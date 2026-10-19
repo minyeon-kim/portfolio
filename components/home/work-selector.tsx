@@ -5,22 +5,26 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { ConceptLabel } from "@/components/case-label";
 
 export type WorkOption = {
   slug: string;
+  cover?: string;
   name: string;
   problem: string;
   role?: string;
   concept?: boolean;
 };
 
-// "Selected work" as tabs: pick a project above, and that project's section
-// appears below with its pieces revealing one by one. Every panel is rendered
+// "Selected work" in the same language as the side menu: a big project list
+// with a dot marking the selected one, and a large preview that crossfades to
+// whichever project you hover. Pick one and its section appears below, its
+// pieces revealing one by one. Every panel is rendered
 // on the server (inactive ones `hidden`), so the content is all there without JS.
 // Keyboard: arrows / Home / End switch projects, Tab moves into the panel.
 export function WorkSelector({ options, children }: { options: WorkOption[]; children: ReactNode }) {
@@ -61,64 +65,96 @@ export function WorkSelector({ options, children }: { options: WorkOption[]; chi
     }
   };
 
-  const indicator = {
-    "--n": options.length,
-    "--i": active,
-  } as CSSProperties;
+  // The preview follows the hovered project and falls back to the selected one.
+  const [hovered, setHovered] = useState<number | null>(null);
+  const shown = hovered ?? active;
 
   return (
     <>
       <div id="work" className="pb-6">
         <p className="mb-1 font-mono text-xs text-muted">Selected work</p>
-        <div
-          role="tablist"
-          aria-label="Selected work"
-          className="relative grid gap-1 pb-1 md:grid-cols-[repeat(var(--n),minmax(0,1fr))]"
-          style={indicator}
-        >
-          {options.map((o, i) => {
-            const selected = i === active;
-            return (
-              <button
-                key={o.slug}
-                ref={(el) => {
-                  tabs.current[i] = el;
-                }}
-                role="tab"
-                id={`tab-${o.slug}`}
-                aria-selected={selected}
-                aria-controls={`panel-${o.slug}`}
-                tabIndex={selected ? 0 : -1}
-                onClick={() => select(i)}
-                onKeyDown={onKeyDown}
-                className={`group relative flex flex-col items-start gap-0.5 rounded-md border p-2 text-left transition-[border-color,background-color,opacity] duration-250 ease-standard ${
-                  selected
-                    ? "border-accent bg-surface"
-                    : "border-line opacity-60 hover:border-ink hover:bg-surface hover:opacity-100"
-                }`}
-              >
-                <span className="flex w-full items-center gap-1 font-mono text-xs text-muted">
-                  <span className={selected ? "text-accent" : ""}>{String(i + 1).padStart(2, "0")}</span>
-                  {o.concept && <ConceptLabel />}
-                  <span
-                    className={`ml-auto transition-[color,translate] duration-250 ease-standard ${
-                      selected ? "translate-y-0.5 text-accent" : "group-hover:translate-y-0.5"
-                    }`}
-                  >
-                    {selected ? "Viewing ↓" : "View ↓"}
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:gap-8">
+          <div
+            role="tablist"
+            aria-label="Selected work"
+            aria-orientation="vertical"
+            className="border-t border-line"
+            onMouseLeave={() => setHovered(null)}
+          >
+            {options.map((o, i) => {
+              const selected = i === active;
+              return (
+                <button
+                  key={o.slug}
+                  ref={(el) => {
+                    tabs.current[i] = el;
+                  }}
+                  role="tab"
+                  id={`tab-${o.slug}`}
+                  aria-selected={selected}
+                  aria-controls={`panel-${o.slug}`}
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => select(i)}
+                  onKeyDown={onKeyDown}
+                  onMouseEnter={() => setHovered(i)}
+                  className="group grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-x-2 border-b border-line py-2 text-left"
+                >
+                  <span className="flex items-center gap-1 font-mono text-xs text-muted">
+                    <span
+                      aria-hidden="true"
+                      className={`size-1 rounded-md bg-accent transition-transform duration-250 ease-standard ${selected ? "scale-100" : "scale-0 group-hover:scale-75"}`}
+                    />
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                </span>
-                <span className="text-lg font-medium">{o.name}</span>
-                <span className="text-sm text-muted">{o.problem}</span>
-                {o.role && <span className="mt-0.5 font-mono text-xs text-muted">{o.role}</span>}
-              </button>
-            );
-          })}
-          {/* Accent bar that slides under the selected project (md and up). */}
-          <span
-            aria-hidden="true"
-            className="absolute bottom-0 left-0 hidden h-[2px] w-[calc((100%-(var(--n)-1)*8px)/var(--n))] translate-x-[calc(var(--i)*(100%+8px))] rounded-md bg-accent transition-transform duration-400 ease-standard md:block"
-          />
+                  <span
+                    className={`flex flex-wrap items-baseline gap-1 text-xl font-medium tracking-tight transition-[color,translate] duration-250 ease-standard ${selected ? "translate-x-0.5 text-ink" : "text-muted group-hover:translate-x-0.5 group-hover:text-ink"}`}
+                  >
+                    {o.name}
+                    {o.concept && <ConceptLabel />}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`font-mono text-xs transition-[color,translate] duration-250 ease-standard ${selected ? "translate-y-0.5 text-accent" : "text-muted group-hover:translate-y-0.5"}`}
+                  >
+                    ↓
+                  </span>
+                  <span
+                    className={`col-start-2 mt-0.5 text-sm transition-colors duration-250 ease-standard ${selected ? "text-muted" : "text-muted/70"}`}
+                  >
+                    {o.problem}
+                  </span>
+                  {o.role && (
+                    <span className="col-start-2 mt-0.5 font-mono text-xs text-muted">{o.role}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Large preview: covers crossfade to the hovered or selected project. */}
+          <Link
+            href={`/work/${options[shown].slug}/`}
+            aria-label={`Read the ${options[shown].name} case study`}
+            className="group relative hidden aspect-[2/1] overflow-clip rounded-md border border-line bg-surface lg:block"
+          >
+            {options.map((o, i) =>
+              o.cover ? (
+                <Image
+                  key={o.slug}
+                  src={o.cover}
+                  alt=""
+                  width={1600}
+                  height={800}
+                  sizes="(min-width: 1024px) 620px, 100vw"
+                  priority={i === 0}
+                  className={`absolute inset-0 size-full object-cover transition-[opacity,scale] duration-400 ease-standard group-hover:scale-[1.02] ${shown === i ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
+                />
+              ) : null,
+            )}
+            <span className="absolute bottom-1 left-1 rounded-md border border-line bg-surface/90 px-1 py-0.5 font-mono text-xs backdrop-blur-sm">
+              {String(shown + 1).padStart(2, "0")} · Read the case →
+            </span>
+          </Link>
         </div>
       </div>
 
