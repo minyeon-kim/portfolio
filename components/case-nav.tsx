@@ -50,10 +50,10 @@ export function CaseNav({ items }: { items: TocItem[] }) {
       <div
         ref={bar}
         aria-hidden="true"
-        className="fixed inset-x-0 top-0 z-10 h-[2px] origin-left bg-accent"
+        className="fixed inset-x-0 top-0 z-30 h-[2px] origin-left bg-accent"
         style={{ transform: "scaleX(0)" }}
       />
-      <nav aria-label="On this page" className="sticky top-4 hidden lg:block">
+      <nav aria-label="On this page" className="sticky top-12 hidden lg:block">
         <p className="mb-1 font-mono text-xs text-muted">On this page</p>
         <ul className="border-l border-line font-mono text-xs">
           {items.map(({ id, label }) => (

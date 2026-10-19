@@ -4,7 +4,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-line">
+    <header className="z-20 border-b border-line bg-bg/90 backdrop-blur-sm md:sticky md:top-0">
       <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-3 gap-y-1 px-2 py-2 md:px-4">
         <Link href="/" className="text-sm font-medium">
           {site.name}
