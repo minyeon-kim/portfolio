@@ -39,16 +39,34 @@ Text scramble (encrypted -> readable) is the single expressive motif. Use it ONL
 - the hero headline: once on load (max 1.2s, left to right, chars "01#$%&"), then,
   after load, only glyphs within 120px of the mouse cursor briefly re-scramble
   (mouse only, never touch; must not reflow the line);
-- nav link hover.
+- side menu page links, on hover or keyboard focus (Geist Mono, 0.4s).
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
 ## Rules
 - Content first: the hero must show name, positioning line, and an index of the two
   featured case studies without scrolling on a 1440x900 screen.
-- The landing page is one long scroll, in this order: hero + case index, one section
-  per featured case, Playground, About, Contact.
-  - Clicking a case index row scrolls to that case's section.
-  - Each case section has a sticky summary column (number, [CONCEPT] label, title,
+- Header: Menu button on the left, name centered, resume link and theme toggle on the
+  right. Page links live in the side menu, not the header. On md+ the header is
+  sticky and folds into a compact floating bar after a little scroll, at the same height.
+- Side menu (Metalab-style), opened from the Menu button, which turns into Close:
+  - Full-screen panel with three columns that slide in one after another: (1) page
+    links (Work, Playground, About, Contact) and case-study pills; (2) a large cover
+    preview with caption that crossfades to the hovered or focused case; (3)
+    Playground and contact.
+  - A dot marks the previewed case pill.
+  - It is a modal dialog: Esc closes it, Tab stays inside it, and focus returns to
+    the Menu button. Following a link closes it.
+  - Page scroll is never locked; the panel scrolls on its own if it's taller than
+    the screen.
+- The landing page is one long scroll, in this order: hero + Work selector, the
+  selected case's section, Playground, About, Contact.
+  - Work selector: the featured cases as a large vertical list (tabs). A dot marks
+    the selected case. On desktop, a large preview beside the list crossfades to the
+    hovered case and falls back to the selected one; clicking the preview opens the
+    full case.
+  - Choosing a case shows only that case's section below, and its pieces reveal one
+    by one. Arrow keys / Home / End switch cases.
+  - The selected case section has a sticky summary column (number, [CONCEPT] label, title,
     role and timeline, steps, "Read the full case" link). Next to it, the story
     scrolls past: Problem and Outcome from the TL;DR, the Key decisions (each links to
     its heading in the full case), and the case's live demo.
