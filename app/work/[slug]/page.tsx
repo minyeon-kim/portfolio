@@ -44,7 +44,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
               <ConceptLabel />
             </div>
           )}
-          <h1 className="mb-4 text-xl font-medium tracking-tight">{meta.title}</h1>
+          <h1 className="mb-4 text-xl font-normal tracking-tight">{meta.title}</h1>
           {metaRow.length > 0 && (
             <dl className="grid gap-2 border-t border-line pt-2 font-mono text-xs sm:grid-cols-3">
               {metaRow.map(({ label, value }) => (

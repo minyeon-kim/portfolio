@@ -61,13 +61,13 @@ export function PasswordMeter() {
           data-1p-ignore
           data-lpignore="true"
           aria-describedby={`${id}-strength`}
-          className="h-5 min-w-0 flex-1 rounded-md border border-line bg-bg px-1 font-mono text-sm transition-colors duration-150 ease-standard hover:border-muted focus:border-accent"
+          className="h-5 min-w-0 flex-1 rounded-full border border-line bg-bg px-2 font-mono text-sm transition-colors duration-150 ease-standard hover:border-muted focus:border-accent"
         />
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
           aria-pressed={visible}
-          className="press h-5 rounded-md border border-line px-1 font-mono text-xs text-muted transition-[color,border-color] duration-150 ease-standard hover:border-ink hover:text-ink"
+          className="press h-5 rounded-full bg-fill px-2 font-mono text-xs text-muted transition-[color,background-color] duration-150 ease-standard hover:bg-fill-strong hover:text-ink"
         >
           {visible ? "Hide" : "Show"}
         </button>
@@ -77,7 +77,7 @@ export function PasswordMeter() {
         {[1, 2, 3, 4].map((n) => (
           <span
             key={n}
-            className={`h-0.5 rounded-md transition-colors duration-250 ease-standard ${score >= n ? "bg-accent" : "bg-line"}`}
+            className={`h-0.5 rounded-full transition-colors duration-250 ease-standard ${score >= n ? "bg-accent" : "bg-line"}`}
           />
         ))}
       </div>

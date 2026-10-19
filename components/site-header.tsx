@@ -17,7 +17,7 @@ export async function SiteHeader() {
   return (
     <HeaderShell>
       {/* Folds into a compact floating bar after a little scroll (md+). */}
-      <div className="mx-auto grid max-w-page grid-cols-[1fr_auto_1fr] items-center gap-2 border border-transparent px-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:px-4 md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[760px] md:group-data-compact/header:rounded-md md:group-data-compact/header:border-line md:group-data-compact/header:bg-surface/90 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-sm">
+      <div className="mx-auto grid max-w-page grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:px-4 md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[760px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
         <div>
           <SiteMenu
             cases={cases.map(({ slug, meta, tldr }) => ({

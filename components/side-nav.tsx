@@ -92,14 +92,14 @@ export function SideNav() {
               <Link
                 href={item.href}
                 aria-current={active ? (onHome ? "location" : "page") : undefined}
-                className={`group press relative flex size-7 items-center justify-center rounded-md border transition-[background-color,border-color,color,scale] duration-250 ease-standard hover:scale-105 ${
-                  active ? "border-ink bg-ink text-bg" : "border-line bg-surface text-muted hover:border-ink hover:text-ink"
+                className={`group press relative flex size-7 items-center justify-center rounded-md transition-[background-color,color,scale] duration-250 ease-standard hover:scale-105 ${
+                  active ? "bg-ink text-bg" : "bg-fill text-muted backdrop-blur-md hover:bg-fill-strong hover:text-ink"
                 }`}
               >
                 {item.icon}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-full ml-1 -translate-x-1 rounded-md border border-line bg-surface px-1 py-0.5 font-mono text-xs whitespace-nowrap text-ink opacity-0 transition-[opacity,translate] duration-250 ease-standard group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+                  className="pointer-events-none absolute left-full ml-1 -translate-x-1 rounded-full bg-ink px-1.5 py-0.5 text-bg font-mono text-xs whitespace-nowrap opacity-0 transition-[opacity,translate] duration-250 ease-standard group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
                 >
                   {item.label}
                 </span>

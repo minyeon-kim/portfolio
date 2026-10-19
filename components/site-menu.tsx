@@ -134,11 +134,11 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                         onClick={go}
                         onMouseEnter={() => setPreview(i)}
                         onFocus={() => setPreview(i)}
-                        className={`group flex items-center gap-0.5 rounded-md border px-1 py-0.5 text-sm transition-colors duration-150 ease-standard ${preview === i ? "border-ink" : "border-line hover:border-ink"}`}
+                        className={`group press flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-sm transition-colors duration-150 ease-standard ${preview === i ? "bg-fill-strong" : "bg-fill hover:bg-fill-strong"}`}
                       >
                         <span
                           aria-hidden="true"
-                          className={`size-1 rounded-md bg-accent transition-transform duration-250 ease-standard ${preview === i ? "scale-100" : "scale-0"}`}
+                          className={`size-1 rounded-full bg-accent transition-transform duration-250 ease-standard ${preview === i ? "scale-100" : "scale-0"}`}
                         />
                         {c.name}
                       </Link>
@@ -156,7 +156,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                   aria-hidden="true"
                   className="group block"
                 >
-                  <div className="relative aspect-[2/1] overflow-clip rounded-md border border-line bg-surface">
+                  <div className="relative aspect-[2/1] overflow-clip rounded-lg bg-fill">
                     {cases.map((c, i) =>
                       c.cover ? (
                         <Image
@@ -194,7 +194,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                 <Link
                   href="/playground/"
                   onClick={go}
-                  className="lift block rounded-md border border-line bg-surface p-2"
+                  className="lift block rounded-md bg-fill p-2 hover:bg-fill-strong"
                 >
                   <p className="mb-1 font-mono text-xs text-muted">Playground</p>
                   <ul className="space-y-0.5 text-sm">
@@ -203,7 +203,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                     ))}
                   </ul>
                 </Link>
-                <div className="lift rounded-md border border-line bg-surface p-2">
+                <div className="lift rounded-md bg-fill p-2">
                   <p className="mb-1 font-mono text-xs text-muted">Contact</p>
                   <div className="flex flex-wrap items-center gap-1 text-sm">
                     {contact.email && <CopyButton value={contact.email} label="Copy email" />}
@@ -256,7 +256,7 @@ function MenuButton({
       data-autofocus={autoFocus ? "" : undefined}
       aria-expanded={open}
       aria-controls={open ? "site-menu" : undefined}
-      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-md border border-line bg-surface px-1 font-mono text-xs transition-colors duration-150 ease-standard hover:border-ink"
+      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong"
     >
       <span aria-hidden="true" className="relative block h-1 w-1.5">
         <span

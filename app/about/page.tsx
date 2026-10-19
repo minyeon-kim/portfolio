@@ -22,7 +22,7 @@ export default function AboutPage() {
     <div className="mx-auto max-w-prose px-2 pt-8 pb-12">
       <header className="mb-6">
         <p className="mb-1 font-mono text-xs text-muted">{site.name}</p>
-        <h1 className="text-xl font-medium tracking-tight">About</h1>
+        <h1 className="text-xl font-normal tracking-tight">About</h1>
         <p className="mt-2 text-base text-muted">{site.positioning}</p>
       </header>
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
         </h2>
         <div className="grid gap-2 sm:grid-cols-3">
           {columns.map((col) => (
-            <div key={col.title} className="reveal lift rounded-md border border-line bg-surface p-2">
+            <div key={col.title} className="reveal lift rounded-md bg-surface p-3">
               <h3 className="mb-1 text-base font-medium">{col.title}</h3>
               <ul className="space-y-0.5 text-sm text-muted">
                 {col.items.map((item) => (
@@ -59,7 +59,7 @@ export default function AboutPage() {
           {hasResume ? (
             <a
               href={site.resumeUrl}
-              className="inline-flex h-4 items-center rounded-md border border-line bg-surface px-1.5 font-mono text-xs hover:border-ink"
+              className="press inline-flex h-4 items-center rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong"
             >
               Resume (PDF)
             </a>

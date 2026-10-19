@@ -33,7 +33,7 @@ export default async function Home() {
         <p className="mb-2 font-mono text-xs text-muted">{site.name}</p>
         <ScrambleHeadline
           text={site.positioning}
-          className="text-xl font-medium tracking-tight md:text-display md:tracking-[-0.02em]"
+          className="text-xl font-normal tracking-tight md:text-display md:font-light md:tracking-[-0.03em]"
         />
       </section>
 
@@ -59,7 +59,7 @@ export default async function Home() {
         <div className="reveal mb-6 flex flex-wrap items-end justify-between gap-2">
           <div>
             <p className="mb-1 font-mono text-xs text-muted">Playground</p>
-            <h2 id="playground-title" className="text-xl font-medium tracking-tight">
+            <h2 id="playground-title" className="text-xl font-normal tracking-tight">
               Small experiments, all working
             </h2>
           </div>
@@ -76,7 +76,7 @@ export default async function Home() {
           as="h2"
           id="about-title"
           text="From security engineering to product design"
-          className="mb-6 max-w-[20ch] text-xl font-medium tracking-tight"
+          className="mb-6 max-w-[20ch] text-xl font-normal tracking-tight"
         />
         {/* The three stages come from claude.md; the story itself lives on /about. */}
         <ol className="mb-6 grid gap-2 md:grid-cols-3">
@@ -98,7 +98,7 @@ export default async function Home() {
           as="h2"
           id="contact-title"
           text="Building something for privacy, trust, or developers? Let's talk."
-          className="mb-4 text-xl font-medium tracking-tight"
+          className="mb-4 text-xl font-normal tracking-tight"
         />
         <div className="reveal flex flex-wrap items-center gap-2">
           {site.email ? (
