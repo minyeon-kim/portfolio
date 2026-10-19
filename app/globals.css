@@ -114,6 +114,24 @@ body {
   outline-offset: 2px;
 }
 
+/*
+ * Hero headline is hidden until the scramble starts, so the real text never
+ * flashes first. If JS fails, it shows anyway after 2s. Never hidden without
+ * JS or with reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-scramble] {
+    visibility: hidden;
+    animation: scramble-fallback 0s 2s forwards;
+  }
+}
+
+@keyframes scramble-fallback {
+  to {
+    visibility: visible;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
