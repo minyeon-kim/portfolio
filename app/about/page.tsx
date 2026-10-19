@@ -34,7 +34,7 @@ export default function AboutPage() {
       </section>
 
       <section aria-labelledby="skills-heading" className="mb-8">
-        <h2 id="skills-heading" className="mb-2 font-mono text-xs text-muted">
+        <h2 id="skills-heading" className="reveal mb-2 font-mono text-xs text-muted">
           Skills
         </h2>
         <div className="grid gap-2 sm:grid-cols-3">
