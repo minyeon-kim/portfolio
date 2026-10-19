@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
+import { FillText } from "@/components/fill-text";
 import { CaseSection } from "@/components/home/case-section";
+import { TypeTrack } from "@/components/home/type-track";
 import { WorkSelector } from "@/components/home/work-selector";
 import { ExperimentGrid } from "@/components/playground/experiments";
 import { ScrambleHeadline } from "@/components/scramble-headline";
@@ -50,6 +52,8 @@ export default async function Home() {
         ))}
       </WorkSelector>
 
+      <TypeTrack />
+
       <section id="playground" aria-labelledby="playground-title" className="border-t border-line py-12">
         <div className="reveal mb-6 flex flex-wrap items-end justify-between gap-2">
           <div>
@@ -67,9 +71,12 @@ export default async function Home() {
 
       <section id="about" aria-labelledby="about-title" className="border-t border-line py-12">
         <p className="reveal mb-1 font-mono text-xs text-muted">About</p>
-        <h2 id="about-title" className="reveal mb-6 max-w-[20ch] text-xl font-medium tracking-tight">
-          From security engineering to product design
-        </h2>
+        <FillText
+          as="h2"
+          id="about-title"
+          text="From security engineering to product design"
+          className="mb-6 max-w-[20ch] text-xl font-medium tracking-tight"
+        />
         {/* The three stages come from claude.md; the story itself lives on /about. */}
         <ol className="mb-6 grid gap-2 md:grid-cols-3">
           {["Computer science", "IT security", "Product design"].map((stage, i) => (
@@ -86,9 +93,12 @@ export default async function Home() {
 
       <section id="contact" aria-labelledby="contact-title" className="border-t border-line py-12">
         <p className="reveal mb-1 font-mono text-xs text-muted">Contact</p>
-        <h2 id="contact-title" className="reveal mb-4 text-xl font-medium tracking-tight">
-          Building something for privacy, trust, or developers? Let&apos;s talk.
-        </h2>
+        <FillText
+          as="h2"
+          id="contact-title"
+          text="Building something for privacy, trust, or developers? Let's talk."
+          className="mb-4 text-xl font-medium tracking-tight"
+        />
         <div className="reveal flex flex-wrap items-center gap-2">
           {site.email ? (
             <>

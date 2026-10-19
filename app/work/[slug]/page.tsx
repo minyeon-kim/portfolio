@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CaseCover } from "@/components/case-cover";
 import { ConceptLabel } from "@/components/case-label";
 import { CaseNav } from "@/components/case-nav";
 import { getCase, getCaseSlugs, getNextCase } from "@/lib/cases";
@@ -55,6 +56,12 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
             </dl>
           )}
         </header>
+
+        {meta.cover && (
+          <div className="mb-8">
+            <CaseCover src={meta.cover} priority />
+          </div>
+        )}
 
         <Content />
 
