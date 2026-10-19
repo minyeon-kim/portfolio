@@ -28,7 +28,7 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --muted #5B6461 / #8E9895
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
-Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only in the hero and the sliding type band.
+Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only for the case title on the landing page.
 Weights: 64px is Light (300), 36px is Regular (400); 24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
@@ -47,9 +47,9 @@ Interaction states (nothing interactive is static; utilities in app/globals.css)
 - Toggles and icons swap with a 250ms fade + quarter turn (theme toggle, Menu/Close),
   never a hard cut. Theme changes crossfade the page (View Transitions).
 - Disclosure (<details>) opens and closes by height, 250ms.
-- Selection lists (side menu cases, Work selector) mark the current item with an
+- Selection lists (side menu cases, landing case pills) mark the current item with an
   accent dot that scales in; their large previews crossfade 400ms.
-- Route changes crossfade; a case cover morphs from the Work selector preview into
+- Route changes crossfade; a case cover morphs from the landing screen into
   the case page cover (React <ViewTransition>).
 - Floating side nav (wide screens): tiles fixed to the left edge; hover/focus slides
   a label out; the current page or section's tile is filled ink.
@@ -64,7 +64,7 @@ Text scramble (encrypted -> readable) is the single expressive motif. Use it ONL
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
 ## Rules
-- Content first: the hero must show name, positioning line, and an index of the two
+- Content first: the landing screen must show name, positioning line, and the list of
   featured case studies without scrolling on a 1440x900 screen.
 - Header: Menu button on the left, name centered, resume link and theme toggle on the
   right. Page links live in the side menu, not the header. On md+ the header is
@@ -79,21 +79,22 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     the Menu button. Following a link closes it.
   - Page scroll is never locked; the panel scrolls on its own if it's taller than
     the screen.
-- The landing page is one long scroll, in this order: hero + Work selector, the
-  selected case's section, Playground, About, Contact.
-  - Work selector: the featured cases as a large vertical list (tabs). A dot marks
-    the selected case. On desktop, a large preview beside the list crossfades to the
-    hovered case and falls back to the selected one; clicking the preview opens the
-    full case.
-  - Choosing a case shows only that case's section below, and its pieces reveal one
-    by one. Arrow keys / Home / End switch cases.
-  - The selected case section has a sticky summary column (number, [CONCEPT] label, title,
-    role and timeline, steps, "Read the full case" link). Next to it, the story
-    scrolls past: Problem and Outcome from the TL;DR, the Key decisions (each links to
-    its heading in the full case), and the case's live demo.
-  - The sticky column's steps light up as their blocks scroll past.
-  - A section rail on the right edge (desktop) shows the current section; its dots
-    are anchor links.
+- The landing page is one screen (Metalab-style home), nothing else on it:
+  - The selected featured case's cover fills the screen behind everything, with
+    scrims so text stays readable in both themes.
+  - Intro at the top: name (mono label) and the positioning line (36px Light, with
+    the Decrypted scramble).
+  - Bottom left: a floating pill list of the featured cases (tabs). The selected pill
+    is filled ink with an accent dot; a mono counter shows "01 / 02".
+  - Bottom right: the selected case's title (64px Light), role, [CONCEPT] label,
+    one-line problem, and a "View case" pill.
+  - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
+    block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
+    Arrow keys / Home / End switch cases.
+  - On phones it stacks instead: intro, the cover as a 24px-rounded card, the list,
+    then the title, so text never sits on the image.
+  - Case details, Playground, About and Contact live on their own pages, reached
+    from the side nav and the Menu.
 - Scroll interactions follow the user's scroll and never take it over: no scroll
   hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a
   preloader. In-page links scroll smoothly. Reveals and parallax use CSS
