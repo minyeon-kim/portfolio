@@ -28,8 +28,10 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --muted #5B6461 / #8E9895
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
-Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only for the case title on the landing page.
-Weights: 64px is Light (300), 36px is Regular (400); 24px and below may use Medium.
+Type scale: 13 / 15 / 18 / 24 / 36 / 48 / 64 px. 48px is only the landing positioning line;
+64px only the landing case title.
+Weights: 64px is Light (300); 48px positioning line is Medium (500); 36px is Regular (400);
+24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
 Shape (Metalab-like, soft rather than wireframe):
@@ -66,10 +68,12 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 ## Rules
 - Content first: the landing screen must show name, positioning line, and the list of
   featured case studies without scrolling on a 1440x900 screen.
-- Header: Menu button on the left, resume link and theme toggle on the right. No name
-  or page title in the header. Page links live in the menu. On md+ the header is
-  sticky and folds into a compact floating pill after a little scroll; on the landing
-  page it is transparent over the cover.
+- Header: Menu button at the left screen edge, resume link and theme toggle at the
+  right screen edge (full width, not the content width). No name or page title.
+  Page links live in the menu. On md+ the header is sticky and folds into one compact
+  floating pill after a little scroll; inside it the buttons drop their own pill
+  backgrounds (never a pill inside a pill). On the landing page it is transparent
+  over the cover.
 - Menu button (turns into Close). On the landing page (md+) it opens the page links
   inline at the left edge (see below). Everywhere else, and on phones, it opens the
   full-screen side menu:
@@ -88,11 +92,12 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     header. Legibility comes from a light even tint over the whole image plus one
     long fade at the bottom that continues into the content, never separate
     top/bottom bands.
-  - Intro at the top: the positioning line only (36px Light, with the Decrypted
-    scramble). No name label, no counter, no footer on this page.
-  - Case picker (lg+): a vertical iOS-style segmented control (frosted rounded track,
-    solid thumb that slides to the selected case), fixed at the left edge and
-    vertically centered, staying put while you read. Picking from inside a case
+  - Intro at the top: the positioning line only (48px Medium, 36px on phones, with
+    the Decrypted scramble). No name label, no counter, no footer on this page.
+  - Case picker (lg+): separate frosted pills stacked with a gap (Metalab-style),
+    always in the dark media palette, fixed at the left edge and vertically
+    centered, staying put while you read. An outline ring slides to the selected
+    pill. Picking from inside a case
     glides back to the stage. Below lg the same control sits horizontally in the
     stage. Tabs: arrows / Home / End switch.
   - Bottom: the selected case's role, [CONCEPT] label, title (64px Light) and
