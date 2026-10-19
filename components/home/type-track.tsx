@@ -12,10 +12,10 @@ export function TypeTrack() {
       {ROWS.map((row, r) => (
         <div
           key={r}
-          className={`${r === 0 ? "track-left" : "track-right text-muted"} flex w-max gap-4 py-1 text-xl font-medium tracking-tight whitespace-nowrap`}
+          className={`${r === 0 ? "track-left" : "track-right text-muted"} flex w-max gap-4 py-1 text-xl font-medium tracking-tight whitespace-nowrap md:gap-6 md:text-display md:tracking-[-0.02em]`}
         >
           {[...row, ...row].map((word, i) => (
-            <span key={i} className="flex items-center gap-4">
+            <span key={i} className="flex items-center gap-4 md:gap-6">
               {word}
               <span className="text-accent">·</span>
             </span>
