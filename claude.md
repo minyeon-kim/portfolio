@@ -43,10 +43,24 @@ Text scramble (encrypted -> readable) is the single expressive motif. Use it ONL
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
 ## Rules
-- Content first: the hero must show name, positioning line, and the two featured
-  case studies without scrolling on a 1440x900 screen.
-- Never block scrolling, never add a preloader, never hijack scroll.
-- Respect prefers-reduced-motion: show final text instantly, disable scramble/parallax.
+- Content first: the hero must show name, positioning line, and an index of the two
+  featured case studies without scrolling on a 1440x900 screen.
+- The landing page is one long scroll, in this order: hero + case index, one section
+  per featured case, Playground, About, Contact.
+  - Clicking a case index row scrolls to that case's section.
+  - Each case section has a sticky summary column (number, [CONCEPT] label, title,
+    role and timeline, steps, "Read the full case" link). Next to it, the story
+    scrolls past: Problem and Outcome from the TL;DR, the Key decisions (each links to
+    its heading in the full case), and the case's live demo.
+  - The sticky column's steps light up as their blocks scroll past.
+  - A section rail on the right edge (desktop) shows the current section; its dots
+    are anchor links.
+- Scroll interactions follow the user's scroll and never take it over: no scroll
+  hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a
+  preloader. In-page links scroll smoothly. Reveals and parallax use CSS
+  scroll-driven animations, so browsers without support just show the static page.
+- Respect prefers-reduced-motion: show final text instantly; disable scramble,
+  parallax, reveals, and smooth scrolling.
 - Accessibility: WCAG AA contrast, visible focus ring (2px var(--accent)),
   full keyboard support for every interactive demo, semantic headings.
 - Performance: Lighthouse 95+ on mobile; images pre-sized WebP via next/image (unoptimized); lazy-load demos.
