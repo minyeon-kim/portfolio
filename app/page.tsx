@@ -1,19 +1,20 @@
-import { ProjectRail } from "@/components/home/project-rail";
+import { CaseBody } from "@/components/home/case-body";
+import { CasePanels } from "@/components/home/case-panels";
+import { InlineMenu } from "@/components/home/inline-menu";
 import { ProjectStage } from "@/components/home/project-stage";
 import { ScrambleHeadline } from "@/components/scramble-headline";
-import { getCases } from "@/lib/cases";
+import { getCase, getCases } from "@/lib/cases";
 import { nav, site } from "@/lib/site";
 
-// The landing page is one screen, Metalab-style: a short intro over the
-// selected project's full-bleed cover, a floating list to pick the project,
-// and that project's title. Case details, playground, about and contact live
-// on their own pages (side nav and Menu).
+// The landing page: a full-screen stage for the selected case, then that
+// case's content, so picking a case and scrolling reads straight into it.
 export default async function Home() {
   const featured = (await getCases()).filter((c) => c.meta.featured);
+  const bodies = await Promise.all(featured.map((c) => getCase(c.slug)));
 
   return (
     <>
-      <ProjectRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} pages={nav} />
+      <InlineMenu pages={nav} />
       <ProjectStage
         projects={featured.map(({ slug, meta, tldr }) => ({
           slug,
@@ -28,6 +29,24 @@ export default async function Home() {
           <ScrambleHeadline text={site.positioning} className="max-w-[24ch] text-xl font-light tracking-tight" />
         }
       />
+      {/* Blend from the dark stage into the page, so there is no edge in light theme. */}
+      <div
+        aria-hidden="true"
+        className="full-bleed hidden h-16 bg-[linear-gradient(to_bottom,var(--media-bg),var(--bg))] md:block"
+      />
+      <CasePanels>
+        {bodies.map(({ slug, meta, Content }, i) => {
+          const n = (i + 1) % bodies.length;
+          return (
+            <CaseBody
+              key={slug}
+              meta={meta}
+              Content={Content}
+              next={bodies.length > 1 ? { index: n, name: bodies[n].meta.short ?? bodies[n].meta.title } : undefined}
+            />
+          );
+        })}
+      </CasePanels>
     </>
   );
 }

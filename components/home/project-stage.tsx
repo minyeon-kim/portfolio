@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useRef, ViewTransition, type KeyboardEvent, type ReactNode } from "react";
+import { ViewTransition, type ReactNode } from "react";
 import { ConceptLabel } from "@/components/case-label";
 import { setUi, useUi } from "@/lib/ui-store";
+import { Segmented } from "./segmented";
 
 export type StageProject = {
   slug: string;
@@ -16,36 +16,15 @@ export type StageProject = {
   concept?: boolean;
 };
 
-// The landing page, Metalab-style: one full-bleed screen. The selected
-// project's cover fills the background and its title block slides in while
-// the cover crossfades. The picker is the floating left rail on md+, and a
-// pill list inside the stage on phones. One project
-// at a time, nothing else competing. Keyboard: arrows / Home / End switch.
+// The landing page opener, Metalab-style. The selected case's cover fills the
+// screen (running up under the transparent header), an iOS-style segmented
+// control in the middle picks the case, and its title sits at the bottom.
+// Scrolling hands off to that case's content below: the title drifts up and
+// the cover dims (.stage-* in globals.css), and the bottom fade runs straight
+// into the content, so there is no hard edge.
 export function ProjectStage({ projects, intro }: { projects: StageProject[]; intro: ReactNode }) {
-  // Selection is shared with the left rail (md+), which is the picker there.
   const active = useUi((s) => s.activeCase);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const select = (i: number, focus = false) => {
-    const next = (i + projects.length) % projects.length;
-    setUi({ activeCase: next });
-    if (focus) tabs.current[next]?.focus();
-  };
-
-  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
-    const moves: Record<string, number> = {
-      ArrowDown: active + 1,
-      ArrowRight: active + 1,
-      ArrowUp: active - 1,
-      ArrowLeft: active - 1,
-      Home: 0,
-      End: projects.length - 1,
-    };
-    if (e.key in moves) {
-      e.preventDefault();
-      select(moves[e.key], true);
-    }
-  };
+  const select = (i: number) => setUi({ activeCase: i });
 
   // Items before the active one have left upward; items after wait below.
   const place = (i: number) =>
@@ -55,124 +34,92 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
     <section
       id="work"
       aria-label="Selected work"
-      // Desktop: one full-bleed screen with the cover behind everything.
-      // Phone: stacked (intro, cover card, list, title) so text never sits on the image.
-      className="full-bleed relative flex flex-col overflow-clip py-6 md:block md:h-[calc(100svh-67px)] md:min-h-[600px] md:bg-surface md:py-0"
+      className="full-bleed relative flex flex-col py-6 md:on-media md:-mt-[67px] md:block md:h-svh md:min-h-[640px] md:bg-bg md:py-0"
     >
-      {/* Covers: crossfade and settle from a slight zoom. */}
+      {/* Covers: crossfade and settle from a slight zoom. Phone: a rounded card. */}
       <div className="relative order-2 mx-2 my-4 aspect-[4/3] overflow-clip rounded-lg bg-surface md:absolute md:inset-0 md:m-0 md:aspect-auto md:rounded-none">
-        {projects.map((p, i) =>
-          p.cover ? (
-            <div
-              key={p.slug}
-              aria-hidden="true"
-              className={`absolute inset-0 transition-[opacity,scale] duration-400 ease-standard ${i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
-            >
-              <ViewTransition name={`cover-${p.slug}`} share="auto" default="none">
-                <Image
-                  src={p.cover}
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  priority={i === 0}
-                  className="object-cover"
-                />
-              </ViewTransition>
-            </div>
-          ) : null,
-        )}
+        <div className="stage-cover absolute inset-0">
+          {projects.map((p, i) =>
+            p.cover ? (
+              <div
+                key={p.slug}
+                aria-hidden="true"
+                className={`absolute inset-0 transition-[opacity,scale] duration-400 ease-standard ${i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
+              >
+                <ViewTransition name={`cover-${p.slug}`} share="auto" default="none">
+                  <Image src={p.cover} alt="" fill sizes="100vw" priority={i === 0} className="object-cover" />
+                </ViewTransition>
+              </div>
+            ) : null,
+          )}
+        </div>
       </div>
 
-      {/* Scrims keep text readable over the cover, in both themes (desktop only). */}
+      {/*
+        Legibility (desktop): the stage uses the dark media palette in both
+        themes. An even dark tint over the whole image (no top band), and a
+        fade at the bottom under the title. The tint deepens as you scroll on;
+        the strip after the stage blends into the page background.
+      */}
+      <div aria-hidden="true" className="stage-tint absolute inset-0 hidden bg-bg/45 md:block" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 hidden md:block bg-[linear-gradient(to_bottom,var(--bg)_0%,color-mix(in_srgb,var(--bg)_80%,transparent)_20%,transparent_42%,transparent_48%,color-mix(in_srgb,var(--bg)_88%,transparent)_70%,var(--bg)_86%)]"
+        className="absolute inset-x-0 bottom-0 hidden h-[45%] bg-[linear-gradient(to_bottom,transparent,var(--bg))] md:block"
       />
 
-      <div className="contents md:relative md:mx-auto md:flex md:h-full md:max-w-page md:flex-col md:justify-between md:px-4 md:pt-8 md:pb-8">
+      <div className="stage-content contents md:relative md:mx-auto md:grid md:h-full md:max-w-page md:grid-rows-[auto_1fr_auto] md:px-4 md:pt-[115px] md:pb-8">
         <div className="order-1 px-2 md:px-0">{intro}</div>
 
-        <div className="order-3 grid items-end gap-4 px-2 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:px-0">
-          {/* Phone picker; on md+ the left rail (ProjectRail) picks instead. */}
-          <div className="md:hidden">
-            <p className="mb-1 font-mono text-xs text-muted">
-              Selected work · {String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-            </p>
-            <div role="tablist" aria-label="Selected work" aria-orientation="vertical" className="flex flex-col items-start gap-0.5">
-              {projects.map((p, i) => {
-                const selected = i === active;
-                return (
-                  <button
-                    key={p.slug}
-                    ref={(el) => {
-                      tabs.current[i] = el;
-                    }}
-                    role="tab"
-                    id={`tab-${p.slug}`}
-                    aria-selected={selected}
-                    aria-controls="stage-panel"
-                    tabIndex={selected ? 0 : -1}
-                    onClick={() => select(i)}
-                    onKeyDown={onKeyDown}
-                    className={`press flex items-center gap-1 rounded-full px-2 py-1 text-base backdrop-blur-md transition-colors duration-250 ease-standard ${
-                      selected ? "bg-ink text-bg" : "bg-bg/60 text-ink hover:bg-bg/85"
-                    }`}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`size-1 rounded-full bg-accent transition-[scale,margin] duration-250 ease-standard ${selected ? "scale-100" : "-mr-1 scale-0"}`}
-                    />
-                    {p.name}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        {/* Case picker, centered */}
+        <div className="order-3 flex justify-center px-2 md:items-center md:px-0">
+          <Segmented
+            label="Selected work"
+            options={projects.map((p) => ({ id: p.slug, label: p.name }))}
+            value={active}
+            onChange={select}
+            controls="stage-panel"
+          />
+        </div>
 
-          {/* Title block for the selected project; slides up on change. */}
+        {/* Title of the selected case; slides up on change. */}
+        <div className="order-4 mt-4 flex flex-wrap items-end justify-between gap-2 px-2 md:mt-0 md:px-0">
           <div
             id="stage-panel"
             role="tabpanel"
             aria-label={`${projects[active].name}, selected case`}
             aria-live="polite"
-            // md+: the left column is left empty for the floating rail.
-            className="grid md:col-start-2"
+            className="grid min-w-0 flex-1"
           >
             {projects.map((p, i) => (
-              <div
-                key={p.slug}
-                aria-hidden={i !== active}
-                inert={i !== active}
-                className="col-start-1 row-start-1 self-end"
-              >
-                <div className={`mb-1 flex items-center gap-1 font-mono text-xs text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}>
+              <div key={p.slug} aria-hidden={i !== active} className="col-start-1 row-start-1 self-end">
+                <div
+                  className={`mb-1 flex items-center gap-1 font-mono text-xs text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+                >
                   {p.concept && <ConceptLabel />}
                   {p.role && <span>{p.role}</span>}
                 </div>
                 <h2
-                  className={`mb-2 text-xl font-normal tracking-tight transition-[opacity,translate] duration-400 ease-standard md:text-display md:font-light md:tracking-[-0.03em] ${place(i)}`}
+                  className={`mb-1 text-xl font-normal tracking-tight transition-[opacity,translate] duration-400 ease-standard md:max-w-[18ch] md:text-display md:font-light md:tracking-[-0.03em] ${place(i)}`}
                   style={{ transitionDelay: i === active ? "150ms" : "0ms" }}
                 >
                   {p.title}
                 </h2>
-                <div
-                  className={`flex flex-wrap items-end justify-between gap-2 transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+                <p
+                  className={`max-w-[52ch] text-base text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
                   style={{ transitionDelay: i === active ? "250ms" : "0ms" }}
                 >
-                  <p className="max-w-[46ch] text-base text-muted">{p.problem}</p>
-                  <Link
-                    href={`/work/${p.slug}/`}
-                    className="group press inline-flex h-5 items-center gap-1 rounded-full bg-ink px-2 text-sm text-bg transition-colors duration-150 ease-standard hover:bg-accent"
-                  >
-                    View case
-                    <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-x-0.5">
-                      →
-                    </span>
-                  </Link>
-                </div>
+                  {p.problem}
+                </p>
               </div>
             ))}
           </div>
+          <a
+            href="#case"
+            className="hidden items-center gap-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink md:inline-flex"
+          >
+            Scroll to read
+            <span aria-hidden="true">↓</span>
+          </a>
         </div>
       </div>
     </section>

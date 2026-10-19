@@ -190,6 +190,24 @@ details[open]::details-content {
   animation-timing-function: var(--ease);
 }
 
+/*
+ * Content on top of media (the landing stage): always the dark palette, in
+ * either theme, so light text reads on a darkened image.
+ */
+:root {
+  --media-bg: #0c0e0e;
+}
+@utility on-media {
+  --bg: var(--media-bg);
+  --surface: #151918;
+  --ink: #e8ecea;
+  --muted: #8e9895;
+  --line: #262c2a;
+  --accent: #7f93ff;
+  color-scheme: dark;
+  color: var(--ink);
+}
+
 /* Break out of the page container to the full viewport width. */
 .full-bleed {
   width: 100vw;
@@ -288,6 +306,25 @@ details[open]::details-content {
       animation-timeline: view();
     }
 
+    /* Landing stage hands off to the case content as you scroll (desktop). */
+    @media (min-width: 48rem) {
+      .stage-content {
+        animation: stage-content linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 70vh;
+      }
+      .stage-tint {
+        animation: stage-tint linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 70vh;
+      }
+      .stage-cover {
+        animation: stage-cover linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+
     /* Case covers open from an inset, tilted frame to full width. */
     .cover-expand {
       animation: cover-expand linear both;
@@ -315,6 +352,25 @@ details[open]::details-content {
   }
   to {
     transform: translateY(3%) scale(1.06);
+  }
+}
+
+@keyframes stage-content {
+  to {
+    opacity: 0;
+    translate: 0 -48px;
+  }
+}
+
+@keyframes stage-tint {
+  to {
+    background-color: color-mix(in srgb, var(--bg) 85%, transparent);
+  }
+}
+
+@keyframes stage-cover {
+  to {
+    scale: 1.06;
   }
 }
 
