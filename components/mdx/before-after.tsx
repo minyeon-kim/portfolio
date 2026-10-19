@@ -60,7 +60,7 @@ export function BeforeAfter({ before, after, width, height, caption }: Props) {
   const label = "rounded-md border border-line bg-surface px-0.5 font-mono text-xs text-muted";
 
   return (
-    <figure className="my-4">
+    <figure className="reveal my-4">
       <div
         ref={frame}
         onPointerDown={onPointerDown}

@@ -159,3 +159,83 @@ body {
 [data-flash] {
   animation: token-flash var(--dur-slow) var(--ease) var(--dur-slow) backwards;
 }
+
+/*
+ * Scroll-driven interactions. Pure CSS tied to scroll position, so they never
+ * hijack or block scrolling. Browsers without animation-timeline, and anyone
+ * with reduced motion, get the static page with everything visible.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Blocks rise in as they enter the viewport. */
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+
+    /* Hero eases back as you scroll past it. */
+    .hero-exit {
+      animation: hero-exit linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
+
+    /* Case card covers drift slightly inside their frame. */
+    .cover-parallax {
+      animation: cover-parallax linear both;
+      animation-timeline: view();
+    }
+
+    /* About timeline: the line fills, each node lights up at mid-screen. */
+    .story-line {
+      animation: story-line linear both;
+      animation-timeline: view();
+      animation-range: cover 20% cover 80%;
+    }
+    .story-node {
+      animation: story-node linear both;
+      animation-timeline: view();
+      animation-range: cover 45% cover 55%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+@keyframes hero-exit {
+  to {
+    opacity: 0.2;
+    translate: 0 -32px;
+  }
+}
+
+@keyframes cover-parallax {
+  from {
+    transform: translateY(-3%) scale(1.06);
+  }
+  to {
+    transform: translateY(3%) scale(1.06);
+  }
+}
+
+@keyframes story-line {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes story-node {
+  to {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+}

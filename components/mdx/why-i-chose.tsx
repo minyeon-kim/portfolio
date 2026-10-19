@@ -10,7 +10,7 @@ export function WhyIChose({
   label?: string;
 }) {
   return (
-    <details className="group mb-4 rounded-md border border-line">
+    <details className="reveal group mb-4 rounded-md border border-line">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-md px-2 py-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink [&::-webkit-details-marker]:hidden">
         {label}
         <span
