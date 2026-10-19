@@ -32,7 +32,7 @@ export function CaseCard({ slug, meta, tldr }: CaseEntry) {
       </div>
       <div className="mt-2 flex items-center gap-1 font-mono text-xs text-muted">
         {meta.concept && <ConceptLabel />}
-        {tldr.role && <span>{tldr.role}</span>}
+        {meta.role && <span>{meta.role}</span>}
       </div>
       <h3 className="mt-0.5 flex items-baseline gap-1 text-lg font-medium">
         {meta.title}
