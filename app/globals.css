@@ -98,6 +98,20 @@ html {
   background: var(--bg);
 }
 
+/* Anchor jumps land below the sticky header (md and up). */
+@media (min-width: 48rem) {
+  html {
+    scroll-padding-top: 72px;
+  }
+}
+
+/* Clicking an in-page link glides there; instant with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   background: var(--bg);
   color: var(--ink);

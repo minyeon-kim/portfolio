@@ -5,8 +5,22 @@ import { slugify } from "./slug";
 const CASES_DIR = path.join(process.cwd(), "content/cases");
 const isProd = process.env.NODE_ENV === "production";
 
+// Live demo shown in the case's section on the landing page.
+export type CaseTeaser =
+  | {
+      type: "before-after";
+      before: { src: string; alt: string };
+      after: { src: string; alt: string };
+      width: number;
+      height: number;
+      caption?: string;
+    }
+  | { type: "token-playground" };
+
 export type CaseMeta = {
   title: string;
+  short?: string; // compact name for the landing page index and section rail
+  teaser?: CaseTeaser;
   role?: string; // short, for the meta row and home card
   timeline?: string;
   tools?: string[];
@@ -20,7 +34,7 @@ export type CaseMeta = {
 // The three lines inside the <TLDR> block every case study starts with.
 export type Tldr = { problem: string; role: string; outcome: string };
 
-export type CaseEntry = { slug: string; meta: CaseMeta; tldr: Tldr };
+export type CaseEntry = { slug: string; meta: CaseMeta; tldr: Tldr; decisions: TocItem[] };
 
 export type TocItem = { id: string; label: string };
 
@@ -57,6 +71,12 @@ function readToc(source: string): TocItem[] {
   return items;
 }
 
+// The `### ` headings inside "## Decisions", used as jump links on the landing page.
+function readDecisions(source: string): TocItem[] {
+  const section = source.split(/^## Decisions\s*$/m)[1]?.split(/^## /m)[0] ?? "";
+  return [...section.matchAll(/^### (.+)$/gm)].map(([, label]) => ({ id: slugify(label), label }));
+}
+
 export async function getCase(slug: string) {
   const mod = await import(`@/content/cases/${slug}.mdx`);
   const source = readSource(slug);
@@ -65,6 +85,7 @@ export async function getCase(slug: string) {
     meta: mod.meta as CaseMeta,
     tldr: readTldr(source),
     toc: readToc(source),
+    decisions: readDecisions(source),
     Content: mod.default,
   };
 }
@@ -72,8 +93,8 @@ export async function getCase(slug: string) {
 export async function getCases(): Promise<CaseEntry[]> {
   const entries = await Promise.all(
     getCaseSlugs().map(async (slug) => {
-      const { meta, tldr } = await getCase(slug);
-      return { slug, meta, tldr };
+      const { meta, tldr, decisions } = await getCase(slug);
+      return { slug, meta, tldr, decisions };
     }),
   );
   return entries.sort((a, b) => (a.meta.order ?? 99) - (b.meta.order ?? 99));

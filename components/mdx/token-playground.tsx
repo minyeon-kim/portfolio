@@ -80,7 +80,7 @@ function jsonLines(t: Resolved): Line[] {
   ];
 }
 
-export function TokenPlayground() {
+export function TokenPlayground({ wide = true }: { wide?: boolean }) {
   const [tokens, setTokens] = useState(DEFAULTS);
   const resolved = resolve(tokens);
 
@@ -116,7 +116,10 @@ export function TokenPlayground() {
   const heading = "mb-2 font-mono text-xs text-muted";
 
   return (
-    <figure className="reveal my-6 lg:w-[calc(min(100vw,1200px)/2+300px)] lg:max-w-none">
+    <figure
+      // `wide` lets it spill into the empty right margin beside a 680px case column.
+      className={`reveal my-6 ${wide ? "lg:w-[calc(min(100vw,1200px)/2+300px)] lg:max-w-none" : ""}`}
+    >
       <div className="grid gap-2 lg:grid-cols-[200px_minmax(0,1fr)_minmax(0,1fr)]">
         {/* Controls */}
         <fieldset className={`${panel} min-w-0 p-2`}>

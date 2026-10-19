@@ -29,11 +29,15 @@ function textOf(node: ReactNode): string {
 // Case study body styles. Body column is 680px (max-w-prose).
 const components: MDXComponents = {
   h2: ({ children }) => (
-    <h2 id={slugify(textOf(children))} className="reveal mt-8 mb-2 scroll-mt-4 text-lg font-medium">
+    <h2 id={slugify(textOf(children))} className="reveal mt-8 mb-2 scroll-mt-4 text-lg font-medium md:scroll-mt-1">
       {children}
     </h2>
   ),
-  h3: (props) => <h3 className="mt-4 mb-1 text-base font-medium" {...props} />,
+  h3: ({ children }) => (
+    <h3 id={slugify(textOf(children))} className="mt-4 mb-1 scroll-mt-4 text-base font-medium md:scroll-mt-1">
+      {children}
+    </h3>
+  ),
   p: (props) => <p className="mb-2 text-base text-ink" {...props} />,
   ul: (props) => <ul className="mb-2 list-disc pl-3 text-base" {...props} />,
   ol: (props) => <ol className="mb-2 list-decimal pl-3 text-base" {...props} />,
