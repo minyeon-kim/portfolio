@@ -113,9 +113,17 @@ html {
 }
 
 body {
+  /* clip, not hidden: full-bleed blocks can't cause sideways scroll, and sticky still works */
+  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
+}
+
+/* Break out of the page container to the full viewport width. */
+.full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
 }
 
 ::selection {
@@ -211,6 +219,26 @@ body {
       animation-timeline: view();
     }
 
+    /* Case covers open from an inset, tilted frame to full width. */
+    .cover-expand {
+      animation: cover-expand linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
+
+    /* Big type rows slide sideways, in opposite directions, while in view. */
+    .track-left,
+    .track-right {
+      animation: linear both;
+      animation-timeline: view();
+    }
+    .track-left {
+      animation-name: track-left;
+    }
+    .track-right {
+      animation-name: track-right;
+    }
+
     /* About timeline: the line fills, each node lights up at mid-screen. */
     .story-line {
       animation: story-line linear both;
@@ -238,6 +266,35 @@ body {
   }
   to {
     transform: translateY(3%) scale(1.06);
+  }
+}
+
+@keyframes cover-expand {
+  from {
+    clip-path: inset(0 12% round 6px);
+    transform: rotateX(10deg) scale(0.96);
+  }
+  to {
+    clip-path: inset(0 0 round 0);
+    transform: none;
+  }
+}
+
+@keyframes track-left {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: -35% 0;
+  }
+}
+
+@keyframes track-right {
+  from {
+    translate: -35% 0;
+  }
+  to {
+    translate: 0 0;
   }
 }
 
