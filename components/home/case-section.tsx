@@ -8,7 +8,18 @@ import { CaseTeaser } from "./case-teaser";
 
 // One case on the landing page: a sticky summary column on the left and the
 // story (problem, key decisions, live demo) scrolling past on the right.
-export function CaseSection({ entry, index, total }: { entry: CaseEntry; index: number; total: number }) {
+export function CaseSection({
+  entry,
+  index,
+  total,
+  cover = true,
+}: {
+  entry: CaseEntry;
+  index: number;
+  total: number;
+  // "mobile": only below lg, where the work selector's preview is hidden.
+  cover?: boolean | "mobile";
+}) {
   const { slug, meta, tldr, decisions } = entry;
   const href = `/work/${slug}/`;
   const id = (part: string) => `${slug}-${part}`;
@@ -21,7 +32,11 @@ export function CaseSection({ entry, index, total }: { entry: CaseEntry; index: 
 
   return (
     <section id={`case-${slug}`} aria-labelledby={`case-${slug}-title`} className="border-t border-line pb-12">
-      {meta.cover && <CaseCover src={meta.cover} />}
+      {cover && meta.cover && (
+        <div className={cover === "mobile" ? "lg:hidden" : undefined}>
+          <CaseCover src={meta.cover} />
+        </div>
+      )}
       <div className="pt-12 lg:grid lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-8">
         <div className="mb-6 lg:sticky lg:top-12 lg:mb-0 lg:self-start">
           <p className="reveal mb-2 flex items-center gap-1 font-mono text-xs text-muted">

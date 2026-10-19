@@ -41,6 +41,7 @@ export default async function Home() {
       <WorkSelector
         options={featured.map(({ slug, meta, tldr }) => ({
           slug,
+          cover: meta.cover,
           name: meta.short ?? meta.title,
           problem: tldr.problem,
           role: meta.role,
@@ -48,7 +49,7 @@ export default async function Home() {
         }))}
       >
         {featured.map((entry, i) => (
-          <CaseSection key={entry.slug} entry={entry} index={i} total={featured.length} />
+          <CaseSection key={entry.slug} entry={entry} index={i} total={featured.length} cover="mobile" />
         ))}
       </WorkSelector>
 
