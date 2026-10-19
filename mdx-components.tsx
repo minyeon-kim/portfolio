@@ -1,10 +1,16 @@
 import { Children, isValidElement, type ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
+import dynamic from "next/dynamic";
 import { BeforeAfter } from "@/components/mdx/before-after";
 import { Callout } from "@/components/mdx/callout";
 import { TLDR } from "@/components/mdx/tldr";
 import { WhyIChose } from "@/components/mdx/why-i-chose";
 import { slugify } from "@/lib/slug";
+
+// Demos are split into their own chunks so case pages without them stay light.
+const TokenPlayground = dynamic(() =>
+  import("@/components/mdx/token-playground").then((m) => m.TokenPlayground),
+);
 
 function textOf(node: ReactNode): string {
   return Children.toArray(node)
@@ -40,6 +46,7 @@ const components: MDXComponents = {
   WhyIChose,
   BeforeAfter,
   Callout,
+  TokenPlayground,
 };
 
 export function useMDXComponents(): MDXComponents {

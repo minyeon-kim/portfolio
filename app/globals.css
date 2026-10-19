@@ -145,3 +145,17 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* TokenPlayground: a changed code line holds a highlight, then fades. */
+@keyframes token-flash {
+  from {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  to {
+    background: transparent;
+  }
+}
+
+[data-flash] {
+  animation: token-flash var(--dur-slow) var(--ease) var(--dur-slow) backwards;
+}

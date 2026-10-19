@@ -1,0 +1,100 @@
+export const meta = {
+  title: "Devsign: design and code review in one workspace",
+  role: "Designer and developer, team of 3", // TODO: confirm your exact role and split
+  timeline: "Sep–Oct 2026", // from the repo's commit history; TODO: confirm
+  tools: ["React", "Tailwind CSS", "shadcn/ui", "Playwright", "Claude Code"], // TODO: add design tools (Figma?)
+  cover: "", // TODO: "/images/cases/workflow-app/cover.webp", 1600x800 WebP (repo has screenshots/)
+  concept: true, // TODO: confirm this was self-initiated, not client work
+  featured: true,
+  order: 2,
+};
+
+{/*
+  Drafted from ~/Projects/devsign: design.md, docs/ut-conflict-review.md,
+  package.json and git history. There are no research notes or test results
+  in the repo, so problem framing, research, rationale and outcome are TODOs.
+*/}
+
+<TLDR>
+- **Problem:** When an implementation drifts from the design, there's no shared place to see the difference, decide which one is right, and keep a record of why.
+- **My role:** Designer and developer on a team of three. {/* TODO: what you owned specifically */}
+- **Outcome:** A working prototype for reviewing design–code mismatches, merging AI design variants, and replaying change history. {/* TODO: usability test results */}
+</TLDR>
+
+## Context
+
+Devsign is a workspace where designers and developers review the same change from their own side. It brings together a dashboard, a project workspace, docs, change history, team activity, and Merge Studio, a canvas for combining design variants.
+
+The prototype runs on React with Tailwind CSS and shadcn/ui. A single token file, `design.md`, is the source of truth for color, spacing, radius, and control sizes across every page.
+
+{/* TODO: who it's for, why the team started it, and what you were responding to. */}
+
+## Problem
+
+A typical case from our test plan: the design specifies two card columns at 768px, the implementation overlaps the cards, and the developer proposes a single column. Each person sees a different version, and the decision and its reason live outside both the design file and the code.
+
+{/* TODO: the problem statement in your words, and any evidence for how often this happens. */}
+
+## Research
+
+{/* TODO: interviews, existing tools you compared, and what you learned. None of this is in the repo. */}
+
+## Decisions
+
+### Turn a mismatch into a decision, not a bug ticket
+
+When a mismatch is detected, the card shows the related file and line, the cause, the impact, and a severity. The designer sees the original, the current implementation, and the developer's proposal side by side, then chooses one of three outcomes: keep the original, approve the change, or ask for another review. They write a reason and pick when it ships: now, before release, or in the next version.
+
+<WhyIChose>
+
+{/* TODO: why three outcomes, why the reason is required, and why timing is part of the decision. */}
+
+</WhyIChose>
+
+### Keep design alternatives out of the review queue
+
+Comparing variants, like four checkout options or two AI-generated dashboards, never adds an item to the change list or starts an approval. Only a real gap between the design and the code does.
+
+<WhyIChose>
+
+{/* TODO: why. The test plan checks whether participants can tell alternatives and mismatches apart. */}
+
+</WhyIChose>
+
+### Tie approvals to the exact content reviewed
+
+<Callout label="Security lens">
+
+An approval in Devsign applies to the content as it was when review was requested. If the change is edited after the request, pending approvals are cancelled and the author has to request review again. It's the same rule as approving a specific commit rather than a branch: a sign-off can't silently carry over to something the reviewer never saw.
+
+</Callout>
+
+<WhyIChose>
+
+{/* TODO: how you arrived at this rule. */}
+
+</WhyIChose>
+
+### Record every step as a History checkpoint
+
+Requests, decisions, fixes, and resolutions each leave a checkpoint. Selecting an activity in History replays the change at that point and marks the related issue on the timeline.
+
+<WhyIChose>
+
+{/* TODO: why replay instead of a plain log. */}
+
+</WhyIChose>
+
+## Interactive demo
+
+Devsign's core idea is that design and code should read from the same values. This small playground shows that idea in isolation: every slider changes one token, and the preview and both code files update from it together. It is a portfolio demo, not part of the Devsign app.
+
+<TokenPlayground />
+
+## Outcome & learnings
+
+{/* TODO: usability test results. */}
+
+We planned the usability test around three tasks in one project, with participants switching roles from the profile menu: merging two AI dashboard variants in Merge Studio as a designer, approving a design change as a designer, and resolving a detected mismatch as a developer. The plan observes whether people move from a review notification to the right change, whether History leads them to the matching replay, and whether they can tell a design alternative from a real mismatch.
+
+{/* TODO: learnings. */}
