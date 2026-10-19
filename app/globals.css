@@ -326,11 +326,20 @@ details[open]::details-content {
         animation-timeline: scroll(root);
         animation-range: 0 70vh;
       }
-      /* The selected case's card grows to the full screen as you scroll. */
-      .stage-card {
-        animation: stage-card linear both;
+      /*
+       * The one pinned sequence on the site: the landing stage holds still
+       * (sticky) for 70vh of normal scrolling while the selected case's card
+       * grows to the full screen. Only here, only with motion allowed.
+       */
+      .stage-pin {
+        height: calc(100svh + 70vh);
+      }
+
+      /* The selected case's small card grows to the full screen as you scroll. */
+      .stage-grow {
+        animation: stage-grow linear both;
         animation-timeline: scroll(root);
-        animation-range: 0 60vh;
+        animation-range: 0 70vh;
       }
     }
 
@@ -378,12 +387,14 @@ details[open]::details-content {
   }
 }
 
-@keyframes stage-card {
-  from {
-    clip-path: inset(0 14% 8% 14% round 24px);
-  }
+/* From the card's own position and size (its classes) to the whole stage. */
+@keyframes stage-grow {
   to {
-    clip-path: inset(0 0 0 0 round 0);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
   }
 }
 
