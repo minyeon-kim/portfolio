@@ -66,11 +66,12 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 ## Rules
 - Content first: the landing screen must show name, positioning line, and the list of
   featured case studies without scrolling on a 1440x900 screen.
-- Header: Menu button on the left, name centered, resume link and theme toggle on the
-  right. Page links live in the side menu, not the header. On md+ the header is
-  sticky and folds into a compact floating bar after a little scroll, at the same height.
+- Header: Menu button on the left, resume link and theme toggle on the right. No name
+  or page title in the header. Page links live in the menu. On md+ the header is
+  sticky and folds into a compact floating pill after a little scroll; on the landing
+  page it is transparent over the cover.
 - Menu button (turns into Close). On the landing page (md+) it opens the page links
-  inline in the left rail (see below). Everywhere else, and on phones, it opens the
+  inline at the left edge (see below). Everywhere else, and on phones, it opens the
   full-screen side menu:
   - Full-screen panel with three columns that slide in one after another: (1) page
     links (Work, Playground, About, Contact) and case-study pills; (2) a large cover
@@ -81,27 +82,31 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     the Menu button. Following a link closes it.
   - Page scroll is never locked; the panel scrolls on its own if it's taller than
     the screen.
-- The landing page is one screen (Metalab-style home), nothing else on it:
-  - The selected featured case's cover fills the screen behind everything, with
-    scrims so text stays readable in both themes.
+- The landing page is a full-screen stage for the selected case, followed by that
+  case's content (Metalab-style home):
+  - Stage (md+): the case cover fills the screen and runs up under the transparent
+    header. Legibility comes from a light even tint over the whole image plus one
+    long fade at the bottom that continues into the content, never separate
+    top/bottom bands.
   - Intro at the top: the positioning line only (36px Light, with the Decrypted
-    scramble). No name label (the header has it) and no footer on this page.
-  - Left rail (md+), fixed at the bottom-left edge over the stage: a floating pill
-    list of the featured cases (tabs) that picks the case. The selected pill is
-    filled ink with an accent dot; a mono counter shows "01 / 02".
-  - Inline menu: Menu opens the page links (Work, Playground, About, Contact) right
-    above the case list, sliding in from the left one by one (50ms apart, 250ms
-    each). Menu again, Esc, or following a link folds them away; focus returns to
-    the Menu button. The links keep their space when hidden so the list never moves.
-  - Bottom right: the selected case's title (64px Light), role, [CONCEPT] label,
-    one-line problem, and a "View case" pill.
+    scramble). No name label, no counter, no footer on this page.
+  - Case picker in the middle: an iOS-style segmented control (frosted pill track,
+    solid thumb that slides to the selected case). Tabs: arrows / Home / End switch.
+  - Bottom: the selected case's role, [CONCEPT] label, title (64px Light) and
+    one-line problem, plus a "Scroll to read" hint. No "View case" button.
   - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
     block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
-    Arrow keys / Home / End switch cases.
-  - On phones it stacks instead: intro, the cover as a 24px-rounded card, a pill
-    list, then the title, so text never sits on the image.
-  - Case details, Playground, About and Contact live on their own pages, reached
-    from the Menu.
+  - Scrolling down hands off to the case: the stage text drifts up and fades, the
+    tint deepens and the cover zooms slightly (scroll-linked), and the selected
+    case's content follows directly (meta row, then the MDX body). Its end offers
+    "Next case", which selects the next case and glides back up.
+  - Inline menu (md+): Menu opens the page links (Work, Playground, About, Contact)
+    at the left edge, vertically centered, as frosted pills sliding in one by one
+    (50ms apart, 250ms each). Menu again, Esc, or following a link folds them away;
+    focus returns to the Menu button.
+  - On phones it stacks: intro, the cover as a 24px-rounded card, the segmented
+    control, then the title, so text never sits on the image.
+  - Full case pages (/work/[slug]) still exist for direct links and the Menu.
 - Scroll interactions follow the user's scroll and never take it over: no scroll
   hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a
   preloader. In-page links scroll smoothly. Reveals and parallax use CSS
