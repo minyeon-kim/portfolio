@@ -10,11 +10,11 @@ gsap.registerPlugin(useGSAP, ScrambleTextPlugin, SplitText);
 
 const CHARS = "01#$%&";
 const LOAD_DURATION = 1.2; // seconds, the hard cap for the load reveal
-const RADIUS = 80; // px around the cursor that re-scrambles after load
-const HOVER_DURATION = 0.6; // seconds, cursor re-scramble at the cursor's center
-// Kept subtle: scrambled glyphs sit at reduced opacity and change slowly.
-const DIM = 0.35;
-const SPEED = 0.3;
+const RADIUS = 56; // px around the cursor that re-scrambles after load (2-3 glyphs)
+const HOVER_DURATION = 0.35; // seconds, cursor re-scramble at the cursor's center
+// Kept light: only a short run of glyphs is ever scrambled at once.
+const GLYPH_SCRAMBLE = 0.1; // seconds each glyph spends scrambled on load (~9-glyph front)
+const SPEED = 0.25; // how often a scrambled glyph changes (lower = calmer)
 
 type Props = { text: string; className?: string };
 
@@ -53,17 +53,12 @@ export function ScrambleHeadline({ text, className }: Props) {
               pointer.y - (r.top + r.height / 2),
             );
             if (dist >= RADIUS) continue;
-            gsap.fromTo(
-              char,
-              { opacity: DIM },
-              {
-                opacity: 1,
-                duration: HOVER_DURATION * (1 - dist / RADIUS),
-                ease: "none",
-                overwrite: true,
-                scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED },
-              },
-            );
+            gsap.to(char, {
+              duration: HOVER_DURATION * (1 - dist / RADIUS),
+              ease: "none",
+              overwrite: true,
+              scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED },
+            });
           }
         };
 
@@ -88,32 +83,32 @@ export function ScrambleHeadline({ text, className }: Props) {
           },
         });
 
-        // Every glyph starts scrambled; glyph i resolves at a time that grows
-        // left to right, so the whole line is readable by LOAD_DURATION.
+        // The line types out left to right; only the few glyphs at the front
+        // are scrambled at any moment, each for GLYPH_SCRAMBLE, so the rest is
+        // either already readable or not shown yet. Done by LOAD_DURATION.
+        gsap.set(chars, { autoAlpha: 0 });
         const load = gsap.timeline({
-          // Reveal on the first rendered frame, when every glyph is already scrambled.
           onStart: () => gsap.set(el, { visibility: "visible" }),
           onComplete: () => window.addEventListener("pointermove", onPointerMove),
         });
+        const span = LOAD_DURATION - GLYPH_SCRAMBLE;
         chars.forEach((char, i) => {
-          const progress = chars.length > 1 ? i / (chars.length - 1) : 1;
-          const resolveAt = LOAD_DURATION * (0.25 + 0.75 * progress);
-          load.fromTo(
+          const at = chars.length > 1 ? (i / (chars.length - 1)) * span : 0;
+          load.set(char, { autoAlpha: 1 }, at);
+          load.to(
             char,
-            { opacity: DIM },
             {
-              opacity: 1,
-              duration: resolveAt,
-              ease: "expo.in", // stays dim while scrambled, brightens as it resolves
+              duration: GLYPH_SCRAMBLE,
+              ease: "none",
               scrambleText: {
                 text: char.dataset.char ?? "",
                 chars: CHARS,
                 speed: SPEED,
                 // A one-glyph scramble otherwise resolves halfway through the tween.
-                revealDelay: resolveAt - 0.05,
+                revealDelay: GLYPH_SCRAMBLE - 0.05,
               },
             },
-            0,
+            at,
           );
         });
 

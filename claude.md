@@ -57,10 +57,11 @@ All of it is off with prefers-reduced-motion.
 
 ## Signature motif: "Decrypted"
 Text scramble (encrypted -> readable) is the single expressive motif. Use it ONLY in:
-- the hero headline: once on load (max 1.2s, left to right, chars "01#$%&"), then,
-  after load, only glyphs within 80px of the mouse cursor briefly re-scramble
-  (max 0.6s; mouse only, never touch; must not reflow the line). Keep it subtle:
-  scrambled glyphs sit at 35% opacity and brighten as they resolve;
+- the hero headline: once on load (max 1.2s, chars "01#$%&"), the line types out
+  left to right and only a short front of glyphs (~6) is scrambled at any moment,
+  each for 0.1s. After load, only glyphs within 56px of the mouse cursor briefly
+  re-scramble (max 0.35s; mouse only, never touch; must not reflow the line).
+  Keep it light: scramble the letters less, never dim or fade them;
 - side menu page links, on hover or keyboard focus (Geist Mono, 0.4s).
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
