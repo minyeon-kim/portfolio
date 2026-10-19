@@ -3,8 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { site } from "@/lib/site";
+import { setUi, useUi } from "@/lib/ui-store";
 import { CopyButton } from "./copy-button";
 import { ScrambleLink } from "./scramble-link";
 
@@ -38,6 +40,18 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const open = phase === "enter" || phase === "open";
+
+  // On the landing page (md+) Menu opens the links inline in the left rail
+  // instead of this overlay.
+  const pathname = usePathname();
+  const inlineOpen = useUi((s) => s.menuOpen);
+  const onMenuClick = () => {
+    if (pathname === "/" && window.matchMedia("(min-width: 48rem)").matches) {
+      setUi({ menuOpen: !inlineOpen });
+      return;
+    }
+    openMenu();
+  };
 
   const openMenu = () => {
     setPhase("enter");
@@ -87,7 +101,13 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
 
   return (
     <>
-      <MenuButton ref={button} open={false} onClick={openMenu} />
+      <MenuButton
+        ref={button}
+        id="menu-button"
+        open={inlineOpen}
+        controls={pathname === "/" ? "inline-menu" : undefined}
+        onClick={onMenuClick}
+      />
 
       {phase !== "closed" &&
         createPortal(
@@ -101,7 +121,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
             className={`fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-bg transition-opacity duration-250 ease-standard ${phase === "enter" || phase === "leaving" ? "opacity-0" : "opacity-100"}`}
           >
             <div className="mx-auto flex max-w-page items-center justify-between px-2 py-2 md:px-4">
-              <MenuButton open onClick={() => closeMenu()} autoFocus />
+              <MenuButton open controls="site-menu" onClick={() => closeMenu()} autoFocus />
               <Link href="/" onClick={go} className="text-sm font-medium">
                 {site.name}
               </Link>
@@ -242,7 +262,11 @@ function MenuButton({
   onClick,
   ref,
   autoFocus,
+  id,
+  controls,
 }: {
+  id?: string;
+  controls?: string;
   open: boolean;
   onClick: () => void;
   ref?: React.Ref<HTMLButtonElement>;
@@ -254,8 +278,9 @@ function MenuButton({
       type="button"
       onClick={onClick}
       data-autofocus={autoFocus ? "" : undefined}
+      id={id}
       aria-expanded={open}
-      aria-controls={open ? "site-menu" : undefined}
+      aria-controls={controls}
       className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong"
     >
       <span aria-hidden="true" className="relative block h-1 w-1.5">
