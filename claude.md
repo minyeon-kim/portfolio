@@ -28,8 +28,8 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --muted #5B6461 / #8E9895
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
-Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is only the selected case name on the
-landing page.
+Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is only for the landing page: the name
+on the intro, and the selected case name.
 Weights: 64px is Light (300); 36px is Regular (400); 24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
@@ -65,8 +65,8 @@ Text scramble (encrypted -> readable) is the single expressive motif. Use it ONL
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
 ## Rules
-- Content first: the landing screen must show name, positioning line, and the list of
-  featured case studies without scrolling on a 1440x900 screen.
+- Content first: the landing intro must show the name, positioning line, and the list
+  of featured case studies without scrolling on a 1440x900 screen.
 - Header: Menu button at the left screen edge, the name (Minyeon Kim) centered, resume
   link and theme toggle at the right screen edge (full width, not the content width).
   The Menu button is icon only (lines that turn into an X, labelled "Open menu" /
@@ -87,15 +87,18 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     the Menu button. Following a link closes it.
   - Page scroll is never locked; the panel scrolls on its own if it's taller than
     the screen.
-- The landing page is a full-screen stage for the selected case, followed by that
-  case's content (Metalab-style home):
-  - Stage (md+), laid out like a Metalab case header: a solid dark head block
-    (running up under the transparent header) with the selected case's [CONCEPT]
-    label and name large on the left (64px Light), the positioning line small at
-    the top right (24px Medium, with the Decrypted scramble), and a facts row along
-    the bottom (Problem / Role / Timeline). The cover fills the rest of the screen
-    below it with no text on it except a "Scroll to read" pill. No footer on this
-    page.
+- The landing page has two states (Metalab-style home):
+  - Intro (on load, nothing picked): the name (64px Light) and the positioning line
+    (36px Medium, Decrypted scramble on load) are the emphasis, with the case picker
+    and a "Select a project" hint. Nothing is rendered below it, so there is nothing
+    to scroll yet (no content exists, the page is never scroll-locked). The header
+    name returns to this state.
+  - Selected: a solid dark head block (running up under the transparent header) with
+    the case's [CONCEPT] label, name (64px Light) and facts (Problem / Role /
+    Timeline), rising in. Below it the case's screen appears as a rounded card
+    (fade + rise + scale from 0.94). Scrolling grows that card to the full screen
+    (scroll-linked clip from inset 14% / 24px radius to full bleed over the first
+    60vh, never pinned), then the case content follows. No footer on this page.
   - Case picker (lg+): separate frosted pills stacked with a gap (Metalab-style),
     always in the dark media palette, fixed at the left edge over the middle of the
     cover area (62% down the screen). An outline ring slides to the selected pill. It belongs to
@@ -103,13 +106,10 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     it's hidden, Menu opens the full-screen menu instead of the inline links.
     Below lg an iOS-style segmented control sits under the cover card instead.
     Tabs: arrows / Home / End switch.
-  - Picking a case crossfades the cover (settling from a 1.04 zoom). The old name
-    and facts slide out upward and the new ones rise in (name at 150ms, facts from
-    250ms, 50ms apart).
-  - Scrolling down hands off to the case: the stage text drifts up and fades, the
-    tint deepens and the cover zooms slightly (scroll-linked), and the selected
-    case's content follows (meta row, then the MDX body). Its end offers "Next
-    case", which selects the next case and glides back up.
+  - Picking or switching a case replays the selected state's enter animation (head
+    at 0ms, facts from 150ms 50ms apart, card at 250ms).
+  - The selected case's content follows the stage (meta row, then the MDX body). Its
+    end offers "Next case", which selects the next case and glides back up.
   - The content is built by scrolling, not laid out all at once: every block
     (paragraphs, list items, subheadings, meta items) rises in as it enters the
     screen, one by one; quotes fill in word by word with scroll; a rule above each
@@ -118,8 +118,8 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     as frosted pills just above the left case picker, sliding in one by one (50ms
     apart, 250ms each). Menu again, Esc, or following a link folds them away;
     focus returns to the Menu button.
-  - On phones it stacks: intro, the cover as a 24px-rounded card, the segmented
-    control, then the title, so text never sits on the image.
+  - On phones it stacks: intro or case name, the cover as a 24px-rounded card, then
+    the segmented control, so text never sits on the image.
   - Full case pages (/work/[slug]) still exist for direct links and the Menu.
 - Scroll interactions follow the user's scroll and never take it over: no scroll
   hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a

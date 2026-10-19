@@ -5,7 +5,7 @@ import { useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 type Props = {
   label: string;
   options: { id: string; label: string }[];
-  value: number;
+  value: number | null; // null: nothing selected yet
   onChange: (index: number) => void;
   controls?: string;
 };
@@ -19,8 +19,9 @@ export function CasePills({ label, options, value, onChange, controls }: Props) 
 
   useLayoutEffect(() => {
     const measure = () => {
-      const b = buttons.current[value];
-      if (b) setRing({ top: b.offsetTop, width: b.offsetWidth, height: b.offsetHeight });
+      const b = value === null ? null : buttons.current[value];
+      if (!b) return setRing(null);
+      setRing({ top: b.offsetTop, width: b.offsetWidth, height: b.offsetHeight });
     };
     measure();
     window.addEventListener("resize", measure);
@@ -36,10 +37,10 @@ export function CasePills({ label, options, value, onChange, controls }: Props) 
 
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     const moves: Record<string, number> = {
-      ArrowDown: value + 1,
-      ArrowRight: value + 1,
-      ArrowUp: value - 1,
-      ArrowLeft: value - 1,
+      ArrowDown: (value ?? -1) + 1,
+      ArrowRight: (value ?? -1) + 1,
+      ArrowUp: (value ?? 1) - 1,
+      ArrowLeft: (value ?? 1) - 1,
       Home: 0,
       End: options.length - 1,
     };
@@ -70,10 +71,10 @@ export function CasePills({ label, options, value, onChange, controls }: Props) 
             id={`rail-${o.id}`}
             aria-selected={selected}
             aria-controls={controls}
-            tabIndex={selected ? 0 : -1}
+            tabIndex={selected || (value === null && i === 0) ? 0 : -1}
             onClick={() => onChange(i)}
             onKeyDown={onKeyDown}
-            className={`press rounded-full bg-bg/60 px-2 py-1 text-base whitespace-nowrap backdrop-blur-xl transition-colors duration-250 ease-standard hover:bg-bg/80 ${
+            className={`press rounded-full bg-fill-strong px-2 py-1 text-base whitespace-nowrap backdrop-blur-xl transition-colors duration-250 ease-standard hover:bg-ink/20 ${
               selected ? "text-ink" : "text-ink/80 hover:text-ink"
             } ${!ring && selected ? "ring-1 ring-ink" : ""}`}
           >
