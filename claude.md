@@ -69,7 +69,9 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 - Content first: the landing screen must show name, positioning line, and the list of
   featured case studies without scrolling on a 1440x900 screen.
 - Header: Menu button at the left screen edge, resume link and theme toggle at the
-  right screen edge (full width, not the content width). No name or page title.
+  right screen edge (full width, not the content width). The Menu button is icon
+  only (lines that turn into an X, labelled "Open menu" / "Close menu"), the same
+  32px circle as the theme toggle. No name or page title.
   Page links live in the menu. On md+ the header is sticky and folds into one compact
   floating pill after a little scroll; inside it the buttons drop their own pill
   backgrounds (never a pill inside a pill). On the landing page it is transparent
