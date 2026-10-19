@@ -28,10 +28,9 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --muted #5B6461 / #8E9895
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
-Type scale: 13 / 15 / 18 / 24 / 36 / 48 / 64 px. 48px is only the landing positioning line;
-64px only the landing case title.
-Weights: 64px is Light (300); 48px positioning line is Medium (500); 36px is Regular (400);
-24px and below may use Medium.
+Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is only the selected case name on the
+landing page.
+Weights: 64px is Light (300); 36px is Regular (400); 24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
 Shape (Metalab-like, soft rather than wireframe):
@@ -68,14 +67,14 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 ## Rules
 - Content first: the landing screen must show name, positioning line, and the list of
   featured case studies without scrolling on a 1440x900 screen.
-- Header: Menu button at the left screen edge, resume link and theme toggle at the
-  right screen edge (full width, not the content width). The Menu button is icon
-  only (lines that turn into an X, labelled "Open menu" / "Close menu"), the same
-  32px circle as the theme toggle. No name or page title.
-  Page links live in the menu. On md+ the header is sticky and folds into one compact
-  floating pill after a little scroll; inside it the buttons drop their own pill
+- Header: Menu button at the left screen edge, the name (Minyeon Kim) centered, resume
+  link and theme toggle at the right screen edge (full width, not the content width).
+  The Menu button is icon only (lines that turn into an X, labelled "Open menu" /
+  "Close menu"), the same 32px circle as the theme toggle. Page links live in the
+  menu. On md+ the header is sticky and folds into one compact floating pill (Menu,
+  name, toggle) after a little scroll; inside it the buttons drop their own pill
   backgrounds (never a pill inside a pill). On the landing page it is transparent
-  over the cover.
+  over the stage.
 - Menu button (turns into Close). On the landing page (md+) it opens the page links
   inline at the left edge (see below). Everywhere else, and on phones, it opens the
   full-screen side menu:
@@ -91,23 +90,22 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 - The landing page is a full-screen stage for the selected case, followed by that
   case's content (Metalab-style home):
   - Stage (md+), laid out like a Metalab case header: a solid dark head block
-    (running up under the transparent header) holds the positioning line and the
-    selected case's facts (Role / Timeline / Tools, crossfading on change); the
-    cover fills the rest of the screen below it. Only the case title sits on the
-    image, with a fade under it.
-  - Intro at the top: the positioning line only (48px Medium, 36px on phones, with
-    the Decrypted scramble). No name label, no counter, no footer on this page.
+    (running up under the transparent header) with the selected case's [CONCEPT]
+    label and name large on the left (64px Light), the positioning line small at
+    the top right (24px Medium, with the Decrypted scramble), and a facts row along
+    the bottom (Problem / Role / Timeline). The cover fills the rest of the screen
+    below it with no text on it except a "Scroll to read" pill. No footer on this
+    page.
   - Case picker (lg+): separate frosted pills stacked with a gap (Metalab-style),
     always in the dark media palette, fixed at the left edge over the middle of the
-    cover area (62% down the screen). An outline ring slides to the selected pill. It belongs to the stage:
-    it fades out once you scroll past half a screen and returns at the top; while
+    cover area (62% down the screen). An outline ring slides to the selected pill. It belongs to
+    the stage: it fades out once you scroll past half a screen and returns at the top; while
     it's hidden, Menu opens the full-screen menu instead of the inline links.
     Below lg an iOS-style segmented control sits under the cover card instead.
     Tabs: arrows / Home / End switch.
-  - On the cover's lower part: the [CONCEPT] label, title (64px Light) and one-line
-    problem, plus a "Scroll to read" hint. No "View case" button.
-  - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
-    block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
+  - Picking a case crossfades the cover (settling from a 1.04 zoom). The old name
+    and facts slide out upward and the new ones rise in (name at 150ms, facts from
+    250ms, 50ms apart).
   - Scrolling down hands off to the case: the stage text drifts up and fades, the
     tint deepens and the cover zooms slightly (scroll-linked), and the selected
     case's content follows (meta row, then the MDX body). Its end offers "Next

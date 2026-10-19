@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import Link from "next/link";
 import { experiments } from "@/components/playground/experiments";
 import { getCases } from "@/lib/cases";
 import { nav, site } from "@/lib/site";
@@ -7,8 +8,8 @@ import { HeaderShell } from "./header-shell";
 import { SiteMenu } from "./site-menu";
 import { ThemeToggle } from "./theme-toggle";
 
-// Menu on the left, resume and theme on the right. No name or page title:
-// the page itself says where you are. Page links live in the menu.
+// Menu at the left edge, name in the center, resume and theme at the right
+// edge (Metalab-style). Page links live in the menu.
 export async function SiteHeader() {
   const cases = (await getCases()).filter((c) => !c.meta.draft);
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
@@ -20,7 +21,7 @@ export async function SiteHeader() {
         scroll (md+) they fold into one compact floating pill; inside it the
         buttons drop their own pill backgrounds, so there is never a pill in a pill.
       */}
-      <div className="mx-auto flex max-w-full items-center justify-between gap-2 px-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:px-4 md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[360px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
+      <div className="mx-auto grid max-w-full grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:px-4 md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[360px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
         <div>
           <SiteMenu
             cases={cases.map(({ slug, meta, tldr }) => ({
@@ -39,6 +40,9 @@ export async function SiteHeader() {
             }}
           />
         </div>
+        <Link href="/" className="text-base font-medium tracking-tight whitespace-nowrap">
+          {site.name}
+        </Link>
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
           {hasResume && (

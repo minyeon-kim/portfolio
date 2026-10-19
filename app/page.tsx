@@ -30,7 +30,7 @@ export default async function Home() {
         intro={
           <ScrambleHeadline
               text={site.positioning}
-              className="max-w-[26ch] text-xl font-medium tracking-tight md:text-headline md:tracking-[-0.02em]"
+              className="text-xl font-medium tracking-tight md:text-lg"
             />
         }
       />
