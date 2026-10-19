@@ -282,13 +282,6 @@ details[open]::details-content {
  */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* Hero eases back as you scroll past it. */
-    .hero-exit {
-      animation: hero-exit linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 70vh;
-    }
-
     /* Case card covers drift slightly inside their frame. */
     .cover-parallax {
       animation: cover-parallax linear both;
@@ -302,19 +295,6 @@ details[open]::details-content {
       animation-range: entry 0% cover 45%;
     }
 
-    /* Big type rows slide sideways, in opposite directions, while in view. */
-    .track-left,
-    .track-right {
-      animation: linear both;
-      animation-timeline: view();
-    }
-    .track-left {
-      animation-name: track-left;
-    }
-    .track-right {
-      animation-name: track-right;
-    }
-
     /* About timeline: the line fills, each node lights up at mid-screen. */
     .story-line {
       animation: story-line linear both;
@@ -326,13 +306,6 @@ details[open]::details-content {
       animation-timeline: view();
       animation-range: cover 45% cover 55%;
     }
-  }
-}
-
-@keyframes hero-exit {
-  to {
-    opacity: 0.2;
-    translate: 0 -32px;
   }
 }
 
@@ -353,24 +326,6 @@ details[open]::details-content {
   to {
     clip-path: inset(0 0 round 0);
     transform: none;
-  }
-}
-
-@keyframes track-left {
-  from {
-    translate: 0 0;
-  }
-  to {
-    translate: -35% 0;
-  }
-}
-
-@keyframes track-right {
-  from {
-    translate: -35% 0;
-  }
-  to {
-    translate: 0 0;
   }
 }
 
