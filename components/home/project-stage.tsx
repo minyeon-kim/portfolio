@@ -19,10 +19,9 @@ export type StageProject = {
 };
 
 // The landing page opener, laid out like a Metalab case header. A solid dark
-// head block holds the positioning line and the selected case's facts (Role /
-// Timeline / Tools); the cover fills the rest of the screen below it, with the
-// case title on its lower part. Text never sits on the image except the title,
-// which has a fade under it. Scrolling hands off to the case content below.
+// head block holds the selected case's name (large), the positioning line
+// (small, top right) and a facts row; the cover fills the rest of the screen
+// below it, clean, with no text on it. Scrolling hands off to the case content.
 export function ProjectStage({ projects, intro }: { projects: StageProject[]; intro: ReactNode }) {
   const active = useUi((s) => s.activeCase);
   const select = (i: number) => setUi({ activeCase: i });
@@ -31,41 +30,55 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
   const place = (i: number) =>
     i === active ? "translate-y-0 opacity-100" : i < active ? "-translate-y-3 opacity-0" : "translate-y-3 opacity-0";
 
-  const facts = (p: StageProject) =>
-    [
-      { label: "Role", value: p.role },
-      { label: "Timeline", value: p.timeline },
-      { label: "Tools", value: p.tools },
-    ].filter((f) => f.value);
-
   return (
     <section
       id="work"
       aria-label="Selected work"
       className="full-bleed relative flex flex-col py-6 md:on-media md:-mt-[67px] md:h-svh md:min-h-[720px] md:bg-bg md:py-0"
     >
-      {/* Head block: solid background, positioning line, the selected case's facts. */}
+      {/*
+        Head block (solid background), like a Metalab case header: the selected
+        case's name large on the left, the positioning line small at the top
+        right, and a facts row (Problem / Role / Timeline) along the bottom.
+      */}
       <div className="order-1 px-2 md:px-4 md:pt-[115px] md:pb-4">
         <div className="mx-auto max-w-page">
-          {intro}
-          <div className="mt-6 hidden grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-4 md:grid">
-            {["Role", "Timeline", "Tools"].map((label, col) => (
-              <div key={label} className="grid">
+          <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:items-start md:gap-8">
+            <div className="hidden md:grid">
+              {projects.map((p, i) => (
+                <div key={p.slug} aria-hidden={i !== active} className="col-start-1 row-start-1">
+                  <div
+                    className={`mb-1 h-2.5 transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+                  >
+                    {p.concept && <ConceptLabel />}
+                  </div>
+                  <h2
+                    className={`text-display font-light tracking-[-0.03em] transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+                    style={{ transitionDelay: i === active ? "150ms" : "0ms" }}
+                  >
+                    {p.title}
+                  </h2>
+                </div>
+              ))}
+            </div>
+            <div className="md:pt-3">{intro}</div>
+          </div>
+
+          <div className="mt-8 hidden grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-4 md:grid">
+            {(["Problem", "Role", "Timeline"] as const).map((label, col) => (
+              <div key={label}>
                 <p className="mb-0.5 text-sm">{label}</p>
                 <div className="grid">
-                  {projects.map((p, i) => {
-                    const fact = facts(p).find((f) => f.label === label);
-                    return (
-                      <p
-                        key={p.slug}
-                        aria-hidden={i !== active}
-                        className={`col-start-1 row-start-1 text-sm text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
-                        style={{ transitionDelay: i === active ? `${col * 50}ms` : "0ms" }}
-                      >
-                        {fact?.value ?? "—"}
-                      </p>
-                    );
-                  })}
+                  {projects.map((p, i) => (
+                    <p
+                      key={p.slug}
+                      aria-hidden={i !== active}
+                      className={`col-start-1 row-start-1 text-sm text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)} ${col === 0 ? "max-w-[52ch]" : ""}`}
+                      style={{ transitionDelay: i === active ? `${250 + col * 50}ms` : "0ms" }}
+                    >
+                      {(label === "Problem" ? p.problem : label === "Role" ? p.role : p.timeline) ?? "—"}
+                    </p>
+                  ))}
                 </div>
               </div>
             ))}
@@ -90,26 +103,16 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
             ) : null,
           )}
         </div>
-        {/* Desktop: a fade under the title only, deepening as you scroll on. */}
-        <div aria-hidden="true" className="stage-tint absolute inset-0 hidden bg-bg/10 md:block" />
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 hidden h-[75%] bg-[linear-gradient(to_bottom,transparent,color-mix(in_srgb,var(--bg)_75%,transparent)_45%,var(--bg)_85%)] md:block"
-        />
+        {/* The cover darkens as you scroll on into the case (desktop). */}
+        <div aria-hidden="true" className="stage-tint absolute inset-0 hidden bg-bg/0 md:block" />
 
-        {/* Title of the selected case, on the lower part of the cover (desktop). */}
-        <div className="stage-content absolute inset-x-0 bottom-0 hidden px-4 pb-8 md:block">
-          <div className="mx-auto flex max-w-page flex-wrap items-end justify-between gap-2">
-            <TitleBlock id="stage-panel" projects={projects} active={active} place={place} />
-            <a
-              href="#case"
-              className="inline-flex items-center gap-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink"
-            >
-              Scroll to read
-              <span aria-hidden="true">↓</span>
-            </a>
-          </div>
-        </div>
+        <a
+          href="#case"
+          className="stage-content absolute right-4 bottom-4 hidden items-center gap-1 rounded-full bg-bg/60 px-2 py-1 font-mono text-xs text-ink backdrop-blur-xl transition-colors duration-150 ease-standard hover:bg-bg/85 md:inline-flex"
+        >
+          Scroll to read
+          <span aria-hidden="true">↓</span>
+        </a>
       </div>
 
       {/* Phones: picker and title stacked under the cover card. */}

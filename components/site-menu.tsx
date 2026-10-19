@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
+import { site } from "@/lib/site";
 import { setUi, useUi } from "@/lib/ui-store";
 import { CopyButton } from "./copy-button";
 import { ScrambleLink } from "./scramble-link";
@@ -124,7 +125,10 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
           >
             <div className="mx-auto flex max-w-page items-center justify-between px-2 py-2 md:px-4">
               <MenuButton open controls="site-menu" onClick={() => closeMenu()} autoFocus />
-              <span aria-hidden="true" />
+              <Link href="/" onClick={go} className="text-base font-medium tracking-tight">
+                {site.name}
+              </Link>
+              <span aria-hidden="true" className="size-4" />
             </div>
 
             <div className="mx-auto grid max-w-page gap-6 px-2 pt-4 pb-12 md:px-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,0.9fr)] lg:gap-4 lg:pt-8">
