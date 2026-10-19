@@ -93,21 +93,24 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     and a "Select a project" hint. Nothing is rendered below it, so there is nothing
     to scroll yet (no content exists, the page is never scroll-locked). The header
     name returns to this state.
-  - Selected: a solid dark head block (running up under the transparent header) with
-    the case's [CONCEPT] label, name (64px Light) and facts (Problem / Role /
-    Timeline), rising in. Below it the case's screen appears as a rounded card
-    (fade + rise + scale from 0.94). Scrolling grows that card to the full screen
-    (scroll-linked clip from inset 14% / 24px radius to full bleed over the first
-    60vh, never pinned), then the case content follows. No footer on this page.
+  - Selected (like Metalab's home with a case picked): the case's screen appears as
+    a small card at the top right (54% from the left, 14% down, 37% x 42% of the
+    screen, 24px radius) over a blurred, darkened backdrop of the same image. Role ·
+    Timeline sit at the left, the [CONCEPT] label and name (64px Light) at the bottom,
+    the problem at the bottom right. Scrolling grows the card from that spot to the
+    whole screen (scroll-linked position and size over the first 70vh, with the stage
+    pinned meanwhile; see the exception below) while the text fades, then the case
+    content follows. Without scroll timelines it
+    simply stays a card. No footer on this page.
   - Case picker (lg+): separate frosted pills stacked with a gap (Metalab-style),
     always in the dark media palette, fixed at the left edge over the middle of the
-    cover area (62% down the screen). An outline ring slides to the selected pill. It belongs to
+    screen (62% down). An outline ring slides to the selected pill. It belongs to
     the stage: it fades out once you scroll past half a screen and returns at the top; while
     it's hidden, Menu opens the full-screen menu instead of the inline links.
     Below lg an iOS-style segmented control sits under the cover card instead.
     Tabs: arrows / Home / End switch.
-  - Picking or switching a case replays the selected state's enter animation (head
-    at 0ms, facts from 150ms 50ms apart, card at 250ms).
+  - Picking or switching a case replays the selected state's enter animation (role
+    line at 0ms, card and name at 150ms, problem at 250ms).
   - The selected case's content follows the stage (meta row, then the MDX body). Its
     end offers "Next case", which selects the next case and glides back up.
   - The content is built by scrolling, not laid out all at once: every block
@@ -122,9 +125,13 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     the segmented control, so text never sits on the image.
   - Full case pages (/work/[slug]) still exist for direct links and the Menu.
 - Scroll interactions follow the user's scroll and never take it over: no scroll
-  hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a
-  preloader. In-page links scroll smoothly. Reveals and parallax use CSS
-  scroll-driven animations, so browsers without support just show the static page.
+  hijacking, snapping, smooth-scroll libraries, or blocked scrolling, and no preloader.
+  In-page links scroll smoothly. Reveals and parallax use CSS scroll-driven
+  animations, so browsers without support just show the static page.
+- One exception, and only this one: the landing stage may pin (sticky) for 70vh of
+  normal native scrolling while the selected case's card grows to the full screen.
+  Desktop only, only where scroll timelines are supported and motion is allowed;
+  otherwise there is no pin and no extra scroll length.
 - Respect prefers-reduced-motion: show final text instantly; disable scramble,
   parallax, reveals, and smooth scrolling.
 - Accessibility: WCAG AA contrast, visible focus ring (2px var(--accent)),
