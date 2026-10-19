@@ -59,7 +59,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
 
         {meta.cover && (
           <div className="mb-8">
-            <CaseCover src={meta.cover} priority />
+            <CaseCover src={meta.cover} priority morphName={`cover-${slug}`} />
           </div>
         )}
 

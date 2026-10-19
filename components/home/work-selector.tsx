@@ -2,6 +2,7 @@
 
 import {
   Children,
+  ViewTransition,
   useLayoutEffect,
   useRef,
   useState,
@@ -139,16 +140,17 @@ export function WorkSelector({ options, children }: { options: WorkOption[]; chi
           >
             {options.map((o, i) =>
               o.cover ? (
-                <Image
-                  key={o.slug}
-                  src={o.cover}
-                  alt=""
-                  width={1600}
-                  height={800}
-                  sizes="(min-width: 1024px) 620px, 100vw"
-                  priority={i === 0}
-                  className={`absolute inset-0 size-full object-cover transition-[opacity,scale] duration-400 ease-standard group-hover:scale-[1.02] ${shown === i ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
-                />
+                <ViewTransition key={o.slug} name={`cover-${o.slug}`} share="auto" default="none">
+                  <Image
+                    src={o.cover}
+                    alt=""
+                    width={1600}
+                    height={800}
+                    sizes="(min-width: 1024px) 620px, 100vw"
+                    priority={i === 0}
+                    className={`absolute inset-0 size-full object-cover transition-[opacity,scale] duration-400 ease-standard group-hover:scale-[1.02] ${shown === i ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
+                  />
+                </ViewTransition>
               ) : null,
             )}
             <span className="absolute bottom-1 left-1 rounded-md border border-line bg-surface/90 px-1 py-0.5 font-mono text-xs backdrop-blur-sm">

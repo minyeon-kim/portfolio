@@ -19,6 +19,10 @@ export function useActiveSection(ids: string[], line = 0.35) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= window.innerHeight * line) current = id;
       }
+      // At the very bottom a short last section can never reach the line; it wins anyway.
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom && document.getElementById(list[list.length - 1])) current = list[list.length - 1];
       setActive(current);
     };
     const schedule = () => {

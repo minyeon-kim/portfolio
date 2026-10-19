@@ -42,7 +42,7 @@ const components: MDXComponents = {
   ul: (props) => <ul className="mb-2 list-disc pl-3 text-base" {...props} />,
   ol: (props) => <ol className="mb-2 list-decimal pl-3 text-base" {...props} />,
   li: (props) => <li className="mb-0.5" {...props} />,
-  a: (props) => <a className="text-accent underline underline-offset-4" {...props} />,
+  a: (props) => <a className="link text-accent" {...props} />,
   strong: (props) => <strong className="font-medium" {...props} />,
   blockquote: (props) => (
     <blockquote className="my-3 border-l-2 border-line pl-2 text-base text-muted [&_p]:text-muted" {...props} />

@@ -10,7 +10,7 @@ export function SectionRail({ items }: { items: TocItem[] }) {
 
   return (
     <nav
-      aria-label="Sections"
+      aria-label="On this page"
       className="fixed top-1/2 right-2 z-20 hidden -translate-y-1/2 xl:block"
     >
       <ul className="flex flex-col items-end gap-1">

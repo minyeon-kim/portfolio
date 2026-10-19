@@ -112,7 +112,7 @@ export function BeforeAfter({ before, after, width, height, caption }: Props) {
           <span aria-hidden="true" className="h-full w-[2px] bg-accent" />
           <span
             aria-hidden="true"
-            className="absolute top-1/2 flex size-4 -translate-y-1/2 items-center justify-center rounded-md border border-accent bg-surface text-accent group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-accent group-focus-visible:outline-solid"
+            className="absolute top-1/2 flex size-4 -translate-y-1/2 items-center justify-center rounded-md border border-accent bg-surface text-accent transition-[scale] duration-150 ease-standard group-hover:scale-110 group-active:scale-95 group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-accent group-focus-visible:outline-solid"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path

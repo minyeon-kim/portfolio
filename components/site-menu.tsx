@@ -194,7 +194,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                 <Link
                   href="/playground/"
                   onClick={go}
-                  className="block rounded-md border border-line bg-surface p-2 transition-colors duration-150 ease-standard hover:border-ink"
+                  className="lift block rounded-md border border-line bg-surface p-2"
                 >
                   <p className="mb-1 font-mono text-xs text-muted">Playground</p>
                   <ul className="space-y-0.5 text-sm">
@@ -203,23 +203,23 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                     ))}
                   </ul>
                 </Link>
-                <div className="rounded-md border border-line bg-surface p-2">
+                <div className="lift rounded-md border border-line bg-surface p-2">
                   <p className="mb-1 font-mono text-xs text-muted">Contact</p>
                   <div className="flex flex-wrap items-center gap-1 text-sm">
                     {contact.email && <CopyButton value={contact.email} label="Copy email" />}
                     {contact.linkedinUrl && (
-                      <a href={contact.linkedinUrl} className="text-accent underline underline-offset-4">
+                      <a href={contact.linkedinUrl} className="link text-accent">
                         LinkedIn
                       </a>
                     )}
                     {contact.resumeUrl && (
-                      <a href={contact.resumeUrl} className="text-accent underline underline-offset-4">
+                      <a href={contact.resumeUrl} className="link text-accent">
                         Resume
                       </a>
                     )}
                     {/* TODO: shows nothing until site.email / linkedinUrl / resume are set. */}
                     {!contact.email && !contact.linkedinUrl && !contact.resumeUrl && (
-                      <Link href="/#contact" onClick={go} className="text-accent underline underline-offset-4">
+                      <Link href="/#contact" onClick={go} className="link text-accent">
                         Get in touch
                       </Link>
                     )}
@@ -256,7 +256,7 @@ function MenuButton({
       data-autofocus={autoFocus ? "" : undefined}
       aria-expanded={open}
       aria-controls={open ? "site-menu" : undefined}
-      className="group inline-flex h-4 w-[84px] items-center gap-1 rounded-md border border-line bg-surface px-1 font-mono text-xs transition-colors duration-150 ease-standard hover:border-ink"
+      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-md border border-line bg-surface px-1 font-mono text-xs transition-colors duration-150 ease-standard hover:border-ink"
     >
       <span aria-hidden="true" className="relative block h-1 w-1.5">
         <span
