@@ -90,20 +90,22 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     the screen.
 - The landing page is a full-screen stage for the selected case, followed by that
   case's content (Metalab-style home):
-  - Stage (md+): the case cover fills the screen and runs up under the transparent
-    header. Legibility comes from a light even tint over the whole image plus one
-    long fade at the bottom that continues into the content, never separate
-    top/bottom bands.
+  - Stage (md+), laid out like a Metalab case header: a solid dark head block
+    (running up under the transparent header) holds the positioning line and the
+    selected case's facts (Role / Timeline / Tools, crossfading on change); the
+    cover fills the rest of the screen below it. Only the case title sits on the
+    image, with a fade under it.
   - Intro at the top: the positioning line only (48px Medium, 36px on phones, with
     the Decrypted scramble). No name label, no counter, no footer on this page.
   - Case picker (lg+): separate frosted pills stacked with a gap (Metalab-style),
-    always in the dark media palette, fixed at the left edge and vertically
-    centered, staying put while you read. An outline ring slides to the selected
-    pill. Picking from inside a case
-    glides back to the stage. Below lg the same control sits horizontally in the
-    stage. Tabs: arrows / Home / End switch.
-  - Bottom: the selected case's role, [CONCEPT] label, title (64px Light) and
-    one-line problem, plus a "Scroll to read" hint. No "View case" button.
+    always in the dark media palette, fixed at the left edge over the middle of the
+    cover area (62% down the screen). An outline ring slides to the selected pill. It belongs to the stage:
+    it fades out once you scroll past half a screen and returns at the top; while
+    it's hidden, Menu opens the full-screen menu instead of the inline links.
+    Below lg an iOS-style segmented control sits under the cover card instead.
+    Tabs: arrows / Home / End switch.
+  - On the cover's lower part: the [CONCEPT] label, title (64px Light) and one-line
+    problem, plus a "Scroll to read" hint. No "View case" button.
   - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
     block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
   - Scrolling down hands off to the case: the stage text drifts up and fades, the
