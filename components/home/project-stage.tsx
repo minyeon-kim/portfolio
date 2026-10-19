@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, ViewTransition, type KeyboardEvent, type ReactNode } from "react";
+import { useRef, ViewTransition, type KeyboardEvent, type ReactNode } from "react";
 import { ConceptLabel } from "@/components/case-label";
+import { setUi, useUi } from "@/lib/ui-store";
 
 export type StageProject = {
   slug: string;
@@ -16,16 +17,18 @@ export type StageProject = {
 };
 
 // The landing page, Metalab-style: one full-bleed screen. The selected
-// project's cover fills the background; a floating pill list picks the
-// project; its title block slides in while the cover crossfades. One project
+// project's cover fills the background and its title block slides in while
+// the cover crossfades. The picker is the floating left rail on md+, and a
+// pill list inside the stage on phones. One project
 // at a time, nothing else competing. Keyboard: arrows / Home / End switch.
 export function ProjectStage({ projects, intro }: { projects: StageProject[]; intro: ReactNode }) {
-  const [active, setActive] = useState(0);
+  // Selection is shared with the left rail (md+), which is the picker there.
+  const active = useUi((s) => s.activeCase);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const select = (i: number, focus = false) => {
     const next = (i + projects.length) % projects.length;
-    setActive(next);
+    setUi({ activeCase: next });
     if (focus) tabs.current[next]?.focus();
   };
 
@@ -90,8 +93,8 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
         <div className="order-1 px-2 md:px-0">{intro}</div>
 
         <div className="order-3 grid items-end gap-4 px-2 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:px-0">
-          {/* Floating project list */}
-          <div>
+          {/* Phone picker; on md+ the left rail (ProjectRail) picks instead. */}
+          <div className="md:hidden">
             <p className="mb-1 font-mono text-xs text-muted">
               Selected work · {String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
             </p>
@@ -130,9 +133,10 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
           <div
             id="stage-panel"
             role="tabpanel"
-            aria-labelledby={`tab-${projects[active].slug}`}
+            aria-label={`${projects[active].name}, selected case`}
             aria-live="polite"
-            className="grid"
+            // md+: the left column is left empty for the floating rail.
+            className="grid md:col-start-2"
           >
             {projects.map((p, i) => (
               <div

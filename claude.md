@@ -51,8 +51,6 @@ Interaction states (nothing interactive is static; utilities in app/globals.css)
   accent dot that scales in; their large previews crossfade 400ms.
 - Route changes crossfade; a case cover morphs from the landing screen into
   the case page cover (React <ViewTransition>).
-- Floating side nav (wide screens): tiles fixed to the left edge; hover/focus slides
-  a label out; the current page or section's tile is filled ink.
 All of it is off with prefers-reduced-motion.
 
 ## Signature motif: "Decrypted"
@@ -71,7 +69,9 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 - Header: Menu button on the left, name centered, resume link and theme toggle on the
   right. Page links live in the side menu, not the header. On md+ the header is
   sticky and folds into a compact floating bar after a little scroll, at the same height.
-- Side menu (Metalab-style), opened from the Menu button, which turns into Close:
+- Menu button (turns into Close). On the landing page (md+) it opens the page links
+  inline in the left rail (see below). Everywhere else, and on phones, it opens the
+  full-screen side menu:
   - Full-screen panel with three columns that slide in one after another: (1) page
     links (Work, Playground, About, Contact) and case-study pills; (2) a large cover
     preview with caption that crossfades to the hovered or focused case; (3)
@@ -86,17 +86,22 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     scrims so text stays readable in both themes.
   - Intro at the top: the positioning line only (36px Light, with the Decrypted
     scramble). No name label (the header has it) and no footer on this page.
-  - Bottom left: a floating pill list of the featured cases (tabs). The selected pill
-    is filled ink with an accent dot; a mono counter shows "01 / 02".
+  - Left rail (md+), fixed at the bottom-left edge over the stage: a floating pill
+    list of the featured cases (tabs) that picks the case. The selected pill is
+    filled ink with an accent dot; a mono counter shows "01 / 02".
+  - Inline menu: Menu opens the page links (Work, Playground, About, Contact) right
+    above the case list, sliding in from the left one by one (50ms apart, 250ms
+    each). Menu again, Esc, or following a link folds them away; focus returns to
+    the Menu button. The links keep their space when hidden so the list never moves.
   - Bottom right: the selected case's title (64px Light), role, [CONCEPT] label,
     one-line problem, and a "View case" pill.
   - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
     block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
     Arrow keys / Home / End switch cases.
-  - On phones it stacks instead: intro, the cover as a 24px-rounded card, the list,
-    then the title, so text never sits on the image.
+  - On phones it stacks instead: intro, the cover as a 24px-rounded card, a pill
+    list, then the title, so text never sits on the image.
   - Case details, Playground, About and Contact live on their own pages, reached
-    from the side nav and the Menu.
+    from the Menu.
 - Scroll interactions follow the user's scroll and never take it over: no scroll
   hijacking, snapping, or scroll-locked sequences, and never block scrolling or add a
   preloader. In-page links scroll smoothly. Reveals and parallax use CSS
