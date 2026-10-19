@@ -165,7 +165,7 @@ export function TokenPlayground({ wide = true }: { wide?: boolean }) {
           <button
             type="button"
             onClick={() => update(DEFAULTS)}
-            className="mt-1 font-mono text-xs text-muted underline-offset-4 hover:text-ink hover:underline"
+            className="mt-1 press link font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink"
           >
             Reset
           </button>

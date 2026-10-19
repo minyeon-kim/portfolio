@@ -33,6 +33,21 @@ Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
 Radius: 6px on cards and controls, nothing larger. Borders 1px var(--line). No drop shadows.
 Motion: 150/250/400ms, ease cubic-bezier(0.2,0.8,0.2,1).
+Interaction states (nothing interactive is static; utilities in app/globals.css):
+- press: buttons and tiles scale to 0.97 while pressed.
+- lift: cards rise 4px and their border turns ink on hover or focus-within.
+- link: text links keep a 40% underline that firms up and tightens on hover/focus.
+- Inputs: border goes muted on hover, accent on focus.
+- Toggles and icons swap with a 250ms fade + quarter turn (theme toggle, Menu/Close),
+  never a hard cut. Theme changes crossfade the page (View Transitions).
+- Disclosure (<details>) opens and closes by height, 250ms.
+- Selection lists (side menu cases, Work selector) mark the current item with an
+  accent dot that scales in; their large previews crossfade 400ms.
+- Route changes crossfade; a case cover morphs from the Work selector preview into
+  the case page cover (React <ViewTransition>).
+- Floating side nav (wide screens): tiles fixed to the left edge; hover/focus slides
+  a label out; the current page or section's tile is filled ink.
+All of it is off with prefers-reduced-motion.
 
 ## Signature motif: "Decrypted"
 Text scramble (encrypted -> readable) is the single expressive motif. Use it ONLY in:

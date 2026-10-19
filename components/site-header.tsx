@@ -42,7 +42,7 @@ export async function SiteHeader() {
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
           {hasResume && (
-            <a href={site.resumeUrl} className="font-mono text-xs text-accent underline-offset-4 hover:underline">
+            <a href={site.resumeUrl} className="link font-mono text-xs text-accent">
               Resume
             </a>
           )}

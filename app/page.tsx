@@ -63,7 +63,7 @@ export default async function Home() {
               Small experiments, all working
             </h2>
           </div>
-          <Link href="/playground/" className="font-mono text-xs text-accent underline-offset-4 hover:underline">
+          <Link href="/playground/" className="link font-mono text-xs text-accent">
             Open the playground →
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default async function Home() {
             </li>
           ))}
         </ol>
-        <Link href="/about/" className="reveal inline-block font-mono text-xs text-accent underline-offset-4 hover:underline">
+        <Link href="/about/" className="reveal link inline-block font-mono text-xs text-accent">
           Read the story →
         </Link>
       </section>
@@ -103,7 +103,7 @@ export default async function Home() {
         <div className="reveal flex flex-wrap items-center gap-2">
           {site.email ? (
             <>
-              <a href={`mailto:${site.email}`} className="text-base text-accent underline underline-offset-4">
+              <a href={`mailto:${site.email}`} className="link text-base text-accent">
                 {site.email}
               </a>
               <CopyButton value={site.email} label="Copy email" />

@@ -31,20 +31,27 @@ export function ThemeToggle() {
   const next: Theme = theme === "dark" ? "light" : "dark";
 
   function toggle() {
-    // Picking the theme the system already uses clears the override,
-    // so the site goes back to following the system.
-    const system: Theme = window.matchMedia(query).matches ? "dark" : "light";
-    try {
-      if (next === system) {
-        delete document.documentElement.dataset.theme;
-        localStorage.removeItem("theme");
-      } else {
+    const apply = () => {
+      // Picking the theme the system already uses clears the override,
+      // so the site goes back to following the system.
+      const system: Theme = window.matchMedia(query).matches ? "dark" : "light";
+      try {
+        if (next === system) {
+          delete document.documentElement.dataset.theme;
+          localStorage.removeItem("theme");
+        } else {
+          document.documentElement.dataset.theme = next;
+          localStorage.setItem("theme", next);
+        }
+      } catch {
         document.documentElement.dataset.theme = next;
-        localStorage.setItem("theme", next);
       }
-    } catch {
-      document.documentElement.dataset.theme = next;
-    }
+    };
+
+    // Crossfade the whole page between themes where supported.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && "startViewTransition" in document) document.startViewTransition(apply);
+    else apply();
   }
 
   return (
@@ -52,9 +59,19 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme ? `Switch to ${next} theme` : "Toggle theme"}
-      className="inline-flex size-4 items-center justify-center rounded-md border border-line text-muted transition-colors duration-150 ease-standard hover:text-ink"
+      className="press relative inline-flex size-4 items-center justify-center rounded-md border border-line text-muted transition-[color,border-color] duration-150 ease-standard hover:border-ink hover:text-ink"
     >
-      {theme === "dark" ? <SunIcon /> : theme === "light" ? <MoonIcon /> : null}
+      {/* Both icons stay mounted and swap with a quarter turn. */}
+      <span
+        className={`absolute transition-[opacity,rotate,scale] duration-250 ease-standard ${theme === "dark" ? "scale-100 rotate-0 opacity-100" : "scale-50 -rotate-90 opacity-0"}`}
+      >
+        <SunIcon />
+      </span>
+      <span
+        className={`absolute transition-[opacity,rotate,scale] duration-250 ease-standard ${theme === "light" ? "scale-100 rotate-0 opacity-100" : "scale-50 rotate-90 opacity-0"}`}
+      >
+        <MoonIcon />
+      </span>
     </button>
   );
 }

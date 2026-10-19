@@ -61,13 +61,13 @@ export function PasswordMeter() {
           data-1p-ignore
           data-lpignore="true"
           aria-describedby={`${id}-strength`}
-          className="h-5 min-w-0 flex-1 rounded-md border border-line bg-bg px-1 font-mono text-sm"
+          className="h-5 min-w-0 flex-1 rounded-md border border-line bg-bg px-1 font-mono text-sm transition-colors duration-150 ease-standard hover:border-muted focus:border-accent"
         />
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
           aria-pressed={visible}
-          className="h-5 rounded-md border border-line px-1 font-mono text-xs text-muted hover:text-ink"
+          className="press h-5 rounded-md border border-line px-1 font-mono text-xs text-muted transition-[color,border-color] duration-150 ease-standard hover:border-ink hover:text-ink"
         >
           {visible ? "Hide" : "Show"}
         </button>

@@ -120,6 +120,70 @@ body {
   font-family: var(--font-sans);
 }
 
+/*
+ * Interaction states (see "Interaction states" in claude.md).
+ * press: tactile feedback on buttons and tiles.
+ * lift: cards rise 4px on hover.
+ * link: underline that is always there (40%) and firms up on hover.
+ */
+@utility press {
+  &:active {
+    scale: 0.97;
+  }
+}
+
+@utility lift {
+  transition:
+    translate var(--dur-base) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+  &:hover,
+  &:focus-within {
+    translate: 0 -4px;
+    border-color: var(--ink);
+  }
+}
+
+@utility link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition:
+    text-decoration-color var(--dur-fast) var(--ease),
+    text-underline-offset var(--dur-fast) var(--ease);
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+    text-underline-offset: 2px;
+  }
+}
+
+/* <details> (Why I chose this) opens and closes with height instead of snapping. */
+:root {
+  interpolate-size: allow-keywords;
+}
+details::details-content {
+  height: 0;
+  overflow: clip;
+  transition:
+    height var(--dur-base) var(--ease),
+    content-visibility var(--dur-base) allow-discrete;
+}
+details[open]::details-content {
+  height: auto;
+}
+
+/* Route changes crossfade; shared covers morph (React <ViewTransition>). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease);
+}
+::view-transition-group(*) {
+  animation-duration: var(--dur-slow);
+  animation-timing-function: var(--ease);
+}
+
 /* Break out of the page container to the full viewport width. */
 .full-bleed {
   width: 100vw;
@@ -158,6 +222,11 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
   *,
   *::before,
   *::after {
@@ -191,7 +260,8 @@ body {
   .reveal-ready .reveal {
     transition:
       opacity var(--dur-slow) var(--ease),
-      translate var(--dur-slow) var(--ease);
+      translate var(--dur-slow) var(--ease),
+      border-color var(--dur-fast) var(--ease);
   }
   .reveal-ready .reveal:not([data-shown]) {
     opacity: 0;

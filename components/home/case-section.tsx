@@ -56,7 +56,7 @@ export function CaseSection({
           </div>
           <Link
             href={href}
-            className="reveal group inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 text-sm transition-colors duration-150 ease-standard hover:border-accent"
+            className="reveal group press inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 text-sm transition-colors duration-150 ease-standard hover:border-accent"
           >
             Read the full case
             <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-x-0.5">

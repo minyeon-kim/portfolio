@@ -39,7 +39,7 @@ export default function AboutPage() {
         </h2>
         <div className="grid gap-2 sm:grid-cols-3">
           {columns.map((col) => (
-            <div key={col.title} className="reveal rounded-md border border-line bg-surface p-2">
+            <div key={col.title} className="reveal lift rounded-md border border-line bg-surface p-2">
               <h3 className="mb-1 text-base font-medium">{col.title}</h3>
               <ul className="space-y-0.5 text-sm text-muted">
                 {col.items.map((item) => (
@@ -68,7 +68,7 @@ export default function AboutPage() {
           )}
           {site.email ? (
             <div className="flex items-center gap-1">
-              <a href={`mailto:${site.email}`} className="text-sm text-accent underline underline-offset-4">
+              <a href={`mailto:${site.email}`} className="link text-sm text-accent">
                 {site.email}
               </a>
               <CopyButton value={site.email} label="Copy email" />

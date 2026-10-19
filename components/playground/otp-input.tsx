@@ -81,7 +81,7 @@ export function OtpInput() {
               if (v) focus(i + 1);
             }}
             data-status={status}
-            className={`h-5 w-full min-w-0 rounded-md border bg-bg text-center font-mono text-lg transition-colors duration-150 ease-standard ${status === "ok" ? "border-accent" : "border-line"} ${i === 2 ? "mr-1" : ""}`}
+            className={`h-5 w-full min-w-0 rounded-md border bg-bg text-center font-mono text-lg transition-colors duration-150 ease-standard ${status === "ok" ? "border-accent" : "border-line hover:border-muted focus:border-accent"} ${i === 2 ? "mr-1" : ""}`}
           />
         ))}
       </div>
@@ -99,7 +99,7 @@ export function OtpInput() {
               setDigits(Array(LENGTH).fill(""));
               focus(0);
             }}
-            className="font-mono text-xs text-muted underline-offset-4 hover:text-ink hover:underline"
+            className="press link font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink"
           >
             Clear
           </button>
