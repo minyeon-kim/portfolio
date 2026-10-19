@@ -277,9 +277,11 @@ function MenuButton({
       id={id}
       aria-expanded={open}
       aria-controls={controls}
-      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong md:group-data-compact/header:bg-transparent md:group-data-compact/header:hover:bg-transparent"
+      aria-label={open ? "Close menu" : "Open menu"}
+      // Icon only, same shape and size as the theme toggle so the pair matches.
+      className="group press relative inline-flex size-4 items-center justify-center rounded-full bg-fill text-muted transition-[color,background-color] duration-150 ease-standard hover:bg-fill-strong hover:text-ink md:group-data-compact/header:bg-transparent md:group-data-compact/header:hover:bg-transparent"
     >
-      <span aria-hidden="true" className="relative block h-1 w-1.5">
+      <span aria-hidden="true" className="relative block h-1 w-2">
         <span
           className={`absolute left-0 h-px w-full bg-current transition-[top,rotate] duration-250 ease-standard ${open ? "top-1/2 rotate-45" : "top-0"}`}
         />
@@ -287,7 +289,6 @@ function MenuButton({
           className={`absolute left-0 h-px w-full bg-current transition-[top,rotate] duration-250 ease-standard ${open ? "top-1/2 -rotate-45" : "top-full"}`}
         />
       </span>
-      {open ? "Close" : "Menu"}
     </button>
   );
 }
