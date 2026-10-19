@@ -175,19 +175,29 @@ body {
 }
 
 /*
+ * Reveal on scroll: `.reveal` elements fade and rise in as they come into
+ * view, one after another (components/reveal-observer.tsx). Hidden only once
+ * that script is running, and never with reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready .reveal {
+    transition:
+      opacity var(--dur-slow) var(--ease),
+      translate var(--dur-slow) var(--ease);
+  }
+  .reveal-ready .reveal:not([data-shown]) {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+/*
  * Scroll-driven interactions. Pure CSS tied to scroll position, so they never
  * hijack or block scrolling. Browsers without animation-timeline, and anyone
  * with reduced motion, get the static page with everything visible.
  */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* Blocks rise in as they enter the viewport. */
-    .reveal {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 20%;
-    }
-
     /* Hero eases back as you scroll past it. */
     .hero-exit {
       animation: hero-exit linear both;
@@ -212,13 +222,6 @@ body {
       animation-timeline: view();
       animation-range: cover 45% cover 55%;
     }
-  }
-}
-
-@keyframes reveal {
-  from {
-    opacity: 0;
-    translate: 0 16px;
   }
 }
 

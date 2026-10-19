@@ -25,24 +25,24 @@ export function CaseSection({ entry, index, total }: { entry: CaseEntry; index: 
       className="border-t border-line py-12 lg:grid lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-8"
     >
       <div className="mb-6 lg:sticky lg:top-12 lg:mb-0 lg:self-start">
-        <p className="mb-2 flex items-center gap-1 font-mono text-xs text-muted">
+        <p className="reveal mb-2 flex items-center gap-1 font-mono text-xs text-muted">
           <span>
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
           {meta.concept && <ConceptLabel />}
         </p>
-        <h2 id={`case-${slug}-title`} className="mb-2 text-xl font-medium tracking-tight">
+        <h2 id={`case-${slug}-title`} className="reveal mb-2 text-xl font-medium tracking-tight">
           {meta.title}
         </h2>
-        <p className="mb-4 font-mono text-xs text-muted">
+        <p className="reveal mb-4 font-mono text-xs text-muted">
           {[meta.role, meta.timeline].filter(Boolean).join(" · ")}
         </p>
-        <div className="mb-4 hidden lg:block">
+        <div className="reveal mb-4 hidden lg:block">
           <CaseSteps steps={steps} />
         </div>
         <Link
           href={href}
-          className="group inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 text-sm transition-colors duration-150 ease-standard hover:border-accent"
+          className="reveal group inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 text-sm transition-colors duration-150 ease-standard hover:border-accent"
         >
           Read the full case
           <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-x-0.5">
@@ -68,23 +68,23 @@ export function CaseSection({ entry, index, total }: { entry: CaseEntry; index: 
             </div>
           </Link>
         )}
-        <div id={id("problem")} className="reveal scroll-mt-4 md:scroll-mt-1">
-          <p className={label}>Problem</p>
-          <p className="mb-4 text-lg">{tldr.problem}</p>
+        <div id={id("problem")} className="scroll-mt-4 md:scroll-mt-1">
+          <p className={`reveal ${label}`}>Problem</p>
+          <p className="reveal mb-4 text-lg">{tldr.problem}</p>
           {tldr.outcome && (
             <>
-              <p className={label}>Outcome</p>
-              <p className="text-base text-muted">{tldr.outcome}</p>
+              <p className={`reveal ${label}`}>Outcome</p>
+              <p className="reveal text-base text-muted">{tldr.outcome}</p>
             </>
           )}
         </div>
 
         {decisions.length > 0 && (
-          <div id={id("decisions")} className="reveal scroll-mt-4 md:scroll-mt-1">
-            <p className={label}>Key decisions</p>
+          <div id={id("decisions")} className="scroll-mt-4 md:scroll-mt-1">
+            <p className={`reveal ${label}`}>Key decisions</p>
             <ol className="border-t border-line">
               {decisions.map((d, k) => (
-                <li key={d.id}>
+                <li key={d.id} className="reveal">
                   <Link
                     href={`${href}#${d.id}`}
                     className="group flex items-baseline gap-2 border-b border-line py-2 transition-colors duration-150 ease-standard hover:bg-surface"
@@ -106,7 +106,7 @@ export function CaseSection({ entry, index, total }: { entry: CaseEntry; index: 
 
         {meta.teaser && (
           <div id={id("demo")} className="scroll-mt-4 md:scroll-mt-1">
-            <p className={label}>Try it</p>
+            <p className={`reveal ${label}`}>Try it</p>
             <CaseTeaser teaser={meta.teaser} />
           </div>
         )}
