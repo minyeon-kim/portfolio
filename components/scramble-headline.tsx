@@ -10,7 +10,11 @@ gsap.registerPlugin(useGSAP, ScrambleTextPlugin, SplitText);
 
 const CHARS = "01#$%&";
 const LOAD_DURATION = 1.2; // seconds, the hard cap for the load reveal
-const RADIUS = 120; // px around the cursor that re-scrambles after load
+const RADIUS = 80; // px around the cursor that re-scrambles after load
+const HOVER_DURATION = 0.6; // seconds, cursor re-scramble at the cursor's center
+// Kept subtle: scrambled glyphs sit at reduced opacity and change slowly.
+const DIM = 0.35;
+const SPEED = 0.3;
 
 type Props = { text: string; className?: string };
 
@@ -49,12 +53,17 @@ export function ScrambleHeadline({ text, className }: Props) {
               pointer.y - (r.top + r.height / 2),
             );
             if (dist >= RADIUS) continue;
-            gsap.to(char, {
-              duration: LOAD_DURATION * (1 - dist / RADIUS),
-              ease: "none",
-              overwrite: true,
-              scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: 0.5 },
-            });
+            gsap.fromTo(
+              char,
+              { opacity: DIM },
+              {
+                opacity: 1,
+                duration: HOVER_DURATION * (1 - dist / RADIUS),
+                ease: "none",
+                overwrite: true,
+                scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED },
+              },
+            );
           }
         };
 
@@ -89,15 +98,17 @@ export function ScrambleHeadline({ text, className }: Props) {
         chars.forEach((char, i) => {
           const progress = chars.length > 1 ? i / (chars.length - 1) : 1;
           const resolveAt = LOAD_DURATION * (0.25 + 0.75 * progress);
-          load.to(
+          load.fromTo(
             char,
+            { opacity: DIM },
             {
+              opacity: 1,
               duration: resolveAt,
-              ease: "none",
+              ease: "expo.in", // stays dim while scrambled, brightens as it resolves
               scrambleText: {
                 text: char.dataset.char ?? "",
                 chars: CHARS,
-                speed: 0.6,
+                speed: SPEED,
                 // A one-glyph scramble otherwise resolves halfway through the tween.
                 revealDelay: resolveAt - 0.05,
               },

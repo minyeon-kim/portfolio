@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ViewTransition } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
+import { HideOnHome } from "@/components/hide-on-home";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SideNav } from "@/components/side-nav";
 import { SiteHeader } from "@/components/site-header";
@@ -42,7 +43,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {/* Route changes crossfade (View Transitions; static where unsupported). */}
           <ViewTransition>{children}</ViewTransition>
         </main>
-        <SiteFooter />
+        <HideOnHome>
+          <SiteFooter />
+        </HideOnHome>
         <RevealObserver />
       </body>
     </html>

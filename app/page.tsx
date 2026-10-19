@@ -22,13 +22,7 @@ export default async function Home() {
         concept: meta.concept,
       }))}
       intro={
-        <>
-          <p className="mb-1 font-mono text-xs text-muted">{site.name}</p>
-          <ScrambleHeadline
-            text={site.positioning}
-            className="max-w-[24ch] text-xl font-light tracking-tight"
-          />
-        </>
+        <ScrambleHeadline text={site.positioning} className="max-w-[24ch] text-xl font-light tracking-tight" />
       }
     />
   );

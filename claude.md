@@ -58,8 +58,9 @@ All of it is off with prefers-reduced-motion.
 ## Signature motif: "Decrypted"
 Text scramble (encrypted -> readable) is the single expressive motif. Use it ONLY in:
 - the hero headline: once on load (max 1.2s, left to right, chars "01#$%&"), then,
-  after load, only glyphs within 120px of the mouse cursor briefly re-scramble
-  (mouse only, never touch; must not reflow the line);
+  after load, only glyphs within 80px of the mouse cursor briefly re-scramble
+  (max 0.6s; mouse only, never touch; must not reflow the line). Keep it subtle:
+  scrambled glyphs sit at 35% opacity and brighten as they resolve;
 - side menu page links, on hover or keyboard focus (Geist Mono, 0.4s).
 Nowhere else. With prefers-reduced-motion, none of it runs.
 
@@ -82,8 +83,8 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
 - The landing page is one screen (Metalab-style home), nothing else on it:
   - The selected featured case's cover fills the screen behind everything, with
     scrims so text stays readable in both themes.
-  - Intro at the top: name (mono label) and the positioning line (36px Light, with
-    the Decrypted scramble).
+  - Intro at the top: the positioning line only (36px Light, with the Decrypted
+    scramble). No name label (the header has it) and no footer on this page.
   - Bottom left: a floating pill list of the featured cases (tabs). The selected pill
     is filled ink with an accent dot; a mono counter shows "01 / 02".
   - Bottom right: the selected case's title (64px Light), role, [CONCEPT] label,
