@@ -27,7 +27,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
   return (
     <header
       ref={ref}
-      className="group/header z-20 border-b border-line bg-bg/90 backdrop-blur-sm transition-[background-color,border-color] duration-400 ease-standard md:sticky md:top-0 md:data-compact:border-transparent md:data-compact:bg-transparent md:data-compact:backdrop-blur-none"
+      className="group/header z-20 bg-bg/90 backdrop-blur-sm transition-[background-color] duration-400 ease-standard md:sticky md:top-0 md:data-compact:bg-transparent md:data-compact:backdrop-blur-none"
     >
       {children}
     </header>

@@ -1,7 +1,7 @@
 // Single place for identity and contact details used by the header and footer.
 // TODO: replace every placeholder below with real values before launch.
 export const site = {
-  name: "[Your Name]", // TODO: real name
+  name: "Minyeon Kim",
   positioning:
     "Product designer with a security engineering background — designing privacy, trust, and tools for builders.",
   resumeUrl: "/resume.pdf", // TODO: add public/resume.pdf
