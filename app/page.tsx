@@ -26,7 +26,10 @@ export default async function Home() {
           concept: meta.concept,
         }))}
         intro={
-          <ScrambleHeadline text={site.positioning} className="max-w-[24ch] text-xl font-light tracking-tight" />
+          <ScrambleHeadline
+              text={site.positioning}
+              className="max-w-[26ch] text-xl font-medium tracking-tight md:text-headline md:tracking-[-0.02em]"
+            />
         }
       />
       {/* Blend from the dark stage into the page, so there is no edge in light theme. */}

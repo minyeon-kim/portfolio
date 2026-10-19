@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ScrambleLink } from "@/components/scramble-link";
 import { setUi, useUi } from "@/lib/ui-store";
-import { Segmented } from "./segmented";
+import { CasePills } from "./case-pills";
 
 const STAGGER_MS = 50;
 
@@ -12,8 +12,9 @@ type Props = {
   pages: { href: string; label: string }[];
 };
 
-// Landing page left side (lg+), Metalab-style: a vertical, rounded case picker
-// fixed at the left edge, vertically centered, staying put while you read.
+// Landing page left side (lg+), Metalab-style: separate case pills fixed at
+// the left edge, vertically centered, staying put while you read. Always the
+// dark media palette, so the pills read the same over the cover and the page.
 // The header's Menu button opens the page links just above it, sliding in one
 // by one; Menu again, Esc, or a link folds them away.
 export function SideRail({ projects, pages }: Props) {
@@ -44,7 +45,7 @@ export function SideRail({ projects, pages }: Props) {
   };
 
   return (
-    <div className="fixed top-1/2 left-4 z-30 hidden -translate-y-1/2 lg:block">
+    <div className="on-media fixed top-1/2 left-4 z-30 hidden -translate-y-1/2 lg:block">
       {/* Page links, attached above the picker so the picker never moves. */}
       <nav id="inline-menu" aria-label="Site" inert={!open} className="absolute bottom-full left-0 mb-2">
         <ul ref={links} className="space-y-0.5">
@@ -58,17 +59,15 @@ export function SideRail({ projects, pages }: Props) {
                 href={p.href}
                 label={p.label}
                 onClick={() => setUi({ menuOpen: false })}
-                className="inline-flex rounded-full bg-bg/60 px-2 py-1 text-base text-ink backdrop-blur-xl transition-colors duration-150 ease-standard hover:bg-bg/85"
+                className="inline-flex rounded-full bg-bg/60 px-2 py-1 text-base text-ink backdrop-blur-xl transition-colors duration-150 ease-standard hover:bg-bg/80"
               />
             </li>
           ))}
         </ul>
       </nav>
 
-      <Segmented
+      <CasePills
         label="Selected work"
-        orientation="vertical"
-        idPrefix="rail"
         options={projects.map((p) => ({ id: p.slug, label: p.name }))}
         value={active}
         onChange={select}

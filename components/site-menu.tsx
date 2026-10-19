@@ -277,7 +277,7 @@ function MenuButton({
       id={id}
       aria-expanded={open}
       aria-controls={controls}
-      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong"
+      className="group press inline-flex h-4 w-[84px] items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong md:group-data-compact/header:bg-transparent md:group-data-compact/header:hover:bg-transparent"
     >
       <span aria-hidden="true" className="relative block h-1 w-1.5">
         <span

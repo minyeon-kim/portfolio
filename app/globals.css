@@ -65,7 +65,7 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* 13 / 15 / 18 / 24 / 36 / 64. display (64) is hero-only. */
+  /* 13 / 15 / 18 / 24 / 36 / 48 / 64. headline (48) is the landing positioning line; display (64) the landing case title. */
   --text-*: initial;
   --text-xs: 13px;
   --text-xs--line-height: 20px;
@@ -77,6 +77,8 @@
   --text-lg--line-height: 32px;
   --text-xl: 36px;
   --text-xl--line-height: 44px;
+  --text-headline: 48px;
+  --text-headline--line-height: 56px;
   --text-display: 64px;
   --text-display--line-height: 1.05;
 
