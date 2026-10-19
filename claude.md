@@ -36,7 +36,11 @@ Motion: 150/250/400ms, ease cubic-bezier(0.2,0.8,0.2,1).
 
 ## Signature motif: "Decrypted"
 Text scramble (encrypted -> readable) is the single expressive motif. Use it ONLY in:
-the hero headline (once on load, max 1.2s), and nav link hover. Nowhere else.
+- the hero headline: once on load (max 1.2s, left to right, chars "01#$%&"), then,
+  after load, only glyphs within 120px of the mouse cursor briefly re-scramble
+  (mouse only, never touch; must not reflow the line);
+- nav link hover.
+Nowhere else. With prefers-reduced-motion, none of it runs.
 
 ## Rules
 - Content first: the hero must show name, positioning line, and the two featured
