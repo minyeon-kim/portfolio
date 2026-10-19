@@ -39,7 +39,7 @@ export function CopyButton({
       onClick={copy}
       aria-label={text}
       data-state={state}
-      className={`group press inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:border-ink data-[state=copied]:border-accent data-[state=copied]:text-accent ${className}`}
+      className={`group press inline-flex h-4 items-center gap-1 rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong data-[state=copied]:text-accent ${className}`}
     >
       <span aria-hidden="true" className="relative size-2">
         <svg

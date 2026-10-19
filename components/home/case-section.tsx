@@ -45,7 +45,7 @@ export function CaseSection({
             </span>
             {meta.concept && <ConceptLabel />}
           </p>
-          <h2 id={`case-${slug}-title`} className="reveal mb-2 text-xl font-medium tracking-tight">
+          <h2 id={`case-${slug}-title`} className="reveal mb-2 text-xl font-normal tracking-tight">
             {meta.title}
           </h2>
           <p className="reveal mb-4 font-mono text-xs text-muted">
@@ -56,7 +56,7 @@ export function CaseSection({
           </div>
           <Link
             href={href}
-            className="reveal group press inline-flex h-4 items-center gap-1 rounded-md border border-line bg-surface px-1.5 text-sm transition-colors duration-150 ease-standard hover:border-accent"
+            className="reveal group press inline-flex h-4 items-center gap-1 rounded-full bg-ink px-2 text-sm text-bg transition-colors duration-150 ease-standard hover:bg-accent"
           >
             Read the full case
             <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-x-0.5">
@@ -68,7 +68,7 @@ export function CaseSection({
         <div className="space-y-12">
           <div id={id("problem")} className="scroll-mt-4 md:scroll-mt-1">
             <p className={`reveal ${label}`}>Problem</p>
-            <FillText text={tldr.problem} className="mb-4 text-xl font-medium tracking-tight" />
+            <FillText text={tldr.problem} className="mb-4 text-xl font-normal tracking-tight" />
             {tldr.outcome && (
               <>
                 <p className={`reveal ${label}`}>Outcome</p>

@@ -103,12 +103,12 @@ export function WorkSelector({ options, children }: { options: WorkOption[]; chi
                   <span className="flex items-center gap-1 font-mono text-xs text-muted">
                     <span
                       aria-hidden="true"
-                      className={`size-1 rounded-md bg-accent transition-transform duration-250 ease-standard ${selected ? "scale-100" : "scale-0 group-hover:scale-75"}`}
+                      className={`size-1 rounded-full bg-accent transition-transform duration-250 ease-standard ${selected ? "scale-100" : "scale-0 group-hover:scale-75"}`}
                     />
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
-                    className={`flex flex-wrap items-baseline gap-1 text-xl font-medium tracking-tight transition-[color,translate] duration-250 ease-standard ${selected ? "translate-x-0.5 text-ink" : "text-muted group-hover:translate-x-0.5 group-hover:text-ink"}`}
+                    className={`flex flex-wrap items-baseline gap-1 text-xl font-normal tracking-tight transition-[color,translate] duration-250 ease-standard ${selected ? "translate-x-0.5 text-ink" : "text-muted group-hover:translate-x-0.5 group-hover:text-ink"}`}
                   >
                     {o.name}
                     {o.concept && <ConceptLabel />}
@@ -136,7 +136,7 @@ export function WorkSelector({ options, children }: { options: WorkOption[]; chi
           <Link
             href={`/work/${options[shown].slug}/`}
             aria-label={`Read the ${options[shown].name} case study`}
-            className="group relative hidden aspect-[2/1] overflow-clip rounded-md border border-line bg-surface lg:block"
+            className="group relative hidden aspect-[2/1] overflow-clip rounded-lg bg-fill lg:block"
           >
             {options.map((o, i) =>
               o.cover ? (
@@ -153,7 +153,7 @@ export function WorkSelector({ options, children }: { options: WorkOption[]; chi
                 </ViewTransition>
               ) : null,
             )}
-            <span className="absolute bottom-1 left-1 rounded-md border border-line bg-surface/90 px-1 py-0.5 font-mono text-xs backdrop-blur-sm">
+            <span className="absolute bottom-1 left-1 rounded-full bg-bg/70 px-1.5 py-0.5 font-mono text-xs backdrop-blur-md">
               {String(shown + 1).padStart(2, "0")} · Read the case →
             </span>
           </Link>

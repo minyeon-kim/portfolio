@@ -59,7 +59,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme ? `Switch to ${next} theme` : "Toggle theme"}
-      className="press relative inline-flex size-4 items-center justify-center rounded-md border border-line text-muted transition-[color,border-color] duration-150 ease-standard hover:border-ink hover:text-ink"
+      className="press relative inline-flex size-4 items-center justify-center rounded-full bg-fill text-muted transition-[color,background-color] duration-150 ease-standard hover:bg-fill-strong hover:text-ink"
     >
       {/* Both icons stay mounted and swap with a quarter turn. */}
       <span

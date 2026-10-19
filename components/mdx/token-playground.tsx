@@ -112,7 +112,7 @@ export function TokenPlayground({ wide = true }: { wide?: boolean }) {
     "--pg-space-2": resolved.space2,
   } as CSSProperties;
 
-  const panel = "rounded-md border border-line bg-surface";
+  const panel = "rounded-md bg-fill";
   const heading = "mb-2 font-mono text-xs text-muted";
 
   return (
@@ -267,7 +267,7 @@ function Slider({
         aria-valuetext={valueText ?? display}
         onChange={(e) => onChange(Number(e.target.value))}
         style={trackStyle}
-        className="h-2 w-full cursor-pointer appearance-none rounded-md border border-line bg-bg accent-accent [&::-moz-range-thumb]:size-2 [&::-moz-range-thumb]:rounded-md [&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-ink [&::-moz-range-thumb]:bg-surface [&::-webkit-slider-thumb]:size-2 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-md [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-ink [&::-webkit-slider-thumb]:bg-surface"
+        className="h-2 w-full cursor-pointer appearance-none rounded-full bg-bg accent-accent [&::-moz-range-thumb]:size-2 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-ink [&::-moz-range-thumb]:bg-surface [&::-webkit-slider-thumb]:size-2 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-ink [&::-webkit-slider-thumb]:bg-surface"
       />
     </div>
   );

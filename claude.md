@@ -29,13 +29,19 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
 Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only in the hero and the sliding type band.
+Weights: 64px is Light (300), 36px is Regular (400); 24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
-Radius: 6px on cards and controls, nothing larger. Borders 1px var(--line). No drop shadows.
+Shape (Metalab-like, soft rather than wireframe):
+- Controls, chips, tags, toggles and the compact header are full pills (rounded-full).
+- Cards and panels are 16px (rounded-md); large media and previews are 24px (rounded-lg).
+- Surfaces are soft fills, not outlines: --fill (ink 7%) and --fill-strong (ink 12%,
+  hover/selected), or --surface for cards. Overlay chips on media use bg 70% + blur.
+- Borders (1px var(--line)) only for dividers and text inputs. No drop shadows.
 Motion: 150/250/400ms, ease cubic-bezier(0.2,0.8,0.2,1).
 Interaction states (nothing interactive is static; utilities in app/globals.css):
 - press: buttons and tiles scale to 0.97 while pressed.
-- lift: cards rise 4px and their border turns ink on hover or focus-within.
+- lift: cards rise 4px on hover or focus-within.
 - link: text links keep a 40% underline that firms up and tightens on hover/focus.
 - Inputs: border goes muted on hover, accent on focus.
 - Toggles and icons swap with a 250ms fade + quarter turn (theme toggle, Menu/Close),

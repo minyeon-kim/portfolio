@@ -30,7 +30,7 @@ export function SectionRail({ items }: { items: TocItem[] }) {
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`block h-[2px] rounded-md transition-[width,background-color] duration-250 ease-standard ${current ? "w-3 bg-accent" : "w-1.5 bg-line group-hover:bg-muted"}`}
+                  className={`block h-[2px] rounded-full transition-[width,background-color] duration-250 ease-standard ${current ? "w-3 bg-accent" : "w-1.5 bg-line group-hover:bg-muted"}`}
                 />
               </a>
             </li>

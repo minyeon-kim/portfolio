@@ -11,7 +11,7 @@ export function CopyDemo() {
         {CODES.map((code) => (
           <li
             key={code}
-            className="flex items-center justify-between gap-1 rounded-md border border-line bg-bg py-0.5 pr-0.5 pl-1"
+            className="flex items-center justify-between gap-1 rounded-full bg-fill py-0.5 pr-0.5 pl-2"
           >
             <code className="font-mono text-sm">{code}</code>
             <CopyButton value={code} />

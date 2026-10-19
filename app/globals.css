@@ -58,6 +58,9 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
+  /* Soft fills instead of outlines: ink at 7% / 12%, so they work in both themes. */
+  --color-fill: color-mix(in srgb, var(--ink) 7%, transparent);
+  --color-fill-strong: color-mix(in srgb, var(--ink) 12%, transparent);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -83,9 +86,13 @@
   --container-page: 1200px;
   --container-prose: 680px;
 
-  /* 6px on cards and controls, nothing larger. Use `rounded-md`. */
+  /*
+   * Shapes: controls, chips and tags are pills (`rounded-full`); cards and
+   * panels `rounded-md` (16px); large media `rounded-lg` (24px).
+   */
   --radius-*: initial;
-  --radius-md: 6px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 
   --shadow-*: initial;
   --drop-shadow-*: initial;
@@ -123,7 +130,7 @@ body {
 /*
  * Interaction states (see "Interaction states" in claude.md).
  * press: tactile feedback on buttons and tiles.
- * lift: cards rise 4px on hover.
+ * lift: cards rise 4px on hover or focus-within.
  * link: underline that is always there (40%) and firms up on hover.
  */
 @utility press {
@@ -135,11 +142,10 @@ body {
 @utility lift {
   transition:
     translate var(--dur-base) var(--ease),
-    border-color var(--dur-fast) var(--ease);
+    background-color var(--dur-fast) var(--ease);
   &:hover,
   &:focus-within {
     translate: 0 -4px;
-    border-color: var(--ink);
   }
 }
 
@@ -341,7 +347,7 @@ details[open]::details-content {
 
 @keyframes cover-expand {
   from {
-    clip-path: inset(0 12% round 6px);
+    clip-path: inset(0 12% round 24px);
     transform: rotateX(10deg) scale(0.96);
   }
   to {

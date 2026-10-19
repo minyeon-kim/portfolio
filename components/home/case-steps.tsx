@@ -24,7 +24,7 @@ export function CaseSteps({ steps }: { steps: TocItem[] }) {
             >
               <span
                 aria-hidden="true"
-                className={`h-[2px] rounded-md transition-[width,background-color] duration-250 ease-standard ${current ? "w-3 bg-accent" : "w-1 bg-line"}`}
+                className={`h-[2px] rounded-full transition-[width,background-color] duration-250 ease-standard ${current ? "w-3 bg-accent" : "w-1 bg-line"}`}
               />
               <span>
                 {String(i + 1).padStart(2, "0")} {label}
