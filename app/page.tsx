@@ -1,7 +1,7 @@
 import { CaseBody } from "@/components/home/case-body";
 import { CasePanels } from "@/components/home/case-panels";
-import { InlineMenu } from "@/components/home/inline-menu";
 import { ProjectStage } from "@/components/home/project-stage";
+import { SideRail } from "@/components/home/side-rail";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { getCase, getCases } from "@/lib/cases";
 import { nav, site } from "@/lib/site";
@@ -14,7 +14,7 @@ export default async function Home() {
 
   return (
     <>
-      <InlineMenu pages={nav} />
+      <SideRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} pages={nav} />
       <ProjectStage
         projects={featured.map(({ slug, meta, tldr }) => ({
           slug,

@@ -208,6 +208,19 @@ details[open]::details-content {
   color: var(--ink);
 }
 
+/* Rule above case section headings (grows in on scroll where supported). */
+.section-rule {
+  position: relative;
+}
+.section-rule::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--line);
+  transform-origin: left;
+}
+
 /* Break out of the page container to the full viewport width. */
 .full-bleed {
   width: 100vw;
@@ -325,6 +338,13 @@ details[open]::details-content {
       }
     }
 
+    /* Case section headings: a rule above them grows in as they arrive. */
+    .section-rule::before {
+      animation: section-rule linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+
     /* Case covers open from an inset, tilted frame to full width. */
     .cover-expand {
       animation: cover-expand linear both;
@@ -371,6 +391,12 @@ details[open]::details-content {
 @keyframes stage-cover {
   to {
     scale: 1.06;
+  }
+}
+
+@keyframes section-rule {
+  from {
+    scale: 0 1;
   }
 }
 
