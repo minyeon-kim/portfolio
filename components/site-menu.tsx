@@ -44,8 +44,11 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
   // instead of this overlay.
   const pathname = usePathname();
   const inlineOpen = useUi((s) => s.menuOpen);
+  const railVisible = useUi((s) => s.railVisible);
   const onMenuClick = () => {
-    if (pathname === "/" && window.matchMedia("(min-width: 64rem)").matches) {
+    // Inline only while the side picker is showing; scrolled into a case, the
+    // full-screen menu opens instead.
+    if (pathname === "/" && railVisible && window.matchMedia("(min-width: 64rem)").matches) {
       setUi({ menuOpen: !inlineOpen });
       return;
     }

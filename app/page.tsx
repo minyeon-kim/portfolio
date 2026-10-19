@@ -22,6 +22,8 @@ export default async function Home() {
           title: meta.title,
           problem: tldr.problem,
           role: meta.role,
+          timeline: meta.timeline,
+          tools: meta.tools?.join(", "),
           cover: meta.cover,
           concept: meta.concept,
         }))}

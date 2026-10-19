@@ -12,16 +12,17 @@ export type StageProject = {
   title: string;
   problem: string;
   role?: string;
+  timeline?: string;
+  tools?: string;
   cover?: string;
   concept?: boolean;
 };
 
-// The landing page opener, Metalab-style. The selected case's cover fills the
-// screen (running up under the transparent header), an iOS-style segmented
-// control in the middle picks the case, and its title sits at the bottom.
-// Scrolling hands off to that case's content below: the title drifts up and
-// the cover dims (.stage-* in globals.css), and the bottom fade runs straight
-// into the content, so there is no hard edge.
+// The landing page opener, laid out like a Metalab case header. A solid dark
+// head block holds the positioning line and the selected case's facts (Role /
+// Timeline / Tools); the cover fills the rest of the screen below it, with the
+// case title on its lower part. Text never sits on the image except the title,
+// which has a fade under it. Scrolling hands off to the case content below.
 export function ProjectStage({ projects, intro }: { projects: StageProject[]; intro: ReactNode }) {
   const active = useUi((s) => s.activeCase);
   const select = (i: number) => setUi({ activeCase: i });
@@ -30,14 +31,50 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
   const place = (i: number) =>
     i === active ? "translate-y-0 opacity-100" : i < active ? "-translate-y-3 opacity-0" : "translate-y-3 opacity-0";
 
+  const facts = (p: StageProject) =>
+    [
+      { label: "Role", value: p.role },
+      { label: "Timeline", value: p.timeline },
+      { label: "Tools", value: p.tools },
+    ].filter((f) => f.value);
+
   return (
     <section
       id="work"
       aria-label="Selected work"
-      className="full-bleed relative flex flex-col py-6 md:on-media md:-mt-[67px] md:block md:h-svh md:min-h-[640px] md:bg-bg md:py-0"
+      className="full-bleed relative flex flex-col py-6 md:on-media md:-mt-[67px] md:h-svh md:min-h-[720px] md:bg-bg md:py-0"
     >
-      {/* Covers: crossfade and settle from a slight zoom. Phone: a rounded card. */}
-      <div className="relative order-2 mx-2 my-4 aspect-[4/3] overflow-clip rounded-lg bg-surface md:absolute md:inset-0 md:m-0 md:aspect-auto md:rounded-none">
+      {/* Head block: solid background, positioning line, the selected case's facts. */}
+      <div className="order-1 px-2 md:px-4 md:pt-[115px] md:pb-4">
+        <div className="mx-auto max-w-page">
+          {intro}
+          <div className="mt-6 hidden grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-4 md:grid">
+            {["Role", "Timeline", "Tools"].map((label, col) => (
+              <div key={label} className="grid">
+                <p className="mb-0.5 text-sm">{label}</p>
+                <div className="grid">
+                  {projects.map((p, i) => {
+                    const fact = facts(p).find((f) => f.label === label);
+                    return (
+                      <p
+                        key={p.slug}
+                        aria-hidden={i !== active}
+                        className={`col-start-1 row-start-1 text-sm text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+                        style={{ transitionDelay: i === active ? `${col * 50}ms` : "0ms" }}
+                      >
+                        {fact?.value ?? "—"}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Cover area: fills the rest of the screen. Phone: a rounded card. */}
+      <div className="relative order-2 mx-2 my-4 aspect-[4/3] overflow-clip rounded-lg bg-surface md:m-0 md:aspect-auto md:flex-1 md:rounded-none">
         <div className="stage-cover absolute inset-0">
           {projects.map((p, i) =>
             p.cover ? (
@@ -53,75 +90,85 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
             ) : null,
           )}
         </div>
+        {/* Desktop: a fade under the title only, deepening as you scroll on. */}
+        <div aria-hidden="true" className="stage-tint absolute inset-0 hidden bg-bg/10 md:block" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 hidden h-[75%] bg-[linear-gradient(to_bottom,transparent,color-mix(in_srgb,var(--bg)_75%,transparent)_45%,var(--bg)_85%)] md:block"
+        />
+
+        {/* Title of the selected case, on the lower part of the cover (desktop). */}
+        <div className="stage-content absolute inset-x-0 bottom-0 hidden px-4 pb-8 md:block">
+          <div className="mx-auto flex max-w-page flex-wrap items-end justify-between gap-2">
+            <TitleBlock id="stage-panel" projects={projects} active={active} place={place} />
+            <a
+              href="#case"
+              className="inline-flex items-center gap-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink"
+            >
+              Scroll to read
+              <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
       </div>
 
-      {/*
-        Legibility (desktop): the stage uses the dark media palette in both
-        themes. An even dark tint over the whole image (no top band), and a
-        fade at the bottom under the title. The tint deepens as you scroll on;
-        the strip after the stage blends into the page background.
-      */}
-      <div aria-hidden="true" className="stage-tint absolute inset-0 hidden bg-bg/45 md:block" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 hidden h-[45%] bg-[linear-gradient(to_bottom,transparent,var(--bg))] md:block"
-      />
-
-      <div className="stage-content contents md:relative md:mx-auto md:grid md:h-full md:max-w-page md:grid-rows-[auto_1fr_auto] md:px-4 md:pt-[115px] md:pb-8">
-        <div className="order-1 px-2 md:px-0">{intro}</div>
-
-        {/* Case picker below lg (lg+ uses the vertical picker in the left SideRail) */}
-        <div className="order-3 flex justify-center px-2 md:items-center md:px-0 lg:invisible">
-          <Segmented
-            label="Selected work"
-            options={projects.map((p) => ({ id: p.slug, label: p.name }))}
-            value={active}
-            onChange={select}
-            controls="stage-panel"
-          />
-        </div>
-
-        {/* Title of the selected case; slides up on change. */}
-        <div className="order-4 mt-4 flex flex-wrap items-end justify-between gap-2 px-2 md:mt-0 md:px-0">
-          <div
-            id="stage-panel"
-            role="tabpanel"
-            aria-label={`${projects[active].name}, selected case`}
-            aria-live="polite"
-            className="grid min-w-0 flex-1"
-          >
-            {projects.map((p, i) => (
-              <div key={p.slug} aria-hidden={i !== active} className="col-start-1 row-start-1 self-end">
-                <div
-                  className={`mb-1 flex items-center gap-1 font-mono text-xs text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
-                >
-                  {p.concept && <ConceptLabel />}
-                  {p.role && <span>{p.role}</span>}
-                </div>
-                <h2
-                  className={`mb-1 text-xl font-normal tracking-tight transition-[opacity,translate] duration-400 ease-standard md:max-w-[18ch] md:text-display md:font-light md:tracking-[-0.03em] ${place(i)}`}
-                  style={{ transitionDelay: i === active ? "150ms" : "0ms" }}
-                >
-                  {p.title}
-                </h2>
-                <p
-                  className={`max-w-[52ch] text-base text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
-                  style={{ transitionDelay: i === active ? "250ms" : "0ms" }}
-                >
-                  {p.problem}
-                </p>
-              </div>
-            ))}
-          </div>
-          <a
-            href="#case"
-            className="hidden items-center gap-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink md:inline-flex"
-          >
-            Scroll to read
-            <span aria-hidden="true">↓</span>
-          </a>
-        </div>
+      {/* Phones: picker and title stacked under the cover card. */}
+      <div className="order-3 flex justify-center px-2 md:hidden">
+        <Segmented
+          label="Selected work"
+          options={projects.map((p) => ({ id: p.slug, label: p.name }))}
+          value={active}
+          onChange={select}
+          controls="stage-panel-phone"
+        />
+      </div>
+      <div className="order-4 mt-4 px-2 md:hidden">
+        <TitleBlock id="stage-panel-phone" projects={projects} active={active} place={place} />
       </div>
     </section>
+  );
+}
+
+function TitleBlock({
+  id,
+  projects,
+  active,
+  place,
+}: {
+  id: string;
+  projects: StageProject[];
+  active: number;
+  place: (i: number) => string;
+}) {
+  return (
+    <div
+      id={id}
+      role="tabpanel"
+      aria-label={`${projects[active].name}, selected case`}
+      aria-live="polite"
+      className="grid min-w-0 flex-1"
+    >
+      {projects.map((p, i) => (
+        <div key={p.slug} aria-hidden={i !== active} className="col-start-1 row-start-1 self-end">
+          <div
+            className={`mb-1 flex items-center gap-1 font-mono text-xs text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+          >
+            {p.concept && <ConceptLabel />}
+          </div>
+          <h2
+            className={`mb-1 text-xl font-normal tracking-tight transition-[opacity,translate] duration-400 ease-standard md:max-w-[18ch] md:text-display md:font-light md:tracking-[-0.03em] ${place(i)}`}
+            style={{ transitionDelay: i === active ? "150ms" : "0ms" }}
+          >
+            {p.title}
+          </h2>
+          <p
+            className={`max-w-[52ch] text-base text-muted transition-[opacity,translate] duration-400 ease-standard ${place(i)}`}
+            style={{ transitionDelay: i === active ? "250ms" : "0ms" }}
+          >
+            {p.problem}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }
