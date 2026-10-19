@@ -1,4 +1,4 @@
-# Portfolio — [Your Name]
+# Portfolio — Minyeon Kim
 
 ## Who this is for
 Personal portfolio of a product designer with a computer science + IT security
@@ -28,7 +28,7 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --muted #5B6461 / #8E9895
 - --line #DADFDC / #262C2A
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
-Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only in the hero.
+Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is used only in the hero and the sliding type band.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
 Radius: 6px on cards and controls, nothing larger. Borders 1px var(--line). No drop shadows.
