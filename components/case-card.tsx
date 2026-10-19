@@ -10,24 +10,26 @@ export function CaseCard({ slug, meta, tldr }: CaseEntry) {
     <Link href={`/work/${slug}/`} className="group block rounded-md">
       <div className="aspect-[2/1] overflow-hidden rounded-md border border-line bg-surface">
         <div className="size-full transition-transform duration-400 ease-standard group-hover:scale-[1.02] group-focus-visible:scale-[1.02]">
-          {meta.cover ? (
-            <Image
-              src={meta.cover}
-              alt=""
-              width={1600}
-              height={800}
-              sizes="(min-width: 768px) 568px, 100vw"
-              priority
-              className="size-full object-cover"
-            />
-          ) : (
-            // TODO: add meta.cover (1600x800 WebP) in the case file.
-            isDev && (
-              <div className="flex size-full items-center justify-center font-mono text-xs text-muted">
-                TODO: cover image
-              </div>
-            )
-          )}
+          <div className="cover-parallax size-full">
+            {meta.cover ? (
+              <Image
+                src={meta.cover}
+                alt=""
+                width={1600}
+                height={800}
+                sizes="(min-width: 768px) 568px, 100vw"
+                priority
+                className="size-full object-cover"
+              />
+            ) : (
+              // TODO: add meta.cover (1600x800 WebP) in the case file.
+              isDev && (
+                <div className="flex size-full items-center justify-center font-mono text-xs text-muted">
+                  TODO: cover image
+                </div>
+              )
+            )}
+          </div>
         </div>
       </div>
       <div className="mt-2 flex items-center gap-1 font-mono text-xs text-muted">

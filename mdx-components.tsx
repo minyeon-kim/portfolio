@@ -3,8 +3,10 @@ import type { MDXComponents } from "mdx/types";
 import dynamic from "next/dynamic";
 import { BeforeAfter } from "@/components/mdx/before-after";
 import { Callout } from "@/components/mdx/callout";
+import { Chapter, Story } from "@/components/mdx/story";
 import { TLDR } from "@/components/mdx/tldr";
 import { WhyIChose } from "@/components/mdx/why-i-chose";
+import { Todo } from "@/components/todo";
 import { slugify } from "@/lib/slug";
 
 // Demos are split into their own chunks so case pages without them stay light.
@@ -27,7 +29,7 @@ function textOf(node: ReactNode): string {
 // Case study body styles. Body column is 680px (max-w-prose).
 const components: MDXComponents = {
   h2: ({ children }) => (
-    <h2 id={slugify(textOf(children))} className="mt-8 mb-2 scroll-mt-4 text-lg font-medium">
+    <h2 id={slugify(textOf(children))} className="reveal mt-8 mb-2 scroll-mt-4 text-lg font-medium">
       {children}
     </h2>
   ),
@@ -47,6 +49,9 @@ const components: MDXComponents = {
   BeforeAfter,
   Callout,
   TokenPlayground,
+  Story,
+  Chapter,
+  Todo,
 };
 
 export function useMDXComponents(): MDXComponents {
