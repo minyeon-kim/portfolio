@@ -326,15 +326,11 @@ details[open]::details-content {
         animation-timeline: scroll(root);
         animation-range: 0 70vh;
       }
-      .stage-tint {
-        animation: stage-tint linear both;
+      /* The selected case's card grows to the full screen as you scroll. */
+      .stage-card {
+        animation: stage-card linear both;
         animation-timeline: scroll(root);
-        animation-range: 0 70vh;
-      }
-      .stage-cover {
-        animation: stage-cover linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 100vh;
+        animation-range: 0 60vh;
       }
     }
 
@@ -382,15 +378,28 @@ details[open]::details-content {
   }
 }
 
-@keyframes stage-tint {
+@keyframes stage-card {
+  from {
+    clip-path: inset(0 14% 8% 14% round 24px);
+  }
   to {
-    background-color: color-mix(in srgb, var(--bg) 85%, transparent);
+    clip-path: inset(0 0 0 0 round 0);
   }
 }
 
-@keyframes stage-cover {
-  to {
-    scale: 1.06;
+/* Enter animations (landing stage). Off with reduced motion (global rule). */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    scale: 0.94;
+    translate: 0 24px;
   }
 }
 

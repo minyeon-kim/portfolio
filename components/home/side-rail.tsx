@@ -84,7 +84,7 @@ export function SideRail({ projects, pages }: Props) {
                 href={p.href}
                 label={p.label}
                 onClick={() => setUi({ menuOpen: false })}
-                className="inline-flex rounded-full bg-bg/60 px-2 py-1 text-base text-ink backdrop-blur-xl transition-colors duration-150 ease-standard hover:bg-bg/80"
+                className="inline-flex rounded-full bg-fill-strong px-2 py-1 text-base text-ink backdrop-blur-xl transition-colors duration-150 ease-standard hover:bg-ink/20"
               />
             </li>
           ))}

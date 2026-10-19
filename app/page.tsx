@@ -6,8 +6,8 @@ import { ScrambleHeadline } from "@/components/scramble-headline";
 import { getCase, getCases } from "@/lib/cases";
 import { nav, site } from "@/lib/site";
 
-// The landing page: a full-screen stage for the selected case, then that
-// case's content, so picking a case and scrolling reads straight into it.
+// The landing page: an intro (name + positioning, pick a case), then, once a
+// case is picked, its stage and its content, so scrolling reads into it.
 export default async function Home() {
   const featured = (await getCases()).filter((c) => c.meta.featured);
   const bodies = await Promise.all(featured.map((c) => getCase(c.slug)));
@@ -23,21 +23,16 @@ export default async function Home() {
           problem: tldr.problem,
           role: meta.role,
           timeline: meta.timeline,
-          tools: meta.tools?.join(", "),
           cover: meta.cover,
           concept: meta.concept,
         }))}
+        name={site.name}
         intro={
           <ScrambleHeadline
               text={site.positioning}
-              className="text-xl font-medium tracking-tight md:text-lg"
+              className="text-lg font-medium tracking-tight md:text-xl"
             />
         }
-      />
-      {/* Blend from the dark stage into the page, so there is no edge in light theme. */}
-      <div
-        aria-hidden="true"
-        className="full-bleed hidden h-16 bg-[linear-gradient(to_bottom,var(--media-bg),var(--bg))] md:block"
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {

@@ -5,7 +5,7 @@ import { useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 type Props = {
   label: string;
   options: { id: string; label: string }[];
-  value: number;
+  value: number | null; // null: nothing selected yet
   onChange: (index: number) => void;
   controls?: string;
   orientation?: "horizontal" | "vertical";
@@ -30,8 +30,9 @@ export function Segmented({
 
   useLayoutEffect(() => {
     const measure = () => {
-      const b = buttons.current[value];
-      if (b) setThumb({ left: b.offsetLeft, top: b.offsetTop, width: b.offsetWidth, height: b.offsetHeight });
+      const b = value === null ? null : buttons.current[value];
+      if (!b) return setThumb(null);
+      setThumb({ left: b.offsetLeft, top: b.offsetTop, width: b.offsetWidth, height: b.offsetHeight });
     };
     measure();
     window.addEventListener("resize", measure);
@@ -47,10 +48,10 @@ export function Segmented({
 
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     const moves: Record<string, number> = {
-      ArrowRight: value + 1,
-      ArrowDown: value + 1,
-      ArrowLeft: value - 1,
-      ArrowUp: value - 1,
+      ArrowRight: (value ?? -1) + 1,
+      ArrowDown: (value ?? -1) + 1,
+      ArrowLeft: (value ?? 1) - 1,
+      ArrowUp: (value ?? 1) - 1,
       Home: 0,
       End: options.length - 1,
     };
@@ -86,7 +87,7 @@ export function Segmented({
             id={`${idPrefix}-${o.id}`}
             aria-selected={selected}
             aria-controls={controls}
-            tabIndex={selected ? 0 : -1}
+            tabIndex={selected || (value === null && i === 0) ? 0 : -1}
             onClick={() => onChange(i)}
             onKeyDown={onKeyDown}
             className={`press relative rounded-full px-3 py-1 text-sm font-medium whitespace-nowrap ${vertical ? "text-left" : ""} transition-colors duration-250 ease-standard ${

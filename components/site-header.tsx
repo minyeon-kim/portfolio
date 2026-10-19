@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import Link from "next/link";
+import { HomeLink } from "@/components/home/case-panels";
 import { experiments } from "@/components/playground/experiments";
 import { getCases } from "@/lib/cases";
 import { nav, site } from "@/lib/site";
@@ -40,9 +40,7 @@ export async function SiteHeader() {
             }}
           />
         </div>
-        <Link href="/" className="text-base font-medium tracking-tight whitespace-nowrap">
-          {site.name}
-        </Link>
+        <HomeLink className="text-base font-medium tracking-tight whitespace-nowrap">{site.name}</HomeLink>
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
           {hasResume && (
