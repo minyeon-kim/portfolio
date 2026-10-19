@@ -57,6 +57,31 @@ export function RevealObserver() {
     watch(document);
     root.classList.add("reveal-ready");
 
+    // Play the reveal again inside a container, e.g. when the work selector
+    // swaps in another case. Dispatch: new CustomEvent("reveal:replay", { detail: el }).
+    const replay = (event: Event) => {
+      const scope = (event as CustomEvent<Element>).detail;
+      const els = [...scope.querySelectorAll<HTMLElement>(".reveal")];
+      for (const el of els) {
+        el.style.transition = "none"; // hide instantly, don't fade out
+        delete el.dataset.shown;
+      }
+      void scope.getBoundingClientRect(); // commit the hidden state
+      for (const el of els) el.style.transition = "";
+      requestAnimationFrame(() => {
+        let step = 0;
+        for (const el of els) {
+          const box = el.getBoundingClientRect();
+          if (box.top < window.innerHeight && box.bottom > 0) {
+            show(el, Math.min(step++, MAX_STEPS) * STEP_MS);
+          } else {
+            observer.observe(el);
+          }
+        }
+      });
+    };
+    window.addEventListener("reveal:replay", replay);
+
     // Client-side navigation swaps page content; pick up new elements.
     // Text-only changes (the hero scramble) are ignored, and rescans are
     // batched to one per frame.
@@ -74,6 +99,7 @@ export function RevealObserver() {
 
     return () => {
       cancelAnimationFrame(frame);
+      window.removeEventListener("reveal:replay", replay);
       observer.disconnect();
       mutations.disconnect();
       root.classList.remove("reveal-ready");
