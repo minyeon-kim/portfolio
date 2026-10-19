@@ -1,0 +1,138 @@
+export const meta = {
+  title: "Gemini privacy redesign",
+  role: "Product designer, solo",
+  timeline: "Jul–Aug 2026", // TODO: confirm end date (usability tests ran later?)
+  tools: ["FigJam", "Google Stitch"], // TODO: confirm full tool list
+  cover: "", // TODO: "/images/cases/gemini-privacy/cover.webp", 1600x800 WebP, no Google logos
+  concept: true,
+  featured: true,
+  order: 1,
+};
+
+{/*
+  Drafted from the project notes in Documents/02. Project_2차/Gemini_Project
+  (Research, ActionPlan, HMW table, ProgressLog). Every claim below comes from
+  those files; review the wording before publishing.
+*/}
+
+<TLDR>
+- **Problem:** Gemini draws on data from connected Google services, but people can't see where an answer came from or check that a deletion worked.
+- **My role:** Solo designer on a course project: research, problem definition, interaction design, prototype, and test plan.
+- **Outcome:** Two in-place flows: answer-level source management and verifiable deletion from chat. {/* TODO: add usability test results */}
+</TLDR>
+
+## Context
+
+Since January 2026, Gemini's Personal Intelligence can connect Gmail, Photos, Calendar, Drive, YouTube, Search, and Contacts, and infer things across them, like relationships, recent trips, and family, that the user never typed into the chat. Disconnecting an app does not delete the insights already built from it.
+
+What people leave in Gemini lands in four surfaces governed by three to four different policies: regular chats, Gems, the standalone Notebook app, and notebooks inside the Gemini app. In that last case, the uploaded sources and the conversation about them follow different policies inside the same notebook.
+
+I scoped the redesign to the consumer Gemini app plus the Google account settings layered on top of it, using GDPR as the design benchmark. Workspace and Vertex AI follow different policies and were out of scope. This is a self-initiated concept, not affiliated with Google.
+
+## Problem
+
+> Gemini users need a way to see and control exactly what is stored, managed, and deleted as Gemini merges information across services.
+
+It breaks down in three places:
+
+- **No source per answer.** Settings list connected apps for the whole account, but nothing shows which data a given answer used. When I asked Gemini "How did you know that?", it said only that it had used connected Workspace data and past conversations, without naming an item or a date.
+- **Controls are scattered.** Real control takes at least three separate switches: the app connection, Keep Activity (Gemini only), and Web & App Activity (the whole account). Turning one off leaves the others on. In my journey map, opting in takes no clicks; opting out takes three to four.
+- **Deletion can't be verified.** Deleting a chat removes it from the list, but there is no way to check whether the same detail survives in other chats or in memory. Conversations picked for human review are kept separately for up to three years, even after activity is deleted.
+
+> "I deleted it, but I still don't know if it's really gone. It feels like maybe only the conversation view disappeared." — Interview participant P4
+
+## Research
+
+I mapped how each surface handles retention, human review, and training, then traced when consent actually happens: a broad Google account consent at Gmail sign-up, a separate Gemini consent on first use, and per-app opt-in for each connection. Since July 7, 2025, Phone, Messages, WhatsApp, and Utilities stay connected even with Gemini Apps Activity turned off, so a person who turned "everything" off may still be sharing.
+
+A GDPR gap analysis of Gemini's flows produced 17 gaps, ranked by severity and by which stage of the data lifecycle they hit. A comparison with ChatGPT, Claude, and Perplexity showed the problem isn't unique to Gemini: temporary or incognito modes in all three keep hidden safety copies for a period, and Perplexity only supports deleting the whole account.
+
+The anchor case came from a documented report. In February 2026, an Android Police writer asked Gemini for a restaurant and got an answer that brought up the writer's ex-girlfriend unprompted. My persona, a 29-year-old content marketer who uses one personal account for work and life, combines that case with interview quotes. I kept the two evidence types labeled: the connection-stage pain points rest on documented cases and official docs, and the storage-stage ones rest on interviews.
+
+> "Instead of just saying 'this isn't stored,' I wish it would tell me exactly what isn't being stored." — P2
+
+<Callout label="Security lens">
+
+Android grants permissions per app package, not per feature. Turning off WhatsApp inside Gemini doesn't revoke the Contacts permission the Google app already held from its Assistant days, so Gemini could still reach contacts. Gemini's toggles control server-side processing; OS permissions control what the app can touch on the device. They are separate systems, which is why one switch can't turn both off.
+
+But an OS permission is only a ceiling. Whether Gemini actually uses data within that ceiling is app logic, the same mechanism Keep Activity already relies on. A per-app "don't use this data" toggle for the exception apps is a product choice, not a technical limit. That split set my scope: OS permissions stay out and get a deep link to system settings; Gemini's use of the data stays in.
+
+</Callout>
+
+## Decisions
+
+### Show the source on the answer, not in settings
+
+An answer that used connected data carries a source badge. Opening it lists each original item, like a photo or an email, paired with what Gemini derived from it, with the actions on the same row: block the source from future answers, or delete the derived record.
+
+<WhyIChose>
+
+The list of connected apps already exists in settings, so the gap wasn't the list. It was the link between one answer and the data behind it. In the journey map, that is exactly where trust starts to drop. In review, my instructor's guidance was that resolving it in one step beats sending people deeper into settings, so the badge opens management in place instead of linking out.
+
+</WhyIChose>
+
+### Block from answers instead of only deleting
+
+<WhyIChose>
+
+Deleting the source isn't always what people want: the photo or email is still useful where it lives. Removing data from a trained model isn't practical either, because machine unlearning has no agreed definition of success. A filter applied at retrieval time keeps the source but stops Gemini from pulling it into answers, needs no retraining, and has research precedent in Google's AirGapAgent work.
+
+</WhyIChose>
+
+### Make deletion from chat verifiable
+
+Gemini already accepts commands like "Forget that I mentioned X" for its memory, but confirms in plain text. I added two cards: a search result card that shows what was found before anything is removed, and a confirmation card that shows what was deleted.
+
+<WhyIChose>
+
+Interviewees didn't doubt the delete button; they doubted the result. Building on a command that already exists keeps the change small and puts the proof where people are already asking.
+
+</WhyIChose>
+
+### Keep the two flows separate
+
+<WhyIChose>
+
+In the first prototype I chained them, and the chat flow asked about items the inline flow had already deleted. When I went back to the review transcript, my instructor and I had agreed they have different triggers: inline management starts when connected data shows up in an answer, and chat deletion starts when someone asks to remove something. Treating them as separate entry points removed the duplicate step.
+
+</WhyIChose>
+
+### Narrow five sketches to two screens
+
+I sketched five directions: a dashboard, deletion from chat, inline data management, category-based management, and per-project retention. Team feedback and an instructor review narrowed this round to deletion from chat and inline data management.
+
+<WhyIChose>
+
+The project is about how data moves across Google's services, not privacy settings in general, and those two screens sit closest to that. Inline management got the strongest support from teammates, who said it pulls the problems together and fits the principle of control best. The dashboard, category, and retention screens were set aside for this round.
+
+</WhyIChose>
+
+## Interactive demo
+
+Drag the divider or focus it and use the arrow keys.
+
+<BeforeAfter
+  before={{
+    src: "/images/cases/gemini-privacy/before.svg",
+    alt: "Chat answer that mentions a past dinner with Jungmin, with no source shown.",
+  }}
+  after={{
+    src: "/images/cases/gemini-privacy/after.svg",
+    alt: "The same answer with a 'Used 2 sources' badge open, listing a photo and a past chat, each with Block and Delete actions.",
+  }}
+  width={1200}
+  height={750}
+  caption="Illustrative mock of the storyboard scenario, not a product screenshot."
+/>
+
+{/* TODO: replace the mocks with screens from the prototype (no Google logos). */}
+
+## Outcome & learnings
+
+{/* TODO: usability test results. The notes describe the plan below but contain no results yet. */}
+
+I planned the test as an observed scenario walkthrough instead of free tasks, because an AI bringing up an unexpected personal detail can't be triggered on demand. Participants step through the storyboard scenario, and only the controls being tested are clickable. Five measures: how easy control felt, whether answers matched expectations, whether deletion worked as intended, how trust or anxiety changed, and whether the amount of information felt right on a 1 to 7 scale.
+
+- **Label evidence by type.** Keeping documented cases and interview quotes apart made the persona honest and easier to defend.
+- **Check the source before acting on a summary.** A line in my own progress log led me to merge the two flows. The original transcript said the opposite.
+- **Choose the test method around what can be triggered.** Free-task testing assumes the participant can cause the problem. Here, only the AI can.

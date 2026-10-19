@@ -1,21 +1,24 @@
 export const meta = {
   title: "Case study template",
-  year: "TODO",
-  cover: "", // TODO: "/images/cases/<slug>/cover.webp", 1600x900 WebP
+  role: "TODO",
+  timeline: "TODO",
+  tools: ["TODO"],
+  cover: "", // TODO: "/images/cases/<slug>/cover.webp", 1600x800 WebP
   concept: false,
-  featured: true,
+  featured: false,
+  draft: true, // dev only; never exported
   order: 99,
 };
 
-{/* TODO: Copy this file to /content/cases/<slug>.mdx for each real case study, then delete it. Keep the section order. */}
+{/* Copy this file to /content/cases/<slug>.mdx for each case study. Keep the section order. */}
 
-## TL;DR
+{/* The home card reads the TL;DR lines: Problem is the one-line summary. Keep each to one line. */}
 
-{/* The home page cards read these lines: Problem is the one-line summary, My role is the role. Keep each to one line. */}
-
+<TLDR>
 - **Problem:** TODO
 - **My role:** TODO
 - **Outcome:** TODO
+</TLDR>
 
 ## Context
 
@@ -29,13 +32,25 @@ export const meta = {
 
 {/* TODO */}
 
+<Callout label="Security lens">
+
+{/* TODO */}
+
+</Callout>
+
 ## Decisions
 
-{/* TODO: each decision gets a "Why I chose this" toggle (component not built yet). */}
+### TODO: decision
+
+<WhyIChose>
+
+{/* TODO */}
+
+</WhyIChose>
 
 ## Interactive demo
 
-{/* TODO: lazy-loaded, fully keyboard-operable demo. */}
+{/* TODO: e.g. <BeforeAfter before={{ src, alt }} after={{ src, alt }} width={1200} height={750} /> */}
 
 ## Outcome & learnings
 
