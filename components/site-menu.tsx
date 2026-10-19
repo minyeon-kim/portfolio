@@ -40,12 +40,12 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
   const panel = useRef<HTMLDivElement>(null);
   const open = phase === "enter" || phase === "open";
 
-  // On the landing page (md+) Menu opens the links inline in the left rail
+  // On the landing page (lg+) Menu opens the links inline in the left rail
   // instead of this overlay.
   const pathname = usePathname();
   const inlineOpen = useUi((s) => s.menuOpen);
   const onMenuClick = () => {
-    if (pathname === "/" && window.matchMedia("(min-width: 48rem)").matches) {
+    if (pathname === "/" && window.matchMedia("(min-width: 64rem)").matches) {
       setUi({ menuOpen: !inlineOpen });
       return;
     }

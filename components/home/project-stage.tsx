@@ -70,8 +70,8 @@ export function ProjectStage({ projects, intro }: { projects: StageProject[]; in
       <div className="stage-content contents md:relative md:mx-auto md:grid md:h-full md:max-w-page md:grid-rows-[auto_1fr_auto] md:px-4 md:pt-[115px] md:pb-8">
         <div className="order-1 px-2 md:px-0">{intro}</div>
 
-        {/* Case picker, centered */}
-        <div className="order-3 flex justify-center px-2 md:items-center md:px-0">
+        {/* Case picker below lg (lg+ uses the vertical picker in the left SideRail) */}
+        <div className="order-3 flex justify-center px-2 md:items-center md:px-0 lg:invisible">
           <Segmented
             label="Selected work"
             options={projects.map((p) => ({ id: p.slug, label: p.name }))}

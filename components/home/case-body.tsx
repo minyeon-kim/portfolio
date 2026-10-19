@@ -22,9 +22,9 @@ export function CaseBody({
   return (
     <article className="mx-auto max-w-prose px-2 pt-8 pb-16">
       {metaRow.length > 0 && (
-        <dl className="reveal mb-6 grid gap-2 font-mono text-xs sm:grid-cols-3">
+        <dl className="mb-6 grid gap-2 font-mono text-xs sm:grid-cols-3">
           {metaRow.map(({ label, value }) => (
-            <div key={label}>
+            <div key={label} className="reveal">
               <dt className="mb-0.5 text-muted uppercase">{label}</dt>
               <dd>{value}</dd>
             </div>

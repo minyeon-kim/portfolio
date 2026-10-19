@@ -90,19 +90,26 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
     top/bottom bands.
   - Intro at the top: the positioning line only (36px Light, with the Decrypted
     scramble). No name label, no counter, no footer on this page.
-  - Case picker in the middle: an iOS-style segmented control (frosted pill track,
-    solid thumb that slides to the selected case). Tabs: arrows / Home / End switch.
+  - Case picker (lg+): a vertical iOS-style segmented control (frosted rounded track,
+    solid thumb that slides to the selected case), fixed at the left edge and
+    vertically centered, staying put while you read. Picking from inside a case
+    glides back to the stage. Below lg the same control sits horizontally in the
+    stage. Tabs: arrows / Home / End switch.
   - Bottom: the selected case's role, [CONCEPT] label, title (64px Light) and
     one-line problem, plus a "Scroll to read" hint. No "View case" button.
   - Picking a case crossfades the cover (settling from a 1.04 zoom). The old title
     block slides out upward and the new one rises in, staggered 0 / 150 / 250ms.
   - Scrolling down hands off to the case: the stage text drifts up and fades, the
     tint deepens and the cover zooms slightly (scroll-linked), and the selected
-    case's content follows directly (meta row, then the MDX body). Its end offers
-    "Next case", which selects the next case and glides back up.
-  - Inline menu (md+): Menu opens the page links (Work, Playground, About, Contact)
-    at the left edge, vertically centered, as frosted pills sliding in one by one
-    (50ms apart, 250ms each). Menu again, Esc, or following a link folds them away;
+    case's content follows (meta row, then the MDX body). Its end offers "Next
+    case", which selects the next case and glides back up.
+  - The content is built by scrolling, not laid out all at once: every block
+    (paragraphs, list items, subheadings, meta items) rises in as it enters the
+    screen, one by one; quotes fill in word by word with scroll; a rule above each
+    section heading grows in. Same on the full case pages.
+  - Inline menu (lg+): Menu opens the page links (Work, Playground, About, Contact)
+    as frosted pills just above the left case picker, sliding in one by one (50ms
+    apart, 250ms each). Menu again, Esc, or following a link folds them away;
     focus returns to the Menu button.
   - On phones it stacks: intro, the cover as a 24px-rounded card, the segmented
     control, then the title, so text never sits on the image.
