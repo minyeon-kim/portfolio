@@ -1378,9 +1378,11 @@ html, body, main { overflow-anchor: none; }
 }
 @keyframes gemini-device-turn {
   from {
-    transform: perspective(1800px) rotateY(40deg) rotateX(10deg) rotateZ(6deg) translate3d(-2%, 4%, 0) scale(0.9);
-    animation-timing-function: cubic-bezier(0.6, 0, 0.3, 1);
+    transform: perspective(1600px) rotateY(68deg) rotateX(16deg) rotateZ(10deg) translate3d(-6%, 6%, 0) scale(0.88);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.25, 1);
   }
   85%, to { transform: perspective(1800px); }
 }
 @keyframes gemini-device-side { from { opacity: 1; } 80% { opacity: 1; } to { opacity: 0; } }
+/* The turned phone reaches past its frame; let it, so the start pose is visible. */
+[data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
