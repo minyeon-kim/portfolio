@@ -229,12 +229,20 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         backdrop.classList.add("project-navigation-dissolve");
         animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
       }
-      // The selection colour flow fades out as the slide starts; the quieter
-      // ambient edge light stays and continues into the bridge.
+      // The selection colour flow recedes gently over the whole slide instead of
+      // switching off, and its lower part is dissolved so it never ends at the
+      // intro's bottom edge while it is still visible. The quieter ambient edge
+      // light stays and continues into the bridge.
       backdrop.querySelectorAll<HTMLElement>(".hero-sculpture").forEach((layer) => {
-        animations.push(layer.animate(
-          [{ opacity: getComputedStyle(layer).opacity }, { opacity: 0 }],
-          { duration: timing.duration * 0.35, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "forwards" },
+        const fade = document.createElement("div");
+        const mask = "linear-gradient(to bottom, #000 50%, transparent 92%)";
+        Object.assign(fade.style, { position: "absolute", inset: "0", zIndex: "-1", pointerEvents: "none", maskImage: mask });
+        fade.style.setProperty("-webkit-mask-image", mask);
+        layer.replaceWith(fade);
+        fade.appendChild(layer);
+        animations.push(fade.animate(
+          [{ opacity: 1 }, { opacity: 0 }],
+          { duration: timing.duration, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
         ));
       });
       animations.push(backdrop.animate(
