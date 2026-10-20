@@ -182,7 +182,7 @@ function IntroState({ name, intro, projects, onSelect }: {
           }}>
             <label htmlFor="project-query" className="sr-only">Find a project</label>
             <input ref={input} readOnly={busy} id="project-query" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder="What would you like to explore?" autoComplete="off" aria-describedby="project-search-status" />
-            <button disabled={busy} type="submit" aria-label="Open matching project" className="press project-prompt-submit"><span className="prompt-send-icon" aria-hidden="true">↗</span></button>
+            <button disabled={busy} type="submit" aria-label="Open matching project" data-ready={query.trim() ? "" : undefined} className="press project-prompt-submit"><svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
           </form>}
           {!submitted && <div className="project-suggestions" aria-label="Projects">
             {matches.map((project) => <button key={project.slug} type="button" disabled={busy} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
