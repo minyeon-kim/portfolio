@@ -75,17 +75,21 @@ export function ReturnToIntro() {
           observer.disconnect();
           clearTimeout(timeout);
           requestAnimationFrame(() => {
-            // The reverse of opening a project, sequenced so the two never show at
-            // once: the detail drops slightly and is gone in 260ms, then the intro
-            // settles down from above and fades in.
+            // The reverse of opening a project: the detail's content drops and
+            // blurs away in 140ms (no ghost), its canvas clears just after, and
+            // the intro settles down from above and fades in.
             const intro = document.querySelector<HTMLElement>("main");
             const introMotion = intro?.animate(
               [{ transform: "translate3d(0, -5vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }],
-              { duration: 800, delay: 220, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+              { duration: 800, delay: 200, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+            );
+            outgoing.firstElementChild?.animate(
+              [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, 2vh, 0)", opacity: 0, filter: "blur(6px)" }],
+              { duration: 140, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
             );
             const motion = outgoing.animate(
-              [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, 3vh, 0)", opacity: 0 }],
-              { duration: 260, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
+              [{ opacity: 1 }, { opacity: 0 }],
+              { duration: 240, delay: 120, easing: "linear", fill: "forwards" },
             );
             void motion.finished.catch(() => {}).finally(() => {
               void (introMotion?.finished ?? Promise.resolve()).catch(() => {}).finally(() => introMotion?.cancel());
