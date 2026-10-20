@@ -67,7 +67,7 @@ export function SideRail({ projects, pages }: Props) {
   return (
     <div
       inert={!visible}
-      className={`on-media fixed top-[62%] left-4 z-30 hidden -translate-y-1/2 transition-[opacity,translate] duration-250 ease-standard lg:block ${
+      className={`project-rail fixed top-[62%] z-30 hidden -translate-y-1/2 transition-[opacity,translate] duration-250 ease-standard lg:block ${
         visible ? "opacity-100" : "pointer-events-none -translate-x-2 opacity-0"
       }`}
     >
@@ -91,13 +91,13 @@ export function SideRail({ projects, pages }: Props) {
         </ul>
       </nav>
 
-      <CasePills
+      {active !== null && <CasePills
         label="Selected work"
         options={projects.map((p) => ({ id: p.slug, label: p.name }))}
         value={active}
         onChange={select}
         controls="stage-panel"
-      />
+      />}
     </div>
   );
 }

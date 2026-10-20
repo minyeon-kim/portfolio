@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { Children, type ReactNode } from "react";
+import { revealNextProject } from "@/lib/project-transition";
 import { setUi, useUi } from "@/lib/ui-store";
+import { withBase } from "@/lib/site";
 
 // Below the stage: the selected case's full content, so scrolling down reads
 // straight into it. Nothing is mounted until a case is picked (the intro has
@@ -14,11 +16,6 @@ export function CasePanels({ children }: { children: ReactNode }) {
   if (active === null) return null;
   return (
     <>
-      {/* Blend from the dark stage into the page, so there is no edge in light theme. */}
-      <div
-        aria-hidden="true"
-        className="full-bleed hidden h-16 bg-[linear-gradient(to_bottom,var(--media-bg),var(--bg))] md:block"
-      />
       <div id="case" key={active} className="scroll-mt-4 md:scroll-mt-1">
         {panels[active]}
       </div>
@@ -33,7 +30,7 @@ export function HomeLink({ className, children }: { className?: string; children
       href="/"
       className={className}
       onClick={(e) => {
-        if (window.location.pathname !== "/") return;
+        if (window.location.pathname !== withBase("/")) return;
         e.preventDefault();
         setUi({ activeCase: null, menuOpen: false });
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -51,16 +48,18 @@ export function NextCaseButton({ index, name }: { index: number; name: string })
     <button
       type="button"
       onClick={() => {
-        setUi({ activeCase: index });
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        revealNextProject(() => {
+          setUi({ activeCase: index });
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }, () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)));
       }}
       className="group press block w-full rounded-md bg-fill p-3 text-left transition-colors duration-150 ease-standard hover:bg-fill-strong"
     >
-      <span className="mb-1 block font-mono text-xs text-muted">Next case</span>
+      <span className="mb-1 block font-mono text-xs text-muted">Next project</span>
       <span className="flex items-baseline gap-1 text-lg">
         {name}
-        <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:-translate-y-0.5">
-          ↑
+        <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-y-0.5">
+          ↓
         </span>
       </span>
     </button>

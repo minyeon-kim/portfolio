@@ -7,6 +7,8 @@ import { Callout } from "@/components/mdx/callout";
 import { Chapter, Story } from "@/components/mdx/story";
 import { TLDR } from "@/components/mdx/tldr";
 import { WhyIChose } from "@/components/mdx/why-i-chose";
+import { CaseSection, CaseMedia, CaseMediaPair, CaseStatement } from "@/components/case-story";
+import { CaseGallery } from "@/components/case-gallery";
 import { Todo } from "@/components/todo";
 import { slugify } from "@/lib/slug";
 
@@ -56,6 +58,11 @@ const components: MDXComponents = {
     </blockquote>
   ),
   code: (props) => <code className="font-mono text-xs" {...props} />,
+  CaseGallery,
+  CaseSection,
+  CaseMedia,
+  CaseMediaPair,
+  CaseStatement,
   TLDR,
   WhyIChose,
   BeforeAfter,

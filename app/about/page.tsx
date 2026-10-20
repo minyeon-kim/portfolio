@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { CopyButton } from "@/components/copy-button";
 import { Todo } from "@/components/todo";
 import Story, { skills } from "@/content/about.mdx";
-import { site } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
 
 export const metadata: Metadata = { title: "About" };
 
@@ -19,7 +19,7 @@ export default function AboutPage() {
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
 
   return (
-    <div className="mx-auto max-w-prose px-2 pt-8 pb-12">
+    <div data-about-page className="mx-auto max-w-prose px-2 pt-8 pb-12">
       <header className="mb-6">
         <p className="mb-1 font-mono text-xs text-muted">{site.name}</p>
         <h1 className="text-xl font-normal tracking-tight">About</h1>
@@ -58,7 +58,7 @@ export default function AboutPage() {
         <div className="flex flex-wrap items-center gap-2">
           {hasResume ? (
             <a
-              href={site.resumeUrl}
+              href={withBase(site.resumeUrl)}
               className="press inline-flex h-4 items-center rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong"
             >
               Resume (PDF)

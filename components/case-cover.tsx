@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ViewTransition } from "react";
+import { withBase } from "@/lib/site";
 
 // Edge-to-edge case cover. As it scrolls in, it opens from an inset, slightly
 // tilted frame to the full width, and the image drifts inside it
@@ -18,7 +19,7 @@ export function CaseCover({
       <div className="cover-expand aspect-[2/1] max-h-[80vh] w-full overflow-clip bg-surface">
         <Morph name={morphName}>
           <Image
-            src={src}
+            src={withBase(src)}
             alt=""
             width={1600}
             height={800}

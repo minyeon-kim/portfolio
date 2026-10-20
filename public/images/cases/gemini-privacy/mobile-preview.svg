@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1100" viewBox="0 0 1000 1100">
+  <defs>
+    <linearGradient id="edge" x2="1" y2="1"><stop stop-color="#77808F"/><stop offset=".25" stop-color="#20242C"/><stop offset=".7" stop-color="#090B0E"/><stop offset="1" stop-color="#5B6472"/></linearGradient>
+    <linearGradient id="screen" x2=".8" y2="1"><stop stop-color="#12151C"/><stop offset="1" stop-color="#1C2540"/></linearGradient>
+    <linearGradient id="spark" x2="1" y2="1"><stop stop-color="#7BAEFF"/><stop offset="1" stop-color="#C5A5F8"/></linearGradient>
+    <clipPath id="display"><rect x="300" y="87" width="400" height="926" rx="48"/></clipPath>
+  </defs>
+  <!-- Concept screen adapted from this case's source-management storyboard. -->
+  <rect x="280" y="260" width="5" height="66" rx="2" fill="#56606D"/>
+  <rect x="280" y="345" width="5" height="94" rx="2" fill="#56606D"/>
+  <rect x="715" y="325" width="5" height="110" rx="2" fill="#56606D"/>
+  <rect x="283" y="70" width="434" height="960" rx="64" fill="url(#edge)"/>
+  <rect x="288" y="75" width="424" height="950" rx="59" fill="#07090C" stroke="#919AA8" stroke-opacity=".3"/>
+  <g clip-path="url(#display)" font-family="Arial, Helvetica, sans-serif">
+    <rect x="300" y="87" width="400" height="926" fill="url(#screen)"/>
+    <text x="330" y="126" font-size="15" fill="#F2F4F8" font-weight="600">9:41</text>
+    <path d="M621 117h3v8h-3zm6-3h3v11h-3zm6-3h3v14h-3z" fill="#F2F4F8"/>
+    <rect x="648" y="113" width="22" height="11" rx="3" fill="none" stroke="#F2F4F8"/><rect x="651" y="116" width="15" height="5" rx="1" fill="#F2F4F8"/>
+    <path d="M329 163h18m-18 6h13" stroke="#DCE2EF" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="500" y="174" font-size="22" fill="#EEF2FA" text-anchor="middle">Gemini</text>
+    <circle cx="660" cy="167" r="14" fill="#354464"/><text x="660" y="172" text-anchor="middle" font-size="12" fill="#DAE3F6">M</text>
+    <rect x="385" y="223" width="286" height="97" rx="22" fill="#2B3345"/>
+    <text x="405" y="251" fill="#F0F2F8" font-size="16"><tspan x="405">Can you recommend a new</tspan><tspan x="405" dy="23">Italian place for dinner</tspan><tspan x="405" dy="23">tonight?</tspan></text>
+    <path d="M338 350Q338 366 322 366Q338 366 338 382Q338 366 354 366Q338 366 338 350" fill="url(#spark)"/>
+    <text x="326" y="414" fill="#E4E8F2" font-size="17"><tspan x="326">How about Bistro O? You loved</tspan><tspan x="326" dy="26">the truffle risotto there when</tspan><tspan x="326" dy="26">you went with Jungmin last spring.</tspan></text>
+    <rect x="326" y="496" width="169" height="35" rx="17.5" fill="#25395B"/><text x="343" y="519" fill="#B9D3FF" font-size="14">Used 2 sources  ⌄</text>
+    <rect x="326" y="551" width="348" height="265" rx="24" fill="#1C2230" stroke="#3A4357"/>
+    <text x="347" y="581" fill="#AAB8D0" font-size="11" letter-spacing="1.2">USED IN THIS ANSWER</text>
+    <text x="347" y="616" fill="#EDF0F7" font-size="16">Photos</text><text x="347" y="640" fill="#AEB8CB" font-size="13">1 photo tagged “Jungmin”</text>
+    <text x="347" y="674" fill="#B9D3FF" font-size="13">Block</text><text x="411" y="674" fill="#B9D3FF" font-size="13">Delete</text>
+    <path d="M347 695h306" stroke="#343D50"/>
+    <text x="347" y="727" fill="#EDF0F7" font-size="16">Past chat</text><text x="347" y="751" fill="#AEB8CB" font-size="13">“Dinner ideas”</text>
+    <text x="347" y="786" fill="#B9D3FF" font-size="13">Block</text><text x="411" y="786" fill="#B9D3FF" font-size="13">Delete</text>
+    <rect x="319" y="898" width="362" height="65" rx="32" fill="#293247"/>
+    <text x="342" y="937" fill="#C3CCDC" font-size="16">Ask Gemini</text><path d="M648 919v17m-5-8h10" stroke="#CAD5E7" stroke-width="2" stroke-linecap="round"/>
+    <rect x="446" y="994" width="108" height="4" rx="2" fill="#E0E4EE"/>
+  </g>
+</svg>

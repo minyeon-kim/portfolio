@@ -102,7 +102,7 @@ export async function getCases(): Promise<CaseEntry[]> {
 
 // The case after this one in display order, wrapping to the first.
 export async function getNextCase(slug: string): Promise<CaseEntry | null> {
-  const cases = await getCases();
+  const cases = (await getCases()).filter((entry) => !entry.meta.draft);
   if (cases.length < 2) return null;
   const index = cases.findIndex((c) => c.slug === slug);
   return cases[(index + 1) % cases.length];
