@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "About" };
 const columns = [
   { title: "Design", items: skills.design },
   { title: "Engineering", items: skills.engineering },
-  { title: "Security", items: skills.security },
+  { title: "Cybersecurity", items: skills.security },
 ];
 
 // Same frame as a project page: editorial opener, then numbered story sections.
@@ -26,8 +26,8 @@ export default function AboutPage() {
       <ProjectHero
         name="About"
         details={[
+          { label: "Background", value: "Cybersecurity → Product design" },
           { label: "Role", value: "Product designer" },
-          { label: "Background", value: "Computer science, IT security" },
           { label: "Focus", value: "Research, design, engineering" },
         ]}
       />
@@ -35,7 +35,7 @@ export default function AboutPage() {
         <div className="case-content">
           <CaseStatement><p>{site.positioning}</p></CaseStatement>
 
-          <CaseSection id="story" label="01 / Story" title="From security to design">
+          <CaseSection id="story" label="01 / Story" title="From cybersecurity to design">
             <Story />
           </CaseSection>
 
