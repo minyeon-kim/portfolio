@@ -1395,15 +1395,3 @@ html, body, main { overflow-anchor: none; }
 @keyframes gemini-device-side { from { opacity: 1; } 80% { opacity: 1; } to { opacity: 0; } }
 /* The turned phone reaches past its frame; let it, so the start pose is visible. */
 [data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
-
-/* Arrival light: the selected project's color on the rising page's top edge,
-   matched to the intro flow and the page glows; fades out as the page lands. */
-.project-arrival-glow {
-  position: absolute; inset: 0 0 auto 0; height: 75vh; z-index: 5; pointer-events: none;
-  --glow-a: rgb(85 120 196 / 0.32); --glow-b: rgb(128 112 183 / 0.28);
-  background:
-    radial-gradient(70% 80% at 22% 0%, var(--glow-a), transparent 72%),
-    radial-gradient(65% 70% at 82% 0%, var(--glow-b), transparent 72%);
-}
-.project-arrival-glow[data-variant="gemini"] { --glow-a: rgb(66 133 244 / 0.42); --glow-b: rgb(167 139 250 / 0.38); }
-.project-arrival-glow[data-variant="devsign"] { --glow-a: rgb(61 212 145 / 0.34); --glow-b: rgb(40 150 140 / 0.26); }

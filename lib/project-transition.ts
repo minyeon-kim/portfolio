@@ -43,7 +43,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     ));
   }
   let incoming: HTMLElement | null = null;
-  let glow: HTMLDivElement | null = null;
   const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, paddingTop: main.style.paddingTop, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
   const floor = document.createElement("div");
   floor.className = "project-navigation-floor";
@@ -83,7 +82,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     clearTimeout(timeout);
     cancelAnimationFrame(scrollFrame);
     animations.forEach((animation) => animation.cancel());
-    glow?.remove();
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
     const heading = main.querySelector<HTMLElement>(".selected-stage-title, .project-hero h1, h1");
@@ -152,15 +150,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         [{ transform: "translate3d(0, 100svh, 0)" }, { transform: "translate3d(0, 0, 0)" }], timing,
       );
       animations.push(slide);
-      // The destination's color rides in on its top edge, continuing the intro's
-      // color flow, then settles into the page's own canvas as it lands.
-      const variant = main.querySelector("[data-gemini]") ? "gemini" : main.querySelector("[data-canvas]") ? "devsign" : "neutral";
-      glow = document.createElement("div");
-      glow.className = "project-arrival-glow";
-      glow.dataset.variant = variant;
-      glow.setAttribute("aria-hidden", "true");
-      main.appendChild(glow);
-      animations.push(glow.animate([{ opacity: 1 }, { opacity: 1, offset: 0.35 }, { opacity: 0 }], timing));
       // Follow-through: the opener's parts trail the page a little and land just
       // after it, so the motion settles instead of stopping as one slab. These run
       // on the live elements and finish on their own after cleanup.

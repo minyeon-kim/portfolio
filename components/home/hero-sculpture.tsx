@@ -43,7 +43,7 @@ void main() {
   vec3 c2 = mix(vec3(0.30, 0.15, 0.38), vec3(0.76, 0.62, 0.85), lightMode);
   vec3 c3 = mix(vec3(0.12, 0.25, 0.29), vec3(0.56, 0.77, 0.78), lightMode);
   c1 = mix(c1, mix(vec3(0.06, 0.23, 0.52), vec3(0.48, 0.66, 0.96), lightMode), flavor.x);
-  c2 = mix(c2, mix(vec3(0.30, 0.24, 0.52), vec3(0.74, 0.66, 0.98), lightMode), flavor.x);
+  c2 = mix(c2, mix(vec3(0.30, 0.14, 0.47), vec3(0.76, 0.62, 0.94), lightMode), flavor.x);
   c1 = mix(c1, mix(vec3(0.035, 0.30, 0.20), vec3(0.40, 0.80, 0.64), lightMode), flavor.y);
   c2 = mix(c2, mix(vec3(0.04, 0.20, 0.22), vec3(0.52, 0.75, 0.69), lightMode), flavor.y);
   c3 = mix(c3, mix(vec3(0.10, 0.28, 0.19), vec3(0.71, 0.86, 0.68), lightMode), flavor.y);
