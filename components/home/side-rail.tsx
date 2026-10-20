@@ -67,7 +67,7 @@ export function SideRail({ projects, pages }: Props) {
   return (
     <div
       inert={!visible}
-      className={`project-rail fixed top-[62%] z-30 hidden -translate-y-1/2 transition-[opacity,translate] duration-250 ease-standard lg:block ${
+      className={`project-rail fixed bottom-12 z-30 hidden transition-[opacity,translate] duration-250 ease-standard lg:block ${
         visible ? "opacity-100" : "pointer-events-none -translate-x-2 opacity-0"
       }`}
     >
