@@ -47,6 +47,15 @@ export function ReturnToIntro() {
         });
         layer = document.createElement("div");
         layer.className = "return-to-main-layer";
+        // The strip above main (header zone) takes the detail canvas colour, so
+        // it doesn't show as a band between the bridge and the page.
+        layer.style.background = detailSurface.color;
+        if (detailSurface.dots) {
+          Object.assign(layer.style, {
+            backgroundImage: detailSurface.dots.image, backgroundSize: detailSurface.dots.size,
+            backgroundPosition: `12px ${(((bounds.top + 12) % 24) + 24) % 24}px`,
+          });
+        }
         layer.inert = true;
         layer.setAttribute("aria-hidden", "true");
         layer.appendChild(snapshot);
@@ -70,7 +79,7 @@ export function ReturnToIntro() {
             // a colour bridge and the detail move down together at one speed.
             const gap = bridgeHeight();
             const intro = document.querySelector<HTMLElement>("main");
-            const bridge = createBridge(gap, surfaceOf(), detailSurface);
+            const bridge = createBridge(gap, surfaceOf(), detailSurface, intro?.querySelector<HTMLElement>(".intro-ambient"));
             bridge.style.top = `${-gap}px`;
             document.body.appendChild(bridge);
             const timing = { duration: 1100, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
@@ -79,11 +88,7 @@ export function ReturnToIntro() {
             const introMotion = intro?.animate(
               [{ transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }], timing,
             );
-            // The intro's ambient light stays off while it travels and fades in
-            // once it has landed, so its colour never ends at a hard edge.
-            intro?.querySelectorAll<HTMLElement>(".intro-ambient").forEach((layer) => {
-              layer.animate([{ opacity: 0 }, { opacity: 0, offset: 0.7 }, { opacity: 1 }], { duration: timing.duration + 500, easing: "ease-out" });
-            });
+            // The intro keeps its ambient light; the bridge continues it below.
             const motion = outgoing.animate(drop, timing);
             void motion.finished.catch(() => {}).finally(() => {
               introMotion?.cancel();

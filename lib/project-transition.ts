@@ -2,7 +2,7 @@
 
 // A page's canvas: its background colour, plus the Devsign dot grid when the
 // page is a design-tool canvas, so a transition bridge can continue it.
-export type Surface = { color: string; dots: { image: string; size: string } | null };
+export type Surface = { color: string; dots: { image: string; size: string } | null; intro: boolean };
 export function surfaceOf(root: ParentNode = document): Surface {
   const canvas = root.querySelector<HTMLElement>("main .selected-stage, main .project-hero, main .intro-stage")
     ?? root.querySelector<HTMLElement>(".selected-stage, .project-hero, .intro-stage");
@@ -11,7 +11,7 @@ export function surfaceOf(root: ParentNode = document): Surface {
     ? getComputedStyle(document.body).backgroundColor : style.backgroundColor;
   const dots = canvas?.closest("[data-canvas]") || canvas?.matches("[data-canvas]")
     ? { image: style.backgroundImage, size: style.backgroundSize } : null;
-  return { color, dots };
+  return { color, dots, intro: Boolean(canvas?.matches(".intro-stage")) };
 }
 
 // Bridge height: a multiple of the 24px dot grid so the dots line up with the
@@ -20,11 +20,42 @@ export const bridgeHeight = () => Math.max(24, Math.round((window.innerHeight * 
 
 // A fixed band that eases one canvas into the next between two moving pages.
 // Dot grids fade in towards the side they belong to.
-export function createBridge(height: number, top: Surface, bottom: Surface) {
+// Copies an intro light layer with each field pinned at its current drift.
+export function freezeAmbient(source: HTMLElement) {
+  const copy = source.cloneNode(true) as HTMLElement;
+  const live = source.querySelectorAll<HTMLElement>("span");
+  copy.querySelectorAll<HTMLElement>("span").forEach((span, index) => {
+    const style = live[index] ? getComputedStyle(live[index]) : null;
+    span.style.animation = "none";
+    if (style) { span.style.transform = style.transform; span.style.opacity = style.opacity; }
+  });
+  return copy;
+}
+
+export function createBridge(height: number, top: Surface, bottom: Surface, ambient?: HTMLElement | null) {
   const bridge = document.createElement("div");
   bridge.className = "project-navigation-bridge";
   bridge.setAttribute("aria-hidden", "true");
   Object.assign(bridge.style, { height: `${height}px`, background: `linear-gradient(to bottom, ${top.color}, ${bottom.color})` });
+  // The intro's ambient edge light continues into the band: a copy of its light
+  // layer (frozen at the current drift) is placed as if the intro extended
+  // below its edge, so the part that the intro clipped shows here, fading out.
+  if (top.intro && ambient) {
+    const surface = ambient.parentElement?.getBoundingClientRect();
+    const wrap = document.createElement("span");
+    const mask = "linear-gradient(to bottom, #000, transparent)";
+    Object.assign(wrap.style, { position: "absolute", inset: "0", overflow: "clip", maskImage: mask });
+    wrap.style.setProperty("-webkit-mask-image", mask);
+    const copy = freezeAmbient(ambient);
+    Object.assign(copy.style, {
+      position: "absolute", left: "0", top: `${-(surface?.height ?? window.innerHeight)}px`,
+      width: `${surface?.width ?? window.innerWidth}px`, height: `${surface?.height ?? window.innerHeight}px`,
+      maskImage: "none", zIndex: "0", overflow: "visible",
+    });
+    copy.style.setProperty("-webkit-mask-image", "none");
+    wrap.appendChild(copy);
+    bridge.appendChild(wrap);
+  }
   ([[top, "to top"], [bottom, "to bottom"]] as const).forEach(([end, direction]) => {
     if (!end.dots) return;
     const dots = document.createElement("span");
@@ -64,6 +95,10 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     if (source && source.width && source.height) copy.getContext("2d")?.drawImage(source, 0, 0);
   });
   snapshot.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+  // Animations are off inside the snapshot; keep the ambient light where it was.
+  const liveAmbient = main.querySelector<HTMLElement>(".intro-ambient");
+  const snapAmbient = snapshot.querySelector<HTMLElement>(".intro-ambient");
+  if (liveAmbient && snapAmbient) snapAmbient.replaceWith(freezeAmbient(liveAmbient));
   Object.assign(snapshot.style, { position: "absolute", top: `${bounds.top}px`, left: `${bounds.left}px`, width: `${bounds.width}px`, height: `${bounds.height}px`, margin: "0" });
   const backdrop = document.createElement("div");
   backdrop.className = "project-navigation-backdrop";
@@ -182,7 +217,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // against another. The bridge ends above the viewport, so it never
       // covers the new title.
       const gap = bridgeHeight();
-      bridge = createBridge(gap, outgoingSurface, surfaceOf());
+      bridge = createBridge(gap, outgoingSurface, surfaceOf(), liveAmbient);
       bridge.style.top = `${-gap}px`;
       document.body.appendChild(bridge);
       const rise = [{ transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }];
@@ -190,11 +225,13 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // The old view's lower part dissolves into its own canvas colour (the
       // floor behind it), so its colour fields don't end at a hard line where
       // the bridge begins.
-      backdrop.classList.add("project-navigation-dissolve");
-      animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
-      // The intro's colour fields (selection flow, ambient light) fade out as the
-      // slide starts, so only the neutral canvas and copy travel up with it.
-      backdrop.querySelectorAll<HTMLElement>(".hero-sculpture, .intro-ambient").forEach((layer) => {
+      if (!outgoingSurface.intro) {
+        backdrop.classList.add("project-navigation-dissolve");
+        animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
+      }
+      // The selection colour flow fades out as the slide starts; the quieter
+      // ambient edge light stays and continues into the bridge.
+      backdrop.querySelectorAll<HTMLElement>(".hero-sculpture").forEach((layer) => {
         animations.push(layer.animate(
           [{ opacity: getComputedStyle(layer).opacity }, { opacity: 0 }],
           { duration: timing.duration * 0.35, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "forwards" },
