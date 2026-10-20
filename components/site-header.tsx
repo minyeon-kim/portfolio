@@ -3,7 +3,7 @@ import path from "node:path";
 import { HomeLink } from "@/components/home/case-panels";
 import { experiments } from "@/components/playground/experiments";
 import { getCases } from "@/lib/cases";
-import { nav, site } from "@/lib/site";
+import { nav, site, withBase } from "@/lib/site";
 import { HeaderShell } from "./header-shell";
 import { SiteMenu } from "./site-menu";
 import { ThemeToggle } from "./theme-toggle";
@@ -21,7 +21,7 @@ export async function SiteHeader() {
         scroll (md+) they fold into one compact floating pill; inside it the
         buttons drop their own pill backgrounds, so there is never a pill in a pill.
       */}
-      <div className="mx-auto grid max-w-full grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:px-4 md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[360px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
+      <div className="site-header-bar mx-auto grid max-w-full grid-cols-[1fr_auto_1fr] items-center gap-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[360px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
         <div>
           <SiteMenu
             cases={cases.map(({ slug, meta, tldr }) => ({
@@ -40,11 +40,11 @@ export async function SiteHeader() {
             }}
           />
         </div>
-        <HomeLink className="text-base font-medium tracking-tight whitespace-nowrap">{site.name}</HomeLink>
+        <HomeLink className="header-name text-base font-medium tracking-tight whitespace-nowrap">{site.name}</HomeLink>
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
           {hasResume && (
-            <a href={site.resumeUrl} className="link font-mono text-xs text-accent">
+            <a href={withBase(site.resumeUrl)} className="link font-mono text-xs text-accent">
               Resume
             </a>
           )}

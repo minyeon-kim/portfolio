@@ -1,6 +1,6 @@
 export const meta = {
-  title: "Gemini privacy redesign",
-  short: "Gemini privacy",
+  title: "Gemini privacy revamp",
+  short: "Gemini privacy revamp",
   teaser: {
     type: "before-after",
     before: {
@@ -18,7 +18,7 @@ export const meta = {
   role: "Product designer, solo",
   timeline: "Jul–Aug 2026", // TODO: confirm end date (usability tests ran later?)
   tools: ["FigJam", "Google Stitch"], // TODO: confirm full tool list
-  cover: "/images/cases/gemini-privacy/cover.svg", // TODO: illustrative; replace with a prototype screen as 1600x800 WebP, no Google logos
+  cover: "/images/cases/gemini-privacy/mobile-preview.svg", // TODO: illustrative; replace with a prototype screen as 1600x800 WebP, no Google logos
   concept: true,
   featured: true,
   order: 1,
@@ -122,9 +122,9 @@ The project is about how data moves across Google's services, not privacy settin
 
 </WhyIChose>
 
-## Interactive demo
+## Before & after
 
-Drag the divider or focus it and use the arrow keys.
+The same answer, with its sources and actions visible in context.
 
 <BeforeAfter
   before={{
@@ -140,7 +140,11 @@ Drag the divider or focus it and use the arrow keys.
   caption="Illustrative mock of the storyboard scenario, not a product screenshot."
 />
 
-{/* TODO: replace the mocks with screens from the prototype (no Google logos). */}
+<CaseGallery title="Mobile flows" items={[
+  { label: "Answer-level source management", caption: "Mobile screen: an answer with its source badge expanded." },
+  { label: "Block or delete a source", caption: "Mobile screen: source-specific controls and their feedback." },
+  { label: "Verifiable deletion from chat", caption: "Mobile sequence: found records, confirmation, and deletion result." },
+]} />
 
 ## Outcome & learnings
 

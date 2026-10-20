@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
-import { site } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
 import { setUi, useUi } from "@/lib/ui-store";
+import { ThemeToggle } from "./theme-toggle";
 import { CopyButton } from "./copy-button";
 import { ScrambleLink } from "./scramble-link";
 
@@ -123,15 +124,15 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
             onKeyDown={onKeyDown}
             className={`fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-bg transition-opacity duration-250 ease-standard ${phase === "enter" || phase === "leaving" ? "opacity-0" : "opacity-100"}`}
           >
-            <div className="mx-auto flex max-w-page items-center justify-between px-2 py-2 md:px-4">
+            <div className="site-menu-bar flex w-full items-center justify-between py-2">
               <MenuButton open controls="site-menu" onClick={() => closeMenu()} autoFocus />
               <Link href="/" onClick={go} className="text-base font-medium tracking-tight">
                 {site.name}
               </Link>
-              <span aria-hidden="true" className="size-4" />
+              <ThemeToggle />
             </div>
 
-            <div className="mx-auto grid max-w-page gap-6 px-2 pt-4 pb-12 md:px-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,0.9fr)] lg:gap-4 lg:pt-8">
+            <div className="site-menu-content mx-auto grid w-full gap-6 pt-4 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,0.9fr)] lg:gap-4 lg:pt-8">
               {/* Pages and case studies */}
               <div {...column(0)}>
                 <nav aria-label="Pages">
@@ -184,7 +185,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                       c.cover ? (
                         <Image
                           key={c.slug}
-                          src={c.cover}
+                          src={withBase(c.cover)}
                           alt=""
                           width={1600}
                           height={800}
@@ -236,7 +237,7 @@ export function SiteMenu({ cases, pages, experiments, contact }: Props) {
                       </a>
                     )}
                     {contact.resumeUrl && (
-                      <a href={contact.resumeUrl} className="link text-accent">
+                      <a href={withBase(contact.resumeUrl)} className="link text-accent">
                         Resume
                       </a>
                     )}

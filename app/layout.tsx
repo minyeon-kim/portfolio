@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { HideOnHome } from "@/components/hide-on-home";
+import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeScript } from "@/components/theme-script";
@@ -19,6 +20,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const nameSerif = Cormorant_Garamond({
+  variable: "--font-name-serif",
+  subsets: ["latin"],
+  weight: "600",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: { default: site.name, template: `%s — ${site.name}` },
   description: site.positioning,
@@ -30,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       // The theme script may set data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${nameSerif.variable} h-full antialiased`}
     >
       <head>
         <ThemeScript />
@@ -45,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
         </HideOnHome>
         <RevealObserver />
+        <ReturnToIntro />
       </body>
     </html>
   );

@@ -2,101 +2,142 @@ export const meta = {
   title: "Devsign: design and code review in one workspace",
   short: "Devsign",
   teaser: { type: "token-playground" },
-  role: "Designer and developer, team of 3", // TODO: confirm your exact role and split
-  timeline: "Sep–Oct 2026", // from the repo's commit history; TODO: confirm
-  tools: ["React", "Tailwind CSS", "shadcn/ui", "Playwright", "Claude Code"], // TODO: add design tools (Figma?)
-  cover: "/images/cases/workflow-app/cover.svg", // TODO: illustrative; replace with a Devsign screen as 1600x800 WebP (repo has screenshots/)
-  concept: true, // TODO: confirm this was self-initiated, not client work
+  role: "Product designer · team of 2",
+  timeline: "Aug–Oct 2026",
+  tools: ["FigJam", "React", "Tailwind CSS", "Playwright"],
+  cover: "/images/cases/workflow-app/cover.svg",
+  concept: true,
   featured: true,
   order: 2,
 };
 
-{/*
-  Drafted from ~/Projects/devsign: design.md, docs/ut-conflict-review.md,
-  package.json and git history. There are no research notes or test results
-  in the repo, so problem framing, research, rationale and outcome are TODOs.
-*/}
+{/* Working content selection from the user's project outline. Image slots and
+section order are provisional. Confirm copy and personal contributions before publishing. */}
+
+<div className="case-draft-note">Working draft · Content and visuals in progress</div>
+
+<CaseSection id="overview" label="01 / Overview" title="From AI output to a shared decision.">
+
+Devsign brings designers and developers into one workflow to compare AI-generated ideas, combine the parts that work, and resolve differences between design and implementation.
+
+The project connects the steps that usually happen across screenshots, messages, design comments, and code: discover a change, request a decision, agree on it, and follow it through.
+
+</CaseSection>
 
 <TLDR>
-- **Problem:** When an implementation drifts from the design, there's no shared place to see the difference, decide which one is right, and keep a record of why.
-- **My role:** Designer and developer on a team of three. {/* TODO: what you owned specifically */}
-- **Outcome:** A working prototype for reviewing design–code mismatches, merging AI design variants, and replaying change history. {/* TODO: usability test results */}
+- **Problem:** AI makes output faster. Comparing alternatives and agreeing on what ships still takes work across disconnected tools.
+- **My role:** Product design in a two-person team, from research and workflow definition to a working prototype and iteration.
+- **Outcome:** A functioning prototype refined through an initial usability test and a co-design session. The revised experience has not yet been retested.
 </TLDR>
 
-## Context
+<CaseMedia label="Devsign — the complete workspace" caption="A full-width product overview or a short walkthrough of the working prototype." />
 
-Devsign is a workspace where designers and developers review the same change from their own side. It brings together a dashboard, a project workspace, docs, change history, team activity, and Merge Studio, a canvas for combining design variants.
+<CaseSection id="challenge" label="02 / The challenge" title="Making became faster. Agreement did not.">
 
-The prototype runs on React with Tailwind CSS and shadcn/ui. A single token file, `design.md`, is the source of truth for color, spacing, radius, and control sizes across every page.
+AI tools generate screens and code quickly, but teams still need to compare the results, choose a direction, and explain why something changed.
 
-{/* TODO: who it's for, why the team started it, and what you were responding to. */}
+When implementation diverges from the design, the reason, owner, and approval can end up in different places. Our focus was the work after generation: comparing, deciding, and keeping that decision in context.
 
-## Problem
+</CaseSection>
 
-A typical case from our test plan: the design specifies two card columns at 768px, the implementation overlaps the cards, and the developer proposes a single column. Each person sees a different version, and the decision and its reason live outside both the design file and the code.
+<CaseStatement>The bottleneck shifted from making the work to agreeing on what to make.</CaseStatement>
 
-{/* TODO: the problem statement in your words, and any evidence for how often this happens. */}
+<CaseMediaPair>
+  <CaseMedia variant="screen" label="The fragmented workflow" caption="A current-state journey showing where screenshots, requests, and decisions become separated." />
+  <CaseMedia variant="screen" label="One connected decision flow" caption="The proposed flow: discover → request → decide → implement → history." />
+</CaseMediaPair>
 
-## Research
+<CaseSection id="research" label="03 / Discover & define" title="Understand the handoffs, not just the tools.">
 
-{/* TODO: interviews, existing tools you compared, and what you learned. None of this is in the repo. */}
+We began with community content and competing services, then interviewed four practitioners across design, product management, and development to understand how AI output moves between roles.
 
-## Decisions
+We grouped interview observations into themes including fragmented tools, shared context, manual review, ownership, and version management. The recurring need was to make decisions easier to find and act on—not to hand every judgment to AI.
 
-### Turn a mismatch into a decision, not a bug ticket
+</CaseSection>
 
-When a mismatch is detected, the card shows the related file and line, the cause, the impact, and a severity. The designer sees the original, the current implementation, and the developer's proposal side by side, then chooses one of three outcomes: keep the original, approve the change, or ask for another review. They write a reason and pick when it ships: now, before release, or in the next version.
+<CaseMedia label="Research synthesis & opportunity areas" caption="Affinity mapping, selected interview evidence, and the path from observations to design opportunities." />
 
-<WhyIChose>
+<CaseSection id="direction" label="04 / Design direction" title="Give each role a clear next step.">
 
-{/* TODO: why three outcomes, why the reason is required, and why timing is part of the decision. */}
+Designers need to see the difference and make a decision. Developers need to explain constraints, request a change, and verify the implementation.
 
-</WhyIChose>
+We organized the experience around these responsibilities, with visual comparisons first and supporting detail close to the decision. Requests and their outcomes stay connected to the same history.
 
-### Keep design alternatives out of the review queue
+</CaseSection>
 
-Comparing variants, like four checkout options or two AI-generated dashboards, never adds an item to the change list or starts an approval. Only a real gap between the design and the code does.
+<div className="case-workflow reveal"><span>Discover</span><span>Request</span><span>Decide</span><span>Implement</span><span>Trace</span></div>
 
-<WhyIChose>
+<CaseSection id="merge-studio" label="05 / Merge Studio" title="Choose the best parts. Build one direction.">
 
-{/* TODO: why. The test plan checks whether participants can tell alternatives and mismatches apart. */}
+Instead of picking an entire AI-generated variation, designers can compare alternatives side by side and combine selected regions—for example, the card layout from one idea and the buttons from another.
 
-</WhyIChose>
+The combined result can be edited directly, while the origin of each selected part remains visible.
 
-### Tie approvals to the exact content reviewed
+</CaseSection>
 
-<Callout label="Security lens">
+<CaseGallery title="Merge Studio / From alternatives to one direction" items={[
+  { label: "Compare alternatives", caption: "Multiple design variations arranged side by side." },
+  { label: "Select regions", caption: "Choose the parts to keep from each variation." },
+  { label: "Refine the combined design", caption: "Edit the merged result in the same workspace." },
+  { label: "Review the final direction", caption: "The combined screen and the origin of its selected parts." },
+]} />
 
-An approval in Devsign applies to the content as it was when review was requested. If the change is edited after the request, pending approvals are cancelled and the author has to request review again. It's the same rule as approving a specific commit rather than a branch: a sign-off can't silently carry over to something the reviewer never saw.
+<CaseSection id="change-review" label="06 / Change review" title="A difference becomes a decision.">
 
-</Callout>
+When implementation differs from the design, developers can share the reason and a proposed change. Designers compare the original, the implementation, and the proposal before keeping the original, approving the change, or requesting another review.
 
-<WhyIChose>
+Approval is one step in the flow. The developer still needs to make and verify the change before it is resolved.
 
-{/* TODO: how you arrived at this rule. */}
+</CaseSection>
 
-</WhyIChose>
+<CaseGallery title="Change review / Follow one request" items={[
+  { label: "Original and implementation", caption: "See the difference and its impact in one comparison." },
+  { label: "Proposal and designer decision", caption: "Review the reason, proposed change, and available decisions." },
+  { label: "Verification and resolution", caption: "Track the implementation and the completed decision in History." },
+]} />
 
-### Record every step as a History checkpoint
+<CaseSection id="workspace-history" label="07 / Workspace & history" title="Keep the screen and its story together.">
 
-Requests, decisions, fixes, and resolutions each leave a checkpoint. Selecting an activity in History replays the change at that point and marks the related issue on the timeline.
+The Screens board lays out a project's views in flow order, with markers that lead to the relevant changes. Teams can first see where something changed, then inspect the details.
 
-<WhyIChose>
+History groups the request, decision, revision, and resolution around the same issue, with the corresponding screen available at each checkpoint.
 
-{/* TODO: why replay instead of a plain log. */}
+</CaseSection>
 
-</WhyIChose>
+<CaseMediaPair>
+  <CaseMedia variant="screen" label="Screens board & change markers" caption="A workspace overview with a selected change." />
+  <CaseMedia variant="screen" label="History & decision checkpoints" caption="A timeline paired with the screen at that moment." />
+</CaseMediaPair>
 
-## Interactive demo
+<CaseSection id="testing" label="08 / Test & iterate" title="Both roles saw it as someone else's tool.">
 
-Devsign's core idea is that design and code should read from the same values. This small playground shows that idea in isolation: every slider changes one token, and the preview and both code files update from it together. It is a portfolio demo, not part of the Devsign app.
+In the first usability test, one designer and one developer worked through the prototype. Both needed help understanding what to do next, especially during the request and approval flow.
 
-<TokenPlayground />
+The experience could be completed, but the first-use hierarchy and ownership were unclear. We used those observations to separate role-specific scenarios and make the next action more visible.
 
-## Outcome & learnings
+</CaseSection>
 
-{/* TODO: usability test results. */}
+<CaseStatement>“What should I do now?” became the question we designed around.</CaseStatement>
 
-We planned the usability test around three tasks in one project, with participants switching roles from the profile menu: merging two AI dashboard variants in Merge Studio as a designer, approving a design change as a designer, and resolving a detected mismatch as a developer. The plan observes whether people move from a review notification to the right change, whether History leads them to the matching replay, and whether they can tell a design alternative from a real mismatch.
+<CaseMediaPair>
+  <CaseMedia variant="screen" label="Before / shared interface, unclear ownership" caption="An annotated test screen showing the moments participants needed help." />
+  <CaseMedia variant="screen" label="After / role-specific views and next actions" caption="The revised hierarchy, request summary, and decision flow." />
+</CaseMediaPair>
 
-{/* TODO: learnings. */}
+<CaseSection id="codesign" label="09 / Co-design" title="See it. Understand it. Decide.">
+
+A co-design session with a practicing designer helped us simplify the workspace, bring the request and its reason to the top, and make decision controls easier to find.
+
+We moved toward a screen-led experience, clearer terminology, and a step-by-step review flow. Merge Studio became part of the same workspace so the surrounding context stayed in place.
+
+</CaseSection>
+
+<CaseMedia label="The revised workspace" caption="A full-width final-direction screen, with a small set of callouts explaining the key changes." />
+
+<CaseSection id="reflection" label="10 / Reflection & next steps" title="A clearer workflow. Still more to validate.">
+
+The project reframed design–development collaboration around roles and decisions, rather than a collection of features. A working prototype made it possible to observe actual clicks and revise the flow with participants.
+
+The revised design has not had a second usability test. The next step is to retest it with new scenarios and validate the workflow in a real team, including Figma and Git integrations and organization-specific approval policies.
+
+</CaseSection>

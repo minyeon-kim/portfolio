@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#1C1C1C"/>
+  <defs><mask id="orbit"><rect width="64" height="64" fill="white"/><circle cx="38" cy="24" r="16" fill="black"/></mask></defs>
+  <circle cx="29" cy="34" r="19" fill="#F1F0E8" mask="url(#orbit)"/>
+  <circle cx="47" cy="18" r="5" fill="#F1F0E8"/>
+</svg>
