@@ -478,3 +478,5 @@ Project slide easing revised: cubic-bezier(0.45, 0, 0.12, 1) over 1200ms (was a 
 Project slide follow-through: as the incoming page lands, its title, metadata columns and preview trail by 64/96/140px and settle 300–500ms after the page stops (WAAPI `translate`, staggered), so the motion eases out instead of stopping as one slab. Applies to chat→project, Next project, and direct-page links.
 
 Fixed the end-of-slide cut: the fixed incoming main now starts at the viewport top (top 0, padding-top + header offset, full innerHeight). Previously it was clipped at main's top (64px), but the home stage sits under the header via negative margin, so the old page stayed visible in the top strip until cleanup swapped it in one frame.
+
+Case body rhythm loosened on desktop (phones unchanged): sections clamp(80–144px) top / clamp(72–120px) bottom, statements and blockquotes clamp(96–176px), media bottom clamp(96–160px), eyebrow-to-title 40–64px, paired media gap 24–48px.
