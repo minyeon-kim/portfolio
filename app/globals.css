@@ -756,7 +756,7 @@ details[open]::details-content {
 [data-phase="typing"] .project-prompt,
 [data-phase="sending"] .project-prompt { border-color: rgb(157 190 255 / 0.6); }
 [data-phase="sending"] .project-prompt { background: rgb(157 190 255 / 0.12); }
-.prompt-send-icon { display: inline-block; }
+.prompt-send-icon { display: block; width: 20px; height: 20px; margin: auto; }
 [data-phase="sending"] .prompt-send-icon { animation: prompt-send 420ms var(--ease) both; }
 .project-suggestion:disabled { cursor: default; opacity: 0.45; }
 .prompt-cancel { color: var(--muted); font-size: 13px; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
@@ -773,7 +773,7 @@ details[open]::details-content {
   .generated-preview { animation: generated-preview 450ms var(--ease) 650ms both; }
   .selected-stage-picker { animation: generated-detail 300ms var(--ease) 800ms both; }
 }
-@keyframes prompt-send { to { transform: translate(12px, -12px); opacity: 0; } }
+@keyframes prompt-send { to { transform: translateY(-14px); opacity: 0; } }
 @keyframes generated-text {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -948,7 +948,9 @@ details[open]::details-content {
 .project-prompt input::placeholder, .project-search-status { color: var(--muted); }
 .project-suggestion { background: var(--color-fill); }
 .project-suggestion:hover { background: var(--color-fill-strong); }
-.project-prompt-submit { color: var(--bg); background: var(--ink); }
+/* Quiet until there is something to send, then solid. */
+.project-prompt-submit { color: var(--ink); background: var(--color-fill-strong); transition: background-color 250ms var(--ease), color 250ms var(--ease); }
+.project-prompt-submit[data-ready], [data-phase]:not([data-phase="idle"]) .project-prompt-submit { color: var(--bg); background: var(--ink); }
 [data-phase="typing"] .project-prompt, [data-phase="sending"] .project-prompt { border-color: var(--accent); }
 [data-phase="sending"] .project-prompt { background: var(--color-fill-strong); }
 @media (min-width: 48rem) {
