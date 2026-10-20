@@ -1,7 +1,7 @@
 "use client";
 
 // A page's canvas: its background colour, plus the Devsign dot grid when the
-// page is a design-tool canvas, so a transition bridge can continue it.
+// page is a design-tool canvas.
 export type Surface = { color: string; dots: { image: string; size: string } | null; intro: boolean };
 export function surfaceOf(root: ParentNode = document): Surface {
   const canvas = root.querySelector<HTMLElement>("main .selected-stage, main .project-hero, main .intro-stage")
@@ -14,12 +14,6 @@ export function surfaceOf(root: ParentNode = document): Surface {
   return { color, dots, intro: Boolean(canvas?.matches(".intro-stage")) };
 }
 
-// Bridge height: a multiple of the 24px dot grid so the dots line up with the
-// page they lead into.
-export const bridgeHeight = () => Math.max(24, Math.round((window.innerHeight * 0.4) / 24) * 24);
-
-// A fixed band that eases one canvas into the next between two moving pages.
-// Dot grids fade in towards the side they belong to.
 // Copies an intro light layer with each field pinned at its current drift.
 export function freezeAmbient(source: HTMLElement) {
   const copy = source.cloneNode(true) as HTMLElement;
@@ -32,41 +26,8 @@ export function freezeAmbient(source: HTMLElement) {
   return copy;
 }
 
-// A gradient over the lower part of the upper page, ending in the colour of the
-// page below; the caller fades it in (or out) with the motion.
-export function shadeInto(color: string) {
-  const shade = document.createElement("div");
-  shade.setAttribute("aria-hidden", "true");
-  Object.assign(shade.style, {
-    position: "absolute", left: "0", right: "0", bottom: "0", height: "45%", zIndex: "2", pointerEvents: "none",
-    background: `linear-gradient(to bottom, transparent, ${color})`,
-  });
-  return shade;
-}
-
-export function createBridge(height: number, top: Surface, bottom: Surface) {
-  const bridge = document.createElement("div");
-  bridge.className = "project-navigation-bridge";
-  bridge.setAttribute("aria-hidden", "true");
-  // Solid lower-page canvas: the upper page's own lower part eases into this
-  // colour (see shadeInto), so brightness only ever moves one way and there is
-  // no darker trough between two canvases.
-  Object.assign(bridge.style, { height: `${height}px`, background: bottom.color });
-  ([[top, "to top"], [bottom, "to bottom"]] as const).forEach(([end, direction]) => {
-    if (!end.dots) return;
-    const dots = document.createElement("span");
-    const mask = `linear-gradient(${direction}, transparent, #000)`;
-    Object.assign(dots.style, {
-      position: "absolute", inset: "0", backgroundImage: end.dots.image, backgroundSize: end.dots.size,
-      backgroundPosition: "12px 12px", maskImage: mask,
-    });
-    dots.style.setProperty("-webkit-mask-image", mask);
-    bridge.appendChild(dots);
-  });
-  return bridge;
-}
-
-// A curved incoming page rises over a slower outgoing page for subtle depth.
+// The new page rises a short way and fades in over the old view, which drifts
+// up slightly and fades out. The two overlap, so there is no seam between them.
 export function revealNextProject(change: () => void, ready: () => boolean) {
   if (document.documentElement.hasAttribute("data-project-navigation")) return;
   const main = document.querySelector<HTMLElement>("main");
@@ -80,7 +41,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     return color === "rgba(0, 0, 0, 0)" || color === "transparent" ? getComputedStyle(document.body).backgroundColor : color;
   };
   const outgoingColor = canvasColor();
-  const outgoingSurface = surfaceOf();
   // A focused Next button must not pull the new document back to its old row.
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   const bounds = main.getBoundingClientRect();
@@ -105,7 +65,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
   document.body.appendChild(backdrop);
   document.documentElement.dataset.projectNavigation = "true";
   const animations: Animation[] = [];
-  let bridge: HTMLDivElement | null = null;
   let incoming: HTMLElement | null = null;
   const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, paddingTop: main.style.paddingTop, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
   const floor = document.createElement("div");
@@ -146,7 +105,6 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     clearTimeout(timeout);
     cancelAnimationFrame(scrollFrame);
     animations.forEach((animation) => animation.cancel());
-    bridge?.remove();
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
     const heading = main.querySelector<HTMLElement>(".selected-stage-title, .project-hero h1, h1");
@@ -205,59 +163,31 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         width: `${rect.width}px`, height: `${window.innerHeight}px`, paddingTop: `${padding + offset}px`,
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
-      // Gentle start and a long, even landing: no fast burst followed by a dead crawl.
-      const timing = { duration: 1300, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
-      // One continuous strip, like scrolling down a single page: the old view,
-      // a colour bridge (old canvas -> new canvas) and the new page move up
-      // together at the same speed, so there is no seam and no layer drifting
-      // against another. The bridge ends above the viewport, so it never
-      // covers the new title.
-      const gap = bridgeHeight();
-      bridge = createBridge(gap, outgoingSurface, surfaceOf());
-      bridge.style.top = `${-gap}px`;
-      document.body.appendChild(bridge);
-      const rise = [{ transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }];
-      animations.push(bridge.animate(rise, timing));
-      // The old view's lower part eases into the new canvas colour as the slide
-      // starts, meeting the bridge (solid new canvas) without a seam or trough;
-      // its ambient light fades under the same shade instead of being cut.
-      const shade = shadeInto(surfaceOf().color);
-      backdrop.appendChild(shade);
-      animations.push(shade.animate([{ opacity: 0 }, { opacity: 1 }], { ...timing, duration: timing.duration * 0.3 }));
-      // The selection colour flow recedes gently over the whole slide instead of
-      // switching off, and its lower part is dissolved so it never ends at the
-      // intro's bottom edge while it is still visible. The quieter ambient edge
-      // light stays and continues into the bridge.
-      backdrop.querySelectorAll<HTMLElement>(".hero-sculpture").forEach((layer) => {
-        const fade = document.createElement("div");
-        const mask = "linear-gradient(to bottom, #000 50%, transparent 92%)";
-        Object.assign(fade.style, { position: "absolute", inset: "0", zIndex: "-1", pointerEvents: "none", maskImage: mask });
-        fade.style.setProperty("-webkit-mask-image", mask);
-        layer.replaceWith(fade);
-        fade.appendChild(layer);
-        animations.push(fade.animate(
-          [{ opacity: 1 }, { opacity: 0 }],
-          { duration: timing.duration, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
-        ));
-      });
+      // Overlap instead of a strip: the old view drifts up a little and fades
+      // out while the new page rises 12vh and fades in on top of it. Nothing is
+      // butted edge to edge, so there is no seam or colour band to see.
+      const timing = { duration: 900, delay: 120, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       animations.push(backdrop.animate(
-        [{ transform: "translate3d(0, 0, 0)" }, { transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }], timing,
+        [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, -6vh, 0)", opacity: 0 }],
+        { duration: 560, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
       ));
-      const slide = incoming.animate(rise, timing);
+      const slide = incoming.animate(
+        [{ transform: "translate3d(0, 12vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }], timing,
+      );
       animations.push(slide);
       // Follow-through: the opener's parts trail the page a little and land just
       // after it, so the motion settles instead of stopping as one slab. These run
       // on the live elements and finish on their own after cleanup.
       const parts: [string, number, number][] = [
-        [".selected-stage-title, .project-hero-title", 64, 0],
-        [".selected-stage-meta > div, .project-hero-details > div", 96, 60],
-        [".selected-stage-object, .project-hero-cover", 140, 140],
+        [".selected-stage-title, .project-hero-title", 24, 0],
+        [".selected-stage-meta > div, .project-hero-details > div", 36, 60],
+        [".selected-stage-object, .project-hero-cover", 52, 120],
       ];
       parts.forEach(([selector, lag, stagger]) => {
         main.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
           element.animate(
             [{ translate: `0 ${lag}px` }, { translate: "0 0" }],
-            { duration: timing.duration + 320 + stagger + index * 50, easing: "cubic-bezier(0.5, 0, 0.1, 1)", fill: "backwards" },
+            { duration: timing.duration + 200 + stagger + index * 50, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "backwards" },
           );
         });
       });

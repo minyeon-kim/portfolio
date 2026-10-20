@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { setUi, useUi } from "@/lib/ui-store";
-import { bridgeHeight, createBridge, shadeInto, surfaceOf } from "@/lib/project-transition";
+import { surfaceOf } from "@/lib/project-transition";
 
 // Only an additional upward gesture at the page top returns to the intro.
 export function ReturnToIntro() {
@@ -48,7 +48,7 @@ export function ReturnToIntro() {
         layer = document.createElement("div");
         layer.className = "return-to-main-layer";
         // The strip above main (header zone) takes the detail canvas colour, so
-        // it doesn't show as a band between the bridge and the page.
+        // the fading detail reads as one surface.
         layer.style.background = detailSurface.color;
         if (detailSurface.dots) {
           Object.assign(layer.style, {
@@ -75,33 +75,19 @@ export function ReturnToIntro() {
           observer.disconnect();
           clearTimeout(timeout);
           requestAnimationFrame(() => {
-            // Same one-strip motion as opening a project, in reverse: the intro,
-            // a colour bridge and the detail move down together at one speed.
-            const gap = bridgeHeight();
+            // The reverse of opening a project: the detail drifts down a little
+            // and fades out over the intro, which settles down into place.
             const intro = document.querySelector<HTMLElement>("main");
-            const bridge = createBridge(gap, surfaceOf(), detailSurface);
-            bridge.style.top = `${-gap}px`;
-            document.body.appendChild(bridge);
-            const timing = { duration: 1100, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
-            const drop = [{ transform: "translate3d(0, 0, 0)" }, { transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }];
-            const bridgeMotion = bridge.animate(drop, timing);
             const introMotion = intro?.animate(
-              [{ transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }], timing,
+              [{ transform: "translate3d(0, -6vh, 0)" }, { transform: "translate3d(0, 0, 0)" }],
+              { duration: 900, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
             );
-            // The intro keeps its ambient light; its lower part eases into the
-            // detail canvas (meeting the bridge) while it travels and clears as
-            // it lands.
-            const introPosition = intro?.style.position ?? "";
-            const shade = shadeInto(detailSurface.color);
-            if (intro) { intro.style.position = "relative"; intro.appendChild(shade); }
-            shade.animate([{ opacity: 1 }, { opacity: 1, offset: 0.55 }, { opacity: 0 }], timing);
-            const motion = outgoing.animate(drop, timing);
+            const motion = outgoing.animate(
+              [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, 8vh, 0)", opacity: 0 }],
+              { duration: 560, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
+            );
             void motion.finished.catch(() => {}).finally(() => {
-              introMotion?.cancel();
-              shade.remove();
-              if (intro) intro.style.position = introPosition;
-              bridgeMotion.cancel();
-              bridge.remove();
+              void (introMotion?.finished ?? Promise.resolve()).catch(() => {}).finally(() => introMotion?.cancel());
               outgoing.remove();
               focusInput();
             });
