@@ -492,3 +492,5 @@ Hero emphasis (Decrypted exception, approved by the user): in the positioning li
 Next-project/chat transitions hold the new page at the top while momentum from the click-time scroll is still arriving: Chrome's momentum wheel events are non-cancelable, so the root gets overflow: hidden (and is reset to the top) until 220ms pass without wheel events (max 2.5s). Leftover trackpad inertia never scrolls the new page; a fresh gesture scrolls normally.
 
 Route changes under the project slide (direct /work Next, chat → About) still start a React view transition (~30ms). With ::view-transition hidden, captured elements (root, .project-detail) blanked for those frames — a visible flicker. During data-project-navigation every view-transition-name is forced to none, so nothing is captured.
+
+Main chat composer is now a 56px full pill (radius 999px, padding 7px around the 40px send button, 24px text inset), matching the pill language of the suggestions; suggestions themselves unchanged for now.

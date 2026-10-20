@@ -724,9 +724,10 @@ details[open]::details-content {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px 12px 12px 24px;
+  /* 56px tall full pill: 7px + 40px send button + 7px + 1px borders. */
+  padding: 7px 7px 7px 24px;
   border: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 24px;
+  border-radius: 999px;
   background: rgb(255 255 255 / 0.055);
   backdrop-filter: blur(16px);
   transition: border-color 250ms ease, background-color 250ms ease;
