@@ -1,13 +1,13 @@
 # Portfolio — Minyeon Kim
 
 ## Who this is for
-Personal portfolio of a product designer with a computer science + IT security
+Personal portfolio of a product designer with a computer science + cybersecurity
 background, applying to product designer / design engineer roles in English-speaking
 countries. Target readers: hiring managers at privacy/security companies and
 developer-tools companies (Linear, Vercel, Proton, Bitwarden). They scan for 6–8
 seconds, then read case studies for judgment, not decoration.
 
-Positioning line (hero): "Product designer with a background in security —
+Positioning line (hero): "Product designer with a background in cybersecurity —
 connecting research, design, and engineering to bring ideas to life with AI."
 
 ## Stack
