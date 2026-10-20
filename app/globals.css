@@ -1194,6 +1194,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .project-navigation-backdrop { position: fixed; inset: 0; z-index: 18; overflow: clip; pointer-events: none; background: var(--bg); contain: layout paint; }
 .project-navigation-backdrop * { animation: none !important; transition: none !important; }
 :root[data-project-navigation]::view-transition { display: none; }
+/* React still starts a route view transition under the slide; with nothing
+   named, nothing is captured, so no element blanks out for those frames. */
+:root[data-project-navigation], :root[data-project-navigation] * { view-transition-name: none !important; }
 
 /* Keep next-project navigation at its title, including React/route layout commits. */
 :root[data-project-navigation] { scroll-behavior: auto !important; overflow-anchor: none; }
