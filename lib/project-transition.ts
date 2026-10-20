@@ -122,6 +122,22 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         [{ transform: "translate3d(0, 100svh, 0)" }, { transform: "translate3d(0, 0, 0)" }], timing,
       );
       animations.push(slide);
+      // Follow-through: the opener's parts trail the page a little and land just
+      // after it, so the motion settles instead of stopping as one slab. These run
+      // on the live elements and finish on their own after cleanup.
+      const parts: [string, number, number][] = [
+        [".selected-stage-title, .project-hero-title", 64, 0],
+        [".selected-stage-meta > div, .project-hero-details > div", 96, 60],
+        [".selected-stage-object, .project-hero-cover", 140, 140],
+      ];
+      parts.forEach(([selector, lag, stagger]) => {
+        main.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
+          element.animate(
+            [{ translate: `0 ${lag}px` }, { translate: "0 0" }],
+            { duration: timing.duration + 320 + stagger + index * 50, easing: "cubic-bezier(0.5, 0, 0.1, 1)", fill: "backwards" },
+          );
+        });
+      });
       void slide.finished.catch(() => {}).finally(cleanup);
     }));
   };
