@@ -43,7 +43,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     ));
   }
   let incoming: HTMLElement | null = null;
-  const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
+  const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, paddingTop: main.style.paddingTop, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
   const floor = document.createElement("div");
   floor.className = "project-navigation-floor";
   floor.style.backgroundColor = outgoingColor;
@@ -107,9 +107,14 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // handoff with different sticky/scroll geometry at the end.
       const rect = main.getBoundingClientRect();
       incoming = main;
+      // The layer starts at the viewport top, not below the header: the stage
+      // slides up under the header (negative margin), and clipping at main's
+      // top left the old page showing in that strip until the very last frame.
+      const offset = Math.max(0, rect.top);
+      const padding = parseFloat(getComputedStyle(main).paddingTop) || 0;
       Object.assign(main.style, {
-        position: "fixed", top: `${rect.top}px`, left: `${rect.left}px`,
-        width: `${rect.width}px`, height: `${window.innerHeight - Math.max(0, rect.top)}px`,
+        position: "fixed", top: `${rect.top - offset}px`, left: `${rect.left}px`,
+        width: `${rect.width}px`, height: `${window.innerHeight}px`, paddingTop: `${padding + offset}px`,
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
       const curveDepth = Math.min(64, window.innerHeight * 0.07);
