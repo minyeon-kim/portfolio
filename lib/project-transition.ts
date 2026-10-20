@@ -34,14 +34,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
   document.body.appendChild(backdrop);
   document.documentElement.dataset.projectNavigation = "true";
   const animations: Animation[] = [];
-  // The old reading position starts drifting up on click, so there is immediate
-  // feedback while the next page renders; it moves more slowly than the new page.
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    animations.push(backdrop.animate(
-      [{ transform: "translate3d(0, 0, 0)" }, { transform: "translate3d(0, -24%, 0)" }],
-      { duration: 1400, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" },
-    ));
-  }
+  let bridge: HTMLDivElement | null = null;
   let incoming: HTMLElement | null = null;
   const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, paddingTop: main.style.paddingTop, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
   const floor = document.createElement("div");
@@ -82,7 +75,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     clearTimeout(timeout);
     cancelAnimationFrame(scrollFrame);
     animations.forEach((animation) => animation.cancel());
-    main.classList.remove("project-feather");
+    bridge?.remove();
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
     const heading = main.querySelector<HTMLElement>(".selected-stage-title, .project-hero h1, h1");
@@ -142,16 +135,29 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
       // Gentle start and a long, even landing: no fast burst followed by a dead crawl.
-      const timing = { duration: 1200, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
-      // Feathered top edge instead of a hard one: the page's top fades in over
-      // --feather, letting the intro show through the seam, and narrows to
-      // nothing as it lands (the title area is never covered).
-      const feather = Math.round(Math.min(200, window.innerHeight * 0.2));
-      incoming.classList.add("project-feather");
-      animations.push(incoming.animate([{ "--feather": `${feather}px` }, { "--feather": "0px" }], timing));
-      const slide = incoming.animate(
-        [{ transform: "translate3d(0, 100svh, 0)" }, { transform: "translate3d(0, 0, 0)" }], timing,
-      );
+      const timing = { duration: 1300, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
+      // One continuous strip, like scrolling down a single page: the old view,
+      // a colour bridge (old canvas -> new canvas) and the new page move up
+      // together at the same speed, so there is no seam and no layer drifting
+      // against another. The bridge ends above the viewport, so it never
+      // covers the new title.
+      const gap = Math.round(window.innerHeight * 0.4);
+      bridge = document.createElement("div");
+      bridge.className = "project-navigation-bridge";
+      bridge.setAttribute("aria-hidden", "true");
+      Object.assign(bridge.style, { top: `${-gap}px`, height: `${gap}px`, background: `linear-gradient(to bottom, ${outgoingColor}, ${canvasColor()})` });
+      document.body.appendChild(bridge);
+      const rise = [{ transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }];
+      animations.push(bridge.animate(rise, timing));
+      // The old view's lower part dissolves into its own canvas colour (the
+      // floor behind it), so its colour fields don't end at a hard line where
+      // the bridge begins.
+      backdrop.classList.add("project-navigation-dissolve");
+      animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
+      animations.push(backdrop.animate(
+        [{ transform: "translate3d(0, 0, 0)" }, { transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }], timing,
+      ));
+      const slide = incoming.animate(rise, timing);
       animations.push(slide);
       // Follow-through: the opener's parts trail the page a little and land just
       // after it, so the motion settles instead of stopping as one slab. These run
