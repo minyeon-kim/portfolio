@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { setUi, useUi } from "@/lib/ui-store";
-import { bridgeHeight, createBridge, surfaceOf } from "@/lib/project-transition";
+import { bridgeHeight, createBridge, shadeInto, surfaceOf } from "@/lib/project-transition";
 
 // Only an additional upward gesture at the page top returns to the intro.
 export function ReturnToIntro() {
@@ -79,7 +79,7 @@ export function ReturnToIntro() {
             // a colour bridge and the detail move down together at one speed.
             const gap = bridgeHeight();
             const intro = document.querySelector<HTMLElement>("main");
-            const bridge = createBridge(gap, surfaceOf(), detailSurface, intro?.querySelector<HTMLElement>(".intro-ambient"));
+            const bridge = createBridge(gap, surfaceOf(), detailSurface);
             bridge.style.top = `${-gap}px`;
             document.body.appendChild(bridge);
             const timing = { duration: 1100, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
@@ -88,10 +88,18 @@ export function ReturnToIntro() {
             const introMotion = intro?.animate(
               [{ transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }], timing,
             );
-            // The intro keeps its ambient light; the bridge continues it below.
+            // The intro keeps its ambient light; its lower part eases into the
+            // detail canvas (meeting the bridge) while it travels and clears as
+            // it lands.
+            const introPosition = intro?.style.position ?? "";
+            const shade = shadeInto(detailSurface.color);
+            if (intro) { intro.style.position = "relative"; intro.appendChild(shade); }
+            shade.animate([{ opacity: 1 }, { opacity: 1, offset: 0.55 }, { opacity: 0 }], timing);
             const motion = outgoing.animate(drop, timing);
             void motion.finished.catch(() => {}).finally(() => {
               introMotion?.cancel();
+              shade.remove();
+              if (intro) intro.style.position = introPosition;
               bridgeMotion.cancel();
               bridge.remove();
               outgoing.remove();

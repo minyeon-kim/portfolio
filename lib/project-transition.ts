@@ -32,30 +32,26 @@ export function freezeAmbient(source: HTMLElement) {
   return copy;
 }
 
-export function createBridge(height: number, top: Surface, bottom: Surface, ambient?: HTMLElement | null) {
+// A gradient over the lower part of the upper page, ending in the colour of the
+// page below; the caller fades it in (or out) with the motion.
+export function shadeInto(color: string) {
+  const shade = document.createElement("div");
+  shade.setAttribute("aria-hidden", "true");
+  Object.assign(shade.style, {
+    position: "absolute", left: "0", right: "0", bottom: "0", height: "45%", zIndex: "2", pointerEvents: "none",
+    background: `linear-gradient(to bottom, transparent, ${color})`,
+  });
+  return shade;
+}
+
+export function createBridge(height: number, top: Surface, bottom: Surface) {
   const bridge = document.createElement("div");
   bridge.className = "project-navigation-bridge";
   bridge.setAttribute("aria-hidden", "true");
-  Object.assign(bridge.style, { height: `${height}px`, background: `linear-gradient(to bottom, ${top.color}, ${bottom.color})` });
-  // The intro's ambient edge light continues into the band: a copy of its light
-  // layer (frozen at the current drift) is placed as if the intro extended
-  // below its edge, so the part that the intro clipped shows here, fading out.
-  if (top.intro && ambient) {
-    const surface = ambient.parentElement?.getBoundingClientRect();
-    const wrap = document.createElement("span");
-    const mask = "linear-gradient(to bottom, #000, transparent)";
-    Object.assign(wrap.style, { position: "absolute", inset: "0", overflow: "clip", maskImage: mask });
-    wrap.style.setProperty("-webkit-mask-image", mask);
-    const copy = freezeAmbient(ambient);
-    Object.assign(copy.style, {
-      position: "absolute", left: "0", top: `${-(surface?.height ?? window.innerHeight)}px`,
-      width: `${surface?.width ?? window.innerWidth}px`, height: `${surface?.height ?? window.innerHeight}px`,
-      maskImage: "none", zIndex: "0", overflow: "visible",
-    });
-    copy.style.setProperty("-webkit-mask-image", "none");
-    wrap.appendChild(copy);
-    bridge.appendChild(wrap);
-  }
+  // Solid lower-page canvas: the upper page's own lower part eases into this
+  // colour (see shadeInto), so brightness only ever moves one way and there is
+  // no darker trough between two canvases.
+  Object.assign(bridge.style, { height: `${height}px`, background: bottom.color });
   ([[top, "to top"], [bottom, "to bottom"]] as const).forEach(([end, direction]) => {
     if (!end.dots) return;
     const dots = document.createElement("span");
@@ -217,18 +213,17 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // against another. The bridge ends above the viewport, so it never
       // covers the new title.
       const gap = bridgeHeight();
-      bridge = createBridge(gap, outgoingSurface, surfaceOf(), liveAmbient);
+      bridge = createBridge(gap, outgoingSurface, surfaceOf());
       bridge.style.top = `${-gap}px`;
       document.body.appendChild(bridge);
       const rise = [{ transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }];
       animations.push(bridge.animate(rise, timing));
-      // The old view's lower part dissolves into its own canvas colour (the
-      // floor behind it), so its colour fields don't end at a hard line where
-      // the bridge begins.
-      if (!outgoingSurface.intro) {
-        backdrop.classList.add("project-navigation-dissolve");
-        animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
-      }
+      // The old view's lower part eases into the new canvas colour as the slide
+      // starts, meeting the bridge (solid new canvas) without a seam or trough;
+      // its ambient light fades under the same shade instead of being cut.
+      const shade = shadeInto(surfaceOf().color);
+      backdrop.appendChild(shade);
+      animations.push(shade.animate([{ opacity: 0 }, { opacity: 1 }], { ...timing, duration: timing.duration * 0.3 }));
       // The selection colour flow recedes gently over the whole slide instead of
       // switching off, and its lower part is dissolved so it never ends at the
       // intro's bottom edge while it is still visible. The quieter ambient edge
