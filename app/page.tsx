@@ -27,7 +27,7 @@ export default async function Home() {
           concept: meta.concept,
         }))}
         name={site.name}
-        intro={<ScrambleHeadline text={site.positioning} className="intro-headline" />}
+        intro={<ScrambleHeadline text={site.positioning} emphasis="cybersecurity" className="intro-headline" />}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
