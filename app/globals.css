@@ -1396,10 +1396,3 @@ html, body, main { overflow-anchor: none; }
 /* The turned phone reaches past its frame; let it, so the start pose is visible. */
 [data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
 
-/* Colour bridge between the old and new page during a project slide. */
-.project-navigation-bridge { position: fixed; left: 0; width: 100%; z-index: 19; pointer-events: none; will-change: transform; }
-@property --dissolve { syntax: "<percentage>"; inherits: false; initial-value: 100%; }
-.project-navigation-dissolve {
-  -webkit-mask-image: linear-gradient(to bottom, #000 var(--dissolve), transparent calc(var(--dissolve) + 45%));
-  mask-image: linear-gradient(to bottom, #000 var(--dissolve), transparent calc(var(--dissolve) + 45%));
-}
