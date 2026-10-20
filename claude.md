@@ -486,3 +486,5 @@ About uses the project frame: ProjectHero (serif "About", metadata Role / Backgr
 Project openers raised: home selected title top padding clamp(76px, 5vw, 96px); direct page heading top padding clamp(40px, 4vw, 72px); title-to-metadata gap clamp(40px, 4vw, 72px) on both.
 
 About intro statement uses the project section-title scale (clamp 32–64px, weight 400, balanced wrap) instead of the 36–80px pull-statement size.
+
+Hero emphasis (Decrypted exception, approved by the user): in the positioning line the word "cybersecurity" stays scrambled from the moment it types in and resolves last, left to right, between ~0.95s and 1.2s (load cap unchanged). The rest of the line types out by 0.85s with per-glyph scramble scaled down so the scrambled front stays ~6 glyphs. ScrambleHeadline takes an `emphasis` word. Cursor re-scramble and reduced-motion behavior are unchanged.
