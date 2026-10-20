@@ -496,3 +496,5 @@ Route changes under the project slide (direct /work Next, chat → About) still 
 Main chat composer is now a 56px full pill (radius 999px, padding 7px around the 40px send button, 24px text inset), matching the pill language of the suggestions; suggestions themselves unchanged for now.
 
 Chat send button: 1.75px line up-arrow SVG (no text glyph). Quiet soft-fill circle with ink icon while empty; solid ink circle once there is text or a selection is running (250ms crossfade). Send animation lifts the arrow straight up.
+
+Gemini mockup tilt: the phone image starts slightly turned in 3D (rotateY -18°, rotateX 6°, rotateZ -7°, 94%) and straightens by 75% of the first 70vh of native scroll, on the home stage (while the object grows) and the direct case cover. md+, scroll timelines and motion allowed only; otherwise upright and static.

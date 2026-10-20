@@ -1340,3 +1340,22 @@ html, body, main { overflow-anchor: none; }
 @media (max-width: 47.99rem) {
   .about-skills > div { grid-template-columns: 1fr; gap: 12px; }
 }
+
+/* Gemini phone mockup: starts slightly turned in 3D, then straightens while the
+   stage grows (home) or while the cover scrolls up (case page). Tied to native
+   scroll; static and upright without scroll timelines or with reduced motion. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+    [data-gemini="true"] .generated-preview img,
+    [data-gemini="true"] .project-hero-cover img {
+      transform-origin: 50% 60%;
+      animation: gemini-mockup-settle linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
+  }
+}
+@keyframes gemini-mockup-settle {
+  from { transform: perspective(1600px) rotateY(-18deg) rotateX(6deg) rotateZ(-7deg) translate3d(0, 4%, 0) scale(0.94); }
+  75%, to { transform: none; }
+}
