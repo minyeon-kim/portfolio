@@ -480,3 +480,5 @@ Project slide follow-through: as the incoming page lands, its title, metadata co
 Fixed the end-of-slide cut: the fixed incoming main now starts at the viewport top (top 0, padding-top + header offset, full innerHeight). Previously it was clipped at main's top (64px), but the home stage sits under the header via negative margin, so the old page stayed visible in the top strip until cleanup swapped it in one frame.
 
 Case body rhythm loosened on desktop (phones unchanged): sections clamp(80–144px) top / clamp(72–120px) bottom, statements and blockquotes clamp(96–176px), media bottom clamp(96–160px), eyebrow-to-title 40–64px, paired media gap 24–48px.
+
+About uses the project frame: ProjectHero (serif "About", metadata Role / Background / Focus taken from the positioning), then a case-study body with the positioning as a statement and numbered CaseSections: 01 Story (timeline), 02 Skills (labelled rows), 03 Contact. ProjectHero accepts an optional `details` list. Story and contact copy remain TODOs.
