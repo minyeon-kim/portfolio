@@ -1383,8 +1383,8 @@ html, body, main { overflow-anchor: none; }
 /* Home: large and steeply slanted, cropped by the stage's bottom edge like a
    product shot (and a cue that there is more below). Case cover: same slant at
    its own size, since it already sits large in the page. */
-:root { --gemini-turned: perspective(1600px) translate3d(14%, 78%, 0) scale(2.3) rotateY(-62deg) rotateX(24deg) rotateZ(-26deg); }
-.project-hero-cover { --gemini-turned: perspective(1600px) translate3d(4%, 6%, 0) scale(0.9) rotateY(-62deg) rotateX(24deg) rotateZ(-26deg); }
+:root { --gemini-turned: perspective(1600px) translate3d(12%, 62%, 0) scale(2.3) rotateZ(18deg) rotateY(-64deg) rotateX(26deg) rotateZ(-38deg); }
+.project-hero-cover { --gemini-turned: perspective(1600px) translate3d(4%, 6%, 0) scale(0.9) rotateZ(18deg) rotateY(-64deg) rotateX(26deg) rotateZ(-38deg); }
 @keyframes gemini-device-turn {
   from {
     transform: var(--gemini-turned);
