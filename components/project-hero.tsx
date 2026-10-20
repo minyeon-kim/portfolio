@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ProjectTitle } from "./project-title";
+import { GeminiDevice } from "./gemini-device";
 import { withBase } from "@/lib/site";
 
 export function ProjectHero({ name, role, timeline, cover, concept, canvas = false, gemini = false, details: custom }: {
@@ -33,7 +34,9 @@ export function ProjectHero({ name, role, timeline, cover, concept, canvas = fal
       </div>
       {cover && (
         <div className="project-hero-cover">
-          <Image src={withBase(cover)} alt={`${name} project overview`} width={gemini ? 1000 : 1600} height={gemini ? 1100 : 800} sizes="100vw" preload />
+          {gemini
+            ? <GeminiDevice><Image src={withBase(cover)} alt={`${name} project overview`} width={1000} height={1100} sizes="100vw" preload /></GeminiDevice>
+            : <Image src={withBase(cover)} alt={`${name} project overview`} width={1600} height={800} sizes="100vw" preload />}
         </div>
       )}
     </header>
