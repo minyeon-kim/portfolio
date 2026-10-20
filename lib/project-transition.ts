@@ -58,7 +58,9 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
   Object.assign(body.style, { position: "fixed", top: "0px", left: "0px", width: `${bodyWidth}px` });
   // Wheel input is swallowed during the slide and for as long as the momentum
   // of the click-time scroll keeps arriving afterwards; only a fresh gesture
-  // (after a short pause) scrolls the new page.
+  // (after a short pause) scrolls the new page. Chrome sends momentum wheel
+  // events as non-cancelable, so preventDefault alone can't stop them: the
+  // root is made non-scrollable (overflow hidden) until the momentum ends.
   let lastWheel = 0;
   const blockScroll = (event: Event) => {
     if (event.type === "wheel") lastWheel = performance.now();
@@ -94,13 +96,18 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       backdrop.remove();
       delete document.documentElement.dataset.projectNavigation;
       window.removeEventListener("touchmove", blockScroll);
+      const root = document.documentElement;
+      const rootOverflow = root.style.overflow;
       const releasedAt = performance.now();
       const releaseWhenIdle = () => {
         const now = performance.now();
         if (now - lastWheel < 220 && now - releasedAt < 2500) {
+          root.style.overflow = "hidden";
+          if (window.scrollY !== top) window.scrollTo({ top, left: 0, behavior: "instant" });
           requestAnimationFrame(releaseWhenIdle);
           return;
         }
+        root.style.overflow = rootOverflow;
         window.removeEventListener("wheel", blockScroll);
       };
       releaseWhenIdle();
