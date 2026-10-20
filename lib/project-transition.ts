@@ -33,9 +33,17 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
   backdrop.appendChild(snapshot);
   document.body.appendChild(backdrop);
   document.documentElement.dataset.projectNavigation = "true";
+  const animations: Animation[] = [];
+  // The old reading position starts drifting up on click, so there is immediate
+  // feedback while the next page renders; it moves more slowly than the new page.
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    animations.push(backdrop.animate(
+      [{ transform: "translate3d(0, 0, 0)" }, { transform: "translate3d(0, -24%, 0)" }],
+      { duration: 1400, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" },
+    ));
+  }
   let incoming: HTMLElement | null = null;
   const mainStyle = { position: main.style.position, top: main.style.top, left: main.style.left, width: main.style.width, height: main.style.height, overflow: main.style.overflow, zIndex: main.style.zIndex, backgroundColor: main.style.backgroundColor, borderRadius: main.style.borderRadius, willChange: main.style.willChange };
-  const animations: Animation[] = [];
   const floor = document.createElement("div");
   floor.className = "project-navigation-floor";
   floor.style.backgroundColor = outgoingColor;
@@ -105,13 +113,10 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
       const curveDepth = Math.min(64, window.innerHeight * 0.07);
-      const timing = { duration: 1050, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" as FillMode };
-      // The old reading position drifts upward more slowly than the new page.
-      animations.push(backdrop.animate(
-        [{ transform: "translate3d(0, 0, 0)" }, { transform: "translate3d(0, -24%, 0)" }], timing,
-      ));
+      // Gentle start and a long, even landing: no fast burst followed by a dead crawl.
+      const timing = { duration: 1200, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
       animations.push(incoming.animate(
-        [{ borderRadius: `50% 50% 0 0 / ${curveDepth}px ${curveDepth}px 0 0` }, { borderRadius: "0px", offset: 0.85 }, { borderRadius: "0px" }], timing,
+        [{ borderRadius: `50% 50% 0 0 / ${curveDepth}px ${curveDepth}px 0 0` }, { borderRadius: "0px" }], timing,
       ));
       const slide = incoming.animate(
         [{ transform: "translate3d(0, 100svh, 0)" }, { transform: "translate3d(0, 0, 0)" }], timing,

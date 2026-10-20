@@ -472,3 +472,5 @@ Selection flow made clearly visible: while a suggestion runs (typing → thinkin
 GitHub Pages deploy: .github/workflows/deploy.yml builds on push to main and passes configure-pages' base_path as PAGES_BASE_PATH (→ next basePath + NEXT_PUBLIC_BASE_PATH). /public paths in next/image and plain <a> go through withBase() in lib/site.ts; cursor SVGs are inlined as data URIs so CSS has no root paths. Repo minyeon-kim/portfolio serves at /portfolio; renaming to minyeon-kim.github.io or adding a custom domain needs no code change.
 
 Selected project title raised (desktop top padding clamp(88px, 7vw, 120px)). The home project rail is anchored 48px from the bottom instead of 62% down, so the inline menu that opens above it clears the title and metadata (verified ~100px gap at 1432px wide).
+
+Project slide easing revised: cubic-bezier(0.45, 0, 0.12, 1) over 1200ms (was a fast-burst 0.22,1,0.36,1 over 1050ms that crawled and then appeared to cut off). The curved top edge flattens across the whole slide. The outgoing page starts drifting up on click (1400ms) instead of waiting for the next page to render.
