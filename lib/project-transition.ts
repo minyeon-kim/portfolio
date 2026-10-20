@@ -56,7 +56,14 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
   const bodyStyle = { position: body.style.position, top: body.style.top, left: body.style.left, width: body.style.width };
   const bodyWidth = body.getBoundingClientRect().width;
   Object.assign(body.style, { position: "fixed", top: "0px", left: "0px", width: `${bodyWidth}px` });
-  const blockScroll = (event: Event) => event.preventDefault();
+  // Wheel input is swallowed during the slide and for as long as the momentum
+  // of the click-time scroll keeps arriving afterwards; only a fresh gesture
+  // (after a short pause) scrolls the new page.
+  let lastWheel = 0;
+  const blockScroll = (event: Event) => {
+    if (event.type === "wheel") lastWheel = performance.now();
+    event.preventDefault();
+  };
   window.addEventListener("wheel", blockScroll, { passive: false });
   window.addEventListener("touchmove", blockScroll, { passive: false });
   let started = false;
@@ -86,8 +93,17 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       floor.remove();
       backdrop.remove();
       delete document.documentElement.dataset.projectNavigation;
-      window.removeEventListener("wheel", blockScroll);
       window.removeEventListener("touchmove", blockScroll);
+      const releasedAt = performance.now();
+      const releaseWhenIdle = () => {
+        const now = performance.now();
+        if (now - lastWheel < 220 && now - releasedAt < 2500) {
+          requestAnimationFrame(releaseWhenIdle);
+          return;
+        }
+        window.removeEventListener("wheel", blockScroll);
+      };
+      releaseWhenIdle();
     }));
   };
   const begin = () => {

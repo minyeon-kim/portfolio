@@ -488,3 +488,5 @@ Project openers raised: home selected title top padding clamp(76px, 5vw, 96px); 
 About intro statement uses the project section-title scale (clamp 32–64px, weight 400, balanced wrap) instead of the 36–80px pull-statement size.
 
 Hero emphasis (Decrypted exception, approved by the user): in the positioning line the word "cybersecurity" stays scrambled from the moment it types in and resolves last, left to right, between ~0.95s and 1.2s (load cap unchanged). The rest of the line types out by 0.85s with per-glyph scramble scaled down so the scrambled front stays ~6 glyphs. ScrambleHeadline takes an `emphasis` word. Cursor re-scramble and reduced-motion behavior are unchanged.
+
+Next-project/chat transitions keep swallowing wheel input after the slide while momentum from the click-time scroll is still arriving (released after 220ms without wheel events, max 2.5s), so leftover trackpad inertia never scrolls the new page; a fresh gesture scrolls normally.
