@@ -1341,21 +1341,46 @@ html, body, main { overflow-anchor: none; }
   .about-skills > div { grid-template-columns: 1fr; gap: 12px; }
 }
 
-/* Gemini phone mockup: starts slightly turned in 3D, then straightens while the
-   stage grows (home) or while the cover scrolls up (case page). Tied to native
-   scroll; static and upright without scroll timelines or with reduced motion. */
+/* Gemini phone mockup: held strongly turned (left side and buttons showing),
+   then it swings to face you as native scroll grows the stage (home) or moves
+   the cover (case page). Upright and flat without scroll timelines, with
+   reduced motion, or on phones. */
+/* The device box always keeps the art's 1000:1100 ratio (contain-fit via
+   container units), so the side strip lands exactly on the phone's edge. */
+.generated-preview:has(> .gemini-device) { container-type: size; display: grid; place-items: center; }
+.gemini-device { position: relative; width: min(100cqw, 100cqh * 1000 / 1100); height: min(100cqh, 100cqw * 1100 / 1000); transform-style: preserve-3d; }
+.project-hero-cover .gemini-device { width: auto; height: min(90svh, 1100px); aspect-ratio: 1000 / 1100; margin-inline: auto; }
+[data-gemini="true"] .project-hero-cover img { width: 100%; height: 100%; max-height: none; }
+.gemini-device img { backface-visibility: hidden; }
+.gemini-device-side {
+  /* Straight part of the body edge only (inside the 64/960 corner radius). */
+  position: absolute; left: 28.6%; top: 10%; width: 4.6%; height: 80%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #7b8492, #3b414b 30%, #15181d 75%, #0b0d10);
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+  opacity: 0;
+}
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
-    [data-gemini="true"] .generated-preview img,
-    [data-gemini="true"] .project-hero-cover img {
-      transform-origin: 50% 60%;
-      animation: gemini-mockup-settle linear both;
+    .gemini-device {
+      transform-origin: 50% 55%;
+      animation: gemini-device-turn linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
+    .gemini-device-side {
+      animation: gemini-device-side linear both;
       animation-timeline: scroll(root);
       animation-range: 0 70vh;
     }
   }
 }
-@keyframes gemini-mockup-settle {
-  from { transform: perspective(1600px) rotateY(-18deg) rotateX(6deg) rotateZ(-7deg) translate3d(0, 4%, 0) scale(0.94); }
-  75%, to { transform: none; }
+@keyframes gemini-device-turn {
+  from {
+    transform: perspective(1800px) rotateY(40deg) rotateX(10deg) rotateZ(6deg) translate3d(-2%, 4%, 0) scale(0.9);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.3, 1);
+  }
+  85%, to { transform: perspective(1800px); }
 }
+@keyframes gemini-device-side { from { opacity: 1; } 80% { opacity: 1; } to { opacity: 0; } }
