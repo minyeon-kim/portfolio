@@ -484,3 +484,5 @@ Case body rhythm loosened on desktop (phones unchanged): sections clamp(80–144
 About uses the project frame: ProjectHero (serif "About", metadata Role / Background / Focus taken from the positioning), then a case-study body with the positioning as a statement and numbered CaseSections: 01 Story (timeline), 02 Skills (labelled rows), 03 Contact. ProjectHero accepts an optional `details` list. Story and contact copy remain TODOs.
 
 Project openers raised: home selected title top padding clamp(76px, 5vw, 96px); direct page heading top padding clamp(40px, 4vw, 72px); title-to-metadata gap clamp(40px, 4vw, 72px) on both.
+
+About intro statement uses the project section-title scale (clamp 32–64px, weight 400, balanced wrap) instead of the 36–80px pull-statement size.

@@ -1323,6 +1323,8 @@ html, body, main { overflow-anchor: none; }
 
 /* About reuses the project frame; each skill group is a labelled row. */
 .case-study[data-project="about"] { --case-accent: var(--accent); }
+/* The intro line matches project section titles, not the oversized pull statement. */
+.case-study[data-project="about"] .case-statement { max-width: 1200px; text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
 .about-skills { display: grid; gap: 0; }
 .about-skills > div { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding-block: 24px; border-top: 1px solid var(--line); }
 .about-skills > div:last-child { border-bottom: 1px solid var(--line); }
