@@ -474,3 +474,5 @@ GitHub Pages deploy: .github/workflows/deploy.yml builds on push to main and pas
 Selected project title raised (desktop top padding clamp(88px, 7vw, 120px)). The home project rail is anchored 48px from the bottom instead of 62% down, so the inline menu that opens above it clears the title and metadata (verified ~100px gap at 1432px wide).
 
 Project slide easing revised: cubic-bezier(0.45, 0, 0.12, 1) over 1200ms (was a fast-burst 0.22,1,0.36,1 over 1050ms that crawled and then appeared to cut off). The curved top edge flattens across the whole slide. The outgoing page starts drifting up on click (1400ms) instead of waiting for the next page to render.
+
+Project slide follow-through: as the incoming page lands, its title, metadata columns and preview trail by 64/96/140px and settle 300–500ms after the page stops (WAAPI `translate`, staggered), so the motion eases out instead of stopping as one slab. Applies to chat→project, Next project, and direct-page links.
