@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { setUi, useUi } from "@/lib/ui-store";
+import { bridgeHeight, createBridge, surfaceOf } from "@/lib/project-transition";
 
 // Only an additional upward gesture at the page top returns to the intro.
 export function ReturnToIntro() {
@@ -35,6 +36,7 @@ export function ReturnToIntro() {
       const main = document.querySelector("main");
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let layer: HTMLDivElement | null = null;
+      const detailSurface = surfaceOf();
       if (main && !reduce) {
         const bounds = main.getBoundingClientRect();
         const snapshot = main.cloneNode(true) as HTMLElement;
@@ -64,11 +66,32 @@ export function ReturnToIntro() {
           observer.disconnect();
           clearTimeout(timeout);
           requestAnimationFrame(() => {
-            const motion = outgoing.animate(
-              [{ transform: "translateY(0)" }, { transform: "translateY(100svh)" }],
-              { duration: 700, easing: "cubic-bezier(0.65, 0, 0.2, 1)", fill: "forwards" },
+            // Same one-strip motion as opening a project, in reverse: the intro,
+            // a colour bridge and the detail move down together at one speed.
+            const gap = bridgeHeight();
+            const intro = document.querySelector<HTMLElement>("main");
+            const bridge = createBridge(gap, surfaceOf(), detailSurface);
+            bridge.style.top = `${-gap}px`;
+            document.body.appendChild(bridge);
+            const timing = { duration: 1100, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
+            const drop = [{ transform: "translate3d(0, 0, 0)" }, { transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }];
+            const bridgeMotion = bridge.animate(drop, timing);
+            const introMotion = intro?.animate(
+              [{ transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }], timing,
             );
-            void motion.finished.catch(() => {}).finally(() => { outgoing.remove(); focusInput(); });
+            // The intro's ambient light stays off while it travels and fades in
+            // once it has landed, so its colour never ends at a hard edge.
+            intro?.querySelectorAll<HTMLElement>(".intro-ambient").forEach((layer) => {
+              layer.animate([{ opacity: 0 }, { opacity: 0, offset: 0.7 }, { opacity: 1 }], { duration: timing.duration + 500, easing: "ease-out" });
+            });
+            const motion = outgoing.animate(drop, timing);
+            void motion.finished.catch(() => {}).finally(() => {
+              introMotion?.cancel();
+              bridgeMotion.cancel();
+              bridge.remove();
+              outgoing.remove();
+              focusInput();
+            });
           });
         };
         observer.observe(document.body, { childList: true, subtree: true });

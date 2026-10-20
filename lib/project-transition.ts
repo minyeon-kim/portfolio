@@ -1,5 +1,44 @@
 "use client";
 
+// A page's canvas: its background colour, plus the Devsign dot grid when the
+// page is a design-tool canvas, so a transition bridge can continue it.
+export type Surface = { color: string; dots: { image: string; size: string } | null };
+export function surfaceOf(root: ParentNode = document): Surface {
+  const canvas = root.querySelector<HTMLElement>("main .selected-stage, main .project-hero, main .intro-stage")
+    ?? root.querySelector<HTMLElement>(".selected-stage, .project-hero, .intro-stage");
+  const style = getComputedStyle(canvas ?? document.body);
+  const color = style.backgroundColor === "rgba(0, 0, 0, 0)" || style.backgroundColor === "transparent"
+    ? getComputedStyle(document.body).backgroundColor : style.backgroundColor;
+  const dots = canvas?.closest("[data-canvas]") || canvas?.matches("[data-canvas]")
+    ? { image: style.backgroundImage, size: style.backgroundSize } : null;
+  return { color, dots };
+}
+
+// Bridge height: a multiple of the 24px dot grid so the dots line up with the
+// page they lead into.
+export const bridgeHeight = () => Math.max(24, Math.round((window.innerHeight * 0.4) / 24) * 24);
+
+// A fixed band that eases one canvas into the next between two moving pages.
+// Dot grids fade in towards the side they belong to.
+export function createBridge(height: number, top: Surface, bottom: Surface) {
+  const bridge = document.createElement("div");
+  bridge.className = "project-navigation-bridge";
+  bridge.setAttribute("aria-hidden", "true");
+  Object.assign(bridge.style, { height: `${height}px`, background: `linear-gradient(to bottom, ${top.color}, ${bottom.color})` });
+  ([[top, "to top"], [bottom, "to bottom"]] as const).forEach(([end, direction]) => {
+    if (!end.dots) return;
+    const dots = document.createElement("span");
+    const mask = `linear-gradient(${direction}, transparent, #000)`;
+    Object.assign(dots.style, {
+      position: "absolute", inset: "0", backgroundImage: end.dots.image, backgroundSize: end.dots.size,
+      backgroundPosition: "12px 12px", maskImage: mask,
+    });
+    dots.style.setProperty("-webkit-mask-image", mask);
+    bridge.appendChild(dots);
+  });
+  return bridge;
+}
+
 // A curved incoming page rises over a slower outgoing page for subtle depth.
 export function revealNextProject(change: () => void, ready: () => boolean) {
   if (document.documentElement.hasAttribute("data-project-navigation")) return;
@@ -14,6 +53,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     return color === "rgba(0, 0, 0, 0)" || color === "transparent" ? getComputedStyle(document.body).backgroundColor : color;
   };
   const outgoingColor = canvasColor();
+  const outgoingSurface = surfaceOf();
   // A focused Next button must not pull the new document back to its old row.
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   const bounds = main.getBoundingClientRect();
@@ -141,11 +181,9 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // together at the same speed, so there is no seam and no layer drifting
       // against another. The bridge ends above the viewport, so it never
       // covers the new title.
-      const gap = Math.round(window.innerHeight * 0.4);
-      bridge = document.createElement("div");
-      bridge.className = "project-navigation-bridge";
-      bridge.setAttribute("aria-hidden", "true");
-      Object.assign(bridge.style, { top: `${-gap}px`, height: `${gap}px`, background: `linear-gradient(to bottom, ${outgoingColor}, ${canvasColor()})` });
+      const gap = bridgeHeight();
+      bridge = createBridge(gap, outgoingSurface, surfaceOf());
+      bridge.style.top = `${-gap}px`;
       document.body.appendChild(bridge);
       const rise = [{ transform: `translate3d(0, calc(100svh + ${gap}px), 0)` }, { transform: "translate3d(0, 0, 0)" }];
       animations.push(bridge.animate(rise, timing));
