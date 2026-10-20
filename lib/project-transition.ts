@@ -104,6 +104,11 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     observer.disconnect();
     clearTimeout(timeout);
     cancelAnimationFrame(scrollFrame);
+    // Hide the old layers before cancelling: a cancelled fade would snap the
+    // old view back to full opacity over the new page for the frames until
+    // they are removed (seen as an afterimage).
+    backdrop.style.visibility = "hidden";
+    floor.style.visibility = "hidden";
     animations.forEach((animation) => animation.cancel());
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
@@ -163,16 +168,16 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         width: `${rect.width}px`, height: `${window.innerHeight}px`, paddingTop: `${padding + offset}px`,
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
-      // Overlap instead of a strip: the old view drifts up a little and fades
-      // out while the new page rises 12vh and fades in on top of it. Nothing is
-      // butted edge to edge, so there is no seam or colour band to see.
-      const timing = { duration: 900, delay: 120, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
+      // Sequenced, never overlapping content: the old view lifts slightly and is
+      // gone in 260ms; only then does the new page rise 10vh and fade in. No
+      // seam (nothing is butted edge to edge) and no ghost of the old text.
+      const timing = { duration: 800, delay: 220, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       animations.push(backdrop.animate(
-        [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, -6vh, 0)", opacity: 0 }],
-        { duration: 560, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
+        [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, -3vh, 0)", opacity: 0 }],
+        { duration: 260, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
       ));
       const slide = incoming.animate(
-        [{ transform: "translate3d(0, 12vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }], timing,
+        [{ transform: "translate3d(0, 10vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }], timing,
       );
       animations.push(slide);
       // Follow-through: the opener's parts trail the page a little and land just

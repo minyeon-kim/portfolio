@@ -75,16 +75,17 @@ export function ReturnToIntro() {
           observer.disconnect();
           clearTimeout(timeout);
           requestAnimationFrame(() => {
-            // The reverse of opening a project: the detail drifts down a little
-            // and fades out over the intro, which settles down into place.
+            // The reverse of opening a project, sequenced so the two never show at
+            // once: the detail drops slightly and is gone in 260ms, then the intro
+            // settles down from above and fades in.
             const intro = document.querySelector<HTMLElement>("main");
             const introMotion = intro?.animate(
-              [{ transform: "translate3d(0, -6vh, 0)" }, { transform: "translate3d(0, 0, 0)" }],
-              { duration: 900, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+              [{ transform: "translate3d(0, -5vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }],
+              { duration: 800, delay: 220, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
             );
             const motion = outgoing.animate(
-              [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, 8vh, 0)", opacity: 0 }],
-              { duration: 560, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
+              [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, 3vh, 0)", opacity: 0 }],
+              { duration: 260, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
             );
             void motion.finished.catch(() => {}).finally(() => {
               void (introMotion?.finished ?? Promise.resolve()).catch(() => {}).finally(() => introMotion?.cancel());
