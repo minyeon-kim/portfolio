@@ -2,8 +2,9 @@ import Image from "next/image";
 import { ProjectTitle } from "./project-title";
 import { withBase } from "@/lib/site";
 
-export function ProjectHero({ name, role, timeline, cover, concept, canvas = false, gemini = false }: {
+export function ProjectHero({ name, role, timeline, cover, concept, canvas = false, gemini = false, details: custom }: {
   name: string;
+  details?: { label: string; value?: string }[];
   role?: string;
   timeline?: string;
   cover?: string;
@@ -11,11 +12,11 @@ export function ProjectHero({ name, role, timeline, cover, concept, canvas = fal
   canvas?: boolean;
   gemini?: boolean;
 }) {
-  const details = [
+  const details = (custom ?? [
     { label: "Project Type", value: concept ? "Concept project" : "Product" },
     { label: "Role", value: role },
     { label: "Timeline", value: timeline },
-  ].filter((item) => item.value);
+  ]).filter((item) => item.value);
 
   return (
     <header className="project-hero" data-canvas={canvas || undefined} data-gemini={gemini || undefined}>

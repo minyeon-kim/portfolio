@@ -1320,3 +1320,15 @@ html, body, main { overflow-anchor: none; }
 /* While a selection runs, the color reaches further toward the copy. */
 .hero-sculpture[data-active] { mask-image: radial-gradient(ellipse at 50% 46%, rgb(0 0 0 / 0.12) 8%, rgb(0 0 0 / 0.55) 36%, #000 70%); }
 .intro-surface[data-phase]:not([data-phase="idle"]) .intro-ambient { opacity: 0; transition: opacity 500ms ease; }
+
+/* About reuses the project frame; each skill group is a labelled row. */
+.case-study[data-project="about"] { --case-accent: var(--accent); }
+.about-skills { display: grid; gap: 0; }
+.about-skills > div { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding-block: 24px; border-top: 1px solid var(--line); }
+.about-skills > div:last-child { border-bottom: 1px solid var(--line); }
+.about-skills-title { margin: 0; padding-top: 4px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.about-skills li { font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; }
+.about-skills li + li { margin-top: 8px; }
+@media (max-width: 47.99rem) {
+  .about-skills > div { grid-template-columns: 1fr; gap: 12px; }
+}
