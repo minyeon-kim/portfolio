@@ -454,7 +454,7 @@ details[open]::details-content {
 }
 
 .project-hero-heading {
-  padding: clamp(64px, 8vw, 128px) 32px 24px;
+  padding: clamp(40px, 4vw, 72px) 32px 24px;
 }
 
 .project-hero-title {
@@ -471,7 +471,7 @@ details[open]::details-content {
   display: grid;
   grid-template-columns: 2fr 0.65fr 1.25fr;
   gap: 32px;
-  margin-top: clamp(64px, 6vw, 112px);
+  margin-top: clamp(40px, 4vw, 72px);
   font-size: 15px;
   line-height: 1.5;
 }
@@ -563,7 +563,7 @@ details[open]::details-content {
     position: absolute;
     inset: 0;
     /* Sits just under the 64px header, clear of the rail's open menu below. */
-    padding: clamp(88px, 7vw, 120px) 32px 24px;
+    padding: clamp(76px, 5vw, 96px) 32px 24px;
   }
   .selected-stage-title {
     position: relative;
@@ -574,7 +574,7 @@ details[open]::details-content {
     grid-template-columns: 2fr 0.65fr 1.25fr;
     gap: 32px;
     width: 100%;
-    margin-top: clamp(64px, 5vw, 96px);
+    margin-top: clamp(40px, 4vw, 72px);
   }
   .selected-stage-object {
     position: absolute;
