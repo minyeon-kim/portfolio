@@ -562,7 +562,8 @@ details[open]::details-content {
   .selected-stage-copy {
     position: absolute;
     inset: 0;
-    padding: clamp(128px, 10vw, 176px) 32px 24px;
+    /* Sits just under the 64px header, clear of the rail's open menu below. */
+    padding: clamp(88px, 7vw, 120px) 32px 24px;
   }
   .selected-stage-title {
     position: relative;
