@@ -168,13 +168,14 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         width: `${rect.width}px`, height: `${window.innerHeight}px`, paddingTop: `${padding + offset}px`,
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
-      // Sequenced, never overlapping content: the old view lifts slightly and is
-      // gone in 260ms; only then does the new page rise 10vh and fade in. No
-      // seam (nothing is butted edge to edge) and no ghost of the old text.
-      const timing = { duration: 800, delay: 220, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
-      animations.push(backdrop.animate(
-        [{ transform: "translate3d(0, 0, 0)", opacity: 1 }, { transform: "translate3d(0, -3vh, 0)", opacity: 0 }],
-        { duration: 260, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
+      // Sequenced, never overlapping content: the old view's content (text,
+      // pills, media) lifts and blurs away in 140ms, so it can't linger as a
+      // ghost, while its canvas stays as the ground the new page rises onto
+      // (10vh, fading in from 160ms). No seam, no afterimage.
+      const timing = { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
+      animations.push(snapshot.animate(
+        [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, -2vh, 0)", opacity: 0, filter: "blur(6px)" }],
+        { duration: 140, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
       ));
       const slide = incoming.animate(
         [{ transform: "translate3d(0, 10vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }], timing,
