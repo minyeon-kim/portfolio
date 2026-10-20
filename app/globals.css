@@ -1395,3 +1395,10 @@ html, body, main { overflow-anchor: none; }
 @keyframes gemini-device-side { from { opacity: 1; } 80% { opacity: 1; } to { opacity: 0; } }
 /* The turned phone reaches past its frame; let it, so the start pose is visible. */
 [data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
+
+/* Feathered top edge of the page rising in during a project slide. */
+@property --feather { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.project-feather {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--feather));
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--feather));
+}

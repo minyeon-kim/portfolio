@@ -82,6 +82,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     clearTimeout(timeout);
     cancelAnimationFrame(scrollFrame);
     animations.forEach((animation) => animation.cancel());
+    main.classList.remove("project-feather");
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
     const heading = main.querySelector<HTMLElement>(".selected-stage-title, .project-hero h1, h1");
@@ -140,12 +141,14 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
         width: `${rect.width}px`, height: `${window.innerHeight}px`, paddingTop: `${padding + offset}px`,
         overflow: "clip", zIndex: "19", backgroundColor: canvasColor(), willChange: "transform",
       });
-      const curveDepth = Math.min(64, window.innerHeight * 0.07);
       // Gentle start and a long, even landing: no fast burst followed by a dead crawl.
       const timing = { duration: 1200, easing: "cubic-bezier(0.45, 0, 0.12, 1)", fill: "forwards" as FillMode };
-      animations.push(incoming.animate(
-        [{ borderRadius: `50% 50% 0 0 / ${curveDepth}px ${curveDepth}px 0 0` }, { borderRadius: "0px" }], timing,
-      ));
+      // Feathered top edge instead of a hard one: the page's top fades in over
+      // --feather, letting the intro show through the seam, and narrows to
+      // nothing as it lands (the title area is never covered).
+      const feather = Math.round(Math.min(200, window.innerHeight * 0.2));
+      incoming.classList.add("project-feather");
+      animations.push(incoming.animate([{ "--feather": `${feather}px` }, { "--feather": "0px" }], timing));
       const slide = incoming.animate(
         [{ transform: "translate3d(0, 100svh, 0)" }, { transform: "translate3d(0, 0, 0)" }], timing,
       );
