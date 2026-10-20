@@ -154,6 +154,14 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // the bridge begins.
       backdrop.classList.add("project-navigation-dissolve");
       animations.push(backdrop.animate([{ "--dissolve": "100%" }, { "--dissolve": "55%" }], { ...timing, duration: timing.duration * 0.4 }));
+      // The intro's colour fields (selection flow, ambient light) fade out as the
+      // slide starts, so only the neutral canvas and copy travel up with it.
+      backdrop.querySelectorAll<HTMLElement>(".hero-sculpture, .intro-ambient").forEach((layer) => {
+        animations.push(layer.animate(
+          [{ opacity: getComputedStyle(layer).opacity }, { opacity: 0 }],
+          { duration: timing.duration * 0.35, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "forwards" },
+        ));
+      });
       animations.push(backdrop.animate(
         [{ transform: "translate3d(0, 0, 0)" }, { transform: `translate3d(0, calc(-100svh - ${gap}px), 0)` }], timing,
       ));
