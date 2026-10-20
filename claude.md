@@ -476,3 +476,5 @@ Selected project title raised (desktop top padding clamp(88px, 7vw, 120px)). The
 Project slide easing revised: cubic-bezier(0.45, 0, 0.12, 1) over 1200ms (was a fast-burst 0.22,1,0.36,1 over 1050ms that crawled and then appeared to cut off). The curved top edge flattens across the whole slide. The outgoing page starts drifting up on click (1400ms) instead of waiting for the next page to render.
 
 Project slide follow-through: as the incoming page lands, its title, metadata columns and preview trail by 64/96/140px and settle 300–500ms after the page stops (WAAPI `translate`, staggered), so the motion eases out instead of stopping as one slab. Applies to chat→project, Next project, and direct-page links.
+
+Fixed the end-of-slide cut: the fixed incoming main now starts at the viewport top (top 0, padding-top + header offset, full innerHeight). Previously it was clipped at main's top (64px), but the home stage sits under the header via negative margin, so the old page stayed visible in the top strip until cleanup swapped it in one frame.
