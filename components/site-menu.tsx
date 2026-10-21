@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -73,27 +72,22 @@ function MenuPanel({ cases, contact, pathname }: Props & { pathname: string }) {
         }}
       >
         <span aria-hidden="true" className="header-menu-icon" data-open={open || undefined}><span /><span /></span>
-        <span>Menu</span>
       </button>
       {open && (
         <nav ref={panel} id="site-menu" aria-label="Site navigation" className="header-menu-panel">
-          <p className="header-menu-label">Projects <span>{String(cases.length).padStart(2, "0")}</span></p>
           <ul className="header-menu-projects">
             {cases.map((project) => (
               <li key={project.slug}>
                 <Link href={`/work/${project.slug}/`} onClick={close}
                   aria-current={pathname === `/work/${project.slug}/` ? "page" : undefined}
                   className="header-menu-project" data-project={project.slug}>
-                  <span className="header-menu-project-icon"><Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={22} height={22} /></span>
-                  <span>{project.name}<small>View case study</small></span>
-                  <span className="header-menu-arrow" aria-hidden="true">↗</span>
+                  <span>{project.name}</span>
                 </Link>
               </li>
             ))}
           </ul>
           <ul className="header-menu-pages">
-            <li><Link href="/about/" onClick={close} aria-current={pathname === "/about/" ? "page" : undefined}>About<span aria-hidden="true">↗</span></Link></li>
-            <li><Link href="/playground/" onClick={close} aria-current={pathname === "/playground/" ? "page" : undefined}>Playground<span aria-hidden="true">↗</span></Link></li>
+            <li><Link href="/about/" onClick={close} aria-current={pathname === "/about/" ? "page" : undefined}>About</Link></li>
           </ul>
           {(contact.email || contact.linkedinUrl || contact.resumeUrl) && <div className="header-menu-contact">
             {contact.email && <a href={`mailto:${contact.email}`} onClick={close}>Email ↗</a>}
