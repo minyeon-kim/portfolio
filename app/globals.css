@@ -1408,32 +1408,42 @@ html, body, main { overflow-anchor: none; }
 
 
 /* End of a case: the other projects as equal cards to choose from. */
-.more-work { margin-top: clamp(64px, 6vw, 112px); padding-top: clamp(40px, 4vw, 72px); border-top: 1px solid var(--line); }
-.more-work-label { margin: 0 0 clamp(20px, 2vw, 32px); color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
-.more-work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.5vw, 24px); margin: 0; padding: 0; list-style: none; }
-.more-work-grid > li { display: flex; }
-.more-work-card {
-  position: relative; display: flex; flex-direction: column; gap: 12px; width: 100%; min-height: clamp(200px, 18vw, 280px);
-  padding: clamp(20px, 2vw, 32px); padding-bottom: clamp(56px, 5vw, 72px); border-radius: 16px; background: var(--color-fill); color: var(--ink);
-  transition: background-color 150ms var(--ease);
-}
-a.more-work-card:hover { background: var(--color-fill-strong); }
-a.more-work-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.more-work { margin-top: clamp(64px, 6vw, 112px); padding-top: clamp(40px, 4vw, 72px); border-top: 1px solid var(--line); text-align: center; }
+.more-work-label { margin: 0 0 clamp(32px, 3vw, 48px); color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+/* Fanned deck: the front card in the middle, the next two tucked behind it. */
+.more-work-deck { --deck-card: clamp(220px, 28vw, 380px); --deck-peek: 34%; --deck-fan: 58%; position: relative; display: grid; place-items: center; width: 100%; height: calc(var(--deck-card) * 1.25 + 24px); margin: 0; padding: 0; list-style: none; }
+.more-work-card { position: absolute; top: 0; left: 50%; width: var(--deck-card); aspect-ratio: 4 / 5; translate: -50% 0; transition: transform 500ms var(--ease), opacity 400ms ease, filter 400ms ease; }
+.more-work-card[data-rank="0"] { z-index: 3; transform: none; }
+.more-work-card[data-rank="1"] { z-index: 2; transform: translate(var(--deck-peek), 6%) scale(0.84); }
+.more-work-card[data-rank="2"] { z-index: 1; transform: translate(calc(var(--deck-peek) * -1), 6%) scale(0.84); }
+.more-work-card[data-rank="3"] { z-index: 0; transform: translateY(6%) scale(0.7); opacity: 0; pointer-events: none; }
+.more-work-deck:is(:hover, :focus-within) .more-work-card[data-rank="0"] { transform: translateY(-8px); }
+.more-work-deck:is(:hover, :focus-within) .more-work-card[data-rank="1"] { transform: translate(var(--deck-fan), 4%) rotate(6deg) scale(0.84); }
+.more-work-deck:is(:hover, :focus-within) .more-work-card[data-rank="2"] { transform: translate(calc(var(--deck-fan) * -1), 4%) rotate(-6deg) scale(0.84); }
+.more-work-hit { display: block; width: 100%; height: 100%; border-radius: 24px; }
+.more-work-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.more-work-cover { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; border-radius: 24px; background: color-mix(in srgb, var(--ink) 7%, var(--bg)); }
+.more-work-cover[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 30%, rgb(66 133 244 / 0.28), transparent 70%), radial-gradient(55% 45% at 75% 75%, rgb(167 139 250 / 0.24), transparent 70%), #0C0F16; }
+.more-work-cover[data-project="workflow-app"] { background: #E9ECEA; }
+.more-work-card:not([data-rank="0"]) .more-work-cover::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 28%, transparent); transition: opacity 250ms ease; }
+.more-work-card:not([data-rank="0"]) .more-work-hit:is(:hover, :focus-visible) .more-work-cover::after { opacity: 0; }
+.more-work-slot .more-work-cover { background: color-mix(in srgb, var(--ink) 4%, var(--bg)); }
+.more-work-slot-label { color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.more-work-caption { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: clamp(24px, 2.5vw, 40px); }
+.more-work-title { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); animation: more-work-title-in 400ms var(--ease) both; }
 .more-work-name { font-family: "Bodoni MT", Didot, "Times New Roman", serif; font-weight: 400; font-size: clamp(32px, 3.2vw, 52px); line-height: 1.02; letter-spacing: -0.045em; }
 .more-work-name[data-variant="devsign"] { color: var(--devsign-title); }
 .more-work-name[data-variant="gemini"] { width: fit-content; background: var(--gemini-title); background-clip: text; -webkit-background-clip: text; color: transparent; padding-bottom: 0.12em; margin-bottom: -0.12em; }
-.more-work-description { color: var(--muted); font-size: 15px; line-height: 1.5; }
-.more-work-arrow { position: absolute; right: clamp(20px, 2vw, 32px); bottom: clamp(20px, 2vw, 28px); width: 22px; height: 22px; color: var(--ink); transition: transform 250ms var(--ease); }
-a.more-work-card:is(:hover, :focus-visible) .more-work-arrow { transform: translateX(4px); }
-.more-work-slot { background: color-mix(in srgb, var(--ink) 2%, transparent); }
-.more-work-slot-label { color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
-.more-work-slot .more-work-description { opacity: 0.8; }
-@media (max-width: 63.99rem) {
-  .more-work-grid { grid-template-columns: 1fr; }
-  .more-work-card { min-height: 0; }
+.more-work-description { max-width: 48ch; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.more-work-arrow { width: 24px; height: 24px; flex: 0 0 24px; transition: transform 250ms var(--ease); }
+.more-work-title:is(:hover, :focus-visible) .more-work-arrow, .more-work:has(.more-work-card[data-rank="0"] .more-work-hit:hover) .more-work-arrow { transform: translateX(4px); }
+@keyframes more-work-title-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (max-width: 47.99rem) {
+  .more-work-deck { --deck-card: min(62vw, 280px); --deck-peek: 26%; --deck-fan: 34%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .more-work-arrow { transition: none; }
+  .more-work-card, .more-work-arrow { transition: none; }
+  .more-work-title { animation: none; }
 }
 
 /* The fixed project rail sits above the transition layers; keep it out of the

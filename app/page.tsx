@@ -31,7 +31,7 @@ export default async function Home() {
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
           const others = bodies.map((_, k) => (i + 1 + k) % bodies.length).slice(0, bodies.length - 1)
-            .map((k) => ({ index: k, slug: bodies[k].slug, name: bodies[k].meta.short ?? bodies[k].meta.title, description: bodies[k].tldr.problem }));
+            .map((k) => ({ index: k, slug: bodies[k].slug, name: bodies[k].meta.short ?? bodies[k].meta.title, description: bodies[k].tldr.problem, cover: bodies[k].meta.cover }));
           return (
             <CaseBody
               key={slug}
