@@ -1527,3 +1527,17 @@ header:has(.header-menu-trigger[aria-expanded="true"]),
 header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { background: transparent !important; backdrop-filter: none !important; }
 /* Finish the chat before introducing the destination, avoiding text afterimages. */
 .intro-surface[data-phase="leaving"] .intro-copy { opacity: 0; transform: translateY(-4px); filter: none; transition: opacity 160ms ease, transform 160ms ease; }
+
+/* A translucent chat capsule with a separate, stationary send control. */
+.intro-project-picker .project-prompt { gap: 16px; padding: 10px 10px 10px 28px; min-height: 76px; border-color: transparent; background: color-mix(in srgb, var(--ink) 5%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.intro-project-picker .project-prompt:focus-within { border-color: color-mix(in srgb, var(--ink) 10%, transparent); background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.intro-project-picker .project-prompt input { font-size: 18px; line-height: 1.5; }
+.intro-project-picker .project-prompt-submit { display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; background: color-mix(in srgb, var(--ink) 10%, transparent); color: var(--ink); transition: background-color 200ms ease; }
+.intro-project-picker .project-prompt-submit[data-ready] { background: color-mix(in srgb, var(--ink) 16%, transparent); color: var(--ink); }
+.intro-project-picker .project-prompt-submit:not(:disabled):hover { background: color-mix(in srgb, var(--ink) 23%, transparent); }
+.intro-project-picker .prompt-send-icon { width: 24px; height: 24px; }
+@media (max-width: 47.99rem) {
+  .intro-project-picker .project-prompt { min-height: 64px; padding: 8px 8px 8px 20px; gap: 12px; }
+  .intro-project-picker .project-prompt input { font-size: 16px; }
+  .intro-project-picker .project-prompt-submit { width: 46px; height: 46px; }
+}
