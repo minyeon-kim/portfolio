@@ -757,7 +757,6 @@ details[open]::details-content {
 [data-phase="sending"] .project-prompt { border-color: rgb(157 190 255 / 0.6); }
 [data-phase="sending"] .project-prompt { background: rgb(157 190 255 / 0.12); }
 .prompt-send-icon { display: block; width: 20px; height: 20px; margin: auto; }
-[data-phase="sending"] .prompt-send-icon { animation: prompt-send 420ms var(--ease) both; }
 .project-suggestion:disabled { cursor: default; opacity: 0.45; }
 .prompt-cancel { color: var(--muted); font-size: 13px; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
 .intro-project-picker { position: relative; }
@@ -773,7 +772,6 @@ details[open]::details-content {
   .generated-preview { animation: generated-preview 450ms var(--ease) 650ms both; }
   .selected-stage-picker { animation: generated-detail 300ms var(--ease) 800ms both; }
 }
-@keyframes prompt-send { to { transform: translateY(-14px); opacity: 0; } }
 @keyframes generated-text {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -1519,3 +1517,7 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 .project-prompt-submit:disabled { cursor: default; }
 @media (max-width: 47.99rem) { .project-prompt-text { font-size: 15px; } }
 @media (prefers-reduced-motion: reduce) { .project-suggestion[data-suggestion] { transition: none; } }
+
+/* The send control stays put and becomes a brief AI activity indicator. */
+.project-prompt-submit .project-thinking-orbit { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 40px; }
+.project-prompt-submit .project-thinking-orbit span { width: 4px; height: 4px; background: currentColor; }
