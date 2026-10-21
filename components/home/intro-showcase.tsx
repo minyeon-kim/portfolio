@@ -6,22 +6,27 @@ import { withBase } from "@/lib/site";
 import type { StageProject } from "./project-stage";
 
 type Props = {
-  projects: (StageProject & { index: number })[];
+  projects: StageProject[];
   visible: boolean;
-  onOpen: (index: number) => void;
 };
+
+type Slide = { key: string; label: string; src?: string; alt: string };
 
 const INTERVAL = 4200;
 
-// Scroll's middle step on the intro: the name and positioning move left and the
-// featured projects cycle in a card at the right. Each change slides the next
-// cover in from the right while the current one drifts left and blurs away.
-export function IntroShowcase({ projects, visible, onOpen }: Props) {
-  const slides = projects.filter((p) => p.cover);
+// Scroll's middle step on the intro: the name and positioning move left and a
+// card at the right cycles a photo of Minyeon, then the featured covers. Each
+// change slides the next image in from the right while the current one drifts
+// left and blurs away.
+export function IntroShowcase({ projects, visible }: Props) {
+  const slides: Slide[] = [
+    // TODO: profile photo or a photo of Minyeon at work, e.g. /images/profile.webp (portrait, 1000x1050 WebP).
+    { key: "profile", label: "Minyeon Kim", alt: "Minyeon Kim" },
+    ...projects.filter((p) => p.cover).map((p) => ({ key: p.slug, label: p.name, src: p.cover, alt: `${p.name} project overview` })),
+  ];
   const [current, setCurrent] = useState(0);
   const [last, setLast] = useState<number | null>(null);
-  const [paused, setPaused] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const [held, setHeld] = useState(false);
   const [reduce, setReduce] = useState(false);
 
   useEffect(() => {
@@ -32,7 +37,8 @@ export function IntroShowcase({ projects, visible, onOpen }: Props) {
     return () => media.removeEventListener("change", sync);
   }, []);
 
-  const playing = visible && !paused && !hovered && !reduce && slides.length > 1;
+  // Hover or keyboard focus holds the current slide.
+  const playing = visible && !held && !reduce && slides.length > 1;
   useEffect(() => {
     if (!playing || last !== null) return;
     const timer = setTimeout(() => go((current + 1) % slides.length), INTERVAL);
@@ -46,7 +52,6 @@ export function IntroShowcase({ projects, visible, onOpen }: Props) {
     return () => clearTimeout(timer);
   }, [last]);
 
-  if (!slides.length) return null;
   function go(i: number) {
     if (i === current) return;
     setLast(current);
@@ -55,40 +60,25 @@ export function IntroShowcase({ projects, visible, onOpen }: Props) {
   const position = (i: number) => (i === current ? "current" : i === last ? "previous" : "next");
 
   return (
-    <div className="intro-showcase" aria-roledescription="carousel" aria-label="Selected work"
-      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHovered(true); }}
-      onPointerLeave={() => setHovered(false)}>
+    <div className="intro-showcase" aria-roledescription="carousel" aria-label="Minyeon Kim and selected work"
+      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHeld(true); }}
+      onPointerLeave={() => setHeld(false)}
+      onFocus={() => setHeld(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHeld(false); }}>
       <div className="intro-showcase-card">
-        {slides.map((p, i) => (
-          <div key={p.slug} className="intro-showcase-slide" data-position={position(i)} data-project={p.slug}
-            role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${p.name}`} aria-hidden={i !== current}>
-            <Image src={withBase(p.cover!)} alt={`${p.name} project overview`} fill sizes="(min-width: 75rem) 480px, 0px" className="object-contain" />
+        {slides.map((s, i) => (
+          <div key={s.key} className="intro-showcase-slide" data-position={position(i)} data-project={s.key}
+            role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.label}`} aria-hidden={i !== current}>
+            {s.src
+              ? <Image src={withBase(s.src)} alt={s.alt} fill sizes="(min-width: 75rem) 500px, 440px" className="object-contain" />
+              : <p className="intro-showcase-placeholder">Profile photo<span>A portrait or a photo of me at work goes here.</span></p>}
           </div>
         ))}
       </div>
-      <div className="intro-showcase-captions">
-        {slides.map((p, i) => (
-          <button key={p.slug} type="button" className="press intro-showcase-caption" data-position={position(i)}
-            tabIndex={i === current ? 0 : -1} aria-hidden={i !== current} onClick={() => onOpen(p.index)}>
-            <span className="intro-showcase-caption-label">{p.concept ? "Concept" : "Product"}{p.timeline && ` · ${p.timeline}`}</span>
-            <span className="intro-showcase-caption-name">{p.name}</span>
-            {p.role && <span className="intro-showcase-caption-role">{p.role}</span>}
-            <span className="intro-showcase-caption-open" aria-hidden="true">Open case <span>→</span></span>
-          </button>
+      <div className="intro-showcase-dots">
+        {slides.map((s, i) => (
+          <button key={s.key} type="button" className="intro-showcase-dot" aria-label={`Show ${s.label}`} aria-current={i === current || undefined} onClick={() => go(i)} />
         ))}
-      </div>
-      <div className="intro-showcase-controls">
-        {slides.length > 1 && !reduce && (
-          <button type="button" className="press intro-showcase-pause" aria-label={paused ? "Play slideshow" : "Pause slideshow"} onClick={() => setPaused((p) => !p)}>
-            <svg viewBox="0 0 16 16" aria-hidden="true" data-show={!paused || undefined}><rect x="4" y="3" width="2.5" height="10" rx="1" fill="currentColor" /><rect x="9.5" y="3" width="2.5" height="10" rx="1" fill="currentColor" /></svg>
-            <svg viewBox="0 0 16 16" aria-hidden="true" data-show={paused || undefined}><path d="M5 3.5v9l7.5-4.5z" fill="currentColor" /></svg>
-          </button>
-        )}
-        <div className="intro-showcase-dots">
-          {slides.map((p, i) => (
-            <button key={p.slug} type="button" className="intro-showcase-dot" aria-label={`Show ${p.name}`} aria-current={i === current || undefined} onClick={() => go(i)} />
-          ))}
-        </div>
       </div>
     </div>
   );
