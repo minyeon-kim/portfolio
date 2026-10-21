@@ -141,7 +141,6 @@ function IntroState({ name, intro, projects, onSelect }: {
       el.style.setProperty("--explore-enter", String(explore));
       el.style.setProperty("--orb-enter", String(orb));
       el.style.setProperty("--welcome-enter", String(media.matches ? 1 : ramp(0.56, 0.9)));
-      el.style.setProperty("--light-spread-scale", String(Math.max(window.innerWidth, window.innerHeight) / 65));
       const showWelcome = orb > 0.75;
       if (showWelcome !== lastWelcome) { lastWelcome = showWelcome; setWelcomeReady(showWelcome); }
       el.toggleAttribute("data-scroll-ready", !media.matches);
@@ -218,6 +217,13 @@ function IntroState({ name, intro, projects, onSelect }: {
       finish();
       return;
     }
+    const orb = surface.current?.querySelector<HTMLElement>(".project-ai-orb");
+    if (orb && surface.current) {
+      const origin = orb.getBoundingClientRect();
+      const bounds = surface.current.getBoundingClientRect();
+      surface.current.style.setProperty("--light-origin-x", `${origin.left + origin.width / 2 - bounds.left}px`);
+      surface.current.style.setProperty("--light-origin-y", `${origin.top + origin.height / 2 - bounds.top}px`);
+    }
     setSculpture(choice.slug);
     setQuery("");
     setPhase("opening");
@@ -247,6 +253,9 @@ function IntroState({ name, intro, projects, onSelect }: {
         <span className="intro-ambient-blue" />
         <span className="intro-ambient-violet" />
         <span className="intro-ambient-pearl" />
+      </div>
+      <div className="project-ambient-spread" data-active={busy || undefined} aria-hidden="true">
+        <HeroSculpture variant={sculpture} active={busy} />
       </div>
       <div className="intro-copy">
         <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
