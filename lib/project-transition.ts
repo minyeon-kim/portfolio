@@ -50,6 +50,18 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     const source = sourceCanvases[index];
     if (source && source.width && source.height) copy.getContext("2d")?.drawImage(source, 0, 0);
   });
+  // Animations and transitions are off inside the snapshot, so anything caught
+  // mid-animation would snap to its end state (e.g. dimmed intro copy popping
+  // back to full opacity). Pin those elements at what is on screen now.
+  const liveElements = Array.from(main.querySelectorAll<HTMLElement>("*"));
+  const snapElements = Array.from(snapshot.querySelectorAll<HTMLElement>("*"));
+  const moving = new Set(main.getAnimations({ subtree: true }).map((animation) => (animation.effect as KeyframeEffect | null)?.target).filter(Boolean));
+  liveElements.forEach((element, index) => {
+    const copy = snapElements[index];
+    if (!copy || !(moving.has(element) || element.closest("[data-phase]"))) return;
+    const style = getComputedStyle(element);
+    Object.assign(copy.style, { opacity: style.opacity, transform: style.transform, filter: style.filter, translate: style.translate, scale: style.scale });
+  });
   snapshot.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
   // Animations are off inside the snapshot; keep the ambient light where it was.
   const liveAmbient = main.querySelector<HTMLElement>(".intro-ambient");
