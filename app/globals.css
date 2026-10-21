@@ -1633,17 +1633,24 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .project-ai-orb[data-dismissed]:not([data-active]) .project-ai-expansion { transform: scale(0); opacity: 0; animation: ai-orb-pop 220ms cubic-bezier(0.3, 0, 0.7, 1) both; }
 @keyframes ai-orb-pop { 0% { transform: scale(1); opacity: 1; } 35% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .project-ai-orb[data-dismissed]:not([data-active]) .project-ai-expansion { animation: none; } }
-/* Suggestions sit as pills below the chat bar. */
+/* Suggestions sit as a quiet vertical list below the chat bar; the question
+   rests just above the bar. */
 .intro-project-picker .project-prompt { position: relative; display: block; min-height: 64px; padding: 10px; border-radius: 34px; }
 .project-prompt-row { display: flex; align-items: center; gap: 12px; padding-left: 12px; }
 .project-prompt-row input { flex: 1; min-width: 0; }
-.intro-project-picker .project-suggestions { justify-content: center; gap: 10px; margin-top: 16px; }
-.intro-project-picker .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 16px; font-size: 14px; }
+.project-chat-welcome { margin-bottom: 20px; }
+.intro-surface .project-chat-welcome h2 { bottom: 0; }
+.intro-surface[data-scroll-ready] .intro-project-picker { height: auto; min-height: 0; }
+.intro-project-picker .project-suggestions { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 4px; margin-top: 16px; padding-left: 8px; }
+.intro-project-picker .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 14px; gap: 12px; font-size: 15px; font-weight: 400; color: var(--muted); background: transparent; box-shadow: none; }
+.intro-project-picker .project-suggestion[data-suggestion] span { color: inherit; transition: color 150ms ease; }
+.intro-project-picker .project-suggestion[data-suggestion]:is(:hover, :focus-visible) { color: var(--ink); background: var(--color-fill); box-shadow: none; }
+.intro-project-picker .project-suggestion .pill-border-light { display: none; }
 @media (max-width: 47.99rem) {
-  .project-chat-welcome { height: 94px; }
+  .project-chat-welcome { height: 94px; margin-bottom: 16px; }
   .intro-project-picker .project-prompt { border-radius: 28px; }
-  .intro-project-picker .project-suggestions { gap: 8px; }
-  .intro-project-picker .project-suggestion[data-suggestion] { padding-inline: 12px; font-size: 13px; min-height: 40px; }
+  .intro-project-picker .project-suggestions { padding-left: 4px; }
+  .intro-project-picker .project-suggestion[data-suggestion] { padding-inline: 12px; font-size: 14px; }
 }
 
 /* Intro middle step (wide screens): name and positioning move to the left and
