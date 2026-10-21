@@ -120,6 +120,7 @@ function IntroState({ name, intro, projects, onSelect }: {
       el.style.setProperty("--explore-enter", String(explore));
       el.style.setProperty("--orb-enter", String(orb));
       el.style.setProperty("--welcome-enter", String(media.matches ? 1 : ramp(0.56, 0.9)));
+      el.style.setProperty("--light-spread-scale", String(Math.max(window.innerWidth, window.innerHeight) / 65));
       el.toggleAttribute("data-scroll-ready", !media.matches);
       const ready = explore > 0.65;
       if (picker.current) {
@@ -224,7 +225,6 @@ function IntroState({ name, intro, projects, onSelect }: {
         <span className="intro-ambient-violet" />
         <span className="intro-ambient-pearl" />
       </div>
-      <HeroSculpture variant={sculpture} active={phase !== "idle"} />
       <div className="intro-copy">
         <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
           {Array.from(name).map((char, index) => <span key={index} className="intro-name-char" aria-hidden="true" style={{ animationDelay: `${index * 55}ms` }}>{char === " " ? "\u00a0" : char}</span>)}
@@ -233,7 +233,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         <div ref={picker} className="intro-project-picker">
           <div className="project-chat-welcome">
             <div className="project-ai-orb" data-active={busy || undefined} aria-hidden="true">
-              <HeroSculpture className="project-ai-field" variant={sculpture} active={busy} />
+              <div className="project-ai-expansion"><HeroSculpture className="project-ai-field" variant={sculpture} active={busy} /></div>
             </div>
             <h2>What would you like to explore?</h2>
           </div>
