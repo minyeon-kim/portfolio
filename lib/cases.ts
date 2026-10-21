@@ -107,3 +107,11 @@ export async function getNextCase(slug: string): Promise<CaseEntry | null> {
   const index = cases.findIndex((c) => c.slug === slug);
   return cases[(index + 1) % cases.length];
 }
+
+// Every other published case, starting after this one in display order (for
+// "More work").
+export async function getOtherCases(slug: string): Promise<CaseEntry[]> {
+  const cases = (await getCases()).filter((entry) => !entry.meta.draft);
+  const index = cases.findIndex((c) => c.slug === slug);
+  return Array.from({ length: cases.length - 1 }, (_, k) => cases[(index + 1 + k) % cases.length]);
+}
