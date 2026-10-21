@@ -189,7 +189,7 @@ function IntroState({ name, intro, projects, onSelect }: {
           </form>}
           {!submitted && <div className="project-suggestions" aria-label="Projects">
             {matches.map((project) => <button key={project.slug} type="button" disabled={busy} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
-              <svg className="pill-border-light" aria-hidden="true"><rect pathLength="100" /></svg>
+              <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
               {project.slug === "about" ? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="project-suggestion-icon"><circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> : <Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={18} height={18} className="project-suggestion-icon" />}
               <span>{project.name}</span>
             </button>)}
