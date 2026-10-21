@@ -37,7 +37,7 @@ export default async function Home() {
               key={slug}
               meta={meta}
               Content={Content}
-              next={bodies.length > 1 ? { index: n, name: bodies[n].meta.short ?? bodies[n].meta.title } : undefined}
+              next={bodies.length > 1 ? { index: n, slug: bodies[n].slug, name: bodies[n].meta.short ?? bodies[n].meta.title, description: bodies[n].tldr.problem } : undefined}
             />
           );
         })}

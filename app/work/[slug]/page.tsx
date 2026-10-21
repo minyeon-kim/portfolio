@@ -32,7 +32,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
 
         </div>
         {next && (
-          <nav aria-label="Next case" className="mt-12 border-t border-line pt-4">
+          <nav aria-label="Next case" className="next-project-nav">
             <NextProjectLink slug={next.slug} name={next.meta.short ?? next.meta.title} description={next.tldr.problem} />
           </nav>
         )}

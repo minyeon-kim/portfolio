@@ -10,7 +10,7 @@ export function CaseBody({
 }: {
   meta: CaseMeta;
   Content: ComponentType;
-  next?: { index: number; name: string };
+  next?: { index: number; slug: string; name: string; description?: string };
 }) {
   return (
     <article className="case-study" data-project={meta.short === "Devsign" ? "devsign" : "gemini"}>
@@ -18,9 +18,9 @@ export function CaseBody({
         <Content />
       </div>
       {next && (
-        <div className="mt-12">
-          <NextCaseButton index={next.index} name={next.name} />
-        </div>
+        <nav aria-label="Next case" className="next-project-nav">
+          <NextCaseButton index={next.index} slug={next.slug} name={next.name} description={next.description} />
+        </nav>
       )}
     </article>
   );
