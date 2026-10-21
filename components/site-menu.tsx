@@ -2,301 +2,106 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { createPortal } from "react-dom";
-import { site, withBase } from "@/lib/site";
-import { setUi, useUi } from "@/lib/ui-store";
-import { ThemeToggle } from "./theme-toggle";
-import { CopyButton } from "./copy-button";
-import { ScrambleLink } from "./scramble-link";
+import { withBase } from "@/lib/site";
+import { setUi } from "@/lib/ui-store";
 
-export type MenuCase = {
-  slug: string;
-  name: string;
-  problem: string;
-  role?: string;
-  cover?: string;
-};
-
+export type MenuCase = { slug: string; name: string };
 type Props = {
   cases: MenuCase[];
-  pages: { href: string; label: string }[];
-  experiments: string[];
   contact: { email: string; linkedinUrl: string; resumeUrl?: string };
 };
 
-type Phase = "closed" | "enter" | "open" | "leaving";
-
-const LEAVE_MS = 250;
-
-// Full-screen side menu in the spirit of Metalab's: the "Menu" button turns
-// into "Close", and three columns slide in one after another (pages and case
-// studies, a large cover preview that follows the hovered case, then
-// playground and contact). Esc closes it, Tab stays inside it, and focus
-// returns to the button. The page underneath is never scroll-locked.
-export function SiteMenu({ cases, pages, experiments, contact }: Props) {
-  const [phase, setPhase] = useState<Phase>("closed");
-  const [preview, setPreview] = useState(0);
-  const button = useRef<HTMLButtonElement>(null);
-  const panel = useRef<HTMLDivElement>(null);
-  const open = phase === "enter" || phase === "open";
-
-  // On the landing page (lg+) Menu opens the links inline in the left rail
-  // instead of this overlay.
+export function SiteMenu(props: Props) {
   const pathname = usePathname();
-  const inlineOpen = useUi((s) => s.menuOpen);
-  const railVisible = useUi((s) => s.railVisible);
-  const onMenuClick = () => {
-    // Inline only while the side picker is showing; scrolled into a case, the
-    // full-screen menu opens instead.
-    if (pathname === "/" && railVisible && window.matchMedia("(min-width: 64rem)").matches) {
-      setUi({ menuOpen: !inlineOpen });
-      return;
-    }
-    openMenu();
-  };
-
-  const openMenu = () => {
-    setPhase("enter");
-    // Two frames: mount hidden first, then flip to open so transitions run.
-    requestAnimationFrame(() => requestAnimationFrame(() => setPhase("open")));
-  };
-
-  const closeMenu = useCallback((returnFocus = true) => {
-    setPhase("leaving");
-    window.setTimeout(() => {
-      setPhase("closed");
-      if (returnFocus) button.current?.focus();
-    }, LEAVE_MS);
-  }, []);
-
-  useEffect(() => {
-    if (phase === "open") panel.current?.querySelector<HTMLElement>("[data-autofocus]")?.focus();
-  }, [phase]);
-
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      closeMenu();
-      return;
-    }
-    if (e.key !== "Tab" || !panel.current) return;
-    const focusable = [...panel.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")];
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
-
-  // Following a link: close without stealing focus back to the button.
-  const go = () => closeMenu(false);
-
-  const shown = phase === "open";
-  const column = (delay: number) => ({
-    className: `transition-[opacity,translate] duration-400 ease-standard ${shown ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`,
-    style: { transitionDelay: shown ? `${delay}ms` : "0ms" },
-  });
-
-  return (
-    <>
-      <MenuButton
-        ref={button}
-        id="menu-button"
-        open={inlineOpen}
-        controls={pathname === "/" ? "inline-menu" : undefined}
-        onClick={onMenuClick}
-      />
-
-      {phase !== "closed" &&
-        createPortal(
-          <div
-            ref={panel}
-            id="site-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site menu"
-            onKeyDown={onKeyDown}
-            className={`fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-bg transition-opacity duration-250 ease-standard ${phase === "enter" || phase === "leaving" ? "opacity-0" : "opacity-100"}`}
-          >
-            <div className="site-menu-bar flex w-full items-center justify-between py-2">
-              <MenuButton open controls="site-menu" onClick={() => closeMenu()} autoFocus />
-              <Link href="/" onClick={go} className="text-base font-medium tracking-tight">
-                {site.name}
-              </Link>
-              <ThemeToggle />
-            </div>
-
-            <div className="site-menu-content mx-auto grid w-full gap-6 pt-4 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,0.9fr)] lg:gap-4 lg:pt-8">
-              {/* Pages and case studies */}
-              <div {...column(0)}>
-                <nav aria-label="Pages">
-                  <ul className="mb-6 space-y-0.5">
-                    {pages.map((p) => (
-                      <li key={p.href}>
-                        <ScrambleLink
-                          href={p.href}
-                          label={p.label}
-                          onClick={go}
-                          className="text-xl tracking-tight text-ink hover:text-accent"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-                <p className="mb-1 font-mono text-xs text-muted">Case studies</p>
-                <ul className="flex flex-wrap gap-0.5">
-                  {cases.map((c, i) => (
-                    <li key={c.slug}>
-                      <Link
-                        href={`/work/${c.slug}/`}
-                        onClick={go}
-                        onMouseEnter={() => setPreview(i)}
-                        onFocus={() => setPreview(i)}
-                        className={`group press flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-sm transition-colors duration-150 ease-standard ${preview === i ? "bg-fill-strong" : "bg-fill hover:bg-fill-strong"}`}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={`size-1 rounded-full bg-accent transition-transform duration-250 ease-standard ${preview === i ? "scale-100" : "scale-0"}`}
-                        />
-                        {c.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Large preview that follows the hovered / focused case */}
-              <div {...column(150)}>
-                <Link
-                  href={`/work/${cases[preview]?.slug}/`}
-                  onClick={go}
-                  tabIndex={-1}
-                  aria-hidden="true"
-                  className="group block"
-                >
-                  <div className="relative aspect-[2/1] overflow-clip rounded-lg bg-fill">
-                    {cases.map((c, i) =>
-                      c.cover ? (
-                        <Image
-                          key={c.slug}
-                          src={withBase(c.cover)}
-                          alt=""
-                          width={1600}
-                          height={800}
-                          sizes="(min-width: 1024px) 560px, 100vw"
-                          className={`absolute inset-0 size-full object-cover transition-[opacity,scale] duration-400 ease-standard group-hover:scale-[1.02] ${preview === i ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"}`}
-                        />
-                      ) : null,
-                    )}
-                  </div>
-                </Link>
-                <div className="mt-2 grid">
-                  {cases.map((c, i) => (
-                    // Captions share one grid cell and crossfade, so height never jumps.
-                    <div
-                      key={c.slug}
-                      aria-hidden={preview !== i}
-                      className={`col-start-1 row-start-1 transition-opacity duration-250 ease-standard ${preview === i ? "opacity-100" : "opacity-0"}`}
-                    >
-                      <p className="font-mono text-xs text-muted">
-                        {String(i + 1).padStart(2, "0")} {c.role ? `· ${c.role}` : ""}
-                      </p>
-                      <p className="text-base">{c.problem}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Playground and contact */}
-              <div {...column(250)} className={`${column(250).className} space-y-2`}>
-                <Link
-                  href="/playground/"
-                  onClick={go}
-                  className="lift block rounded-md bg-fill p-2 hover:bg-fill-strong"
-                >
-                  <p className="mb-1 font-mono text-xs text-muted">Playground</p>
-                  <ul className="space-y-0.5 text-sm">
-                    {experiments.map((x) => (
-                      <li key={x}>{x}</li>
-                    ))}
-                  </ul>
-                </Link>
-                <div className="lift rounded-md bg-fill p-2">
-                  <p className="mb-1 font-mono text-xs text-muted">Contact</p>
-                  <div className="flex flex-wrap items-center gap-1 text-sm">
-                    {contact.email && <CopyButton value={contact.email} label="Copy email" />}
-                    {contact.linkedinUrl && (
-                      <a href={contact.linkedinUrl} className="link text-accent">
-                        LinkedIn
-                      </a>
-                    )}
-                    {contact.resumeUrl && (
-                      <a href={withBase(contact.resumeUrl)} className="link text-accent">
-                        Resume
-                      </a>
-                    )}
-                    {/* TODO: shows nothing until site.email / linkedinUrl / resume are set. */}
-                    {!contact.email && !contact.linkedinUrl && !contact.resumeUrl && (
-                      <Link href="/#contact" onClick={go} className="link text-accent">
-                        Get in touch
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-      <span className="sr-only" aria-live="polite">
-        {open ? "Menu open" : ""}
-      </span>
-    </>
-  );
+  return <MenuPanel key={pathname} {...props} pathname={pathname} />;
 }
 
-function MenuButton({
-  open,
-  onClick,
-  ref,
-  autoFocus,
-  id,
-  controls,
-}: {
-  id?: string;
-  controls?: string;
-  open: boolean;
-  onClick: () => void;
-  ref?: React.Ref<HTMLButtonElement>;
-  autoFocus?: boolean;
-}) {
+function MenuPanel({ cases, contact, pathname }: Props & { pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const button = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setUi({ menuOpen: open });
+    return () => setUi({ menuOpen: false });
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !root.current?.contains(event.target)) setOpen(false);
+    };
+    const escape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setOpen(false);
+      button.current?.focus({ preventScroll: true });
+    };
+    const dismiss = () => setOpen(false);
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    window.addEventListener("popstate", dismiss);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+      window.removeEventListener("popstate", dismiss);
+    };
+  }, [open]);
+
+  const close = () => setOpen(false);
   return (
-    <button
-      ref={ref}
-      type="button"
-      onClick={onClick}
-      data-autofocus={autoFocus ? "" : undefined}
-      id={id}
-      aria-expanded={open}
-      aria-controls={controls}
-      aria-label={open ? "Close menu" : "Open menu"}
-      // Icon only, same shape and size as the theme toggle so the pair matches.
-      className="group press relative inline-flex size-4 items-center justify-center rounded-full bg-fill text-muted transition-[color,background-color] duration-150 ease-standard hover:bg-fill-strong hover:text-ink md:group-data-compact/header:bg-transparent md:group-data-compact/header:hover:bg-transparent"
-    >
-      <span aria-hidden="true" className="relative block h-1 w-2">
-        <span
-          className={`absolute left-0 h-px w-full bg-current transition-[top,rotate] duration-250 ease-standard ${open ? "top-1/2 rotate-45" : "top-0"}`}
-        />
-        <span
-          className={`absolute left-0 h-px w-full bg-current transition-[top,rotate] duration-250 ease-standard ${open ? "top-1/2 -rotate-45" : "top-full"}`}
-        />
-      </span>
-    </button>
+    <div ref={root} className="header-menu" onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) close();
+    }}>
+      <button
+        ref={button}
+        id="menu-button"
+        type="button"
+        aria-expanded={open}
+        aria-controls="site-menu"
+        aria-label={open ? "Close menu" : "Open menu"}
+        className="header-menu-trigger press"
+        onClick={() => setOpen(!open)}
+        onKeyDown={(event) => {
+          if (event.key !== "ArrowDown") return;
+          event.preventDefault();
+          setOpen(true);
+          requestAnimationFrame(() => panel.current?.querySelector<HTMLAnchorElement>("a")?.focus());
+        }}
+      >
+        <span aria-hidden="true" className="header-menu-icon" data-open={open || undefined}><span /><span /></span>
+        <span>Menu</span>
+      </button>
+      {open && (
+        <nav ref={panel} id="site-menu" aria-label="Site navigation" className="header-menu-panel">
+          <p className="header-menu-label">Projects <span>{String(cases.length).padStart(2, "0")}</span></p>
+          <ul className="header-menu-projects">
+            {cases.map((project) => (
+              <li key={project.slug}>
+                <Link href={`/work/${project.slug}/`} onClick={close}
+                  aria-current={pathname === `/work/${project.slug}/` ? "page" : undefined}
+                  className="header-menu-project" data-project={project.slug}>
+                  <span className="header-menu-project-icon"><Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={22} height={22} /></span>
+                  <span>{project.name}<small>View case study</small></span>
+                  <span className="header-menu-arrow" aria-hidden="true">↗</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="header-menu-pages">
+            <li><Link href="/about/" onClick={close} aria-current={pathname === "/about/" ? "page" : undefined}>About<span aria-hidden="true">↗</span></Link></li>
+            <li><Link href="/playground/" onClick={close} aria-current={pathname === "/playground/" ? "page" : undefined}>Playground<span aria-hidden="true">↗</span></Link></li>
+          </ul>
+          {(contact.email || contact.linkedinUrl || contact.resumeUrl) && <div className="header-menu-contact">
+            {contact.email && <a href={`mailto:${contact.email}`} onClick={close}>Email ↗</a>}
+            {contact.linkedinUrl && <a href={contact.linkedinUrl} onClick={close}>LinkedIn ↗</a>}
+            {contact.resumeUrl && <a href={withBase(contact.resumeUrl)} onClick={close}>Resume ↗</a>}
+          </div>}
+        </nav>
+      )}
+    </div>
   );
 }
