@@ -1440,3 +1440,44 @@ a.more-work-card:is(:hover, :focus-visible) .more-work-arrow { transform: transl
 /* The fixed project rail sits above the transition layers; keep it out of the
    page change and let it ease in once the new page has landed. */
 :root[data-project-navigation] .project-rail { opacity: 0 !important; translate: -8px 0 !important; transition: none !important; }
+
+/* Give each chapter room; keep its supporting media closer than the next chapter. */
+.case-study:not([data-project="about"]) .case-section { padding-block: clamp(56px, 6vw, 104px); }
+.case-study:not([data-project="about"]) .case-section + .case-section { margin-top: 32px; }
+.case-section-wide .case-section-grid { grid-template-columns: 1fr; gap: 32px; }
+.case-section-wide .case-section-title { max-width: 24ch; }
+.case-section-wide .case-section-copy { max-width: none; }
+.case-section-copy .case-direction-intro { max-width: 58ch; margin-bottom: 40px; color: var(--muted); }
+.case-role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 64px); }
+.case-role { border-top: 2px solid var(--case-accent); padding-top: 24px; }
+.case-role-label { color: var(--case-accent); font: 12px/1.5 var(--font-mono); }
+.case-role h3 { margin: 16px 0; font-size: clamp(24px, 2.2vw, 32px); font-weight: 400; }
+.case-role p { max-width: 52ch; }
+.case-role-result { border-top: 1px solid var(--line); margin-top: 28px; padding-top: 16px; font-size: 16px; line-height: 1.6; }
+.case-role-result > span { display: block; margin-bottom: 8px; color: var(--muted); font: 11px/1.5 var(--font-mono); }
+.case-flow-summary { margin-top: 48px; }
+.case-flow-summary > span { font: 12px/1.5 var(--font-mono); color: var(--muted); }
+.case-flow-summary p { margin-top: 8px; }
+.case-section-copy .case-workflow { list-style: none; margin: 24px 0 0; padding: 0; }
+.case-workflow li { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 16px; margin: 0; font-size: clamp(16px, 1.6vw, 24px); }
+.case-workflow li:not(:last-child)::after { content: "→"; color: var(--muted); }
+
+/* Project pickers share their cover's canvas, including in dark mode. */
+body:has(.selected-stage[data-canvas]) .project-rail { --picker-canvas: var(--devsign-canvas); }
+body:has(.selected-stage[data-gemini]) .project-rail { --picker-canvas: var(--gemini-canvas); }
+.project-rail [role="tab"] { background: var(--picker-canvas, var(--bg)); backdrop-filter: none; }
+.project-rail [role="tab"]:hover { box-shadow: inset 0 0 0 1px var(--muted); }
+.selected-stage-picker [role="tablist"], .selected-stage-picker [role="tablist"] > span,
+.selected-stage-picker [role="tab"] { background: inherit; backdrop-filter: none; }
+[data-canvas] .selected-stage-picker { background: var(--devsign-canvas); }
+[data-gemini] .selected-stage-picker { background: var(--gemini-canvas); }
+body:has(.project-detail) header[data-compact] .site-header-bar,
+body:has(.project-selected) header[data-compact] .site-header-bar { background: var(--bg); backdrop-filter: none; }
+@media (max-width: 47.99rem) {
+  .case-study:not([data-project="about"]) .case-section { padding-block: 48px; }
+  .case-role-grid { grid-template-columns: 1fr; gap: 32px; }
+  .case-section-copy .case-direction-intro { margin-bottom: 28px; }
+  .case-flow-summary { margin-top: 32px; }
+  .case-section-copy .case-workflow { grid-template-columns: 1fr; gap: 12px; }
+}
+.selected-stage-picker [role="tab"][aria-selected="true"] { box-shadow: inset 0 0 0 1px currentColor; }

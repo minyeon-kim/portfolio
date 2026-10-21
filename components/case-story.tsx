@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-export function CaseSection({ id, label, title, children }: { id: string; label: string; title: string; children: ReactNode }) {
+export function CaseSection({ id, label, title, children, layout = "split" }: { id: string; label: string; title: string; children: ReactNode; layout?: "split" | "wide" }) {
   return (
-    <section id={id} className="case-section" aria-labelledby={`${id}-title`}>
+    <section id={id} className={`case-section case-section-${layout}`} aria-labelledby={`${id}-title`}>
       <p className="case-eyebrow reveal">{label}</p>
       <div className="case-section-grid">
         <h2 id={`${id}-title`} className="case-section-title reveal">{title}</h2>
