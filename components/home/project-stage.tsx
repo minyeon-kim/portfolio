@@ -88,7 +88,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const surface = useRef<HTMLDivElement>(null);
   const picker = useRef<HTMLDivElement>(null);
   const [exploreReady, setExploreReady] = useState(false);
-  const [welcomeCount, setWelcomeCount] = useState(0);
+  const [welcomeCount, setWelcomeCount] = useState(-1);
   const welcomePlayed = useRef(false);
   const welcomeText = "What would you like to explore?";
   useEffect(() => {
@@ -96,18 +96,20 @@ function IntroState({ name, intro, projects, onSelect }: {
     welcomePlayed.current = true;
     let count = 0;
     let interval: ReturnType<typeof setInterval> | undefined;
+    let typingDelay: ReturnType<typeof setTimeout> | undefined;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const delay = setTimeout(() => {
       if (reduce) { count = welcomeText.length; setWelcomeCount(count); return; }
       setWelcomeCount(0);
-      interval = setInterval(() => {
+      typingDelay = setTimeout(() => { interval = setInterval(() => {
         count += 1;
         setWelcomeCount(count);
         if (count >= welcomeText.length) clearInterval(interval);
-      }, 65);
+      }, 65); }, 180);
     }, reduce ? 0 : 400);
     return () => {
       clearTimeout(delay);
+      clearTimeout(typingDelay);
       clearInterval(interval);
       if (count < welcomeText.length) welcomePlayed.current = false;
     };
@@ -168,23 +170,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const [phase, setPhase] = useState<"idle" | "opening" | "typing" | "sending" | "leaving">("idle");
   const [sculpture, setSculpture] = useState("default");
   const [message, setMessage] = useState("");
-  const [hint, setHint] = useState("");
   const input = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    if (!exploreReady) return;
-    const text = "Ask me anything";
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const frame = requestAnimationFrame(() => setHint(text));
-      return () => cancelAnimationFrame(frame);
-    }
-    let index = 0;
-    const interval = setInterval(() => {
-      index += 1;
-      setHint(text.slice(0, index));
-      if (index === text.length) clearInterval(interval);
-    }, 55);
-    return () => clearInterval(interval);
-  }, [exploreReady]);
   const busy = phase !== "idle";
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const running = useRef(false);
@@ -264,12 +250,12 @@ function IntroState({ name, intro, projects, onSelect }: {
         <div className="intro-positioning-scroll"><div className="intro-positioning">{intro}</div></div>
         <div ref={picker} className="intro-project-picker">
           <div className="project-chat-welcome" data-present={exploreReady || undefined}>
-            <div className="project-ai-orb" data-active={busy || undefined} data-speaking={exploreReady && welcomeCount < welcomeText.length && !busy || undefined} aria-hidden="true">
+            <div className="project-ai-orb" data-active={busy || undefined} data-speaking={exploreReady && welcomeCount < 0 && !busy || undefined} data-dismissed={welcomeCount >= 0 || undefined} aria-hidden="true">
               <div className="project-ai-expansion"><HeroSculpture className="project-ai-field" variant={sculpture} active={busy} /></div>
             </div>
-            <h2 aria-label={welcomeText}><span aria-hidden="true">{welcomeText.slice(0, welcomeCount)}<span className="project-welcome-pending">{welcomeText.slice(welcomeCount)}</span></span></h2>
+            <h2 aria-label={welcomeText} data-show={welcomeCount > 0 || undefined}><span aria-hidden="true">{welcomeText.slice(0, Math.max(0, welcomeCount))}<span className="project-welcome-pending">{welcomeText.slice(Math.max(0, welcomeCount))}</span></span></h2>
           </div>
-          <form className="project-prompt" aria-label="Explore projects" onSubmit={(event) => {
+          <form className="project-prompt" data-has-query={query.trim() ? "" : undefined} aria-label="Explore projects" onSubmit={(event) => {
             event.preventDefault();
             if (busy) return;
             const value = query.trim().toLowerCase();
@@ -277,12 +263,13 @@ function IntroState({ name, intro, projects, onSelect }: {
             if (matches.length === 1) openChoice(matches[0].index);
             else setMessage(value ? "Choose Gemini, Devsign, or About me below." : "Type a project name or choose below.");
           }}>
+            <div className="project-prompt-row">
             <label htmlFor="project-query" className="sr-only">What would you like to explore?</label>
-            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder={hint} autoComplete="off" aria-describedby="project-search-status" />
+            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} autoComplete="off" aria-describedby="project-search-status" />
             <button type="submit" disabled={busy || !query.trim()} className="project-prompt-submit" data-ready={query.trim() ? "" : undefined} aria-label={phase === "sending" ? "Opening project" : "Open matching project"}>
               {phase === "sending" || phase === "leaving" ? <span className="project-thinking-orbit" aria-hidden="true"><span /><span /><span /></span> : <svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </button>
-          </form>
+          </div>
           <div className="project-suggestions" aria-label="Projects" data-selecting={busy || undefined}>
             {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-chosen={sculpture === project.slug || undefined} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
@@ -290,6 +277,7 @@ function IntroState({ name, intro, projects, onSelect }: {
               <span>{project.name}</span>
             </button>)}
           </div>
+          </form>
           <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `Opening ${query}` : "")}</p>
         </div>
       </div>
