@@ -168,12 +168,22 @@ function IntroState({ name, intro, projects, onSelect }: {
       if (!media.matches && Math.abs(target - current) > 0.0005) frame = requestAnimationFrame(update);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    // The stacked (narrow) layout places the card under the copy, so it needs both heights.
+    const copy = el.querySelector<HTMLElement>(".intro-copy");
+    const measure = () => {
+      if (copy) el.style.setProperty("--copy-h", `${copy.offsetHeight}px`);
+      if (showcase.current) el.style.setProperty("--card-h", `${showcase.current.offsetHeight}px`);
+    };
+    const observer = new ResizeObserver(measure);
+    if (copy) observer.observe(copy);
+    if (showcase.current) observer.observe(showcase.current);
     update();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     media.addEventListener("change", schedule);
     return () => {
       cancelAnimationFrame(frame);
+      observer.disconnect();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       media.removeEventListener("change", schedule);
@@ -257,7 +267,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         <HeroSculpture variant={sculpture} active={busy} />
       </div>
       <div ref={showcase} className="intro-showcase-scroll">
-        <IntroShowcase projects={projects.map((project, index) => ({ ...project, index }))} visible={showcaseVisible && !busy} onOpen={onSelect} />
+        <IntroShowcase projects={projects} visible={showcaseVisible && !busy} />
       </div>
       <div className="intro-copy">
         <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
