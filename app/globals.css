@@ -1291,7 +1291,7 @@ html, body, main { overflow-anchor: none; }
 }
 .project-suggestion[data-suggestion="gemini-privacy"] { --suggestion-accent: var(--accent); }
 .project-suggestion[data-suggestion="workflow-app"] { --suggestion-accent: var(--devsign-title); }
-.project-suggestion[data-suggestion]:not([data-suggestion="about"]) {
+.project-suggestion[data-suggestion] {
   background: color-mix(in srgb, var(--suggestion-accent) 3%, transparent);
   font-weight: 500;
 }
@@ -1301,16 +1301,12 @@ html, body, main { overflow-anchor: none; }
 }
 .project-suggestions { gap: 16px; margin-top: 24px; align-items: center; }
 .project-suggestion[data-suggestion] { min-height: 48px; padding-inline: 20px; gap: 9px; }
-.project-suggestion[data-suggestion="about"] { background: transparent; box-shadow: none; padding-inline: 10px; color: var(--muted); }
-.project-suggestion[data-suggestion="about"] span { color: inherit; }
-.project-suggestion[data-suggestion="about"]:is(:hover, :focus-visible) { color: var(--ink); background: transparent; box-shadow: none; }
 .project-suggestion[data-suggestion="about"] .pill-border-light { display: none; }
 .project-prompt { border-color: color-mix(in srgb, var(--ink) 9%, transparent); }
 .project-prompt:focus-within { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 @media (max-width: 47.99rem) {
   .project-suggestions { column-gap: 12px; row-gap: 10px; margin-top: 20px; }
   .project-suggestion[data-suggestion] { padding-inline: 16px; }
-  .project-suggestion[data-suggestion="about"] { padding-inline: 8px; }
 }
 
 /* Soft flowing color pools stay at the perimeter of the main introduction. */
@@ -1513,14 +1509,13 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 }
 @keyframes header-menu-enter { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Reveal the chat only after a project is chosen; keep the choices in place. */
-.project-prompt-reveal { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 180ms var(--ease), opacity 160ms ease; }
-.project-prompt-reveal[data-visible] { grid-template-rows: 1fr; opacity: 1; }
-.project-prompt-clip { min-height: 0; overflow: hidden; }
-.project-prompt-reveal .project-prompt { margin-bottom: 20px; animation: none; }
-.project-prompt-text { flex: 1; min-width: 0; display: flex; align-items: center; min-height: 40px; color: var(--ink); font-size: 18px; }
-.project-prompt-placeholder { color: var(--muted); }
-.intro-project-picker > .project-suggestions { margin-top: 0; }
+/* Keep the AI entry visible; fade the alternatives once a choice is made. */
+.intro-project-picker > .project-prompt { animation: none; }
+.project-prompt-text { flex: 1; min-width: 0; min-height: 40px; color: var(--ink); font-size: 18px; }
+.project-suggestion[data-suggestion] { transition: opacity 200ms ease, transform 200ms var(--ease), background-color 200ms ease, box-shadow 200ms ease; }
+.project-suggestions[data-selecting] .project-suggestion:not([data-chosen]) { opacity: 0; transform: translateY(6px); pointer-events: none; }
+.project-suggestions[data-selecting] .project-suggestion[data-chosen] { opacity: 0.6; }
 [data-phase="sending"] .project-prompt-text { opacity: 0.65; transition: opacity 160ms ease; }
+.project-prompt-submit:disabled { cursor: default; }
 @media (max-width: 47.99rem) { .project-prompt-text { font-size: 15px; } }
-@media (prefers-reduced-motion: reduce) { .project-prompt-reveal { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .project-suggestion[data-suggestion] { transition: none; } }
