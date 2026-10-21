@@ -88,6 +88,8 @@ function IntroState({ name, intro, projects, onSelect }: {
   const [query, setQuery] = useState("");
   const [phase, setPhase] = useState<"idle" | "opening" | "typing" | "sending">("idle");
   const [sculpture, setSculpture] = useState("default");
+  const [message, setMessage] = useState("");
+  const input = useRef<HTMLInputElement>(null);
   const busy = phase !== "idle";
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const running = useRef(false);
@@ -100,6 +102,7 @@ function IntroState({ name, intro, projects, onSelect }: {
     setSculpture("default");
     setPhase("idle");
     setQuery("");
+    setMessage("");
     requestAnimationFrame(() => trigger.current?.focus({ preventScroll: true }));
   };
   const openChoice = (index: number) => {
@@ -122,6 +125,8 @@ function IntroState({ name, intro, projects, onSelect }: {
     setSculpture(choice.slug);
     setQuery("");
     setPhase("opening");
+    setMessage("");
+    requestAnimationFrame(() => input.current?.focus({ preventScroll: true }));
     const text = choice.name;
     let character = 0;
     const type = () => {
@@ -151,22 +156,26 @@ function IntroState({ name, intro, projects, onSelect }: {
         </p>
         <div className="intro-positioning">{intro}</div>
         <div className="intro-project-picker">
-          <div className="project-prompt-reveal" data-visible={busy || undefined} aria-hidden={!busy} inert={!busy}>
-            <div className="project-prompt-clip">
-              <div className="project-prompt" aria-label="Opening project">
-                <span className="project-prompt-text" aria-hidden="true">{query || <span className="project-prompt-placeholder">Opening your project…</span>}</span>
-                <span className="project-prompt-submit" data-ready={query ? "" : undefined} aria-hidden="true"><svg className="prompt-send-icon" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-              </div>
-            </div>
-          </div>
-          <div className="project-suggestions" aria-label="Projects">
-            {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
+          <form className="project-prompt" aria-label="Explore projects" onSubmit={(event) => {
+            event.preventDefault();
+            if (busy) return;
+            const value = query.trim().toLowerCase();
+            const matches = value ? choices.filter((choice) => `${choice.name} ${choice.slug}`.toLowerCase().includes(value)) : [];
+            if (matches.length === 1) openChoice(matches[0].index);
+            else setMessage(value ? "Choose Gemini, Devsign, or About me below." : "Type a project name or choose below.");
+          }}>
+            <label htmlFor="project-query" className="sr-only">What would you like to explore?</label>
+            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder="What would you like to explore?" autoComplete="off" aria-describedby="project-search-status" />
+            <button type="submit" disabled={busy || !query.trim()} className="project-prompt-submit" data-ready={query.trim() ? "" : undefined} aria-label="Open matching project"><svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+          </form>
+          <div className="project-suggestions" aria-label="Projects" data-selecting={busy || undefined}>
+            {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-chosen={sculpture === project.slug || undefined} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
               {project.slug === "about" ? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="project-suggestion-icon"><circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> : <Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={18} height={18} className="project-suggestion-icon" />}
               <span>{project.name}</span>
             </button>)}
           </div>
-          <p role="status" className="sr-only">{phase === "sending" ? `Opening ${query}` : ""}</p>
+          <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `Opening ${query}` : "")}</p>
         </div>
       </div>
     </div>
