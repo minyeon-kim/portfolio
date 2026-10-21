@@ -95,15 +95,25 @@ function IntroState({ name, intro, projects, onSelect }: {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let lastReady: boolean | null = null;
+    let progress: number | null = null;
+    let lastTime = performance.now();
     const update = () => {
       frame = 0;
       const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
       const start = Math.max(0, stage.getBoundingClientRect().top + window.scrollY);
-      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / travel));
-      const ramp = (from: number, to: number) => Math.max(0, Math.min(1, (progress - from) / (to - from)));
-      const name = media.matches ? 0 : ramp(0.04, 0.38);
-      const intro = media.matches ? 0 : ramp(0.36, 0.72);
-      const explore = media.matches ? 1 : ramp(0.62, 0.94);
+      const target = Math.max(0, Math.min(1, (window.scrollY - start) / travel));
+      const now = performance.now();
+      const dt = Math.min(64, now - lastTime);
+      lastTime = now;
+      progress = progress === null || media.matches ? target : progress + (target - progress) * (1 - Math.exp(-dt / 180));
+      const current = progress;
+      const ramp = (from: number, to: number) => {
+        const t = Math.max(0, Math.min(1, (current - from) / (to - from)));
+        return t * t * (3 - 2 * t);
+      };
+      const name = media.matches ? 0 : ramp(0.08, 0.55);
+      const intro = media.matches ? 0 : ramp(0.22, 0.84);
+      const explore = media.matches ? 1 : ramp(0.58, 0.98);
       el.style.setProperty("--name-exit", String(name));
       el.style.setProperty("--intro-exit", String(intro));
       el.style.setProperty("--explore-enter", String(explore));
@@ -114,6 +124,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         picker.current.setAttribute("aria-hidden", String(!ready));
       }
       if (ready !== lastReady) { lastReady = ready; setExploreReady(ready); }
+      if (!media.matches && Math.abs(target - current) > 0.0005) frame = requestAnimationFrame(update);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
     update();
@@ -212,8 +223,8 @@ function IntroState({ name, intro, projects, onSelect }: {
       </div>
       <HeroSculpture variant={sculpture} active={phase !== "idle"} />
       <div className="intro-copy">
-        <div className="intro-name-scroll"><p className="intro-name" translate="no">
-          {name}
+        <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
+          {Array.from(name).map((char, index) => <span key={index} className="intro-name-char" aria-hidden="true" style={{ animationDelay: `${index * 55}ms` }}>{char === " " ? "\u00a0" : char}</span>)}
         </p></div>
         <div className="intro-positioning-scroll"><div className="intro-positioning">{intro}</div></div>
         <div ref={picker} className="intro-project-picker">
