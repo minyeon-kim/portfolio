@@ -1600,9 +1600,9 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
   .intro-project-picker .project-prompt input { min-height: 38px; font-size: 16px; }
 }
 
-/* The central light itself expands; no separate ambient effect is switched on. */
-.project-ai-expansion { position: absolute; inset: 0; pointer-events: none; transform: scale(1); opacity: 1; transition: transform 1500ms cubic-bezier(0.16, 0.7, 0.25, 1), opacity 1200ms ease; }
-.project-ai-orb[data-active] .project-ai-expansion { transform: scale(var(--light-spread-scale, 24)); opacity: 0.5; }
+/* The central light opens into the original flowing ambient palette. */
+.project-ai-expansion { position: absolute; inset: 0; pointer-events: none; transform: scale(1); opacity: 1; transition: transform 1000ms cubic-bezier(0.16, 0.7, 0.25, 1), opacity 700ms ease 160ms; }
+.project-ai-orb[data-active] .project-ai-expansion { transform: scale(6); opacity: 0; }
 .project-ai-orb[data-active] { z-index: -1; }
 .project-chat-welcome h2, .intro-project-picker .project-prompt, .intro-project-picker .project-suggestions { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .project-ai-expansion { transition: none; } }
@@ -1618,3 +1618,8 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
   45% { transform: translateY(-4px) scale(1.07, 1.02); }
   75% { transform: translateY(-2px) scale(1, 1.04); }
 }
+
+/* Reveal the original full-screen flow outward from the light's actual position. */
+.project-ambient-spread { position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: circle(0px at var(--light-origin-x, 50%) var(--light-origin-y, 46%)); opacity: 0; transition: clip-path 1300ms cubic-bezier(0.16, 0.7, 0.25, 1), opacity 450ms ease; }
+.project-ambient-spread[data-active] { clip-path: circle(150vmax at var(--light-origin-x, 50%) var(--light-origin-y, 46%)); opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .project-ambient-spread { transition: none; } }
