@@ -86,32 +86,27 @@ function IntroState({ name, intro, projects, onSelect }: {
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [message, setMessage] = useState("");
-  const [phase, setPhase] = useState<"idle" | "typing" | "sending" | "thinking" | "leaving">("idle");
-  const [submitted, setSubmitted] = useState("");
+  const [phase, setPhase] = useState<"idle" | "opening" | "typing" | "sending">("idle");
   const [sculpture, setSculpture] = useState("default");
   const busy = phase !== "idle";
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const running = useRef(false);
-  const input = useRef<HTMLInputElement>(null);
+  const trigger = useRef<HTMLElement | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const choices = [...projects.map((project, index) => ({ ...project, index })), { slug: "about", name: "About me", index: -1 }];
-  const matches = choices.filter((project) => busy || project.name.toLowerCase().includes(query.trim().toLowerCase()));
   const cancel = () => {
     if (timer.current) clearTimeout(timer.current);
     running.current = false;
     setSculpture("default");
     setPhase("idle");
-    setSubmitted("");
-    setMessage("");
-    requestAnimationFrame(() => input.current?.focus());
+    setQuery("");
+    requestAnimationFrame(() => trigger.current?.focus({ preventScroll: true }));
   };
-  const openChoice = (index: number, typeName = true) => {
+  const openChoice = (index: number) => {
     const choice = choices.find((item) => item.index === index);
-    if (!choice) return;
-    if (running.current) return;
+    if (!choice || running.current) return;
     running.current = true;
-    setSculpture(choice.slug);
+    trigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const finish = () => {
       if (index === -1) {
         revealNextProject(
@@ -124,33 +119,22 @@ function IntroState({ name, intro, projects, onSelect }: {
       finish();
       return;
     }
-    const send = () => {
-      setSubmitted(typeName ? choice.name : query.trim());
-      setPhase("sending");
-      setMessage("Message sent.");
-      timer.current = setTimeout(() => {
-        setPhase("thinking");
-        setMessage(`Preparing ${choice.name}…`);
-        timer.current = setTimeout(() => {
-          setPhase("leaving");
-          timer.current = setTimeout(finish, 0);
-        }, 480);
-      }, 180);
-    };
-    input.current?.focus({ preventScroll: true });
-    if (!typeName) { send(); return; }
+    setSculpture(choice.slug);
     setQuery("");
-    setPhase("typing");
-    setMessage("");
+    setPhase("opening");
     const text = choice.name;
     let character = 0;
     const type = () => {
+      setPhase("typing");
       character += 1;
       setQuery(text.slice(0, character));
-      if (character < text.length) timer.current = setTimeout(type, Math.min(55, 700 / text.length));
-      else timer.current = setTimeout(send, 160);
+      if (character < text.length) timer.current = setTimeout(type, 340 / text.length);
+      else timer.current = setTimeout(() => {
+        setPhase("sending");
+        timer.current = setTimeout(finish, 160);
+      }, 60);
     };
-    timer.current = setTimeout(type, 100);
+    timer.current = setTimeout(type, 160);
   };
 
   return (
@@ -167,34 +151,22 @@ function IntroState({ name, intro, projects, onSelect }: {
         </p>
         <div className="intro-positioning">{intro}</div>
         <div className="intro-project-picker">
-          {submitted ? (
-            <div className="project-conversation" aria-label="Project request">
-              <div className="project-user-message"><span className="sr-only">You: </span>{submitted}</div>
-              {(phase === "thinking" || phase === "leaving") && (
-                <div className="project-assistant-message">
-                  <span className="project-thinking-orbit" aria-hidden="true"><span /><span /><span /></span>
-
-                </div>
-              )}
+          <div className="project-prompt-reveal" data-visible={busy || undefined} aria-hidden={!busy} inert={!busy}>
+            <div className="project-prompt-clip">
+              <div className="project-prompt" aria-label="Opening project">
+                <span className="project-prompt-text" aria-hidden="true">{query || <span className="project-prompt-placeholder">Opening your project…</span>}</span>
+                <span className="project-prompt-submit" data-ready={query ? "" : undefined} aria-hidden="true"><svg className="prompt-send-icon" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+              </div>
             </div>
-          ) : <form className="project-prompt" role="search" aria-label="Find a project" onSubmit={(event) => {
-            event.preventDefault();
-            if (busy) return;
-            if (matches.length === 1) openChoice(matches[0].index, false);
-            else setMessage(matches.length ? "Choose a project below." : "No matching result. Try Gemini, Devsign, or About me.");
-          }}>
-            <label htmlFor="project-query" className="sr-only">Find a project</label>
-            <input ref={input} readOnly={busy} id="project-query" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder="What would you like to explore?" autoComplete="off" aria-describedby="project-search-status" />
-            <button disabled={busy} type="submit" aria-label="Open matching project" data-ready={query.trim() ? "" : undefined} className="press project-prompt-submit"><svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-          </form>}
-          {!submitted && <div className="project-suggestions" aria-label="Projects">
-            {matches.map((project) => <button key={project.slug} type="button" disabled={busy} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
+          </div>
+          <div className="project-suggestions" aria-label="Projects">
+            {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
               {project.slug === "about" ? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="project-suggestion-icon"><circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> : <Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={18} height={18} className="project-suggestion-icon" />}
               <span>{project.name}</span>
             </button>)}
-          </div>}
-          <p id="project-search-status" role="status" className={`project-search-status ${submitted ? "sr-only" : ""}`}>{message || (!matches.length ? "No matching project." : "")}</p>
+          </div>
+          <p role="status" className="sr-only">{phase === "sending" ? `Opening ${query}` : ""}</p>
         </div>
       </div>
     </div>
