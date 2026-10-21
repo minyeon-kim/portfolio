@@ -2,10 +2,10 @@ import type { ReactNode } from "react";
 
 export function CaseSection({ id, label, title, children }: { id: string; label: string; title: string; children: ReactNode }) {
   return (
-    <section id={id} className="case-section">
+    <section id={id} className="case-section" aria-labelledby={`${id}-title`}>
       <p className="case-eyebrow reveal">{label}</p>
       <div className="case-section-grid">
-        <h2 className="case-section-title reveal">{title}</h2>
+        <h2 id={`${id}-title`} className="case-section-title reveal">{title}</h2>
         <div className="case-section-copy">{children}</div>
       </div>
     </section>

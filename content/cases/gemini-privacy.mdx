@@ -36,7 +36,7 @@ export const meta = {
 - **Outcome:** Two in-place flows: answer-level source management and verifiable deletion from chat. {/* TODO: add usability test results */}
 </TLDR>
 
-## Context
+<CaseSection id="context" label="01 / Overview" title="Personalized answers need visible boundaries.">
 
 Since January 2026, Gemini's Personal Intelligence can connect Gmail, Photos, Calendar, Drive, YouTube, Search, and Contacts, and infer things across them, like relationships, recent trips, and family, that the user never typed into the chat. Disconnecting an app does not delete the insights already built from it.
 
@@ -44,7 +44,9 @@ What people leave in Gemini lands in four surfaces governed by three to four dif
 
 I scoped the redesign to the consumer Gemini app plus the Google account settings layered on top of it, using GDPR as the design benchmark. Workspace and Vertex AI follow different policies and were out of scope. This is a self-initiated concept, not affiliated with Google.
 
-## Problem
+</CaseSection>
+
+<CaseSection id="problem" label="02 / The challenge" title="People cannot control what they cannot see.">
 
 > Gemini users need a way to see and control exactly what is stored, managed, and deleted as Gemini merges information across services.
 
@@ -56,7 +58,9 @@ It breaks down in three places:
 
 > "I deleted it, but I still don't know if it's really gone. It feels like maybe only the conversation view disappeared." — Interview participant P4
 
-## Research
+</CaseSection>
+
+<CaseSection id="research" label="03 / Discover & define" title="Trace the data, then find the trust gaps.">
 
 I mapped how each surface handles retention, human review, and training, then traced when consent actually happens: a broad Google account consent at Gmail sign-up, a separate Gemini consent on first use, and per-app opt-in for each connection. Since July 7, 2025, Phone, Messages, WhatsApp, and Utilities stay connected even with Gemini Apps Activity turned off, so a person who turned "everything" off may still be sharing.
 
@@ -74,7 +78,9 @@ But an OS permission is only a ceiling. Whether Gemini actually uses data within
 
 </Callout>
 
-## Decisions
+</CaseSection>
+
+<CaseSection id="decisions" label="04 / Design direction" title="Put control where the question starts.">
 
 ### Show the source on the answer, not in settings
 
@@ -122,9 +128,13 @@ The project is about how data moves across Google's services, not privacy settin
 
 </WhyIChose>
 
-## Before & after
+</CaseSection>
+
+<CaseSection id="before-after" label="05 / The experience" title="See the source. Choose what happens next.">
 
 The same answer, with its sources and actions visible in context.
+
+</CaseSection>
 
 <BeforeAfter
   before={{
@@ -146,7 +156,7 @@ The same answer, with its sources and actions visible in context.
   { label: "Verifiable deletion from chat", caption: "Mobile sequence: found records, confirmation, and deletion result." },
 ]} />
 
-## Outcome & learnings
+<CaseSection id="outcome-learnings" label="06 / Reflection & next steps" title="A testable direction. Results still to come.">
 
 {/* TODO: usability test results. The notes describe the plan below but contain no results yet. */}
 
@@ -155,3 +165,5 @@ I planned the test as an observed scenario walkthrough instead of free tasks, be
 - **Label evidence by type.** Keeping documented cases and interview quotes apart made the persona honest and easier to defend.
 - **Check the source before acting on a summary.** A line in my own progress log led me to merge the two flows. The original transcript said the opposite.
 - **Choose the test method around what can be triggered.** Free-task testing assumes the participant can cause the problem. Here, only the AI can.
+
+</CaseSection>

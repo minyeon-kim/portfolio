@@ -60,7 +60,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     const copy = snapElements[index];
     if (!copy || !(moving.has(element) || element.closest("[data-phase]"))) return;
     const style = getComputedStyle(element);
-    Object.assign(copy.style, { opacity: style.opacity, transform: style.transform, filter: style.filter, translate: style.translate, scale: style.scale });
+    Object.assign(copy.style, { visibility: style.visibility, opacity: style.opacity, transform: style.transform, filter: style.filter, translate: style.translate, scale: style.scale });
   });
   snapshot.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
   // Animations are off inside the snapshot; keep the ambient light where it was.
