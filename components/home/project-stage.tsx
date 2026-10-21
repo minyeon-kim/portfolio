@@ -114,9 +114,11 @@ function IntroState({ name, intro, projects, onSelect }: {
       const name = media.matches ? 0 : ramp(0.08, 0.55);
       const intro = media.matches ? 0 : ramp(0.22, 0.84);
       const explore = media.matches ? 1 : ramp(0.58, 0.98);
+      const orb = media.matches ? 1 : ramp(0.48, 0.84);
       el.style.setProperty("--name-exit", String(name));
       el.style.setProperty("--intro-exit", String(intro));
       el.style.setProperty("--explore-enter", String(explore));
+      el.style.setProperty("--orb-enter", String(orb));
       el.toggleAttribute("data-scroll-ready", !media.matches);
       const ready = explore > 0.65;
       if (picker.current) {
@@ -146,7 +148,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!exploreReady) return;
-    const text = "What would you like to explore?";
+    const text = "Choose a project or type its name";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const frame = requestAnimationFrame(() => setHint(text));
       return () => cancelAnimationFrame(frame);
@@ -228,6 +230,12 @@ function IntroState({ name, intro, projects, onSelect }: {
         </p></div>
         <div className="intro-positioning-scroll"><div className="intro-positioning">{intro}</div></div>
         <div ref={picker} className="intro-project-picker">
+          <div className="project-chat-welcome">
+            <div className="project-ai-orb" data-active={busy || undefined} aria-hidden="true">
+              <div className="project-ai-orb-core"><span /><span /><span /></div>
+            </div>
+            <h2>What would you like to explore?</h2>
+          </div>
           <form className="project-prompt" aria-label="Explore projects" onSubmit={(event) => {
             event.preventDefault();
             if (busy) return;
