@@ -1521,3 +1521,9 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 /* The send control stays put and becomes a brief AI activity indicator. */
 .project-prompt-submit .project-thinking-orbit { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 40px; }
 .project-prompt-submit .project-thinking-orbit span { width: 4px; height: 4px; background: currentColor; }
+
+/* Opening navigation never paints a full header strip over the page. */
+header:has(.header-menu-trigger[aria-expanded="true"]),
+header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { background: transparent !important; backdrop-filter: none !important; }
+/* Finish the chat before introducing the destination, avoiding text afterimages. */
+.intro-surface[data-phase="leaving"] .intro-copy { opacity: 0; transform: translateY(-4px); filter: none; transition: opacity 160ms ease, transform 160ms ease; }
