@@ -1397,28 +1397,31 @@ html, body, main { overflow-anchor: none; }
 [data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
 
 
-/* End-of-case CTA: a preview of the next project's opener, no box. */
-.next-project-nav { margin-top: clamp(64px, 6vw, 112px); border-top: 1px solid var(--line); }
-.next-project {
-  display: block; width: 100%; padding-block: clamp(40px, 4vw, 72px) clamp(56px, 5vw, 96px);
-  text-align: left; color: var(--ink); cursor: pointer; border-radius: 0;
+/* End of a case: the other projects as equal cards to choose from. */
+.more-work { margin-top: clamp(64px, 6vw, 112px); padding-top: clamp(40px, 4vw, 72px); border-top: 1px solid var(--line); }
+.more-work-label { margin: 0 0 clamp(20px, 2vw, 32px); color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.more-work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.5vw, 24px); margin: 0; padding: 0; list-style: none; }
+.more-work-grid > li { display: flex; }
+.more-work-card {
+  position: relative; display: flex; flex-direction: column; gap: 12px; width: 100%; min-height: clamp(200px, 18vw, 280px);
+  padding: clamp(20px, 2vw, 32px); padding-bottom: clamp(56px, 5vw, 72px); border-radius: 16px; background: var(--color-fill); color: var(--ink);
+  transition: background-color 150ms var(--ease);
 }
-.next-project:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; border-radius: 16px; }
-.next-project-label { display: block; margin-bottom: clamp(16px, 2vw, 28px); color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
-.next-project-title {
-  display: flex; align-items: center; gap: 0.18em; width: fit-content; color: var(--ink);
-  font-family: "Bodoni MT", Didot, "Times New Roman", serif; font-weight: 400;
-  font-size: clamp(48px, 7vw, 120px); line-height: 1; letter-spacing: -0.05em;
+a.more-work-card:hover { background: var(--color-fill-strong); }
+a.more-work-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.more-work-name { font-family: "Bodoni MT", Didot, "Times New Roman", serif; font-weight: 400; font-size: clamp(32px, 3.2vw, 52px); line-height: 1.02; letter-spacing: -0.045em; }
+.more-work-name[data-variant="devsign"] { color: var(--devsign-title); }
+.more-work-name[data-variant="gemini"] { width: fit-content; background: var(--gemini-title); background-clip: text; -webkit-background-clip: text; color: transparent; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+.more-work-description { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.more-work-arrow { position: absolute; right: clamp(20px, 2vw, 32px); bottom: clamp(20px, 2vw, 28px); width: 22px; height: 22px; color: var(--ink); transition: transform 250ms var(--ease); }
+a.more-work-card:is(:hover, :focus-visible) .more-work-arrow { transform: translateX(4px); }
+.more-work-slot { background: color-mix(in srgb, var(--ink) 2%, transparent); }
+.more-work-slot-label { color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.more-work-slot .more-work-description { opacity: 0.8; }
+@media (max-width: 63.99rem) {
+  .more-work-grid { grid-template-columns: 1fr; }
+  .more-work-card { min-height: 0; }
 }
-.next-project-title[data-variant="devsign"] { color: var(--devsign-title); }
-.next-project-title[data-variant="gemini"] .next-project-name { background: var(--gemini-title); background-clip: text; -webkit-background-clip: text; color: transparent; padding-bottom: 0.12em; margin-bottom: -0.12em; }
-.next-project-title[data-variant="gemini"] { color: var(--accent); }
-.next-project-arrow { flex: none; width: 0.42em; height: 0.42em; transition: transform 250ms var(--ease); }
-.next-project-description { display: block; max-width: 640px; margin-top: clamp(16px, 2vw, 24px); color: var(--muted); font-size: clamp(15px, 1.2vw, 18px); line-height: 1.55; }
-.next-project-name { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 95%; transition: background-size 400ms var(--ease); }
-.next-project:is(:hover, :focus-visible) .next-project-arrow { transform: translateY(0.12em); }
-.next-project:is(:hover, :focus-visible) .next-project-title:not([data-variant="gemini"]) .next-project-name { background-size: 100% 1px; }
-.next-project:active .next-project-title { transform: scale(0.99); }
 @media (prefers-reduced-motion: reduce) {
-  .next-project-arrow, .next-project-name { transition: none; }
+  .more-work-arrow { transition: none; }
 }

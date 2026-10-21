@@ -31,13 +31,14 @@ export default async function Home() {
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
-          const n = (i + 1) % bodies.length;
+          const others = bodies.map((_, k) => (i + 1 + k) % bodies.length).slice(0, bodies.length - 1)
+            .map((k) => ({ index: k, slug: bodies[k].slug, name: bodies[k].meta.short ?? bodies[k].meta.title, description: bodies[k].tldr.problem }));
           return (
             <CaseBody
               key={slug}
               meta={meta}
               Content={Content}
-              next={bodies.length > 1 ? { index: n, slug: bodies[n].slug, name: bodies[n].meta.short ?? bodies[n].meta.title, description: bodies[n].tldr.problem } : undefined}
+              others={others}
             />
           );
         })}

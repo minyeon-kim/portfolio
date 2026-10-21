@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { NextProjectLink } from "@/components/next-project-link";
+import { MoreWork } from "@/components/more-work";
 import { notFound } from "next/navigation";
 import { ProjectHero } from "@/components/project-hero";
-import { getCase, getCaseSlugs, getNextCase } from "@/lib/cases";
+import { getCase, getCaseSlugs, getOtherCases } from "@/lib/cases";
 
 export function generateStaticParams() {
   return getCaseSlugs().map((slug) => ({ slug }));
@@ -21,7 +21,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
   if (!getCaseSlugs().includes(slug)) notFound();
   const { meta, Content } = await getCase(slug);
-  const next = await getNextCase(slug);
+  const others = await getOtherCases(slug);
 
   return (
     <div className="project-detail" data-case-slug={slug}>
@@ -31,11 +31,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
         <Content />
 
         </div>
-        {next && (
-          <nav aria-label="Next case" className="next-project-nav">
-            <NextProjectLink slug={next.slug} name={next.meta.short ?? next.meta.title} description={next.tldr.problem} />
-          </nav>
-        )}
+        <MoreWork items={others.map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title, description: c.tldr.problem }))} />
       </article>
     </div>
   );
