@@ -1495,8 +1495,8 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 
 /* Original floating pills, anchored beside their header control. */
 .header-menu { position: relative; width: fit-content; }
-.header-menu-trigger { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: var(--color-fill); color: var(--muted); }
-.header-menu-trigger:hover, .header-menu-trigger[aria-expanded="true"] { background: var(--color-fill-strong); color: var(--ink); }
+.header-menu-trigger { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: transparent; color: var(--muted); }
+.header-menu-trigger:hover, .header-menu-trigger[aria-expanded="true"] { background: color-mix(in srgb, var(--ink) 5%, transparent); color: var(--ink); }
 .header-menu-icon { position: relative; width: 14px; height: 10px; }
 .header-menu-icon > span { position: absolute; left: 0; width: 14px; height: 1px; background: currentColor; transition: transform 180ms ease, top 180ms ease; }
 .header-menu-icon > span:first-child { top: 2px; }
@@ -1506,8 +1506,8 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 .header-menu-panel { position: absolute; z-index: 50; top: calc(100% + 16px); left: 0; width: max-content; max-width: calc(100vw - 32px); max-height: calc(100svh - 100px); overflow-y: auto; padding: 2px; color: var(--ink); text-align: left; }
 .header-menu-projects, .header-menu-pages { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; list-style: none; padding: 0; margin: 0; }
 .header-menu-pages { margin-top: 16px; }
-.header-menu-panel a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px; border-radius: 999px; background: var(--color-fill-strong); backdrop-filter: blur(20px); font-size: 16px; line-height: 1.4; transition: background-color 150ms ease; }
-.header-menu-panel a:hover { background: color-mix(in srgb, var(--ink) 18%, var(--bg)); }
+.header-menu-panel a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px; border: 1px solid var(--line); border-radius: 999px; background: transparent; backdrop-filter: blur(12px); font-size: 16px; line-height: 1.4; transition: background-color 150ms ease, border-color 150ms ease; }
+.header-menu-panel a:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); border-color: var(--muted); }
 .header-menu-panel a[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--ink); }
 .header-menu-panel a:focus-visible, .header-menu-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .header-menu-contact { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 16px; }
