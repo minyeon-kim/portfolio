@@ -47,7 +47,7 @@ export function ProjectStage({ projects, name, intro }: Props) {
     <>
       {active === null && (
     <section id="work" aria-label="Introduction" className="intro-stage full-bleed md:-mt-[64px] bg-bg">
-      <div className="relative flex min-h-svh flex-col pt-6 pb-6 md:h-svh md:min-h-[720px] md:pt-0 md:pb-0">
+      <div className="intro-scroll-viewport">
         <IntroState name={name} intro={intro} projects={projects} onSelect={select} />
       </div>
     </section>
@@ -85,6 +85,48 @@ function IntroState({ name, intro, projects, onSelect }: {
   onSelect: (index: number) => void;
 }) {
   const router = useRouter();
+  const surface = useRef<HTMLDivElement>(null);
+  const picker = useRef<HTMLDivElement>(null);
+  const [exploreReady, setExploreReady] = useState(false);
+  useLayoutEffect(() => {
+    const el = surface.current;
+    const stage = el?.closest<HTMLElement>(".intro-stage");
+    if (!el || !stage) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    let lastReady: boolean | null = null;
+    const update = () => {
+      frame = 0;
+      const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
+      const start = Math.max(0, stage.getBoundingClientRect().top + window.scrollY);
+      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / travel));
+      const ramp = (from: number, to: number) => Math.max(0, Math.min(1, (progress - from) / (to - from)));
+      const name = media.matches ? 0 : ramp(0.04, 0.38);
+      const intro = media.matches ? 0 : ramp(0.36, 0.72);
+      const explore = media.matches ? 1 : ramp(0.62, 0.94);
+      el.style.setProperty("--name-exit", String(name));
+      el.style.setProperty("--intro-exit", String(intro));
+      el.style.setProperty("--explore-enter", String(explore));
+      el.toggleAttribute("data-scroll-ready", !media.matches);
+      const ready = explore > 0.65;
+      if (picker.current) {
+        picker.current.inert = !ready;
+        picker.current.setAttribute("aria-hidden", String(!ready));
+      }
+      if (ready !== lastReady) { lastReady = ready; setExploreReady(ready); }
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    media.addEventListener("change", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      media.removeEventListener("change", schedule);
+    };
+  }, []);
   const [query, setQuery] = useState("");
   const [phase, setPhase] = useState<"idle" | "opening" | "typing" | "sending" | "leaving">("idle");
   const [sculpture, setSculpture] = useState("default");
@@ -92,6 +134,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const [hint, setHint] = useState("");
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    if (!exploreReady) return;
     const text = "What would you like to explore?";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const frame = requestAnimationFrame(() => setHint(text));
@@ -104,7 +147,7 @@ function IntroState({ name, intro, projects, onSelect }: {
       if (index === text.length) clearInterval(interval);
     }, 55);
     return () => clearInterval(interval);
-  }, []);
+  }, [exploreReady]);
   const busy = phase !== "idle";
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const running = useRef(false);
@@ -161,7 +204,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   };
 
   return (
-    <div data-phase={phase} aria-busy={busy} onKeyDown={(event) => { if (event.key === "Escape" && busy) cancel(); }} className="intro-surface order-1 flex flex-1 flex-col justify-center px-2 md:px-4">
+    <div ref={surface} data-phase={phase} aria-busy={busy} onKeyDown={(event) => { if (event.key === "Escape" && busy) cancel(); }} className="intro-surface order-1 flex flex-1 flex-col justify-center px-2 md:px-4">
       <div aria-hidden="true" className="intro-ambient">
         <span className="intro-ambient-blue" />
         <span className="intro-ambient-violet" />
@@ -169,11 +212,11 @@ function IntroState({ name, intro, projects, onSelect }: {
       </div>
       <HeroSculpture variant={sculpture} active={phase !== "idle"} />
       <div className="intro-copy">
-        <p className="intro-name" translate="no">
+        <div className="intro-name-scroll"><p className="intro-name" translate="no">
           {name}
-        </p>
-        <div className="intro-positioning">{intro}</div>
-        <div className="intro-project-picker">
+        </p></div>
+        <div className="intro-positioning-scroll"><div className="intro-positioning">{intro}</div></div>
+        <div ref={picker} className="intro-project-picker">
           <form className="project-prompt" aria-label="Explore projects" onSubmit={(event) => {
             event.preventDefault();
             if (busy) return;
@@ -198,6 +241,12 @@ function IntroState({ name, intro, projects, onSelect }: {
           <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `Opening ${query}` : "")}</p>
         </div>
       </div>
+      <button type="button" className="intro-explore-cue" tabIndex={exploreReady ? -1 : 0} onClick={() => {
+        const stage = surface.current?.closest<HTMLElement>(".intro-stage");
+        if (!stage) return;
+        const start = Math.max(0, stage.getBoundingClientRect().top + window.scrollY);
+        window.scrollTo({ top: start + stage.offsetHeight - window.innerHeight, behavior: "smooth" });
+      }}>Explore projects <span aria-hidden="true">↓</span></button>
     </div>
   );
 }
