@@ -10,9 +10,8 @@ gsap.registerPlugin(useGSAP, ScrambleTextPlugin, SplitText);
 
 const CHARS = "01#$%&";
 const LOAD_DURATION = 1.2; // seconds, the hard cap for the load reveal
-const RADIUS = 56; // px around the cursor that re-scrambles after load (2-3 glyphs)
-const HOVER_DURATION = 0.85; // seconds, cursor re-scramble at the cursor's center
-const HOVER_MIN_DURATION = 0.4; // edge glyphs still get a readable decrypt beat
+const RADIUS = 28; // px around the cursor; keep the hover effect to 1-2 glyphs
+const HOVER_DURATION = 0.35; // seconds, cursor re-scramble at the cursor's center
 // Kept light: only a short run of glyphs is ever scrambled at once.
 const GLYPH_SCRAMBLE = 0.1; // seconds each glyph spends scrambled on load (~9-glyph front)
 const SPEED = 0.25; // how often a scrambled glyph changes (lower = calmer)
@@ -61,12 +60,12 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
             );
             if (dist >= RADIUS || gsap.isTweening(char)) continue;
             // Let each glyph finish instead of restarting it on every mouse move.
-            const duration = HOVER_MIN_DURATION + (HOVER_DURATION - HOVER_MIN_DURATION) * (1 - dist / RADIUS);
+            const duration = HOVER_DURATION * (1 - dist / RADIUS);
             gsap.to(char, {
               duration,
               ease: "none",
               overwrite: true,
-              scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: 0.18, revealDelay: duration * 0.65 },
+              scrambleText: { text: char.dataset.char ?? "", chars: "01", speed: 0.1 },
             });
           }
         };

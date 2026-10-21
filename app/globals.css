@@ -943,8 +943,8 @@ details[open]::details-content {
 .gemini-title-lines > span { display: block; width: fit-content; background: var(--gemini-title); background-clip: text; color: transparent; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .gemini-title-lines .gemini-title-first { display: flex; align-items: center; gap: 0.22em; }
 .gemini-brand-mark { width: 0.52em; height: 0.52em; object-fit: contain; flex-shrink: 0; }
-.project-prompt { background: color-mix(in srgb, var(--ink) 2%, var(--intro-canvas)); border-color: var(--line); backdrop-filter: none; }
-.project-prompt:focus-within { background: var(--intro-canvas); border-color: var(--accent); }
+.project-prompt { background: color-mix(in srgb, var(--intro-canvas) 30%, transparent); border-color: var(--line); backdrop-filter: none; }
+.project-prompt:focus-within { background: color-mix(in srgb, var(--intro-canvas) 45%, transparent); border-color: var(--accent); }
 .project-prompt input::placeholder, .project-search-status { color: var(--muted); }
 .project-suggestion { background: var(--color-fill); }
 .project-suggestion:hover { background: var(--color-fill-strong); }
