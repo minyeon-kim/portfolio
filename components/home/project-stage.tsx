@@ -119,6 +119,7 @@ function IntroState({ name, intro, projects, onSelect }: {
       el.style.setProperty("--intro-exit", String(intro));
       el.style.setProperty("--explore-enter", String(explore));
       el.style.setProperty("--orb-enter", String(orb));
+      el.style.setProperty("--welcome-enter", String(media.matches ? 1 : ramp(0.56, 0.9)));
       el.toggleAttribute("data-scroll-ready", !media.matches);
       const ready = explore > 0.65;
       if (picker.current) {
@@ -148,7 +149,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!exploreReady) return;
-    const text = "Choose a project or type its name";
+    const text = "Ask me anything";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const frame = requestAnimationFrame(() => setHint(text));
       return () => cancelAnimationFrame(frame);
@@ -232,7 +233,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         <div ref={picker} className="intro-project-picker">
           <div className="project-chat-welcome">
             <div className="project-ai-orb" data-active={busy || undefined} aria-hidden="true">
-              <div className="project-ai-orb-core"><span /><span /><span /></div>
+              <HeroSculpture className="project-ai-field" variant={sculpture} active={busy} />
             </div>
             <h2>What would you like to explore?</h2>
           </div>
