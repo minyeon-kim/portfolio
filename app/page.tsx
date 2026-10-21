@@ -4,7 +4,7 @@ import { ProjectStage } from "@/components/home/project-stage";
 import { SideRail } from "@/components/home/side-rail";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { getCase, getCases } from "@/lib/cases";
-import { nav, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 // The landing page: an intro (name + positioning, pick a case), then, once a
 // case is picked, its stage and its content, so scrolling reads into it.
@@ -14,7 +14,7 @@ export default async function Home() {
 
   return (
     <>
-      <SideRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} pages={nav} />
+      <SideRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} />
       <ProjectStage
         projects={featured.map(({ slug, meta, tldr }) => ({
           slug,

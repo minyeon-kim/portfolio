@@ -1,9 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { HomeLink } from "@/components/home/case-panels";
-import { experiments } from "@/components/playground/experiments";
 import { getCases } from "@/lib/cases";
-import { nav, site, withBase } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
 import { HeaderShell } from "./header-shell";
 import { SiteMenu } from "./site-menu";
 import { ThemeToggle } from "./theme-toggle";
@@ -24,15 +23,10 @@ export async function SiteHeader() {
       <div className="site-header-bar mx-auto grid max-w-full grid-cols-[1fr_auto_1fr] items-center gap-2 py-2 transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[360px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
         <div>
           <SiteMenu
-            cases={cases.map(({ slug, meta, tldr }) => ({
+            cases={cases.map(({ slug, meta }) => ({
               slug,
               name: meta.short ?? meta.title,
-              problem: tldr.problem,
-              role: meta.role,
-              cover: meta.cover,
             }))}
-            pages={nav}
-            experiments={experiments.map((x) => x.title)}
             contact={{
               email: site.email,
               linkedinUrl: site.linkedinUrl,
