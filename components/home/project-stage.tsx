@@ -88,6 +88,26 @@ function IntroState({ name, intro, projects, onSelect }: {
   const surface = useRef<HTMLDivElement>(null);
   const picker = useRef<HTMLDivElement>(null);
   const [exploreReady, setExploreReady] = useState(false);
+  const [welcomeReady, setWelcomeReady] = useState(false);
+  const [welcomeCount, setWelcomeCount] = useState(0);
+  const welcomePlayed = useRef(false);
+  const welcomeText = "What would you like to explore?";
+  useEffect(() => {
+    if (!welcomeReady || welcomePlayed.current) return;
+    welcomePlayed.current = true;
+    let count = 0;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const interval = setInterval(() => {
+      count = reduce ? welcomeText.length : count + 1;
+      setWelcomeCount(count);
+      if (count >= welcomeText.length) clearInterval(interval);
+    }, reduce ? 0 : 45);
+    return () => {
+      clearInterval(interval);
+      // Re-entering after a partial scroll resumes the introduction cleanly.
+      if (count < welcomeText.length) welcomePlayed.current = false;
+    };
+  }, [welcomeReady]);
   useLayoutEffect(() => {
     const el = surface.current;
     const stage = el?.closest<HTMLElement>(".intro-stage");
@@ -95,6 +115,7 @@ function IntroState({ name, intro, projects, onSelect }: {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let lastReady: boolean | null = null;
+    let lastWelcome: boolean | null = null;
     let progress: number | null = null;
     let lastTime = performance.now();
     const update = () => {
@@ -121,6 +142,8 @@ function IntroState({ name, intro, projects, onSelect }: {
       el.style.setProperty("--orb-enter", String(orb));
       el.style.setProperty("--welcome-enter", String(media.matches ? 1 : ramp(0.56, 0.9)));
       el.style.setProperty("--light-spread-scale", String(Math.max(window.innerWidth, window.innerHeight) / 65));
+      const showWelcome = orb > 0.75;
+      if (showWelcome !== lastWelcome) { lastWelcome = showWelcome; setWelcomeReady(showWelcome); }
       el.toggleAttribute("data-scroll-ready", !media.matches);
       const ready = explore > 0.65;
       if (picker.current) {
@@ -232,10 +255,10 @@ function IntroState({ name, intro, projects, onSelect }: {
         <div className="intro-positioning-scroll"><div className="intro-positioning">{intro}</div></div>
         <div ref={picker} className="intro-project-picker">
           <div className="project-chat-welcome">
-            <div className="project-ai-orb" data-active={busy || undefined} aria-hidden="true">
+            <div className="project-ai-orb" data-active={busy || undefined} data-speaking={welcomeReady && welcomeCount < welcomeText.length && !busy || undefined} aria-hidden="true">
               <div className="project-ai-expansion"><HeroSculpture className="project-ai-field" variant={sculpture} active={busy} /></div>
             </div>
-            <h2>What would you like to explore?</h2>
+            <h2 aria-label={welcomeText}><span aria-hidden="true">{welcomeText.slice(0, welcomeCount)}<span className="project-welcome-pending">{welcomeText.slice(welcomeCount)}</span></span></h2>
           </div>
           <form className="project-prompt" aria-label="Explore projects" onSubmit={(event) => {
             event.preventDefault();

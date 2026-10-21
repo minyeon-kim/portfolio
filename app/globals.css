@@ -1606,3 +1606,15 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .project-ai-orb[data-active] { z-index: -1; }
 .project-chat-welcome h2, .intro-project-picker .project-prompt, .intro-project-picker .project-suggestions { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .project-ai-expansion { transition: none; } }
+
+/* The light gathers and gently pulses as it introduces the question. */
+.project-welcome-pending { visibility: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  .project-ai-orb[data-speaking] { animation: ai-light-speaking 1.35s ease-in-out infinite; }
+  .project-ai-orb[data-speaking] .project-ai-field { animation-duration: 4.5s; }
+}
+@keyframes ai-light-speaking {
+  0%, 100% { transform: translateY(0) scale(0.96); }
+  45% { transform: translateY(-4px) scale(1.07, 1.02); }
+  75% { transform: translateY(-2px) scale(1, 1.04); }
+}
