@@ -2,7 +2,6 @@ import { CaseBody } from "@/components/home/case-body";
 import { CasePanels } from "@/components/home/case-panels";
 import { ProjectStage } from "@/components/home/project-stage";
 import { SideRail } from "@/components/home/side-rail";
-import { ScrambleHeadline } from "@/components/scramble-headline";
 import { getCase, getCases } from "@/lib/cases";
 import { site } from "@/lib/site";
 
@@ -27,7 +26,7 @@ export default async function Home() {
           concept: meta.concept,
         }))}
         name={site.name}
-        intro={<ScrambleHeadline text={site.positioning} emphasis="cybersecurity" className="intro-headline" />}
+        intro={<h1 className="intro-headline">{site.positioning}</h1>}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
