@@ -1242,37 +1242,17 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 /* Project bodies swap as a unit; old reading anchors must never move the new title. */
 html, body, main { overflow-anchor: none; }
 
-/* A faint, diffused glint rests on the upper edge and gently fades away. */
+/* A short light travels around the edge instead of outlining the whole pill. */
 .project-suggestion::before, .project-suggestion::after { content: none; animation: none; }
-.pill-border-light {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 0;
-  mask-image: radial-gradient(ellipse at 65% 0%, #000 0%, transparent 65%);
-  filter: blur(0.4px);
-}
-.pill-border-light rect {
-  x: 0.75px;
-  y: 0.75px;
-  width: calc(100% - 1.5px);
-  height: calc(100% - 1.5px);
-  rx: 22px;
-  fill: none;
-  stroke: color-mix(in srgb, var(--ink) 22%, transparent);
-  stroke-width: 1px;
-}
+.pill-border-light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; filter: blur(0.3px); }
+.pill-border-light rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 999px; fill: none; stroke: color-mix(in srgb, var(--suggestion-accent) 65%, transparent); stroke-width: 1.25px; stroke-linecap: round; stroke-dasharray: 12 88; }
 @media (prefers-reduced-motion: no-preference) {
-  .project-suggestion:not(:disabled) .pill-border-light { animation: pill-edge-glint 9s ease-in-out infinite; }
-  .project-suggestion:nth-child(2) .pill-border-light { animation-delay: -3s; }
-  .project-suggestion:nth-child(3) .pill-border-light { animation-delay: -6s; }
+  .project-suggestion:not(:disabled):not([data-suggestion="about"]) .pill-border-light { animation: pill-edge-glint 8s ease-in-out infinite; }
+  .project-suggestion:not(:disabled) .pill-border-light rect { animation: pill-edge-travel 8s linear infinite; }
+  .project-suggestion:nth-child(2) .pill-border-light, .project-suggestion:nth-child(2) .pill-border-light rect { animation-delay: -4s; }
 }
-@keyframes pill-edge-glint {
-  0%, 50%, 100% { opacity: 0; }
-  72% { opacity: 0.45; }
-}
+@keyframes pill-edge-glint { 0%, 100% { opacity: 0.1; } 30%, 70% { opacity: 0.65; } }
+@keyframes pill-edge-travel { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
 
 /* A quiet sequence: name, positioning, prompt, then suggestions. */
 @media (prefers-reduced-motion: no-preference) {
@@ -1302,22 +1282,33 @@ html, body, main { overflow-anchor: none; }
 /* Project shortcuts are the primary action; the prompt stays neutral. */
 .project-suggestion[data-suggestion] {
   --suggestion-accent: var(--muted);
-  background: var(--intro-canvas);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--suggestion-accent) 35%, transparent);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--suggestion-accent) 14%, transparent);
   transition: background-color 200ms ease, box-shadow 200ms ease;
 }
 .project-suggestion[data-suggestion="gemini-privacy"] { --suggestion-accent: var(--accent); }
 .project-suggestion[data-suggestion="workflow-app"] { --suggestion-accent: var(--devsign-title); }
 .project-suggestion[data-suggestion]:not([data-suggestion="about"]) {
-  background: color-mix(in srgb, var(--suggestion-accent) 8%, var(--intro-canvas));
+  background: color-mix(in srgb, var(--suggestion-accent) 3%, transparent);
   font-weight: 500;
 }
 .project-suggestion[data-suggestion]:is(:hover, :focus-visible) {
-  background: color-mix(in srgb, var(--suggestion-accent) 14%, var(--intro-canvas));
-  box-shadow: inset 0 0 0 1px var(--suggestion-accent);
+  background: color-mix(in srgb, var(--suggestion-accent) 7%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--suggestion-accent) 35%, transparent);
 }
-.project-suggestion[data-suggestion="about"] { box-shadow: inset 0 0 0 1px var(--line); }
-.project-suggestion .pill-border-light { display: none; }
+.project-suggestions { gap: 16px; margin-top: 24px; align-items: center; }
+.project-suggestion[data-suggestion] { min-height: 48px; padding-inline: 20px; gap: 9px; }
+.project-suggestion[data-suggestion="about"] { background: transparent; box-shadow: none; padding-inline: 10px; color: var(--muted); }
+.project-suggestion[data-suggestion="about"] span { color: inherit; }
+.project-suggestion[data-suggestion="about"]:is(:hover, :focus-visible) { color: var(--ink); background: transparent; box-shadow: none; }
+.project-suggestion[data-suggestion="about"] .pill-border-light { display: none; }
+.project-prompt { border-color: color-mix(in srgb, var(--ink) 9%, transparent); }
+.project-prompt:focus-within { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+@media (max-width: 47.99rem) {
+  .project-suggestions { column-gap: 12px; row-gap: 10px; margin-top: 20px; }
+  .project-suggestion[data-suggestion] { padding-inline: 16px; }
+  .project-suggestion[data-suggestion="about"] { padding-inline: 8px; }
+}
 
 /* Soft flowing color pools stay at the perimeter of the main introduction. */
 .hero-sculpture {
