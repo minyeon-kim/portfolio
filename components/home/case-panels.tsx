@@ -5,6 +5,7 @@ import { Children, type ReactNode } from "react";
 import { revealNextProject } from "@/lib/project-transition";
 import { setUi, useUi } from "@/lib/ui-store";
 import { withBase } from "@/lib/site";
+import { NextProjectContent } from "@/components/next-project-content";
 
 // Below the stage: the selected case's full content, so scrolling down reads
 // straight into it. Nothing is mounted until a case is picked (the intro has
@@ -43,7 +44,7 @@ export function HomeLink({ className, children }: { className?: string; children
 
 // End of a case on the landing page: switch to the next one and glide back
 // up to its cover.
-export function NextCaseButton({ index, name }: { index: number; name: string }) {
+export function NextCaseButton({ index, slug, name, description }: { index: number; slug: string; name: string; description?: string }) {
   return (
     <button
       type="button"
@@ -53,15 +54,9 @@ export function NextCaseButton({ index, name }: { index: number; name: string })
           window.scrollTo({ top: 0, behavior: "instant" });
         }, () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)));
       }}
-      className="group press block w-full rounded-md bg-fill p-3 text-left transition-colors duration-150 ease-standard hover:bg-fill-strong"
+      className="next-project"
     >
-      <span className="mb-1 block font-mono text-xs text-muted">Next project</span>
-      <span className="flex items-baseline gap-1 text-lg">
-        {name}
-        <span aria-hidden="true" className="transition-transform duration-250 ease-standard group-hover:translate-y-0.5">
-          ↓
-        </span>
-      </span>
+      <NextProjectContent slug={slug} name={name} description={description} />
     </button>
   );
 }

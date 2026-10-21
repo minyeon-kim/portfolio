@@ -1396,3 +1396,29 @@ html, body, main { overflow-anchor: none; }
 /* The turned phone reaches past its frame; let it, so the start pose is visible. */
 [data-gemini="true"] .generated-frame, .project-hero[data-gemini="true"] .project-hero-cover { overflow: visible; }
 
+
+/* End-of-case CTA: a preview of the next project's opener, no box. */
+.next-project-nav { margin-top: clamp(64px, 6vw, 112px); border-top: 1px solid var(--line); }
+.next-project {
+  display: block; width: 100%; padding-block: clamp(40px, 4vw, 72px) clamp(56px, 5vw, 96px);
+  text-align: left; color: var(--ink); cursor: pointer; border-radius: 0;
+}
+.next-project:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; border-radius: 16px; }
+.next-project-label { display: block; margin-bottom: clamp(16px, 2vw, 28px); color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.next-project-title {
+  display: flex; align-items: center; gap: 0.18em; width: fit-content; color: var(--ink);
+  font-family: "Bodoni MT", Didot, "Times New Roman", serif; font-weight: 400;
+  font-size: clamp(48px, 7vw, 120px); line-height: 1; letter-spacing: -0.05em;
+}
+.next-project-title[data-variant="devsign"] { color: var(--devsign-title); }
+.next-project-title[data-variant="gemini"] .next-project-name { background: var(--gemini-title); background-clip: text; -webkit-background-clip: text; color: transparent; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+.next-project-title[data-variant="gemini"] { color: var(--accent); }
+.next-project-arrow { flex: none; width: 0.42em; height: 0.42em; transition: transform 250ms var(--ease); }
+.next-project-description { display: block; max-width: 640px; margin-top: clamp(16px, 2vw, 24px); color: var(--muted); font-size: clamp(15px, 1.2vw, 18px); line-height: 1.55; }
+.next-project-name { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 95%; transition: background-size 400ms var(--ease); }
+.next-project:is(:hover, :focus-visible) .next-project-arrow { transform: translateY(0.12em); }
+.next-project:is(:hover, :focus-visible) .next-project-title:not([data-variant="gemini"]) .next-project-name { background-size: 100% 1px; }
+.next-project:active .next-project-title { transform: scale(0.99); }
+@media (prefers-reduced-motion: reduce) {
+  .next-project-arrow, .next-project-name { transition: none; }
+}
