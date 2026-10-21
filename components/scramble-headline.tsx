@@ -149,6 +149,7 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
           split.revert();
         };
       });
+      return () => mm.revert();
     },
     { scope: ref, dependencies: [text, emphasis] },
   );

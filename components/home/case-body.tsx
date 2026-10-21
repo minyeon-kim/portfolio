@@ -15,6 +15,7 @@ export function CaseBody({
   return (
     <article className="case-study" data-project={meta.short === "Devsign" ? "devsign" : "gemini"}>
       <div className="case-content">
+        <p className="case-draft-note">Working draft · Content and visuals in progress</p>
         <Content />
       </div>
       <MoreWork items={others} />

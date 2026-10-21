@@ -68,12 +68,16 @@ function readToc(source: string): TocItem[] {
   for (const [, label] of source.matchAll(/^## (.+)$/gm)) {
     items.push({ id: slugify(label), label });
   }
+  for (const [, id, label] of source.matchAll(/<CaseSection id="([^"]+)" label="([^"]+)"/g)) {
+    items.push({ id, label: label.replace(/^\d+\s*\/\s*/, "") });
+  }
   return items;
 }
 
 // The `### ` headings inside "## Decisions", used as jump links on the landing page.
 function readDecisions(source: string): TocItem[] {
-  const section = source.split(/^## Decisions\s*$/m)[1]?.split(/^## /m)[0] ?? "";
+  const section = source.match(/<CaseSection id="decisions"[^>]*>([\s\S]*?)<\/CaseSection>/)?.[1]
+    ?? source.split(/^## Decisions\s*$/m)[1]?.split(/^## /m)[0] ?? "";
   return [...section.matchAll(/^### (.+)$/gm)].map(([, label]) => ({ id: slugify(label), label }));
 }
 
