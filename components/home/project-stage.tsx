@@ -8,6 +8,7 @@ import { setUi, useUi } from "@/lib/ui-store";
 import { revealNextProject } from "@/lib/project-transition";
 import { Segmented } from "./segmented";
 import { HeroSculpture } from "./hero-sculpture";
+import { IntroShowcase } from "./intro-showcase";
 import { GeminiDevice } from "@/components/gemini-device";
 import { withBase } from "@/lib/site";
 
@@ -87,7 +88,9 @@ function IntroState({ name, intro, projects, onSelect }: {
   const router = useRouter();
   const surface = useRef<HTMLDivElement>(null);
   const picker = useRef<HTMLDivElement>(null);
+  const showcase = useRef<HTMLDivElement>(null);
   const [exploreReady, setExploreReady] = useState(false);
+  const [showcaseVisible, setShowcaseVisible] = useState(false);
   const [welcomeCount, setWelcomeCount] = useState(-1);
   const welcomePlayed = useRef(false);
   const welcomeText = "What would you like to explore?";
@@ -137,10 +140,14 @@ function IntroState({ name, intro, projects, onSelect }: {
         const t = Math.max(0, Math.min(1, (current - from) / (to - from)));
         return t * t * (3 - 2 * t);
       };
-      const name = media.matches ? 0 : ramp(0.08, 0.55);
-      const intro = media.matches ? 0 : ramp(0.22, 0.84);
-      const explore = media.matches ? 1 : ramp(0.58, 0.98);
-      const orb = media.matches ? 1 : ramp(0.48, 0.84);
+      const split = media.matches ? 0 : ramp(0.03, 0.28);
+      const showcaseExit = media.matches ? 0 : ramp(0.46, 0.66);
+      const name = media.matches ? 0 : ramp(0.48, 0.68);
+      const intro = media.matches ? 0 : ramp(0.52, 0.76);
+      const explore = media.matches ? 1 : ramp(0.7, 0.98);
+      const orb = media.matches ? 1 : ramp(0.64, 0.86);
+      el.style.setProperty("--split", String(split));
+      el.style.setProperty("--showcase-exit", String(showcaseExit));
       el.style.setProperty("--name-exit", String(name));
       el.style.setProperty("--intro-exit", String(intro));
       el.style.setProperty("--explore-enter", String(explore));
@@ -152,6 +159,12 @@ function IntroState({ name, intro, projects, onSelect }: {
         picker.current.setAttribute("aria-hidden", String(!ready));
       }
       if (ready !== lastReady) { lastReady = ready; setExploreReady(ready); }
+      const shown = split > 0.5 && showcaseExit < 0.5 && showcase.current?.offsetParent != null;
+      if (showcase.current) {
+        showcase.current.inert = !shown;
+        showcase.current.setAttribute("aria-hidden", String(!shown));
+      }
+      setShowcaseVisible(shown);
       if (!media.matches && Math.abs(target - current) > 0.0005) frame = requestAnimationFrame(update);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
@@ -242,6 +255,9 @@ function IntroState({ name, intro, projects, onSelect }: {
       </div>
       <div className="project-ambient-spread" data-active={busy || undefined} aria-hidden="true">
         <HeroSculpture variant={sculpture} active={busy} />
+      </div>
+      <div ref={showcase} className="intro-showcase-scroll">
+        <IntroShowcase projects={projects.map((project, index) => ({ ...project, index }))} visible={showcaseVisible && !busy} onOpen={onSelect} />
       </div>
       <div className="intro-copy">
         <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
