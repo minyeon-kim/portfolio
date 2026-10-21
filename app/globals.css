@@ -1426,3 +1426,7 @@ a.more-work-card:is(:hover, :focus-visible) .more-work-arrow { transform: transl
 @media (prefers-reduced-motion: reduce) {
   .more-work-arrow { transition: none; }
 }
+
+/* The fixed project rail sits above the transition layers; keep it out of the
+   page change and let it ease in once the new page has landed. */
+:root[data-project-navigation] .project-rail { opacity: 0 !important; translate: -8px 0 !important; transition: none !important; }
