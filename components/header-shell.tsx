@@ -2,19 +2,23 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, type ReactNode } from "react";
+import { useUi } from "@/lib/ui-store";
 
 // Marks the header `data-compact` once the page has scrolled a little, so CSS
 // can fold the full-width bar into a small floating one (md and up).
 export function HeaderShell({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
   // On the landing page the header floats over the full-screen cover.
-  const overStage = usePathname() === "/";
+  const pathname = usePathname();
+  const overStage = pathname === "/";
+  const activeCase = useUi((state) => state.activeCase);
+  const canCompact = pathname.startsWith("/work/") || (overStage && activeCase !== null);
 
   useEffect(() => {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const next = window.scrollY > 64;
+      const next = canCompact && window.scrollY > 64;
       ref.current?.toggleAttribute("data-compact", next);
     };
     const schedule = () => {
@@ -26,7 +30,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
     };
-  }, []);
+  }, [canCompact]);
 
   return (
     <header
