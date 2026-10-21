@@ -296,6 +296,7 @@ function IntroState({ name, intro, projects, onSelect }: {
               {phase === "sending" || phase === "leaving" ? <span className="project-thinking-orbit" aria-hidden="true"><span /><span /><span /></span> : <svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </button>
           </div>
+          </form>
           <div className="project-suggestions" aria-label="Projects" data-selecting={busy || undefined}>
             {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-chosen={sculpture === project.slug || undefined} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
@@ -303,7 +304,6 @@ function IntroState({ name, intro, projects, onSelect }: {
               <span>{project.name}</span>
             </button>)}
           </div>
-          </form>
           <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `Opening ${query}` : "")}</p>
         </div>
       </div>

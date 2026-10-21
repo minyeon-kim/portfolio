@@ -1633,20 +1633,17 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .project-ai-orb[data-dismissed]:not([data-active]) .project-ai-expansion { transform: scale(0); opacity: 0; animation: ai-orb-pop 220ms cubic-bezier(0.3, 0, 0.7, 1) both; }
 @keyframes ai-orb-pop { 0% { transform: scale(1); opacity: 1; } 35% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .project-ai-orb[data-dismissed]:not([data-active]) .project-ai-expansion { animation: none; } }
-/* Suggestions sit inside the chat capsule, replacing the idle placeholder. */
+/* Suggestions sit as pills below the chat bar. */
 .intro-project-picker .project-prompt { position: relative; display: block; min-height: 64px; padding: 10px; border-radius: 34px; }
 .project-prompt-row { display: flex; align-items: center; gap: 12px; padding-left: 12px; }
 .project-prompt-row input { flex: 1; min-width: 0; }
-.project-prompt .project-suggestions { position: absolute; inset: 8px 64px 8px 16px; margin: 0; gap: 10px; align-content: center; pointer-events: none; transition: opacity 150ms ease; }
-.project-prompt .project-suggestion { pointer-events: auto; }
-.project-prompt .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 14px; font-size: 14px; }
-.project-prompt:has(input:focus) .project-suggestions, .project-prompt[data-has-query] .project-suggestions { opacity: 0; pointer-events: none; }
+.intro-project-picker .project-suggestions { justify-content: center; gap: 10px; margin-top: 16px; }
+.intro-project-picker .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 16px; font-size: 14px; }
 @media (max-width: 47.99rem) {
   .project-chat-welcome { height: 94px; }
-  .intro-project-picker .project-prompt { min-height: 116px; border-radius: 28px; }
-  .project-prompt-row { min-height: 94px; }
-  .project-prompt .project-suggestions { inset: 12px 58px 12px 14px; gap: 8px; }
-  .project-prompt .project-suggestion[data-suggestion] { padding-inline: 12px; font-size: 13px; min-height: 40px; }
+  .intro-project-picker .project-prompt { border-radius: 28px; }
+  .intro-project-picker .project-suggestions { gap: 8px; }
+  .intro-project-picker .project-suggestion[data-suggestion] { padding-inline: 12px; font-size: 13px; min-height: 40px; }
 }
 
 /* Intro middle step (wide screens): name and positioning move to the left and
