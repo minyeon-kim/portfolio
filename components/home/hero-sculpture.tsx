@@ -58,7 +58,7 @@ void main() {
 `;
 
 // Diffused color fields: no solid geometry or external assets.
-export function HeroSculpture({ variant = "default", active = false }: { variant?: string; active?: boolean }) {
+export function HeroSculpture({ variant = "default", active = false, className = "hero-sculpture" }: { variant?: string; active?: boolean; className?: string }) {
   const destination = useRef(variant);
   const excited = useRef(active);
   useEffect(() => { excited.current = active; }, [active]);
@@ -204,5 +204,5 @@ export function HeroSculpture({ variant = "default", active = false }: { variant
       gl.deleteBuffer(buffer); gl.deleteProgram(program); gl.deleteShader(vs); gl.deleteShader(fs);
     };
   }, []); // The variant is read from a ref to preserve the GPU context across changes.
-  return <canvas ref={ref} className="hero-sculpture" data-sculpture={variant} data-active={active || undefined} aria-hidden="true" />;
+  return <canvas ref={ref} className={className} data-sculpture={variant} data-active={active || undefined} aria-hidden="true" />;
 }
