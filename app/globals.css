@@ -1244,14 +1244,17 @@ html, body, main { overflow-anchor: none; }
 
 /* A short light travels around the edge instead of outlining the whole pill. */
 .project-suggestion::before, .project-suggestion::after { content: none; animation: none; }
-.pill-border-light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; filter: blur(0.3px); }
-.pill-border-light rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 999px; fill: none; stroke: color-mix(in srgb, var(--suggestion-accent) 65%, transparent); stroke-width: 1.25px; stroke-linecap: round; stroke-dasharray: 12 88; }
+.pill-border-light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; overflow: visible; }
+/* Both radii must be explicit: rx alone at 999px makes SVG clamp the
+   horizontal radius to half the width, producing an ellipse instead of a pill. */
+.pill-border-light rect { x: 0.75px; y: 0.75px; width: calc(100% - 1.5px); height: calc(100% - 1.5px); rx: 23.25px; ry: 23.25px; fill: none; stroke: var(--suggestion-accent); stroke-linecap: round; stroke-dasharray: 7 93; }
+.pill-border-light .pill-edge-core { stroke-width: 1.25px; }
+.pill-border-light .pill-edge-glow { stroke-width: 4px; filter: blur(3px); opacity: 0.55; }
 @media (prefers-reduced-motion: no-preference) {
-  .project-suggestion:not(:disabled):not([data-suggestion="about"]) .pill-border-light { animation: pill-edge-glint 8s ease-in-out infinite; }
+  .project-suggestion:not(:disabled):not([data-suggestion="about"]) .pill-border-light { opacity: 0.8; }
   .project-suggestion:not(:disabled) .pill-border-light rect { animation: pill-edge-travel 8s linear infinite; }
-  .project-suggestion:nth-child(2) .pill-border-light, .project-suggestion:nth-child(2) .pill-border-light rect { animation-delay: -4s; }
+  .project-suggestion:nth-child(2) .pill-border-light rect { animation-delay: -4s; }
 }
-@keyframes pill-edge-glint { 0%, 100% { opacity: 0.1; } 30%, 70% { opacity: 0.65; } }
 @keyframes pill-edge-travel { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
 
 /* A quiet sequence: name, positioning, prompt, then suggestions. */
