@@ -89,7 +89,22 @@ function IntroState({ name, intro, projects, onSelect }: {
   const [phase, setPhase] = useState<"idle" | "opening" | "typing" | "sending" | "leaving">("idle");
   const [sculpture, setSculpture] = useState("default");
   const [message, setMessage] = useState("");
+  const [hint, setHint] = useState("");
   const input = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const text = "What would you like to explore?";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const frame = requestAnimationFrame(() => setHint(text));
+      return () => cancelAnimationFrame(frame);
+    }
+    let index = 0;
+    const interval = setInterval(() => {
+      index += 1;
+      setHint(text.slice(0, index));
+      if (index === text.length) clearInterval(interval);
+    }, 55);
+    return () => clearInterval(interval);
+  }, []);
   const busy = phase !== "idle";
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const running = useRef(false);
@@ -133,7 +148,7 @@ function IntroState({ name, intro, projects, onSelect }: {
       setPhase("typing");
       character += 1;
       setQuery(text.slice(0, character));
-      if (character < text.length) timer.current = setTimeout(type, 340 / text.length);
+      if (character < text.length) timer.current = setTimeout(type, Math.min(65, 1000 / text.length));
       else timer.current = setTimeout(() => {
         setPhase("sending");
         timer.current = setTimeout(() => {
@@ -168,7 +183,7 @@ function IntroState({ name, intro, projects, onSelect }: {
             else setMessage(value ? "Choose Gemini, Devsign, or About me below." : "Type a project name or choose below.");
           }}>
             <label htmlFor="project-query" className="sr-only">What would you like to explore?</label>
-            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder="What would you like to explore?" autoComplete="off" aria-describedby="project-search-status" />
+            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} placeholder={hint} autoComplete="off" aria-describedby="project-search-status" />
             <button type="submit" disabled={busy || !query.trim()} className="project-prompt-submit" data-ready={query.trim() ? "" : undefined} aria-label={phase === "sending" ? "Opening project" : "Open matching project"}>
               {phase === "sending" || phase === "leaving" ? <span className="project-thinking-orbit" aria-hidden="true"><span /><span /><span /></span> : <svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </button>
