@@ -63,6 +63,9 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     Object.assign(copy.style, { visibility: style.visibility, opacity: style.opacity, transform: style.transform, filter: style.filter, translate: style.translate, scale: style.scale });
   });
   snapshot.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+  // The chat has already faded before departure. Keep only its canvas in the
+  // outgoing layer so cloned controls/text cannot reappear over the project.
+  snapshot.querySelectorAll(".intro-copy").forEach((element) => element.remove());
   // Animations are off inside the snapshot; keep the ambient light where it was.
   const liveAmbient = main.querySelector<HTMLElement>(".intro-ambient");
   const snapAmbient = snapshot.querySelector<HTMLElement>(".intro-ambient");
