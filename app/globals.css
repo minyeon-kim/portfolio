@@ -813,6 +813,7 @@ details[open]::details-content {
 [data-canvas="true"] .selected-stage-object,
 [data-gemini="true"] .selected-stage-object { outline: none; }
 [data-canvas="true"] .generated-frame { outline: 1px solid #3dd491; outline-offset: 2px; }
+[data-canvas="true"] .generated-frame { background: transparent; }
 [data-gemini="true"] .generated-frame { outline: 1px solid rgb(157 190 255 / 0.2); outline-offset: -1px; }
 @keyframes generated-frame {
   from { opacity: 0; transform: translateY(24px) scale(0.96); }
