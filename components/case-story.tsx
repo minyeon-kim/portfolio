@@ -18,8 +18,6 @@ type MediaProps = {
   label: string;
   caption?: string;
   variant?: "wide" | "screen" | "portrait" | "phone" | "logo";
-  // "column" lines the image up with the body text; "full" spans the page.
-  size?: "column" | "full";
   // With a src the image is shown at its own aspect ratio; without one, a labelled placeholder.
   src?: string;
   alt?: string;
@@ -27,12 +25,12 @@ type MediaProps = {
   height?: number;
 };
 
-export function CaseMedia({ label, caption, variant = "wide", size = "column", src, alt, width = 1600, height = 1000 }: MediaProps) {
+export function CaseMedia({ label, caption, variant = "wide", src, alt, width = 1600, height = 1000 }: MediaProps) {
   return (
-    <figure className={`case-media case-media-${variant} case-media-${size} reveal`}>
+    <figure className={`case-media case-media-${variant} reveal`}>
       {src ? (
         <div className="case-media-image">
-          <Image src={withBase(src)} alt={alt ?? label} width={width} height={height} sizes={variant === "phone" ? "(max-width: 767px) 50vw, 320px" : size === "full" ? "(max-width: 767px) 100vw, 1200px" : "(max-width: 767px) 100vw, 720px"} />
+          <Image src={withBase(src)} alt={alt ?? label} width={width} height={height} sizes={variant === "phone" ? "(max-width: 767px) 50vw, 320px" : "(max-width: 767px) 100vw, 880px"} />
         </div>
       ) : (
         <div className="case-media-space" role="img" aria-label={`Image placeholder: ${label}`}>
@@ -47,8 +45,8 @@ export function CaseMedia({ label, caption, variant = "wide", size = "column", s
   );
 }
 
-export function CaseMediaPair({ children, columns = 2, size = "column" }: { children: ReactNode; columns?: 2 | 3 | 4; size?: "column" | "full" }) {
-  return <div className={`case-media-pair case-media-pair-${size}`} style={{ "--media-columns": columns } as CSSProperties}>{children}</div>;
+export function CaseMediaPair({ children, columns = 2 }: { children: ReactNode; columns?: 2 | 3 | 4 }) {
+  return <div className="case-media-pair" style={{ "--media-columns": columns } as CSSProperties}>{children}</div>;
 }
 
 export function CaseStatement({ children }: { children: ReactNode }) {
