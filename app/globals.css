@@ -1847,3 +1847,17 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .intro-showcase-dot:hover::before { background: color-mix(in srgb, var(--ink) 55%, transparent); }
 @media (max-width: 74.99rem) {
 }
+
+/* TL;DR already closes with a rule; the first section after it shouldn't add a second one. */
+.case-content > section[aria-labelledby="tldr"] + .case-section { border-top: 0; }
+
+/* About has no cover image, so its opener sits in the same column as the body
+   instead of spanning the page and then narrowing. */
+[data-about-page] .project-hero-heading { max-width: 880px; margin-inline: auto; padding-inline: 0; box-sizing: content-box; }
+@media (max-width: 60rem) { [data-about-page] .project-hero-heading { padding-inline: var(--project-text-inset); } }
+[data-about-page] .project-hero-title { font-size: clamp(56px, 7vw, 120px); }
+[data-about-page] .project-hero-details { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 47.99rem) { [data-about-page] .project-hero-details { grid-template-columns: 1fr 1fr; } }
+
+/* The question types in on its own; no half-blurred orb flashing before it. */
+.project-chat-welcome .project-ai-orb:not([data-active]) .project-ai-expansion { opacity: 0; animation: none; }

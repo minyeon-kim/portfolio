@@ -108,8 +108,8 @@ function IntroState({ name, intro, projects, onSelect }: {
         count += 1;
         setWelcomeCount(count);
         if (count >= welcomeText.length) clearInterval(interval);
-      }, 65); }, 180);
-    }, reduce ? 0 : 400);
+      }, 65); }, 0);
+    }, reduce ? 0 : 200);
     return () => {
       clearTimeout(delay);
       clearTimeout(typingDelay);
