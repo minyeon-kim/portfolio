@@ -19,8 +19,8 @@ export function Chapter({ label, title, children }: { label: string; title: stri
         aria-hidden="true"
         className="story-node absolute top-0.5 -left-4 size-1.5 rounded-full border border-line bg-bg"
       />
-      <p className="mb-0.5 font-mono text-xs text-muted">{label}</p>
-      <h3 className="mb-1 text-lg font-medium">{title}</h3>
+      <p className="story-label mb-0.5 font-mono text-xs text-muted">{label}</p>
+      <h3 className="story-title mb-1 text-lg font-medium">{title}</h3>
       {children}
     </li>
   );
