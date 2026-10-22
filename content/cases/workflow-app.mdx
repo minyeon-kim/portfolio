@@ -206,13 +206,16 @@ Three features share one workspace, and every decision is saved to History.
 
 </CaseSection>
 
-<CaseGallery title="The final prototype / v2" items={[
-  { label: "Live Workspace", src: "/images/cases/workflow-app/screens-board.webp", alt: "Screens board showing every screen in flow order with change markers", caption: "Live Workspace: every screen in flow order, with a marker wherever something changed. Click one to jump to the decision it needs." },
-  { label: "Conflict Points", src: "/images/cases/workflow-app/v2-review.webp", alt: "Change review comparing the original, the build and the proposal, with a five-step status", caption: "Conflict Points: the original, the build and the proposal side by side, and the decision that's yours now." },
-  { label: "Merge Studio", src: "/images/cases/workflow-app/v2-merge.webp", alt: "Merge Studio combining areas from several drafts", caption: "Merge Studio: pick each area from a different draft, adjust the result, and save it with where every piece came from." },
-  { label: "Dashboard", src: "/images/cases/workflow-app/dashboard.webp", alt: "Dashboard with the reviews waiting on you at the top", caption: "Dashboard: the requests waiting on your decision come first." },
-  { label: "History", src: "/images/cases/workflow-app/history.webp", alt: "History timeline next to the screen as it was at that moment", caption: "History: pick an event on the timeline to see the actual screen and code change at that moment." },
-]} />
+<CaseMedia src="/images/cases/workflow-app/screens-board.webp" width={960} height={540} label="Screens board showing every screen in flow order with change markers" caption="Live Workspace: every screen in flow order, with a marker wherever something changed. Click one to jump to the decision it needs." />
+
+<CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} label="Change review comparing the original, the build and the proposal, with a five-step status" caption="Conflict Points: the original, the build and the proposal side by side, and the decision that's yours now." />
+
+<CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} label="Merge Studio combining areas from several drafts" caption="Merge Studio: pick each area from a different draft, adjust the result, and save it with where every piece came from." />
+
+<CaseMediaPair>
+  <CaseMedia src="/images/cases/workflow-app/dashboard.webp" width={1600} height={1256} variant="screen" label="Dashboard with the reviews waiting on you at the top" caption="Dashboard: the requests waiting on your decision come first." />
+  <CaseMedia src="/images/cases/workflow-app/history.webp" width={1600} height={1256} variant="screen" label="History timeline next to the screen as it was at that moment" caption="History: the actual screen and code change at any point on the timeline." />
+</CaseMediaPair>
 
 <CaseSection id="usability-testing" label="10 / Usability testing" title="Both roles called it “the other team's tool.” So we split the screens.">
 
@@ -252,10 +255,9 @@ Same features, far less to read. We shipped it two days later, on Oct 16.
 
 </CaseSection>
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="Before: v1 change review, text and code heavy" caption="Before (Oct 7): text and code first, with the decision buttons far from the evidence." />
-  <CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="After: v2 change review, visual comparison with the decision on top" caption="After (Oct 16): your step and the decision come first." />
-</CaseMediaPair>
+<CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="Before: v1 change review, text and code heavy" caption="Before (Oct 7): text and code first, with the decision buttons far from the evidence." />
+
+<CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="After: v2 change review, visual comparison with the decision on top" caption="After (Oct 16): your step and the decision come first." />
 
 <CaseSection id="review" label="11 / Review & limitations" title="We designed who decides. Proving it saves time is the next test.">
 
