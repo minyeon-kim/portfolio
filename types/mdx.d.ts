@@ -4,8 +4,10 @@ declare module "*.mdx" {
 
   export const meta: CaseMeta;
   // Only content/about.mdx exports these.
+  export const headline: string;
   export const bio: string[];
   export const principles: { title: string; body: string }[];
+  export const strengths: { title: string; body: string }[];
   export const skills: { design: string[]; engineering: string[]; security: string[] };
   export default function MDXContent(props: MDXProps): React.JSX.Element;
 }

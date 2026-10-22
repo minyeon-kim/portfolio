@@ -1,45 +1,52 @@
 {/*
-  About page content. Drafted only from what the site already states (CLAUDE.md
-  positioning, the Gemini and Devsign case studies). Nothing here adds schools,
-  employers, years or metrics beyond what Minyeon supplied (SK shieldus role and
-  dates from Minyeon's LinkedIn). Confirm the wording, then fill the TODOs: school and
-  years, what the consulting work covered, location, and the photos.
+  About page content, from the Notion page "Portfolio — About" (English site
+  copy). Direction: security background → working with developers and client
+  teams → strong at collaboration → end to end, all the way to a working
+  prototype. Experience follows LinkedIn (SK shieldus, Mar 2022 – Mar 2026).
+  Both projects are deployed prototypes, not shipped products; don't say "shipped".
 */}
 
+export const headline = "End-to-end product designer — from research to a working prototype.";
+
 export const bio = [
-  "I'm Minyeon, a product designer with a background in computer science and cybersecurity.",
-  "I spent four years as a security consultant at SK shieldus. Security work trains you to ask where data goes, who can see it, and what happens when someone changes their mind. I carry those questions into product design, where the answer has to be something a person can see and act on, not a policy buried in settings.",
-  "I like owning the whole path: talking to people, tracing how the system really behaves, designing the flow, and building a working prototype to test it.",
+  "I'm Minyeon, an end-to-end product designer. Before design, I spent four years as a security consultant at SK shieldus, one of South Korea's largest security companies, working with developers and client teams to understand how systems are built and get issues fixed.",
+  "That's where I learned to collaborate across roles — and it's how I design now: I research the problem, shape the flow, build a working prototype with AI coding tools, and test it with real users.",
 ];
 
 export const principles = [
   {
-    title: "Start from what the system actually does",
-    body: "Before sketching, I trace the data. For the Gemini concept that meant mapping retention, human review and consent across four surfaces, and a GDPR gap analysis that found 17 gaps ranked by severity.",
+    title: "Security taught me how systems work",
+    body: "For four years at SK shieldus, I assessed real systems for public agencies, banks and large companies. Finding a problem was only half the job; the other half was explaining it to developers and client teams so they could fix it.",
   },
   {
-    title: "Put control where the question starts",
-    body: "People doubt a result at the moment they see it, not later in settings. So the Gemini redesign shows the sources on the answer itself and makes deletion from chat verifiable.",
+    title: "Collaboration is where I'm strongest",
+    body: "I'm comfortable in the space between design and engineering. In Devsign, my teammate and I designed how designers and developers decide together when AI-made work drifts apart — and tested it with both roles.",
   },
   {
-    title: "Prototype in the real medium",
-    body: "On Devsign, a two-person team, we built a working prototype in React and Tailwind CSS, then refined it through an initial usability test and a co-design session.",
+    title: "I take things all the way",
+    body: "I don't stop at mockups. I research, define, design, build working prototypes with AI, test them and iterate. Devsign went through 1,039 commits in four weeks; Gemini Privacy Revamp is a live prototype that records every click so testing turns straight into data.",
   },
+];
+
+export const strengths = [
+  { title: "Developer-friendly", body: "I understand how things get built, so handoffs are shorter and decisions are faster." },
+  { title: "End-to-end", body: "Research → design → working prototype → testing → iteration." },
+  { title: "Builds it", body: "Live, clickable prototypes people can test, not just static screens." },
 ];
 
 export const skills = {
   design: [
-    "User interviews and research synthesis",
-    "Journey mapping and competitive analysis",
+    "User interviews and affinity mapping",
+    "Desk research and competitive analysis",
     "Interaction design and prototyping",
-    "Usability tests and co-design sessions",
-    "FigJam, Google Stitch",
+    "Usability tests (SUS) and co-design sessions",
+    "FigJam, Miro, Dovetail",
   ],
-  engineering: ["React", "Tailwind CSS", "Playwright", "Next.js and TypeScript"],
+  engineering: ["Working prototypes with AI coding tools", "React", "Tailwind CSS", "HTML, CSS and JavaScript"],
   security: [
-    "Privacy regulation gap analysis (GDPR)",
-    "Data flow and consent mapping",
-    "Platform permission models (Android)",
+    "Security assessments for public agencies, banks and large companies",
+    "Explaining findings to developers and client teams",
+    "Privacy principles as design requirements (GDPR)",
   ],
 };
 
@@ -51,19 +58,17 @@ export const skills = {
 
 </Chapter>
 
-<Chapter label="Cybersecurity · Mar 2022 – Mar 2026" title="Security Consultant, SK shieldus">
+<Chapter label="Mar 2022 – Mar 2026 · Seongnam" title="Security Consultant, SK shieldus">
 
-Full-time security and information security consulting, on-site in Seongnam, South Korea.
-
-<Todo>What the consulting work covered (types of engagements, clients' industries), and the moment you noticed the problem was often the interface, not the system.</Todo>
+SK shieldus is one of South Korea's largest security companies. I assessed systems for public agencies, banks and large companies, and worked with developers and client teams on the fixes.
 
 </Chapter>
 
-<Chapter label="Product design · 2026" title="Designing for trust and control">
+<Chapter label="2026" title="Product design, Blossom UX School">
 
-Gemini privacy revamp (Jul–Aug 2026, solo concept): answer-level source management and verifiable deletion from chat.
+Gemini Privacy Revamp: see where it came from, turn it off right there. Research with a teammate, then solo from problem definition to prototype.
 
-Devsign (Aug–Oct 2026, team of two): design and code review in one workspace, from research to a working prototype.
+Devsign (Aug–Oct 2026): merge the AI drafts and settle the design–code gaps in one place. A two-person team, end to end.
 
 </Chapter>
 
