@@ -1,39 +1,66 @@
 {/*
-  About page content. The story and skills below are placeholders: nothing
-  here was written by you yet. Only the three stages come from claude.md
-  (computer science + cybersecurity background, now product design), and the
-  prefilled skills are ones your Gemini and Devsign cases show. Confirm,
-  rewrite, and extend.
+  About page content. Drafted only from what the site already states (CLAUDE.md
+  positioning, the Gemini and Devsign case studies). Nothing here adds schools,
+  employers, years or metrics. Confirm the wording, then fill the TODOs:
+  school and years, past security roles, location, and the photos.
 */}
+
+export const bio = [
+  "I'm Minyeon, a product designer with a background in computer science and cybersecurity.",
+  "Security work trains you to ask where data goes, who can see it, and what happens when someone changes their mind. I carry those questions into product design, where the answer has to be something a person can see and act on, not a policy buried in settings.",
+  "I like owning the whole path: talking to people, tracing how the system really behaves, designing the flow, and building a working prototype to test it.",
+];
+
+export const principles = [
+  {
+    title: "Start from what the system actually does",
+    body: "Before sketching, I trace the data. For the Gemini concept that meant mapping retention, human review and consent across four surfaces, and a GDPR gap analysis that found 17 gaps ranked by severity.",
+  },
+  {
+    title: "Put control where the question starts",
+    body: "People doubt a result at the moment they see it, not later in settings. So the Gemini redesign shows the sources on the answer itself and makes deletion from chat verifiable.",
+  },
+  {
+    title: "Prototype in the real medium",
+    body: "On Devsign, a two-person team, we built a working prototype in React and Tailwind CSS, then refined it through an initial usability test and a co-design session.",
+  },
+];
 
 export const skills = {
   design: [
     "User interviews and research synthesis",
-    "Usability test planning",
+    "Journey mapping and competitive analysis",
     "Interaction design and prototyping",
-    "Design tokens and systems",
+    "Usability tests and co-design sessions",
+    "FigJam, Google Stitch",
   ],
-  engineering: ["React", "Tailwind CSS", "Playwright"],
-  security: ["Privacy regulation gap analysis (GDPR)"],
+  engineering: ["React", "Tailwind CSS", "Playwright", "Next.js and TypeScript"],
+  security: [
+    "Privacy regulation gap analysis (GDPR)",
+    "Data flow and consent mapping",
+    "Platform permission models (Android)",
+  ],
 };
 
 <Story>
 
-<Chapter label="Computer science" title="TODO: chapter title">
+<Chapter label="Computer science" title="Learning how systems are built">
 
-<Todo>Where you studied, and what first pulled you toward security.</Todo>
-
-</Chapter>
-
-<Chapter label="Cybersecurity" title="TODO: chapter title">
-
-<Todo>What you worked on, and the moment you noticed the problem was often the interface, not the system.</Todo>
+<Todo>Where and when you studied, and what first pulled you toward security.</Todo>
 
 </Chapter>
 
-<Chapter label="Product design" title="TODO: chapter title">
+<Chapter label="Cybersecurity" title="Looking at systems from the side that breaks">
 
-<Todo>Why you moved into design, and what the security background lets you see that others miss.</Todo>
+<Todo>What you worked on (roles, years, organisations), and the moment you noticed the problem was often the interface, not the system.</Todo>
+
+</Chapter>
+
+<Chapter label="Product design · 2026" title="Designing for trust and control">
+
+Gemini privacy revamp (Jul–Aug 2026, solo concept): answer-level source management and verifiable deletion from chat.
+
+Devsign (Aug–Oct 2026, team of two): design and code review in one workspace, from research to a working prototype.
 
 </Chapter>
 

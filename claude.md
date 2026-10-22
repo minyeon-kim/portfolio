@@ -481,7 +481,7 @@ Fixed the end-of-slide cut: the fixed incoming main now starts at the viewport t
 
 Case body rhythm loosened on desktop (phones unchanged): sections clamp(80–144px) top / clamp(72–120px) bottom, statements and blockquotes clamp(96–176px), media bottom clamp(96–160px), eyebrow-to-title 40–64px, paired media gap 24–48px.
 
-About uses the project frame: ProjectHero (serif "About", metadata Role / Background / Focus taken from the positioning), then a case-study body with the positioning as a statement and numbered CaseSections: 01 Story (timeline), 02 Skills (labelled rows), 03 Contact. ProjectHero accepts an optional `details` list. Story and contact copy remain TODOs.
+About uses the project frame: ProjectHero (serif "About"; Role / Background / Focus), then a portrait placeholder (4:5) beside a short first-person bio, the positioning as a statement, and numbered CaseSections: 01 How I work (three principles, each backed by a case fact), 02 Selected work (featured cases with timeline, problem, role), 03 Background (Story timeline; 2026 projects filled, school/years/security roles TODO), 04 Toolkit (Design / Engineering / Security rows), 05 Outside work (TODO line + two 16:9 photo placeholders), 06 Contact (resume, LinkedIn, email; each shows once set). Copy lives in content/about.mdx (bio, principles, skills exports + Story) and was drafted only from facts already on the site; no schools, employers, years or metrics are invented. ProjectHero accepts an optional `details` list.
 
 Project openers raised: home selected title top padding clamp(76px, 5vw, 96px); direct page heading top padding clamp(40px, 4vw, 72px); title-to-metadata gap clamp(40px, 4vw, 72px) on both.
 
