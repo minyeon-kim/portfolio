@@ -25,7 +25,7 @@ export default async function CasePage({ params }: PageProps<"/work/[slug]">) {
 
   return (
     <div className="project-detail" data-case-slug={slug}>
-      <ProjectHero gemini={slug === "gemini-privacy"} canvas={slug === "workflow-app"} name={meta.short ?? meta.title} role={meta.role} timeline={meta.timeline} cover={meta.cover} concept={meta.concept} />
+      <ProjectHero gemini={slug === "gemini-privacy"} canvas={slug === "workflow-app"} name={meta.short ?? meta.title} role={meta.role} timeline={meta.timeline} cover={meta.cover} concept={meta.concept} keywords={meta.keywords} />
       <div id="case-body">
         <CaseBody meta={meta} Content={Content} others={others.map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title, description: c.tldr.problem, cover: c.meta.cover }))} />
       </div>
