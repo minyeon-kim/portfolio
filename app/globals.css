@@ -1116,12 +1116,21 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-media-index { position: absolute; top: 24px; left: 24px; color: var(--muted); font-size: 22px; }
 .case-media-outline { position: absolute; inset: 13% 12%; border: 1px solid var(--line); border-radius: 8px; }
 .case-media figcaption { max-width: 680px; padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.55; }
-.case-media-image { overflow: clip; border-radius: 24px; background: var(--color-fill); }
-.case-media-image img { display: block; width: 100%; height: auto; max-height: 88vh; object-fit: contain; }
-.case-media-phone .case-media-image { max-width: 360px; margin-inline: auto; border-radius: 16px; }
-.case-media-logo .case-media-image { display: grid; place-items: center; padding: clamp(40px, 6vw, 80px); }
-.case-media-logo .case-media-image img { width: clamp(96px, 12vw, 160px); }
-.case-stats { margin: 16px 0 clamp(40px, 5vw, 72px); }
+/* Images keep their own size and shape: no letterboxing, rounded, at most the body column wide. */
+.case-media-image img { display: block; width: auto; max-width: 100%; height: auto; max-height: 80vh; border-radius: 16px; outline: 1px solid var(--line); outline-offset: -1px; }
+.case-media-full .case-media-image img { width: 100%; }
+/* Phone screens: corners are cut to the device radius in the file; the outline follows it. */
+.case-media-phone .case-media-image img { max-width: min(100%, 320px); border-radius: 13.3% / 6.2%; }
+.case-media-logo .case-media-image { display: grid; place-items: center; padding: clamp(40px, 6vw, 72px); border-radius: 16px; background: var(--color-fill); }
+.case-media-logo .case-media-image img { width: clamp(80px, 10vw, 128px); border-radius: 0; outline: none; }
+@media (min-width: 48rem) {
+  .case-media-column, .case-media-pair-column, .case-stats { margin-left: calc((100% - clamp(32px, 5vw, 80px)) * 0.425 + clamp(32px, 5vw, 80px)); }
+  .case-media-pair .case-media { margin-left: 0; }
+}
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .case-media-column, .case-media-pair-column, .case-stats { margin-left: calc((100% - 40px) * 0.425 + 40px); }
+}
+.case-stats { margin-block: 16px clamp(40px, 5vw, 72px); }
 .case-stats dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(16px, 2vw, 32px); margin: 0; }
 .case-stats dl > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; padding: 24px; border-radius: 16px; background: var(--color-fill); }
 .case-stats dd { margin: 0; font-size: clamp(40px, 4.5vw, 64px); line-height: 1; font-weight: 300; letter-spacing: -0.04em; }
@@ -1134,7 +1143,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-findings-card h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
 .case-findings-card ul { margin: 0; padding-left: 18px; list-style: disc; color: var(--muted); font-size: 15px; line-height: 1.6; }
 .case-findings-card li + li { margin-top: 8px; }
-.case-media-pair { display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(24px, 2.5vw, 48px); }
+.case-media-pair { display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); align-items: start; }
 .case-media-pair .case-media { margin-top: 0; }
 .case-statement { max-width: 1200px; padding-block: 32px 48px; font-size: clamp(28px, 3vw, 48px); line-height: 1.12; font-weight: 300; letter-spacing: -0.04em; }
 .case-statement p { font: inherit; letter-spacing: inherit; margin: 0; }
