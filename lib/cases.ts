@@ -24,6 +24,7 @@ export type CaseMeta = {
   role?: string; // short, for the meta row and home card
   timeline?: string;
   tools?: string[];
+  keywords?: string[]; // shown as tags under the project name
   cover?: string; // path under /public, e.g. "/images/cases/<slug>/cover.webp" (1600x800 WebP)
   concept?: boolean; // self-initiated work, shown with a [CONCEPT] label
   featured?: boolean;

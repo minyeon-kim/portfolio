@@ -467,6 +467,28 @@ details[open]::details-content {
   overflow-wrap: anywhere;
 }
 
+.project-hero-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: clamp(24px, 2.5vw, 40px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-hero-keywords li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--case-accent, var(--accent)) 10%, transparent);
+  color: var(--case-accent, var(--accent));
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
 .project-hero-details {
   display: grid;
   grid-template-columns: 2fr 0.65fr 1.25fr;
@@ -1082,6 +1104,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
   background: var(--bg);
 }
 .case-study[data-project="devsign"] { --case-accent: var(--devsign-title); }
+.project-hero[data-canvas] { --case-accent: var(--devsign-title); }
 .case-study[data-project="gemini"] { --case-accent: var(--accent); }
 .case-section { max-width: var(--case-media); margin-inline: auto; padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
 .case-eyebrow { margin: 0 0 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
