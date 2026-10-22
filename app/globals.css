@@ -1119,6 +1119,8 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 /* Images keep their own size and shape: no letterboxing, rounded, at most the body column wide. */
 .case-media-image img { display: block; width: auto; max-width: 100%; height: auto; max-height: 80vh; border-radius: 16px; outline: 1px solid var(--line); outline-offset: -1px; }
 .case-media-full .case-media-image img { width: 100%; }
+/* Tall boards stay compact so they never take over the page. */
+.case-media-portrait .case-media-image img { max-height: min(600px, 70vh); }
 /* Phone screens: corners are cut to the device radius in the file; the outline follows it. */
 .case-media-phone .case-media-image img { max-width: min(100%, 320px); border-radius: 13.3% / 6.2%; }
 .case-media-logo .case-media-image { display: grid; place-items: center; padding: clamp(40px, 6vw, 72px); border-radius: 16px; background: var(--color-fill); }
