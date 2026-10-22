@@ -1534,7 +1534,8 @@ html, body, main { overflow-anchor: none; }
 :root[data-project-navigation] .project-rail { opacity: 0 !important; translate: -8px 0 !important; transition: none !important; }
 
 /* Give each chapter room; keep its supporting media closer than the next chapter. */
-.case-study:not([data-project="about"]) .case-section { padding-block: clamp(56px, 6vw, 104px); }
+/* A section stays close to the cards and media that follow it; the next section opens with room. */
+.case-study:not([data-project="about"]) .case-section { padding-block: clamp(56px, 6vw, 104px) 32px; }
 .case-study:not([data-project="about"]) .case-section + .case-section { margin-top: 32px; }
 .case-section-wide { max-width: var(--case-media); }
 .case-section-wide .case-section-grid { grid-template-columns: 1fr; gap: 32px; }

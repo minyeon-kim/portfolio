@@ -11,7 +11,7 @@ export function WhyIChose({
 }) {
   return (
     <details className="reveal group mb-4 rounded-md bg-fill">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-md px-2 py-1 font-mono text-xs text-muted transition-colors duration-150 ease-standard hover:text-ink [&::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-md px-2 py-1 text-sm font-medium text-muted transition-colors duration-150 ease-standard hover:text-ink [&::-webkit-details-marker]:hidden">
         {label}
         <span
           aria-hidden="true"

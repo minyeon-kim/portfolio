@@ -51,7 +51,7 @@ You ask Gemini for an Italian restaurant, and it adds: “You loved the truffle 
   title="Three gaps"
   items={[
     { label: "01", title: "You can't tell where it came from", body: "An answer mixes in personal data without saying whether it came from an email, a photo or an old chat." },
-    { label: "02", title: "The off switch is far away", body: "Gemini settings take 3–4 clicks; opting out of training sits on a separate Google account page, 4–5 clicks away." },
+    { label: "02", title: "The off switch is far away", body: "In our walkthrough, Gemini settings took 3–4 clicks; opting out of training sits on a separate Google account page, 4–5 clicks away." },
     { label: "03", title: "You can't trust that it's gone", body: "People expect “delete” to erase everything, but the original stays in Gmail. Only Gemini stops reading it." },
   ]}
 />
@@ -91,7 +91,7 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "Off switches exist, but no one knows what's left", body: "5 AI services, regulation and papers, 4 interviews" },
+    { label: "Discover", title: "Off switches exist, but no one knows what's left", body: "5 AI services, regulation and papers, 4 interviews (2 external)" },
     { label: "Define", title: "Anxiety starts when your data shows up", body: "79 quotes re-clustered into 6 themes" },
     { label: "Develop", title: "Control at the answer, not in settings", body: "11 sketches, 4 concepts, 2 kept" },
     { label: "Deliver", title: "Does checking it yourself build trust?", body: "A coded prototype that logs behavior, and a usability test" },
@@ -100,7 +100,7 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseSection id="discover" label="05 / Discover" title="There's an off switch — but no one knows what's left after.">
 
-We compared the privacy controls of five AI services. Gemini splits them between the app and the Google account, collects the most data types, and no screen says what remains after you switch something off.
+We compared the privacy controls of five AI services. Gemini splits them between the app and the Google account, and no screen says what remains after you switch something off.
 
 </CaseSection>
 
@@ -108,16 +108,15 @@ We compared the privacy controls of five AI services. Gemini splits them between
 
 <CaseStats
   items={[
-    { value: "23 / 35", label: "data types Gemini collects, vs. 17 for ChatGPT and 13 for Claude", source: "Surfshark (2025)" },
-    { value: "56%", label: "of U.S. adults always or almost always agree to privacy policies without reading them", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "39% vs 5%", label: "of consumers rank clear information on data use as the top trust builder; of organizations, letting people configure privacy settings", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
-    { value: "~60%", label: "reject cookies when “Reject all” is on the first screen; about 90% accept when rejecting takes more clicks", source: "Bielova et al., USENIX Security Symposium (2024)" },
+    { value: "56%", label: "of U.S. adults frequently agree to privacy policies without reading them", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "61%", label: "of U.S. adults are skeptical that anything they do will make much difference to their privacy", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "39% vs 5%", label: "of consumers put clear information on data use first for trust; of organizations, letting people configure privacy settings", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
   ]}
 />
 
 <CaseSection id="discover-primary" label="05 / Discover · Interviews" title="Worried, but still using it.">
 
-We interviewed a designer, a security professional, a call-center worker and an everyday AI user. All four kept using AI because it was convenient, but turned off integrations when trust broke. The call-center worker, who asks for personal data, told us people expect a deletion to erase everything.
+We interviewed a call-center worker and an everyday AI user, and answered the same guide ourselves, as a designer and a security professional, to test it. Everyone kept using AI because it was convenient, but turned off integrations when trust broke. The call-center worker, who asks people for personal data, said they expect a deletion request to erase everything.
 
 > “Even when I delete it, I don't know if the record is really deleted.”
 
@@ -171,33 +170,19 @@ I drew 11 hand sketches across the How-Might-We questions and gathered feedback 
   <CaseMedia src="/images/cases/gemini-privacy/concept-chat.webp" width={1600} height={1197} variant="screen" label="Deletion from chat concept with team feedback" caption="Kept ②: deleting records from chat." />
 </CaseMediaPair>
 
-<CaseSection id="develop-decisions" label="07 / Develop · Decisions" title="Two decisions behind the screens.">
+<CaseFindings
+  title="Two decisions behind the screens"
+  items={[
+    { label: "Decision 1", title: "Show what each source allows", body: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay where they live. The screen's structure says so, instead of hiding the difference." },
+    { label: "Decision 2", title: "Reveal sources one step at a time", body: "Showing many sources at once raises the checking burden, so the answer carries only a badge and the full panel opens on tap." },
+  ]}
+/>
 
-### Show what each source allows
-
-<WhyIChose>
-
-Different data allows different actions, and hiding that is what confused people. Memory can be deleted; Gmail and Calendar can only be blocked from Gemini, and the originals stay where they live. The screen's structure says so.
-
-</WhyIChose>
-
-### Reveal sources one step at a time
-
-<WhyIChose>
-
-Research on AI memory showed that showing many sources at once raises the checking burden. So the answer carries only a badge, and the full panel opens on tap.
-
-</WhyIChose>
-
-### Where the sketches came from
-
-<WhyIChose label="See the 11 sketches">
+<WhyIChose label="See the 11 hand sketches">
 
 <CaseMedia src="/images/cases/gemini-privacy/sketches.webp" width={1166} height={2226} variant="portrait" label="Hand-drawn solution sketches mapped to How-Might-We questions" caption="11 hand sketches, one row per How-Might-We question." />
 
 </WhyIChose>
-
-</CaseSection>
 
 <CaseSection id="deliver" label="08 / Deliver" title="A prototype you can actually click, built to be tested.">
 
