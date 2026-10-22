@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
+import { HomeLink } from "@/components/home/case-panels";
 
-export type MenuCase = { slug: string; name: string };
+// Site-wide navigation only. Projects are picked on the landing page and
+// linked from the end of each case, so the menu doesn't repeat them.
 type Props = {
-  cases: MenuCase[];
   contact: { email: string; linkedinUrl: string; resumeUrl?: string };
 };
 
@@ -17,7 +18,7 @@ export function SiteMenu(props: Props) {
   return <MenuPanel key={pathname} {...props} pathname={pathname} />;
 }
 
-function MenuPanel({ cases, contact, pathname }: Props & { pathname: string }) {
+function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -75,18 +76,8 @@ function MenuPanel({ cases, contact, pathname }: Props & { pathname: string }) {
       </button>
       {open && (
         <nav ref={panel} id="site-menu" aria-label="Site navigation" className="header-menu-panel">
-          <ul className="header-menu-projects">
-            {cases.map((project) => (
-              <li key={project.slug}>
-                <Link href={`/work/${project.slug}/`} onClick={close}
-                  aria-current={pathname === `/work/${project.slug}/` ? "page" : undefined}
-                  className="header-menu-project" data-project={project.slug}>
-                  <span>{project.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
           <ul className="header-menu-pages">
+            <li onClick={close}><HomeLink>Work</HomeLink></li>
             <li><Link href="/about/" onClick={close} aria-current={pathname === "/about/" ? "page" : undefined}>About</Link></li>
           </ul>
           {(contact.email || contact.linkedinUrl || contact.resumeUrl) && <div className="header-menu-contact">
