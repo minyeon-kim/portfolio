@@ -71,16 +71,15 @@ export default async function AboutPage() {
           </CaseSection>
 
           <CaseSection id="work" label="02 / Selected work" title="Recent projects">
-            <ul className="about-rows">
+            <ul className="about-rows about-rows-plain">
               {work.map(({ slug, meta, tldr }) => (
                 <li key={slug} className="reveal">
-                  <span className="about-rows-index">{meta.timeline}</span>
                   <div>
                     <h3 className="about-rows-title">
                       <Link href={`/work/${slug}/`} className="link">{meta.short ?? meta.title}</Link>
                     </h3>
                     <p>{tldr.problem}</p>
-                    {meta.role && <p className="about-rows-meta">{meta.concept ? "Concept · " : ""}{meta.role}</p>}
+                    <p className="about-rows-meta">{[meta.concept ? "Concept" : null, meta.role, meta.timeline].filter(Boolean).join(" · ")}</p>
                   </div>
                 </li>
               ))}
