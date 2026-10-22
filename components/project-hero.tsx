@@ -42,7 +42,7 @@ export function ProjectHero({ name, role, timeline, cover, concept, keywords, ca
       {cover && (
         <div className="project-hero-cover">
           {gemini
-            ? <GeminiDevice><GeminiPhone alt={`${name}: the Source badge opens a sheet where Gmail is switched off, and the line about Jungmin leaves the answer`} /></GeminiDevice>
+            ? <GeminiDevice><GeminiPhone alt={`${name}: the Source badge opens a sheet where Gmail is switched off, and the line about Jeongmin leaves the answer`} /></GeminiDevice>
             : <Image src={withBase(cover)} alt={`${name} project overview`} width={1600} height={800} sizes="100vw" preload />}
         </div>
       )}
