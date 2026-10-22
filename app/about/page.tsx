@@ -6,7 +6,7 @@ import { CopyButton } from "@/components/copy-button";
 import { CaseMedia, CaseMediaPair, CaseSection, CaseStatement } from "@/components/case-story";
 import { ProjectHero } from "@/components/project-hero";
 import { Todo } from "@/components/todo";
-import Story, { bio, principles, skills } from "@/content/about.mdx";
+import Story, { bio, headline, principles, skills, strengths } from "@/content/about.mdx";
 import { getCases } from "@/lib/cases";
 import { site, withBase } from "@/lib/site";
 
@@ -36,7 +36,7 @@ export default async function AboutPage() {
         details={[
           { label: "Role", value: "Product designer" },
           { label: "Background", value: "Security consultant, 4 years" },
-          { label: "Focus", value: "Privacy, trust, developer tools" },
+          { label: "Focus", value: "End to end, research to working prototype" },
         ]}
       />
       <article className="case-study" data-project="about">
@@ -50,9 +50,9 @@ export default async function AboutPage() {
             </div>
           </div>
 
-          <CaseStatement><p>{site.positioning}</p></CaseStatement>
+          <CaseStatement><p>{headline}</p></CaseStatement>
 
-          <CaseSection id="approach" label="01 / How I work" title="Research, design and engineering in one loop">
+          <CaseSection id="approach" label="01 / How I work" title="From security to design, all the way to a prototype">
             <ol className="about-rows">
               {principles.map((item, i) => (
                 <li key={item.title} className="reveal">
@@ -66,7 +66,21 @@ export default async function AboutPage() {
             </ol>
           </CaseSection>
 
-          <CaseSection id="work" label="02 / Selected work" title="Recent projects">
+          <CaseSection id="strengths" label="02 / What I bring" title="What I bring to a team">
+            <ol className="about-rows">
+              {strengths.map((item, i) => (
+                <li key={item.title} className="reveal">
+                  <span className="about-rows-index">{String(i + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3 className="about-rows-title">{item.title}</h3>
+                    <p>{item.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </CaseSection>
+
+          <CaseSection id="work" label="03 / Selected work" title="Recent projects">
             <ul className="about-rows">
               {work.map(({ slug, meta, tldr }) => (
                 <li key={slug} className="reveal">
@@ -83,11 +97,11 @@ export default async function AboutPage() {
             </ul>
           </CaseSection>
 
-          <CaseSection id="background" label="03 / Background" title="From cybersecurity to design">
+          <CaseSection id="background" label="04 / Experience" title="From cybersecurity to design">
             <Story />
           </CaseSection>
 
-          <CaseSection id="toolkit" label="04 / Toolkit" title="What I work with">
+          <CaseSection id="toolkit" label="05 / Toolkit" title="What I work with">
             <div className="about-skills">
               {columns.map((col) => (
                 <div key={col.title} className="reveal">
@@ -102,7 +116,7 @@ export default async function AboutPage() {
             </div>
           </CaseSection>
 
-          <CaseSection id="outside" label="05 / Outside work" title="Off the screen">
+          <CaseSection id="outside" label="06 / Outside work" title="Off the screen">
             <Todo>a line or two about what you do outside work, in your own words</Todo>
           </CaseSection>
           {/* TODO: replace with real photos (public/images/about/), e.g. at work and a workshop or talk. */}
@@ -111,7 +125,7 @@ export default async function AboutPage() {
             <CaseMedia variant="screen" label="Workshop, study group or talk" />
           </CaseMediaPair>
 
-          <CaseSection id="contact" label="06 / Contact" title="Get in touch">
+          <CaseSection id="contact" label="07 / Contact" title="Get in touch">
             <p className="reveal">Open to product designer and design engineer roles, especially in privacy, security and developer tools.</p>
             <div className="flex flex-wrap items-center gap-2">
               {hasResume ? (
