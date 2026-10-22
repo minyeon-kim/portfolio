@@ -1944,3 +1944,23 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @keyframes gp-knob { 0%, 39% { right: 6%; } 43%, 95% { right: 36%; } 97%, 100% { right: 6%; } }
 @keyframes gp-forget { 0%, 59% { opacity: 0; } 65%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
 .project-hero-cover .gemini-phone :is(.gemini-phone-stage, .gemini-phone-sheet) > img { width: 100%; height: auto; max-height: none; object-fit: fill; }
+
+/* Phone prototype with the walkthrough underneath: four steps in a row. */
+@media (min-width: 48rem) {
+  .case-prototype-phone[data-steps-below] { display: block; }
+  .case-prototype-phone[data-steps-below] .case-prototype-frame { width: 340px; }
+}
+.case-prototype-phone[data-steps-below] .case-prototype-steps { margin-top: 40px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 28px 24px; }
+.case-prototype-phone[data-steps-below] .case-prototype-steps li { grid-template-columns: 1fr; }
+.case-prototype-phone[data-steps-below] .case-prototype-thumb img { width: min(100%, 160px); border-radius: 14px; }
+
+/* Cards in a row come in one after another, a beat apart, once their group shows. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li) { transition: opacity 600ms var(--ease), translate 600ms var(--ease); }
+  .reveal-ready .reveal:not([data-shown]) :is(.case-findings-card, .case-prototype-steps > li) { opacity: 0; translate: 0 16px; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(2) { transition-delay: 90ms; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(3) { transition-delay: 180ms; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(4) { transition-delay: 270ms; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(n+5) { transition-delay: 360ms; }
+}
+.case-prototype-steps li { align-content: start; }
