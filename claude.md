@@ -142,7 +142,9 @@ Nowhere else. With prefers-reduced-motion, none of it runs.
   Interactive demo, Outcome & learnings. Mark self-initiated work with a [CONCEPT] label.
 - No lorem ipsum. Use text from /content. If content is missing, leave a visible
   TODO comment instead of inventing facts or metrics.
-- No third-party logos implying affiliation (e.g. no Google logo on the Gemini concept).
+- Product logos are fine when the case is a revamp of that real product (the Gemini
+  case uses the Gemini logo and real Gemini UI). Still mark it as a self-initiated
+  concept, not affiliated with the company.
 - Copy is in English, plain and specific. No emoji in UI.
 
 ## Working style
@@ -191,8 +193,8 @@ Reference: https://design.google/library/gemini-ai-visual-design (Google Design)
 Gemini alone uses a near-black blue surface (#0C0F16), diffuse blue (#4285F4)
 and lavender (#A78BFA) radial glows, a pale blue–lavender title gradient
 (#D6E2FF / #9DBEFF / #D5C5FF), and 32px rounded preview containers with
-a faint cool outline. This is an original concept presentation inspired by
-the official gradient and rounded-container language, with no Google logos.
+a faint cool outline. This is a revamp concept of the real product, so the Gemini logo and Gemini UI
+appear as they do in the product, labelled as a self-initiated concept.
 Existing project typography, metadata layout and scroll expansion remain.
 
 ## Devsign color and shared alignment refinement
