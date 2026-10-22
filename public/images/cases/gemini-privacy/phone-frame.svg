@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1100" viewBox="0 0 1000 1100">
+  <defs>
+    <linearGradient id="edge" x2="1" y2="1"><stop stop-color="#77808F"/><stop offset=".25" stop-color="#20242C"/><stop offset=".7" stop-color="#090B0E"/><stop offset="1" stop-color="#5B6472"/></linearGradient>
+    <linearGradient id="screen" x2=".8" y2="1"><stop stop-color="#12151C"/><stop offset="1" stop-color="#1C2540"/></linearGradient>
+    <linearGradient id="spark" x2="1" y2="1"><stop stop-color="#7BAEFF"/><stop offset="1" stop-color="#C5A5F8"/></linearGradient>
+    <clipPath id="display"><rect x="300" y="87" width="400" height="926" rx="48"/></clipPath>
+  </defs>
+  <!-- Phone body only; the screen is HTML layered on top (components/gemini-phone.tsx). -->
+  <rect x="280" y="260" width="5" height="66" rx="2" fill="#56606D"/>
+  <rect x="280" y="345" width="5" height="94" rx="2" fill="#56606D"/>
+  <rect x="715" y="325" width="5" height="110" rx="2" fill="#56606D"/>
+  <rect x="283" y="70" width="434" height="960" rx="64" fill="url(#edge)"/>
+  <rect x="288" y="75" width="424" height="950" rx="59" fill="#07090C" stroke="#919AA8" stroke-opacity=".3"/>
+  </svg>
