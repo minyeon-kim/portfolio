@@ -9,7 +9,7 @@ import { TLDR } from "@/components/mdx/tldr";
 import { WhyIChose } from "@/components/mdx/why-i-chose";
 import { CaseSection, CaseMedia, CaseMediaPair, CaseStatement } from "@/components/case-story";
 import { CaseGallery } from "@/components/case-gallery";
-import { CaseCompare, CaseFindings, CaseKey, CaseStats, CaseSteps } from "@/components/case-facts";
+import { CaseCompare, CaseDiamond, CaseFindings, CaseKey, CaseStats } from "@/components/case-facts";
 import { Todo } from "@/components/todo";
 import { slugify } from "@/lib/slug";
 
@@ -61,10 +61,10 @@ const components: MDXComponents = {
   code: (props) => <code className="font-mono text-xs" {...props} />,
   CaseGallery,
   CaseCompare,
+  CaseDiamond,
   CaseFindings,
   CaseKey,
   CaseStats,
-  CaseSteps,
   CaseSection,
   CaseMedia,
   CaseMediaPair,
