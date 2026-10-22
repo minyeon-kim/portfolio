@@ -35,7 +35,7 @@ export default async function AboutPage() {
         name="About"
         details={[
           { label: "Role", value: "Product designer" },
-          { label: "Background", value: "Computer science, cybersecurity" },
+          { label: "Background", value: "Security consultant, 4 years" },
           { label: "Focus", value: "Privacy, trust, developer tools" },
         ]}
       />

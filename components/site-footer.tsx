@@ -7,13 +7,11 @@ export function SiteFooter() {
         <p>{site.name}</p>
         <ul className="flex gap-3">
           <li>
-            {/* TODO: set site.email in lib/site.ts */}
             <a href={site.email ? `mailto:${site.email}` : "#"} className="link transition-colors duration-150 ease-standard hover:text-ink">
               Email
             </a>
           </li>
           <li>
-            {/* TODO: set site.linkedinUrl in lib/site.ts */}
             <a href={site.linkedinUrl || "#"} className="link transition-colors duration-150 ease-standard hover:text-ink">
               LinkedIn
             </a>
