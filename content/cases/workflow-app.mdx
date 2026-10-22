@@ -44,7 +44,26 @@ Designers and developers now build with AI, each on their own. When we each buil
 
 </CaseSection>
 
-<CaseMedia src="/images/cases/workflow-app/merge-experiment.webp" width={1400} height={1681} variant="portrait" label="Board listing the pain points found when merging two AI-built versions of a hotel booking site" caption="The merge experiment: pain points across design, the AI process and development when we combined two AI-built versions of the same site." />
+<CaseFindings
+  title="The merge experiment: what broke when we combined two AI-built versions of the same hotel booking site"
+  items={[
+    { title: "The design drifted", points: [
+      "Values we specified as numbers (color, width, font) matched; icons and spacing we could only describe in words kept coming out differently.",
+      "A token document wasn't enough: any state left undocumented split again.",
+      "Only shared component code kept things identical, and new screens outside the library drifted anyway.",
+    ] },
+    { title: "The logic disagreed", points: [
+      "The AI invented values missing from the data in different ways: a 4.2 rating in one build, 4.3 in the other.",
+      "The same logic got different names: getStarRating vs. deriveStarClass.",
+      "One build handled a missing hotelId; the other didn't.",
+    ] },
+    { title: "The setup diverged", points: [
+      "Unpinned library versions and changing project defaults caused conflicts and builds that wouldn't run.",
+      "Different package managers left different lock files to reconcile.",
+      "Without a team plan, neither of us could see what the other was asking the AI in real time.",
+    ] },
+  ]}
+/>
 
 <CaseStatement>4 interviews · 212 quotes · 26 ideas → 3 features · 2 test participants · 1 co-design session · 1,039 commits</CaseStatement>
 
@@ -165,7 +184,8 @@ We built a working React prototype with AI (vibe coding) and went through 1,039 
   <CaseMedia src="/images/cases/workflow-app/value-effort.webp" width={1600} height={1214} variant="screen" label="Value versus effort 2x2 matrix" caption="Narrowing: value × effort." />
 </CaseMediaPair>
 
-<CaseMedia src="/images/cases/workflow-app/crazy8.webp" width={1600} height={1232} label="Crazy 8 sketches of screen ideas" caption="Crazy 8s: sketching screens quickly to find the new direction." />
+{/* TODO: replace with a photo or scan of the hand-drawn sketches (the earlier Crazy 8 image was AI-generated and was removed). */}
+<CaseMedia label="Hand-drawn screen sketches" caption="Sketching screens by hand to find the new direction." />
 
 <CaseMediaPair>
   <CaseMedia src="/images/cases/workflow-app/ia.webp" width={1600} height={627} variant="screen" label="Information architecture" caption="IA: Dashboard → Project → Workspace (preview, screens, code, merge) → change review → History." />

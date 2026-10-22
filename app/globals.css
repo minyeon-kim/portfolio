@@ -1121,6 +1121,19 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-media-phone .case-media-image { max-width: 360px; margin-inline: auto; border-radius: 16px; }
 .case-media-logo .case-media-image { display: grid; place-items: center; padding: clamp(40px, 6vw, 80px); }
 .case-media-logo .case-media-image img { width: clamp(96px, 12vw, 160px); }
+.case-stats { margin: 16px 0 clamp(40px, 5vw, 72px); }
+.case-stats dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(16px, 2vw, 32px); margin: 0; }
+.case-stats dl > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; padding: 24px; border-radius: 16px; background: var(--color-fill); }
+.case-stats dd { margin: 0; font-size: clamp(40px, 4.5vw, 64px); line-height: 1; font-weight: 300; letter-spacing: -0.04em; }
+.case-stats dt { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.case-stats figcaption, .case-findings-title { padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.case-findings { margin: 16px 0 clamp(40px, 5vw, 72px); }
+.case-findings-title { padding: 0 0 16px; font-family: var(--font-mono); font-size: 12px; }
+.case-findings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.case-findings-card { padding: 24px; border-radius: 16px; background: var(--color-fill); }
+.case-findings-card h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
+.case-findings-card ul { margin: 0; padding-left: 18px; list-style: disc; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.case-findings-card li + li { margin-top: 8px; }
 .case-media-pair { display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(24px, 2.5vw, 48px); }
 .case-media-pair .case-media { margin-top: 0; }
 .case-statement { max-width: 1200px; padding-block: 32px 48px; font-size: clamp(28px, 3vw, 48px); line-height: 1.12; font-weight: 300; letter-spacing: -0.04em; }
