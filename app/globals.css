@@ -1876,3 +1876,13 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .about-hero { max-width: 880px; margin-inline: auto; padding: clamp(56px, 7vw, 120px) var(--project-text-inset) 0; box-sizing: content-box; }
 .about-hero-label { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.5; }
 .about-hero-title { margin: 0; max-width: 18ch; color: var(--ink); font-size: clamp(36px, 4.4vw, 64px); line-height: 1.1; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance; }
+
+/* Prototype slot: the frame the playable prototype will load into. */
+.case-prototype { max-width: 880px; margin: 0 auto clamp(40px, 5vw, 72px); }
+.case-prototype-frame { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 32px 24px; text-align: center; background: color-mix(in srgb, var(--ink) 4%, transparent); border: 1px solid var(--line); border-radius: 20px; aspect-ratio: 16 / 10; }
+.case-prototype-phone .case-prototype-frame { width: min(100%, 340px); margin-inline: auto; aspect-ratio: 9 / 19; border-radius: 40px; }
+.case-prototype-kicker { color: var(--case-accent, var(--accent)); font-size: 14px; font-weight: 500; }
+.case-prototype-label { max-width: 28ch; text-wrap: balance; color: var(--ink); font-size: clamp(18px, 1.8vw, 22px); line-height: 1.35; letter-spacing: -0.01em; }
+.case-prototype-open { margin-top: 8px; display: inline-flex; align-items: center; min-height: 40px; padding: 0 18px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 500; }
+.case-prototype-open:hover { opacity: 0.85; }
+@media (max-width: 47.99rem) { .case-prototype-frame { aspect-ratio: 4 / 3; } }
