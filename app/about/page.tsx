@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 };
 
 const columns = [
-  { title: "Design", items: skills.design },
-  { title: "Engineering", items: skills.engineering },
-  { title: "Security", items: skills.security },
+  { title: "Research", items: skills.research },
+  { title: "Design & build", items: skills.build },
+  { title: "Background", items: skills.background },
 ];
 
 // Same frame as a project page: editorial opener, a portrait beside a short bio,
@@ -147,8 +147,8 @@ export default async function AboutPage() {
               )}
               {site.email ? (
                 <div className="flex items-center gap-1">
-                  <a href={`mailto:${site.email}`} className="link text-sm text-accent">
-                    {site.email}
+                  <a href={`mailto:${site.email}`} className="press inline-flex h-4 items-center rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong">
+                    Email
                   </a>
                   <CopyButton value={site.email} label="Copy email" />
                 </div>
