@@ -41,7 +41,7 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / Overview" title="Connecting took one tap. Cleaning up took a trip to settings.">
 
-You ask Gemini for an Italian restaurant, and it adds: “You loved the truffle risotto when you went with Jungmin last spring.” You never told it that name. Since Personal Intelligence linked Gmail, Calendar and Photos, Gemini can bring up things you never asked about, and turning them off means digging through two settings pages.
+You ask Gemini for an Italian restaurant, and it adds: “You loved the truffle risotto when you went with Jungmin last spring.” You never told it that name. Since [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) linked Gmail, Calendar and Photos (January 2026), Gemini can bring up things you never asked about, and turning them off means digging through two settings pages.
 
 [Try the prototype](https://minyeon-kim.github.io/gemini_privacy/?mode=participant) · A self-initiated concept, not affiliated with Google.
 
@@ -100,7 +100,7 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseSection id="discover" label="05 / Discover" title="There's an off switch — but no one knows what's left after.">
 
-We compared the privacy controls of five AI services. Gemini splits them between the app and the Google account, collects the most data types (23 of 35), and no screen says what remains after you switch something off.
+We compared the privacy controls of five AI services. Gemini splits them between the app and the Google account, collects the most data types, and no screen says what remains after you switch something off.
 
 </CaseSection>
 
@@ -108,11 +108,11 @@ We compared the privacy controls of five AI services. Gemini splits them between
 
 <CaseStats
   items={[
-    { value: "56%", label: "agree to privacy policies without reading them" },
-    { value: "39% vs 12%", label: "clear information is users' top trust factor; companies rank offering controls last" },
-    { value: "~60%", label: "reject when the reject button sits on the first screen; when it takes an extra click, about 90% accept" },
+    { value: "23 / 35", label: "data types Gemini collects, vs. 17 for ChatGPT and 13 for Claude", source: "Surfshark (2025)" },
+    { value: "56%", label: "of U.S. adults always or almost always agree to privacy policies without reading them", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "39% vs 5%", label: "of consumers rank clear information on data use as the top trust builder; of organizations, letting people configure privacy settings", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "~60%", label: "reject cookies when “Reject all” is on the first screen; about 90% accept when rejecting takes more clicks", source: "Bielova et al., USENIX Security Symposium (2024)" },
   ]}
-  source="Secondary research: industry and academic surveys collected in our desk research."
 />
 
 <CaseSection id="discover-primary" label="05 / Discover · Interviews" title="Worried, but still using it.">
@@ -125,10 +125,9 @@ We interviewed a designer, a security professional, a call-center worker and an 
 
 <CaseStats
   items={[
-    { value: "81%", label: "of Americans who have heard of AI expect companies to use it on their data in ways people wouldn't be comfortable with" },
-    { value: "62%", label: "say the same use of AI could make people's lives easier" },
+    { value: "81%", label: "of Americans who have heard of AI expect companies to use it on their data in ways people wouldn't be comfortable with", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "62%", label: "say the same use of AI could make people's lives easier", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
   ]}
-  source="Secondary research. Source: Pew Research Center, “How Americans View Data Privacy,” survey of U.S. adults, May 2023."
 />
 
 <CaseSection id="define" label="06 / Define" title="Anxiety starts when your data shows up, not when you type it.">

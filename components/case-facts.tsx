@@ -4,12 +4,14 @@ import type { ReactNode } from "react";
 // cards and short lines instead of long lists, and secondary research is
 // cited rather than shown as someone else's chart.
 
-export function CaseStats({ items, source }: { items: { value: string; label: string }[]; source?: string }) {
+// Every number cites its source right under it.
+export function CaseStats({ items, source }: { items: { value: string; label: string; source?: string }[]; source?: string }) {
   return (
     <figure className="case-stats reveal">
       <dl>
         {items.map((item) => (
           <div key={item.label}>
+            {item.source && <cite>{item.source}</cite>}
             <dt>{item.label}</dt>
             <dd>{item.value}</dd>
           </div>
