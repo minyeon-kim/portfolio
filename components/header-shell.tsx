@@ -15,7 +15,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
   // floats over it instead of laying a bar across the top.
   const overHero = pathname.startsWith("/work/") || pathname.startsWith("/about");
   const activeCase = useUi((state) => state.activeCase);
-  const canCompact = pathname.startsWith("/work/") || (overStage && activeCase !== null);
+  const canCompact = pathname.startsWith("/work/") || pathname.startsWith("/about") || (overStage && activeCase !== null);
 
   useEffect(() => {
     let frame = 0;
