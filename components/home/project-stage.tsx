@@ -121,6 +121,9 @@ function IntroState({ name, intro, projects, onSelect }: {
     const el = surface.current;
     const stage = el?.closest<HTMLElement>(".intro-stage");
     if (!el || !stage) return;
+    // The chat picker stays hidden until this effect has placed it, so it never
+    // flashes in its unpositioned spot during the first paint.
+    el.setAttribute("data-mounted", "");
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let lastReady: boolean | null = null;
