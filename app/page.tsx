@@ -1,6 +1,7 @@
 import { CaseBody } from "@/components/home/case-body";
 import { CasePanels } from "@/components/home/case-panels";
 import { ProjectStage } from "@/components/home/project-stage";
+import { AlignWords } from "@/components/home/align-words";
 import { SideRail } from "@/components/home/side-rail";
 import { getCase, getCases } from "@/lib/cases";
 import { site } from "@/lib/site";
@@ -26,7 +27,7 @@ export default async function Home() {
           concept: meta.concept,
         }))}
         name={site.name}
-        intro={<h1 className="intro-headline">{site.positioning}</h1>}
+        intro={<h1 className="intro-headline"><AlignWords text={site.positioning} /></h1>}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
