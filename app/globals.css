@@ -1628,6 +1628,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .intro-scroll-viewport .intro-copy { position: relative; }
 .intro-surface[data-scroll-ready] .intro-name-scroll { opacity: calc(1 - var(--name-exit, 0)); transform: translateY(calc(var(--name-exit, 0) * -100px)); }
 .intro-surface[data-scroll-ready] .intro-positioning-scroll { opacity: calc(1 - var(--intro-exit, 0)); transform: translateY(calc(var(--intro-exit, 0) * -140px)); }
+.intro-surface:not([data-mounted]) .intro-project-picker { visibility: hidden; }
 .intro-surface[data-scroll-ready] .intro-project-picker { position: absolute; top: 50%; left: 0; width: 100%; margin-top: 0; opacity: var(--explore-enter, 0); transform: translateY(calc(-50% + (1 - var(--explore-enter, 0)) * 64px)); }
 .intro-scroll-viewport .intro-name { animation: none; }
 .intro-name-char { display: inline-block; animation: intro-name-letter 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
