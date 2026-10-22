@@ -299,7 +299,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         <HeroSculpture variant={sculpture} active={busy} />
       </div>
       <div ref={showcase} className="intro-showcase-scroll">
-        <IntroShowcase projects={projects} visible={showcaseVisible && !busy} />
+        <IntroShowcase visible={showcaseVisible && !busy} />
       </div>
       <div className="intro-copy">
         <div className="intro-name-scroll"><p className="intro-name" translate="no" aria-label={name}>
