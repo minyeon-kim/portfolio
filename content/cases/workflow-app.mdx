@@ -179,18 +179,17 @@ Every screen in flow order, a marker wherever something changed, and the decisio
 
 </CaseSection>
 
-<CasePrototype href="https://minyeon-kim.github.io/devsign/" label="Compare a conflict, then approve the merge" />
-
-<CaseMedia src="/images/cases/workflow-app/screens-board.webp" width={960} height={540} label="Screens board showing every screen in flow order with change markers" caption="Live Workspace: click a marker to jump to the decision it needs." />
-
-<CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} label="Change review comparing the original, the build and the proposal, with a five-step status" caption="Conflict Points: original, build and proposal side by side." />
-
-<CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} label="Merge Studio combining areas from several drafts" caption="Merge Studio: each area from a different draft, with where every piece came from." />
-
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/dashboard.webp" width={1600} height={1256} variant="screen" label="Dashboard with the reviews waiting on you at the top" caption="Dashboard: requests waiting on you come first." />
-  <CaseMedia src="/images/cases/workflow-app/history.webp" width={1600} height={1256} variant="screen" label="History timeline next to the screen as it was at that moment" caption="History: the actual screen at any point on the timeline." />
-</CaseMediaPair>
+<CasePrototype
+  href="https://minyeon-kim.github.io/devsign/"
+  label="Compare a conflict, then approve the merge"
+  steps={[
+    { src: "/images/cases/workflow-app/screens-board.webp", width: 960, height: 540, title: "Live Workspace", body: "Every screen in flow order; a marker jumps to the decision it needs." },
+    { src: "/images/cases/workflow-app/v2-review.webp", width: 960, height: 540, title: "Conflict Points", body: "Original, build and proposal side by side, with a five-step status." },
+    { src: "/images/cases/workflow-app/v2-merge.webp", width: 960, height: 540, title: "Merge Studio", body: "Each area from a different draft, with where every piece came from." },
+    { src: "/images/cases/workflow-app/dashboard.webp", width: 1600, height: 1256, title: "Dashboard", body: "Requests waiting on you come first." },
+    { src: "/images/cases/workflow-app/history.webp", width: 1600, height: 1256, title: "History", body: "The actual screen at any point on the timeline." },
+  ]}
+/>
 
 <CaseSection id="usability-testing" label="10 / Usability testing" title="Both roles called it “the other team's tool.” So we split the screens.">
 
