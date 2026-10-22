@@ -1871,3 +1871,8 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @media (max-width: 74.99rem) and (prefers-reduced-motion: no-preference) {
   .intro-surface[data-scroll-ready] :is(.intro-name, .intro-positioning) { text-align: center; }
 }
+
+/* About opener: a quiet label, then the headline as the page title, in the body column. */
+.about-hero { max-width: 880px; margin-inline: auto; padding: clamp(56px, 7vw, 120px) var(--project-text-inset) 0; box-sizing: content-box; }
+.about-hero-label { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.about-hero-title { margin: 0; max-width: 18ch; color: var(--ink); font-size: clamp(36px, 4.4vw, 64px); line-height: 1.1; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance; }

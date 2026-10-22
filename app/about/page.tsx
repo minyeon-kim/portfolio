@@ -3,8 +3,7 @@ import path from "node:path";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
-import { CaseMedia, CaseMediaPair, CaseSection, CaseStatement } from "@/components/case-story";
-import { ProjectHero } from "@/components/project-hero";
+import { CaseMedia, CaseMediaPair, CaseSection } from "@/components/case-story";
 import { Todo } from "@/components/todo";
 import Story, { bio, headline, principles, skills } from "@/content/about.mdx";
 import { getCases } from "@/lib/cases";
@@ -21,7 +20,7 @@ const columns = [
   { title: "Background", items: skills.background },
 ];
 
-// Same frame as a project page: editorial opener, a portrait beside a short bio,
+// Headline as the page title, a portrait beside a short bio,
 // then numbered sections. Photo spots are labelled placeholders until real
 // photos exist.
 export default async function AboutPage() {
@@ -34,18 +33,13 @@ export default async function AboutPage() {
 
   return (
     <div data-about-page className="project-detail">
-      <ProjectHero
-        name="About"
-        details={[
-          { label: "Role", value: "Product designer" },
-          { label: "Background", value: "Security consultant, 4 years" },
-          { label: "Focus", value: "End to end, research to working prototype" },
-        ]}
-      />
+      {/* The headline is the page title; "About" is only a label above it. */}
+      <header className="about-hero">
+        <p className="about-hero-label">About</p>
+        <h1 className="about-hero-title">{headline}</h1>
+      </header>
       <article className="case-study" data-project="about">
         <div className="case-content">
-          <CaseStatement><p>{headline}</p></CaseStatement>
-
           <div className="about-intro" data-portrait>
             {hasPortrait
               ? <CaseMedia variant="portrait" src={portrait} width={1200} height={1500} label="Portrait of Minyeon" />

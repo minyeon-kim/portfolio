@@ -75,10 +75,10 @@ export function CaseDiamond({ items }: { items: { label: string; title: string; 
     <figure className="case-diamond reveal">
       <div className="case-diamond-spaces" aria-hidden="true"><span>Problem</span><span>Solution</span></div>
       <div className="case-diamond-figure">
-        <svg viewBox="0 0 800 180" role="img" aria-label="Double Diamond: Discover and Define, then Develop and Deliver">
-          <line x1="0" y1="90" x2="800" y2="90" />
-          <polygon points="0,90 200,4 400,90 200,176" />
-          <polygon points="400,90 600,4 800,90 600,176" />
+        <svg viewBox="0 0 800 300" role="img" aria-label="Double Diamond: Discover and Define, then Develop and Deliver">
+          <line x1="0" y1="150" x2="800" y2="150" />
+          <polygon points="0,150 200,4 400,150 200,296" />
+          <polygon points="400,150 600,4 800,150 600,296" />
         </svg>
         <ol className="case-diamond-phases" aria-hidden="true">
           {items.map((item) => <li key={item.label}>{item.label}</li>)}
