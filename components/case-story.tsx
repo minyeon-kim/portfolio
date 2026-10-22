@@ -58,9 +58,9 @@ type PrototypeStep = { src: string; title: string; body: string; width?: number;
 // The playable prototype with a numbered walkthrough beside it. The frame is a
 // slot for now and links out; the embed will load only after a click, so the
 // page stays light. The steps double as the fallback for anyone who doesn't play.
-export function CasePrototype({ label, href, device = "desktop", steps = [] }: { label: string; href: string; device?: "phone" | "desktop"; steps?: PrototypeStep[] }) {
+export function CasePrototype({ label, href, device = "desktop", steps = [], stepsBelow = false }: { label: string; href: string; device?: "phone" | "desktop"; steps?: PrototypeStep[]; stepsBelow?: boolean }) {
   return (
-    <figure className={`case-prototype case-prototype-${device} reveal`}>
+    <figure className={`case-prototype case-prototype-${device} reveal`} data-steps-below={stepsBelow || undefined}>
       <div className="case-prototype-frame" role="img" aria-label={`Prototype placeholder: ${label}`}>
         <span className="case-prototype-kicker">Interactive prototype</span>
         <span className="case-prototype-label">{label}</span>

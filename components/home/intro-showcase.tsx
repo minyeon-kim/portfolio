@@ -3,26 +3,23 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { withBase } from "@/lib/site";
-import type { StageProject } from "./project-stage";
 
-type Props = {
-  projects: StageProject[];
-  visible: boolean;
-};
+type Props = { visible: boolean };
 
 type Slide = { key: string; label: string; src?: string; alt: string };
 
 const INTERVAL = 4200;
 
 // Scroll's middle step on the intro: the name and positioning move left and a
-// card at the right cycles a photo of Minyeon, then the featured covers. Each
+// card at the right cycles photos of Minyeon (placeholders until they exist). Each
 // change slides the next image in from the right while the current one drifts
 // left and blurs away.
-export function IntroShowcase({ projects, visible }: Props) {
+export function IntroShowcase({ visible }: Props) {
+  // TODO: real photos of Minyeon, e.g. /images/profile-1.webp (portrait, 1000x1050 WebP).
   const slides: Slide[] = [
-    // TODO: profile photo or a photo of Minyeon at work, e.g. /images/profile.webp (portrait, 1000x1050 WebP).
-    { key: "profile", label: "Minyeon Kim", alt: "Minyeon Kim" },
-    ...projects.filter((p) => p.cover).map((p) => ({ key: p.slug, label: p.name, src: p.cover, alt: `${p.name} project overview` })),
+    { key: "photo-1", label: "Photo 1", alt: "Minyeon Kim" },
+    { key: "photo-2", label: "Photo 2", alt: "Minyeon Kim at work" },
+    { key: "photo-3", label: "Photo 3", alt: "Minyeon Kim" },
   ];
   const [current, setCurrent] = useState(0);
   const [last, setLast] = useState<number | null>(null);
@@ -60,7 +57,7 @@ export function IntroShowcase({ projects, visible }: Props) {
   const position = (i: number) => (i === current ? "current" : i === last ? "previous" : "next");
 
   return (
-    <div className="intro-showcase" aria-roledescription="carousel" aria-label="Minyeon Kim and selected work"
+    <div className="intro-showcase" aria-roledescription="carousel" aria-label="Photos of Minyeon Kim"
       onPointerEnter={(e) => { if (e.pointerType === "mouse") setHeld(true); }}
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
@@ -71,7 +68,7 @@ export function IntroShowcase({ projects, visible }: Props) {
             role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.label}`} aria-hidden={i !== current}>
             {s.src
               ? <Image src={withBase(s.src)} alt={s.alt} fill sizes="(min-width: 75rem) 500px, 440px" className="object-contain" />
-              : <p className="intro-showcase-placeholder">Profile photo<span>A portrait or a photo of me at work goes here.</span></p>}
+              : <p className="intro-showcase-placeholder">Profile photo {i + 1}<span>Image to come</span></p>}
           </div>
         ))}
       </div>
