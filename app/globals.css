@@ -1861,3 +1861,13 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 
 /* The question types in on its own; no half-blurred orb flashing before it. */
 .project-chat-welcome .project-ai-orb:not([data-active]) .project-ai-expansion { opacity: 0; animation: none; }
+
+/* Intro text: centered when the page opens, left-aligned once the card is in. */
+.align-word { display: inline-block; }
+@media (min-width: 75rem) and (prefers-reduced-motion: no-preference) {
+  .intro-surface[data-scroll-ready] :is(.intro-name-char, .align-word) { translate: calc((1 - var(--split, 0)) * var(--dx, 0px)) 0; }
+}
+/* Narrower screens stack the card under the copy, so the copy stays centered. */
+@media (max-width: 74.99rem) and (prefers-reduced-motion: no-preference) {
+  .intro-surface[data-scroll-ready] :is(.intro-name, .intro-positioning) { text-align: center; }
+}

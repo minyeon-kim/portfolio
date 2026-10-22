@@ -117,6 +117,35 @@ function IntroState({ name, intro, projects, onSelect }: {
       if (count < welcomeText.length) welcomePlayed.current = false;
     };
   }, [exploreReady]);
+  // Wide screens open with the name and positioning centered and settle on the
+  // left edge as the card slides in. Text-align can't animate, so measure how far
+  // each word sits from its left-aligned spot and let --split close the gap.
+  useLayoutEffect(() => {
+    const el = surface.current;
+    if (!el) return;
+    const wide = window.matchMedia("(min-width: 75rem) and (prefers-reduced-motion: no-preference)");
+    const blocks = Array.from(el.querySelectorAll<HTMLElement>(".intro-name, .intro-positioning"));
+    const measure = () => {
+      for (const block of blocks) {
+        const words = Array.from(block.querySelectorAll<HTMLElement>(".intro-name-char, .align-word"));
+        if (!wide.matches) { words.forEach((word) => word.style.removeProperty("--dx")); continue; }
+        block.style.textAlign = "left";
+        const start = words.map((word) => word.offsetLeft);
+        block.style.textAlign = "center";
+        words.forEach((word, i) => word.style.setProperty("--dx", `${word.offsetLeft - start[i]}px`));
+        block.style.textAlign = "";
+      }
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    blocks.forEach((block) => observer.observe(block));
+    wide.addEventListener("change", measure);
+    document.fonts?.ready.then(measure);
+    return () => {
+      observer.disconnect();
+      wide.removeEventListener("change", measure);
+    };
+  }, []);
   useLayoutEffect(() => {
     const el = surface.current;
     const stage = el?.closest<HTMLElement>(".intro-stage");
