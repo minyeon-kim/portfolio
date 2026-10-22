@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-// Numbers, findings, steps and comparisons set as text, so a case reads in
+// Numbers, findings, the process diagram and comparisons set as text, so a case reads in
 // cards and short lines instead of long lists, and secondary research is
 // cited rather than shown as someone else's chart.
 
@@ -44,20 +44,6 @@ export function CaseFindings({ title, items }: { title?: string; items: Finding[
   );
 }
 
-export function CaseSteps({ items }: { items: { label: string; title: string; body: string }[] }) {
-  return (
-    <ol className="case-steps reveal">
-      {items.map((item) => (
-        <li key={item.label}>
-          <span className="case-steps-label">{item.label}</span>
-          <strong>{item.title}</strong>
-          <p>{item.body}</p>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
 export function CaseCompare({ before, after, rows }: { before: string; after: string; rows: { topic?: string; before: string; after: string }[] }) {
   return (
     <div className="case-compare reveal" role="table" aria-label={`${before} and ${after}`}>
@@ -78,4 +64,33 @@ export function CaseCompare({ before, after, rows }: { before: string; after: st
 // The one line per stage a skimming reader should take away.
 export function CaseKey({ children }: { children: ReactNode }) {
   return <p className="case-key reveal">{children}</p>;
+}
+
+// The Double Diamond drawn out: two diamonds (problem, then solution) with the
+// four phases on them, and what each phase found underneath.
+export function CaseDiamond({ items }: { items: { label: string; title: string; body: string }[] }) {
+  return (
+    <figure className="case-diamond reveal">
+      <div className="case-diamond-spaces" aria-hidden="true"><span>Problem</span><span>Solution</span></div>
+      <div className="case-diamond-figure">
+        <svg viewBox="0 0 800 180" role="img" aria-label="Double Diamond: Discover and Define, then Develop and Deliver">
+          <line x1="0" y1="90" x2="800" y2="90" />
+          <polygon points="0,90 200,4 400,90 200,176" />
+          <polygon points="400,90 600,4 800,90 600,176" />
+        </svg>
+        <ol className="case-diamond-phases" aria-hidden="true">
+          {items.map((item) => <li key={item.label}>{item.label}</li>)}
+        </ol>
+      </div>
+      <ol className="case-diamond-notes">
+        {items.map((item) => (
+          <li key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.title}</strong>
+            <p>{item.body}</p>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  );
 }
