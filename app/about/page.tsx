@@ -1,45 +1,93 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
-import { CaseSection, CaseStatement } from "@/components/case-story";
+import { CaseMedia, CaseMediaPair, CaseSection, CaseStatement } from "@/components/case-story";
 import { ProjectHero } from "@/components/project-hero";
 import { Todo } from "@/components/todo";
-import Story, { skills } from "@/content/about.mdx";
+import Story, { bio, principles, skills } from "@/content/about.mdx";
+import { getCases } from "@/lib/cases";
 import { site, withBase } from "@/lib/site";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description: site.positioning,
+};
 
 const columns = [
   { title: "Design", items: skills.design },
   { title: "Engineering", items: skills.engineering },
-  { title: "Cybersecurity", items: skills.security },
+  { title: "Security", items: skills.security },
 ];
 
-// Same frame as a project page: editorial opener, then numbered story sections.
-export default function AboutPage() {
+// Same frame as a project page: editorial opener, a portrait beside a short bio,
+// then numbered sections. Photo spots are labelled placeholders until real
+// photos exist.
+export default async function AboutPage() {
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
+  const work = (await getCases()).filter((c) => c.meta.featured);
 
   return (
     <div data-about-page className="project-detail">
       <ProjectHero
         name="About"
         details={[
-          { label: "Background", value: "Cybersecurity → Product design" },
           { label: "Role", value: "Product designer" },
-          { label: "Focus", value: "Research, design, engineering" },
+          { label: "Background", value: "Computer science, cybersecurity" },
+          { label: "Focus", value: "Privacy, trust, developer tools" },
         ]}
       />
       <article className="case-study" data-project="about">
         <div className="case-content">
+          <div className="about-intro">
+            {/* TODO: replace with a portrait (public/images/about/portrait.webp, 4:5). */}
+            <CaseMedia variant="portrait" label="Portrait of Minyeon" />
+            <div className="about-bio">
+              {bio.map((paragraph) => <p key={paragraph} className="reveal">{paragraph}</p>)}
+              <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
+            </div>
+          </div>
+
           <CaseStatement><p>{site.positioning}</p></CaseStatement>
 
-          <CaseSection id="story" label="01 / Story" title="From cybersecurity to design">
+          <CaseSection id="approach" label="01 / How I work" title="Research, design and engineering in one loop">
+            <ol className="about-rows">
+              {principles.map((item, i) => (
+                <li key={item.title} className="reveal">
+                  <span className="about-rows-index">{String(i + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3 className="about-rows-title">{item.title}</h3>
+                    <p>{item.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </CaseSection>
+
+          <CaseSection id="work" label="02 / Selected work" title="Recent projects">
+            <ul className="about-rows">
+              {work.map(({ slug, meta, tldr }) => (
+                <li key={slug} className="reveal">
+                  <span className="about-rows-index">{meta.timeline}</span>
+                  <div>
+                    <h3 className="about-rows-title">
+                      <Link href={`/work/${slug}/`} className="link">{meta.short ?? meta.title}</Link>
+                    </h3>
+                    <p>{tldr.problem}</p>
+                    {meta.role && <p className="about-rows-meta">{meta.concept ? "Concept · " : ""}{meta.role}</p>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </CaseSection>
+
+          <CaseSection id="background" label="03 / Background" title="From cybersecurity to design">
             <Story />
           </CaseSection>
 
-          <CaseSection id="skills" label="02 / Skills" title="What I work with">
+          <CaseSection id="toolkit" label="04 / Toolkit" title="What I work with">
             <div className="about-skills">
               {columns.map((col) => (
                 <div key={col.title} className="reveal">
@@ -54,7 +102,17 @@ export default function AboutPage() {
             </div>
           </CaseSection>
 
-          <CaseSection id="contact" label="03 / Contact" title="Get in touch">
+          <CaseSection id="outside" label="05 / Outside work" title="Off the screen">
+            <Todo>a line or two about what you do outside work, in your own words</Todo>
+          </CaseSection>
+          {/* TODO: replace with real photos (public/images/about/), e.g. at work and a workshop or talk. */}
+          <CaseMediaPair>
+            <CaseMedia variant="screen" label="Photo of Minyeon at work" />
+            <CaseMedia variant="screen" label="Workshop, study group or talk" />
+          </CaseMediaPair>
+
+          <CaseSection id="contact" label="06 / Contact" title="Get in touch">
+            <p className="reveal">Open to product designer and design engineer roles, especially in privacy, security and developer tools.</p>
             <div className="flex flex-wrap items-center gap-2">
               {hasResume ? (
                 <a
@@ -65,6 +123,13 @@ export default function AboutPage() {
                 </a>
               ) : (
                 <Todo>add public/resume.pdf; the link appears once it exists</Todo>
+              )}
+              {site.linkedinUrl ? (
+                <a href={site.linkedinUrl} className="press inline-flex h-4 items-center rounded-full bg-fill px-1.5 font-mono text-xs transition-colors duration-150 ease-standard hover:bg-fill-strong">
+                  LinkedIn
+                </a>
+              ) : (
+                <Todo>set site.linkedinUrl in lib/site.ts</Todo>
               )}
               {site.email ? (
                 <div className="flex items-center gap-1">
