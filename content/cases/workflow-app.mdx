@@ -27,155 +27,129 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / Overview" title="AI made us faster alone — and slower together.">
 
-Designers and developers now build with AI, each on their own. When we each built the same hotel booking site with AI and tried to merge the two, the same feature had different function names, and the AI had invented different rating rules that weren't in the data: 4.2 stars in one, 4.3 in the other. Making things got faster; agreeing on one version got slower.
-
-77% of designers using AI say their work got faster, and 78% of developers say they're more productive. What sped up was the work done alone. Lining up each other's output and deciding what ships stayed the same, or grew:
-
-- **Output that won't merge.** Drafts and code each made with AI differ in rules, names and values, and have to be reworked.
-- **Reviews no one fully trusts.** 76% of developers don't fully trust AI-generated code, so people check again, but can't check everything.
-- **Silent conflicts.** Different names or values don't throw errors, so drift from the design is found late.
-- **Lost intent.** The prompt given to the AI is effectively the spec, and reviewers never see it.
-- **Decisions that leave no trace.** “Let's go with two columns” gets settled over KakaoTalk or Slack screenshots, and that's the end of it.
-- **Scattered tools, blurred roles.** Figma, GitHub and Slack, with no agreement on who checks what, and when.
-
-**Goal.** Connect comparing, merging and deciding on changes in one flow, so the screenshot back-and-forth becomes request → decision → record inside the tool. For a company, that means time saved and fewer “can you check this?” messages.
+We each built the same hotel booking site with AI and tried to merge the two. The same feature had different function names, and the AI had invented different rating rules: 4.2 stars in one, 4.3 in the other. Making things got faster; agreeing on one version got slower.
 
 [Try the prototype](https://minyeon-kim.github.io/devsign/) · [GitHub](https://github.com/minyeon-kim/devsign)
 
 </CaseSection>
 
 <CaseFindings
-  title="The merge experiment: what broke when we combined two AI-built versions of the same hotel booking site"
+  title="The merge experiment: what broke"
   items={[
-    { title: "The design drifted", points: [
-      "Values we specified as numbers (color, width, font) matched; icons and spacing we could only describe in words kept coming out differently.",
-      "A token document wasn't enough: any state left undocumented split again.",
-      "Only shared component code kept things identical, and new screens outside the library drifted anyway.",
-    ] },
-    { title: "The logic disagreed", points: [
-      "The AI invented values missing from the data in different ways: a 4.2 rating in one build, 4.3 in the other.",
-      "The same logic got different names: getStarRating vs. deriveStarClass.",
-      "One build handled a missing hotelId; the other didn't.",
-    ] },
-    { title: "The setup diverged", points: [
-      "Unpinned library versions and changing project defaults caused conflicts and builds that wouldn't run.",
-      "Different package managers left different lock files to reconcile.",
-      "Without a team plan, neither of us could see what the other was asking the AI in real time.",
-    ] },
+    { label: "Design", title: "The design drifted", points: ["Icons and spacing described in words came out differently", "Undocumented states split again", "New screens outside the library drifted"] },
+    { label: "Logic", title: "The logic disagreed", points: ["Invented values: 4.2 vs. 4.3 stars", "getStarRating vs. deriveStarClass", "A missing hotelId handled in only one build"] },
+    { label: "Setup", title: "The setup diverged", points: ["Unpinned versions broke builds", "Different package managers and lock files", "Neither of us could see the other's AI chat"] },
   ]}
+/>
+
+<CaseStats
+  items={[
+    { value: "77%", label: "of designers using AI say their work got faster" },
+    { value: "76%", label: "of developers still don't fully trust AI-generated code" },
+  ]}
+  source="Secondary research. Sources: UX Collective (designers, small study) and Qodo developer survey."
 />
 
 <CaseSection id="keywords" label="02 / Keywords" title="Collaboration workflow and visual comparison.">
 
-- **Collaboration workflow.** Connect the requests, decisions and fixes that designers and developers used to pass between separate tools, and give each role its own screens and order.
-- **Visual comparison and hierarchy.** Show the difference between the design and the build, or between AI drafts, as side-by-side images and markers instead of text and code, with the next thing to do shown first.
+The goal: turn screenshot back-and-forth in chat into request → decision → record inside one tool, so teams spend less time between Figma, GitHub and Slack.
 
 </CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "Collaboration workflow", title: "One flow, a clear role for each side", body: "Requests, decisions and fixes connected, with screens and order per role." },
+    { label: "Visual comparison", title: "See the difference, don't read it", body: "Side-by-side images and markers instead of text and code, next step first." },
+  ]}
+/>
 
 <CaseSection id="features" label="03 / Main features" title="Merge, decide, and see it all at a glance.">
 
-### Merge Studio
-
-Put several AI-made drafts side by side and combine the parts you like into one.
-
-- **Problem:** With several drafts there's no way to keep only the good parts, so you pick one whole draft or redraw by hand.
-- **For:** designers.
-
-### Conflict Points
-
-Find where the build drifted from the design; the developer asks, and the designer answers on one screen.
-
-- **Problem:** People hunt for differences by eye, then trade screenshots and answers in chat.
-- **For:** developers (request) → designers (decide).
-
-### Live Workspace
-
-See who is changing what on one board, without digging through Slack and other tools.
-
-- **Problem:** Finding out who changed what means jumping between tools.
-- **For:** designers and developers.
-
-**Shared foundation: History.** Each request links its request, decision, fix and resolution with the actual screen at that moment.
+Three features share one workspace. Every decision is saved to History, with the actual screen at that moment.
 
 </CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "Merge Studio · Designers", title: "Pick the best parts of every AI draft", body: "Instead of choosing one whole draft or redrawing by hand." },
+    { label: "Conflict Points · Developer → designer", title: "Spot the drift, decide in one screen", body: "Instead of hunting by eye and trading screenshots in chat." },
+    { label: "Live Workspace · Both", title: "See who changed what", body: "Instead of digging through Slack and other tools." },
+  ]}
+/>
 
 <CaseSection id="process" label="04 / Process" title="Double Diamond: go wide, then narrow, then change course.">
 
-Collaboration with AI is a new problem with little written about it, so we needed to research widely before narrowing. We did change direction once, in Develop: from an AI mediator to Merge Studio.
-
-- **Discover.** Where does designer–developer collaboration get stuck in teams that use AI? → 100+ community posts, competing tools, 4 interviews.
-- **Define.** What's the root cause behind the repeats? → 212 quotes, bottom-up affinity mapping into 7 themes.
-- **Develop.** What do we build to solve it? → 26 ideas, DVF scoring, a change of direction, 3 features, an AI-built prototype, then a test and co-design.
-- **Deliver.** Whose tool is it, and for what? → Scope, roles and design principles fixed; v2 shipped as a prototype.
+Collaboration with AI is new and little written about, so we went wide first. We changed direction once, in Develop: from an AI mediator to Merge Studio.
 
 </CaseSection>
+
+<CaseSteps
+  items={[
+    { label: "Discover", title: "Plenty of tools, none connected", body: "100+ community posts, competing tools, 4 interviews" },
+    { label: "Define", title: "Decisions lived in chat", body: "212 quotes, bottom-up into 7 themes" },
+    { label: "Develop", title: "Solve what AI itself created", body: "26 ideas, a change of course, 3 features, AI-built prototype" },
+    { label: "Deliver", title: "Designers decide, developers request", body: "Scope, roles and principles fixed; v2 after test and co-design" },
+  ]}
+/>
 
 <CaseSection id="discover" label="05 / Discover" title="Plenty of tools. None of them talk to each other.">
 
-There was almost no academic work on this, so we started where practitioners write. We read 100+ posts on Reddit, Hacker News, the Figma forum, Medium, Blind and Korean communities, kept only the collaboration problems AI itself created, and compared tools for handoff, visual QA, review and AI design.
-
-- **Handoff** (Figma Dev Mode, Zeplin) covers specs, but not who decides when the build differs.
-- **Visual diff** (OverlayQA, Uiprobe, vrdiff) spots differences, but stops before the request, decision and record.
-- **Review and approval** (Chromatic, GitHub required reviewers) works per PR, in screens designers find hard to read.
-- **AI design** (Magic Patterns, Stitch) generates and edits screens, but can't combine several drafts element by element.
-
-The most common complaint was the review burden. And people kept missing something from Figma: comparing options A, B and C and marking the final one, which disappeared once the work moved to code. The open space was the flow between spotting a difference and approving it, and merging AI drafts part by part.
+With almost no academic work, we started where practitioners write: 100+ posts from Reddit, Hacker News, the Figma forum and Korean communities. Each tool covers one step, but none connects spotting a difference to deciding what to do about it.
 
 </CaseSection>
 
-<CaseMedia src="/images/cases/workflow-app/research-board.webp" width={1600} height={617} label="Research board of community posts and competing services" caption="Experience research board: community posts and competing services." />
+<CaseCompare
+  before="What tools do"
+  after="What's missing"
+  rows={[
+    { topic: "Handoff · Figma Dev Mode, Zeplin", before: "Specs and component links.", after: "Who decides when the build differs." },
+    { topic: "Visual diff · OverlayQA, Uiprobe", before: "Spots design–build differences.", after: "The request, decision and record after." },
+    { topic: "Review · Chromatic, GitHub", before: "Approval per pull request.", after: "Screens a designer can read." },
+    { topic: "AI design · Magic Patterns, Stitch", before: "Generates and edits screens.", after: "Merging drafts element by element." },
+  ]}
+/>
 
 <CaseSection id="discover-primary" label="05 / Discover · Interviews" title="Making got faster. Checking, comparing and agreeing didn't.">
 
-Public sources couldn't show whether these tools connect in real work, so we interviewed four practitioners who use collaboration tools with AI features: a designer, a PM, a product designer and a developer, about 60 minutes each over Google Meet, with recording consent.
-
-We asked three things: how AI output moves between roles and where it gets stuck; who decides, and in which channel, when design and build differ; and how the final version is chosen, and where the reason is kept. We dropped handoff questions that would apply without AI and added ones about over-reliance on AI and the trade-off between speed and accuracy.
+We interviewed a designer, a PM, a product designer and a developer, about 60 minutes each. We dropped questions that would apply without AI and asked who decides when design and build differ, and where the reason is kept.
 
 </CaseSection>
 
 <CaseSection id="define" label="06 / Define" title="Decisions lived in chat, not in the work.">
 
-We turned 212 interview quotes into cards and grouped them bottom-up: 20 sub-themes, then 7 themes. Shared context had the most cards (55), followed by tool fragmentation (38), manual review (29) and blurred roles (28). We later re-checked the findings in Dovetail, coding 279 highlights from the interviews, test and co-design.
+We grouped 212 quotes bottom-up into 7 themes, then re-checked them in Dovetail. Shared context had the most cards (55), then tool fragmentation (38).
 
-1. The problem isn't a lack of communication. **What gets said never makes it back into the work.**
-2. Version trouble isn't about losing files. **The reason a version was chosen, and what it was compared with, disappear.**
-3. Roles overlap, but **who checks what, and when, was never agreed.**
-4. Making got faster; **the bottleneck moved to meetings and agreement.**
-
-**Who we designed for.** Of three personas, we focused on designers and developers. We interviewed a PM, but the core features deal with design and code directly, and PM responsibilities vary too much between teams. In both journeys the AI step was fine; the trouble was before and after it. Designers found drift only after development was done. Developers had to dig for what they were supposed to build from.
-
-> Small teams moving fast with AI can't tell why the work looks the way it does, because the work and the reasons behind it live in different tools. So gaps between design and build surface too late, and some roles miss the moment to weigh in.
+> What gets said never makes it back into the work, so no one can tell why it looks the way it does.
 
 </CaseSection>
 
-<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="Bottom-up affinity map: 212 quotes into 20 sub-themes and 7 themes" caption="Bottom-up affinity mapping: 212 quotes → 20 sub-themes → 7 themes." />
+<CaseFindings
+  title="Key insights"
+  items={[
+    { title: "Reasons disappear", body: "Version trouble isn't lost files; it's losing why a version was chosen." },
+    { title: "No one owns the check", body: "Roles overlap, but who checks what, and when, was never agreed." },
+    { title: "The bottleneck moved", body: "Making got faster; meetings and agreement didn't." },
+  ]}
+/>
+
+<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="Bottom-up affinity map: 212 quotes into 20 sub-themes and 7 themes" caption="212 quotes → 20 sub-themes → 7 themes. We designed for designers and developers; PM roles vary too much between teams." />
 
 <CaseSection id="develop" label="07 / Develop" title="26 ideas, narrowed to the problem AI itself created.">
 
-We each generated ideas from three How-Might-We questions and debated them into 26, then scored each on desirability, viability and feasibility. Some fell out for clear reasons: a role-fit card read like a performance review, and a presence heatmap wasn't something work stalled without.
-
-### Changing direction
-
-Our first pick, an AI mediator that spots drift, asks both sides and drafts an agreement, looked novel. In review we were asked whether it really solved the five problems we'd defined. It solved one, the timing of when to step in. And alerts and approvals existed before AI.
-
-<WhyIChose label="Why we changed course">
-
-The turning point was a simple question: what had the two of us actually struggled with? The answer was the merge experiment. Work each of us made with AI didn't fit together, and combining it took longer. That problem didn't exist before AI. So we rebuilt around comparing, combining, deciding and recording in one workspace. Merge Studio became the center, and mediation and approval moved into Conflict Points. We also changed how we worked: sketching and building the same screens ourselves instead of summarizing research with AI.
-
-</WhyIChose>
-
-### One feature per core problem
-
-- Hard to merge → **Merge Studio**
-- Unclear roles → **Conflict Points**
-- Scattered information → **Live Workspace**
-- Hard to trace changes → **History** (shared foundation)
-
-### Build it, then test it
-
-We built a working React prototype with AI (vibe coding) and went through 1,039 commits in four weeks of testing, fixing and redeploying.
+We scored 26 ideas on desirability, viability and feasibility. Our first pick, an AI mediator, looked novel but solved only one of our five problems. So we went back to the merge experiment: work made with AI didn't fit together, a problem that didn't exist before AI.
 
 </CaseSection>
+
+<CaseCompare
+  before="Core problem"
+  after="Feature"
+  rows={[
+    { before: "Hard to merge", after: "Merge Studio" },
+    { before: "Unclear roles", after: "Conflict Points" },
+    { before: "Scattered information", after: "Live Workspace" },
+    { before: "Hard to trace changes", after: "History (shared foundation)" },
+  ]}
+/>
 
 <CaseMediaPair>
   <CaseMedia src="/images/cases/workflow-app/idea-voting.webp" width={1600} height={863} variant="screen" label="Idea cards with sticker votes" caption="Going wide: idea cards and sticker votes." />
@@ -185,94 +159,107 @@ We built a working React prototype with AI (vibe coding) and went through 1,039 
 {/* TODO: replace with a photo or scan of the hand-drawn sketches (the earlier Crazy 8 image was AI-generated and was removed). */}
 <CaseMedia label="Hand-drawn screen sketches" caption="Sketching screens by hand to find the new direction." />
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/ia.webp" width={1600} height={627} variant="screen" label="Information architecture" caption="IA: Dashboard → Project → Workspace (preview, screens, code, merge) → change review → History." />
-  <CaseMedia src="/images/cases/workflow-app/user-flow.webp" width={912} height={1853} variant="portrait" label="Combined user flow from detecting a change to recording it" caption="One flow, from detecting a change to request, decision, fix and record." />
-</CaseMediaPair>
+<CaseSection id="develop-build" label="07 / Develop · Build" title="Built with AI, changed 1,039 times in four weeks.">
+
+We built a working React prototype with AI and tested, fixed and redeployed it continuously.
+
+<WhyIChose label="See the IA and user flow">
+
+<CaseMedia src="/images/cases/workflow-app/ia.webp" width={1600} height={627} label="Information architecture" caption="IA: Dashboard → Project → Workspace (preview, screens, code, merge) → change review → History." />
+
+<CaseMedia src="/images/cases/workflow-app/user-flow.webp" width={912} height={1853} variant="portrait" label="Combined user flow from detecting a change to recording it" caption="One flow, from detecting a change to request, decision, fix and record." />
+
+</WhyIChose>
+
+</CaseSection>
 
 <CaseSection id="deliver" label="08 / Deliver" title="Designers see and decide. Developers fix and request.">
 
-- **Scope: up to UI code.** In testing, what developers actually found tedious were small UI requests like color and size. Code conflicts and history were already handled in Git, so we left the backend and code conflicts to Git. Devsign only covers the gap between the design and the UI build.
-- **Roles: the design comes first.** Developers find the cause and request a change with a proposed fix; designers decide. After a decision, the developer fixes, verifies and merges to resolve it. Approval alone doesn't close it.
-- **Principle: decide by looking, not by reading code.** Comparison images, markers on the screen and color show what changed. The request and the decision sit at the top. One primary button per screen; AI is a helper you open when needed. Yellow means caution, red means risk, mint is the main action, and labels use designers' words, not developer jargon.
+What we fixed after testing and co-design.
 
 </CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "Scope", title: "Up to UI code", body: "Developers found small UI requests tedious; code conflicts stay in Git." },
+    { label: "Roles", title: "The design comes first", body: "Developers request with a fix; designers decide; a merge closes it." },
+    { label: "Principle", title: "Decide by looking", body: "Images, markers and color over code. One primary action per screen." },
+  ]}
+/>
 
 <CaseSection id="prototype" label="09 / Final prototype" title="Compare, combine, decide, record — in one workspace.">
 
-Three features share one workspace, and every decision is saved to History.
+Every screen in flow order, a marker wherever something changed, and the decision that's yours at the top.
 
 </CaseSection>
 
-<CaseMedia src="/images/cases/workflow-app/screens-board.webp" width={960} height={540} label="Screens board showing every screen in flow order with change markers" caption="Live Workspace: every screen in flow order, with a marker wherever something changed. Click one to jump to the decision it needs." />
+<CaseMedia src="/images/cases/workflow-app/screens-board.webp" width={960} height={540} label="Screens board showing every screen in flow order with change markers" caption="Live Workspace: click a marker to jump to the decision it needs." />
 
-<CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} label="Change review comparing the original, the build and the proposal, with a five-step status" caption="Conflict Points: the original, the build and the proposal side by side, and the decision that's yours now." />
+<CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} label="Change review comparing the original, the build and the proposal, with a five-step status" caption="Conflict Points: original, build and proposal side by side." />
 
-<CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} label="Merge Studio combining areas from several drafts" caption="Merge Studio: pick each area from a different draft, adjust the result, and save it with where every piece came from." />
+<CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} label="Merge Studio combining areas from several drafts" caption="Merge Studio: each area from a different draft, with where every piece came from." />
 
 <CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/dashboard.webp" width={1600} height={1256} variant="screen" label="Dashboard with the reviews waiting on you at the top" caption="Dashboard: the requests waiting on your decision come first." />
-  <CaseMedia src="/images/cases/workflow-app/history.webp" width={1600} height={1256} variant="screen" label="History timeline next to the screen as it was at that moment" caption="History: the actual screen and code change at any point on the timeline." />
+  <CaseMedia src="/images/cases/workflow-app/dashboard.webp" width={1600} height={1256} variant="screen" label="Dashboard with the reviews waiting on you at the top" caption="Dashboard: requests waiting on you come first." />
+  <CaseMedia src="/images/cases/workflow-app/history.webp" width={1600} height={1256} variant="screen" label="History timeline next to the screen as it was at that moment" caption="History: the actual screen at any point on the timeline." />
 </CaseMediaPair>
 
 <CaseSection id="usability-testing" label="10 / Usability testing" title="Both roles called it “the other team's tool.” So we split the screens.">
 
-We tested with one designer and one developer (Oct 6–7) to see whether each could review a change, decide and merge on their own. We measured task completion, moderator help (0–3), errors and SUS, followed by an interview.
-
-- **Every task was completed, but only with help.** Average help was 2.3 out of 3, short of our 1.5 target. Request, approve and merge needed maximum help from both.
-- **SUS: designer 55, developer 75.** The average is 68, so the designer's screens needed the most work.
-- **Fast to learn.** On a second try help dropped to 0.4, and the designer's change review went from 4:16 to 1:46. It was the same task repeated, so this shows learning, not an improved design.
-- **Positive on the core value.** Both gave 5 out of 5 to “features are well integrated” and to fewer missed design–code gaps.
-
-What we saw:
-
-- No clear next step on the first screen. The first action was “What should I do now?”
-- Unclear roles in approval. The designer thought a request was already approved; the developer asked why a small UI fix needed approval at all.
-- The designer read “conflict” as a serious code error. The screens felt built for developers.
-- Each role saw Devsign as a tool for the other.
-
-**What we changed.** Separate screens and scenarios per role; developers request, designers keep the original, approve or ask for another look. Yellow for caution, red for risk. Plainer terms (“changes to review” instead of “conflict”). The AI panel collapsed by default. Each request linked to its decision, fix and resolution in History.
-
-**What we learned about the test.** Giving both roles the same screens and the same tasks was the mistake. We rewrote the plan with role-specific scenarios for a second round.
+One designer and one developer (Oct 6–7). Every task was completed, but only with help, and each saw Devsign as built for the other role.
 
 </CaseSection>
+
+<CaseStats
+  items={[
+    { value: "55 / 75", label: "SUS, designer / developer (68 is average)" },
+    { value: "2.3 / 3", label: "average moderator help on the first try (target: 1.5)" },
+    { value: "4:16 → 1:46", label: "designer's change review, second try of the same task" },
+  ]}
+  source="Second-try gains reflect learning the same task, not the redesign."
+/>
+
+<CaseCompare
+  before="What we saw"
+  after="What we changed"
+  rows={[
+    { before: "“What should I do now?” on the first screen.", after: "Separate screens and scenarios per role." },
+    { before: "Unclear who approves; a small UI fix felt over-managed.", after: "Developers request; designers keep, approve or ask again." },
+    { before: "“Conflict” read as a serious code error.", after: "Plain terms: “changes to review.” Yellow caution, red risk." },
+  ]}
+/>
 
 <CaseSection id="codesign" label="10 / Co-design" title="From reading code to seeing changes: Visual v2.">
 
-In a 1 hour 40 minute co-design session with a working designer (Oct 13), we marked five screens with three sticker colors (red: had to read to understand; yellow: confusing; green: clear at a glance) and voted on priorities. Each feature worked, but the flow between screens broke, and developer-style panels overwhelmed a designer. We agreed not to add features, but to cut menus, move things and hide what matters less.
-
-- Four developer-style panels → three tabs (preview, screens, code), with AI chat collapsed.
-- One screen at a time → a **screens board** with every screen in flow order and change counts.
-- Merge Studio as a separate app → a fourth tab, **Merge**, in the same window.
-- A long developer request at the bottom → a one-line summary at the top.
-- Decision buttons in one color → a color per choice, where they're easy to see.
-- “Conflict,” “Drift” → “Review changes,” “changes to review.”
-- An approval flow you couldn't see → five steps: found → requested → decided → fixed and verified → merged.
-
-Same features, far less to read. We shipped it two days later, on Oct 16.
+A 1 hour 40 minute session with a working designer (Oct 13). We agreed not to add features, but to cut menus, move things and hide what matters less. Shipped two days later.
 
 </CaseSection>
 
-<CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="Before: v1 change review, text and code heavy" caption="Before (Oct 7): text and code first, with the decision buttons far from the evidence." />
+<CaseCompare
+  before="Before"
+  after="After"
+  rows={[
+    { before: "Four developer-style panels", after: "Three tabs, AI chat collapsed" },
+    { before: "One screen at a time", after: "A screens board in flow order" },
+    { before: "Merge Studio as a separate app", after: "A Merge tab in the same window" },
+    { before: "Approval flow you couldn't see", after: "Five steps: found → requested → decided → fixed → merged" },
+  ]}
+/>
+
+<CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="Before: v1 change review, text and code heavy" caption="Before (Oct 7): text and code first, decision far from the evidence." />
 
 <CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="After: v2 change review, visual comparison with the decision on top" caption="After (Oct 16): your step and the decision come first." />
 
 <CaseSection id="review" label="11 / Review & limitations" title="We designed who decides. Proving it saves time is the next test.">
 
-We reframed collaboration around who decides what, rather than a list of features, and focused on what happens after AI generates the work: comparing, merging and reviewing. AI let us turn ideas into a working prototype quickly, and ship what we agreed in co-design within two days.
-
-**Next time, we will**
-
-- Judge ideas by how much of the defined problem they solve, not by how new they look.
-- Think in sketches and hands-on experiments before text and AI summaries.
-- In testing, give each role the tasks that role actually does.
-
-**Limitations**
-
-- **No second test yet.** The effect of the redesign is unconfirmed.
-- **Few participants.** One per role. The second try repeated the same task, so we don't know how people do in new situations.
-- **Scope rests on one developer.** The second test's developer tasks need to confirm it.
-- **Mock data.** Real Figma and Git integration, and long-term use, are untested.
-- **Permissions undecided.** Who can change the design system, or whether a PM can decide, varies by team.
+We reframed collaboration around who decides what, and focused on what happens after AI generates the work.
 
 </CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "Next time", title: "How we'll work", points: ["Judge ideas by the problem they solve", "Sketch and experiment before summarizing", "Give each role its own test tasks"] },
+    { label: "Limitations", title: "What's unproven", points: ["No second test yet", "One participant per role", "Mock data; no real Figma or Git"] },
+    { label: "Next", title: "Where it goes next", points: ["Role-specific second test", "Real integrations", "Permission rules per team"] },
+  ]}
+/>
