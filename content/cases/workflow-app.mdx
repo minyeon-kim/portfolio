@@ -42,13 +42,6 @@ We each built the same hotel booking site with AI and tried to merge the two. Th
   ]}
 />
 
-<CaseStats
-  items={[
-    { value: "77%", label: "of designers using AI say their work got faster (small study)", source: "UX Collective, “AI in designer–developer collaboration: beyond individual productivity”" },
-    { value: "76%", label: "of developers still don't fully trust AI-generated code", source: "Qodo, State of AI Code Quality (2025)" },
-  ]}
-/>
-
 <CaseSection id="keywords" label="02 / Keywords" title="Collaboration workflow and visual comparison.">
 
 The goal: turn screenshot back-and-forth in chat into request → decision → record inside one tool, so teams spend less time between Figma, GitHub and Slack.
@@ -137,11 +130,11 @@ We grouped 212 quotes bottom-up into 7 themes, then re-checked them in Dovetail.
 
 <CaseSection id="develop" label="07 / Develop" title="26 ideas, narrowed to the problem AI itself created.">
 
-We scored 26 ideas on desirability, viability and feasibility. Our first pick, an AI mediator, looked novel but solved only one of our five problems. So we went back to the merge experiment: work made with AI didn't fit together, a problem that didn't exist before AI.
+We scored 26 ideas on desirability, viability and feasibility. Our first pick, an AI mediator, looked novel but solved only one of our five problems. So we went back to the merge experiment: work made with AI didn't fit together, a problem that didn't exist before AI. We then built a working React prototype with AI and changed it 1,039 times in four weeks.
 
 </CaseSection>
 
-<CaseKey>We dropped the novel idea for the real one: <strong>work made with AI that won't merge.</strong></CaseKey>
+<CaseKey>We traded the novel idea for the real problem: <strong>work made with AI that won't merge.</strong></CaseKey>
 
 <CaseCompare
   before="Core problem"
@@ -159,12 +152,7 @@ We scored 26 ideas on desirability, viability and feasibility. Our first pick, a
   <CaseMedia src="/images/cases/workflow-app/value-effort.webp" width={1600} height={1214} variant="screen" label="Value versus effort 2x2 matrix" caption="Narrowing: value × effort." />
 </CaseMediaPair>
 
-{/* TODO: replace with a photo or scan of the hand-drawn sketches (the earlier Crazy 8 image was AI-generated and was removed). */}
-<CaseMedia label="Hand-drawn screen sketches" caption="Sketching screens by hand to find the new direction." />
-
-<CaseSection id="develop-build" label="07 / Develop · Build" title="Built with AI, changed 1,039 times in four weeks.">
-
-We built a working React prototype with AI and tested, fixed and redeployed it continuously.
+{/* TODO: add the hand-drawn screen sketches here (the earlier Crazy 8 image was AI-generated and was removed). */}
 
 <WhyIChose label="See the IA and user flow">
 
@@ -174,8 +162,6 @@ We built a working React prototype with AI and tested, fixed and redeployed it c
 
 </WhyIChose>
 
-</CaseSection>
-
 <CaseSection id="deliver" label="08 / Deliver" title="Designers see and decide. Developers fix and request.">
 
 What we fixed after testing and co-design.
@@ -184,7 +170,7 @@ What we fixed after testing and co-design.
 
 <CaseFindings
   items={[
-    { label: "Scope", title: "Up to UI code", body: "Developers found small UI requests tedious; code conflicts stay in Git." },
+    { label: "Scope", title: "Up to UI code", body: "In testing, the developer found small UI requests tedious; code conflicts stay in Git." },
     { label: "Roles", title: "The design comes first", body: "Developers request with a fix; designers decide; a merge closes it." },
     { label: "Principle", title: "Decide by looking", body: "Images, markers and color over code. One primary action per screen." },
   ]}
@@ -219,7 +205,7 @@ One designer and one developer (Oct 6–7). Every task was completed, but only w
     { value: "2.3 / 3", label: "average moderator help on the first try (target: 1.5)" },
     { value: "4:16 → 1:46", label: "designer's change review, second try of the same task" },
   ]}
-  source="Second-try gains reflect learning the same task, not the redesign."
+  source="Our usability test, Oct 6–7 (1 designer, 1 developer). Second-try gains reflect learning the same task, not the redesign."
 />
 
 <CaseCompare
@@ -234,7 +220,7 @@ One designer and one developer (Oct 6–7). Every task was completed, but only w
 
 <CaseSection id="codesign" label="10 / Co-design" title="From reading code to seeing changes: Visual v2.">
 
-A 1 hour 40 minute session with a working designer (Oct 13). We agreed not to add features, but to cut menus, move things and hide what matters less. Shipped two days later.
+A 1 hour 40 minute session with a working designer (Oct 13). We agreed not to add features, but to cut menus, move things and hide what matters less. The changes were in within two days; v2 went up on Oct 16.
 
 </CaseSection>
 
