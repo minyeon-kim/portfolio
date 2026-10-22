@@ -1083,7 +1083,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .case-study[data-project="devsign"] { --case-accent: var(--devsign-title); }
 .case-study[data-project="gemini"] { --case-accent: var(--accent); }
-.case-content > .case-draft-note { max-width: var(--case-media); margin: 0 auto 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); }
 .case-section { max-width: var(--case-text); margin-inline: auto; padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
 .case-eyebrow { margin: 0 0 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .case-section-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -1156,7 +1155,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 @media (max-width: 47.99rem) {
   .case-study { padding-top: 48px; padding-bottom: 64px; }
-  .case-content > .case-draft-note { margin-bottom: 20px; }
   .case-section { padding-block: 32px 40px; }
   .case-eyebrow { margin-bottom: 24px; }
   .case-section-grid, .case-media-pair { grid-template-columns: 1fr; gap: 24px; }
