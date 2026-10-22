@@ -3,7 +3,7 @@ import path from "node:path";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
-import { CaseMedia, CaseMediaPair, CaseSection, CaseStatement } from "@/components/case-story";
+import { CaseMedia, CaseSection, CaseStatement } from "@/components/case-story";
 import { ProjectHero } from "@/components/project-hero";
 import { Todo } from "@/components/todo";
 import Story, { bio, headline, principles, skills, strengths } from "@/content/about.mdx";
@@ -27,6 +27,9 @@ const columns = [
 export default async function AboutPage() {
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
+  // Photo spots appear only once the real photos are in /public; no placeholders ship.
+  const portrait = "/images/about/portrait.webp";
+  const hasPortrait = fs.existsSync(path.join(process.cwd(), "public", portrait));
   const work = (await getCases()).filter((c) => c.meta.featured);
 
   return (
@@ -41,9 +44,8 @@ export default async function AboutPage() {
       />
       <article className="case-study" data-project="about">
         <div className="case-content">
-          <div className="about-intro">
-            {/* TODO: replace with a portrait (public/images/about/portrait.webp, 4:5). */}
-            <CaseMedia variant="portrait" label="Portrait of Minyeon" />
+          <div className="about-intro" data-portrait={hasPortrait || undefined}>
+            {hasPortrait && <CaseMedia variant="portrait" src={portrait} width={1200} height={1500} label="Portrait of Minyeon" />}
             <div className="about-bio">
               {bio.map((paragraph) => <p key={paragraph} className="reveal">{paragraph}</p>)}
               <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
@@ -116,16 +118,8 @@ export default async function AboutPage() {
             </div>
           </CaseSection>
 
-          <CaseSection id="outside" label="06 / Outside work" title="Off the screen">
-            <Todo>a line or two about what you do outside work, in your own words</Todo>
-          </CaseSection>
-          {/* TODO: replace with real photos (public/images/about/), e.g. at work and a workshop or talk. */}
-          <CaseMediaPair>
-            <CaseMedia variant="screen" label="Photo of Minyeon at work" />
-            <CaseMedia variant="screen" label="Workshop, study group or talk" />
-          </CaseMediaPair>
 
-          <CaseSection id="contact" label="07 / Contact" title="Get in touch">
+          <CaseSection id="contact" label="06 / Contact" title="Get in touch">
             <p className="reveal">Open to product designer and design engineer roles, especially in privacy, security and developer tools.</p>
             <div className="flex flex-wrap items-center gap-2">
               {hasResume ? (
