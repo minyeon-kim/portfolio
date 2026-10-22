@@ -17,7 +17,7 @@ export function CaseSection({ id, label, title, children, layout = "split" }: { 
 type MediaProps = {
   label: string;
   caption?: string;
-  variant?: "wide" | "screen" | "portrait" | "phone";
+  variant?: "wide" | "screen" | "portrait" | "phone" | "logo";
   // With a src the image is shown at its own aspect ratio; without one, a labelled placeholder.
   src?: string;
   alt?: string;
