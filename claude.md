@@ -33,6 +33,9 @@ on the intro, and the selected case name.
 Weights: 64px is Light (300); 36px is Regular (400); 24px and below may use Medium.
 Geist for text, Geist Mono for labels, metadata, and scramble text.
 Layout: max-width 1200px; case body 680px; 16px min side padding; 8px spacing grid.
+Case and About pages are one centered column: section label, title and text at
+680px, images, stats and cards a step wider (880px, centered). Images keep their
+own aspect ratio and hug their caption; tall boards cap at 600px.
 Shape (Metalab-like, soft rather than wireframe):
 - Controls, chips, tags, toggles and the compact header are full pills (rounded-full).
 - Cards and panels are 16px (rounded-md); large media and previews are 24px (rounded-lg).

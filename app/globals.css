@@ -1074,18 +1074,21 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* Editorial case studies: broad visual rhythm, short readable text columns. */
 .case-study {
+  /* One centered column: text at a reading measure, media a step wider. */
+  --case-text: 680px;
+  --case-media: 880px;
   padding: 64px var(--project-text-inset) 96px;
   color: var(--ink);
   background: var(--bg);
 }
 .case-study[data-project="devsign"] { --case-accent: var(--devsign-title); }
 .case-study[data-project="gemini"] { --case-accent: var(--accent); }
-.case-content > .case-draft-note { width: auto; margin: 0 0 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); }
-.case-section { padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
+.case-content > .case-draft-note { max-width: var(--case-media); margin: 0 auto 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); }
+.case-section { max-width: var(--case-text); margin-inline: auto; padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
 .case-eyebrow { margin: 0 0 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
-.case-section-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(32px, 5vw, 80px); }
-.case-section-title { max-width: 15ch; margin: 0; font-size: clamp(28px, 2.8vw, 44px); line-height: 1.15; font-weight: 400; letter-spacing: -0.04em; }
-.case-section-copy { min-width: 0; max-width: 66ch; padding-top: 2px; }
+.case-section-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.case-section-title { max-width: 22ch; margin: 0; font-size: clamp(28px, 2.8vw, 44px); line-height: 1.15; font-weight: 400; letter-spacing: -0.04em; }
+.case-section-copy { min-width: 0; padding-top: 2px; }
 .case-section-copy :is(p, ul, ol) { font-size: clamp(16px, 1.2vw, 18px); line-height: 1.75; margin-bottom: 20px; }
 .case-section-copy li { margin-bottom: 12px; }
 .case-section-copy h3 { margin: 36px 0 12px; font-size: clamp(20px, 1.6vw, 24px); line-height: 1.35; letter-spacing: -0.02em; }
@@ -1098,16 +1101,19 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-section-copy details p, .case-section-copy aside p { font-size: 16px; }
 .case-section-copy aside { margin: 28px 0; padding: 20px; }
 .case-section-copy p:last-child { margin-bottom: 0; }
-.case-content > section[aria-labelledby="tldr"] { margin: 0 0 48px; padding: 32px 0; background: transparent; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; }
+.case-content > section[aria-labelledby="tldr"] { max-width: var(--case-media); margin: 0 auto 48px; padding: 32px 0; background: transparent; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; }
 .case-content > section[aria-labelledby="tldr"] > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .case-content > section[aria-labelledby="tldr"] li { font-size: 17px; line-height: 1.6; }
 .case-content > section[aria-labelledby="tldr"] strong { color: var(--case-accent); }
 .case-content > h2 { margin-top: 112px; font-size: clamp(32px, 3vw, 56px); line-height: 1.15; letter-spacing: -0.035em; font-weight: 400; }
-.case-content > :is(p, ul, ol, h3, details) { width: min(100%, 760px); margin-left: auto; margin-right: min(10vw, 160px); }
+.case-content > :is(p, ul, ol, h3, details) { width: min(100%, var(--case-text)); margin-inline: auto; }
 .case-content > p { font-size: 20px; line-height: 1.65; margin-bottom: 24px; }
 .case-content > blockquote { max-width: 1120px; margin-block: clamp(96px, 8vw, 160px); }
 .case-content > blockquote p { font-size: clamp(28px, 3vw, 48px); line-height: 1.3; }
-.case-media { margin: 16px 0 clamp(40px, 5vw, 72px); min-width: 0; }
+.case-media { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); min-width: 0; }
+/* A figure with an image hugs it, so the caption sits under the image's own edge. */
+.case-media:has(> .case-media-image) { width: fit-content; }
+.case-media:has(> .case-media-image) figcaption { contain: inline-size; }
 .case-media-space { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 280px; aspect-ratio: 16 / 9; overflow: clip; background: color-mix(in srgb, var(--ink) 4%, var(--bg)); }
 .case-media-wide .case-media-space { aspect-ratio: 1.9 / 1; }
 .case-media-portrait .case-media-space { aspect-ratio: 4 / 5; }
@@ -1118,36 +1124,28 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-media figcaption { max-width: 680px; padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 /* Images keep their own size and shape: no letterboxing, rounded, at most the body column wide. */
 .case-media-image img { display: block; width: auto; max-width: 100%; height: auto; max-height: 80vh; border-radius: 16px; outline: 1px solid var(--line); outline-offset: -1px; }
-.case-media-full .case-media-image img { width: 100%; }
 /* Tall boards stay compact so they never take over the page. */
 .case-media-portrait .case-media-image img { max-height: min(600px, 70vh); }
 /* Phone screens: corners are cut to the device radius in the file; the outline follows it. */
 .case-media-phone .case-media-image img { max-width: min(100%, 320px); border-radius: 13.3% / 6.2%; }
 .case-media-logo .case-media-image { display: grid; place-items: center; padding: clamp(40px, 6vw, 72px); border-radius: 16px; background: var(--color-fill); }
 .case-media-logo .case-media-image img { width: clamp(80px, 10vw, 128px); border-radius: 0; outline: none; }
-@media (min-width: 48rem) {
-  .case-media-column, .case-media-pair-column, .case-stats { margin-left: calc((100% - clamp(32px, 5vw, 80px)) * 0.425 + clamp(32px, 5vw, 80px)); }
-  .case-media-pair .case-media { margin-left: 0; }
-}
-@media (min-width: 48rem) and (max-width: 63.99rem) {
-  .case-media-column, .case-media-pair-column, .case-stats { margin-left: calc((100% - 40px) * 0.425 + 40px); }
-}
-.case-stats { margin-block: 16px clamp(40px, 5vw, 72px); }
+.case-stats { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); }
 .case-stats dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(16px, 2vw, 32px); margin: 0; }
 .case-stats dl > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; padding: 24px; border-radius: 16px; background: var(--color-fill); }
 .case-stats dd { margin: 0; font-size: clamp(40px, 4.5vw, 64px); line-height: 1; font-weight: 300; letter-spacing: -0.04em; }
 .case-stats dt { color: var(--muted); font-size: 15px; line-height: 1.5; }
 .case-stats figcaption, .case-findings-title { padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.55; }
-.case-findings { margin: 16px 0 clamp(40px, 5vw, 72px); }
+.case-findings { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); }
 .case-findings-title { padding: 0 0 16px; font-family: var(--font-mono); font-size: 12px; }
 .case-findings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(16px, 2vw, 24px); }
 .case-findings-card { padding: 24px; border-radius: 16px; background: var(--color-fill); }
 .case-findings-card h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
 .case-findings-card ul { margin: 0; padding-left: 18px; list-style: disc; color: var(--muted); font-size: 15px; line-height: 1.6; }
 .case-findings-card li + li { margin-top: 8px; }
-.case-media-pair { display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); align-items: start; }
+.case-media-pair { max-width: var(--case-media); margin-inline: auto; display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); align-items: start; }
 .case-media-pair .case-media { margin-top: 0; }
-.case-statement { max-width: 1200px; padding-block: 32px 48px; font-size: clamp(28px, 3vw, 48px); line-height: 1.12; font-weight: 300; letter-spacing: -0.04em; }
+.case-statement { max-width: var(--case-media); margin-inline: auto; padding-block: 32px 48px; font-size: clamp(28px, 3vw, 48px); line-height: 1.12; font-weight: 300; letter-spacing: -0.04em; }
 .case-statement p { font: inherit; letter-spacing: inherit; margin: 0; }
 .case-workflow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 16px 0 48px; }
 .case-workflow span { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--case-accent); padding-top: 20px; font-size: clamp(16px, 1.8vw, 28px); }
@@ -1370,9 +1368,9 @@ html, body, main { overflow-anchor: none; }
 /* About reuses the project frame; each skill group is a labelled row. */
 .case-study[data-project="about"] { --case-accent: var(--accent); }
 /* The intro line matches project section titles, not the oversized pull statement. */
-.case-study[data-project="about"] .case-statement { max-width: 1200px; text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
+.case-study[data-project="about"] .case-statement { max-width: var(--case-media); text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
 /* About: portrait beside the bio, then numbered rows for principles and work. */
-.about-intro { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: end; margin-bottom: clamp(48px, 6vw, 96px); }
+.about-intro { max-width: var(--case-media); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: end; margin-bottom: clamp(48px, 6vw, 96px); }
 .about-intro .case-media { margin: 0; }
 .about-bio p { max-width: 36ch; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.45; letter-spacing: -0.01em; }
 .about-bio p + p { margin-top: 1em; }
@@ -1500,6 +1498,7 @@ html, body, main { overflow-anchor: none; }
 /* Give each chapter room; keep its supporting media closer than the next chapter. */
 .case-study:not([data-project="about"]) .case-section { padding-block: clamp(56px, 6vw, 104px); }
 .case-study:not([data-project="about"]) .case-section + .case-section { margin-top: 32px; }
+.case-section-wide { max-width: var(--case-media); }
 .case-section-wide .case-section-grid { grid-template-columns: 1fr; gap: 32px; }
 .case-section-wide .case-section-title { max-width: 24ch; }
 .case-section-wide .case-section-copy { max-width: none; }
