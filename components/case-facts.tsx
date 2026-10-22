@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 // Numbers, findings, steps and comparisons set as text, so a case reads in
 // cards and short lines instead of long lists, and secondary research is
 // cited rather than shown as someone else's chart.
@@ -71,4 +73,9 @@ export function CaseCompare({ before, after, rows }: { before: string; after: st
       ))}
     </div>
   );
+}
+
+// The one line per stage a skimming reader should take away.
+export function CaseKey({ children }: { children: ReactNode }) {
+  return <p className="case-key reveal">{children}</p>;
 }

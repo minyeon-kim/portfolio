@@ -11,6 +11,9 @@ export function HeaderShell({ children }: { children: ReactNode }) {
   // On the landing page the header floats over the full-screen cover.
   const pathname = usePathname();
   const overStage = pathname === "/";
+  // Project and About pages open on their own full-bleed hero, so the header
+  // floats over it instead of laying a bar across the top.
+  const overHero = pathname.startsWith("/work/") || pathname.startsWith("/about");
   const activeCase = useUi((state) => state.activeCase);
   const canCompact = pathname.startsWith("/work/") || (overStage && activeCase !== null);
 
@@ -37,7 +40,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       ref={ref}
       data-home={overStage || undefined}
       className={`group/header z-20 transition-[background-color] duration-400 ease-standard md:sticky md:top-0 md:data-compact:bg-transparent md:data-compact:backdrop-blur-none ${
-        overStage
+        overStage || overHero
           ? "bg-bg/90 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none"
           : "bg-bg/90 backdrop-blur-sm"
       }`}

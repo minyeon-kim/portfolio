@@ -1083,11 +1083,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .case-study[data-project="devsign"] { --case-accent: var(--devsign-title); }
 .case-study[data-project="gemini"] { --case-accent: var(--accent); }
-.case-section { max-width: var(--case-text); margin-inline: auto; padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
+.case-section { max-width: var(--case-media); margin-inline: auto; padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
 .case-eyebrow { margin: 0 0 24px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .case-section-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
-.case-section-title { max-width: 22ch; margin: 0; font-size: clamp(28px, 2.8vw, 44px); line-height: 1.15; font-weight: 400; letter-spacing: -0.04em; }
-.case-section-copy { min-width: 0; padding-top: 2px; }
+.case-section-title { max-width: 26ch; margin: 0; font-size: clamp(28px, 2.8vw, 44px); line-height: 1.15; font-weight: 400; letter-spacing: -0.04em; }
+.case-section-copy { min-width: 0; max-width: var(--case-text); padding-top: 2px; }
 .case-section-copy :is(p, ul, ol) { font-size: clamp(16px, 1.2vw, 18px); line-height: 1.75; margin-bottom: 20px; }
 .case-section-copy li { margin-bottom: 12px; }
 .case-section-copy h3 { margin: 36px 0 12px; font-size: clamp(20px, 1.6vw, 24px); line-height: 1.35; letter-spacing: -0.02em; }
@@ -1105,7 +1105,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-content > section[aria-labelledby="tldr"] li { font-size: 17px; line-height: 1.6; }
 .case-content > section[aria-labelledby="tldr"] strong { color: var(--case-accent); }
 .case-content > h2 { margin-top: 112px; font-size: clamp(32px, 3vw, 56px); line-height: 1.15; letter-spacing: -0.035em; font-weight: 400; }
-.case-content > :is(p, ul, ol, h3, details) { width: min(100%, var(--case-text)); margin-inline: auto; }
+.case-content > :is(p, ul, ol, h3, details) { width: min(100%, var(--case-media)); margin-inline: auto; }
 .case-content > p { font-size: 20px; line-height: 1.65; margin-bottom: 24px; }
 .case-content > blockquote { max-width: 1120px; margin-block: clamp(96px, 8vw, 160px); }
 .case-content > blockquote p { font-size: clamp(28px, 3vw, 48px); line-height: 1.3; }
@@ -1132,29 +1132,29 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-stats { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); }
 .case-stats dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(16px, 2vw, 32px); margin: 0; }
 .case-stats dl > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; padding: 24px; border-radius: 16px; background: var(--color-fill); }
-.case-stats dd { margin: 0; font-size: clamp(32px, 3.6vw, 52px); white-space: nowrap; line-height: 1; font-weight: 300; letter-spacing: -0.04em; }
+.case-stats dd { margin: 0; color: var(--case-accent); font-size: clamp(32px, 3.6vw, 52px); white-space: nowrap; line-height: 1; font-weight: 300; letter-spacing: -0.04em; }
 .case-stats dt { color: var(--muted); font-size: 15px; line-height: 1.5; }
 .case-stats figcaption, .case-findings-title { padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 .case-findings { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); }
-.case-findings-title { padding: 0 0 16px; font-family: var(--font-mono); font-size: 12px; }
+.case-findings .case-findings-title { padding: 0 0 20px; color: var(--ink); font-size: clamp(20px, 1.8vw, 24px); line-height: 1.3; font-weight: 500; letter-spacing: -0.02em; }
 .case-findings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(16px, 2vw, 24px); }
 .case-findings-card { padding: 24px; border-radius: 16px; background: var(--color-fill); }
-.case-findings-card h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
+.case-findings-card h3 { margin: 0 0 10px; font-size: 19px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
 .case-findings-card ul { margin: 0; padding-left: 18px; list-style: disc; color: var(--muted); font-size: 15px; line-height: 1.6; }
 .case-findings-card li + li { margin-top: 8px; }
 .case-findings-card > p { color: var(--muted); font-size: 15px; line-height: 1.6; }
-.case-findings-card > .case-findings-label { margin-bottom: 8px; color: var(--case-accent); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.case-findings-card > .case-findings-label { margin-bottom: 8px; color: var(--case-accent); font-size: 13px; line-height: 1.5; font-weight: 500; }
 .case-content > .case-steps { width: auto; }
 .case-steps { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: clamp(16px, 2vw, 24px); counter-reset: step; }
 .case-steps li { position: relative; padding-top: 20px; border-top: 2px solid var(--case-accent); }
-.case-steps-label { display: block; margin-bottom: 12px; color: var(--case-accent); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.case-steps-label { display: block; margin-bottom: 10px; color: var(--case-accent); font-size: 13px; line-height: 1.5; font-weight: 500; }
 .case-steps strong { display: block; margin-bottom: 8px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
 .case-steps p { color: var(--muted); font-size: 15px; line-height: 1.6; }
 .case-compare { max-width: var(--case-media); margin: 16px auto clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); }
 .case-compare-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 48px); padding-block: 20px; border-bottom: 1px solid var(--line); font-size: 16px; line-height: 1.55; }
 .case-compare-row > :first-child { color: var(--muted); }
 .case-compare-row em { display: block; margin-bottom: 6px; color: var(--ink); font-style: normal; font-size: 13px; font-weight: 500; }
-.case-compare-head { padding-block: 12px; font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.case-compare-head { padding-block: 12px; font-size: 13px; line-height: 1.5; font-weight: 500; }
 .case-compare-head > :last-child { color: var(--case-accent); }
 @media (max-width: 47.99rem) {
   .case-compare-row { grid-template-columns: 1fr; gap: 8px; }
@@ -1163,6 +1163,8 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 }
 .case-media-pair { max-width: var(--case-media); margin-inline: auto; display: grid; grid-template-columns: repeat(var(--media-columns, 2), minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px); align-items: start; }
 .case-media-pair .case-media { margin-top: 0; }
+.case-key { max-width: var(--case-media); margin: 8px auto clamp(40px, 5vw, 72px); padding: 4px 0 4px clamp(20px, 2.5vw, 32px); border-left: 3px solid var(--case-accent); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.3; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance; }
+.case-key strong { color: var(--case-accent); font-weight: 500; }
 .case-statement { max-width: var(--case-media); margin-inline: auto; padding-block: 32px 48px; font-size: clamp(28px, 3vw, 48px); line-height: 1.12; font-weight: 300; letter-spacing: -0.04em; }
 .case-statement p { font: inherit; letter-spacing: inherit; margin: 0; }
 .case-workflow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 16px 0 48px; }
@@ -1370,6 +1372,9 @@ html, body, main { overflow-anchor: none; }
 /* Project title layout stays independent of the main-only sculpture. */
 .selected-stage, .project-hero { isolation: isolate; }
 .project-hero { position: relative; overflow: clip; }
+@media (min-width: 48rem) {
+  .project-detail > .project-hero:first-child { margin-top: -64px; padding-top: 64px; }
+}
 .project-hero-heading { position: relative; z-index: 1; }
 
 :root[data-project-navigation] .project-prompt { backdrop-filter: none; }
@@ -1385,7 +1390,9 @@ html, body, main { overflow-anchor: none; }
 /* About reuses the project frame; each skill group is a labelled row. */
 .case-study[data-project="about"] { --case-accent: var(--accent); }
 /* The intro line matches project section titles, not the oversized pull statement. */
-.case-study[data-project="about"] .case-statement { max-width: var(--case-media); text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
+.case-study[data-project="about"] .case-key { max-width: var(--case-media); margin: 8px auto clamp(40px, 5vw, 72px); padding: 4px 0 4px clamp(20px, 2.5vw, 32px); border-left: 3px solid var(--case-accent); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.3; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance; }
+.case-key strong { color: var(--case-accent); font-weight: 500; }
+.case-statement { max-width: var(--case-media); text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
 /* About: portrait beside the bio, then numbered rows for principles and work. */
 .about-intro { max-width: var(--case-media); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: end; margin-bottom: clamp(48px, 6vw, 96px); }
 .about-intro .case-media { margin: 0; }
