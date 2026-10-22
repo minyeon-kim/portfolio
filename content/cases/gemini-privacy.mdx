@@ -189,27 +189,23 @@ Built in HTML and JavaScript with a moderator and a participant mode. It logs cl
 
 <CaseSection id="prototype" label="09 / Final prototype" title="Check it, turn it off, right where the answer is.">
 
-**Scenario A.** Jungmin, a name the user never mentioned, appears in a restaurant suggestion. The Source badge shows where it came from, and each source switches off in place.
+**Scenario A.** Jungmin, a name the user never mentioned, appears in a restaurant suggestion. Where did that come from, and can I switch it off?
+
+**Scenario B.** “Delete everything about Jungmin.” What actually goes away, and how do I know it did?
 
 </CaseSection>
 
-<CasePrototype device="phone" href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant" label="See where Jungmin came from, then turn that source off" />
-
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/gemini-privacy/screen-a2-badge.webp" width={750} height={1624} variant="phone" label="Prototype: an answer that mentions Jungmin, with a Source badge underneath" caption="A2 · The answer and its Source badge." />
-  <CaseMedia src="/images/cases/gemini-privacy/screen-a3-panel.webp" width={750} height={1624} variant="phone" label="Prototype: the source panel with toggles for Gmail, Calendar and Memory" caption="A3 · Gmail, Calendar and Memory, each with its own toggle." />
-</CaseMediaPair>
-
-<CaseSection id="prototype-chat" label="09 / Final prototype" title="Ask it to forget, then check that it did.">
-
-**Scenario B.** “Delete everything about Jungmin.” Results are split into what will be deleted and what will only be blocked, then reported line by line with **Check now**.
-
-</CaseSection>
-
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/gemini-privacy/screen-b2-list.webp" width={750} height={1624} variant="phone" label="Prototype: items about Jungmin grouped into will be deleted and only blocked" caption="B2 · Grouped by what will happen to each item." />
-  <CaseMedia src="/images/cases/gemini-privacy/screen-b3-result.webp" width={750} height={1624} variant="phone" label="Prototype: the result of the request, with a Check now button" caption="B3 · The result, line by line, with Check now." />
-</CaseMediaPair>
+<CasePrototype
+  device="phone"
+  href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant"
+  label="See where Jungmin came from, then turn that source off"
+  steps={[
+    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", title: "A Source badge under the answer", body: "Personal data is flagged where it shows up, not in settings." },
+    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", title: "One toggle per source", body: "Gmail, Calendar and Memory switch off without leaving the chat." },
+    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", title: "Deleted vs. only blocked", body: "The request is split by what will really happen to each item." },
+    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", title: "A result you can check", body: "Line by line, with Check now to confirm it's gone." },
+  ]}
+/>
 
 <CaseCompare
   before="As-is"

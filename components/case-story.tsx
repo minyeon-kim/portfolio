@@ -53,9 +53,12 @@ export function CaseStatement({ children }: { children: ReactNode }) {
   return <div className="case-statement reveal">{children}</div>;
 }
 
-// Slot for the playable prototype. For now it reserves the frame and links out;
-// the embed will load only after a click, so the page stays light.
-export function CasePrototype({ label, href, device = "desktop" }: { label: string; href: string; device?: "phone" | "desktop" }) {
+type PrototypeStep = { src: string; title: string; body: string; width?: number; height?: number };
+
+// The playable prototype with a numbered walkthrough beside it. The frame is a
+// slot for now and links out; the embed will load only after a click, so the
+// page stays light. The steps double as the fallback for anyone who doesn't play.
+export function CasePrototype({ label, href, device = "desktop", steps = [] }: { label: string; href: string; device?: "phone" | "desktop"; steps?: PrototypeStep[] }) {
   return (
     <figure className={`case-prototype case-prototype-${device} reveal`}>
       <div className="case-prototype-frame" role="img" aria-label={`Prototype placeholder: ${label}`}>
@@ -64,6 +67,22 @@ export function CasePrototype({ label, href, device = "desktop" }: { label: stri
         <span className="case-media-note">Playable here soon</span>
         <a href={href} target="_blank" rel="noreferrer" className="case-prototype-open">Open the prototype ↗</a>
       </div>
+      {steps.length ? (
+        <ol className="case-prototype-steps">
+          {steps.map((step, i) => (
+            <li key={step.src}>
+              <div className="case-prototype-thumb">
+                <Image src={withBase(step.src)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes={device === "phone" ? "96px" : "(max-width: 767px) 100vw, 280px"} />
+              </div>
+              <div>
+                <span className="case-prototype-step-index">{String(i + 1).padStart(2, "0")}</span>
+                <strong>{step.title}</strong>
+                <p>{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : null}
     </figure>
   );
 }
