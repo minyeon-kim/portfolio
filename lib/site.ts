@@ -1,12 +1,12 @@
 // Single place for identity and contact details used by the header and footer.
-// TODO: replace every placeholder below with real values before launch.
+// TODO: add public/resume.pdf before launch.
 export const site = {
   name: "Minyeon Kim",
   positioning:
     "Product designer with a background in cybersecurity — connecting research, design, and engineering to bring ideas to life with AI.",
   resumeUrl: "/resume.pdf", // TODO: add public/resume.pdf
-  email: "", // TODO: contact email
-  linkedinUrl: "", // TODO: LinkedIn profile URL
+  email: "minyeon.kim3@gmail.com",
+  linkedinUrl: "https://www.linkedin.com/in/minyeon-kim-56b21228a/",
 };
 
 export const nav = [
