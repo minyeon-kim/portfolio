@@ -27,8 +27,6 @@ export const meta = {
 
 이제 디자이너도 개발자도 AI로 화면과 코드를 만듭니다. 각자 하는 일은 빨라졌지만, 서로 만든 것을 비교하고 합치고 하나로 합의하는 일은 여전히 Figma, GitHub, Slack을 오가며 손으로 합니다. 인터뷰 4건, 발화 212개에서 찾은 막히는 지점입니다.
 
-[프로토타입 써 보기](https://minyeon-kim.github.io/devsign/) · [GitHub](https://github.com/minyeon-kim/devsign)
-
 </CaseSection>
 
 <CaseFindings
@@ -75,10 +73,10 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "툴은 많지만, 이어지지 않는다", methods: ["커뮤니티 콘텐츠 분석", "경쟁 분석", "사용자 인터뷰"], steps: ["커뮤니티 글 100개+ 분석(Reddit, Hacker News, Figma 포럼, 국내 커뮤니티)", "핸드오프, 화면 비교, 리뷰, AI 디자인 툴 비교", "실무자 4명을 각각 60분 정도 인터뷰"], output: "협업이 막히는 지점" },
-    { label: "Define", title: "결정은 메신저에만 남았다", methods: ["어피니티 매핑", "Dovetail 코딩", "페르소나·여정 지도", "HMW"], steps: ["발화 212개를 바텀업으로 하위 테마 20개, 상위 테마 7개로", "Dovetail 코딩으로 다시 확인", "디자이너와 개발자의 페르소나와 여정", "문제 정의와 How-Might-We 질문 3개"], output: "핵심 문제 4가지" },
-    { label: "Develop", title: "AI 때문에 생긴 문제를 푼다", methods: ["Value Proposition Canvas", "DVF 평가", "가치 × 노력 매트릭스", "닷 보팅", "IA·유저 플로우", "AI 프로토타입"], steps: ["Value Proposition Canvas: 페인을 기능 후보 5개로", "아이디어 26개를 바람직성, 사업성, 실현 가능성으로 평가", "가치 × 노력 매트릭스와 팀 투표", "방향 전환: AI 중재자에서 Merge Studio로", "IA, 유저 플로우, AI로 만든 React 프로토타입"], output: "History를 공유하는 기능 3개" },
-    { label: "Deliver", title: "디자이너는 결정하고, 개발자는 요청한다", methods: ["사용성 테스트", "SUS", "코디자인 세션"], steps: ["디자이너 1명, 개발자 1명과 사용성 테스트", "직군별로 화면과 흐름 분리", "현업 디자이너와 코디자인 세션", "범위, 역할, 원칙을 정한 v2"], output: "v2 프로토타입, 다음은 2차 테스트" },
+    { label: "Discover", title: "툴은 많지만, 이어지지 않는다", methods: ["커뮤니티 콘텐츠 분석", "경쟁 분석", "사용자 인터뷰", "Affinity Mapping", "Thematic Coding"], steps: ["커뮤니티 글 100개+ 분석(Reddit, Hacker News, Figma 포럼, 국내 커뮤니티)", "핸드오프, 화면 비교, 리뷰, AI 디자인 툴 비교", "실무자 4명을 각각 60분 정도 인터뷰", "발화 212개를 하위 테마 20개, 상위 테마 7개로 묶고 Dovetail로 다시 확인"], output: "협업이 막히는 지점, 테마 7개" },
+    { label: "Define", title: "결정은 메신저에만 남았다", methods: ["Insight", "Persona", "Journey Map", "HMW"], steps: ["테마 7개에서 핵심 인사이트 도출", "디자이너와 개발자의 Persona와 Journey Map", "Problem Statement", "How-Might-We 질문 3개"], output: "핵심 문제 4가지" },
+    { label: "Develop", title: "AI 때문에 생긴 문제를 푼다", methods: ["Value Proposition Canvas", "DVF", "Value × Effort Matrix", "Dot Voting", "IA · User Flow", "AI 프로토타입"], steps: ["Value Proposition Canvas: 페인을 기능 후보 5개로", "아이디어 26개를 DVF(Desirability, Viability, Feasibility)로 평가", "Value × Effort Matrix와 Dot Voting", "방향 전환: AI 중재자에서 Merge Studio로", "IA, User Flow, AI로 만든 React 프로토타입"], output: "History를 공유하는 기능 3개" },
+    { label: "Deliver", title: "디자이너는 결정하고, 개발자는 요청한다", methods: ["Usability Test", "SUS", "Co-design"], steps: ["디자이너 1명, 개발자 1명과 Usability Test", "직군별로 화면과 흐름 분리", "현업 디자이너와 Co-design 세션", "범위, 역할, 원칙을 정한 v2"], output: "v2 프로토타입, 다음은 2차 테스트" },
   ]}
 />
 
@@ -105,11 +103,15 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 
 디자이너, PM, 프로덕트 디자이너, 개발자를 각각 60분 정도 인터뷰했습니다. AI가 없어도 생기는 질문은 빼고, 디자인과 구현이 다를 때 누가 결정하는지, 그 이유는 어디에 남는지를 물었습니다.
 
+발화 212개를 바텀업으로 하위 테마 20개, 상위 테마 7개로 묶고, Dovetail에서 Thematic Coding으로 다시 확인했습니다. 카드가 가장 많은 테마는 맥락 공유(55), 그다음은 툴 파편화(38)였습니다.
+
 </CaseSection>
+
+<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="바텀업 Affinity Map: 발화 212개를 하위 테마 20개, 상위 테마 7개로" caption="발화 212개 → 하위 테마 20개 → 상위 테마 7개." />
 
 <CaseSection id="define" label="06 / Define" title="결정은 작업물이 아니라, | 메신저에 남아 있었다.">
 
-발화 212개를 바텀업으로 테마 7개로 묶고, Dovetail에서 다시 확인했습니다. 카드가 가장 많은 테마는 맥락 공유(55), 그다음은 툴 파편화(38)였습니다.
+진짜 문제는 소통 부족이 아니었습니다. Slack이나 카카오톡에서 정한 내용이 작업물로 돌아오지 않았습니다. 핵심 사용자는 디자이너와 개발자로 정했습니다. PM 역할은 팀마다 너무 다릅니다.
 
 </CaseSection>
 
@@ -118,17 +120,16 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 <CaseFindings
   title="핵심 인사이트"
   items={[
-    { title: "이유가 사라진다", body: "버전 문제는 파일을 잃는 게 아니라, 왜 그 버전을 골랐는지를 잃는 거입니다." },
+    { title: "이유가 사라진다", body: "버전 문제는 파일을 잃는 게 아니라, 왜 그 버전을 골랐는지를 잃는 것입니다." },
     { title: "확인하는 사람이 없다", body: "역할은 겹치는데, 누가 언제 무엇을 확인할지는 정한 적이 없습니다." },
     { title: "병목이 옮겨 갔다", body: "만드는 건 빨라졌지만, 회의와 합의는 그대로입니다." },
   ]}
 />
 
-<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="바텀업 어피니티 맵: 발화 212개를 하위 테마 20개, 상위 테마 7개로" caption="발화 212개 → 하위 테마 20개 → 상위 테마 7개. 핵심 사용자는 디자이너와 개발자로 정했습니다. PM 역할은 팀마다 너무 다릅니다." />
 
 <CaseSection id="develop" label="07 / Develop" title="아이디어 26개를, | AI 때문에 생긴 문제로 좁혔다.">
 
-아이디어 26개를 바람직성, 사업성, 실현 가능성으로 평가했습니다. 처음 고른 AI 중재자는 새로워 보였지만 우리 문제 다섯 개 중 하나만 풀었습니다. 그래서 AI 때문에 새로 생긴 문제에 집중했습니다. 각자 AI로 만든 시안과 코드가 서로 맞지 않는다는 문제입니다. 그 뒤 AI로 동작하는 React 프로토타입을 만들었습니다.
+아이디어 26개를 DVF(Desirability, Viability, Feasibility)로 평가했습니다. 처음 고른 AI 중재자는 새로워 보였지만 우리 문제 다섯 개 중 하나만 풀었습니다. 그래서 AI 때문에 새로 생긴 문제에 집중했습니다. 각자 AI로 만든 시안과 코드가 서로 맞지 않는다는 문제입니다. 그 뒤 AI로 동작하는 React 프로토타입을 만들었습니다.
 
 </CaseSection>
 
@@ -148,15 +149,15 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 />
 
 <CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/idea-voting.webp" width={1600} height={863} variant="screen" label="스티커 투표를 한 아이디어 카드" caption="넓히기: 아이디어 카드와 스티커 투표." />
-  <CaseMedia src="/images/cases/workflow-app/value-effort.webp" width={1600} height={1214} variant="screen" label="가치 대비 노력 2x2 매트릭스" caption="좁히기: 가치 × 노력." />
+  <CaseMedia src="/images/cases/workflow-app/idea-voting.webp" width={1600} height={863} variant="screen" label="스티커 투표를 한 아이디어 카드" caption="넓히기: 아이디어 카드와 Dot Voting." />
+  <CaseMedia src="/images/cases/workflow-app/value-effort.webp" width={1600} height={1214} variant="screen" label="Value × Effort 2×2 Matrix" caption="좁히기: Value × Effort Matrix." />
 </CaseMediaPair>
 
 {/* TODO: add the hand-drawn screen sketches here (the earlier Crazy 8 image was AI-generated and was removed). */}
 
 <CaseMedia src="/images/cases/workflow-app/ia.webp" width={1600} height={627} label="정보 구조" caption="IA: Dashboard → Project → Workspace(미리보기, 화면, 코드, 병합) → 변경 확인 → History." />
 
-<CaseMedia src="/images/cases/workflow-app/user-flow.webp" width={912} height={1853} variant="portrait" label="변경 감지부터 기록까지의 통합 유저 플로우" caption="변경 감지부터 요청, 결정, 수정, 기록까지 하나의 흐름." />
+<CaseMedia src="/images/cases/workflow-app/user-flow.webp" width={912} height={1853} variant="portrait" label="변경 감지부터 기록까지의 통합 User Flow" caption="변경 감지부터 요청, 결정, 수정, 기록까지 하나의 흐름." />
 
 <CaseSection id="deliver" label="08 / Deliver" title="디자이너는 보고 결정하고, | 개발자는 고치고 요청한다.">
 
@@ -174,7 +175,7 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 
 <CaseSection id="prototype" label="09 / 최종 프로토타입" title="비교하고, 합치고, 결정하고, 기록한다 — | 한 워크스페이스에서.">
 
-모든 화면을 흐름 순서대로 보여 주고, 바뀐 곳마다 표시를 달고, 내가 내려야 할 결정을 맨 위에 둡니다.
+모든 화면을 흐름 순서대로 보여 주고, 바뀐 곳마다 표시를 달고, 내가 내려야 할 결정을 맨 위에 둡니다. [GitHub에서 코드 보기](https://github.com/minyeon-kim/devsign)
 
 </CaseSection>
 

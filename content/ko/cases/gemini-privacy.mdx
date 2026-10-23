@@ -38,9 +38,9 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / 개요" title="연결은 한 번에 됐는데, | 정리하려면 설정 깊숙이 들어가야 했다.">
 
-Google이 2026년 1월 [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/)를 내놓으며 든 예시는 타이어 가게였습니다. 차 번호판을 묻자 Gemini는 Google Photos의 사진에서 번호를 읽어 냈고, Gmail에서 차량 트림까지 찾아냈습니다. 편리하지만, 이제 Gemini가 메일, 일정, 사진 속 무엇이든 답변에 꺼내 쓸 수 있다는 뜻이기도 합니다. 그런데 답변이 어디서 왔는지는 보여 주지 않고, 출처를 끄려면 설정 화면 두 곳을 따로 찾아 들어가야 합니다.
+[Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/)의 한 필자가 Gemini에게 데이트할 레스토랑을 물었습니다. Gemini는 트러플 리조또를 추천하면서, 작년 봄 전 여자친구 Sarah와 그곳에 갔었다는 말을 덧붙였습니다. [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/)가 Gmail, Calendar, Photos를 연결한 뒤(2026년 1월), Gemini는 묻지 않은 기억까지 답변에 꺼내 쓸 수 있게 됐습니다. 그런데 그 정보가 어디서 왔는지는 보여 주지 않고, 출처를 끄려면 설정 화면 두 곳을 따로 찾아 들어가야 합니다.
 
-[프로토타입 써 보기](https://minyeon-kim.github.io/gemini_privacy/?mode=participant) · 개인적으로 진행한 컨셉 프로젝트이며, Google과 관련이 없습니다.
+개인적으로 진행한 컨셉 프로젝트이며, Google과 관련이 없습니다.
 
 </CaseSection>
 
@@ -88,10 +88,10 @@ AI 프라이버시는 범위가 넓어서, 좁히기 전에 넓게 조사했습�
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "끄는 버튼은 있지만, 무엇이 남는지 모른다", methods: ["경쟁 분석", "데스크 리서치", "사용자 인터뷰"], steps: ["AI 서비스 5개의 프라이버시 설정 비교", "규제, 논문, 설문 데이터(Pew, Cisco) 조사", "팀 밖의 2명 인터뷰", "디자이너와 보안 종사자로서 같은 가이드에 직접 답변"], output: "지금의 설정이 부족한 지점" },
-    { label: "Define", title: "불안은 내 정보가 나타날 때 시작된다", methods: ["어피니티 매핑", "페르소나", "문제 재정의", "HMW"], steps: ["인터뷰 발화 79개를 색으로 구분", "라벨을 떼고 테마 6개로 다시 묶기", "페르소나 작성: 김유나, 29세", "문제 재정의: 입력할 때 경고에서, 연결된 뒤의 통제로"], output: "How-Might-We 질문" },
+    { label: "Discover", title: "끄는 버튼은 있지만, 무엇이 남는지 모른다", methods: ["경쟁 분석", "Desk Research", "사용자 인터뷰", "Affinity Mapping"], steps: ["AI 서비스 5개의 프라이버시 설정 비교", "규제, 논문, 설문 데이터(Pew, Cisco) 조사", "팀 밖의 2명 인터뷰, 같은 가이드에 우리도 직접 답변", "발화 79개를 색으로 구분한 뒤 테마 6개로 다시 묶기"], output: "지금의 설정이 부족한 지점, 테마 6개" },
+    { label: "Define", title: "불안은 내 정보가 나타날 때 시작된다", methods: ["Insight", "Persona", "문제 재정의", "HMW"], steps: ["테마 6개에서 인사이트 3개 도출", "페르소나 작성: 김유나, 29세", "문제 재정의: 입력할 때 경고에서, 연결된 뒤의 통제로", "How-Might-We 질문으로 정리"], output: "How-Might-We 질문" },
     { label: "Develop", title: "설정이 아니라 답변에서 통제한다", methods: ["스케치", "컨셉 피드백", "디자인 원칙"], steps: ["How-Might-We 질문별 손 스케치 11개", "컨셉 4개에 대한 팀 피드백", "2개 선택: 인라인 설정, 채팅으로 삭제", "두 가지 원칙: 출처마다 할 수 있는 일을 보여 주기, 출처는 한 단계씩 열기"], output: "컨셉 2개와 그 뒤의 원칙" },
-    { label: "Deliver", title: "직접 확인하면 신뢰가 생길까?", methods: ["HTML/JS 프로토타입", "소리 내어 생각하기 테스트", "SUS · SEQ"], steps: ["진행자·참가자 모드가 있는 HTML/JS 프로토타입 제작", "클릭, 오클릭, 출처 배지를 찾는 시간 기록", "최대 5명과 진행자가 함께하는 소리 내어 생각하기 테스트 설계", "측정 지표: SUS, SEQ, 정보량"], output: "사용성 테스트 진행 중" },
+    { label: "Deliver", title: "직접 확인하면 신뢰가 생길까?", methods: ["HTML/JS 프로토타입", "Think-aloud 테스트", "SUS · SEQ"], steps: ["진행자·참가자 모드가 있는 HTML/JS 프로토타입 제작", "클릭, 오클릭, 출처 배지를 찾는 시간 기록", "최대 5명과 진행자가 함께하는 Think-aloud 테스트 설계", "측정 지표: SUS, SEQ, 정보량"], output: "사용성 테스트 진행 중" },
   ]}
 />
 
@@ -107,7 +107,8 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
   items={[
     { value: "56%", label: "의 미국 성인이 개인정보 처리방침을 읽지 않고 자주 동의한다", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
     { value: "61%", label: "의 미국 성인이 자신이 무엇을 해도 프라이버시에 큰 차이가 없을 거라고 본다", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "39% vs 5%", label: "신뢰를 위해 소비자는 데이터 사용에 대한 명확한 정보를, 기업은 프라이버시 설정 제공을 가장 먼저 꼽았다", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "39%", label: "의 소비자가 신뢰를 위해 가장 중요한 것으로 ‘내 데이터가 어떻게 쓰이는지에 대한 명확한 정보’를 꼽았다", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "5%", label: "의 기업만이 ‘사용자가 프라이버시 설정을 직접 조정하게 하기’를 신뢰를 위한 1순위로 꼽았다", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
   ]}
 />
 
@@ -117,7 +118,11 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
 
 > “삭제해도 기록이 정말 지워졌는지 모르겠어요.”
 
+인터뷰 발화 79개를 색으로 구분한 뒤, 처음 묶음이 결과를 이끌지 않도록 라벨을 떼고 아래에서부터 다시 묶어 테마 6개로 정리했습니다.
+
 </CaseSection>
+
+<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="인터뷰 발화 79개를 테마 6개로 묶은 Affinity Map" caption="다시 한 Affinity Mapping: 발화 79개, 라벨을 떼고 테마 6개로 재분류." />
 
 <CaseStats
   items={[
@@ -128,7 +133,7 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
 
 <CaseSection id="define" label="06 / Define" title="불안은 입력할 때가 아니라, | 내 정보가 나타날 때 시작된다.">
 
-인터뷰 발화 79개를 색으로 구분한 뒤, 라벨을 떼고 아래에서부터 다시 묶었습니다. 불안이 가장 큰 순간은 개인 정보를 입력할 때가 아니라, 그 정보가 답변에 나타났는데 어디서 왔는지 모를 때였습니다.
+테마 6개를 보면, 불안이 가장 큰 순간은 개인 정보를 입력할 때가 아니라, 그 정보가 답변에 나타났는데 어디서 왔는지 모를 때였습니다. 여기서 페르소나를 정했습니다. 김유나, 29세, 업무와 일상에 Gemini 계정 하나를 함께 씁니다.
 
 </CaseSection>
 
@@ -143,7 +148,6 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
 
 <CaseKey>그래서 문제를 옮겼습니다. 입력할 때 경고하는 것에서, <strong>이미 연결된 것을 나타나는 그 자리에서 통제하는 것</strong>으로.</CaseKey>
 
-<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="인터뷰 발화 79개를 테마 6개로 묶은 어피니티 맵" caption="다시 한 어피니티 매핑: 발화 79개, 라벨을 떼고 테마 6개로 재분류. 페르소나: 김유나, 29세, 업무와 일상에 Gemini 계정 하나를 함께 씀." />
 
 <CaseSection id="develop" label="07 / Develop" title="설정이 아니라, 답변에서 통제한다.">
 
@@ -219,7 +223,7 @@ HTML과 JavaScript로 진행자 모드와 참가자 모드를 만들었습니다
 
 <CaseSection id="usability-testing" label="10 / 사용성 테스트" title="테스트 중: | 직접 확인하면 신뢰가 생길까?">
 
-AI 사용 정도와 프라이버시 민감도가 다른 최대 5명과, 진행자가 함께하는 소리 내어 생각하기 테스트를 합니다. 시나리오에 가상의 인물을 써서, 참가자의 실제 데이터는 쓰지 않습니다.
+AI 사용 정도와 프라이버시 민감도가 다른 최대 5명과, 진행자가 함께하는 Think-aloud 테스트를 합니다. 시나리오에 가상의 인물을 써서, 참가자의 실제 데이터는 쓰지 않습니다.
 
 <Todo>add usability test results (SUS and 1–2 key numbers) once the sessions are done</Todo>
 
