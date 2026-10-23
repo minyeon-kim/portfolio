@@ -1,5 +1,6 @@
 "use client";
 
+import { useStrings } from "@/lib/use-locale";
 import { useEffect } from "react";
 import { setUi, useUi } from "@/lib/ui-store";
 import { CasePills } from "./case-pills";
@@ -13,6 +14,7 @@ type Props = {
 // belongs to the stage: it fades away once you scroll into the case and
 // returns at the top.
 export function SideRail({ projects }: Props) {
+  const t = useStrings();
   const active = useUi((s) => s.activeCase);
   const visible = useUi((s) => s.railVisible);
   // Leaving the landing page folds the menu.
@@ -51,7 +53,7 @@ export function SideRail({ projects }: Props) {
       }`}
     >
       {active !== null && <CasePills
-        label="Selected work"
+        label={t.selectedWork}
         options={projects.map((p) => ({ id: p.slug, label: p.name }))}
         value={active}
         onChange={select}

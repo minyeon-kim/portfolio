@@ -1,3 +1,4 @@
+import { T } from "./local-text";
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { withBase } from "@/lib/site";
@@ -34,10 +35,10 @@ export function CaseMedia({ label, caption, variant = "wide", src, alt, width = 
           <Image src={withBase(src)} alt={alt ?? label} width={width} height={height} sizes={variant === "phone" ? "(max-width: 767px) 50vw, 320px" : "(max-width: 767px) 100vw, 880px"} />
         </div>
       ) : (
-        <div className="case-media-space" role="img" aria-label={`Image placeholder: ${label}`}>
+        <div className="case-media-space" role="img" aria-label={label}>
           <span className="case-media-index" aria-hidden="true">↗</span>
           <span className="case-media-label">{label}</span>
-          <span className="case-media-note">Image to come</span>
+          <span className="case-media-note"><T k="imageToCome" /></span>
           <span className="case-media-outline" aria-hidden="true" />
         </div>
       )}
@@ -62,11 +63,11 @@ type PrototypeStep = { src: string; srcDark?: string; title: string; body: strin
 export function CasePrototype({ label, href, device = "desktop", steps = [], stepsBelow = false }: { label: string; href: string; device?: "phone" | "desktop"; steps?: PrototypeStep[]; stepsBelow?: boolean }) {
   return (
     <figure className={`case-prototype case-prototype-${device} reveal`} data-steps-below={stepsBelow || undefined}>
-      <div className="case-prototype-frame" role="img" aria-label={`Prototype placeholder: ${label}`}>
-        <span className="case-prototype-kicker">Interactive prototype</span>
+      <div className="case-prototype-frame" role="img" aria-label={label}>
+        <span className="case-prototype-kicker"><T k="interactivePrototype" /></span>
         <span className="case-prototype-label">{label}</span>
-        <span className="case-media-note">Playable here soon</span>
-        <a href={href} target="_blank" rel="noreferrer" className="case-prototype-open">Open the prototype ↗</a>
+        <span className="case-media-note"><T k="playableSoon" /></span>
+        <a href={href} target="_blank" rel="noreferrer" className="case-prototype-open"><T k="openPrototype" /></a>
       </div>
       {steps.length ? (
         <ol className="case-prototype-steps">

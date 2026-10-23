@@ -1,11 +1,13 @@
 "use client";
 
+import { useStrings } from "@/lib/use-locale";
 import { useEffect, useRef, useState } from "react";
 import type { TocItem } from "@/lib/cases";
 
 // Reading progress bar (all sizes) and sticky table of contents (desktop only)
 // for a case study. The article body must have id="case-body".
 export function CaseNav({ items }: { items: TocItem[] }) {
+  const t = useStrings();
   const [active, setActive] = useState(items[0]?.id);
   const bar = useRef<HTMLDivElement>(null);
 
@@ -53,8 +55,8 @@ export function CaseNav({ items }: { items: TocItem[] }) {
         className="fixed inset-x-0 top-0 z-30 h-[2px] origin-left bg-accent"
         style={{ transform: "scaleX(0)" }}
       />
-      <nav aria-label="On this page" className="sticky top-12 hidden lg:block">
-        <p className="mb-1 font-mono text-xs text-muted">On this page</p>
+      <nav aria-label={t.onThisPage} className="sticky top-12 hidden lg:block">
+        <p className="mb-1 font-mono text-xs text-muted">{t.onThisPage}</p>
         <ul className="border-l border-line font-mono text-xs">
           {items.map(({ id, label }) => (
             <li key={id}>

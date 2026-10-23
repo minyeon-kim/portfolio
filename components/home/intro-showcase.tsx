@@ -1,5 +1,6 @@
 "use client";
 
+import { useStrings } from "@/lib/use-locale";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { withBase } from "@/lib/site";
@@ -15,6 +16,7 @@ const INTERVAL = 4200;
 // change slides the next image in from the right while the current one drifts
 // left and blurs away.
 export function IntroShowcase({ visible }: Props) {
+  const t = useStrings();
   // TODO: real photos of Minyeon, e.g. /images/profile-1.webp (portrait, 1000x1050 WebP).
   const slides: Slide[] = [
     { key: "photo-1", label: "Photo 1", alt: "Minyeon Kim" },
@@ -57,7 +59,7 @@ export function IntroShowcase({ visible }: Props) {
   const position = (i: number) => (i === current ? "current" : i === last ? "previous" : "next");
 
   return (
-    <div className="intro-showcase" aria-roledescription="carousel" aria-label="Photos of Minyeon Kim"
+    <div className="intro-showcase" aria-roledescription="carousel" aria-label={t.photosOf}
       onPointerEnter={(e) => { if (e.pointerType === "mouse") setHeld(true); }}
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
@@ -68,13 +70,13 @@ export function IntroShowcase({ visible }: Props) {
             role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.label}`} aria-hidden={i !== current}>
             {s.src
               ? <Image src={withBase(s.src)} alt={s.alt} fill sizes="(min-width: 75rem) 500px, 440px" className="object-contain" />
-              : <p className="intro-showcase-placeholder">Profile photo {i + 1}<span>Image to come</span></p>}
+              : <p className="intro-showcase-placeholder">{t.profilePhoto} {i + 1}<span>{t.imageToCome}</span></p>}
           </div>
         ))}
       </div>
       <div className="intro-showcase-dots">
         {slides.map((s, i) => (
-          <button key={s.key} type="button" className="intro-showcase-dot" aria-label={`Show ${s.label}`} aria-current={i === current || undefined} onClick={() => go(i)} />
+          <button key={s.key} type="button" className="intro-showcase-dot" aria-label={`${t.show} ${s.label}`} aria-current={i === current || undefined} onClick={() => go(i)} />
         ))}
       </div>
     </div>

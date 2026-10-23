@@ -1,5 +1,7 @@
 "use client";
 
+import { localize } from "@/lib/i18n";
+import { useLocale } from "@/lib/use-locale";
 import Link from "next/link";
 import { Children, type ReactNode } from "react";
 import { setUi, useUi } from "@/lib/ui-store";
@@ -24,12 +26,13 @@ export function CasePanels({ children }: { children: ReactNode }) {
 
 // Header name on the landing page: back to the intro, at the top.
 export function HomeLink({ className, children }: { className?: string; children: ReactNode }) {
+  const home = localize("/", useLocale());
   return (
     <Link
-      href="/"
+      href={home}
       className={className}
       onClick={(e) => {
-        if (window.location.pathname !== withBase("/")) return;
+        if (window.location.pathname !== withBase(home)) return;
         e.preventDefault();
         setUi({ activeCase: null, menuOpen: false });
         window.scrollTo({ top: 0, behavior: "smooth" });
