@@ -1,23 +1,18 @@
+import Link from "next/link";
 import { site } from "@/lib/site";
 
+// Closing block at the end of case studies and the playground: one line and a
+// way onward. It replaces the old site-wide footer, whose Email and LinkedIn
+// links it already carries. About has its own Contact section, so it skips this.
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-line">
-      <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-2 px-2 py-4 font-mono text-xs text-muted md:px-4">
-        <p>{site.name}</p>
-        <ul className="flex gap-3">
-          <li>
-            <a href={site.email ? `mailto:${site.email}` : "#"} className="link transition-colors duration-150 ease-standard hover:text-ink">
-              Email
-            </a>
-          </li>
-          <li>
-            <a href={site.linkedinUrl || "#"} className="link transition-colors duration-150 ease-standard hover:text-ink">
-              LinkedIn
-            </a>
-          </li>
-        </ul>
-      </div>
+    <footer className="site-closing">
+      <p className="site-closing-title">More about how I work</p>
+      <ul className="site-closing-links">
+        <li><Link href="/about/" className="site-closing-pill">About <span aria-hidden="true">→</span></Link></li>
+        {site.email && <li><a href={`mailto:${site.email}`} className="site-closing-pill">Email</a></li>}
+        {site.linkedinUrl && <li><a href={site.linkedinUrl} className="site-closing-pill">LinkedIn</a></li>}
+      </ul>
     </footer>
   );
 }

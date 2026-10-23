@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import type { CaseMeta } from "@/lib/cases";
 import { MoreWork, type MoreWorkItem } from "@/components/more-work";
+import { SiteFooter } from "@/components/site-footer";
 
 // Full-width case story shared with the direct project page.
 export function CaseBody({
@@ -18,6 +19,7 @@ export function CaseBody({
         <Content />
       </div>
       <MoreWork items={others} />
+      <SiteFooter />
     </article>
   );
 }

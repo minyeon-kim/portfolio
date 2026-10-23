@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ExperimentGrid } from "@/components/playground/experiments";
+import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = { title: "Playground" };
 
@@ -11,6 +12,7 @@ export default function PlaygroundPage() {
         <p className="text-base text-muted">Small interaction experiments. Each one works right in its card.</p>
       </header>
       <ExperimentGrid />
+      <SiteFooter />
     </div>
   );
 }
