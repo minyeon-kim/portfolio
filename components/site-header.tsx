@@ -28,7 +28,7 @@ export async function SiteHeader() {
             }}
           />
         </div>
-        <HomeLink className="header-name text-base font-medium tracking-tight whitespace-nowrap">{site.name}</HomeLink>
+        <HomeLink className="header-name whitespace-nowrap">{site.name}</HomeLink>
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
           {hasResume && (
