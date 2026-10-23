@@ -2023,3 +2023,11 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .about-bio p + p { margin-top: 20px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.6; max-width: 46ch; }
 @media (max-width: 47.99rem) { .about-intro[data-portrait] > .case-media { max-width: 240px; } }
 @media (min-width: 48rem) { .about-hero-title > span { display: block; } }
+
+/* Phrase breaks (components/lines.tsx, " | " in titles): one phrase per line from md up. */
+@media (min-width: 48rem) { .line { display: block; } }
+.align-break { display: none; }
+@media (min-width: 48rem) { .align-break { display: inline; } }
+/* Everywhere else headings and card titles avoid a lone word on the last line. */
+:is(h1, h2, h3, .case-findings-card h3, .case-prototype-steps strong) { text-wrap: balance; }
+.intro-headline { text-wrap: wrap; }
