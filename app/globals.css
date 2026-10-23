@@ -2022,3 +2022,4 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .about-bio p:first-child { font-size: clamp(22px, 2vw, 28px); line-height: 1.35; letter-spacing: -0.02em; color: var(--ink); }
 .about-bio p + p { margin-top: 20px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.6; max-width: 46ch; }
 @media (max-width: 47.99rem) { .about-intro[data-portrait] > .case-media { max-width: 240px; } }
+@media (min-width: 48rem) { .about-hero-title > span { display: block; } }
