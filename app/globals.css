@@ -2006,3 +2006,10 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .more-work-app .devsign-loop > img { height: 100%; width: 100%; object-fit: cover; }
 .more-work-cover[data-project="workflow-app"] { background: #141414; }
 .more-work-cover[data-project="gemini-privacy"] { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); }
+
+/* Header slides away while scrolling down and returns on any scroll up (md+, where it is sticky). */
+@media (min-width: 48rem) {
+  header.group\/header { transition: transform 320ms var(--ease), background-color 400ms var(--ease); }
+  header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
+}
+@media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }

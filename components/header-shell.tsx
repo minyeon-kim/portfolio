@@ -5,7 +5,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { useUi } from "@/lib/ui-store";
 
 // Marks the header `data-compact` once the page has scrolled a little, so CSS
-// can fold the full-width bar into a small floating one (md and up).
+// can fold the full-width bar into a small floating one (md and up). Scrolling
+// down past the top also sets `data-hidden` so the bar slides away from the
+// content; any scroll up, or focus inside the header, brings it back.
 export function HeaderShell({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
   // On the landing page the header floats over the full-screen cover.
@@ -19,10 +21,20 @@ export function HeaderShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let frame = 0;
+    let last = window.scrollY;
     const update = () => {
       frame = 0;
-      const next = canCompact && window.scrollY > 64;
-      ref.current?.toggleAttribute("data-compact", next);
+      const y = window.scrollY;
+      const header = ref.current;
+      if (!header) return;
+      header.toggleAttribute("data-compact", canCompact && y > 64);
+      const delta = y - last;
+      if (Math.abs(delta) > 4) {
+        const keep = header.contains(document.activeElement) || header.querySelector('[aria-expanded="true"]');
+        header.toggleAttribute("data-hidden", delta > 0 && y > 120 && !keep);
+        last = y;
+      }
+      if (y <= 120) header.removeAttribute("data-hidden");
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
