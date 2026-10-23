@@ -63,7 +63,7 @@ export const meta = {
   items={[
     { label: "Merge Studio · 디자이너", title: "AI 시안마다 좋은 부분만 골라 합친다", body: "시안 하나를 통째로 고르거나 손으로 다시 그리는 대신." },
     { label: "Conflict Points · 개발자 → 디자이너", title: "달라진 곳을 찾고, 한 화면에서 결정한다", body: "눈으로 찾아 헤매고 메신저로 캡처를 주고받는 대신." },
-    { label: "Live Workspace · 모두", title: "누가 무엇을 바꿨는지 본다", body: "Slack과 여러 툴을 뒤지는 대신." },
+    { label: "Live Workspace · 모두", title: "누가 무엇을 바꿨는지 본다", body: "Slack과 여러 툴을 오가며 찾지 않아도 됩니다." },
   ]}
 />
 
@@ -75,10 +75,10 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "툴은 많지만, 이어지지 않는다", steps: ["커뮤니티 글 100개+ 분석(Reddit, Hacker News, Figma 포럼, 국내 커뮤니티)", "핸드오프, 화면 비교, 리뷰, AI 디자인 툴 비교", "실무자 4명을 각각 60분 정도 인터뷰"], output: "협업이 막히는 지점" },
-    { label: "Define", title: "결정은 메신저에만 남았다", steps: ["발화 212개를 바텀업으로 하위 테마 20개, 상위 테마 7개로", "Dovetail 코딩으로 다시 확인", "디자이너와 개발자의 페르소나와 여정", "문제 정의와 How-Might-We 질문 3개"], output: "핵심 문제 4가지" },
-    { label: "Develop", title: "AI 때문에 생긴 문제를 푼다", steps: ["Value Proposition Canvas: 페인을 기능 후보 5개로", "아이디어 26개를 바람직성, 사업성, 실현 가능성으로 평가", "가치 × 노력 매트릭스와 팀 투표", "방향 전환: AI 중재자에서 Merge Studio로", "IA, 유저 플로우, AI로 만든 React 프로토타입"], output: "History를 공유하는 기능 3개" },
-    { label: "Deliver", title: "디자이너는 결정하고, 개발자는 요청한다", steps: ["디자이너 1명, 개발자 1명과 사용성 테스트", "직군별로 화면과 흐름 분리", "현업 디자이너와 코디자인 세션", "범위, 역할, 원칙을 정한 v2"], output: "v2 프로토타입, 다음은 2차 테스트" },
+    { label: "Discover", title: "툴은 많지만, 이어지지 않는다", methods: ["커뮤니티 콘텐츠 분석", "경쟁 분석", "사용자 인터뷰"], steps: ["커뮤니티 글 100개+ 분석(Reddit, Hacker News, Figma 포럼, 국내 커뮤니티)", "핸드오프, 화면 비교, 리뷰, AI 디자인 툴 비교", "실무자 4명을 각각 60분 정도 인터뷰"], output: "협업이 막히는 지점" },
+    { label: "Define", title: "결정은 메신저에만 남았다", methods: ["어피니티 매핑", "Dovetail 코딩", "페르소나·여정 지도", "HMW"], steps: ["발화 212개를 바텀업으로 하위 테마 20개, 상위 테마 7개로", "Dovetail 코딩으로 다시 확인", "디자이너와 개발자의 페르소나와 여정", "문제 정의와 How-Might-We 질문 3개"], output: "핵심 문제 4가지" },
+    { label: "Develop", title: "AI 때문에 생긴 문제를 푼다", methods: ["Value Proposition Canvas", "DVF 평가", "가치 × 노력 매트릭스", "닷 보팅", "IA·유저 플로우", "AI 프로토타입"], steps: ["Value Proposition Canvas: 페인을 기능 후보 5개로", "아이디어 26개를 바람직성, 사업성, 실현 가능성으로 평가", "가치 × 노력 매트릭스와 팀 투표", "방향 전환: AI 중재자에서 Merge Studio로", "IA, 유저 플로우, AI로 만든 React 프로토타입"], output: "History를 공유하는 기능 3개" },
+    { label: "Deliver", title: "디자이너는 결정하고, 개발자는 요청한다", methods: ["사용성 테스트", "SUS", "코디자인 세션"], steps: ["디자이너 1명, 개발자 1명과 사용성 테스트", "직군별로 화면과 흐름 분리", "현업 디자이너와 코디자인 세션", "범위, 역할, 원칙을 정한 v2"], output: "v2 프로토타입, 다음은 2차 테스트" },
   ]}
 />
 
