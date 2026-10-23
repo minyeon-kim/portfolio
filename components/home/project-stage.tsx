@@ -62,6 +62,7 @@ export function ProjectStage({ projects, name, intro }: Props) {
       <section id="work" aria-label={`${p.name}, selected case`} className="project-selected stage-pin full-bleed md:-mt-[64px]">
         <div key={p.slug} id="stage-panel" data-stage-index={active} className="selected-stage" data-canvas={p.slug === "workflow-app" || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
           <div className="stage-content selected-stage-copy">
+            <p className="selected-stage-index">{t.project} {(active ?? 0) + 1}</p>
             <h1 tabIndex={-1} className="selected-stage-title generated-title"><ProjectTitle name={p.name} gemini={p.slug === "gemini-privacy"} /></h1>
             <dl className="selected-stage-meta">
               <div><dt>{t.projectType}</dt><dd>{p.concept ? t.conceptProject : t.product}</dd></div>
@@ -342,6 +343,7 @@ function IntroState({ name, intro, projects, onSelect }: {
             {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-chosen={sculpture === project.slug || undefined} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
               {project.slug === "about" ? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="project-suggestion-icon"><circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> : <Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={18} height={18} className="project-suggestion-icon" />}
+              {project.slug !== "about" && <span className="project-suggestion-index">{t.project} {project.index + 1}</span>}
               <span>{project.name}</span>
             </button>)}
           </div>

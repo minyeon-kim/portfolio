@@ -2063,3 +2063,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .case-diamond-notes .case-diamond-methods li { padding: 2px 8px; border: 1px solid color-mix(in srgb, var(--case-accent) 35%, transparent); border-radius: 999px; color: var(--case-accent); font-size: 12px; line-height: 1.5; overflow-wrap: normal; white-space: nowrap; }
 /* The header name uses the same display face as the intro name. */
 .header-name { font-family: var(--font-display), var(--font-sans); font-size: 18px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; }
+/* Projects are numbered in the picker and on the selected stage. */
+.project-suggestion .project-suggestion-index { color: var(--muted); font-size: 12px; }
+.selected-stage-index { margin: 0 0 12px; color: var(--muted); font-size: 13px; letter-spacing: 0.02em; }
