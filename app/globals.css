@@ -1998,3 +1998,11 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* Home's selected-project stage shows the same hero loops as the case pages. */
 .generated-preview:has(> .devsign-loop) { container-type: size; display: grid; place-items: center; }
 .generated-preview > .devsign-loop { width: min(92cqw, 92cqh * 1.6); }
+
+/* Next-project cards show the same loops as the heroes, cropped to the card. */
+.more-work-phone { position: absolute; left: 50%; top: 6%; width: 165%; aspect-ratio: 1000 / 1100; translate: -50% 0; pointer-events: none; }
+.more-work-app { position: absolute; top: 0; bottom: 0; left: -66%; aspect-ratio: 16 / 10; pointer-events: none; }
+.more-work-app .devsign-loop { height: 100%; width: auto; aspect-ratio: 16 / 10; border-radius: 0; border: 0; box-shadow: none; }
+.more-work-app .devsign-loop > img { height: 100%; width: 100%; object-fit: cover; }
+.more-work-cover[data-project="workflow-app"] { background: #141414; }
+.more-work-cover[data-project="gemini-privacy"] { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); }

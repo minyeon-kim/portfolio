@@ -59,7 +59,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme ? `Switch to ${next} theme` : "Toggle theme"}
-      className="press relative inline-flex size-4 items-center justify-center rounded-full bg-fill text-muted transition-[color,background-color] duration-150 ease-standard hover:bg-fill-strong hover:text-ink md:group-data-compact/header:bg-transparent md:group-data-compact/header:hover:bg-transparent"
+      className="theme-toggle press relative inline-flex size-4 items-center justify-center rounded-full text-muted opacity-70 transition-[color,background-color,opacity] duration-150 ease-standard hover:bg-fill hover:text-ink hover:opacity-100 focus-visible:bg-fill focus-visible:opacity-100 active:bg-fill-strong"
     >
       {/* Both icons stay mounted and swap with a quarter turn. */}
       <span
@@ -78,12 +78,12 @@ export function ThemeToggle() {
 
 function SunIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="8" cy="8" r="2.75" stroke="currentColor" strokeWidth="1.25" />
       <path
-        d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06"
+        d="M8 1.75v1M8 13.25v1M1.75 8h1M13.25 8h1M3.6 3.6l.7.7M11.7 11.7l.7.7M3.6 12.4l.7-.7M11.7 4.3l.7-.7"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.25"
         strokeLinecap="round"
       />
     </svg>
@@ -92,11 +92,11 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path
         d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.25"
         strokeLinejoin="round"
       />
     </svg>
