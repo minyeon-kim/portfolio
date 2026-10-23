@@ -36,7 +36,7 @@ export default async function AboutPage() {
       {/* The headline is the page title; "About" is only a label above it. */}
       <header className="about-hero">
         <p className="about-hero-label">About</p>
-        <h1 className="about-hero-title">{headline}</h1>
+        <h1 className="about-hero-title">{headline.map((line) => <span key={line}>{line} </span>)}</h1>
       </header>
       <article className="case-study" data-project="about">
         <div className="case-content">
