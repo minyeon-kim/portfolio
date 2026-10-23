@@ -10,6 +10,8 @@ import { Segmented } from "./segmented";
 import { HeroSculpture } from "./hero-sculpture";
 import { IntroShowcase } from "./intro-showcase";
 import { GeminiDevice } from "@/components/gemini-device";
+import { GeminiPhone } from "@/components/gemini-phone";
+import { DevsignLoop } from "@/components/devsign-loop";
 import { withBase } from "@/lib/site";
 
 export type StageProject = {
@@ -65,9 +67,11 @@ export function ProjectStage({ projects, name, intro }: Props) {
             </dl>
           </div>
           <div className="stage-grow selected-stage-object">
-            <div className="generated-frame"><div className="generated-preview">{p.cover && (p.slug === "gemini-privacy"
-              ? <GeminiDevice><Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" /></GeminiDevice>
-              : <Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" />)}</div></div>
+            <div className="generated-frame"><div className="generated-preview">{p.slug === "gemini-privacy"
+              ? <GeminiDevice><GeminiPhone alt={`${p.name}: the source sheet opens and Gmail is switched off`} /></GeminiDevice>
+              : p.slug === "workflow-app"
+                ? <DevsignLoop alt={`${p.name}: a drifted button is flagged, reviewed and approved`} />
+                : p.cover && <Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" />}</div></div>
           </div>
           <div className="selected-stage-picker flex justify-center px-2 py-3 lg:hidden">
             <Segmented label="Selected work" options={projects.map((x) => ({ id: x.slug, label: x.name }))} value={active} onChange={select} />
