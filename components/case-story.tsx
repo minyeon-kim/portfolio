@@ -1,13 +1,14 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { withBase } from "@/lib/site";
+import { Lines } from "./lines";
 
 export function CaseSection({ id, label, title, children, layout = "split" }: { id: string; label: string; title: string; children: ReactNode; layout?: "split" | "wide" }) {
   return (
     <section id={id} className={`case-section case-section-${layout}`} aria-labelledby={`${id}-title`}>
       <p className="case-eyebrow reveal">{label}</p>
       <div className="case-section-grid">
-        <h2 id={`${id}-title`} className="case-section-title reveal">{title}</h2>
+        <h2 id={`${id}-title`} className="case-section-title reveal"><Lines text={title} /></h2>
         <div className="case-section-copy">{children}</div>
       </div>
     </section>
