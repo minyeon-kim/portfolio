@@ -459,11 +459,11 @@ details[open]::details-content {
 
 .project-hero-title {
   margin: 0;
-  font-family: var(--font-name-serif), Georgia, serif;
-  font-size: clamp(64px, 9.5vw, 176px);
-  font-weight: 400;
+  font-family: var(--font-display), var(--font-sans);
+  font-size: clamp(56px, 8vw, 148px);
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.05em;
   overflow-wrap: anywhere;
 }
 
@@ -549,11 +549,11 @@ details[open]::details-content {
 }
 .selected-stage-title {
   margin: 0;
-  font-family: var(--font-name-serif), Georgia, serif;
-  font-size: clamp(64px, 9.5vw, 176px);
-  font-weight: 400;
+  font-family: var(--font-display), var(--font-sans);
+  font-size: clamp(56px, 8vw, 148px);
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.05em;
 }
 .selected-stage-meta {
   display: grid;
@@ -627,11 +627,11 @@ details[open]::details-content {
   z-index: 1;
 }
 .intro-name {
-  font-family: var(--font-name-serif), Georgia, serif;
-  font-size: clamp(60px, 7.5vw, 120px);
-  font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display), var(--font-sans);
+  font-size: clamp(52px, 6.4vw, 104px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.045em;
   color: var(--ink);
 
 }
@@ -738,7 +738,7 @@ details[open]::details-content {
 }
 
 /* Prompt-like project discovery, resolved locally against the case index. */
-.intro-name { font-size: clamp(60px, 7.5vw, 120px); }
+.intro-name { font-size: clamp(52px, 6.4vw, 104px); }
 .intro-headline { font-size: clamp(28px, 3vw, 48px); }
 .intro-surface { justify-content: center; padding-block: 80px; }
 .intro-project-picker { width: 100%; max-width: var(--intro-content-width); margin-top: 40px; }
@@ -961,7 +961,7 @@ details[open]::details-content {
 [data-canvas="true"] .project-hero-title { color: var(--devsign-title); }
 [data-gemini="true"] { background-color: var(--gemini-canvas); }
 [data-gemini="true"] .selected-stage-title,
-[data-gemini="true"] .project-hero-title { background: none; -webkit-text-fill-color: initial; font-size: clamp(56px, 8vw, 144px); }
+[data-gemini="true"] .project-hero-title { background: none; -webkit-text-fill-color: initial; font-size: clamp(48px, 6.8vw, 124px); }
 .gemini-title-lines { display: flex; flex-direction: column; gap: 0.02em; }
 .gemini-title-lines > span { display: block; width: fit-content; background: var(--gemini-title); background-clip: text; color: transparent; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .gemini-title-lines .gemini-title-first { display: flex; align-items: center; gap: 0.22em; }
@@ -1552,7 +1552,7 @@ html, body, main { overflow-anchor: none; }
 .more-work-slot-label { color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .more-work-caption { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: clamp(16px, 2vw, 28px); }
 .more-work-title { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); animation: more-work-title-in 400ms var(--ease) both; }
-.more-work-name { font-family: var(--font-name-serif), Georgia, serif; font-weight: 400; font-size: clamp(30px, 2.8vw, 44px); line-height: 1.02; letter-spacing: -0.02em; }
+.more-work-name { font-family: var(--font-display), var(--font-sans); font-weight: 500; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.02; letter-spacing: -0.04em; }
 .more-work-name[data-variant="devsign"] { color: var(--devsign-title); }
 .more-work-name[data-variant="gemini"] { width: fit-content; background: var(--gemini-title); background-clip: text; -webkit-background-clip: text; color: transparent; padding-bottom: 0.12em; margin-bottom: -0.12em; }
 .more-work-description { max-width: 48ch; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
@@ -1875,8 +1875,8 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* About opener: a quiet label, then the headline as the page title, in the body column. */
 .about-hero { max-width: 880px; margin-inline: auto; padding: clamp(56px, 7vw, 120px) var(--project-text-inset) 0; box-sizing: content-box; }
 .about-hero-label { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.5; }
-.about-hero-title { margin: 0; color: var(--ink); font-family: var(--font-name-serif), Georgia, serif; font-size: clamp(38px, 4.4vw, 66px); line-height: 1.05; font-weight: 400; letter-spacing: -0.02em; text-wrap: balance; }
-/* Instrument Serif has no Hangul, so the Korean headline stays in the sans. */
+.about-hero-title { margin: 0; color: var(--ink); font-family: var(--font-display), var(--font-sans); font-size: clamp(30px, 3.3vw, 48px); line-height: 1.1; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
+/* The display face has no Hangul, so the Korean headline stays in the sans. */
 html:lang(ko) .about-hero-title { font-family: var(--font-sans); font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; }
 
 /* Prototype slot: the frame the playable prototype will load into. */
@@ -2061,5 +2061,5 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 }
 .case-diamond-notes .case-diamond-methods { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 12px; padding: 0; list-style: none; }
 .case-diamond-notes .case-diamond-methods li { padding: 2px 8px; border: 1px solid color-mix(in srgb, var(--case-accent) 35%, transparent); border-radius: 999px; color: var(--case-accent); font-size: 12px; line-height: 1.5; overflow-wrap: normal; white-space: nowrap; }
-/* The header name uses the same serif as the intro name. */
-.header-name { font-family: var(--font-name-serif), Georgia, serif; font-size: 22px; font-weight: 400; line-height: 1; letter-spacing: -0.01em; }
+/* The header name uses the same display face as the intro name. */
+.header-name { font-family: var(--font-display), var(--font-sans); font-size: 18px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; }

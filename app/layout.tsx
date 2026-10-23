@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SiteHeader } from "@/components/site-header";
@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const nameSerif = Instrument_Serif({
-  variable: "--font-name-serif",
+const display = Bricolage_Grotesque({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       // The theme script may set data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${nameSerif.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}
     >
       <head>
         <ThemeScript />
