@@ -2047,21 +2047,18 @@ html:lang(ko) :is(h1, h2, h3, .case-statement, .about-hero-title, .intro-headlin
 /* Mono labels are set for Latin; Korean labels read better in the text face. */
 html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-gallery-placeholder small, .case-comparison-label, .more-work-label, .more-work-slot-label, .case-role-label, .intro-explore-cue, .intro-showcase-placeholder, .font-mono) { font-family: var(--font-sans, inherit), system-ui, sans-serif; letter-spacing: 0; text-transform: none; }
 
-/* Revamped Double Diamond: edge labels, phase names and numbered method marks in the SVG. */
+/* Revamped Double Diamond: edge labels and phase names in the SVG. */
 .case-diamond-phases { display: none; }
 .case-diamond-figure svg text { font-family: var(--font-sans); fill: var(--muted); font-size: 13px; }
 .case-diamond-figure svg .case-diamond-phase { fill: var(--case-accent); font-size: 17px; font-weight: 500; }
-.case-diamond-figure svg .case-diamond-mark circle { fill: var(--bg); stroke: var(--case-accent); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
-.case-diamond-figure svg .case-diamond-mark text { fill: var(--case-accent); font-size: 11px; font-weight: 600; }
-.case-diamond-steps { margin: 0 0 10px; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 6px; }
-.case-diamond-steps li { counter-increment: step; position: relative; padding: 0 0 0 26px; border: 0; color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: break-word; word-break: keep-all; }
-.case-diamond-steps li::before { content: counter(step); position: absolute; left: 0; top: 2.5px; display: grid; place-items: center; width: 17px; height: 17px; border: 1px solid var(--case-accent); border-radius: 50%; color: var(--case-accent); font-size: 10px; font-weight: 600; line-height: 1; }
+.case-diamond-steps { margin: 0 0 10px; padding: 0; list-style: none; display: grid; gap: 6px; }
+.case-diamond-steps li { position: relative; padding: 0 0 0 14px; border: 0; color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: break-word; word-break: keep-all; }
+.case-diamond-steps li::before { content: ""; position: absolute; left: 2px; top: 0.7em; width: 4px; height: 4px; border-radius: 50%; background: var(--case-accent); }
 .case-diamond-notes .case-diamond-output { margin-top: 10px; color: var(--ink); font-size: 14px; line-height: 1.5; }
 .case-diamond-notes .case-diamond-output span { display: inline; margin: 0; color: var(--case-accent); }
 @media (max-width: 47.99rem) {
-  .case-diamond-figure svg .case-diamond-edge, .case-diamond-figure svg .case-diamond-mark text { display: none; }
+  .case-diamond-figure svg .case-diamond-edge { display: none; }
   .case-diamond-figure svg .case-diamond-phase { font-size: 26px; }
-  .case-diamond-figure svg .case-diamond-mark circle { r: 6; }
 }
 .case-diamond-notes .case-diamond-methods { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 12px; padding: 0; list-style: none; }
 .case-diamond-notes .case-diamond-methods li { padding: 2px 8px; border: 1px solid color-mix(in srgb, var(--case-accent) 35%, transparent); border-radius: 999px; color: var(--case-accent); font-size: 12px; line-height: 1.5; overflow-wrap: normal; white-space: nowrap; }
