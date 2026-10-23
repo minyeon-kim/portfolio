@@ -42,9 +42,9 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / Overview" title="Connecting took one tap. | Cleaning up took a trip to settings.">
 
-When Google launched [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) in January 2026, its own example was a stop at a tire shop. Asked for the family van's license plate, Gemini read it off a photo in Google Photos, then found the van's trim in Gmail. Helpful, and a sign that Gemini can now bring anything from your mail, calendar and photos into an answer. What it doesn't do is show where an answer came from, and turning a source off means going through two separate settings pages.
+A writer at [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/) asked Gemini for a date-night restaurant. It recommended the truffle risotto, and mentioned they'd been there with Sarah, an ex, last spring. Since [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) connected Gmail, Calendar and Photos (January 2026), Gemini can bring memories like this into an answer unasked. It doesn't show where they came from, and turning a source off means going through two separate settings pages.
 
-[Try the prototype](https://minyeon-kim.github.io/gemini_privacy/?mode=participant) · A self-initiated concept, not affiliated with Google.
+A self-initiated concept, not affiliated with Google.
 
 </CaseSection>
 
@@ -92,8 +92,8 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews"], steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and survey data (Pew, Cisco)", "Interviewed 2 people outside the team", "Answered the same guide ourselves, as a designer and a security professional"], output: "Where today's controls fall short" },
-    { label: "Define", title: "Anxiety starts when your data shows up", methods: ["Affinity mapping", "Persona", "Problem reframing", "HMW"], steps: ["Color-coded 79 interview quotes", "Removed the labels and re-clustered them into 6 themes", "Wrote a persona: Yuna Kim, 29", "Redefined the problem: from warning at input to control after connecting"], output: "How-Might-We questions" },
+    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews", "Affinity mapping"], steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and survey data (Pew, Cisco)", "Interviewed 2 people outside the team, and answered the same guide ourselves", "Color-coded 79 quotes, then re-clustered them into 6 themes"], output: "Six themes on where today's controls fall short" },
+    { label: "Define", title: "Anxiety starts when your data shows up", methods: ["Insights", "Persona", "Problem reframing", "HMW"], steps: ["Drew 3 insights from the 6 themes", "Wrote a persona: Yuna Kim, 29", "Redefined the problem: from warning at input to control after connecting", "Turned it into How-Might-We questions"], output: "How-Might-We questions" },
     { label: "Develop", title: "Control at the answer, not in settings", methods: ["Sketching", "Concept feedback", "Design principles"], steps: ["Drew 11 hand sketches across the How-Might-We questions", "Gathered team feedback on 4 concepts", "Kept 2: inline controls and deleting from chat", "Set two rules: show what each source allows, reveal sources one step at a time"], output: "Two concepts and the rules behind them" },
     { label: "Deliver", title: "Does checking it yourself build trust?", methods: ["HTML/JS prototype", "Think-aloud test", "SUS · SEQ"], steps: ["Built an HTML/JS prototype with moderator and participant modes", "Logged clicks, misclicks and time to find the Source badge", "Planned a moderated think-aloud test with up to 5 people", "Chose measures: SUS, SEQ and information load"], output: "Usability test in progress" },
   ]}
@@ -111,7 +111,8 @@ We compared the privacy controls of five AI services. Gemini splits them between
   items={[
     { value: "56%", label: "of U.S. adults frequently agree to privacy policies without reading them", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
     { value: "61%", label: "of U.S. adults are skeptical that anything they do will make much difference to their privacy", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "39% vs 5%", label: "of consumers put clear information on data use first for trust; of organizations, letting people configure privacy settings", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "39%", label: "of consumers name clear information on how their data is used as the top thing that builds trust", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "5%", label: "of organizations rank letting people adjust their own privacy settings as the top way to build trust", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
   ]}
 />
 
@@ -121,7 +122,11 @@ We interviewed a call-center worker and an everyday AI user, and answered the sa
 
 > “Even when I delete it, I don't know if the record is really deleted.”
 
+I color-coded 79 interview quotes, removed the labels and re-clustered them from the bottom up into six themes, so the first grouping wouldn't steer the result.
+
 </CaseSection>
+
+<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="Affinity map of 79 interview quotes grouped into six themes" caption="Re-affinity mapping: 79 quotes, labels removed, regrouped into six themes." />
 
 <CaseStats
   items={[
@@ -132,7 +137,7 @@ We interviewed a call-center worker and an everyday AI user, and answered the sa
 
 <CaseSection id="define" label="06 / Define" title="Anxiety starts when your data shows up, | not when you type it.">
 
-I color-coded 79 interview quotes, removed the labels and re-clustered them from the bottom up. Anxiety peaked not when people typed personal data, but when it appeared in an answer and they couldn't tell where it came from.
+Across the six themes, anxiety peaked not when people typed personal data, but when it appeared in an answer and they couldn't tell where it came from. I wrote the persona from there: Yuna Kim, 29, one Gemini account for work and life.
 
 </CaseSection>
 
@@ -146,8 +151,6 @@ I color-coded 79 interview quotes, removed the labels and re-clustered them from
 />
 
 <CaseKey>So the problem moved: from warning people as they type <strong>to controlling what's already connected</strong>, right where it shows up.</CaseKey>
-
-<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="Affinity map of 79 interview quotes grouped into six themes" caption="Re-affinity mapping: 79 quotes, labels removed, regrouped into six themes. Persona: Yuna Kim, 29, one Gemini account for work and life." />
 
 <CaseSection id="develop" label="07 / Develop" title="Control at the answer, not in the settings.">
 
