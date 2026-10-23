@@ -1994,3 +1994,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @keyframes dl-panel { 0%, 22% { transform: translateX(105%); } 30%, 92% { transform: translateX(0); } 98%, 100% { transform: translateX(105%); } }
 @keyframes dl-approve { 0%, 38% { opacity: 0; } 42% { opacity: 1; } 45% { opacity: 0.3; } 48% { opacity: 1; } 52%, 100% { opacity: 0; } }
 @keyframes dl-approved { 0%, 51% { opacity: 0; } 55%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+
+/* Home's selected-project stage shows the same hero loops as the case pages. */
+.generated-preview:has(> .devsign-loop) { container-type: size; display: grid; place-items: center; }
+.generated-preview > .devsign-loop { width: min(92cqw, 92cqh * 1.6); }
