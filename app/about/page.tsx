@@ -42,8 +42,8 @@ export default async function AboutPage() {
         <div className="case-content">
           <div className="about-intro" data-portrait>
             {hasPortrait
-              ? <CaseMedia variant="portrait" src={portrait} width={1200} height={1500} label="Portrait of Minyeon" />
-              : <CaseMedia variant="portrait" label="Portrait of Minyeon" />}
+              ? <CaseMedia variant="portrait" src={portrait} width={1200} height={1500} label="Portrait" />
+              : <CaseMedia variant="portrait" label="Portrait" />}
             <div className="about-bio">
               {bio.map((paragraph) => <p key={paragraph} className="reveal">{paragraph}</p>)}
               <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
