@@ -1907,13 +1907,18 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 }
 @media (max-width: 47.99rem) { .case-prototype-phone .case-prototype-frame { width: min(100%, 240px); } }
 
-/* The ambient glow follows the copy to the left while the card is in, then
-   drifts back to center for the chat. */
+/* In light mode the ambient glow follows the copy to the left while the card
+   is in, then drifts back to center for the chat. */
 @media (min-width: 75rem) and (prefers-reduced-motion: no-preference) {
   .intro-surface[data-scroll-ready] .intro-ambient {
     translate: calc((var(--split, 0) - var(--showcase-exit, 0)) * -1 * max(0px, (100vw - var(--intro-content-width, 640px)) / 2 - var(--split-inset))) 0;
     overflow: visible;
   }
+  /* Dark mode keeps its gradient fixed. */
+  :root[data-theme="dark"] .intro-surface[data-scroll-ready] .intro-ambient { translate: none; }
+}
+@media (min-width: 75rem) and (prefers-reduced-motion: no-preference) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .intro-surface[data-scroll-ready] .intro-ambient { translate: none; }
 }
 
 /* Gemini hero phone: real prototype screens in the frame, one 9s loop. */
