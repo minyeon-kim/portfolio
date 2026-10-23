@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { setUi } from "@/lib/ui-store";
 import { withBase } from "@/lib/site";
+import { DevsignLoop } from "./devsign-loop";
+import { GeminiPhone } from "./gemini-phone";
 
 export type MoreWorkItem = { slug: string; name: string; description?: string; cover?: string; index?: number };
 
@@ -72,7 +74,11 @@ export function MoreWork({ items }: { items: MoreWorkItem[] }) {
           const r = rank(i);
           const media = (
             <span className="more-work-cover" data-project={item.slug}>
-              {item.cover && <Image src={withBase(item.cover)} alt="" fill sizes="(min-width: 48rem) 400px, 70vw" className="object-contain" />}
+              {item.slug === "gemini-privacy"
+                ? <span className="more-work-phone"><GeminiPhone alt="" /></span>
+                : item.slug === "workflow-app"
+                  ? <span className="more-work-app"><DevsignLoop alt="" /></span>
+                  : item.cover && <Image src={withBase(item.cover)} alt="" fill sizes="(min-width: 48rem) 400px, 70vw" className="object-contain" />}
             </span>
           );
           return (
