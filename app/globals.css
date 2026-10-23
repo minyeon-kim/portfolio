@@ -2030,4 +2030,4 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @media (min-width: 48rem) { .align-break { display: inline; } }
 /* Everywhere else headings and card titles avoid a lone word on the last line. */
 :is(h1, h2, h3, .case-findings-card h3, .case-prototype-steps strong) { text-wrap: balance; }
-.intro-headline { text-wrap: wrap; }
+.intro-positioning h1.intro-headline { text-wrap: pretty; }
