@@ -59,7 +59,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme ? `Switch to ${next} theme` : "Toggle theme"}
-      className="theme-toggle press relative inline-flex size-4 items-center justify-center rounded-full text-muted opacity-70 transition-[color,background-color,opacity] duration-150 ease-standard hover:bg-fill hover:text-ink hover:opacity-100 focus-visible:bg-fill focus-visible:opacity-100 active:bg-fill-strong"
+      className="header-menu-trigger theme-toggle press relative"
     >
       {/* Both icons stay mounted and swap with a quarter turn. */}
       <span
@@ -76,15 +76,16 @@ export function ThemeToggle() {
   );
 }
 
+// Same line weight and size as the menu icon (1px lines, 14px wide).
 function SunIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <circle cx="8" cy="8" r="2.75" stroke="currentColor" strokeWidth="1.25" />
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <circle cx="7" cy="7" r="2.5" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
       <path
-        d="M8 1.75v1M8 13.25v1M1.75 8h1M13.25 8h1M3.6 3.6l.7.7M11.7 11.7l.7.7M3.6 12.4l.7-.7M11.7 4.3l.7-.7"
+        d="M7 .5v1.5M7 12v1.5M.5 7H2M12 7h1.5M2.4 2.4l1.06 1.06M10.54 10.54l1.06 1.06M2.4 11.6l1.06-1.06M10.54 3.46l1.06-1.06"
         stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
+        strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
@@ -92,12 +93,12 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
       <path
-        d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"
+        d="M12.5 8.4A5.5 5.5 0 0 1 5.6 1.5a5.5 5.5 0 1 0 6.9 6.9Z"
         stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinejoin="round"
+        strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
