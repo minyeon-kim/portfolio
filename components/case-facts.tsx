@@ -72,13 +72,8 @@ export function CaseKey({ children }: { children: ReactNode }) {
 type DiamondPhase = { label: string; title: string; methods?: string[]; steps?: string[]; output?: string; body?: string };
 
 // The Double Diamond drawn out in the "revamped" style: each diamond diverges,
-// then converges; every method used in a phase is a numbered mark on the line,
-// listed underneath with what the phase handed on to the next.
+// then converges; each phase lists its methods and what it handed on to the next.
 export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
-  const marks = items.flatMap((item, p) => {
-    const n = item.steps?.length ?? 0;
-    return Array.from({ length: n }, (_, i) => ({ key: `${p}-${i}`, x: p * 200 + ((i + 1) * 200) / (n + 1), n: i + 1 }));
-  });
   return (
     <figure className="case-diamond reveal">
       <div className="case-diamond-spaces" aria-hidden="true"><span><T k="rightThing" /></span><span><T k="thingsRight" /></span></div>
@@ -94,13 +89,7 @@ export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
             </g>
           ))}
           {items.map((item, p) => (
-            <text key={item.label} className="case-diamond-phase" x={p * 200 + 100} y={118} textAnchor="middle">{item.label}</text>
-          ))}
-          {marks.map((m) => (
-            <g key={m.key} className="case-diamond-mark">
-              <circle cx={m.x} cy={150} r={10} />
-              <text x={m.x} y={154} textAnchor="middle">{m.n}</text>
-            </g>
+            <text key={item.label} className="case-diamond-phase" x={p * 200 + 100} y={136} textAnchor="middle">{item.label}</text>
           ))}
         </svg>
       </div>
@@ -115,9 +104,9 @@ export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
               </ul>
             ) : null}
             {item.steps ? (
-              <ol className="case-diamond-steps">
+              <ul className="case-diamond-steps">
                 {item.steps.map((step) => <li key={step}>{step}</li>)}
-              </ol>
+              </ul>
             ) : null}
             {item.body && <p>{item.body}</p>}
             {item.output && <p className="case-diamond-output"><span aria-hidden="true">→</span> {item.output}</p>}
