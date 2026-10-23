@@ -30,8 +30,6 @@ export const meta = {
 
 Designers and developers now both build with AI. Each side moves faster on its own, but comparing what each built, combining it and agreeing on one version still happens by hand, across Figma, GitHub and Slack. Here is where it breaks, from four interviews and 212 quotes.
 
-[Try the prototype](https://minyeon-kim.github.io/devsign/) · [GitHub](https://github.com/minyeon-kim/devsign)
-
 </CaseSection>
 
 <CaseFindings
@@ -78,8 +76,8 @@ Collaboration with AI is new and little written about, so we went wide first. We
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "Plenty of tools, none connected", methods: ["Community content analysis", "Competitive analysis", "User interviews"], steps: ["Read 100+ community posts (Reddit, Hacker News, Figma forum, Korean communities)", "Compared handoff, visual diff, review and AI design tools", "Interviewed 4 practitioners, about 60 minutes each"], output: "Where collaboration breaks" },
-    { label: "Define", title: "Decisions lived in chat", methods: ["Affinity mapping", "Dovetail coding", "Persona & journey map", "HMW"], steps: ["Grouped 212 quotes bottom-up into 20 sub-themes and 7 themes", "Re-checked them with Dovetail coding", "Personas and journeys for designers and developers", "A problem statement and 3 How-Might-We questions"], output: "Four core problems" },
+    { label: "Discover", title: "Plenty of tools, none connected", methods: ["Community content analysis", "Competitive analysis", "User interviews", "Affinity mapping", "Thematic coding"], steps: ["Analyzed 100+ community posts (Reddit, Hacker News, Figma forum, Korean communities)", "Compared handoff, visual diff, review and AI design tools", "Interviewed 4 practitioners, about 60 minutes each", "Grouped 212 quotes into 20 sub-themes and 7 themes, re-checked in Dovetail"], output: "Seven themes on where collaboration breaks" },
+    { label: "Define", title: "Decisions lived in chat", methods: ["Insights", "Persona", "Journey map", "HMW"], steps: ["Drew key insights from the 7 themes", "Personas and journeys for designers and developers", "Problem statement", "3 How-Might-We questions"], output: "Four core problems" },
     { label: "Develop", title: "Solve what AI itself created", methods: ["Value Proposition Canvas", "DVF scoring", "Value × effort matrix", "Dot voting", "IA & user flow", "AI-built prototype"], steps: ["Value Proposition Canvas: pains into 5 feature candidates", "26 ideas scored on desirability, viability and feasibility", "Value × effort matrix and a team vote", "Changed course: from an AI mediator to Merge Studio", "IA, user flows and an AI-built React prototype"], output: "Three features on a shared History" },
     { label: "Deliver", title: "Designers decide, developers request", methods: ["Usability test", "SUS", "Co-design session"], steps: ["Usability test with 1 designer and 1 developer", "Split the screens and flows by role", "Co-design session with a working designer", "v2 with scope, roles and principles fixed"], output: "v2 prototype; the second test is next" },
   ]}
@@ -108,11 +106,15 @@ With almost no academic work, we started where practitioners write: 100+ posts f
 
 We interviewed a designer, a PM, a product designer and a developer, about 60 minutes each. We dropped questions that would apply without AI and asked who decides when design and build differ, and where the reason is kept.
 
+We grouped 212 quotes bottom-up into 20 sub-themes and 7 themes, then re-checked the interviews with thematic coding in Dovetail. Shared context had the most cards (55), then tool fragmentation (38).
+
 </CaseSection>
+
+<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="Bottom-up affinity map: 212 quotes into 20 sub-themes and 7 themes" caption="212 quotes → 20 sub-themes → 7 themes." />
 
 <CaseSection id="define" label="06 / Define" title="Decisions lived in chat, not in the work.">
 
-We grouped 212 quotes bottom-up into 7 themes, then re-checked them in Dovetail. Shared context had the most cards (55), then tool fragmentation (38).
+The real problem wasn't a lack of communication. Decisions made in Slack or KakaoTalk never made it back into the work. We designed for designers and developers; PM roles vary too much between teams.
 
 </CaseSection>
 
@@ -127,7 +129,6 @@ We grouped 212 quotes bottom-up into 7 themes, then re-checked them in Dovetail.
   ]}
 />
 
-<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="Bottom-up affinity map: 212 quotes into 20 sub-themes and 7 themes" caption="212 quotes → 20 sub-themes → 7 themes. We designed for designers and developers; PM roles vary too much between teams." />
 
 <CaseSection id="develop" label="07 / Develop" title="26 ideas, narrowed to the problem AI itself created.">
 
@@ -177,7 +178,7 @@ What we fixed after testing and co-design.
 
 <CaseSection id="prototype" label="09 / Final prototype" title="Compare, combine, decide, record — | in one workspace.">
 
-Every screen in flow order, a marker wherever something changed, and the decision that's yours at the top.
+Every screen in flow order, a marker wherever something changed, and the decision that's yours at the top. [Code on GitHub](https://github.com/minyeon-kim/devsign)
 
 </CaseSection>
 
