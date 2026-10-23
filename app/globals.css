@@ -1969,3 +1969,23 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) [data-theme-show="light"] { display: none !important; } }
 :root[data-theme="dark"] .gemini-phone-display, :root[data-theme="dark"] .gemini-phone-sheet { background: #131314; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.gemini-phone-display, .gemini-phone-sheet) { background: #131314; } }
+
+/* Devsign hero: real prototype screens, one 9s loop (components/devsign-loop.tsx). */
+.devsign-loop { position: relative; max-width: 1280px; margin-inline: auto; overflow: hidden; border-radius: 16px; border: 1px solid rgb(255 255 255 / 0.08); box-shadow: 0 30px 80px rgb(0 0 0 / 0.45); }
+.devsign-loop img { display: block; width: 100%; height: auto; }
+.project-hero-cover .devsign-loop img { border-radius: 0; max-width: none; }
+.devsign-loop-pin { position: absolute; left: 51.4%; top: 42.7%; width: 3.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 2px solid #ef4444; opacity: 0; }
+.devsign-loop-panel { position: absolute; left: 66.08%; top: 5.39%; width: 33.33%; transform: translateX(105%); box-shadow: -18px 0 40px rgb(0 0 0 / 0.35); }
+.devsign-loop-panel .devsign-loop-approved { position: absolute; inset: 0; opacity: 0; }
+.devsign-loop-approve { position: absolute; left: 70.5%; top: 94.9%; width: 20%; height: 3%; border-radius: 999px; box-shadow: 0 0 0 2px #34d399, 0 0 16px 3px rgb(52 211 153 / 0.5); opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .devsign-loop-pin { animation: dl-pin 9s ease-out infinite; }
+  .devsign-loop-panel { animation: dl-panel 9s cubic-bezier(0.3, 0.7, 0.2, 1) infinite; }
+  .devsign-loop-approve { animation: dl-approve 9s ease-in-out infinite; }
+  .devsign-loop-approved { animation: dl-approved 9s ease infinite; }
+}
+@media (prefers-reduced-motion: reduce) { .devsign-loop-panel { transform: none; } }
+@keyframes dl-pin { 0%, 4% { opacity: 0; scale: 0.6; } 8% { opacity: 1; scale: 1; } 13% { opacity: 0; scale: 1.8; } 14% { opacity: 0; scale: 0.6; } 17% { opacity: 1; scale: 1; } 22%, 100% { opacity: 0; scale: 1.8; } }
+@keyframes dl-panel { 0%, 22% { transform: translateX(105%); } 30%, 92% { transform: translateX(0); } 98%, 100% { transform: translateX(105%); } }
+@keyframes dl-approve { 0%, 38% { opacity: 0; } 42% { opacity: 1; } 45% { opacity: 0.3; } 48% { opacity: 1; } 52%, 100% { opacity: 0; } }
+@keyframes dl-approved { 0%, 51% { opacity: 0; } 55%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
