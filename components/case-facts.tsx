@@ -69,7 +69,7 @@ export function CaseKey({ children }: { children: ReactNode }) {
   return <p className="case-key reveal">{children}</p>;
 }
 
-type DiamondPhase = { label: string; title: string; methods?: string[]; steps?: string[]; output?: string; body?: string };
+type DiamondPhase = { label: string; title: string; methods?: string[]; output?: string; body?: string };
 
 // The Double Diamond drawn out in the "revamped" style: each diamond diverges,
 // then converges; each phase lists its methods and what it handed on to the next.
@@ -101,11 +101,6 @@ export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
             {item.methods ? (
               <ul className="case-diamond-methods" aria-label="Methods">
                 {item.methods.map((m) => <li key={m}>{m}</li>)}
-              </ul>
-            ) : null}
-            {item.steps ? (
-              <ul className="case-diamond-steps">
-                {item.steps.map((step) => <li key={step}>{step}</li>)}
               </ul>
             ) : null}
             {item.body && <p>{item.body}</p>}
