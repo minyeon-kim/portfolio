@@ -42,7 +42,7 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / Overview" title="Connecting took one tap. | Cleaning up took a trip to settings.">
 
-You ask Gemini for an Italian restaurant, and it adds: “You loved the truffle risotto when you went with Jeongmin last spring.” You never told it that name. Since [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) linked Gmail, Calendar and Photos (January 2026), Gemini can bring up things you never asked about, and turning them off means digging through two settings pages.
+When Google launched [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) in January 2026, its own example was a stop at a tire shop. Asked for the family van's license plate, Gemini read it off a photo in Google Photos, then found the van's trim in Gmail. Helpful, and a sign that Gemini can now bring anything from your mail, calendar and photos into an answer. What it doesn't do is show where an answer came from, and turning a source off means going through two separate settings pages.
 
 [Try the prototype](https://minyeon-kim.github.io/gemini_privacy/?mode=participant) · A self-initiated concept, not affiliated with Google.
 
@@ -92,10 +92,10 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "Off switches exist, but no one knows what's left", steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and survey data (Pew, Cisco)", "Interviewed 2 people outside the team", "Answered the same guide ourselves, as a designer and a security professional"], output: "Where today's controls fall short" },
-    { label: "Define", title: "Anxiety starts when your data shows up", steps: ["Color-coded 79 interview quotes", "Removed the labels and re-clustered them into 6 themes", "Wrote a persona: Yuna Kim, 29", "Redefined the problem: from warning at input to control after connecting"], output: "How-Might-We questions" },
-    { label: "Develop", title: "Control at the answer, not in settings", steps: ["Drew 11 hand sketches across the How-Might-We questions", "Gathered team feedback on 4 concepts", "Kept 2: inline controls and deleting from chat", "Set two rules: show what each source allows, reveal sources one step at a time"], output: "Two concepts and the rules behind them" },
-    { label: "Deliver", title: "Does checking it yourself build trust?", steps: ["Built an HTML/JS prototype with moderator and participant modes", "Logged clicks, misclicks and time to find the Source badge", "Planned a moderated think-aloud test with up to 5 people", "Chose measures: SUS, SEQ and information load"], output: "Usability test in progress" },
+    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews"], steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and survey data (Pew, Cisco)", "Interviewed 2 people outside the team", "Answered the same guide ourselves, as a designer and a security professional"], output: "Where today's controls fall short" },
+    { label: "Define", title: "Anxiety starts when your data shows up", methods: ["Affinity mapping", "Persona", "Problem reframing", "HMW"], steps: ["Color-coded 79 interview quotes", "Removed the labels and re-clustered them into 6 themes", "Wrote a persona: Yuna Kim, 29", "Redefined the problem: from warning at input to control after connecting"], output: "How-Might-We questions" },
+    { label: "Develop", title: "Control at the answer, not in settings", methods: ["Sketching", "Concept feedback", "Design principles"], steps: ["Drew 11 hand sketches across the How-Might-We questions", "Gathered team feedback on 4 concepts", "Kept 2: inline controls and deleting from chat", "Set two rules: show what each source allows, reveal sources one step at a time"], output: "Two concepts and the rules behind them" },
+    { label: "Deliver", title: "Does checking it yourself build trust?", methods: ["HTML/JS prototype", "Think-aloud test", "SUS · SEQ"], steps: ["Built an HTML/JS prototype with moderator and participant modes", "Logged clicks, misclicks and time to find the Source badge", "Planned a moderated think-aloud test with up to 5 people", "Chose measures: SUS, SEQ and information load"], output: "Usability test in progress" },
   ]}
 />
 
@@ -188,6 +188,8 @@ Built in HTML and JavaScript with a moderator and a participant mode. It logs cl
 </CaseSection>
 
 <CaseSection id="prototype" label="09 / Final prototype" title="Check it, turn it off, right where the answer is.">
+
+Both test scenarios follow the persona, Yuna, with made-up data, so no participant shares their own.
 
 **Scenario A.** Jeongmin, a name the user never mentioned, appears in a restaurant suggestion. Where did that come from, and can I switch it off?
 

@@ -2063,3 +2063,5 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .case-diamond-figure svg .case-diamond-phase { font-size: 26px; }
   .case-diamond-figure svg .case-diamond-mark circle { r: 6; }
 }
+.case-diamond-notes .case-diamond-methods { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 12px; padding: 0; list-style: none; }
+.case-diamond-notes .case-diamond-methods li { padding: 2px 8px; border: 1px solid color-mix(in srgb, var(--case-accent) 35%, transparent); border-radius: 999px; color: var(--case-accent); font-size: 12px; line-height: 1.5; overflow-wrap: normal; white-space: nowrap; }
