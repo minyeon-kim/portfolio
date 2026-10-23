@@ -1875,7 +1875,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* About opener: a quiet label, then the headline as the page title, in the body column. */
 .about-hero { max-width: 880px; margin-inline: auto; padding: clamp(56px, 7vw, 120px) var(--project-text-inset) 0; box-sizing: content-box; }
 .about-hero-label { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.5; }
-.about-hero-title { margin: 0; max-width: 18ch; color: var(--ink); font-size: clamp(36px, 4.4vw, 64px); line-height: 1.1; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance; }
+.about-hero-title { margin: 0; color: var(--ink); font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance; }
 
 /* Prototype slot: the frame the playable prototype will load into. */
 .case-prototype { max-width: 880px; margin: 0 auto clamp(40px, 5vw, 72px); }
@@ -2013,3 +2013,12 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
   header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
 }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
+
+/* About intro: a smaller portrait beside a short lead, vertically centered. */
+@media (min-width: 48rem) {
+  .about-intro[data-portrait] { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: center; gap: clamp(32px, 5vw, 72px); }
+}
+.about-intro[data-portrait] > .case-media { max-width: 300px; }
+.about-bio p:first-child { font-size: clamp(22px, 2vw, 28px); line-height: 1.35; letter-spacing: -0.02em; color: var(--ink); }
+.about-bio p + p { margin-top: 20px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.6; max-width: 46ch; }
+@media (max-width: 47.99rem) { .about-intro[data-portrait] > .case-media { max-width: 240px; } }
