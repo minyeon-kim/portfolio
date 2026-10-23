@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SiteHeader } from "@/components/site-header";
@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const nameSerif = Cormorant_Garamond({
+const nameSerif = Instrument_Serif({
   variable: "--font-name-serif",
   subsets: ["latin"],
-  weight: "600",
+  weight: "400",
   display: "swap",
 });
 
