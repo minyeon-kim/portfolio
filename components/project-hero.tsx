@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ProjectTitle } from "./project-title";
 import { GeminiDevice } from "./gemini-device";
 import { GeminiPhone } from "./gemini-phone";
+import { DevsignLoop } from "./devsign-loop";
 import { withBase } from "@/lib/site";
 
 export function ProjectHero({ name, role, timeline, cover, concept, keywords, canvas = false, gemini = false, details: custom }: {
@@ -43,7 +44,9 @@ export function ProjectHero({ name, role, timeline, cover, concept, keywords, ca
         <div className="project-hero-cover">
           {gemini
             ? <GeminiDevice><GeminiPhone alt={`${name}: the Source badge opens a sheet where Gmail is switched off, and the line about Jeongmin leaves the answer`} /></GeminiDevice>
-            : <Image src={withBase(cover)} alt={`${name} project overview`} width={1600} height={800} sizes="100vw" preload />}
+            : canvas
+              ? <DevsignLoop alt={`${name}: a drifted Place order button is flagged, the review panel opens, and the designer approves the fix`} />
+              : <Image src={withBase(cover)} alt={`${name} project overview`} width={1600} height={800} sizes="100vw" preload />}
         </div>
       )}
     </header>
