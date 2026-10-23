@@ -1,3 +1,4 @@
+import { ui, type Locale } from "@/lib/i18n";
 import Image from "next/image";
 import { ProjectTitle } from "./project-title";
 import { GeminiDevice } from "./gemini-device";
@@ -5,8 +6,9 @@ import { GeminiPhone } from "./gemini-phone";
 import { DevsignLoop } from "./devsign-loop";
 import { withBase } from "@/lib/site";
 
-export function ProjectHero({ name, role, timeline, cover, concept, keywords, canvas = false, gemini = false, details: custom }: {
+export function ProjectHero({ name, role, timeline, cover, concept, keywords, canvas = false, gemini = false, details: custom, locale = "en" }: {
   name: string;
+  locale?: Locale;
   keywords?: string[];
   details?: { label: string; value?: string }[];
   role?: string;
@@ -16,10 +18,11 @@ export function ProjectHero({ name, role, timeline, cover, concept, keywords, ca
   canvas?: boolean;
   gemini?: boolean;
 }) {
+  const t = ui[locale];
   const details = (custom ?? [
-    { label: "Project Type", value: concept ? "Concept project" : "Product" },
-    { label: "Role", value: role },
-    { label: "Timeline", value: timeline },
+    { label: t.projectType, value: concept ? t.conceptProject : t.product },
+    { label: t.role, value: role },
+    { label: t.timeline, value: timeline },
   ]).filter((item) => item.value);
 
   return (
@@ -27,7 +30,7 @@ export function ProjectHero({ name, role, timeline, cover, concept, keywords, ca
       <div className="project-hero-heading">
         <h1 className="project-hero-title"><ProjectTitle name={name} gemini={gemini} /></h1>
         {keywords?.length ? (
-          <ul className="project-hero-keywords" aria-label="Keywords">
+          <ul className="project-hero-keywords" aria-label={t.keywords}>
             {keywords.map((keyword) => <li key={keyword}>{keyword}</li>)}
           </ul>
         ) : null}

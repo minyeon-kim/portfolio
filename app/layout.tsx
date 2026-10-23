@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {/* Route changes crossfade (View Transitions; static where unsupported). */}
           <ViewTransition>{children}</ViewTransition>
         </main>
+        <HtmlLang />
         <RevealObserver />
         <ReturnToIntro />
       </body>

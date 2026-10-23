@@ -1,0 +1,129 @@
+// English is the default and lives at the root; Korean mirrors every page under
+// /ko/. UI strings are here; page copy lives in content/ (content/ko/ for Korean).
+export type Locale = "en" | "ko";
+
+export function localeOf(pathname: string): Locale {
+  return /^\/ko(\/|$)/.test(pathname) ? "ko" : "en";
+}
+
+// The same page without the /ko prefix ("/ko/about/" -> "/about/").
+export function stripLocale(pathname: string) {
+  return pathname.replace(/^\/ko(?=\/|$)/, "") || "/";
+}
+
+// An internal path in the given locale ("/about/", "ko" -> "/ko/about/").
+export function localize(href: string, locale: Locale) {
+  if (locale === "en") return href;
+  return href === "/" ? "/ko/" : `/ko${href}`;
+}
+
+export const ui = {
+  en: {
+    work: "Work",
+    about: "About",
+    email: "Email",
+    linkedin: "LinkedIn",
+    resume: "Resume",
+    language: "한국어",
+    languageLabel: "한국어로 보기",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    siteNav: "Site navigation",
+    positioning: "Product designer with a cybersecurity background, connecting research, design, and engineering to bring ideas to life with AI.",
+    projectType: "Project Type",
+    role: "Role",
+    timeline: "Timeline",
+    conceptProject: "Concept project",
+    product: "Product",
+    keywords: "Keywords",
+    atAGlance: "At a glance",
+    imageToCome: "Image to come",
+    imagePlaceholder: "Image placeholder",
+    interactivePrototype: "Interactive prototype",
+    playableSoon: "Playable here soon",
+    openPrototype: "Open the prototype ↗",
+    prototypePlaceholder: "Prototype placeholder",
+    problem: "Problem",
+    solution: "Solution",
+    diamond: "Double Diamond: Discover and Define, then Develop and Deliver",
+    nextProject: "Next project",
+    inProgress: "In progress",
+    caseInProgress: "Case study in progress",
+    open: "Open",
+    bringForward: "Bring {name} forward",
+    closingTitle: "More about how I work",
+    profilePhoto: "Profile photo",
+    photosOf: "Photos of Minyeon Kim",
+    show: "Show",
+    welcome: "What would you like to explore?",
+    askPlaceholder: "Ask about a project",
+    aboutMe: "About me",
+    chooseBelow: "Choose Gemini, Devsign, or About me below.",
+    typeName: "Type a project name or choose below.",
+    openingProject: "Opening project",
+    openMatching: "Open matching project",
+    opening: "Opening",
+    exploreProjects: "Explore projects",
+    projects: "Projects",
+    selectedWork: "Selected work",
+    introduction: "Introduction",
+    onThisPage: "On this page",
+    switchTo: { light: "Switch to light theme", dark: "Switch to dark theme" },
+    toggleTheme: "Toggle theme",
+  },
+  ko: {
+    work: "작업",
+    about: "소개",
+    email: "이메일",
+    linkedin: "LinkedIn",
+    resume: "이력서",
+    language: "English",
+    languageLabel: "View in English",
+    openMenu: "메뉴 열기",
+    closeMenu: "메뉴 닫기",
+    siteNav: "사이트 메뉴",
+    positioning: "보안을 경험한 프로덕트 디자이너로, 리서치와 디자인, 개발을 이어 AI로 아이디어를 실제로 만듭니다.",
+    projectType: "프로젝트 유형",
+    role: "역할",
+    timeline: "기간",
+    conceptProject: "컨셉 프로젝트",
+    product: "프로덕트",
+    keywords: "키워드",
+    atAGlance: "한눈에 보기",
+    imageToCome: "이미지 준비 중",
+    imagePlaceholder: "이미지 자리",
+    interactivePrototype: "인터랙티브 프로토타입",
+    playableSoon: "곧 여기서 직접 써 볼 수 있어요",
+    openPrototype: "프로토타입 열기 ↗",
+    prototypePlaceholder: "프로토타입 자리",
+    problem: "문제",
+    solution: "해결",
+    diamond: "더블 다이아몬드: 발견과 정의, 그다음 개발과 전달",
+    nextProject: "다음 프로젝트",
+    inProgress: "준비 중",
+    caseInProgress: "준비 중인 케이스 스터디",
+    open: "열기",
+    bringForward: "{name} 앞으로 가져오기",
+    closingTitle: "제가 일하는 방식이 더 궁금하다면",
+    profilePhoto: "프로필 사진",
+    photosOf: "김민연 사진",
+    show: "보기",
+    welcome: "무엇을 살펴볼까요?",
+    askPlaceholder: "프로젝트에 대해 물어보세요",
+    aboutMe: "소개",
+    chooseBelow: "아래에서 Gemini, Devsign, 소개 중 하나를 골라 주세요.",
+    typeName: "프로젝트 이름을 입력하거나 아래에서 골라 주세요.",
+    openingProject: "프로젝트 여는 중",
+    openMatching: "맞는 프로젝트 열기",
+    opening: "여는 중",
+    exploreProjects: "프로젝트 보기",
+    projects: "프로젝트",
+    selectedWork: "선택한 작업",
+    introduction: "소개",
+    onThisPage: "이 페이지",
+    switchTo: { light: "라이트 모드로 바꾸기", dark: "다크 모드로 바꾸기" },
+    toggleTheme: "테마 바꾸기",
+  },
+} as const;
+
+export type UiKey = keyof (typeof ui)["en"];

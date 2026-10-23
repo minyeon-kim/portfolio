@@ -1,0 +1,257 @@
+export const meta = {
+  title: "Devsign: 디자인과 코드 리뷰를 한 워크스페이스에서",
+  short: "Devsign",
+  teaser: { type: "token-playground" },
+  role: "프로덕트 디자이너 · 2인 팀",
+  timeline: "2026.08–10",
+  tools: ["FigJam", "Dovetail", "React", "Tailwind CSS", "Playwright"],
+  keywords: ["협업 워크플로우", "시각적 비교"],
+  cover: "/images/cases/workflow-app/cover.webp",
+  concept: true,
+  featured: true,
+  order: 2,
+};
+
+{/*
+  Korean copy of content/cases/workflow-app.mdx. Keep the facts, numbers and
+  sources identical to the English file; when one changes, change the other.
+*/}
+
+<TLDR>
+- **문제:** AI 덕분에 디자이너와 개발자는 각자 더 빨리 만들게 됐지만, 서로 만든 것을 합치고 하나로 합의하는 일은 Figma, GitHub, Slack을 오가며 오히려 느려졌어요.
+- **역할:** 2인 팀(김민연, 김다연). 인터뷰, 분석, AI로 만든 동작하는 프로토타입, 사용성 테스트, 코디자인까지 리서치부터 테스트를 함께 진행했어요.
+- **결과:** AI 시안을 비교하고 합치며, 디자인과 코드의 차이를 요청, 결정, 기록으로 바꾸는 동작하는 프로토타입. 테스트 후 다시 디자인했고, 2차 테스트는 남아 있어요.
+</TLDR>
+
+<CaseSection id="overview" label="01 / 개요" title="AI로 혼자는 빨라졌는데, | 함께는 느려졌다.">
+
+같은 호텔 예약 사이트를 둘이 각자 AI로 만들고 하나로 합쳐 봤어요. 같은 기능인데 함수 이름이 달랐고, AI가 평점 기준을 각자 다르게 지어내 한쪽은 4.2점, 다른 쪽은 4.3점이 나왔어요. 만드는 건 빨라졌지만, 하나로 합의하는 건 느려졌어요.
+
+[프로토타입 써 보기](https://minyeon-kim.github.io/devsign/) · [GitHub](https://github.com/minyeon-kim/devsign)
+
+</CaseSection>
+
+<CaseFindings
+  title="둘 다 AI를 쓰면서 협업이 막히는 곳"
+  items={[
+    { label: "병합 실험", title: "합쳐지지 않는 결과물", body: "각자 AI로 만든 시안과 코드는 규칙, 이름, 값이 조금씩 달라서 누군가 손으로 다시 맞춰야 해요." },
+    { label: "인터뷰 발화 55개", title: "사라지는 의도", body: "AI에게 준 지시가 사실상 설계서인데, 결과를 검토하는 사람은 그걸 보지 못해요." },
+    { label: "인터뷰 발화 38 + 28개", title: "흩어진 툴, 흐려진 역할", body: "Figma, GitHub, Slack을 오가며 일하고, 누가 언제 무엇을 확인할지는 정해져 있지 않아요." },
+  ]}
+/>
+
+<CaseSection id="keywords" label="02 / 키워드" title="협업 워크플로우와 시각적 비교.">
+
+목표는 메신저로 캡처를 주고받던 일을 한 툴 안의 요청 → 결정 → 기록으로 바꿔서, Figma, GitHub, Slack 사이를 오가는 시간을 줄이는 것이에요.
+
+</CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "협업 워크플로우", title: "하나의 흐름, 직군마다 분명한 역할", body: "요청, 결정, 수정을 잇고, 직군별로 화면과 순서를 나눴어요." },
+    { label: "시각적 비교", title: "읽지 말고, 보고 차이를 안다", body: "글과 코드 대신 나란히 놓인 이미지와 표시로, 다음에 할 일이 먼저 보이게." },
+  ]}
+/>
+
+<CaseSection id="features" label="03 / 주요 기능" title="합치고, 결정하고, | 한눈에 본다.">
+
+세 기능이 하나의 워크스페이스에 있어요. 모든 결정은 그 시점의 실제 화면과 함께 History에 남아요.
+
+</CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "Merge Studio · 디자이너", title: "AI 시안마다 좋은 부분만 골라 합친다", body: "시안 하나를 통째로 고르거나 손으로 다시 그리는 대신." },
+    { label: "Conflict Points · 개발자 → 디자이너", title: "달라진 곳을 찾고, 한 화면에서 결정한다", body: "눈으로 찾아 헤매고 메신저로 캡처를 주고받는 대신." },
+    { label: "Live Workspace · 모두", title: "누가 무엇을 바꿨는지 본다", body: "Slack과 여러 툴을 뒤지는 대신." },
+  ]}
+/>
+
+<CaseSection id="process" label="04 / 과정" title="더블 다이아몬드: | 넓게, 좁게, 그리고 방향 전환.">
+
+AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했어요. Develop 단계에서 방향을 한 번 바꿨어요. AI 중재자에서 Merge Studio로요.
+
+</CaseSection>
+
+<CaseDiamond
+  items={[
+    { label: "Discover", title: "툴은 많지만, 이어지지 않는다", body: "커뮤니티 글 100개+, 경쟁 툴, 인터뷰 4명" },
+    { label: "Define", title: "결정은 메신저에만 남았다", body: "발화 212개를 바텀업으로 테마 7개로" },
+    { label: "Develop", title: "AI 때문에 생긴 문제를 푼다", body: "아이디어 26개, 방향 전환, 기능 3개, AI로 만든 프로토타입" },
+    { label: "Deliver", title: "디자이너는 결정하고, 개발자는 요청한다", body: "범위, 역할, 원칙 확정; 테스트와 코디자인 후 v2" },
+  ]}
+/>
+
+<CaseSection id="discover" label="05 / Discover" title="툴은 많다. | 그런데 서로 이어지지 않는다.">
+
+학술 자료가 거의 없어서, 실무자들이 직접 글을 쓰는 곳부터 봤어요. Reddit, Hacker News, Figma 포럼, 국내 커뮤니티의 글 100개 이상이에요. 툴마다 한 단계씩은 맡지만, 차이를 발견하는 것과 그걸 어떻게 할지 정하는 것을 잇는 툴은 없었어요.
+
+</CaseSection>
+
+<CaseKey>툴마다 한 단계씩은 맡는다. <strong>차이를 발견하는 것과 무엇을 할지 정하는 것을 잇는 툴은 없다.</strong></CaseKey>
+
+<CaseCompare
+  before="툴이 하는 일"
+  after="빠진 것"
+  rows={[
+    { topic: "핸드오프 · Figma Dev Mode, Zeplin", before: "스펙 확인, 컴포넌트 연결.", after: "구현이 달라졌을 때 누가 결정하는지." },
+    { topic: "화면 비교 · OverlayQA, Uiprobe", before: "디자인과 구현의 차이 발견.", after: "그 뒤의 요청, 결정, 기록." },
+    { topic: "리뷰 · Chromatic, GitHub", before: "PR 단위 승인.", after: "디자이너가 읽을 수 있는 화면." },
+    { topic: "AI 디자인 · Magic Patterns, Stitch", before: "화면 생성과 편집.", after: "시안을 요소 단위로 골라 합치기." },
+  ]}
+/>
+
+<CaseSection id="discover-primary" label="05 / Discover · 인터뷰" title="만드는 건 빨라졌다. | 확인하고, 비교하고, 합의하는 건 아니었다.">
+
+디자이너, PM, 프로덕트 디자이너, 개발자를 각각 60분 정도 인터뷰했어요. AI가 없어도 생기는 질문은 빼고, 디자인과 구현이 다를 때 누가 결정하는지, 그 이유는 어디에 남는지를 물었어요.
+
+</CaseSection>
+
+<CaseSection id="define" label="06 / Define" title="결정은 작업물이 아니라, | 메신저에 남아 있었다.">
+
+발화 212개를 바텀업으로 테마 7개로 묶고, Dovetail에서 다시 확인했어요. 카드가 가장 많은 테마는 맥락 공유(55), 그다음은 툴 파편화(38)였어요.
+
+</CaseSection>
+
+<CaseKey>나눈 이야기가 작업물로 돌아오지 않아서, <strong>왜 지금 이 모양인지 아무도 모른다.</strong></CaseKey>
+
+<CaseFindings
+  title="핵심 인사이트"
+  items={[
+    { title: "이유가 사라진다", body: "버전 문제는 파일을 잃는 게 아니라, 왜 그 버전을 골랐는지를 잃는 거예요." },
+    { title: "확인하는 사람이 없다", body: "역할은 겹치는데, 누가 언제 무엇을 확인할지는 정한 적이 없어요." },
+    { title: "병목이 옮겨 갔다", body: "만드는 건 빨라졌지만, 회의와 합의는 그대로예요." },
+  ]}
+/>
+
+<CaseMedia src="/images/cases/workflow-app/affinity.webp" width={2000} height={476} label="바텀업 어피니티 맵: 발화 212개를 하위 테마 20개, 상위 테마 7개로" caption="발화 212개 → 하위 테마 20개 → 상위 테마 7개. 핵심 사용자는 디자이너와 개발자로 정했어요. PM 역할은 팀마다 너무 달라요." />
+
+<CaseSection id="develop" label="07 / Develop" title="아이디어 26개를, | AI 때문에 생긴 문제로 좁혔다.">
+
+아이디어 26개를 바람직성, 사업성, 실현 가능성으로 평가했어요. 처음 고른 AI 중재자는 새로워 보였지만 우리 문제 다섯 개 중 하나만 풀었어요. 그래서 병합 실험으로 돌아갔어요. AI로 만든 결과물이 서로 맞지 않는 건, AI 이전에는 없던 문제였어요. 그 뒤 AI로 동작하는 React 프로토타입을 만들고, 4주 동안 1,039번 고쳤어요.
+
+</CaseSection>
+
+<CaseKey>새로워 보이는 아이디어 대신 진짜 문제를 골랐어요. <strong>AI로 만든 결과물이 합쳐지지 않는다는 것.</strong></CaseKey>
+
+<CaseCompare
+  before="핵심 문제"
+  after="기능"
+  rows={[
+    { before: "병합의 어려움", after: "Merge Studio" },
+    { before: "역할 불명확", after: "Conflict Points" },
+    { before: "정보 분산", after: "Live Workspace" },
+    { before: "변경 추적의 어려움", after: "History (공통 기반)" },
+  ]}
+/>
+
+<CaseMediaPair>
+  <CaseMedia src="/images/cases/workflow-app/idea-voting.webp" width={1600} height={863} variant="screen" label="스티커 투표를 한 아이디어 카드" caption="넓히기: 아이디어 카드와 스티커 투표." />
+  <CaseMedia src="/images/cases/workflow-app/value-effort.webp" width={1600} height={1214} variant="screen" label="가치 대비 노력 2x2 매트릭스" caption="좁히기: 가치 × 노력." />
+</CaseMediaPair>
+
+{/* TODO: add the hand-drawn screen sketches here (the earlier Crazy 8 image was AI-generated and was removed). */}
+
+<CaseMedia src="/images/cases/workflow-app/ia.webp" width={1600} height={627} label="정보 구조" caption="IA: Dashboard → Project → Workspace(미리보기, 화면, 코드, 병합) → 변경 확인 → History." />
+
+<CaseMedia src="/images/cases/workflow-app/user-flow.webp" width={912} height={1853} variant="portrait" label="변경 감지부터 기록까지의 통합 유저 플로우" caption="변경 감지부터 요청, 결정, 수정, 기록까지 하나의 흐름." />
+
+<CaseSection id="deliver" label="08 / Deliver" title="디자이너는 보고 결정하고, | 개발자는 고치고 요청한다.">
+
+테스트와 코디자인을 거쳐 정한 것들이에요.
+
+</CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "범위", title: "UI 코드까지", body: "테스트에서 개발자가 번거롭게 느낀 건 작은 UI 수정 요청이었어요. 코드 충돌은 Git에 맡겨요." },
+    { label: "역할", title: "디자인 원안이 먼저", body: "개발자는 수정안을 담아 요청하고, 디자이너가 결정하고, 병합하면 해결돼요." },
+    { label: "원칙", title: "보고 결정한다", body: "코드보다 이미지, 표시, 색. 화면마다 주요 버튼은 하나." },
+  ]}
+/>
+
+<CaseSection id="prototype" label="09 / 최종 프로토타입" title="비교하고, 합치고, 결정하고, 기록한다 — | 한 워크스페이스에서.">
+
+모든 화면을 흐름 순서대로 보여 주고, 바뀐 곳마다 표시를 달고, 내가 내려야 할 결정을 맨 위에 둬요.
+
+</CaseSection>
+
+<CasePrototype
+  href="https://minyeon-kim.github.io/devsign/"
+  label="달라진 곳을 비교하고, 병합을 승인하기"
+  steps={[
+    { src: "/images/cases/workflow-app/en-workspace.webp", width: 1280, height: 800, title: "Live Workspace", body: "모든 화면을 흐름 순서대로. 표시를 누르면 필요한 결정으로 바로 가요." },
+    { src: "/images/cases/workflow-app/en-review.webp", width: 1280, height: 800, title: "Conflict Points", body: "원안, 구현, 수정안을 나란히 놓고, 5단계 진행 상태를 보여 줘요." },
+    { src: "/images/cases/workflow-app/en-merge.webp", width: 1280, height: 800, title: "Merge Studio", body: "영역마다 다른 시안에서 골라 합치고, 각 부분이 어디서 왔는지 보여 줘요." },
+    { src: "/images/cases/workflow-app/en-dashboard.webp", width: 1280, height: 800, title: "Dashboard", body: "나를 기다리는 요청이 먼저 보여요." },
+    { src: "/images/cases/workflow-app/en-history.webp", width: 1280, height: 800, title: "History", body: "타임라인의 어느 시점이든 그때의 실제 화면을 다시 봐요." },
+  ]}
+/>
+
+<CaseSection id="usability-testing" label="10 / 사용성 테스트" title="두 직군 모두 “상대방의 툴”이라고 했다. | 그래서 화면을 나눴다.">
+
+디자이너 1명, 개발자 1명과 테스트했어요(10.06–07). 모든 과제를 끝냈지만 도움을 받아서였고, 둘 다 Devsign을 상대 직군을 위한 툴로 봤어요.
+
+</CaseSection>
+
+<CaseStats
+  items={[
+    { value: "55 / 75", label: "SUS, 디자이너 / 개발자 (68이 평균)" },
+    { value: "2.3 / 3", label: "첫 시도의 평균 진행자 도움 (목표 1.5)" },
+    { value: "4:16 → 1:46", label: "같은 과제를 두 번째로 했을 때 디자이너의 변경 검토 시간" },
+  ]}
+  source="자체 사용성 테스트, 10.06–07 (디자이너 1명, 개발자 1명). 두 번째 시도의 개선은 같은 과제를 익힌 효과이며, 리디자인의 효과가 아니에요."
+/>
+
+<CaseCompare
+  before="관찰한 것"
+  after="바꾼 것"
+  rows={[
+    { before: "첫 화면에서 “지금 뭐 하면 될까요?”", after: "직군별로 화면과 시나리오를 나눔." },
+    { before: "누가 승인하는지 불분명, 작은 UI 수정에 절차가 과함.", after: "개발자는 요청하고, 디자이너는 유지, 승인, 재검토 중 선택." },
+    { before: "‘Conflict’를 심각한 코드 오류로 받아들임.", after: "쉬운 말: ‘확인할 변경점’. 노랑은 주의, 빨강은 위험." },
+  ]}
+/>
+
+<CaseSection id="codesign" label="10 / 코디자인" title="코드를 읽는 화면에서, | 변화를 보는 화면으로: Visual v2.">
+
+현업 디자이너와 1시간 40분 동안 세션을 했어요(10.13). 기능을 더하지 않고, 메뉴를 줄이고, 위치를 옮기고, 덜 중요한 건 숨기기로 합의했어요. 이틀 만에 반영해서 10월 16일에 v2를 배포했어요.
+
+</CaseSection>
+
+<CaseKey>기능은 그대로, <strong>읽을 것은 훨씬 적게.</strong></CaseKey>
+
+<CaseMediaPair>
+  <CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="이전: 글과 코드 중심의 v1 변경 확인" caption="이전 · 변경 확인 (10.07): 글과 코드가 먼저, 결정 버튼은 근거와 멀리 떨어짐." />
+  <CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="이후: 결정이 위에 있는 시각적 비교 v2 변경 확인" caption="이후 · 변경 확인 (10.16): 지금 내 차례인 단계와 결정이 먼저." />
+</CaseMediaPair>
+
+<CaseMediaPair>
+  <CaseMedia src="/images/cases/workflow-app/v1-merge.webp" width={960} height={540} variant="screen" label="이전: 별도 화면에서 시안을 통째로 고르는 v1 Merge Studio" caption="이전 · Merge Studio (10.07): 별도 화면, 시안을 통째로만." />
+  <CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} variant="screen" label="이후: 여러 시안에서 영역을 골라 합치는 v2 병합 탭" caption="이후 · 병합 탭 (10.16): 같은 창에서 시안마다 영역을 골라 합침." />
+</CaseMediaPair>
+
+<CaseCompare
+  before="이전"
+  after="이후"
+  rows={[
+    { before: "개발 툴 같은 4분할 패널", after: "탭 3개, AI 채팅은 기본 접힘" },
+    { before: "화면을 하나씩만 봄", after: "흐름 순서대로 보는 화면 보드" },
+    { before: "따로 떨어진 앱 같은 Merge Studio", after: "같은 창의 병합 탭" },
+    { before: "보이지 않는 승인 흐름", after: "5단계: 발견 → 요청 → 결정 → 수정 → 병합" },
+  ]}
+/>
+
+<CaseSection id="review" label="11 / 리뷰와 한계" title="누가 결정하는지를 설계했다. | 시간을 줄이는지는 다음 테스트에서.">
+
+협업을 누가 무엇을 결정하는가의 관점에서 다시 정의하고, AI가 결과물을 만든 뒤에 생기는 일에 집중했어요.
+
+</CaseSection>
+
+<CaseFindings
+  items={[
+    { label: "다음에는", title: "이렇게 일하겠다", points: ["아이디어는 푸는 문제로 판단하기", "정리하기 전에 스케치하고 실험하기", "직군마다 그 직군의 테스트 과제 주기"] },
+    { label: "한계", title: "아직 증명하지 못한 것", points: ["2차 테스트 미진행", "직군별 참가자 1명", "목업 데이터, 실제 Figma·Git 연동 없음"] },
+    { label: "다음", title: "다음에 할 것", points: ["직군별 2차 테스트", "실제 연동", "팀별 권한 규칙"] },
+  ]}
+/>
