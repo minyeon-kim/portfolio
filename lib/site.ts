@@ -4,9 +4,6 @@ export const site = {
   name: "Minyeon Kim",
   positioning:
     "Product designer with a cybersecurity background, connecting research, design, and engineering to bring ideas to life with AI.",
-  // The same sentence with phrase breaks (" | ") for the landing headline.
-  positioningLines:
-    "Product designer with a cybersecurity background, | connecting research, design, and engineering | to bring ideas to life with AI.",
   resumeUrl: "/resume.pdf", // TODO: add public/resume.pdf
   email: "minyeon.kim3@gmail.com",
   linkedinUrl: "https://www.linkedin.com/in/minyeon-kim-56b21228a/",

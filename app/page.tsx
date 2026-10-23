@@ -27,7 +27,7 @@ export default async function Home() {
           concept: meta.concept,
         }))}
         name={site.name}
-        intro={<h1 className="intro-headline"><AlignWords text={site.positioningLines} /></h1>}
+        intro={<h1 className="intro-headline"><AlignWords text={site.positioning} /></h1>}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
