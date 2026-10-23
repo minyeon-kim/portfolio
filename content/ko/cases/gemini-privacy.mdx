@@ -38,7 +38,9 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / 개요" title="연결은 한 번에 됐는데, | 정리하려면 설정 깊숙이 들어가야 했다.">
 
-[Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/)의 한 필자가 Gemini에게 데이트할 레스토랑을 물었습니다. Gemini는 트러플 리조또를 추천하면서, 작년 봄 전 여자친구 Sarah와 그곳에 갔었다는 말을 덧붙였습니다. [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/)가 Gmail, Calendar, Photos를 연결한 뒤(2026년 1월), Gemini는 묻지 않은 기억까지 답변에 꺼내 쓸 수 있게 됐습니다. 그런데 그 정보가 어디서 왔는지는 보여 주지 않고, 출처를 끄려면 설정 화면 두 곳을 따로 찾아 들어가야 합니다.
+2026년 1월 Google은 [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/)를 내놓았습니다. 이 기능을 켜면 Gemini가 Gmail, Calendar, Photos, YouTube, 검색 기록을 읽어 답변을 개인화하고, 묻지 않아도 그 정보를 꺼내 씁니다. [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/)의 한 필자는 데이트할 레스토랑을 물었다가, 메뉴 추천과 함께 작년 봄 전 여자친구 Sarah와 그곳에 갔었다는 말을 들었습니다.
+
+편리한 건 맞습니다. 문제는 통제입니다. 답변은 그 기억이 어느 앱에서 왔는지 알려 주지 않고, 끄는 곳은 Gemini 앱과 Google 계정 두 곳에 나뉘어 있습니다. 삭제도 사람들이 기대하는 것과 다릅니다. Google의 [Privacy Hub](https://support.google.com/gemini/answer/13594961?hl=en)에 따르면 활동 기록을 꺼도 대화는 72시간 동안 보관되고, 사람이 검토하도록 선택된 대화는 삭제해도 3년 동안 남으며, Gemini 활동을 지워도 Gmail이나 Photos의 원본은 그대로 남습니다.
 
 개인적으로 진행한 컨셉 프로젝트이며, Google과 관련이 없습니다.
 
@@ -88,7 +90,7 @@ AI 프라이버시는 범위가 넓어서, 좁히기 전에 넓게 조사했습�
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "끄는 버튼은 있지만, 무엇이 남는지 모른다", methods: ["경쟁 분석", "Desk Research", "사용자 인터뷰", "Affinity Mapping"], steps: ["AI 서비스 5개의 프라이버시 설정 비교", "규제, 논문, 설문 데이터(Pew, Cisco) 조사", "팀 밖의 2명 인터뷰, 같은 가이드에 우리도 직접 답변", "발화 79개를 색으로 구분한 뒤 테마 6개로 다시 묶기"], output: "지금의 설정이 부족한 지점, 테마 6개" },
+    { label: "Discover", title: "끄는 버튼은 있지만, 무엇이 남는지 모른다", methods: ["경쟁 분석", "Desk Research", "사용자 인터뷰", "Affinity Mapping"], steps: ["AI 서비스 5개의 프라이버시 설정 비교", "규제, 논문, 2025–2026 설문 데이터(Pew) 조사", "팀 밖의 2명 인터뷰, 같은 가이드에 우리도 직접 답변", "발화 79개를 색으로 구분한 뒤 테마 6개로 다시 묶기"], output: "지금의 설정이 부족한 지점, 테마 6개" },
     { label: "Define", title: "불안은 내 정보가 나타날 때 시작된다", methods: ["Insight", "Persona", "문제 재정의", "HMW"], steps: ["테마 6개에서 인사이트 3개 도출", "페르소나 작성: 김유나, 29세", "문제 재정의: 입력할 때 경고에서, 연결된 뒤의 통제로", "How-Might-We 질문으로 정리"], output: "How-Might-We 질문" },
     { label: "Develop", title: "설정이 아니라 답변에서 통제한다", methods: ["스케치", "컨셉 피드백", "디자인 원칙"], steps: ["How-Might-We 질문별 손 스케치 11개", "컨셉 4개에 대한 팀 피드백", "2개 선택: 인라인 설정, 채팅으로 삭제", "두 가지 원칙: 출처마다 할 수 있는 일을 보여 주기, 출처는 한 단계씩 열기"], output: "컨셉 2개와 그 뒤의 원칙" },
     { label: "Deliver", title: "직접 확인하면 신뢰가 생길까?", methods: ["HTML/JS 프로토타입", "Think-aloud 테스트", "SUS · SEQ"], steps: ["진행자·참가자 모드가 있는 HTML/JS 프로토타입 제작", "클릭, 오클릭, 출처 배지를 찾는 시간 기록", "최대 5명과 진행자가 함께하는 Think-aloud 테스트 설계", "측정 지표: SUS, SEQ, 정보량"], output: "사용성 테스트 진행 중" },
@@ -105,10 +107,9 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
 
 <CaseStats
   items={[
-    { value: "56%", label: "의 미국 성인이 개인정보 처리방침을 읽지 않고 자주 동의한다", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "61%", label: "의 미국 성인이 자신이 무엇을 해도 프라이버시에 큰 차이가 없을 거라고 본다", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "39%", label: "의 소비자가 신뢰를 위해 가장 중요한 것으로 ‘내 데이터가 어떻게 쓰이는지에 대한 명확한 정보’를 꼽았다", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
-    { value: "5%", label: "의 기업만이 ‘사용자가 프라이버시 설정을 직접 조정하게 하기’를 신뢰를 위한 1순위로 꼽았다", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "61%", label: "의 미국 성인이 AI가 내 삶에 쓰이는 방식을 더 통제하고 싶다고 답했다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "17%", label: "만이 지금 가진 통제 수준에 만족한다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "71%", label: "가 AI 사용이 늘면 내 개인 정보가 덜 안전해질 거라고 본다", source: "Pew Research Center, survey of U.S. adults (Feb 2026)" },
   ]}
 />
 
@@ -126,8 +127,8 @@ AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설
 
 <CaseStats
   items={[
-    { value: "81%", label: "AI를 들어 본 미국인 중, 기업이 사람들이 불편해할 방식으로 AI를 데이터에 쓸 거라고 예상하는 비율", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "62%", label: "같은 AI 활용이 사람들의 삶을 더 편하게 만들 수 있다고 답한 비율", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "50%", label: "의 미국 성인이 일상 속 AI 확산에 기대보다 걱정이 크다고 답했다(2021년 37%에서 증가)", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "38%", label: "는 기대와 걱정이 반반이다. 걱정하면서도 떠나지는 않는다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
   ]}
 />
 

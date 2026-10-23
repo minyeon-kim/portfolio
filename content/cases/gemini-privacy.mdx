@@ -42,7 +42,9 @@ export const meta = {
 
 <CaseSection id="overview" label="01 / Overview" title="Connecting took one tap. | Cleaning up took a trip to settings.">
 
-A writer at [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/) asked Gemini for a date-night restaurant. It recommended the truffle risotto, and mentioned they'd been there with Sarah, an ex, last spring. Since [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/) connected Gmail, Calendar and Photos (January 2026), Gemini can bring memories like this into an answer unasked. It doesn't show where they came from, and turning a source off means going through two separate settings pages.
+In January 2026, Google launched [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/). Turn it on, and Gemini reads your Gmail, Calendar, Photos, YouTube and Search history to personalize answers, even when you don't ask it to. A writer at [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/) asked for a date-night restaurant and got a dish recommendation, plus a reminder that they'd been there with Sarah, an ex, last spring.
+
+The convenience is real. The problem is control. The answer doesn't say which app a memory came from, and the switches sit in two places, the Gemini app and your Google account. Deleting doesn't mean what people expect, either. Per Google's own [Privacy Hub](https://support.google.com/gemini/answer/13594961?hl=en), chats are kept for 72 hours even with activity off, chats picked for human review are kept for three years even after you delete them, and deleting Gemini activity leaves the original in Gmail or Photos.
 
 A self-initiated concept, not affiliated with Google.
 
@@ -92,7 +94,7 @@ AI privacy is broad, so we researched widely before narrowing. In Define I redef
 
 <CaseDiamond
   items={[
-    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews", "Affinity mapping"], steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and survey data (Pew, Cisco)", "Interviewed 2 people outside the team, and answered the same guide ourselves", "Color-coded 79 quotes, then re-clustered them into 6 themes"], output: "Six themes on where today's controls fall short" },
+    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews", "Affinity mapping"], steps: ["Compared the privacy controls of 5 AI services", "Read regulation, papers and 2025–2026 survey data (Pew)", "Interviewed 2 people outside the team, and answered the same guide ourselves", "Color-coded 79 quotes, then re-clustered them into 6 themes"], output: "Six themes on where today's controls fall short" },
     { label: "Define", title: "Anxiety starts when your data shows up", methods: ["Insights", "Persona", "Problem reframing", "HMW"], steps: ["Drew 3 insights from the 6 themes", "Wrote a persona: Yuna Kim, 29", "Redefined the problem: from warning at input to control after connecting", "Turned it into How-Might-We questions"], output: "How-Might-We questions" },
     { label: "Develop", title: "Control at the answer, not in settings", methods: ["Sketching", "Concept feedback", "Design principles"], steps: ["Drew 11 hand sketches across the How-Might-We questions", "Gathered team feedback on 4 concepts", "Kept 2: inline controls and deleting from chat", "Set two rules: show what each source allows, reveal sources one step at a time"], output: "Two concepts and the rules behind them" },
     { label: "Deliver", title: "Does checking it yourself build trust?", methods: ["HTML/JS prototype", "Think-aloud test", "SUS · SEQ"], steps: ["Built an HTML/JS prototype with moderator and participant modes", "Logged clicks, misclicks and time to find the Source badge", "Planned a moderated think-aloud test with up to 5 people", "Chose measures: SUS, SEQ and information load"], output: "Usability test in progress" },
@@ -109,10 +111,9 @@ We compared the privacy controls of five AI services. Gemini splits them between
 
 <CaseStats
   items={[
-    { value: "56%", label: "of U.S. adults frequently agree to privacy policies without reading them", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "61%", label: "of U.S. adults are skeptical that anything they do will make much difference to their privacy", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "39%", label: "of consumers name clear information on how their data is used as the top thing that builds trust", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
-    { value: "5%", label: "of organizations rank letting people adjust their own privacy settings as the top way to build trust", source: "Cisco, 2023 Data Privacy Benchmark Study, Figure 11" },
+    { value: "61%", label: "of U.S. adults want more control over how AI is used in their lives", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "17%", label: "are comfortable with the amount of control they have now", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "71%", label: "think the increased use of AI will make their personal information less secure", source: "Pew Research Center, survey of U.S. adults (Feb 2026)" },
   ]}
 />
 
@@ -130,8 +131,8 @@ I color-coded 79 interview quotes, removed the labels and re-clustered them from
 
 <CaseStats
   items={[
-    { value: "81%", label: "of Americans who have heard of AI expect companies to use it on their data in ways people wouldn't be comfortable with", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
-    { value: "62%", label: "say the same use of AI could make people's lives easier", source: "Pew Research Center, “How Americans View Data Privacy” (2023)" },
+    { value: "50%", label: "of U.S. adults are more concerned than excited about the increased use of AI in daily life, up from 37% in 2021", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
+    { value: "38%", label: "feel equally excited and concerned: worried, but not walking away", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
   ]}
 />
 
