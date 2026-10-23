@@ -69,28 +69,53 @@ export function CaseKey({ children }: { children: ReactNode }) {
   return <p className="case-key reveal">{children}</p>;
 }
 
-// The Double Diamond drawn out: two diamonds (problem, then solution) with the
-// four phases on them, and what each phase found underneath.
-export function CaseDiamond({ items }: { items: { label: string; title: string; body: string }[] }) {
+type DiamondPhase = { label: string; title: string; steps?: string[]; output?: string; body?: string };
+
+// The Double Diamond drawn out in the "revamped" style: each diamond diverges,
+// then converges; every method used in a phase is a numbered mark on the line,
+// listed underneath with what the phase handed on to the next.
+export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
+  const marks = items.flatMap((item, p) => {
+    const n = item.steps?.length ?? 0;
+    return Array.from({ length: n }, (_, i) => ({ key: `${p}-${i}`, x: p * 200 + ((i + 1) * 200) / (n + 1), n: i + 1 }));
+  });
   return (
     <figure className="case-diamond reveal">
-      <div className="case-diamond-spaces" aria-hidden="true"><span><T k="problem" /></span><span><T k="solution" /></span></div>
+      <div className="case-diamond-spaces" aria-hidden="true"><span><T k="rightThing" /></span><span><T k="thingsRight" /></span></div>
       <div className="case-diamond-figure">
-        <svg viewBox="0 0 800 300" role="img" aria-label="Double Diamond: Discover and Define, then Develop and Deliver">
+        <svg viewBox="0 0 800 300" role="img" aria-label={items.map((item) => item.label).join(", ")}>
           <line x1="0" y1="150" x2="800" y2="150" />
           <polygon points="0,150 200,4 400,150 200,296" />
           <polygon points="400,150 600,4 800,150 600,296" />
+          {[0, 400].map((x) => (
+            <g key={x} className="case-diamond-edge">
+              <text x={x + 92} y={62} transform={`rotate(-36 ${x + 92} 62)`} textAnchor="middle"><T k="diverge" /></text>
+              <text x={x + 308} y={62} transform={`rotate(36 ${x + 308} 62)`} textAnchor="middle"><T k="converge" /></text>
+            </g>
+          ))}
+          {items.map((item, p) => (
+            <text key={item.label} className="case-diamond-phase" x={p * 200 + 100} y={118} textAnchor="middle">{item.label}</text>
+          ))}
+          {marks.map((m) => (
+            <g key={m.key} className="case-diamond-mark">
+              <circle cx={m.x} cy={150} r={10} />
+              <text x={m.x} y={154} textAnchor="middle">{m.n}</text>
+            </g>
+          ))}
         </svg>
-        <ol className="case-diamond-phases" aria-hidden="true">
-          {items.map((item) => <li key={item.label}>{item.label}</li>)}
-        </ol>
       </div>
       <ol className="case-diamond-notes">
         {items.map((item) => (
           <li key={item.label}>
             <span>{item.label}</span>
             <strong>{item.title}</strong>
-            <p>{item.body}</p>
+            {item.steps ? (
+              <ol className="case-diamond-steps">
+                {item.steps.map((step) => <li key={step}>{step}</li>)}
+              </ol>
+            ) : null}
+            {item.body && <p>{item.body}</p>}
+            {item.output && <p className="case-diamond-output"><span aria-hidden="true">→</span> {item.output}</p>}
           </li>
         ))}
       </ol>
