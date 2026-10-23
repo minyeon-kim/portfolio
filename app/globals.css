@@ -2031,3 +2031,11 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* Everywhere else headings and card titles avoid a lone word on the last line. */
 :is(h1, h2, h3, .case-findings-card h3, .case-prototype-steps strong) { text-wrap: balance; }
 .intro-positioning h1.intro-headline { text-wrap: pretty; }
+
+/* Closing block (components/site-footer.tsx): the last thing on a case page. */
+.site-closing { max-width: 880px; margin: clamp(72px, 8vw, 128px) auto 0; padding: clamp(40px, 5vw, 64px) 0 clamp(56px, 7vw, 96px); border-top: 1px solid var(--line); text-align: center; }
+.site-closing-title { margin: 0 0 24px; color: var(--ink); font-size: clamp(24px, 2.4vw, 36px); line-height: 1.2; letter-spacing: -0.03em; }
+.site-closing-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.site-closing-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 18px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); font-size: 15px; transition: background-color 150ms ease; }
+.site-closing-pill:hover { background: color-mix(in srgb, var(--ink) 11%, transparent); }
+.site-closing-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
