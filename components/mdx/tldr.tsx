@@ -1,3 +1,4 @@
+import { T } from "@/components/local-text";
 import type { ReactNode } from "react";
 
 // "At a glance" summary at the top of every case. Content is a three-line list:
@@ -10,7 +11,7 @@ export function TLDR({ children }: { children: ReactNode }) {
       className="mb-6 rounded-md bg-fill p-3 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_strong]:mb-0.5 [&_strong]:block [&_strong]:text-[13px] [&_strong]:font-medium [&_strong]:text-muted [&_ul]:mb-0 [&_ul]:list-none [&_ul]:pl-0"
     >
       <h2 id="tldr" className="mb-2 scroll-mt-4 text-[13px] font-medium text-muted">
-        At a glance
+        <T k="atAGlance" />
       </h2>
       {children}
     </section>

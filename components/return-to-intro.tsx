@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { localeOf, localize, stripLocale } from "@/lib/i18n";
 import { usePathname, useRouter } from "next/navigation";
 import { setUi, useUi } from "@/lib/ui-store";
 import { surfaceOf } from "@/lib/project-transition";
 
 // Only an additional upward gesture at the page top returns to the intro.
 export function ReturnToIntro() {
-  const pathname = usePathname();
+  const fullPath = usePathname();
+  const pathname = stripLocale(fullPath);
+  const home = localize("/", localeOf(fullPath));
   const router = useRouter();
   const active = useUi((state) => state.activeCase);
   const menuOpen = useUi((state) => state.menuOpen);
@@ -101,7 +104,7 @@ export function ReturnToIntro() {
         observer.observe(document.body, { childList: true, subtree: true });
       }
       setUi({ activeCase: null, menuOpen: false, railVisible: true });
-      if (pathname !== "/") router.push("/", { scroll: true });
+      if (pathname !== "/") router.push(home, { scroll: true });
       else {
         window.scrollTo({ top: 0, behavior: "instant" });
         if (!layer) requestAnimationFrame(focusInput);
@@ -143,7 +146,7 @@ export function ReturnToIntro() {
       window.removeEventListener("touchstart", touchStart);
       window.removeEventListener("touchend", touchEnd);
     };
-  }, [active, menuOpen, pathname, router]);
+  }, [active, menuOpen, pathname, home, router]);
 
   return null;
 }

@@ -2039,3 +2039,10 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .site-closing-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 18px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); font-size: 15px; transition: background-color 150ms ease; }
 .site-closing-pill:hover { background: color-mix(in srgb, var(--ink) 11%, transparent); }
 .site-closing-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Korean pages: break lines between words, not inside them, and loosen the
+   tight Latin tracking a little for Hangul. */
+html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
+html:lang(ko) :is(h1, h2, h3, .case-statement, .about-hero-title, .intro-headline, .site-closing-title) { letter-spacing: -0.02em; }
+/* Mono labels are set for Latin; Korean labels read better in the text face. */
+html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-gallery-placeholder small, .case-comparison-label, .more-work-label, .more-work-slot-label, .case-role-label, .intro-explore-cue, .intro-showcase-placeholder, .font-mono) { font-family: var(--font-sans, inherit), system-ui, sans-serif; letter-spacing: 0; text-transform: none; }

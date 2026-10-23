@@ -1,5 +1,6 @@
 "use client";
 
+import { useStrings } from "@/lib/use-locale";
 import { useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
@@ -27,6 +28,7 @@ function subscribe(onChange: () => void) {
 }
 
 export function ThemeToggle() {
+  const t = useStrings();
   const theme = useSyncExternalStore(subscribe, getTheme, () => null);
   const next: Theme = theme === "dark" ? "light" : "dark";
 
@@ -58,7 +60,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme ? `Switch to ${next} theme` : "Toggle theme"}
+      aria-label={theme ? t.switchTo[next] : t.toggleTheme}
       className="header-menu-trigger theme-toggle press relative"
     >
       {/* Both icons stay mounted and swap with a quarter turn. */}

@@ -1,5 +1,7 @@
 "use client";
 
+import { localize } from "@/lib/i18n";
+import { useLocale, useStrings } from "@/lib/use-locale";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +26,8 @@ const INTERVAL = 4200;
 // home stage (items carry an index) a card selects that case; elsewhere it
 // opens its page.
 export function MoreWork({ items }: { items: MoreWorkItem[] }) {
+  const t = useStrings();
+  const locale = useLocale();
   const router = useRouter();
   const [front, setFront] = useState(0);
   const [held, setHeld] = useState(false);
@@ -51,7 +55,7 @@ export function MoreWork({ items }: { items: MoreWorkItem[] }) {
       }, () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)));
       return;
     }
-    const href = `/work/${item.slug}/`;
+    const href = localize(`/work/${item.slug}/`, locale);
     revealNextProject(() => router.push(href, { scroll: false }), () => Boolean(document.querySelector(`[data-case-slug="${item.slug}"]`)));
   };
   if (!items.length) return null;
@@ -68,7 +72,7 @@ export function MoreWork({ items }: { items: MoreWorkItem[] }) {
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHeld(false); }}>
-      <h2 id="more-work-label" className="more-work-label">Next project</h2>
+      <h2 id="more-work-label" className="more-work-label">{t.nextProject}</h2>
       <ul className="more-work-deck">
         {items.map((item, i) => {
           const r = rank(i);
@@ -84,26 +88,26 @@ export function MoreWork({ items }: { items: MoreWorkItem[] }) {
           return (
             <li key={item.slug} className="more-work-card" data-rank={Math.min(r, 3)}>
               {r === 0 ? (
-                <Link href={`/work/${item.slug}/`} className="more-work-hit" aria-label={`Open ${item.name}`}
+                <Link href={localize(`/work/${item.slug}/`, locale)} className="more-work-hit" aria-label={`${t.open} ${item.name}`}
                   onClick={(event) => {
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
                     event.preventDefault();
                     open(item);
                   }}>{media}</Link>
               ) : (
-                <button type="button" className="more-work-hit" aria-label={`Bring ${item.name} forward`} tabIndex={r < 3 ? 0 : -1} onClick={() => setFront(i)}>{media}</button>
+                <button type="button" className="more-work-hit" aria-label={t.bringForward.replace("{name}", item.name)} tabIndex={r < 3 ? 0 : -1} onClick={() => setFront(i)}>{media}</button>
               )}
             </li>
           );
         })}
         {Array.from({ length: slots }, (_, k) => (
-          <li key={`slot-${k}`} className="more-work-card more-work-slot" data-rank={Math.min(rank(items.length + k), 3)} aria-label="Case study in progress">
-            <span className="more-work-cover"><span className="more-work-slot-label">In progress</span></span>
+          <li key={`slot-${k}`} className="more-work-card more-work-slot" data-rank={Math.min(rank(items.length + k), 3)} aria-label={t.caseInProgress}>
+            <span className="more-work-cover"><span className="more-work-slot-label">{t.inProgress}</span></span>
           </li>
         ))}
       </ul>
       <div className="more-work-caption" aria-live="polite">
-        <Link key={current.slug} href={`/work/${current.slug}/`} className="more-work-title" tabIndex={-1}
+        <Link key={current.slug} href={localize(`/work/${current.slug}/`, locale)} className="more-work-title" tabIndex={-1}
           onClick={(event) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
             event.preventDefault();

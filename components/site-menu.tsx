@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
 import { HomeLink } from "@/components/home/case-panels";
+import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
 // Site-wide navigation only. Projects are picked on the landing page and
 // linked from the end of each case, so the menu doesn't repeat them.
@@ -20,6 +21,9 @@ export function SiteMenu(props: Props) {
 
 function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
   const [open, setOpen] = useState(false);
+  const locale = localeOf(pathname);
+  const t = ui[locale];
+  const other = locale === "en" ? "ko" : "en";
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLElement>(null);
@@ -62,7 +66,7 @@ function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
         type="button"
         aria-expanded={open}
         aria-controls="site-menu"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? t.closeMenu : t.openMenu}
         className="header-menu-trigger press"
         onClick={() => setOpen(!open)}
         onKeyDown={(event) => {
@@ -75,15 +79,16 @@ function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
         <span aria-hidden="true" className="header-menu-icon" data-open={open || undefined}><span /><span /></span>
       </button>
       {open && (
-        <nav ref={panel} id="site-menu" aria-label="Site navigation" className="header-menu-panel">
+        <nav ref={panel} id="site-menu" aria-label={t.siteNav} className="header-menu-panel">
           <ul className="header-menu-pages">
-            <li onClick={close}><HomeLink>Work</HomeLink></li>
-            <li><Link href="/about/" onClick={close} aria-current={pathname === "/about/" ? "page" : undefined}>About</Link></li>
+            <li onClick={close}><HomeLink>{t.work}</HomeLink></li>
+            <li><Link href={localize("/about/", locale)} onClick={close} aria-current={stripLocale(pathname) === "/about/" ? "page" : undefined}>{t.about}</Link></li>
+            <li><Link href={localize(stripLocale(pathname), other)} hrefLang={other} lang={other} onClick={close} aria-label={t.languageLabel}>{t.language}</Link></li>
           </ul>
           {(contact.email || contact.linkedinUrl || contact.resumeUrl) && <div className="header-menu-contact">
-            {contact.email && <a href={`mailto:${contact.email}`} onClick={close}>Email ↗</a>}
+            {contact.email && <a href={`mailto:${contact.email}`} onClick={close}>{t.email} ↗</a>}
             {contact.linkedinUrl && <a href={contact.linkedinUrl} onClick={close}>LinkedIn ↗</a>}
-            {contact.resumeUrl && <a href={withBase(contact.resumeUrl)} onClick={close}>Resume ↗</a>}
+            {contact.resumeUrl && <a href={withBase(contact.resumeUrl)} onClick={close}>{t.resume} ↗</a>}
           </div>}
         </nav>
       )}

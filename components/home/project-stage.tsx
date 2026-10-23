@@ -1,5 +1,7 @@
 "use client";
 
+import { localize } from "@/lib/i18n";
+import { useLocale, useStrings } from "@/lib/use-locale";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,6 +31,7 @@ type Props = { projects: StageProject[]; name: string; intro: ReactNode };
 
 // Project selection opens an editorial heading and full-width cover.
 export function ProjectStage({ projects, name, intro }: Props) {
+  const t = useStrings();
   const active = useUi((s) => s.activeCase);
   // Reset after React commits the new stage, rather than before its old body
   // unmounts (browser scroll anchoring can otherwise restore the reading offset).
@@ -49,7 +52,7 @@ export function ProjectStage({ projects, name, intro }: Props) {
   return (
     <>
       {active === null && (
-    <section id="work" aria-label="Introduction" className="intro-stage full-bleed md:-mt-[64px] bg-bg">
+    <section id="work" aria-label={t.introduction} className="intro-stage full-bleed md:-mt-[64px] bg-bg">
       <div className="intro-scroll-viewport">
         <IntroState name={name} intro={intro} projects={projects} onSelect={select} />
       </div>
@@ -61,9 +64,9 @@ export function ProjectStage({ projects, name, intro }: Props) {
           <div className="stage-content selected-stage-copy">
             <h1 tabIndex={-1} className="selected-stage-title generated-title"><ProjectTitle name={p.name} gemini={p.slug === "gemini-privacy"} /></h1>
             <dl className="selected-stage-meta">
-              <div><dt>Project Type</dt><dd>{p.concept ? "Concept project" : "Product"}</dd></div>
-              {p.role && <div><dt>Role</dt><dd>{p.role}</dd></div>}
-              {p.timeline && <div><dt>Timeline</dt><dd>{p.timeline}</dd></div>}
+              <div><dt>{t.projectType}</dt><dd>{p.concept ? t.conceptProject : t.product}</dd></div>
+              {p.role && <div><dt>{t.role}</dt><dd>{p.role}</dd></div>}
+              {p.timeline && <div><dt>{t.timeline}</dt><dd>{p.timeline}</dd></div>}
             </dl>
           </div>
           <div className="stage-grow selected-stage-object">
@@ -74,7 +77,7 @@ export function ProjectStage({ projects, name, intro }: Props) {
                 : p.cover && <Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" />}</div></div>
           </div>
           <div className="selected-stage-picker flex justify-center px-2 py-3 lg:hidden">
-            <Segmented label="Selected work" options={projects.map((x) => ({ id: x.slug, label: x.name }))} value={active} onChange={select} />
+            <Segmented label={t.selectedWork} options={projects.map((x) => ({ id: x.slug, label: x.name }))} value={active} onChange={select} />
           </div>
         </div>
       </section>
@@ -89,6 +92,8 @@ function IntroState({ name, intro, projects, onSelect }: {
   projects: StageProject[];
   onSelect: (index: number) => void;
 }) {
+  const t = useStrings();
+  const locale = useLocale();
   const router = useRouter();
   const surface = useRef<HTMLDivElement>(null);
   const picker = useRef<HTMLDivElement>(null);
@@ -97,7 +102,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const [showcaseVisible, setShowcaseVisible] = useState(false);
   const [welcomeCount, setWelcomeCount] = useState(-1);
   const welcomePlayed = useRef(false);
-  const welcomeText = "What would you like to explore?";
+  const welcomeText = t.welcome;
   useEffect(() => {
     if (!exploreReady || welcomePlayed.current) return;
     welcomePlayed.current = true;
@@ -120,7 +125,7 @@ function IntroState({ name, intro, projects, onSelect }: {
       clearInterval(interval);
       if (count < welcomeText.length) welcomePlayed.current = false;
     };
-  }, [exploreReady]);
+  }, [exploreReady, welcomeText]);
   // Wide screens open with the name and positioning centered and settle on the
   // left edge as the card slides in. Text-align can't animate, so measure how far
   // each word sits from its left-aligned spot and let --split close the gap.
@@ -235,7 +240,7 @@ function IntroState({ name, intro, projects, onSelect }: {
   const running = useRef(false);
   const trigger = useRef<HTMLElement | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
-  const choices = [...projects.map((project, index) => ({ ...project, index })), { slug: "about", name: "About me", index: -1 }];
+  const choices = [...projects.map((project, index) => ({ ...project, index })), { slug: "about", name: t.aboutMe, index: -1 }];
   const cancel = () => {
     if (timer.current) clearTimeout(timer.current);
     running.current = false;
@@ -253,7 +258,7 @@ function IntroState({ name, intro, projects, onSelect }: {
     const finish = () => {
       if (index === -1) {
         revealNextProject(
-          () => router.push("/about/", { scroll: false }),
+          () => router.push(localize("/about/", locale), { scroll: false }),
           () => Boolean(document.querySelector("main [data-about-page]")),
         );
       } else onSelect(index);
@@ -317,30 +322,30 @@ function IntroState({ name, intro, projects, onSelect }: {
             </div>
             <h2 aria-label={welcomeText} data-show={welcomeCount > 0 || undefined}><span aria-hidden="true">{welcomeText.slice(0, Math.max(0, welcomeCount))}<span className="project-welcome-pending">{welcomeText.slice(Math.max(0, welcomeCount))}</span></span></h2>
           </div>
-          <form className="project-prompt" data-has-query={query.trim() ? "" : undefined} aria-label="Explore projects" onSubmit={(event) => {
+          <form className="project-prompt" data-has-query={query.trim() ? "" : undefined} aria-label={t.exploreProjects} onSubmit={(event) => {
             event.preventDefault();
             if (busy) return;
             const value = query.trim().toLowerCase();
             const matches = value ? choices.filter((choice) => `${choice.name} ${choice.slug}`.toLowerCase().includes(value)) : [];
             if (matches.length === 1) openChoice(matches[0].index);
-            else setMessage(value ? "Choose Gemini, Devsign, or About me below." : "Type a project name or choose below.");
+            else setMessage(value ? t.chooseBelow : t.typeName);
           }}>
             <div className="project-prompt-row">
-            <label htmlFor="project-query" className="sr-only">What would you like to explore?</label>
-            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} autoComplete="off" placeholder="Ask about a project" aria-describedby="project-search-status" />
-            <button type="submit" disabled={busy || !query.trim()} className="project-prompt-submit" data-ready={query.trim() ? "" : undefined} aria-label={phase === "sending" ? "Opening project" : "Open matching project"}>
+            <label htmlFor="project-query" className="sr-only">{t.welcome}</label>
+            <input ref={input} id="project-query" className="project-prompt-text" type="text" readOnly={busy} value={query} onChange={(event) => { setQuery(event.target.value); setMessage(""); }} autoComplete="off" placeholder={t.askPlaceholder} aria-describedby="project-search-status" />
+            <button type="submit" disabled={busy || !query.trim()} className="project-prompt-submit" data-ready={query.trim() ? "" : undefined} aria-label={phase === "sending" ? t.openingProject : t.openMatching}>
               {phase === "sending" || phase === "leaving" ? <span className="project-thinking-orbit" aria-hidden="true"><span /><span /><span /></span> : <svg className="prompt-send-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </button>
           </div>
           </form>
-          <div className="project-suggestions" aria-label="Projects" data-selecting={busy || undefined}>
+          <div className="project-suggestions" aria-label={t.projects} data-selecting={busy || undefined}>
             {choices.map((project) => <button key={project.slug} type="button" disabled={busy} data-chosen={sculpture === project.slug || undefined} data-suggestion={project.slug} className="press project-suggestion" onClick={() => openChoice(project.index)}>
               <svg className="pill-border-light" aria-hidden="true"><rect className="pill-edge-glow" pathLength="100" /><rect className="pill-edge-core" pathLength="100" /></svg>
               {project.slug === "about" ? <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="project-suggestion-icon"><circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> : <Image src={withBase(project.slug === "gemini-privacy" ? "/images/cases/gemini-privacy/gemini-logo.png" : "/images/cases/workflow-app/devsign-icon.svg")} alt="" width={18} height={18} className="project-suggestion-icon" />}
               <span>{project.name}</span>
             </button>)}
           </div>
-          <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `Opening ${query}` : "")}</p>
+          <p id="project-search-status" role="status" className={message ? "project-search-status" : "sr-only"}>{message || (phase === "sending" ? `${t.opening} ${query}` : "")}</p>
         </div>
       </div>
       <button type="button" className="intro-explore-cue" tabIndex={exploreReady ? -1 : 0} onClick={() => {
@@ -348,7 +353,7 @@ function IntroState({ name, intro, projects, onSelect }: {
         if (!stage) return;
         const start = Math.max(0, stage.getBoundingClientRect().top + window.scrollY);
         window.scrollTo({ top: start + stage.offsetHeight - window.innerHeight, behavior: "smooth" });
-      }}>Explore projects <span aria-hidden="true">↓</span></button>
+      }}>{t.exploreProjects} <span aria-hidden="true">↓</span></button>
     </div>
   );
 }

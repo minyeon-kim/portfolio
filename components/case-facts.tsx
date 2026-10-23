@@ -1,3 +1,4 @@
+import { T } from "./local-text";
 import type { ReactNode } from "react";
 
 // Numbers, findings, the process diagram and comparisons set as text, so a case reads in
@@ -73,7 +74,7 @@ export function CaseKey({ children }: { children: ReactNode }) {
 export function CaseDiamond({ items }: { items: { label: string; title: string; body: string }[] }) {
   return (
     <figure className="case-diamond reveal">
-      <div className="case-diamond-spaces" aria-hidden="true"><span>Problem</span><span>Solution</span></div>
+      <div className="case-diamond-spaces" aria-hidden="true"><span><T k="problem" /></span><span><T k="solution" /></span></div>
       <div className="case-diamond-figure">
         <svg viewBox="0 0 800 300" role="img" aria-label="Double Diamond: Discover and Define, then Develop and Deliver">
           <line x1="0" y1="150" x2="800" y2="150" />
