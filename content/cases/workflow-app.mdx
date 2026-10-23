@@ -26,9 +26,9 @@ export const meta = {
 - **Outcome:** A working prototype that compares and merges AI drafts and turns design–code gaps into requests, decisions and a history. Redesigned after testing; the second test is still ahead.
 </TLDR>
 
-<CaseSection id="overview" label="01 / Overview" title="AI made us faster alone — and slower together.">
+<CaseSection id="overview" label="01 / Overview" title="AI made solo work faster — | and working together slower.">
 
-We each built the same hotel booking site with AI and tried to merge the two. The same feature had different function names, and the AI had invented different rating rules: 4.2 stars in one, 4.3 in the other. Making things got faster; agreeing on one version got slower.
+Designers and developers now both build with AI. Each side moves faster on its own, but comparing what each built, combining it and agreeing on one version still happens by hand, across Figma, GitHub and Slack. Here is where it breaks, from four interviews and 212 quotes.
 
 [Try the prototype](https://minyeon-kim.github.io/devsign/) · [GitHub](https://github.com/minyeon-kim/devsign)
 
@@ -37,7 +37,7 @@ We each built the same hotel booking site with AI and tried to merge the two. Th
 <CaseFindings
   title="Where collaboration breaks once both sides use AI"
   items={[
-    { label: "Merge test", title: "Drafts that won't merge", body: "Each AI-made draft and build uses slightly different rules, names and values, so someone has to rework them by hand." },
+    { label: "14 interview quotes", title: "Drafts with no way to combine", body: "There are several AI drafts, but no way to compare them, keep the best parts, or record why one was chosen." },
     { label: "55 interview quotes", title: "Intent that disappears", body: "The instructions given to the AI are effectively the spec, but whoever reviews the result never sees them." },
     { label: "38 + 28 interview quotes", title: "Scattered tools, blurred roles", body: "Work moves between Figma, GitHub and Slack, and no one has agreed who checks what, or when." },
   ]}
@@ -131,7 +131,7 @@ We grouped 212 quotes bottom-up into 7 themes, then re-checked them in Dovetail.
 
 <CaseSection id="develop" label="07 / Develop" title="26 ideas, narrowed to the problem AI itself created.">
 
-We scored 26 ideas on desirability, viability and feasibility. Our first pick, an AI mediator, looked novel but solved only one of our five problems. So we went back to the merge experiment: work made with AI didn't fit together, a problem that didn't exist before AI. We then built a working React prototype with AI and changed it 1,039 times in four weeks.
+We scored 26 ideas on desirability, viability and feasibility. Our first pick, an AI mediator, looked novel but solved only one of our five problems. We refocused on a problem that only exists because of AI: drafts and builds made separately with AI that don't fit together. We then built a working React prototype with AI and changed it 1,039 times in four weeks.
 
 </CaseSection>
 
