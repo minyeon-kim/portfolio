@@ -53,7 +53,7 @@ export function CaseStatement({ children }: { children: ReactNode }) {
   return <div className="case-statement reveal">{children}</div>;
 }
 
-type PrototypeStep = { src: string; title: string; body: string; width?: number; height?: number };
+type PrototypeStep = { src: string; srcDark?: string; title: string; body: string; width?: number; height?: number };
 
 // The playable prototype with a numbered walkthrough beside it. The frame is a
 // slot for now and links out; the embed will load only after a click, so the
@@ -72,7 +72,8 @@ export function CasePrototype({ label, href, device = "desktop", steps = [], ste
           {steps.map((step, i) => (
             <li key={step.src}>
               <div className="case-prototype-thumb">
-                <Image src={withBase(step.src)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes={device === "phone" ? "96px" : "(max-width: 767px) 100vw, 280px"} />
+                <Image src={withBase(step.src)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes={device === "phone" ? "160px" : "(max-width: 767px) 100vw, 280px"} data-theme-show={step.srcDark ? "light" : undefined} />
+                {step.srcDark && <Image src={withBase(step.srcDark)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes="160px" data-theme-show="dark" />}
               </div>
               <div>
                 <span className="case-prototype-step-index">{String(i + 1).padStart(2, "0")}</span>
