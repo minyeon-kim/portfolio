@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
-import { DevsignLive, prepareDevsignZoom } from "@/components/devsign-live";
+import { prepareDevsignZoom } from "@/components/devsign-live";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { HeroObject } from "./hero-object";
@@ -66,12 +66,12 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     return () => clearTimeout(timer);
   }, [worldSlug, displayedSlug]);
   const copyOn = world !== null && displayed !== null && world.slug === displayed.slug;
-  // The live Devsign prototype starts loading the first time its pill is
-  // hovered, so it is ready by the click.
+  // The first hover of the Devsign pill builds the hidden full-screen
+  // prototype for the zoom, so it is loaded by the click; the small card keeps
+  // the image loop (one live frame at a time keeps the stage smooth). It is
+  // removed with the stage if it was never used.
   const [live, setLive] = useState(false);
   if (hover === "workflow-app" && !live) setLive(true);
-  // The full-screen copy for the zoom is built at the same moment and removed
-  // with the stage if it was never used.
   const zoomLayer = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (!live || zoomLayer.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -98,7 +98,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={shown?.slug ?? "default"} />
+        <HeroObject className="home-object" variant={shown?.slug ?? "default"} active={!world} />
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
         {aboutCopy && (
           <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined}>
@@ -114,7 +114,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
-              ? <div className="home-device-window"><div className="devsign-hero-chrome" aria-hidden="true"><span /><span /><span /><i /></div>{live ? <DevsignLive alt="" /> : <DevsignLoop alt="" />}</div>
+              ? <div className="home-device-window"><div className="devsign-hero-chrome" aria-hidden="true"><span /><span /><span /><i /></div><DevsignLoop alt="" /></div>
               : p.slug === "gemini-privacy"
                 ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
                 : null}
