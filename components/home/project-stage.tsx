@@ -27,7 +27,7 @@ export type StageProject = {
   hero?: DevsignHeroData; // Figma-style opener instead of the title and growing cover
 };
 
-export type AboutWorld = { headline: string; bio: string; principles: string[] };
+export type AboutWorld = { headline: string; emphasis: string; bio: string };
 
 type Props = { projects: StageProject[]; about?: AboutWorld };
 
