@@ -26,14 +26,57 @@ export function freezeAmbient(source: HTMLElement) {
   return copy;
 }
 
+// The picked case's device grows to fill the screen, then settles into the
+// case opener's media frame once the case page is there (after metalab.com).
+export type ZoomOptions = { from: HTMLElement; to: string; project: string };
+
 // The new page rises a short way and fades in over the old view, which drifts
 // up slightly and fades out. The two overlap, so there is no seam between them.
-export function revealNextProject(change: () => void, ready: () => boolean) {
+// With `zoom`, the old view's device instead grows to the full screen first,
+// and the new page fades in underneath while the device shrinks into its
+// opener media frame.
+export function revealNextProject(change: () => void, ready: () => boolean, zoom?: ZoomOptions) {
   if (document.documentElement.hasAttribute("data-project-navigation")) return;
   const main = document.querySelector<HTMLElement>("main");
   if (!main) {
     change();
     return;
+  }
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // The device layer: a copy of the hovered device at its on-screen box, grown
+  // to the viewport over 650ms while the old view leaves. Flattened as it
+  // grows (its 3D pose animates to none).
+  const grow = 650;
+  const zoomStart = performance.now();
+  let layer: HTMLElement | null = null;
+  if (zoom && !reduced) {
+    const source = zoom.from;
+    const box = source.getBoundingClientRect();
+    if (box.width > 10 && box.height > 10) {
+      layer = document.createElement("div");
+      layer.className = "project-zoom";
+      layer.dataset.project = zoom.project;
+      layer.inert = true;
+      layer.setAttribute("aria-hidden", "true");
+      const copy = source.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+      // Cloned images are fetched from cache but decoded lazily; without this
+      // the layer's first frame is its bare background.
+      copy.querySelectorAll("img").forEach((img) => { img.loading = "eager"; img.decoding = "sync"; });
+      layer.appendChild(copy);
+      Object.assign(layer.style, { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` });
+      document.body.appendChild(layer);
+      const posed = source.matches(".gemini-device, .home-device-window") ? source : source.querySelector<HTMLElement>(".gemini-device, .home-device-window");
+      const posedCopy = posed === source ? copy : copy.querySelector<HTMLElement>(".gemini-device, .home-device-window");
+      if (posed && posedCopy) {
+        posedCopy.animate([{ transform: getComputedStyle(posed).transform }, { transform: "none" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
+      }
+      layer.animate(
+        [{ top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "18px" },
+         { top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" }],
+        { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+      );
+    }
   }
   const canvasColor = () => {
     const canvas = main.querySelector<HTMLElement>(".selected-stage, .project-hero, .intro-stage");
@@ -124,6 +167,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     // they are removed (seen as an afterimage).
     backdrop.style.visibility = "hidden";
     floor.style.visibility = "hidden";
+    if (layer) { layer.style.visibility = "hidden"; const gone = layer; requestAnimationFrame(() => requestAnimationFrame(() => gone.remove())); }
     animations.forEach((animation) => animation.cancel());
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);
@@ -161,7 +205,7 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
     started = true;
     observer.disconnect();
     holdAtTop();
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reduced) {
       requestAnimationFrame(cleanup);
       return;
     }
@@ -187,15 +231,40 @@ export function revealNextProject(change: () => void, ready: () => boolean) {
       // pills, media) lifts and blurs away in 140ms, so it can't linger as a
       // ghost, while its canvas stays as the ground the new page rises onto
       // (10vh, fading in from 160ms). No seam, no afterimage.
-      const timing = { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
+      // With the device layer: wait for it to fill the screen, then fade the
+      // new page in while the device shrinks into the opener's media frame.
+      const wait = layer ? Math.max(0, grow - (performance.now() - zoomStart)) : 0;
+      const timing = layer
+        ? { duration: 750, delay: wait + 60, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
+        : { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       animations.push(snapshot.animate(
         [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, -2vh, 0)", opacity: 0, filter: "blur(6px)" }],
-        { duration: 140, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
+        { duration: layer ? 400 : 140, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" },
       ));
       const slide = incoming.animate(
-        [{ transform: "translate3d(0, 10vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }], timing,
+        layer
+          ? [{ opacity: 0 }, { opacity: 1 }]
+          : [{ transform: "translate3d(0, 10vh, 0)", opacity: 0 }, { transform: "translate3d(0, 0, 0)", opacity: 1 }],
+        timing,
       );
       animations.push(slide);
+      if (layer && zoom) {
+        const target = incoming.querySelector<HTMLElement>(zoom.to);
+        const box = target?.getBoundingClientRect();
+        const radius = target ? getComputedStyle(target).borderRadius : "14px";
+        if (box && box.width > 0) {
+          const settle = layer.animate(
+            [{ top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" },
+             { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: radius }],
+            { duration: timing.duration, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+          );
+          animations.push(settle);
+          // Blend into the real media over the last stretch.
+          animations.push(layer.animate([{ opacity: 1 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }], { duration: timing.duration, delay: timing.delay, fill: "both" }));
+        } else {
+          animations.push(layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: timing.duration, delay: timing.delay, fill: "both" }));
+        }
+      }
       // Follow-through: the opener's parts trail the page a little and land just
       // after it, so the motion settles instead of stopping as one slab. These run
       // on the live elements and finish on their own after cleanup.

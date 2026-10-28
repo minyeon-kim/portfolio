@@ -28,6 +28,7 @@ uniform vec3 tint1;
 uniform vec3 tint2;
 uniform float spread;
 uniform float focus;
+uniform float light;
 
 mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -60,12 +61,16 @@ float streak(vec3 r, vec3 n, vec3 c, float w) {
 // The studio around the object: near black, a violet sky, blue from below,
 // two white softbox streaks.
 vec3 env(vec3 r) {
-  vec3 c = vec3(0.01, 0.01, 0.016);
+  // Dark: a near-black room. Light: a bright pearl room, where the streaks
+  // read as dark seams instead.
+  vec3 c = mix(vec3(0.01, 0.01, 0.016), mix(vec3(0.42, 0.44, 0.5), vec3(0.9, 0.91, 0.94), smoothstep(-0.4, 0.8, r.y)), light);
   c += tint1 * 0.78 * pow(max(dot(r, normalize(vec3(-0.35, 0.75, 0.55))), 0.0), 2.2);
   c += tint0 * 0.5 * pow(max(dot(r, normalize(vec3(0.65, -0.45, 0.6))), 0.0), 2.6);
   c += tint2 * 0.18 * pow(max(dot(r, normalize(vec3(0.2, 0.2, 1.0))), 0.0), 6.0);
-  c += vec3(1.0) * 2.0 * streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), 0.085);
-  c += vec3(0.95, 0.95, 1.0) * 1.3 * streak(r, normalize(vec3(-0.9, 0.15, 0.4)), normalize(vec3(0.35, -0.25, 0.9)), 0.06);
+  float s1 = streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), 0.085);
+  float s2 = streak(r, normalize(vec3(-0.9, 0.15, 0.4)), normalize(vec3(0.35, -0.25, 0.9)), 0.06);
+  c += vec3(1.0) * mix(2.0, 0.5, light) * s1 + vec3(0.95, 0.95, 1.0) * mix(1.3, 0.3, light) * s2;
+  c -= vec3(0.6, 0.6, 0.66) * light * streak(r, normalize(vec3(0.6, 0.7, -0.3)), normalize(vec3(-0.2, 0.3, 1.0)), 0.07);
   return c;
 }
 vec4 shade(vec3 p, vec3 rd) {
@@ -77,7 +82,7 @@ vec4 shade(vec3 p, vec3 rd) {
   vec3 refl = env(r);
   // Black chrome: almost everything is reflection; a trace of the case colour
   // in the body, and a soft lit edge when a case is picked.
-  vec3 col = vec3(0.012) + refl * (0.55 + 0.45 * fres) + tint1 * 0.03 + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
+  vec3 col = mix(vec3(0.012), vec3(0.4, 0.42, 0.47), light) + refl * (0.55 + 0.45 * fres) + tint1 * mix(0.03, 0.14, light) + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
   return vec4(col, 1.0);
 }
 void main() {
@@ -143,7 +148,15 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const u = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus");
+    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light");
+    // The theme: the explicit choice on <html>, else the system's.
+    const scheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
+    let lightTarget = isDark() ? 0 : 1;
+    const onTheme = () => { lightTarget = isDark() ? 0 : 1; };
+    scheme.addEventListener("change", onTheme);
+    const themeObserver = new MutationObserver(onTheme);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     let width = 0, height = 0;
     const resize = () => {
@@ -166,7 +179,7 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const current = { tints: OBJECT_STATES.default.tints.map((c) => [...c]), spread: OBJECT_STATES.default.spread, focus: 0 };
+    const current = { tints: OBJECT_STATES.default.tints.map((c) => [...c]), spread: OBJECT_STATES.default.spread, focus: 0, light: lightTarget };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -186,6 +199,7 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
       for (let s = 0; s < 3; s++) for (let i = 0; i < 3; i++) current.tints[s][i] += (target.tints[s][i] - current.tints[s][i]) * k;
       current.spread += (target.spread - current.spread) * k;
       current.focus += (target.focus - current.focus) * k;
+      current.light += (lightTarget - current.light) * k;
       pointer.x += (pointer.tx - pointer.x) * (1 - Math.exp(-dt / 0.6));
       pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt / 0.6));
       gl.uniform2f(uRes, width, height);
@@ -194,6 +208,7 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
       for (let s = 0; s < 3; s++) gl.uniform3f(uT[s], current.tints[s][0], current.tints[s][1], current.tints[s][2]);
       gl.uniform1f(uSpread, current.spread);
       gl.uniform1f(uFocus, current.focus);
+      gl.uniform1f(uLight, current.light);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -204,6 +219,8 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
       observer.disconnect();
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      scheme.removeEventListener("change", onTheme);
+      themeObserver.disconnect();
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       gl.deleteBuffer(buffer);

@@ -13,7 +13,7 @@ import { GeminiPhone } from "@/components/gemini-phone";
 import { HeroObject } from "./hero-object";
 import type { StageProject } from "./project-stage";
 
-type Props = { projects: StageProject[]; onSelect: (index: number) => void };
+type Props = { projects: StageProject[]; onSelect: (index: number, from?: HTMLElement | null) => void };
 
 // The landing stage, after metalab.com's home: one dark screen, no scroll.
 // A glossy object (HeroObject) turns slowly behind everything. Left: the case
@@ -46,7 +46,10 @@ export function HomeIntro({ projects, onSelect }: Props) {
       return;
     }
     const index = projects.findIndex((p) => p.slug === slug);
-    if (index >= 0) onSelect(index);
+    // The raised device is what grows into the case page; without one (touch,
+    // keyboard before hover settled) the page just rises in.
+    const device = document.querySelector<HTMLElement>(`.home-device[data-project="${slug}"][data-active] > *`);
+    if (index >= 0) onSelect(index, device);
   };
 
   return (

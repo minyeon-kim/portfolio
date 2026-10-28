@@ -1,7 +1,6 @@
 import { CaseBody } from "@/components/home/case-body";
 import { CasePanels } from "@/components/home/case-panels";
 import { ProjectStage } from "@/components/home/project-stage";
-import { SideRail } from "@/components/home/side-rail";
 import { getCase, getCases } from "@/lib/cases";
 import type { Locale } from "@/lib/i18n";
 
@@ -13,7 +12,6 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <>
-      <SideRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} />
       <ProjectStage
         projects={featured.map(({ slug, meta, tldr }) => ({
           slug,
