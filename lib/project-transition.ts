@@ -31,7 +31,9 @@ export function freezeAmbient(source: HTMLElement) {
 // `live`: a page to show in the layer at the real viewport size (the Devsign
 // prototype), scaling up from the device box and down into the opener; the
 // device copy stands in until it has loaded.
-export type ZoomOptions = { from: HTMLElement; to: string; project: string; live?: string };
+// `prepared`: a layer built ahead of time (the live prototype, already loaded),
+// used instead of building one now.
+export type ZoomOptions = { from: HTMLElement; to: string; project: string; live?: string; prepared?: HTMLElement };
 
 // The new page rises a short way and fades in over the old view, which drifts
 // up slightly and fades out. The two overlap, so there is no seam between them.
@@ -56,7 +58,19 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   if (zoom && !reduced) {
     const source = zoom.from;
     const box = source.getBoundingClientRect();
-    if (box.width > 10 && box.height > 10) {
+    if (box.width > 10 && box.height > 10 && zoom.prepared) {
+      layer = zoom.prepared;
+      delete layer.dataset.prepared;
+      liveFrame = layer.querySelector("iframe");
+      if (liveFrame) Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
+      Object.assign(layer.style, { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` });
+      layer.animate(
+        [{ top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "18px" },
+         { top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" }],
+        { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+      );
+      liveFrame?.animate([{ transform: `scale(${box.width / window.innerWidth})` }, { transform: "scale(1)" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
+    } else if (box.width > 10 && box.height > 10) {
       layer = document.createElement("div");
       layer.className = "project-zoom";
       layer.dataset.project = zoom.project;
