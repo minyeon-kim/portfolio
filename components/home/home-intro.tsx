@@ -3,8 +3,7 @@
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
 import { useEffect, useRef, useState } from "react";
-import { site, withBase } from "@/lib/site";
-import Image from "next/image";
+import { site } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
@@ -30,7 +29,8 @@ type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: n
 // line bottom right. Each world has its own composition (CSS by data-world):
 // Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
 // cropped at the bottom right), About like Midjourney (name bottom centre, a
-// card with a real session photo top right).
+// no card: the site's own loop stays as the image, the three principles sit
+// under the headline).
 export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
@@ -99,19 +99,9 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={shown?.slug ?? "default"} active={!world} />
+        <HeroObject className="home-object" variant={shown?.slug ?? "default"} active={!world || world.slug === "about"} />
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
-        {aboutCopy && (
-          <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined}>
-            {/* A real moment from the work (the Devsign co-design session) stands
-                in for the portrait until there is one (TODO: /images/about/portrait.webp). */}
-            <div className="home-about-card">
-              <Image src={withBase("/images/devsign/codesign-session.webp")} alt={t.aboutCardAlt} fill sizes="(max-width: 767px) 100vw, 44vw" />
-              <span className="home-about-card-chip">{t.aboutCardCaption}</span>
-              <span className="home-about-card-cta">{t.footerAbout} <span aria-hidden="true">→</span></span>
-            </div>
-          </div>
-        )}
+
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
@@ -156,6 +146,11 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         {displayed?.role && <p className="home-world-role" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed.role}</p>}
         <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name}</p>
         <p className="home-world-problem" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.text}</p>
+        {displayed?.slug === "about" && aboutCopy && (
+          <ol className="home-world-list" data-on={copyOn || undefined} aria-hidden={!copyOn}>
+            {aboutCopy.principles.map((line, i) => <li key={line}><span>{String(i + 1).padStart(2, "0")}</span>{line}</li>)}
+          </ol>
+        )}
       </div>
     </section>
   );
