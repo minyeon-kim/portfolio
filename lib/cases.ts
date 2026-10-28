@@ -32,6 +32,7 @@ export type CaseMeta = {
   concept?: boolean; // self-initiated work, shown with a [CONCEPT] label
   featured?: boolean;
   draft?: boolean; // shown in dev only, never exported
+  hero?: { title: string; details: { label: string; value: string }[] }; // Figma-style opener (Devsign)
   order?: number;
 };
 
