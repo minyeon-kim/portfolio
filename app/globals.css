@@ -2474,7 +2474,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding: clamp(48px, 5.5svh, 80px) var(--dh-pad) 72px;
+  padding: clamp(72px, 8svh, 96px) var(--dh-pad) 72px;
   background: light-dark(#f5f5f5, var(--surface));
   color: var(--dh-ink);
 }
@@ -2532,14 +2532,16 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
 .home-backdrop[data-project] .intro-ambient { opacity: 0.35; }
 .home-object { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.home-device { position: absolute; top: 36%; right: 12vw; width: min(36vw, 560px); aspect-ratio: 16 / 10; translate: 0 -46%; opacity: 0; transition: opacity 500ms ease, translate 600ms var(--ease); pointer-events: none; }
-.home-device[data-active] { opacity: 1; translate: 0 -50%; }
-.home-device-window { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgb(0 0 0 / 0.6); transform: perspective(1600px) rotateY(-14deg) rotateX(4deg); transform-origin: 60% 50%; }
-.home-device-window .devsign-loop { max-width: none; margin: 0; border: 1px solid rgb(255 255 255 / 0.1); border-radius: 18px; box-shadow: none; }
-.home-device-window .devsign-live { position: absolute; inset: 0; border-radius: 18px; }
-.home-device-window .devsign-live > .devsign-loop { border: 0; border-radius: 0; }
-.home-device-phone { position: absolute; top: 50%; left: 50%; height: 115%; aspect-ratio: 1000 / 1100; translate: -50% -50%; container-type: size; display: grid; place-items: center; perspective: 1600px; }
-.home-device-phone .gemini-device { transform: rotateY(-22deg) rotateX(6deg) rotateZ(-6deg); filter: drop-shadow(0 40px 80px rgb(0 0 0 / 0.6)); }
+/* The hovered case's media: a flat card at the top right, in its own frame (metalab.com's project photo), not a posed device. */
+.home-device { position: absolute; top: 13%; right: var(--project-text-inset); width: min(36vw, 560px); aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 20px; background: #141414; box-shadow: 0 40px 100px -24px rgb(0 0 0 / 0.45), 0 12px 32px -12px rgb(0 0 0 / 0.3); opacity: 0; translate: 0 16px; transition: opacity 450ms ease, translate 600ms var(--ease); pointer-events: none; }
+.home-device[data-active] { opacity: 1; translate: 0 0; }
+.home-device-window { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.home-device-window .devsign-live, .home-device-window .devsign-loop { position: relative; inset: auto; flex: 1; min-height: 0; max-width: none; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+.home-device-window .devsign-loop { overflow: hidden; }
+.home-device-window .devsign-live > .devsign-loop { position: absolute; inset: 0; }
+.home-device-phone { position: absolute; inset: 0; display: grid; place-items: center; container-type: size; background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
+.home-device-phone .gemini-device { width: auto; height: 128cqh; aspect-ratio: 1000 / 1100; translate: 0 10%; transform: none; animation: none; filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.5)); }
+.home-device-phone .gemini-device-side { display: none; }
 .home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 30%, color-mix(in srgb, var(--bg) 60%, transparent) 100%), linear-gradient(to top, color-mix(in srgb, var(--bg) 85%, transparent), transparent 45%), linear-gradient(to bottom, color-mix(in srgb, var(--bg) 75%, transparent), transparent 140px); pointer-events: none; }
 .intro-surface.home-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 24px 48px; height: 100%; padding: 104px var(--project-text-inset) 48px; overflow: visible; }
 .home-meta { grid-column: 2; grid-row: 1; justify-self: end; margin: 0; color: var(--muted); font: 500 13px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
@@ -2569,7 +2571,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
   .home-picks ol { flex-direction: row; flex-wrap: wrap; }
-  .home-device { right: -10vw; width: 80vw; top: auto; bottom: -6vh; translate: 0 0; }
+  .home-device { right: var(--project-text-inset); left: var(--project-text-inset); width: auto; top: auto; bottom: 26vh; translate: 0 12px; }
   .home-device[data-active] { translate: 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
