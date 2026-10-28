@@ -593,3 +593,5 @@ About world, revised: no card (a project photo there read as a project). The sit
 Case pills, hovered or active, are fully see-through: background transparent and backdrop-filter none (the frosted blur read as a fill), only the 1px ink-70% ring remains.
 
 Merged from the parallel session (PR #1, 2f33239): the case pills are the menu's page-link pill (44px, hairline var(--line) border, 88% --bg surface); the Devsign home card lost its chrome bar; the About world drops the principles list and sets the About headline as the statement with "End-to-end" set apart (Emphasis). On top of that, hovered/active pills are see-through: background transparent, no blur, border in ink 70%, no inset ring.
+
+Dark theme case sheet: the Devsign body and the Gemini skin use the surface tone (#151918, --dv-bg) instead of the page near-black, matching the opener, and the whole .case-study (body, Next project) sits on that surface; bands and tints mix from the surface; the footer band goes darker (#0a0c0c) for contrast. Light theme unchanged.

@@ -2018,7 +2018,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 
 /* Closing block (components/site-footer.tsx): the last thing on a case page. */
 /* Closing footer after metalab.com: a dark full-bleed band — a big question, large ways onward, a quiet bottom row. */
-.site-footer { --ft-bg: light-dark(#0e1111, #151918); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
+.site-footer { --ft-bg: light-dark(#0e1111, #0a0c0c); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
 .case-study[data-skin="dv"] .site-footer, .case-study:has(.dv) .site-footer { padding-inline: var(--dv-pad); }
 .site-footer-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
 .site-footer-headline { margin: 0; color: var(--ft-ink); font-family: var(--font-display), var(--font-sans); font-size: clamp(40px, 5.5vw, 88px); font-weight: 500; line-height: 0.98; letter-spacing: -0.03em; text-wrap: balance; }
@@ -2069,17 +2069,18 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    frame has no dark version, so dark keeps the same roles on the site's dark
    surfaces with a lighter purple for contrast. */
 .dv {
-  --dv-bg: light-dark(#ffffff, var(--bg));
+  /* Dark keeps the opener's surface tone rather than the page's near-black, so the case reads as one lifted sheet; the footer below goes darker instead. */
+  --dv-bg: light-dark(#ffffff, var(--surface));
   --dv-surface: light-dark(#ffffff, var(--surface));
   --dv-ink: light-dark(#1d1d1f, var(--ink));
   --dv-muted: light-dark(#5e5e63, var(--muted));
   --dv-line: light-dark(#d6d6d6, var(--line));
   --dv-alt: light-dark(#f5f5f7, color-mix(in srgb, var(--ink) 7%, transparent));
-  --dv-band: light-dark(#f3f3f5, color-mix(in srgb, var(--ink) 4%, var(--bg)));
+  --dv-band: light-dark(#f3f3f5, color-mix(in srgb, var(--ink) 5%, var(--surface)));
   --dv-arrow: light-dark(#9e9ea6, var(--muted));
   --case-accent: var(--devsign-title);
-  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #a594ff 14%, var(--bg)));
-  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #a594ff 12%, var(--bg)));
+  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #a594ff 14%, var(--surface)));
+  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #a594ff 12%, var(--surface)));
   --dv-second: light-dark(#e8742c, #f0965a);
   --dv-tint-second: light-dark(#fdf0e7, color-mix(in srgb, #f0965a 12%, var(--bg)));
   --dv-alert: light-dark(#c7383d, #ff8a80);
@@ -2098,6 +2099,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   color: var(--dv-ink);
 }
 .case-study:has(.dv) { padding-top: 0; }
+/* The whole case sheet (body, Next project, up to the footer) sits on the surface tone in dark. */
+.case-study:has(.dv), .case-study[data-skin="dv"] { background: light-dark(transparent, var(--surface)); }
 .dv > section > *, .dv-nav > * { max-width: var(--dv-max); }
 .dv :where(h2, h3, h4, p, ol, ul, dl, figure) { margin: 0; }
 .dv :where(ol, ul) { list-style: none; padding: 0; }
@@ -2616,7 +2619,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Gemini body in the Devsign body language (no Figma frame yet): the generic
    MDX blocks take the Devsign margins, stage titles, labels, cards and tables. */
-.case-study[data-skin="dv"] { --dv-bg: var(--bg); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
+.case-study[data-skin="dv"] { --dv-bg: light-dark(var(--bg), var(--surface)); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
 .case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1440px; margin-left: 0; margin-right: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
