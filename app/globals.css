@@ -2598,7 +2598,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
 .home-pick[data-active] .home-pick-index { color: var(--ink); }
 .home-picks ol:has(.home-pick[data-active]) .home-pick:not([data-active]) { color: color-mix(in srgb, var(--ink) 72%, transparent); }
-.home-pick-index { font: 500 11px/1 var(--font-mono); color: var(--muted); }
+.home-pick-index { font: 500 13px/1 var(--font-sans); font-variant-numeric: tabular-nums; color: var(--muted); }
 .home-note { grid-column: 1; grid-row: 3; align-self: end; display: grid; width: min(100%, 36ch); }
 .home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 400ms ease, translate 400ms var(--ease); }
 .home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
