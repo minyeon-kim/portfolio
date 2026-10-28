@@ -591,3 +591,5 @@ Case pill numbers (01, 02) are set in Geist Medium 13px, tabular figures, muted 
 About world, revised: no card (a project photo there read as a project). The site's own chrome loop stays visible over a near-black surface (#0b0d0e) as the image for the person; the About headline sits top left with the three principle titles listed under it (.home-world-list, numbered in Geist, staggered 140ms), "Minyeon Kim" bottom centre, the first bio sentence bottom right. A portrait can join later.
 
 Case pills, hovered or active, are fully see-through: background transparent and backdrop-filter none (the frosted blur read as a fill), only the 1px ink-70% ring remains.
+
+Merged from the parallel session (PR #1, 2f33239): the case pills are the menu's page-link pill (44px, hairline var(--line) border, 88% --bg surface); the Devsign home card lost its chrome bar; the About world drops the principles list and sets the About headline as the statement with "End-to-end" set apart (Emphasis). On top of that, hovered/active pills are see-through: background transparent, no blur, border in ink 70%, no inset ring.
