@@ -9,11 +9,17 @@ import { useLocale } from "@/lib/use-locale";
 export const DEVSIGN_URL = "https://minyeon-kim.github.io/devsign/";
 const VIRTUAL_WIDTH = 1440;
 
+// The prototype honours ?lang=en|ko for the load (src/i18n/language.js in the
+// devsign repo), so it opens in the site's language on any origin.
+export function devsignUrl(locale: "en" | "ko") {
+  return `${DEVSIGN_URL}?lang=${locale}`;
+}
+
 // The prototype keeps its language in localStorage under this key (see
 // src/i18n/language.js in the devsign repo) and listens for storage changes.
 // On GitHub Pages the portfolio and the prototype share an origin
-// (minyeon-kim.github.io), so writing it here switches every frame to the
-// site's language; elsewhere (local dev) the prototype keeps its own default.
+// (minyeon-kim.github.io), so writing it here also switches loaded frames live
+// when the site language changes; the URL parameter covers the first load.
 const DEVSIGN_LANGUAGE_KEY = "devsign:preferences:v1";
 export function setDevsignLanguage(locale: "en" | "ko") {
   try { localStorage.setItem(DEVSIGN_LANGUAGE_KEY, JSON.stringify({ version: 1, language: locale })); } catch { /* storage unavailable: the prototype keeps its default */ }
@@ -34,7 +40,7 @@ export function prepareDevsignZoom(locale: "en" | "ko") {
   layer.setAttribute("aria-hidden", "true");
   const frame = document.createElement("iframe");
   frame.className = "project-zoom-live";
-  frame.src = DEVSIGN_URL;
+  frame.src = devsignUrl(locale);
   frame.title = "";
   frame.tabIndex = -1;
   frame.setAttribute("aria-hidden", "true");
@@ -75,7 +81,7 @@ export function DevsignLive({ alt }: { alt: string }) {
   return (
     <div ref={box} className="devsign-live" data-loaded={loaded || undefined}>
       <DevsignLoop alt={alt} />
-      <iframe src={DEVSIGN_URL} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={() => setLoaded(true)} />
+      <iframe src={devsignUrl(locale)} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={() => setLoaded(true)} />
     </div>
   );
 }
