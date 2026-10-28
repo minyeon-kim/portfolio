@@ -1,7 +1,7 @@
 "use client";
 
 import { useStrings } from "@/lib/use-locale";
-import { useLayoutEffect, type ReactNode } from "react";
+import { useLayoutEffect } from "react";
 import Image from "next/image";
 import { ProjectTitle } from "@/components/project-title";
 import { HomeIntro } from "./home-intro";
@@ -26,10 +26,10 @@ export type StageProject = {
   hero?: DevsignHeroData; // Figma-style opener instead of the title and growing cover
 };
 
-type Props = { projects: StageProject[]; intro: ReactNode };
+type Props = { projects: StageProject[] };
 
 // Project selection opens an editorial heading and full-width cover.
-export function ProjectStage({ projects, intro }: Props) {
+export function ProjectStage({ projects }: Props) {
   const t = useStrings();
   const active = useUi((s) => s.activeCase);
   // Reset after React commits the new stage, rather than before its old body
@@ -50,11 +50,11 @@ export function ProjectStage({ projects, intro }: Props) {
 
   return (
     <>
-      {active === null && <HomeIntro intro={intro} projects={projects} onSelect={select} />}
+      {active === null && <HomeIntro projects={projects} onSelect={select} />}
       {p && (
       <section id="work" aria-label={`${p.name}, selected case`} className={p.hero ? "project-selected full-bleed md:-mt-[64px]" : "project-selected stage-pin full-bleed md:-mt-[64px]"}>
         <div key={p.slug} id="stage-panel" data-stage-index={active} className={p.hero ? "selected-stage selected-stage-hero" : "selected-stage"} data-canvas={(p.slug === "workflow-app" && !p.hero) || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
-          {p.hero ? <DevsignHero hero={p.hero} name={p.name} alt={`${p.name}: a drifted button is flagged, reviewed and approved`} /> : <>
+          {p.hero ? <DevsignHero hero={p.hero} name={p.name} project={p.slug} alt={p.slug === "gemini-privacy" ? `${p.name}: the source sheet opens and Gmail is switched off` : `${p.name}: a drifted button is flagged, reviewed and approved`} /> : <>
           <div className="stage-content selected-stage-copy">
             <p className="selected-stage-index">{t.project} {(active ?? 0) + 1}</p>
             <h1 tabIndex={-1} className="selected-stage-title generated-title"><ProjectTitle name={p.name} gemini={p.slug === "gemini-privacy"} /></h1>
