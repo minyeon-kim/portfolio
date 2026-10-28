@@ -2334,8 +2334,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 }
 @keyframes dv-wipe-reveal { from { clip-path: inset(0% 0% 0% 100%); } to { clip-path: inset(0% 0% 0% 0%); } }
 @keyframes dv-wipe-line { 0% { left: 100%; opacity: 0; } 6% { opacity: 1; } 94% { opacity: 1; } 100% { left: 0%; opacity: 0; } }
-@keyframes dv-wipe-fade-out { 0%, 45% { opacity: 1; translate: 0 0; } 70%, 100% { opacity: 0; translate: 0 -6px; } }
-@keyframes dv-wipe-fade-in { 0%, 45% { opacity: 0; translate: 0 6px; } 70%, 100% { opacity: 1; translate: 0 0; } }
+@keyframes dv-wipe-fade-out { 0%, 40% { opacity: 1; translate: 0 0; } 52%, 100% { opacity: 0; translate: 0 -6px; } }
+@keyframes dv-wipe-fade-in { 0%, 56% { opacity: 0; translate: 0 6px; } 68%, 100% { opacity: 1; translate: 0 0; } }
 
 /* Takeaway */
 .dv-headline-plain + .dv-body { margin-top: 12px; }
