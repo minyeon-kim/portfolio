@@ -165,6 +165,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body reveal">{overview.process.body}</p>
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} labels={labels} />
         </div>
+        {overview.features && (
+          <div className="dv-main-features">
+            <Block method={overview.features.method} title={overview.features.title} />
+            <ul className="dv-features dv-gap-40">
+              {overview.features.items.map((f: { kicker: string; name: string; body: string }) => (
+                <li key={f.name} className="reveal"><span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span></li>
+              ))}
+            </ul>
+            <p className="dv-link reveal"><a href="#deliver">{overview.features.link}</a></p>
+          </div>
+        )}
       </Section>
 
       <Section id="discover" title="Discover">
