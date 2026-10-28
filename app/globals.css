@@ -2537,6 +2537,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-world[data-active] { opacity: 1; }
 .home-world[data-project="workflow-app"] { background: radial-gradient(60% 55% at 70% 30%, rgb(91 63 214 / 0.26), transparent 70%), radial-gradient(circle, #353535 1px, transparent 1.4px) 0 0 / 24px 24px, #1c1c1c; }
 .home-world[data-project="gemini-privacy"] { background: radial-gradient(60% 55% at 72% 24%, rgb(66 133 244 / 0.34), transparent 70%), radial-gradient(55% 50% at 28% 82%, rgb(167 139 250 / 0.26), transparent 70%), #0c0f16; }
+.home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.14), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.18), transparent 70%), #121415; }
 .home-backdrop .home-object { transition: opacity 500ms ease; }
 .home-backdrop[data-project] .home-object { opacity: 0; }
 .intro-stage.home-stage { transition: color 300ms ease; }
@@ -2550,6 +2551,23 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-world-role[data-on] { translate: -50% 0; }
 .home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-display), var(--font-sans); font-size: clamp(56px, 7vw, 128px); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; text-wrap: balance; }
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 15px; font-weight: 500; line-height: 1.55; }
+/* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
+/* Gemini (Robinhood): a portrait card cropped at the bottom right, the name at the left of centre, the role under it, the problem top centre-right. */
+.home-device[data-project="gemini-privacy"] { top: auto; bottom: -8vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
+.home-stage[data-world="gemini-privacy"] .home-world-name { left: 18%; top: 44%; max-width: 44vw; font-size: clamp(48px, 6vw, 104px); }
+.home-stage[data-world="gemini-privacy"] .home-world-role { left: 18%; top: auto; bottom: 30%; translate: 0 8px; }
+.home-stage[data-world="gemini-privacy"] .home-world-role[data-on] { translate: 0 0; }
+.home-stage[data-world="gemini-privacy"] .home-world-problem { right: auto; left: 52%; top: 22%; bottom: auto; width: min(100%, 28ch); }
+/* About (Midjourney): the facts card top right, the name bottom centre, the headline top centre, the bio bottom right. */
+.home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
+.home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 23%; translate: 0 8px; max-width: 40vw; white-space: normal; }
+.home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
+.home-about-card { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 28px 32px; color: #e8ecea; background: linear-gradient(160deg, #1d2124, #121415); }
+.home-about-card-label { margin: 0; color: #8e9895; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+.home-about-card-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.home-about-card-list li { display: flex; gap: 16px; align-items: baseline; padding: 14px 0; border-top: 1px solid rgb(255 255 255 / 0.12); font-size: clamp(16px, 1.3vw, 22px); font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; }
+.home-about-card-list li span { color: #8e9895; font-family: var(--font-mono); font-size: 12px; }
+.home-about-card-cta { margin: 0; color: #e8ecea; font-size: 15px; font-weight: 500; }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
 }
@@ -2564,7 +2582,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-device-window .devsign-loop { overflow: hidden; }
 .home-device-window .devsign-live > .devsign-loop { position: absolute; inset: 0; }
 .home-device-phone { position: absolute; inset: 0; display: grid; place-items: center; container-type: size; background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
-.home-device-phone .gemini-device { width: auto; height: 128cqh; aspect-ratio: 1000 / 1100; translate: 0 10%; transform: none; animation: none; filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.5)); }
+.home-device-phone .gemini-device { width: auto; height: 100cqh; aspect-ratio: 1000 / 1100; translate: 0 8%; transform: none; animation: none; filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.5)); }
 .home-device-phone .gemini-device-side { display: none; }
 .home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 30%, color-mix(in srgb, var(--bg) 60%, transparent) 100%), linear-gradient(to top, color-mix(in srgb, var(--bg) 85%, transparent), transparent 45%), linear-gradient(to bottom, color-mix(in srgb, var(--bg) 75%, transparent), transparent 140px); pointer-events: none; }
 .intro-surface.home-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 24px 48px; height: 100%; padding: 104px var(--project-text-inset) 48px; overflow: visible; }

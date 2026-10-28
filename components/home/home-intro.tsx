@@ -12,9 +12,9 @@ import { DevsignLive, prepareDevsignZoom } from "@/components/devsign-live";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { HeroObject } from "./hero-object";
-import type { StageProject } from "./project-stage";
+import type { AboutWorld, StageProject } from "./project-stage";
 
-type Props = { projects: StageProject[]; onSelect: (index: number, from?: HTMLElement | null, prepared?: HTMLElement | null) => void };
+type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: number, from?: HTMLElement | null, prepared?: HTMLElement | null) => void };
 
 // The landing stage, after metalab.com's home: one dark screen, no scroll.
 // A glossy object (HeroObject) turns slowly behind everything. Left: the case
@@ -26,9 +26,11 @@ type Props = { projects: StageProject[]; onSelect: (index: number, from?: HTMLEl
 // fades, its media sits in a large card at the top right (the Devsign browser
 // window with the live prototype, or the Gemini phone on its surface), the
 // role sits top centre, the name large at the left of centre and the problem
-// line bottom right. About me shows the name as the statement over the whole
-// positioning line, on the plain stage.
-export function HomeIntro({ projects, onSelect }: Props) {
+// line bottom right. Each world has its own composition (CSS by data-world):
+// Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
+// cropped at the bottom right), About like Midjourney (name bottom centre, a
+// card of the three principles top right).
+export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
   const router = useRouter();
@@ -41,11 +43,18 @@ export function HomeIntro({ projects, onSelect }: Props) {
   // name and the whole positioning line for About me. Kept while it fades out.
   const next = shown ? { name: shown.name, text: shown.problem } : about ? { name: site.name, text: t.positioning } : null;
   if (next && (next.name !== recent?.name)) setRecent(next);
-  // The hovered project's world: the whole stage takes its surface and its
-  // media sits in a large card; its role, name and problem are laid out
-  // across the stage (metalab.com). Kept while it fades out.
-  const [recentProject, setRecentProject] = useState<StageProject | null>(null);
-  if (shown && shown !== recentProject) setRecentProject(shown);
+  // The hovered pill's world: the whole stage takes its surface and its media
+  // (or, for About, a card of facts) sits in a large card; a role line, the
+  // name and a paragraph are laid out across the stage, each world in its own
+  // composition (metalab.com's per-project layouts). Kept while it fades out.
+  type World = { slug: string; role?: string; name: string; text: string };
+  const world: World | null = shown
+    ? { slug: shown.slug, role: shown.role, name: shown.name, text: shown.problem }
+    : about && aboutCopy
+      ? { slug: "about", role: aboutCopy.headline, name: site.name, text: aboutCopy.bio }
+      : null;
+  const [recentWorld, setRecentWorld] = useState<World | null>(null);
+  if (world && world.slug !== recentWorld?.slug) setRecentWorld(world);
   // The live Devsign prototype starts loading the first time its pill is
   // hovered, so it is ready by the click.
   const [live, setLive] = useState(false);
@@ -75,11 +84,22 @@ export function HomeIntro({ projects, onSelect }: Props) {
   };
 
   return (
-    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={shown?.slug}>
-      <div className="home-backdrop" data-project={shown?.slug} aria-hidden="true">
+    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
+      <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
         <HeroObject className="home-object" variant={shown?.slug ?? "default"} />
-        {projects.map((p) => <div key={p.slug} className="home-world" data-project={p.slug} data-active={shown?.slug === p.slug || undefined} />)}
+        {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
+        {aboutCopy && (
+          <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined}>
+            <div className="home-about-card">
+              <p className="home-about-card-label">{t.about}</p>
+              <ul className="home-about-card-list">
+                {aboutCopy.principles.map((line, i) => <li key={line}><span>{String(i + 1).padStart(2, "0")}</span>{line}</li>)}
+              </ul>
+              <p className="home-about-card-cta">{t.footerAbout} <span aria-hidden="true">→</span></p>
+            </div>
+          </div>
+        )}
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
@@ -121,9 +141,9 @@ export function HomeIntro({ projects, onSelect }: Props) {
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
-        {recentProject?.role && <p className="home-world-role" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject.role}</p>}
-        <p className="home-world-name" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject?.name}</p>
-        <p className="home-world-problem" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject?.problem}</p>
+        {recentWorld?.role && <p className="home-world-role" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld.role}</p>}
+        <p className="home-world-name" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld?.name}</p>
+        <p className="home-world-problem" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld?.text}</p>
       </div>
     </section>
   );
