@@ -10,6 +10,7 @@ import { WhyIChose } from "@/components/mdx/why-i-chose";
 import { CaseSection, CaseMedia, CaseMediaPair, CasePrototype, CaseStatement } from "@/components/case-story";
 import { CaseGallery } from "@/components/case-gallery";
 import { CaseCompare, CaseDiamond, CaseFindings, CaseKey, CaseStats } from "@/components/case-facts";
+import { DevsignCase } from "@/components/devsign-case";
 import { Todo } from "@/components/todo";
 import { slugify } from "@/lib/slug";
 
@@ -65,6 +66,7 @@ const components: MDXComponents = {
   CaseFindings,
   CaseKey,
   CaseStats,
+  DevsignCase,
   CaseSection,
   CaseMedia,
   CaseMediaPair,
