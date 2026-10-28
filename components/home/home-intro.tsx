@@ -3,7 +3,8 @@
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
 import { useEffect, useRef, useState } from "react";
-import { site } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
@@ -29,7 +30,7 @@ type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: n
 // line bottom right. Each world has its own composition (CSS by data-world):
 // Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
 // cropped at the bottom right), About like Midjourney (name bottom centre, a
-// card of the three principles top right).
+// card with a real session photo top right).
 export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
@@ -102,12 +103,12 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
         {aboutCopy && (
           <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined}>
+            {/* A real moment from the work (the Devsign co-design session) stands
+                in for the portrait until there is one (TODO: /images/about/portrait.webp). */}
             <div className="home-about-card">
-              <p className="home-about-card-label">{t.about}</p>
-              <ul className="home-about-card-list">
-                {aboutCopy.principles.map((line, i) => <li key={line}><span>{String(i + 1).padStart(2, "0")}</span>{line}</li>)}
-              </ul>
-              <p className="home-about-card-cta">{t.footerAbout} <span aria-hidden="true">→</span></p>
+              <Image src={withBase("/images/devsign/codesign-session.webp")} alt={t.aboutCardAlt} fill sizes="(max-width: 767px) 100vw, 44vw" />
+              <span className="home-about-card-chip">{t.aboutCardCaption}</span>
+              <span className="home-about-card-cta">{t.footerAbout} <span aria-hidden="true">→</span></span>
             </div>
           </div>
         )}

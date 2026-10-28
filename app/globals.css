@@ -2565,12 +2565,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
 .home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 23%; translate: 0 16px; max-width: 40vw; white-space: normal; }
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
-.home-about-card { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 28px 32px; color: #e8ecea; background: linear-gradient(160deg, #1d2124, #121415); }
-.home-about-card-label { margin: 0; color: #8e9895; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
-.home-about-card-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.home-about-card-list li { display: flex; gap: 16px; align-items: baseline; padding: 14px 0; border-top: 1px solid rgb(255 255 255 / 0.12); font-size: clamp(16px, 1.3vw, 22px); font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; }
-.home-about-card-list li span { color: #8e9895; font-family: var(--font-mono); font-size: 12px; }
-.home-about-card-cta { margin: 0; color: #e8ecea; font-size: 15px; font-weight: 500; }
+.home-about-card { position: absolute; inset: 0; background: #121415; }
+.home-about-card img { object-fit: cover; object-position: 50% 40%; }
+.home-about-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 45%); pointer-events: none; }
+.home-about-card-chip, .home-about-card-cta { position: absolute; bottom: 20px; z-index: 1; padding: 6px 12px; border-radius: 999px; color: #fff; font-size: 13px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
+.home-about-card-chip { left: 20px; background: rgb(0 0 0 / 0.55); backdrop-filter: blur(8px); }
+.home-about-card-cta { right: 20px; padding-inline: 0; }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
 }
