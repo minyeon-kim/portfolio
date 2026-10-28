@@ -589,3 +589,5 @@ Prototype language and smoothness: DevsignLive and the prepared zoom layer load 
 Case pill numbers (01, 02) are set in Geist Medium 13px, tabular figures, muted — the same face as the label, not Geist Mono.  The devsign repo honours ?lang=en|ko (commit 1fc6ef5, deployed): verified document lang en/ko on minyeon-kim.github.io/devsign.
 
 About world, revised: no card (a project photo there read as a project). The site's own chrome loop stays visible over a near-black surface (#0b0d0e) as the image for the person; the About headline sits top left with the three principle titles listed under it (.home-world-list, numbered in Geist, staggered 140ms), "Minyeon Kim" bottom centre, the first bio sentence bottom right. A portrait can join later.
+
+Case pills, hovered or active, are fully see-through: background transparent and backdrop-filter none (the frosted blur read as a fill), only the 1px ink-70% ring remains.
