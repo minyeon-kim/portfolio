@@ -227,15 +227,31 @@ A 1 hour 40 minute session with a working designer (Oct 13). We agreed not to ad
 
 <CaseKey>Same features, <strong>far less to read.</strong></CaseKey>
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="Before: v1 change review, text and code heavy" caption="Before · Change review (Oct 7): text and code first, the decision far from the evidence." />
-  <CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="After: v2 change review, visual comparison with the decision on top" caption="After · Change review (Oct 16): your step and the decision come first." />
-</CaseMediaPair>
+<CaseToggle
+  labels={["Before", "After"]}
+  width={960}
+  height={540}
+  before={{ src: "/images/cases/workflow-app/v1-review.webp", alt: "Before: v1 change review, text and code heavy", caption: "Before · Change review (Oct 7): text and code first, the decision far from the evidence." }}
+  after={{ src: "/images/cases/workflow-app/v2-review.webp", alt: "After: v2 change review, visual comparison with the decision on top", caption: "After · Change review (Oct 16): your step and the decision come first." }}
+  changes={[
+    { title: "See the gap, don't read it", before: "Values and tokens written as text.", after: "The button itself, marked on the screen.", a: [28.96, 29.07, 41.15, 14.81], b: [18.23, 50.0, 29.17, 11.11] },
+    { title: "Your step first", before: "Three code-heavy option cards.", after: "The decision waiting on you, with the request that led to it.", a: [28.96, 55.56, 41.15, 38.52], b: [63.54, 51.85, 33.85, 19.44] },
+    { title: "Status you can follow", before: "A progress list off to the side.", after: "Five steps on top: 2/5, and whose turn it is.", a: [74.27, 30.56, 24.17, 39.81], b: [63.33, 34.26, 33.85, 16.67] },
+  ]}
+/>
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/v1-merge.webp" width={960} height={540} variant="screen" label="Before: v1 Merge Studio as a separate screen, choosing whole drafts" caption="Before · Merge Studio (Oct 7): a separate screen, whole drafts only." />
-  <CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} variant="screen" label="After: v2 Merge tab combining areas from several drafts" caption="After · Merge tab (Oct 16): pick areas from each draft, in the same window." />
-</CaseMediaPair>
+<CaseToggle
+  labels={["Before", "After"]}
+  width={960}
+  height={540}
+  before={{ src: "/images/cases/workflow-app/v1-merge.webp", alt: "Before: v1 Merge Studio as a separate screen, choosing whole drafts", caption: "Before · Merge Studio (Oct 7): a separate screen, whole drafts only." }}
+  after={{ src: "/images/cases/workflow-app/v2-merge.webp", alt: "After: v2 Merge tab combining areas from several drafts", caption: "After · Merge tab (Oct 16): pick areas from each draft, in the same window." }}
+  changes={[
+    { title: "Same window", before: "A separate screen; you leave the workspace.", after: "A Merge tab next to Changes, in the same window.", a: [26.88, 0.93, 54.17, 4.63], b: [88.13, 7.41, 7.5, 4.44] },
+    { title: "Pick per area", before: "Whole drafts, side by side.", after: "Header, summary, payment, pay bar: each from a draft.", a: [50.0, 37.96, 28.33, 21.3], b: [62.81, 23.7, 23.96, 4.44] },
+    { title: "Where each piece came from", before: "A code file tree on the right.", after: "Each area tagged with the draft it came from.", a: [80.94, 7.41, 17.19, 76.85], b: [31.77, 60.37, 17.71, 13.33] },
+  ]}
+/>
 
 <CaseCompare
   before="Before"
