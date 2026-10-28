@@ -2,7 +2,8 @@
 
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { site } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
@@ -20,26 +21,21 @@ type Props = { projects: StageProject[]; onSelect: (index: number) => void };
 // positioning: the first half as the big statement bottom right, the second
 // half as the paragraph bottom left. Hovering or focusing a project pill swaps
 // them to that case: its name, its problem line, the object takes its colour,
-// and the case's device rises in at the right. Top right: local time, as a
-// quiet sign of where the work happens.
+// and the case's device rises in at the right. About me shows the name as the
+// statement over the whole positioning line.
 export function HomeIntro({ projects, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
   const router = useRouter();
   const [hover, setHover] = useState<string | null>(null);
-  const [recent, setRecent] = useState<StageProject | null>(null);
+  const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
   const choices = [...projects, { slug: "about", name: t.aboutMe }];
   const shown = projects.find((p) => p.slug === hover) ?? null;
-  // Keeps the last case's copy in place while it fades out (derived during render).
-  if (shown && shown !== recent) setRecent(shown);
-
-  const [clock, setClock] = useState("");
-  useEffect(() => {
-    const tick = () => setClock(new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-US", { hour: "numeric", minute: "2-digit", timeZone: "Asia/Seoul" }).format(new Date()));
-    tick();
-    const id = setInterval(tick, 30_000);
-    return () => clearInterval(id);
-  }, [locale]);
+  const about = hover === "about";
+  // The copy that replaces the positioning: a case's name and problem, or the
+  // name and the whole positioning line for About me. Kept while it fades out.
+  const next = shown ? { name: shown.name, text: shown.problem } : about ? { name: site.name, text: t.positioning } : null;
+  if (next && (next.name !== recent?.name)) setRecent(next);
 
   const open = (slug: string) => {
     if (slug === "about") {
@@ -57,7 +53,7 @@ export function HomeIntro({ projects, onSelect }: Props) {
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]">
       <div className="home-backdrop" data-project={shown?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={shown?.slug ?? "default"} active={Boolean(shown)} />
+        <HeroObject className="home-object" variant={shown?.slug ?? "default"} />
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
@@ -69,7 +65,6 @@ export function HomeIntro({ projects, onSelect }: Props) {
         ))}
       </div>
       <div className="intro-surface home-grid">
-        <p className="home-meta">{t.city}{clock ? ` · ${clock}` : ""}</p>
         <nav className="home-picks" aria-label={t.projects}>
           <ol>
             {choices.map((c, i) => (
@@ -92,13 +87,13 @@ export function HomeIntro({ projects, onSelect }: Props) {
             ))}
           </ol>
         </nav>
-        <div className="home-note" data-swap={shown ? "" : undefined}>
+        <div className="home-note" data-swap={next ? "" : undefined}>
           <p className="home-note-default">{t.heroParagraph}</p>
-          <p className="home-note-project" aria-hidden={!shown}>{recent?.problem}</p>
+          <p className="home-note-project" aria-hidden={!next}>{recent?.text}</p>
         </div>
-        <div className="home-tagline-wrap" data-swap={shown ? "" : undefined}>
+        <div className="home-tagline-wrap" data-swap={next ? "" : undefined}>
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
-          <p className="home-tagline home-tagline-project" aria-hidden={!shown}>{recent?.name}</p>
+          <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
       </div>
     </section>

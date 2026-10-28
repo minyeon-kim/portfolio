@@ -2,12 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing object: a glossy twisted loop, raymarched in a fragment shader
-// (no model, no runtime). It turns slowly, tilts a little toward the cursor,
-// and its rim light takes the hovered case's colour (smoothed). Rendering is
-// capped at DPR 1, 1280px and 30fps, pauses offscreen, hidden or during the
-// page transition, and is skipped entirely with reduced motion (CSS shows the
-// static ambient light instead).
+// The landing object, after metalab.com's home: an oversized glossy black
+// chrome form that crosses the whole screen, lit by long white studio
+// highlights and deep violet and blue reflections, with film grain. Here the
+// form is one continuous loop with a softly squared path: the positioning
+// line made solid, the research-design-engineering loop that closes on
+// itself. It turns slowly and tilts a little toward the cursor. Hovering a
+// case changes the reflections to that case's colours (Gemini blue and
+// lavender, Devsign purple) and the loop's weight. Raymarched in a fragment
+// shader (no model, no runtime), capped at DPR 1, 1280px and 30fps, paused
+// offscreen, hidden or during the page transition, and skipped with reduced
+// motion (CSS shows the static ambient light instead).
 const vertex = `
 attribute vec2 position;
 void main() { gl_Position = vec4(position, 0.0, 1.0); }
@@ -18,76 +23,104 @@ precision highp float;
 uniform vec2 resolution;
 uniform vec2 pointer;
 uniform float time;
-uniform vec3 tintA;
-uniform vec3 tintB;
-uniform float energy;
+uniform vec3 tint0;
+uniform vec3 tint1;
+uniform vec3 tint2;
+uniform float spread;
+uniform float focus;
 
 mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 
-// A ring with a rounded-rectangle cross-section that twists twice around the
-// ring and flexes gently, so it reads as one continuous folded band.
-float band(vec3 p) {
-  float ang = atan(p.z, p.x);
-  float ring = length(p.xz) - 1.0;
-  vec2 sec = vec2(ring, p.y + 0.14 * sin(ang * 3.0 + time * 0.35));
-  sec = rot(ang * 2.0 + time * 0.2) * sec;
-  vec2 d = abs(sec) - vec2(0.32, 0.085);
-  return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0) - 0.06;
+vec3 orient(vec3 p) {
+  p.yz = rot(1.15 + pointer.y * 0.1) * p.yz;
+  p.xz = rot(time * 0.07 - pointer.x * 0.16) * p.xz;
+  p.xy = rot(-0.5) * p.xy;
+  return p;
 }
+// A thick loop on a softly squared path, breathing a little along its length.
 float map(vec3 p) {
-  p.yz = rot(0.55 + pointer.y * 0.18) * p.yz;
-  p.xz = rot(time * 0.16 - pointer.x * 0.22) * p.xz;
-  p.xy = rot(-0.35) * p.xy;
-  return band(p);
+  p = orient(p);
+  float ang = atan(p.z, p.x);
+  vec2 q = abs(p.xz) - vec2(0.55);
+  float path = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - 0.95;
+  float y = p.y + 0.1 * sin(ang * 2.0 + time * 0.3);
+  float r = 0.46 + 0.06 * spread + 0.03 * sin(ang * 3.0 - time * 0.2);
+  return length(vec2(path, y)) - r;
 }
 vec3 normalAt(vec3 p) {
   vec2 e = vec2(0.0015, 0.0);
   return normalize(vec3(map(p + e.xyy) - map(p - e.xyy), map(p + e.yxy) - map(p - e.yxy), map(p + e.yyx) - map(p - e.yyx)));
 }
+// A long thin light: bright where the reflected ray is near a great circle.
+float streak(vec3 r, vec3 n, vec3 c, float w) {
+  float band = exp(-pow(dot(r, n) / w, 2.0));
+  return band * smoothstep(-0.3, 0.6, dot(r, c));
+}
+// The studio around the object: near black, a violet sky, blue from below,
+// two white softbox streaks.
+vec3 env(vec3 r) {
+  vec3 c = vec3(0.01, 0.01, 0.016);
+  c += tint1 * 0.78 * pow(max(dot(r, normalize(vec3(-0.35, 0.75, 0.55))), 0.0), 2.2);
+  c += tint0 * 0.5 * pow(max(dot(r, normalize(vec3(0.65, -0.45, 0.6))), 0.0), 2.6);
+  c += tint2 * 0.18 * pow(max(dot(r, normalize(vec3(0.2, 0.2, 1.0))), 0.0), 6.0);
+  c += vec3(1.0) * 2.0 * streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), 0.085);
+  c += vec3(0.95, 0.95, 1.0) * 1.3 * streak(r, normalize(vec3(-0.9, 0.15, 0.4)), normalize(vec3(0.35, -0.25, 0.9)), 0.06);
+  return c;
+}
+vec4 shade(vec3 p, vec3 rd) {
+  vec3 n = normalAt(p);
+  vec3 v = -rd;
+  float nv = max(dot(n, v), 0.0);
+  float fres = 0.08 + 0.92 * pow(1.0 - nv, 3.0);
+  vec3 r = reflect(rd, n);
+  vec3 refl = env(r);
+  // Black chrome: almost everything is reflection; a trace of the case colour
+  // in the body, and a soft lit edge when a case is picked.
+  vec3 col = vec3(0.012) + refl * (0.55 + 0.45 * fres) + tint1 * 0.03 + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
+  return vec4(col, 1.0);
+}
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
-  // Camera pulled back so the loop spans about 70% of the stage height.
-  vec3 ro = vec3(0.0, 0.0, 7.4);
-  vec3 rd = normalize(vec3(uv, -2.0));
-  float t = 0.0; float hit = -1.0;
+  // Camera close, so the loop sweeps past the edges of the stage.
+  vec3 ro = vec3(0.0, 0.0, 4.8);
+  vec3 rd = normalize(vec3(uv, -1.9));
+  float t = 0.0; float hit = -1.0; float dm = 1e9; float tm = 0.0;
   for (int i = 0; i < 90; i++) {
     vec3 p = ro + rd * t;
     float d = map(p);
-    if (d < 0.0012) { hit = t; break; }
-    t += d * 0.9;
-    if (t > 12.0) break;
+    if (d < dm) { dm = d; tm = t; }
+    if (d < 0.001) { hit = t; break; }
+    t += d * 0.92;
+    if (t > 11.0) break;
   }
-  if (hit < 0.0) { gl_FragColor = vec4(0.0); return; }
-  vec3 p = ro + rd * hit;
-  vec3 n = normalAt(p);
-  vec3 v = -rd;
-  float fres = pow(1.0 - max(dot(n, v), 0.0), 3.0);
-  vec3 l1 = normalize(vec3(0.6, 0.8, 0.5));
-  vec3 l2 = normalize(vec3(-0.7, -0.4, 0.6));
-  float d1 = max(dot(n, l1), 0.0), d2 = max(dot(n, l2), 0.0);
-  float s1 = pow(max(dot(reflect(-l1, n), v), 0.0), 48.0);
-  float s2 = pow(max(dot(reflect(-l2, n), v), 0.0), 28.0);
-  vec3 base = vec3(0.045, 0.05, 0.06);
-  vec3 col = base
-    + tintA * (d1 * 0.22 + s1 * 0.9)
-    + tintB * (d2 * 0.28 + s2 * 0.6)
-    + mix(tintA, tintB, 0.5) * fres * (0.55 + energy * 0.3)
-    + vec3(0.9, 0.93, 1.0) * s1 * 0.35;
-  float edge = smoothstep(0.0, 0.004, 0.004);
-  gl_FragColor = vec4(col, 1.0) * edge;
+  float grain = (hash(gl_FragCoord.xy + fract(time) * 7.0) - 0.5) * 0.045;
+  if (hit >= 0.0) {
+    vec4 c = shade(ro + rd * hit, rd);
+    gl_FragColor = vec4(c.rgb + grain, 1.0);
+    return;
+  }
+  // Missed: soften the silhouette by about a pixel.
+  float px = tm / resolution.y * 1.3;
+  float edge = 1.0 - smoothstep(0.0, px, dm);
+  if (edge < 0.002) { gl_FragColor = vec4(0.0); return; }
+  vec4 c = shade(ro + rd * tm, rd);
+  gl_FragColor = vec4((c.rgb + grain) * edge, edge);
 }
 `;
 
-export const OBJECT_TINTS: Record<string, [number[], number[]]> = {
-  default: [[0.36, 0.5, 0.95], [0.6, 0.45, 0.9]],
-  "gemini-privacy": [[0.26, 0.52, 0.96], [0.65, 0.55, 0.98]],
-  "workflow-app": [[0.45, 0.33, 0.9], [0.7, 0.58, 1.0]],
+// Per case: the colours of the three reflections (sky, floor, front), the
+// loop's extra weight and whether its edge lights up.
+export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; focus: number }> = {
+  default: { tints: [[0.28, 0.4, 0.95], [0.5, 0.3, 0.95], [0.75, 0.8, 0.95]], spread: 0, focus: 0 },
+  "gemini-privacy": { tints: [[0.26, 0.55, 1.0], [0.62, 0.55, 1.0], [0.78, 0.86, 1.0]], spread: 0.3, focus: 1 },
+  "workflow-app": { tints: [[0.38, 0.26, 0.9], [0.6, 0.42, 1.0], [0.7, 0.62, 1.0]], spread: -0.4, focus: 0.6 },
 };
 
-export function HeroObject({ variant = "default", active = false, className }: { variant?: string; active?: boolean; className?: string }) {
+export function HeroObject({ variant = "default", className }: { variant?: string; className?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const state = useRef({ variant, active });
-  useEffect(() => { state.current = { variant, active }; }, [variant, active]);
+  const state = useRef(variant);
+  useEffect(() => { state.current = variant; }, [variant]);
 
   useEffect(() => {
     const el = canvas.current;
@@ -110,7 +143,7 @@ export function HeroObject({ variant = "default", active = false, className }: {
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const u = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uA = u("tintA"), uB = u("tintB"), uEnergy = u("energy");
+    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus");
 
     let width = 0, height = 0;
     const resize = () => {
@@ -133,7 +166,7 @@ export function HeroObject({ variant = "default", active = false, className }: {
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const tint = { a: [...OBJECT_TINTS.default[0]], b: [...OBJECT_TINTS.default[1]], energy: 0 };
+    const current = { tints: OBJECT_STATES.default.tints.map((c) => [...c]), spread: OBJECT_STATES.default.spread, focus: 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -148,18 +181,19 @@ export function HeroObject({ variant = "default", active = false, className }: {
       if (now - lastDraw < 1000 / 30) return;
       lastDraw = now;
       clock += dt;
-      const target = OBJECT_TINTS[state.current.variant] ?? OBJECT_TINTS.default;
-      const k = 1 - Math.exp(-dt / 0.4);
-      for (let i = 0; i < 3; i++) { tint.a[i] += (target[0][i] - tint.a[i]) * k; tint.b[i] += (target[1][i] - tint.b[i]) * k; }
-      tint.energy += ((state.current.active ? 1 : 0) - tint.energy) * k;
+      const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
+      const k = 1 - Math.exp(-dt / 0.45);
+      for (let s = 0; s < 3; s++) for (let i = 0; i < 3; i++) current.tints[s][i] += (target.tints[s][i] - current.tints[s][i]) * k;
+      current.spread += (target.spread - current.spread) * k;
+      current.focus += (target.focus - current.focus) * k;
       pointer.x += (pointer.tx - pointer.x) * (1 - Math.exp(-dt / 0.6));
       pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt / 0.6));
       gl.uniform2f(uRes, width, height);
       gl.uniform2f(uPointer, pointer.x, pointer.y);
       gl.uniform1f(uTime, clock);
-      gl.uniform3f(uA, tint.a[0], tint.a[1], tint.a[2]);
-      gl.uniform3f(uB, tint.b[0], tint.b[1], tint.b[2]);
-      gl.uniform1f(uEnergy, tint.energy);
+      for (let s = 0; s < 3; s++) gl.uniform3f(uT[s], current.tints[s][0], current.tints[s][1], current.tints[s][2]);
+      gl.uniform1f(uSpread, current.spread);
+      gl.uniform1f(uFocus, current.focus);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

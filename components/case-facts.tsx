@@ -1,4 +1,3 @@
-import { T } from "./local-text";
 import type { ReactNode } from "react";
 
 // Numbers, findings, the process diagram and comparisons set as text, so a case reads in
@@ -69,45 +68,3 @@ export function CaseKey({ children }: { children: ReactNode }) {
   return <p className="case-key reveal">{children}</p>;
 }
 
-type DiamondPhase = { label: string; title: string; methods?: string[]; output?: string; body?: string };
-
-// The Double Diamond drawn out in the "revamped" style: each diamond diverges,
-// then converges; each phase lists its methods and what it handed on to the next.
-export function CaseDiamond({ items }: { items: DiamondPhase[] }) {
-  return (
-    <figure className="case-diamond reveal">
-      <div className="case-diamond-spaces" aria-hidden="true"><span><T k="rightThing" /></span><span><T k="thingsRight" /></span></div>
-      <div className="case-diamond-figure">
-        <svg viewBox="0 0 800 300" role="img" aria-label={items.map((item) => item.label).join(", ")}>
-          <line x1="0" y1="150" x2="800" y2="150" />
-          <polygon points="0,150 200,4 400,150 200,296" />
-          <polygon points="400,150 600,4 800,150 600,296" />
-          {[0, 400].map((x) => (
-            <g key={x} className="case-diamond-edge">
-              <text x={x + 92} y={62} transform={`rotate(-36 ${x + 92} 62)`} textAnchor="middle"><T k="diverge" /></text>
-              <text x={x + 308} y={62} transform={`rotate(36 ${x + 308} 62)`} textAnchor="middle"><T k="converge" /></text>
-            </g>
-          ))}
-          {items.map((item, p) => (
-            <text key={item.label} className="case-diamond-phase" x={p * 200 + 100} y={136} textAnchor="middle">{item.label}</text>
-          ))}
-        </svg>
-      </div>
-      <ol className="case-diamond-notes">
-        {items.map((item) => (
-          <li key={item.label}>
-            <span>{item.label}</span>
-            <strong>{item.title}</strong>
-            {item.methods ? (
-              <ul className="case-diamond-methods" aria-label="Methods">
-                {item.methods.map((m) => <li key={m}>{m}</li>)}
-              </ul>
-            ) : null}
-            {item.body && <p>{item.body}</p>}
-            {item.output && <p className="case-diamond-output"><span aria-hidden="true">→</span> {item.output}</p>}
-          </li>
-        ))}
-      </ol>
-    </figure>
-  );
-}

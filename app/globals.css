@@ -2061,6 +2061,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-tint-alert: light-dark(#fdefef, color-mix(in srgb, #ff8a80 10%, var(--bg)));
   --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg)));
   --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg)));
+  --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg)));
   --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg)));
   --dv-diamond-current: light-dark(#e9e4fc, color-mix(in srgb, #a594ff 16%, var(--bg)));
   --dv-max: 1440px;
@@ -2122,16 +2123,17 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-diamond { display: block; width: 100%; min-width: 760px; height: auto; margin-top: 12px; font-family: inherit; }
 .dv-diamond-half-0 { fill: var(--dv-diamond-1); }
 .dv-diamond-half-1 { fill: var(--dv-diamond-2); }
+.dv-diamond-half-2 { fill: var(--dv-diamond-3); }
 .dv-diamond-half-3 { fill: var(--dv-diamond-4); }
 .dv-diamond-current { fill: var(--dv-diamond-current); stroke: var(--case-accent); stroke-width: 2; stroke-linejoin: round; }
 .dv-diamond-dash { fill: none; stroke: var(--dv-muted); stroke-dasharray: 4 4; }
 .dv-diamond-callout { stroke: var(--case-accent); }
 .dv-svg-dot { fill: var(--case-accent); }
-.dv :is(.dv-diamond, .dv-journey svg) text { font-weight: 700; }
+:is(.dv, [data-skin="dv"]) :is(.dv-diamond, .dv-journey svg) text { font-weight: 700; }
 .dv-svg-strong { fill: var(--dv-ink); }
 .dv-svg-muted { fill: var(--dv-muted); font-weight: 500; }
-.dv :is(.dv-diamond, .dv-journey svg) .dv-svg-muted, .dv :is(.dv-diamond, .dv-journey svg) .dv-svg-regular { font-weight: 500; }
-.dv :is(.dv-diamond, .dv-journey svg) .dv-svg-caps { font-weight: 700; letter-spacing: 0.06em; }
+:is(.dv, [data-skin="dv"]) :is(.dv-diamond, .dv-journey svg) .dv-svg-muted, :is(.dv, [data-skin="dv"]) :is(.dv-diamond, .dv-journey svg) .dv-svg-regular { font-weight: 500; }
+:is(.dv, [data-skin="dv"]) :is(.dv-diamond, .dv-journey svg) .dv-svg-caps { font-weight: 700; letter-spacing: 0.06em; }
 .dv-svg-accent { fill: var(--case-accent); }
 .dv-svg-second { fill: var(--dv-second); }
 
@@ -2285,21 +2287,21 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-compare-text { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-compare-text em { color: var(--case-accent); font-style: normal; }
 
-.dv-slider-frame { position: relative; overflow: clip; aspect-ratio: 700 / 372; border-radius: 12px; background: var(--dv-alt); touch-action: pan-y; }
-.dv-slider-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.dv-slider-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--dv-split)) 0 0); }
-.dv-slider-chip { position: absolute; top: 16px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, #000 55%, transparent); color: #fff; font-size: 14px; font-weight: 600; backdrop-filter: blur(8px); pointer-events: none; }
-.dv-slider-chip[data-side="before"] { left: 16px; }
-.dv-slider-chip[data-side="after"] { right: 16px; }
-.dv-slider-divider { position: absolute; top: 0; bottom: 0; left: var(--dv-split); width: 2px; margin-left: -1px; background: #fff; pointer-events: none; }
-.dv-slider-divider span { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #1d1d1f; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; transform: translate(-50%, -50%); transition: transform var(--dur-fast) var(--ease); }
-.dv-slider-frame input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
-.dv-slider-frame:has(input:active) .dv-slider-divider span { transform: translate(-50%, -50%) scale(0.97); }
-.dv-slider-frame:has(input:focus-visible) .dv-slider-divider span { outline: 2px solid var(--case-accent); outline-offset: 2px; }
-.dv-slider { display: grid; grid-template-columns: minmax(0, 920fr) minmax(0, 480fr); gap: 40px; align-items: end; }
-.dv-slider .dv-compare { grid-template-columns: 1fr; gap: 32px; }
-.dv-slider .dv-compare-item { display: flex; flex-direction: column; gap: 4px; }
-.dv-slider .dv-compare-label { margin: 0; }
+.dv-toggle { display: grid; grid-template-columns: minmax(0, 920fr) minmax(0, 480fr); gap: 24px 40px; align-items: end; }
+.dv-toggle-head { grid-column: 1 / -1; }
+.dv-toggle-tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--dv-alt); }
+.dv-toggle-tab { min-height: 36px; padding: 6px 16px; border-radius: 999px; color: var(--dv-muted); font-size: 14px; font-weight: 600; line-height: 1.4; cursor: pointer; transition: background-color 250ms var(--ease), color 250ms var(--ease); }
+.dv-toggle-tab[aria-selected="true"] { color: var(--dv-ink); background: var(--dv-surface); box-shadow: 0 1px 2px rgb(0 0 0 / 0.08); }
+.dv-toggle-tab:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
+.dv-toggle-frame { position: relative; overflow: hidden; aspect-ratio: 700 / 372; border-radius: 12px; background: var(--dv-alt); }
+.dv-toggle-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 400ms var(--ease); }
+.dv-toggle[data-view="before"] img[data-side="before"], .dv-toggle[data-view="after"] img[data-side="after"] { opacity: 1; }
+.dv-toggle[data-view="before"] img[data-side="before"] { filter: saturate(0.85); }
+.dv-toggle-caption { display: grid; }
+.dv-toggle-caption > span { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 4px; opacity: 0; translate: 0 6px; transition: opacity 300ms ease, translate 300ms var(--ease); }
+.dv-toggle[data-view="before"] .dv-toggle-caption > span[data-side="before"], .dv-toggle[data-view="after"] .dv-toggle-caption > span[data-side="after"] { opacity: 1; translate: 0 0; }
+.dv-toggle-caption > span[data-side="after"] .dv-compare-label { color: var(--case-accent); }
+@media (prefers-reduced-motion: reduce) { .dv-toggle-frame img, .dv-toggle-caption > span, .dv-toggle-tab { transition: none; } }
 
 /* Takeaway */
 .dv-headline-plain + .dv-body { margin-top: 12px; }
@@ -2332,8 +2334,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-split > .dv-block { order: -1; }
   .dv-two { grid-template-columns: 1fr; }
   .dv-boards { padding-top: 0; }
-  .dv-slider { grid-template-columns: 1fr; gap: 20px; }
-  .dv-slider .dv-compare { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .dv-toggle { grid-template-columns: 1fr; gap: 20px; }
   .dv-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dv-persona { grid-template-columns: 260px minmax(0, 1fr); }
   .dv-stats { grid-template-columns: 1fr; gap: 16px; }
@@ -2374,7 +2375,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-needs td:last-child::before { content: "→ "; color: var(--dv-role); font-weight: 700; }
   .dv-journey { padding: 20px; }
   .dv-features { grid-template-columns: 1fr; }
-  .dv-slider .dv-compare { grid-template-columns: 1fr; gap: 16px; }
   .dv-cover img { aspect-ratio: 4 / 3; }
   .dv-next { padding: 32px 24px; }
   .dv-review li > span { width: 48px; font-size: 32px; }
@@ -2429,6 +2429,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    the display statement bottom right. Hovering a case pill recolours the
    object, swaps the copy and raises that case's device at the right. Always
    the dark media palette, whatever the site theme. */
+.intro-stage.home-stage, header[data-home]:not([data-compact]) { --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white'/%3E%3C/svg%3E") 12 12; --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='white'/%3E%3C/svg%3E") 16 16; }
 .intro-stage.home-stage { --bg: #080909; --surface: #151918; --ink: #e8ecea; --muted: #8e9895; --line: #262c2a; --accent: #7f93ff; --color-fill: rgb(255 255 255 / 0.08); --color-fill-strong: rgb(255 255 255 / 0.14); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); color-scheme: dark; }
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
 .home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
@@ -2447,8 +2448,10 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    statement never move the pills under the pointer. */
 .home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, translate 250ms var(--ease); }
-.home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: rgb(255 255 255 / 0.2); translate: 4px 0; }
+.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
+.home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7); }
+.home-pick[data-active] .home-pick-index { color: var(--ink); }
+.home-picks ol:has(.home-pick[data-active]) .home-pick:not([data-active]) { color: color-mix(in srgb, var(--ink) 72%, transparent); }
 .home-pick-index { font: 500 11px/1 var(--font-mono); color: var(--muted); }
 .home-note { grid-column: 1; grid-row: 3; align-self: end; display: grid; width: min(100%, 36ch); }
 .home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 250ms ease, translate 250ms var(--ease); }
@@ -2489,7 +2492,7 @@ header[data-home]:not([data-compact]) .header-menu-trigger:hover { background: r
 
 /* Gemini body in the Devsign body language (no Figma frame yet): the generic
    MDX blocks take the Devsign margins, stage titles, labels, cards and tables. */
-.case-study[data-skin="dv"] { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
+.case-study[data-skin="dv"] { --dv-bg: var(--bg); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
 .case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1440px; margin-left: 0; margin-right: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -2541,7 +2544,16 @@ header[data-home]:not([data-compact]) .header-menu-trigger:hover { background: r
 .case-study[data-skin="dv"] .case-media figcaption { color: var(--muted); font-size: 14px; font-weight: 500; }
 .case-study[data-skin="dv"] .case-media-pair { margin-top: 40px; gap: 24px; }
 .case-study[data-skin="dv"] .case-media-pair .case-media { margin-top: 0; }
-.case-study[data-skin="dv"] .case-diamond { margin-top: 40px; }
+.case-study[data-skin="dv"] .case-diamond { max-width: none; margin: 40px 0 0; }
+.case-study[data-skin="dv"] .case-diamond-notes { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 40px; }
+.case-study[data-skin="dv"] .case-diamond-notes > li { padding: 24px 28px; border: 0; border-radius: 14px; background: var(--dv-alt); }
+.case-study[data-skin="dv"] .case-diamond-notes > li[data-current] { background: var(--dv-tint); }
+.case-study[data-skin="dv"] .case-diamond-notes span { margin-bottom: 10px; color: var(--case-accent); font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
+.case-study[data-skin="dv"] .case-diamond-notes strong { margin-bottom: 12px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.case-study[data-skin="dv"] .case-diamond-notes p { color: var(--muted); font-size: 15px; font-weight: 500; line-height: 1.5; }
+.case-study[data-skin="dv"] .case-diamond-notes .case-diamond-output { margin-top: 10px; color: var(--ink); }
+@media (max-width: 63.99rem) { .case-study[data-skin="dv"] .case-diamond-notes { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 47.99rem) { .case-study[data-skin="dv"] .case-diamond-notes { grid-template-columns: 1fr; } }
 .case-study[data-skin="dv"] .case-prototype { margin-top: 40px; }
 @media (max-width: 47.99rem) {
   .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li { grid-template-columns: 1fr; gap: 8px; padding-bottom: 24px; }
