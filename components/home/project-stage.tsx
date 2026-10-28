@@ -27,10 +27,12 @@ export type StageProject = {
   hero?: DevsignHeroData; // Figma-style opener instead of the title and growing cover
 };
 
-type Props = { projects: StageProject[] };
+export type AboutWorld = { headline: string; bio: string; principles: string[] };
+
+type Props = { projects: StageProject[]; about?: AboutWorld };
 
 // Project selection opens an editorial heading and full-width cover.
-export function ProjectStage({ projects }: Props) {
+export function ProjectStage({ projects, about }: Props) {
   const t = useStrings();
   const active = useUi((s) => s.activeCase);
   // Reset after React commits the new stage, rather than before its old body
@@ -56,7 +58,7 @@ export function ProjectStage({ projects }: Props) {
 
   return (
     <>
-      {active === null && <HomeIntro projects={projects} onSelect={select} />}
+      {active === null && <HomeIntro projects={projects} about={about} onSelect={select} />}
       {p && (
       <section id="work" aria-label={`${p.name}, selected case`} className={p.hero ? "project-selected full-bleed md:-mt-[64px]" : "project-selected stage-pin full-bleed md:-mt-[64px]"}>
         <div key={p.slug} id="stage-panel" data-stage-index={active} className={p.hero ? "selected-stage selected-stage-hero" : "selected-stage"} data-canvas={(p.slug === "workflow-app" && !p.hero) || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>

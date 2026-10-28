@@ -3,12 +3,17 @@ import { CasePanels } from "@/components/home/case-panels";
 import { ProjectStage } from "@/components/home/project-stage";
 import { getCase, getCases } from "@/lib/cases";
 import type { Locale } from "@/lib/i18n";
+import * as aboutEn from "@/content/about.mdx";
+import * as aboutKo from "@/content/ko/about.mdx";
 
 // The landing page: an intro (name + positioning, pick a case), then, once a
 // case is picked, its stage and its content, so scrolling reads into it.
 export async function HomePage({ locale = "en" }: { locale?: Locale }) {
   const featured = (await getCases(locale)).filter((c) => c.meta.featured);
   const bodies = await Promise.all(featured.map((c) => getCase(c.slug, locale)));
+  // The About world on the landing: headline as the role line, the first bio
+  // sentence as the paragraph, the three principles in the card.
+  const about = locale === "ko" ? aboutKo : aboutEn;
 
   return (
     <>
@@ -24,6 +29,7 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           concept: meta.concept,
           hero: meta.hero,
         }))}
+        about={{ headline: about.headline.join(" "), bio: about.bio[0], principles: about.principles.map((p: { title: string }) => p.title) }}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
