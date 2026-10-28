@@ -32,6 +32,7 @@ export type CaseMeta = {
   concept?: boolean; // self-initiated work, shown with a [CONCEPT] label
   featured?: boolean;
   draft?: boolean; // shown in dev only, never exported
+  hero?: { title: string; details: { label: string; value: string }[] }; // Figma-style opener (Devsign)
   order?: number;
 };
 
@@ -47,26 +48,29 @@ function readSource(slug: string, locale: Locale = "en") {
 }
 
 // Runs at build time only (static export), so reading the filesystem is fine.
-export function getCaseSlugs(): string[] {
+// A locale only lists cases that have a file in that locale (the draft
+// template has no Korean copy).
+export function getCaseSlugs(locale: Locale = "en"): string[] {
   return fs
     .readdirSync(CASES_DIR)
     .filter((file) => file.endsWith(".mdx"))
     .map((file) => file.replace(/\.mdx$/, ""))
-    .filter((slug) => !(isProd && /^\s*draft:\s*true/m.test(readSource(slug))));
+    .filter((slug) => !(isProd && /^\s*draft:\s*true/m.test(readSource(slug))))
+    .filter((slug) => locale === "en" || fs.existsSync(path.join(casesDir(locale), `${slug}.mdx`)));
 }
 
 // Reads `- **Problem:** ...` style lines from the <TLDR> block (Korean cases
-// use 문제 / 역할 / 결과).
+// use 문제 / 역할 / 결과, or the English labels). The colon is optional.
 const TLDR_LABELS = { en: ["Problem", "My role", "Outcome"], ko: ["문제", "역할", "결과"] } as const;
 function readTldr(source: string, locale: Locale = "en"): Tldr {
   const block = source.match(/<TLDR>([\s\S]*?)<\/TLDR>/)?.[1] ?? "";
   const line = (label: string) =>
     block
-      .match(new RegExp(`\\*\\*${label}:\\*\\*(.*)$`, "m"))?.[1]
+      .match(new RegExp(`\\*\\*${label}:?\\*\\*(.*)$`, "m"))?.[1]
       .replace(/\{\/\*.*?\*\/\}/g, "") // drop MDX comments
       .trim() ?? "";
-  const [problem, role, outcome] = TLDR_LABELS[locale];
-  return { problem: line(problem), role: line(role), outcome: line(outcome) };
+  const pick = (i: 0 | 1 | 2) => line(TLDR_LABELS[locale][i]) || line(TLDR_LABELS.en[i]);
+  return { problem: pick(0), role: pick(1), outcome: pick(2) };
 }
 
 // Table of contents: the TL;DR box, then every `## ` heading in the body.
@@ -103,7 +107,7 @@ export async function getCase(slug: string, locale: Locale = "en") {
 
 export async function getCases(locale: Locale = "en"): Promise<CaseEntry[]> {
   const entries = await Promise.all(
-    getCaseSlugs().map(async (slug) => {
+    getCaseSlugs(locale).map(async (slug) => {
       const { meta, tldr, decisions } = await getCase(slug, locale);
       return { slug, meta, tldr, decisions };
     }),

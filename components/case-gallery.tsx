@@ -4,9 +4,20 @@ import Image from "next/image";
 import { useEffect, useId, useRef } from "react";
 import { withBase } from "@/lib/site";
 
-type GalleryItem = { label: string; caption?: string; src?: string; alt?: string };
+type GalleryItem = {
+  label: string;
+  caption?: string;
+  src?: string;
+  alt?: string;
+  // Feature slides: a kicker, title, short description and numbered points under the screen.
+  kicker?: string;
+  title?: string;
+  body?: string;
+  points?: string[];
+};
 
 export function CaseGallery({ title, items }: { title: string; items: GalleryItem[] }) {
+  const feature = items.some((item) => item.title);
   const id = useId();
   const section = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
@@ -56,7 +67,7 @@ export function CaseGallery({ title, items }: { title: string; items: GalleryIte
   if (!items.length) return null;
   return (
     <>
-      <section ref={section} className="case-gallery" style={{ "--gallery-count": items.length } as React.CSSProperties} aria-label={title}>
+      <section ref={section} className={feature ? "case-gallery case-gallery-feature" : "case-gallery"} style={{ "--gallery-count": items.length } as React.CSSProperties} aria-label={title}>
         <div ref={viewport} className="case-gallery-viewport">
           <div className="case-gallery-heading"><span>{title}</span><a href={`#${id}-end`}>Continue reading ↓</a></div>
           <div ref={track} className="case-gallery-track">
@@ -65,7 +76,20 @@ export function CaseGallery({ title, items }: { title: string; items: GalleryIte
                 <div className="case-gallery-image">
                   {item.src ? <Image src={withBase(item.src)} alt={item.alt ?? item.label} width={1600} height={1000} sizes="(max-width: 767px) 100vw, 80vw" /> : <div className="case-gallery-placeholder" role="img" aria-label={`Image placeholder: ${item.label}`}><span className="case-gallery-number">{String(index + 1).padStart(2, "0")}</span><span>{item.label}</span><small>Image to come</small><i aria-hidden="true" /></div>}
                 </div>
-                <figcaption><span>{String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</span><span>{item.caption ?? item.label}</span></figcaption>
+                {feature ? (
+                  <figcaption className="case-gallery-feature-caption">
+                    {item.kicker && <span className="case-gallery-kicker">{item.kicker}</span>}
+                    <span className="case-gallery-title">{item.title ?? item.label}</span>
+                    {item.body && <span className="case-gallery-body">{item.body}</span>}
+                    {item.points && (
+                      <ol className="case-gallery-points">
+                        {item.points.map((point, i) => <li key={point}><span>{String(i + 1).padStart(2, "0")}</span>{point}</li>)}
+                      </ol>
+                    )}
+                  </figcaption>
+                ) : (
+                  <figcaption><span>{String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</span><span>{item.caption ?? item.label}</span></figcaption>
+                )}
               </figure>
             ))}
           </div>

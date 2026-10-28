@@ -1,21 +1,22 @@
 import { CaseBody } from "@/components/home/case-body";
 import { CasePanels } from "@/components/home/case-panels";
 import { ProjectStage } from "@/components/home/project-stage";
-import { AlignWords } from "@/components/home/align-words";
-import { SideRail } from "@/components/home/side-rail";
 import { getCase, getCases } from "@/lib/cases";
-import { site } from "@/lib/site";
-import { ui, type Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
+import * as aboutEn from "@/content/about.mdx";
+import * as aboutKo from "@/content/ko/about.mdx";
 
 // The landing page: an intro (name + positioning, pick a case), then, once a
 // case is picked, its stage and its content, so scrolling reads into it.
 export async function HomePage({ locale = "en" }: { locale?: Locale }) {
   const featured = (await getCases(locale)).filter((c) => c.meta.featured);
   const bodies = await Promise.all(featured.map((c) => getCase(c.slug, locale)));
+  // The About world on the landing: the headline (its emphasis set apart) as
+  // the statement, the first bio sentence as the paragraph.
+  const about = locale === "ko" ? aboutKo : aboutEn;
 
   return (
     <>
-      <SideRail projects={featured.map(({ slug, meta }) => ({ slug, name: meta.short ?? meta.title }))} />
       <ProjectStage
         projects={featured.map(({ slug, meta, tldr }) => ({
           slug,
@@ -26,9 +27,9 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           timeline: meta.timeline,
           cover: meta.cover,
           concept: meta.concept,
+          hero: meta.hero,
         }))}
-        name={site.name}
-        intro={<h1 className="intro-headline"><AlignWords text={ui[locale].positioning} /></h1>}
+        about={{ headline: about.headline.join(" "), emphasis: about.headlineEmphasis, bio: about.bio[0] }}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
