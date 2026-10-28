@@ -1311,6 +1311,15 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* Curved page slide with a slower outgoing layer for depth. */
 .project-navigation-floor { position: fixed; inset: 0; z-index: 17; background: var(--bg); pointer-events: none; }
+/* The picked case's device, copied and grown to the screen, then settled into the opener's media frame. */
+.project-zoom { position: fixed; z-index: 30; overflow: hidden; pointer-events: none; background: #141414; will-change: top, left, width, height; }
+.project-zoom[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
+.project-zoom > * { position: absolute; inset: 0; width: 100%; height: 100%; translate: none; }
+.project-zoom .home-device-window { display: grid; place-items: center; border-radius: 0; box-shadow: none; transform: none; }
+.project-zoom .home-device-window .devsign-loop { width: min(100%, 160vh); }
+.project-zoom .home-device-window .devsign-loop { border: 0; border-radius: 0; }
+.project-zoom .home-device-phone { aspect-ratio: auto; height: 100%; width: 100%; padding-block: 4%; box-sizing: border-box; container-type: size; }
+.project-zoom .gemini-device { transform: none; filter: none; }
 .project-navigation-incoming { position: fixed; inset: 0; z-index: 19; overflow: clip; background: var(--bg); pointer-events: none; contain: layout paint; will-change: transform; }
 .project-navigation-incoming * { animation: none !important; transition: none !important; }
 
@@ -2390,7 +2399,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dh-muted: light-dark(#5e5e63, var(--muted));
   --dh-line: light-dark(#d6d6d6, var(--line));
   --dh-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2));
-  padding: 155px var(--dh-pad) 96px;
+  /* Fits one screen: the opener (brand, question, media, facts) sizes to the viewport height. */
+  padding: clamp(96px, 10svh, 128px) var(--dh-pad) 72px;
   background: light-dark(#f5f5f5, var(--surface));
   color: var(--dh-ink);
 }
@@ -2402,12 +2412,12 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .devsign-hero-intro { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
 .devsign-hero-brand { display: inline-flex; align-items: center; gap: 14px; margin: 0; font-size: 34px; line-height: 1.2; letter-spacing: -0.03em; }
 .devsign-hero-brand img { width: 42px; height: 40px; }
-.devsign-hero-title { max-width: min(1000px, 52vw); margin: 0; font-size: clamp(36px, 4.375vw, 84px); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.devsign-hero-title { max-width: min(1000px, 52vw); margin: 0; font-size: clamp(36px, min(4.375vw, 7.5svh), 84px); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
 .devsign-hero-title:focus { outline: none; }
 /* Figma window is 1440 x 759; the 16:10 loop is center-cropped into it. */
-.devsign-hero-media { aspect-ratio: 1440 / 759; margin-top: 80px; overflow: hidden; border: 1px solid var(--dh-line); border-radius: 14px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.12); }
+.devsign-hero-media { width: min(100%, calc((100svh - 640px) * 1440 / 759)); min-width: min(100%, 560px); aspect-ratio: 1440 / 759; margin: clamp(32px, 4svh, 64px) auto 0; overflow: hidden; border: 1px solid var(--dh-line); border-radius: 14px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.12); }
 .devsign-hero-media .devsign-loop { max-width: none; margin-top: -4.9%; border: 0; border-radius: 0; box-shadow: none; }
-.devsign-hero-details { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: 56px 0 0; }
+.devsign-hero-details { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: clamp(32px, 4svh, 56px) 0 0; }
 .devsign-hero-details > div { padding-top: 20px; border-top: 1px solid var(--dh-line); }
 .devsign-hero-details dt { color: var(--dh-muted); font-size: 13px; font-weight: 700; line-height: 1.35; letter-spacing: 0.03em; text-transform: uppercase; }
 .devsign-hero-details dd { margin: 10px 0 0; font-size: 18px; font-weight: 500; line-height: 1.5; }
@@ -2429,8 +2439,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    the display statement bottom right. Hovering a case pill recolours the
    object, swaps the copy and raises that case's device at the right. Always
    the dark media palette, whatever the site theme. */
-.intro-stage.home-stage, header[data-home]:not([data-compact]) { --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white'/%3E%3C/svg%3E") 12 12; --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='white'/%3E%3C/svg%3E") 16 16; }
-.intro-stage.home-stage { --bg: #080909; --surface: #151918; --ink: #e8ecea; --muted: #8e9895; --line: #262c2a; --accent: #7f93ff; --color-fill: rgb(255 255 255 / 0.08); --color-fill-strong: rgb(255 255 255 / 0.14); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); color-scheme: dark; }
+/* The landing follows the theme: near-black with a black chrome loop in dark, the page grey with a pearl chrome loop in light. */
+.intro-stage.home-stage { --bg: light-dark(#eef0ee, #080909); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); }
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
 .home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
 .home-backdrop[data-project] .intro-ambient { opacity: 0.35; }
@@ -2441,15 +2451,15 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-device-window .devsign-loop { max-width: none; margin: 0; border: 1px solid rgb(255 255 255 / 0.1); border-radius: 18px; box-shadow: none; }
 .home-device-phone { position: absolute; top: 50%; left: 50%; height: 115%; aspect-ratio: 1000 / 1100; translate: -50% -50%; container-type: size; display: grid; place-items: center; perspective: 1600px; }
 .home-device-phone .gemini-device { transform: rotateY(-22deg) rotateX(6deg) rotateZ(-6deg); filter: drop-shadow(0 40px 80px rgb(0 0 0 / 0.6)); }
-.home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 30%, rgb(8 9 9 / 0.6) 100%), linear-gradient(to top, rgb(8 9 9 / 0.85), transparent 45%), linear-gradient(to bottom, rgb(8 9 9 / 0.75), transparent 140px); pointer-events: none; }
+.home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 30%, color-mix(in srgb, var(--bg) 60%, transparent) 100%), linear-gradient(to top, color-mix(in srgb, var(--bg) 85%, transparent), transparent 45%), linear-gradient(to bottom, color-mix(in srgb, var(--bg) 75%, transparent), transparent 140px); pointer-events: none; }
 .intro-surface.home-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 24px 48px; height: 100%; padding: 104px var(--project-text-inset) 48px; overflow: visible; }
 .home-meta { grid-column: 2; grid-row: 1; justify-self: end; margin: 0; color: var(--muted); font: 500 13px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 /* Pinned to the vertical center, out of the grid flow, so the swapping paragraph and
    statement never move the pills under the pointer. */
 .home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
-.home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7); }
+.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
+.home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
 .home-pick[data-active] .home-pick-index { color: var(--ink); }
 .home-picks ol:has(.home-pick[data-active]) .home-pick:not([data-active]) { color: color-mix(in srgb, var(--ink) 72%, transparent); }
 .home-pick-index { font: 500 11px/1 var(--font-mono); color: var(--muted); }
@@ -2481,9 +2491,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 
 /* Over the dark landing stage the header controls and name read light, the
    controls get frosted pill backgrounds, and a scrim fades in behind them. */
-header[data-home]:not([data-compact]) { --ink: #e8ecea; --muted: #8e9895; --color-fill: rgb(255 255 255 / 0.1); --color-fill-strong: rgb(255 255 255 / 0.18); color: var(--ink); }
-header[data-home]:not([data-compact]) .header-menu-trigger { background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); }
-header[data-home]:not([data-compact]) .header-menu-trigger:hover { background: rgb(255 255 255 / 0.18); }
+body:has(.intro-stage.home-stage) header[data-home]:not([data-compact]) .header-menu-trigger { background: color-mix(in srgb, var(--ink) 10%, transparent); backdrop-filter: blur(12px); }
+body:has(.intro-stage.home-stage) header[data-home]:not([data-compact]) .header-menu-trigger:hover { background: color-mix(in srgb, var(--ink) 18%, transparent); }
 /* Gemini opener: same frame as Devsign, with the phone loop on the Gemini surface. */
 .devsign-hero[data-project="gemini-privacy"] .devsign-hero-media { position: relative; background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
 .devsign-hero-phone { position: absolute; top: 6%; left: 50%; display: block; height: 100%; aspect-ratio: 1000 / 1100; translate: -50% 0; }
