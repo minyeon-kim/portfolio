@@ -1450,14 +1450,7 @@ html, body, main { overflow-anchor: none; }
 .case-study[data-project="about"] .case-key { max-width: var(--case-media); margin: 8px auto clamp(40px, 5vw, 72px); padding: 4px 0 4px clamp(20px, 2.5vw, 32px); border-left: 3px solid var(--case-accent); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.3; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance; }
 .case-key strong { color: var(--case-accent); font-weight: 500; }
 .case-statement { max-width: var(--case-media); text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
-/* About: portrait beside the bio, then numbered rows for principles and work. */
-.about-intro { max-width: var(--case-media); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); align-items: start; margin-bottom: clamp(48px, 6vw, 96px); }
-.about-intro .case-media { margin: 0; }
-@media (min-width: 48rem) { .about-intro[data-portrait] { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
-.about-intro[data-portrait] > .case-media { width: 100%; max-width: 360px; }
-.about-bio p { max-width: 44ch; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.45; letter-spacing: -0.01em; }
-.about-bio p + p { margin-top: 1em; }
-.about-bio p:not(:first-child) { color: var(--muted); }
+/* About: numbered rows for principles and work. */
 .about-rows { display: grid; margin: 0; padding: 0; list-style: none; }
 .about-rows > li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding-block: 16px; }
 .about-rows-index { padding-top: 4px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; }
@@ -1472,7 +1465,6 @@ html, body, main { overflow-anchor: none; }
 .case-section-copy li:has(> .story-title) p:not(.story-label) { margin-bottom: 8px; }
 .about-rows-index { line-height: 1.6; }
 @media (max-width: 47.99rem) {
-  .about-intro { grid-template-columns: 1fr; align-items: start; }
   .about-rows > li { grid-template-columns: 1fr; gap: 8px; }
 }
 .about-skills { display: grid; gap: 0; }
@@ -1877,12 +1869,6 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
   .intro-surface[data-scroll-ready] :is(.intro-name, .intro-positioning) { text-align: center; }
 }
 
-/* About opener: a quiet label, then the headline as the page title, in the body column. */
-.about-hero { max-width: 880px; margin-inline: auto; padding: clamp(56px, 7vw, 120px) var(--project-text-inset) 0; box-sizing: content-box; }
-.about-hero-label { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.5; }
-.about-hero-title { margin: 0; color: var(--ink); font-family: var(--font-display), var(--font-sans); font-size: clamp(30px, 3.3vw, 48px); line-height: 1.1; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
-/* The display face has no Hangul, so the Korean headline stays in the sans. */
-html:lang(ko) .about-hero-title { font-family: var(--font-sans); font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; }
 
 /* Prototype slot: the frame the playable prototype will load into. */
 .case-prototype { max-width: 880px; margin: 0 auto clamp(40px, 5vw, 72px); }
@@ -2021,15 +2007,6 @@ html:lang(ko) .about-hero-title { font-family: var(--font-sans); font-size: clam
 }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
 
-/* About intro: a smaller portrait beside a short lead, vertically centered. */
-@media (min-width: 48rem) {
-  .about-intro[data-portrait] { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: center; gap: clamp(32px, 5vw, 72px); }
-}
-.about-intro[data-portrait] > .case-media { max-width: 300px; }
-.about-bio p:first-child { font-size: clamp(22px, 2vw, 28px); line-height: 1.35; letter-spacing: -0.02em; color: var(--ink); }
-.about-bio p + p { margin-top: 20px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.6; max-width: 46ch; }
-@media (max-width: 47.99rem) { .about-intro[data-portrait] > .case-media { max-width: 240px; } }
-@media (min-width: 48rem) { .about-hero-title > span { display: block; } }
 
 /* Phrase breaks (components/lines.tsx, " | " in titles): one phrase per line from md up. */
 @media (min-width: 48rem) { .line { display: block; } }
@@ -2493,7 +2470,11 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .devsign-hero-title:focus { outline: none; }
 /* Figma window is 1440 x 759; the 16:10 loop is center-cropped into it. */
 .devsign-hero-media { --dh-media-h: clamp(180px, calc(100svh - 600px), 720px); width: min(100%, calc(var(--dh-media-h) * 1440 / 759)); min-width: min(100%, 420px); aspect-ratio: 1440 / 759; margin: clamp(32px, 4svh, 64px) auto 0; overflow: hidden; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 20px; background: #141414; box-shadow: 0 48px 120px -24px rgb(0 0 0 / 0.45), 0 12px 32px -12px rgb(0 0 0 / 0.3); }
-.devsign-hero-window { display: flex; flex-direction: column; height: 100%; }
+.devsign-hero-window { position: relative; display: flex; flex-direction: column; height: 100%; }
+/* The live prototype link, a chip on the card instead of a browser bar. */
+.devsign-hero-visit { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; background: rgb(20 20 20 / 0.7); backdrop-filter: blur(12px); color: rgb(255 255 255 / 0.75); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; text-decoration: none; transition: color 150ms ease, background-color 150ms ease; }
+.devsign-hero-visit:hover { color: #fff; background: rgb(20 20 20 / 0.85); }
+.devsign-hero-visit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .devsign-hero-chrome { display: flex; align-items: center; gap: 8px; flex: none; height: 38px; padding: 0 16px; background: #1c1c1c; border-bottom: 1px solid rgb(255 255 255 / 0.08); }
 .devsign-hero-chrome span { width: 10px; height: 10px; border-radius: 50%; background: rgb(255 255 255 / 0.16); }
 .devsign-hero-chrome i { flex: 1; max-width: 320px; height: 20px; margin-inline: auto; border-radius: 999px; background: rgb(255 255 255 / 0.06); translate: -16px 0; }
@@ -2563,16 +2544,11 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="gemini-privacy"] .home-world-problem { right: auto; left: 52%; top: 22%; bottom: auto; width: min(100%, 28ch); }
 /* About (Midjourney): the facts card top right, the name bottom centre, the headline top centre, the bio bottom right. */
 .home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
-.home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 23%; translate: 0 16px; max-width: 40vw; white-space: normal; }
+.home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 17%; translate: 0 16px; max-width: min(46vw, 20ch); font-size: clamp(28px, 2.6vw, 44px); font-weight: 500; line-height: 1.08; letter-spacing: -0.02em; white-space: normal; text-wrap: balance; }
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
-/* About keeps the loop (the site's own object stands for the person) and lists the three principles under the headline. */
+/* About keeps the loop (the site's own object stands for the person); the headline is the statement, "End-to-end" set apart. */
 .home-backdrop[data-project="about"] .home-object { opacity: 1; }
 .home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%), #0b0d0e; }
-.home-world-list { --stagger: 140ms; position: absolute; left: var(--project-text-inset); top: calc(23% + 56px); display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; color: var(--ink); opacity: 0; translate: 0 16px; pointer-events: none; transition: opacity 220ms ease, translate 220ms var(--ease); }
-.home-world-list[data-on] { opacity: 1; translate: 0 0; transition: opacity 500ms ease var(--stagger), translate 650ms var(--ease) var(--stagger); }
-.home-world-list li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; font-weight: 500; line-height: 1.4; }
-.home-world-list li span { color: var(--muted); font-variant-numeric: tabular-nums; }
-@media (max-width: 63.99rem) { .home-world-list { display: none; } }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
 }
@@ -2596,8 +2572,11 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
    statement never move the pills under the pointer. */
 .home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
-.home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
+/* Same pill as the menu's page links (.header-menu-panel a). */
+.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 18px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--bg) 88%, transparent); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 16px; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, color 150ms ease; }
+.home-pick:hover, .home-pick:focus-visible { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); border-color: var(--muted); }
+.home-pick[data-active] { box-shadow: inset 0 0 0 1px var(--ink); }
+.home-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .home-pick[data-active] .home-pick-index { color: var(--ink); }
 .home-picks ol:has(.home-pick[data-active]) .home-pick:not([data-active]) { color: color-mix(in srgb, var(--ink) 72%, transparent); }
 .home-pick-index { font: 500 13px/1 var(--font-sans); font-variant-numeric: tabular-nums; color: var(--muted); }
@@ -2708,3 +2687,19 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .case-study[data-skin="dv"] .case-compare-row { grid-template-columns: 1fr; gap: 8px; }
   .case-study[data-skin="dv"] .case-stats dd { font-size: 36px; }
 }
+
+/* One phrase set apart: the line muted, the phrase in full ink (components/emphasis.tsx). */
+.has-emphasis { color: var(--muted); }
+.has-emphasis strong { color: var(--ink); font-weight: inherit; }
+
+/* About opens like a case page (the Devsign hero): name, headline, bio, facts. */
+.devsign-hero[data-project="about"] { --dh-glow: #6b7cff; --dh-glow-2: #a594ff; }
+.about-opener .devsign-hero-brand span:last-child { font-weight: 600; letter-spacing: -0.02em; }
+.about-hero-mark { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: var(--bg); font: 600 15px/1 var(--font-mono); letter-spacing: 0.02em; }
+.about-hero-line { display: block; }
+.about-hero-bio { display: flex; flex-direction: column; gap: 12px; max-width: 680px; color: var(--dh-muted); font-size: 18px; line-height: 1.6; }
+.about-hero-bio p { margin: 0; }
+.about-hero-bio p:first-child { color: var(--dh-ink); }
+.about-hero-portrait { width: min(100%, 320px); margin: clamp(32px, 4svh, 56px) auto 0; overflow: hidden; border-radius: 24px; }
+.about-hero-portrait img { display: block; width: 100%; height: auto; }
+.about-opener .devsign-hero-details { margin-top: clamp(40px, 6svh, 72px); }
