@@ -77,6 +77,7 @@ function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
         }}
       >
         <span aria-hidden="true" className="header-menu-icon" data-open={open || undefined}><span /><span /></span>
+        <span aria-hidden="true" className="header-menu-label">{open ? t.close : t.menu}</span>
       </button>
       {open && (
         <nav ref={panel} id="site-menu" aria-label={t.siteNav} className="header-menu-panel">
