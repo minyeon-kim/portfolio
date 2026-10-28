@@ -2308,6 +2308,9 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-donut-track { stroke: var(--dv-line); }
 .dv-donut-value { stroke: var(--case-accent); }
 .dv-donut-missed { stroke: var(--dv-alert); }
+/* The ring fills from 12 o'clock as its row scrolls into view (rows already stagger via .reveal). */
+.reveal-ready .dv-scores li .dv-donut-value { transition: stroke-dasharray 1400ms cubic-bezier(0.22, 1, 0.36, 1) 250ms; }
+.reveal-ready .dv-scores li:not([data-shown]) .dv-donut-value { stroke-dasharray: 0 400; }
 .dv-donut-value-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; line-height: 1.4; }
 .dv-donut-value-text small { margin-top: -4px; color: var(--dv-muted); font-size: 12px; font-weight: 500; }
 .dv-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
@@ -2375,9 +2378,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-nav { top: calc(50vh - 102px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--project-text-inset) - 24px); height: 204px; margin: 0 0 0 calc(var(--project-text-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
   /* The list has a real box so sticky keeps it inside the case; the first section climbs back over that box. */
   .dv-nav + section { margin-top: -204px; }
-  .dv-nav-links a { position: relative; padding-left: 14px; }
-  .dv-nav-links a::before { content: ""; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--case-accent); translate: 0 -50%; scale: 0; transition: scale var(--dur-fast) var(--ease); }
-  .dv-nav-links a[aria-current]::before { scale: 1; }
   .dv-nav-links { flex-direction: column; gap: 12px; overflow: visible; }
 }
 @media (max-width: 63.99rem) {
@@ -2529,13 +2529,18 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-world-problem { --stagger: 180ms; }
 .home-world-role { left: 50%; top: 23%; translate: -50% 16px; font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
 .home-world-role[data-on] { translate: -50% 0; }
+/* Devsign: the role sits just above the name, clear of the card at the top right. */
+.home-stage[data-world="workflow-app"] .home-world-role { left: 26%; top: auto; bottom: calc(40% + 16px); translate: 0 16px; }
+.home-stage[data-world="workflow-app"] .home-world-role[data-on] { translate: 0 0; }
 .home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-display), var(--font-sans); font-size: clamp(56px, 7vw, 128px); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; text-wrap: balance; }
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 15px; font-weight: 500; line-height: 1.55; }
 /* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
 /* Gemini (Robinhood): a portrait card cropped at the bottom right, the name at the left of centre, the role under it, the problem top centre-right. */
 .home-device[data-project="gemini-privacy"] { top: auto; bottom: -8vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
-.home-stage[data-world="gemini-privacy"] .home-world-name { left: 18%; top: 44%; max-width: 44vw; font-size: clamp(48px, 6vw, 104px); }
-.home-stage[data-world="gemini-privacy"] .home-world-role { left: 18%; top: auto; bottom: 30%; translate: 0 16px; }
+/* The name starts clear of the pill column and stops short of the card (which begins at 68vw, or 102vw - 520px once the card caps). */
+.home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 300px)); }
+.home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: 44%; max-width: calc(min(68vw, 102vw - 520px) - var(--gx) - 48px); font-size: clamp(44px, 5.4vw, 104px); }
+.home-stage[data-world="gemini-privacy"] .home-world-role { left: var(--gx); top: auto; bottom: calc(56% + 16px); translate: 0 16px; }
 .home-stage[data-world="gemini-privacy"] .home-world-role[data-on] { translate: 0 0; }
 .home-stage[data-world="gemini-privacy"] .home-world-problem { right: auto; left: 52%; top: 22%; bottom: auto; width: min(100%, 28ch); }
 /* About (Midjourney): the facts card top right, the name bottom centre, the headline top centre, the bio bottom right. */
@@ -2702,3 +2707,8 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .about-hero-portrait img { display: block; width: 100%; height: auto; }
 .about-opener .devsign-hero-details { margin-top: clamp(40px, 6svh, 72px); }
 
+
+/* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
+@media (min-width: 75rem) {
+  .dv, .case-study[data-skin="dv"] { --dv-pad: max(224px, 12.5vw, calc((100vw - 1440px) / 2)); }
+}
