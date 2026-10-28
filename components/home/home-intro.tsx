@@ -22,8 +22,11 @@ type Props = { projects: StageProject[]; onSelect: (index: number, from?: HTMLEl
 // positioning: the first half as the big statement bottom right, the second
 // half as the paragraph bottom left. Hovering or focusing a project pill swaps
 // them to that case: its name, its problem line, the object takes its colour,
-// and the case's device rises in at the right. About me shows the name as the
-// statement over the whole positioning line.
+// and the case's media rises in as a flat card at the top right (after
+// metalab.com's project photo: its own frame, no 3D pose — the Devsign
+// browser window with the live prototype, or the Gemini phone on its blue
+// surface). About me shows the name as the statement over the whole
+// positioning line.
 export function HomeIntro({ projects, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
@@ -73,7 +76,7 @@ export function HomeIntro({ projects, onSelect }: Props) {
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
-              ? <div className="home-device-window">{live ? <DevsignLive alt="" /> : <DevsignLoop alt="" />}</div>
+              ? <div className="home-device-window"><div className="devsign-hero-chrome" aria-hidden="true"><span /><span /><span /><i /></div>{live ? <DevsignLive alt="" /> : <DevsignLoop alt="" />}</div>
               : p.slug === "gemini-privacy"
                 ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
                 : null}
