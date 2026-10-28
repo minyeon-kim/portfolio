@@ -16,10 +16,24 @@ type Study = Record<string, any>;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+// Frames where the Figma file shows an image at a fixed size with its own crop:
+// frame aspect ratio, then the image's width, height, left and top in % of the frame.
+const CROPS: Record<string, [number, number, number, number, number]> = {
+  "/images/devsign/affinity-board.webp": [1440 / 487, 100.04, 100.97, -0.02, -0.97],
+  "/images/devsign/information-architecture.webp": [1440 / 279, 102.77, 115.63, -1.23, -10.74],
+  "/images/devsign/user-flow.webp": [1440 / 351, 104.71, 126.42, -2.27, -18.71],
+  "/images/devsign/value-effort-matrix.webp": [376 / 440, 103.73, 107.53, -1.87, -5.91],
+  "/images/devsign/codesign-session.webp": [700 / 421, 108.84, 118.47, -4.38, -13.12],
+};
+
 function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" }: { img: Img; sizes?: string; className?: string }) {
+  const crop = CROPS[img.src];
+  const image = <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} />;
   return (
     <figure className={`dv-figure reveal ${className}`}>
-      <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} />
+      {crop ? (
+        <div className="dv-crop" style={{ aspectRatio: crop[0], "--w": `${crop[1]}%`, "--h": `${crop[2]}%`, "--l": `${crop[3]}%`, "--t": `${crop[4]}%` } as React.CSSProperties}>{image}</div>
+      ) : image}
       {img.caption && <figcaption>{img.caption}</figcaption>}
     </figure>
   );
@@ -139,7 +153,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
   return (
     <div className="dv">
-      <DevsignNav items={nav} title={labels.navTitle} />
+      <DevsignNav items={nav} />
 
       <Section id="overview" title="Overview">
         <p className="dv-headline reveal">
@@ -225,7 +239,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         </div>
 
-        <div className="dv-subsection">
+        <div className="dv-subsection dv-rule">
           <Block {...discover.interview} />
           <div className="dv-two dv-gap-40 dv-center">
             <Figure img={discover.interview.photo} sizes="(max-width: 767px) 100vw, 50vw" className="dv-photo" />
