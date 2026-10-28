@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
+import { DevsignLive } from "@/components/devsign-live";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { HeroObject } from "./hero-object";
@@ -36,6 +37,10 @@ export function HomeIntro({ projects, onSelect }: Props) {
   // name and the whole positioning line for About me. Kept while it fades out.
   const next = shown ? { name: shown.name, text: shown.problem } : about ? { name: site.name, text: t.positioning } : null;
   if (next && (next.name !== recent?.name)) setRecent(next);
+  // The live Devsign prototype starts loading the first time its pill is
+  // hovered, so it is ready by the click.
+  const [live, setLive] = useState(false);
+  if (hover === "workflow-app" && !live) setLive(true);
 
   const open = (slug: string) => {
     if (slug === "about") {
@@ -60,7 +65,7 @@ export function HomeIntro({ projects, onSelect }: Props) {
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
-              ? <div className="home-device-window"><DevsignLoop alt="" /></div>
+              ? <div className="home-device-window">{live ? <DevsignLive alt="" /> : <DevsignLoop alt="" />}</div>
               : p.slug === "gemini-privacy"
                 ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
                 : null}
