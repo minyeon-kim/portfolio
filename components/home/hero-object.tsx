@@ -124,10 +124,15 @@ export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; 
   "workflow-app": { tints: [[0.38, 0.26, 0.9], [0.6, 0.42, 1.0], [0.7, 0.62, 1.0]], spread: -0.4, focus: 0.6 },
 };
 
-export function HeroObject({ variant = "default", className }: { variant?: string; className?: string }) {
+// `active` false (a world covers the loop) stops drawing after the fade, so
+// the GPU is free for the prototype frame.
+export function HeroObject({ variant = "default", active = true, className }: { variant?: string; active?: boolean; className?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const state = useRef(variant);
   useEffect(() => { state.current = variant; }, [variant]);
+  const running = useRef(active);
+  const idleSince = useRef<number | null>(null);
+  useEffect(() => { running.current = active; idleSince.current = active ? null : performance.now(); }, [active]);
 
   useEffect(() => {
     const el = canvas.current;
@@ -191,7 +196,8 @@ export function HeroObject({ variant = "default", className }: { variant?: strin
       frame = requestAnimationFrame(draw);
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      const paused = !visible || document.hidden || document.documentElement.hasAttribute("data-project-navigation");
+      const covered = !running.current && idleSince.current !== null && now - idleSince.current > 800;
+      const paused = !visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation");
       if (paused) return;
       if (now - lastDraw < 1000 / 30) return;
       lastDraw = now;
