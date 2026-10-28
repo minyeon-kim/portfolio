@@ -2565,12 +2565,14 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
 .home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 23%; translate: 0 16px; max-width: 40vw; white-space: normal; }
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
-.home-about-card { position: absolute; inset: 0; background: #121415; }
-.home-about-card img { object-fit: cover; object-position: 50% 40%; }
-.home-about-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 45%); pointer-events: none; }
-.home-about-card-chip, .home-about-card-cta { position: absolute; bottom: 20px; z-index: 1; padding: 6px 12px; border-radius: 999px; color: #fff; font-size: 13px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
-.home-about-card-chip { left: 20px; background: rgb(0 0 0 / 0.55); backdrop-filter: blur(8px); }
-.home-about-card-cta { right: 20px; padding-inline: 0; }
+/* About keeps the loop (the site's own object stands for the person) and lists the three principles under the headline. */
+.home-backdrop[data-project="about"] .home-object { opacity: 1; }
+.home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%), #0b0d0e; }
+.home-world-list { --stagger: 140ms; position: absolute; left: var(--project-text-inset); top: calc(23% + 56px); display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; color: var(--ink); opacity: 0; translate: 0 16px; pointer-events: none; transition: opacity 220ms ease, translate 220ms var(--ease); }
+.home-world-list[data-on] { opacity: 1; translate: 0 0; transition: opacity 500ms ease var(--stagger), translate 650ms var(--ease) var(--stagger); }
+.home-world-list li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; font-weight: 500; line-height: 1.4; }
+.home-world-list li span { color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 63.99rem) { .home-world-list { display: none; } }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
 }
