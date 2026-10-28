@@ -47,12 +47,15 @@ function readSource(slug: string, locale: Locale = "en") {
 }
 
 // Runs at build time only (static export), so reading the filesystem is fine.
-export function getCaseSlugs(): string[] {
+// A locale only lists cases that have a file in that locale (the draft
+// template has no Korean copy).
+export function getCaseSlugs(locale: Locale = "en"): string[] {
   return fs
     .readdirSync(CASES_DIR)
     .filter((file) => file.endsWith(".mdx"))
     .map((file) => file.replace(/\.mdx$/, ""))
-    .filter((slug) => !(isProd && /^\s*draft:\s*true/m.test(readSource(slug))));
+    .filter((slug) => !(isProd && /^\s*draft:\s*true/m.test(readSource(slug))))
+    .filter((slug) => locale === "en" || fs.existsSync(path.join(casesDir(locale), `${slug}.mdx`)));
 }
 
 // Reads `- **Problem:** ...` style lines from the <TLDR> block (Korean cases
@@ -103,7 +106,7 @@ export async function getCase(slug: string, locale: Locale = "en") {
 
 export async function getCases(locale: Locale = "en"): Promise<CaseEntry[]> {
   const entries = await Promise.all(
-    getCaseSlugs().map(async (slug) => {
+    getCaseSlugs(locale).map(async (slug) => {
       const { meta, tldr, decisions } = await getCase(slug, locale);
       return { slug, meta, tldr, decisions };
     }),

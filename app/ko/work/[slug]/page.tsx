@@ -1,6 +1,6 @@
 import { CasePage, caseMetadata, caseParams } from "@/components/pages/case-page";
 
-export const generateStaticParams = caseParams;
+export const generateStaticParams = () => caseParams("ko");
 
 export async function generateMetadata({ params }: PageProps<"/ko/work/[slug]">) {
   return caseMetadata((await params).slug, "ko");
