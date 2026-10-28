@@ -53,8 +53,19 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     : about && aboutCopy
       ? { slug: "about", role: aboutCopy.headline, name: site.name, text: aboutCopy.bio }
       : null;
-  const [recentWorld, setRecentWorld] = useState<World | null>(null);
-  if (world && world.slug !== recentWorld?.slug) setRecentWorld(world);
+  // The copy changes in two beats (metalab.com): the current world's lines
+  // leave (220ms) before the next world's lines arrive, staggered. `displayed`
+  // trails `world` by that beat; while they differ the lines are hidden.
+  const [displayed, setDisplayed] = useState<World | null>(null);
+  const worldRef = useRef(world);
+  useEffect(() => { worldRef.current = world; });
+  const worldSlug = world?.slug ?? null, displayedSlug = displayed?.slug ?? null;
+  useEffect(() => {
+    if (worldSlug === displayedSlug) return;
+    const timer = setTimeout(() => setDisplayed(worldRef.current), 220);
+    return () => clearTimeout(timer);
+  }, [worldSlug, displayedSlug]);
+  const copyOn = world !== null && displayed !== null && world.slug === displayed.slug;
   // The live Devsign prototype starts loading the first time its pill is
   // hovered, so it is ready by the click.
   const [live, setLive] = useState(false);
@@ -141,9 +152,9 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
-        {recentWorld?.role && <p className="home-world-role" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld.role}</p>}
-        <p className="home-world-name" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld?.name}</p>
-        <p className="home-world-problem" data-on={world ? "" : undefined} aria-hidden={!world}>{recentWorld?.text}</p>
+        {displayed?.role && <p className="home-world-role" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed.role}</p>}
+        <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name}</p>
+        <p className="home-world-problem" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.text}</p>
       </div>
     </section>
   );
