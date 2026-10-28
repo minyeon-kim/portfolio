@@ -10,9 +10,9 @@ const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "sw
 export type DevsignHeroData = { title: string; details: { label: string; value: string }[] };
 
 // The case opener, after the Figma "Hero" frame of the Devsign case study: logo
-// and wordmark, a centered question, the prototype loop in a framed window
-// (the frame's note asks for a looping recording), then Duration / Team / Role
-// / Tools. Gemini uses the same layout with its own sparkle and phone loop.
+// and wordmark, a centered question, the prototype loop in a browser window
+// over a soft project-coloured glow, then Duration / Team / Role / Tools.
+// Gemini uses the same layout with its own sparkle and phone loop.
 // Used on the direct case page and on the home page's selected stage.
 export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroData; name: string; alt: string; project: string }) {
   const gemini = project === "gemini-privacy";
@@ -28,7 +28,12 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         <h1 tabIndex={-1} className="devsign-hero-title">{hero.title}</h1>
       </div>
       <div className="devsign-hero-media">
-        {gemini ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span> : <DevsignLoop alt={alt} />}
+        {gemini
+          ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span>
+          : <div className="devsign-hero-window">
+              <div className="devsign-hero-chrome" aria-hidden="true"><span /><span /><span /><i /></div>
+              <DevsignLoop alt={alt} />
+            </div>}
       </div>
       <dl className="devsign-hero-details">
         {hero.details.map(({ label, value }) => (

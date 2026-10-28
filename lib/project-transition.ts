@@ -231,11 +231,12 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // pills, media) lifts and blurs away in 140ms, so it can't linger as a
       // ghost, while its canvas stays as the ground the new page rises onto
       // (10vh, fading in from 160ms). No seam, no afterimage.
-      // With the device layer: wait for it to fill the screen, then fade the
-      // new page in while the device shrinks into the opener's media frame.
+      // With the device layer: wait for it to fill the screen, hold it there a
+      // moment (the prototype keeps playing), then fade the new page in while
+      // the device shrinks into the opener's media frame.
       const wait = layer ? Math.max(0, grow - (performance.now() - zoomStart)) : 0;
       const timing = layer
-        ? { duration: 750, delay: wait + 60, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
+        ? { duration: 750, delay: wait + 700, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
         : { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       animations.push(snapshot.animate(
         [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, -2vh, 0)", opacity: 0, filter: "blur(6px)" }],
