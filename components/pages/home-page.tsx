@@ -26,6 +26,7 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           timeline: meta.timeline,
           cover: meta.cover,
           concept: meta.concept,
+          hero: meta.hero,
         }))}
         name={site.name}
         intro={<h1 className="intro-headline"><AlignWords text={ui[locale].positioning} /></h1>}

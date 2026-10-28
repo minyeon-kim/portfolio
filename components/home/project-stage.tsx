@@ -14,6 +14,7 @@ import { IntroShowcase } from "./intro-showcase";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DevsignLoop } from "@/components/devsign-loop";
+import { DevsignHero, type DevsignHeroData } from "@/components/devsign-hero";
 import { withBase } from "@/lib/site";
 
 export type StageProject = {
@@ -25,6 +26,7 @@ export type StageProject = {
   timeline?: string;
   cover?: string;
   concept?: boolean;
+  hero?: DevsignHeroData; // Figma-style opener instead of the title and growing cover
 };
 
 type Props = { projects: StageProject[]; name: string; intro: ReactNode };
@@ -59,8 +61,9 @@ export function ProjectStage({ projects, name, intro }: Props) {
     </section>
       )}
       {p && (
-      <section id="work" aria-label={`${p.name}, selected case`} className="project-selected stage-pin full-bleed md:-mt-[64px]">
-        <div key={p.slug} id="stage-panel" data-stage-index={active} className="selected-stage" data-canvas={p.slug === "workflow-app" || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
+      <section id="work" aria-label={`${p.name}, selected case`} className={p.hero ? "project-selected full-bleed md:-mt-[64px]" : "project-selected stage-pin full-bleed md:-mt-[64px]"}>
+        <div key={p.slug} id="stage-panel" data-stage-index={active} className={p.hero ? "selected-stage selected-stage-hero" : "selected-stage"} data-canvas={(p.slug === "workflow-app" && !p.hero) || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
+          {p.hero ? <DevsignHero hero={p.hero} name={p.name} alt={`${p.name}: a drifted button is flagged, reviewed and approved`} /> : <>
           <div className="stage-content selected-stage-copy">
             <p className="selected-stage-index">{t.project} {(active ?? 0) + 1}</p>
             <h1 tabIndex={-1} className="selected-stage-title generated-title"><ProjectTitle name={p.name} gemini={p.slug === "gemini-privacy"} /></h1>
@@ -77,6 +80,7 @@ export function ProjectStage({ projects, name, intro }: Props) {
                 ? <DevsignLoop alt={`${p.name}: a drifted button is flagged, reviewed and approved`} />
                 : p.cover && <Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" />}</div></div>
           </div>
+          </>}
           <div className="selected-stage-picker flex justify-center px-2 py-3 lg:hidden">
             <Segmented label={t.selectedWork} options={projects.map((x) => ({ id: x.slug, label: x.name }))} value={active} onChange={select} />
           </div>
