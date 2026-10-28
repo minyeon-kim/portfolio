@@ -6,18 +6,18 @@ import { getCase, getCaseSlugs, getOtherCases } from "@/lib/cases";
 import type { Locale } from "@/lib/i18n";
 
 // A case study page; /work/[slug] and /ko/work/[slug] both render it.
-export function caseParams() {
-  return getCaseSlugs().map((slug) => ({ slug }));
+export function caseParams(locale: Locale = "en") {
+  return getCaseSlugs(locale).map((slug) => ({ slug }));
 }
 
 export async function caseMetadata(slug: string, locale: Locale): Promise<Metadata> {
-  if (!getCaseSlugs().includes(slug)) return {};
+  if (!getCaseSlugs(locale).includes(slug)) return {};
   const { meta, tldr } = await getCase(slug, locale);
   return { title: meta.title, description: tldr.problem };
 }
 
 export async function CasePage({ slug, locale = "en" }: { slug: string; locale?: Locale }) {
-  if (!getCaseSlugs().includes(slug)) notFound();
+  if (!getCaseSlugs(locale).includes(slug)) notFound();
   const { meta, Content } = await getCase(slug, locale);
   const others = await getOtherCases(slug, locale);
 
