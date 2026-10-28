@@ -2,7 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { CopyButton } from "@/components/copy-button";
+import { Emphasis } from "@/components/emphasis";
 import { CaseMedia, CaseMediaPair, CaseSection } from "@/components/case-story";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
@@ -15,6 +17,7 @@ import { site, withBase } from "@/lib/site";
 const copy = {
   en: {
     label: "About", portrait: "Portrait", concept: "Concept",
+    facts: [["Background", "Four years of security consulting at SK shieldus"], ["Focus", "Privacy, security and developer tools"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     sections: [["01 / What I bring", "What I bring to a team"], ["02 / Selected work", "Recent projects"], ["03 / Experience", "From cybersecurity to design"], ["04 / Toolkit", "What I work with"], ["05 / Outside work", "Off the screen"], ["06 / Contact", "Get in touch"]],
     columns: ["Research", "Design & build", "Background"],
     photos: ["Photo of Minyeon at work", "Workshop, study group or talk"],
@@ -23,6 +26,7 @@ const copy = {
   },
   ko: {
     label: "소개", portrait: "프로필 사진", concept: "컨셉",
+    facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["관심 분야", "프라이버시, 보안, 개발자 도구"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     sections: [["01 / 강점", "팀에 더할 수 있는 것"], ["02 / 작업", "최근 프로젝트"], ["03 / 경력", "보안에서 디자인으로"], ["04 / 도구", "주로 쓰는 것"], ["05 / 일 밖에서", "화면 밖의 저"], ["06 / 연락", "연락하기"]],
     columns: ["리서치", "디자인과 구현", "배경"],
     photos: ["일하는 모습", "워크숍, 스터디 또는 발표"],
@@ -35,11 +39,12 @@ export function aboutMetadata(locale: Locale): Metadata {
   return { title: copy[locale].label, description: (locale === "ko" ? ko : en).bio[0] ?? site.positioning };
 }
 
-// Headline as the page title, a portrait beside a short bio,
-// then numbered sections. Photo spots are labelled placeholders until real
-// photos exist.
+// Opens like a case page (the Devsign hero): the name as the brand line, the
+// headline centered with its emphasis set apart, the short bio, the portrait
+// once it exists, then four facts. Numbered sections follow. Photo spots are
+// labelled placeholders until real photos exist.
 export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
-  const { default: Story, bio, headline, principles, skills } = locale === "ko" ? ko : en;
+  const { default: Story, bio, headline, headlineEmphasis, principles, skills } = locale === "ko" ? ko : en;
   const c = copy[locale];
   const columns = [
     { title: c.columns[0], items: skills.research },
@@ -55,22 +60,36 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <div data-about-page className="project-detail">
-      {/* The headline is the page title; "About" is only a label above it. */}
-      <header className="about-hero">
-        <p className="about-hero-label">{c.label}</p>
-        <h1 className="about-hero-title">{headline.map((line) => <span key={line}>{line} </span>)}</h1>
+      {/* The headline is the page title; the name sits above it like a case's brand line. */}
+      <header className="project-hero devsign-hero-page">
+        <div className="devsign-hero about-opener" data-project="about">
+          <div className="devsign-hero-intro">
+            <p className="devsign-hero-brand"><span className="about-hero-mark" aria-hidden="true">{site.name.split(" ").map((w) => w[0]).join("")}</span><span>{site.name}</span></p>
+            <h1 tabIndex={-1} className="devsign-hero-title has-emphasis">
+              {headline.map((line) => <span key={line} className="about-hero-line"><Emphasis text={line} phrase={headlineEmphasis} /> </span>)}
+            </h1>
+            <div className="about-hero-bio">
+              {bio.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+          </div>
+          {hasPortrait && (
+            <div className="about-hero-portrait">
+              <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
+            </div>
+          )}
+          <dl className="devsign-hero-details">
+            {c.facts.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </header>
       <article className="case-study" data-project="about">
         <div className="case-content">
-          <div className="about-intro" data-portrait>
-            {hasPortrait
-              ? <CaseMedia variant="portrait" src={portrait} width={1200} height={1500} label={c.portrait} />
-              : <CaseMedia variant="portrait" label={c.portrait} />}
-            <div className="about-bio">
-              {bio.map((paragraph) => <p key={paragraph} className="reveal">{paragraph}</p>)}
-              <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
-            </div>
-          </div>
+          <Todo>add a portrait at public/images/about/portrait.webp (it appears in the opener); add where you are based and whether you are open to relocation or remote roles</Todo>
 
           <CaseSection id="approach" label={c.sections[0][0]} title={c.sections[0][1]}>
             <ol className="about-rows">
