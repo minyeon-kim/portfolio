@@ -2140,6 +2140,12 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-svg-accent { fill: var(--case-accent); }
 .dv-svg-second { fill: var(--dv-second); }
 
+.dv-main-features { margin-top: 120px; }
+.dv-features .dv-caps { margin-bottom: 4px; color: var(--case-accent); font-size: 13px; }
+.dv-link { margin-top: 24px; font-size: 18px; font-weight: 500; }
+.dv-link a { color: var(--case-accent); text-decoration: none; }
+.dv-link a:hover, .dv-link a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+
 /* Discover */
 .dv-question { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--dv-line); }
 .dv-answer { max-width: 1100px; margin-top: 8px; font-size: clamp(20px, 1.8vw, 24px); font-weight: 700; line-height: 1.3; }
