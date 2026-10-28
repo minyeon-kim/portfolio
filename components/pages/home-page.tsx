@@ -4,7 +4,6 @@ import { ProjectStage } from "@/components/home/project-stage";
 import { AlignWords } from "@/components/home/align-words";
 import { SideRail } from "@/components/home/side-rail";
 import { getCase, getCases } from "@/lib/cases";
-import { site } from "@/lib/site";
 import { ui, type Locale } from "@/lib/i18n";
 
 // The landing page: an intro (name + positioning, pick a case), then, once a
@@ -28,7 +27,6 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           concept: meta.concept,
           hero: meta.hero,
         }))}
-        name={site.name}
         intro={<h1 className="intro-headline"><AlignWords text={ui[locale].positioning} /></h1>}
       />
       <CasePanels>
