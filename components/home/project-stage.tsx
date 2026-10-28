@@ -44,12 +44,12 @@ export function ProjectStage({ projects }: Props) {
   // From a case pill, the hovered device grows to the screen and settles into
   // the opener's media frame; from elsewhere (segmented control, More work)
   // the page just rises in.
-  const select = (index: number, from?: HTMLElement | null) => {
+  const select = (index: number, from?: HTMLElement | null, prepared?: HTMLElement | null) => {
     const project = projects[index];
     revealNextProject(
       () => setUi({ activeCase: index }),
       () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)),
-      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug, live: project.slug === "workflow-app" ? DEVSIGN_URL : undefined } : undefined,
+      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug, live: project.slug === "workflow-app" ? DEVSIGN_URL : undefined, prepared: prepared ?? undefined } : undefined,
     );
   };
   const p = active !== null ? projects[active] : null;
