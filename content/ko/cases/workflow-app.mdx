@@ -224,15 +224,31 @@ AI 협업은 새로 생긴 문제라 자료가 적어서 먼저 넓게 조사했
 
 <CaseKey>기능은 그대로, <strong>읽을 것은 훨씬 적게.</strong></CaseKey>
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/v1-review.webp" width={960} height={540} variant="screen" label="이전: 글과 코드 중심의 v1 변경 확인" caption="이전 · 변경 확인 (10.07): 글과 코드가 먼저, 결정 버튼은 근거와 멀리 떨어짐." />
-  <CaseMedia src="/images/cases/workflow-app/v2-review.webp" width={960} height={540} variant="screen" label="이후: 결정이 위에 있는 시각적 비교 v2 변경 확인" caption="이후 · 변경 확인 (10.16): 지금 내 차례인 단계와 결정이 먼저." />
-</CaseMediaPair>
+<CaseToggle
+  labels={["이전", "이후"]}
+  width={960}
+  height={540}
+  before={{ src: "/images/cases/workflow-app/v1-review.webp", alt: "이전: 글과 코드 중심의 v1 변경 확인", caption: "이전 · 변경 확인 (10.07): 글과 코드가 먼저, 결정 버튼은 근거와 멀리 떨어짐." }}
+  after={{ src: "/images/cases/workflow-app/v2-review.webp", alt: "이후: 결정이 위에 있는 시각적 비교 v2 변경 확인", caption: "이후 · 변경 확인 (10.16): 지금 내 차례인 단계와 결정이 먼저." }}
+  changes={[
+    { title: "읽지 않고 보는 차이", before: "값과 토큰을 글로 나열.", after: "화면 위 버튼에 바로 표시.", a: [28.96, 29.07, 41.15, 14.81], b: [18.23, 50.0, 29.17, 11.11] },
+    { title: "내 차례가 먼저", before: "코드가 가득한 선택지 카드 3개.", after: "나에게 온 결정과 그 요청을 위에.", a: [28.96, 55.56, 41.15, 38.52], b: [63.54, 51.85, 33.85, 19.44] },
+    { title: "따라가기 쉬운 진행 상황", before: "옆으로 밀려난 진행 목록.", after: "위쪽 5단계: 2/5, 지금 누구 차례인지.", a: [74.27, 30.56, 24.17, 39.81], b: [63.33, 34.26, 33.85, 16.67] },
+  ]}
+/>
 
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/workflow-app/v1-merge.webp" width={960} height={540} variant="screen" label="이전: 별도 화면에서 시안을 통째로 고르는 v1 Merge Studio" caption="이전 · Merge Studio (10.07): 별도 화면, 시안을 통째로만." />
-  <CaseMedia src="/images/cases/workflow-app/v2-merge.webp" width={960} height={540} variant="screen" label="이후: 여러 시안에서 영역을 골라 합치는 v2 병합 탭" caption="이후 · 병합 탭 (10.16): 같은 창에서 시안마다 영역을 골라 합침." />
-</CaseMediaPair>
+<CaseToggle
+  labels={["이전", "이후"]}
+  width={960}
+  height={540}
+  before={{ src: "/images/cases/workflow-app/v1-merge.webp", alt: "이전: 별도 화면에서 시안을 통째로 고르는 v1 Merge Studio", caption: "이전 · Merge Studio (10.07): 별도 화면, 시안을 통째로만." }}
+  after={{ src: "/images/cases/workflow-app/v2-merge.webp", alt: "이후: 여러 시안에서 영역을 골라 합치는 v2 병합 탭", caption: "이후 · 병합 탭 (10.16): 같은 창에서 시안마다 영역을 골라 합침." }}
+  changes={[
+    { title: "같은 창에서", before: "작업 공간을 떠나는 별도 화면.", after: "변경 확인 옆 병합 탭, 같은 창.", a: [26.88, 0.93, 54.17, 4.63], b: [88.13, 7.41, 7.5, 4.44] },
+    { title: "영역별로 고르기", before: "시안을 통째로 나란히.", after: "헤더·요약·결제 수단·결제 바를 시안마다.", a: [50.0, 37.96, 28.33, 21.3], b: [62.81, 23.7, 23.96, 4.44] },
+    { title: "어디서 왔는지 보이게", before: "오른쪽의 코드 파일 트리.", after: "영역마다 출처 시안 표시.", a: [80.94, 7.41, 17.19, 76.85], b: [31.77, 60.37, 17.71, 13.33] },
+  ]}
+/>
 
 <CaseCompare
   before="이전"

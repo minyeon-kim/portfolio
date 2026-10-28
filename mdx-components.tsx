@@ -9,6 +9,7 @@ import { TLDR } from "@/components/mdx/tldr";
 import { WhyIChose } from "@/components/mdx/why-i-chose";
 import { CaseSection, CaseMedia, CaseMediaPair, CasePrototype, CaseStatement } from "@/components/case-story";
 import { CaseGallery } from "@/components/case-gallery";
+import { CaseToggle } from "@/components/case-toggle";
 import { CaseCompare, CaseDiamond, CaseFindings, CaseKey, CaseStats } from "@/components/case-facts";
 import { Todo } from "@/components/todo";
 import { slugify } from "@/lib/slug";
@@ -68,6 +69,7 @@ const components: MDXComponents = {
   CaseSection,
   CaseMedia,
   CaseMediaPair,
+  CaseToggle,
   CasePrototype,
   CaseStatement,
   TLDR,
