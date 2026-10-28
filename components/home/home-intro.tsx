@@ -14,10 +14,12 @@ type Props = { projects: StageProject[]; onSelect: (index: number) => void };
 type Phase = "idle" | "typing" | "sending" | "leaving";
 
 // The landing stage, after metalab.com's home: one dark screen, no scroll.
-// Left: the case picker as pills (hover previews the case behind the copy,
-// click opens it). Top right: the second half of the positioning line. Bottom
-// right: the first half as the big serif statement (Decrypted on load). Bottom
-// left: the local chat, a slim composer with three question chips; a chip types
+// Left: the case picker as pills. With nothing (or About me) hovered the stage
+// reads the positioning: ambient light behind, the second half top right, the
+// first half as the big statement bottom right (Decrypted on load). Hovering or
+// focusing a project pill swaps all three to that case: its hero loop behind,
+// its name as the statement, its problem line as the paragraph. Bottom left:
+// the local chat, a slim composer with three question chips; a chip types
 // its question, shows a pre-written one-line answer while the matching pill
 // and backdrop highlight, then the case opens with the shared transition.
 export function HomeIntro({ projects, onSelect }: Props) {
@@ -32,6 +34,7 @@ export function HomeIntro({ projects, onSelect }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [asked, setAsked] = useState<number | null>(null);
   const [hover, setHover] = useState<string | null>(null);
+  const [recent, setRecent] = useState<StageProject | null>(null);
   const [message, setMessage] = useState("");
   const busy = phase !== "idle";
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
@@ -39,8 +42,10 @@ export function HomeIntro({ projects, onSelect }: Props) {
   const questions = t.homeQuestions;
   const choices = [...projects, { slug: "about", name: t.aboutMe }];
   const target = asked === null ? null : questions[asked].slug;
-  // The backdrop shows the asked case, else the hovered one, else the first.
-  const active = projects.some((p) => p.slug === (target ?? hover)) ? (target ?? hover) : projects[0]?.slug;
+  // The asked case, else the hovered one; null shows the positioning.
+  const shown = projects.find((p) => p.slug === (target ?? hover)) ?? null;
+  // Keeps the last case's copy in place while it fades out (derived during render).
+  if (shown && shown !== recent) setRecent(shown);
   const filter = query.trim().toLowerCase();
   const matches = (p: { slug: string; name: string }) => `${p.name} ${p.slug}`.toLowerCase().includes(filter);
 
@@ -103,15 +108,19 @@ export function HomeIntro({ projects, onSelect }: Props) {
 
   return (
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]">
-      <div className="home-backdrop" aria-hidden="true">
+      <div className="home-backdrop" data-project={shown?.slug} aria-hidden="true">
+        <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
         {projects.map((p) => (
-          <div key={p.slug} className="home-backdrop-layer" data-project={p.slug} data-active={active === p.slug || undefined}>
+          <div key={p.slug} className="home-backdrop-layer" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app" ? <DevsignLoop alt="" /> : p.slug === "gemini-privacy" ? <span className="home-backdrop-phone"><GeminiPhone alt="" /></span> : null}
           </div>
         ))}
       </div>
       <div data-phase={phase} aria-busy={busy} onKeyDown={(event) => { if (event.key === "Escape" && busy) cancel(); }} className="intro-surface home-grid">
-        <p className="home-note">{t.heroParagraph}</p>
+        <div className="home-note" data-swap={shown ? "" : undefined}>
+          <p className="home-note-default">{t.heroParagraph}</p>
+          <p className="home-note-project" aria-hidden={!shown}>{recent?.problem}</p>
+        </div>
         <nav className="home-picks" aria-label={t.projects}>
           <ol>
             {choices.map((c, i) => (
@@ -136,7 +145,10 @@ export function HomeIntro({ projects, onSelect }: Props) {
             ))}
           </ol>
         </nav>
-        <ScrambleHeadline className="home-tagline" text={t.heroLine} emphasis={t.heroEmphasis} />
+        <div className="home-tagline-wrap" data-swap={shown ? "" : undefined}>
+          <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
+          <p className="home-tagline home-tagline-project" aria-hidden={!shown}>{recent?.name}</p>
+        </div>
         <div className="home-ask">
           <form className="home-composer" aria-label={t.exploreProjects} onSubmit={(event) => { event.preventDefault(); submit(); }}>
             <label htmlFor="project-query" className="sr-only">{t.askWork}</label>

@@ -2431,20 +2431,30 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
 .home-backdrop-layer { position: absolute; inset: 0; opacity: 0; filter: brightness(0.42) saturate(0.8) blur(1.5px); transition: opacity 600ms ease; }
 .home-backdrop-layer[data-active] { opacity: 1; }
+.home-backdrop .intro-ambient { opacity: 1; transition: opacity 600ms ease; }
+.home-backdrop[data-project] .intro-ambient { opacity: 0; }
 .home-backdrop-layer[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 62% 30%, rgb(66 133 244 / 0.35), transparent 70%), radial-gradient(55% 45% at 30% 80%, rgb(167 139 250 / 0.28), transparent 70%) #0c0f16; }
 .home-backdrop-layer .devsign-loop { position: absolute; top: 50%; left: 50%; width: max(100%, 178svh); max-width: none; margin: 0; translate: -50% -50%; border: 0; border-radius: 0; box-shadow: none; }
 .home-backdrop-phone { position: absolute; top: 12%; left: 60%; display: block; height: 108%; aspect-ratio: 1000 / 1100; translate: -50% 0; }
 .home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 20%, rgb(8 9 9 / 0.78) 100%), linear-gradient(to top, rgb(8 9 9 / 0.9), transparent 48%); }
 .intro-surface.home-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 24px 48px; height: 100%; padding: 104px var(--project-text-inset) 48px; overflow: visible; }
-.home-note { grid-column: 2; grid-row: 1; justify-self: end; max-width: 36ch; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; }
-.home-picks { grid-column: 1; grid-row: 2; align-self: center; }
+.home-note { grid-column: 2; grid-row: 1; justify-self: end; display: grid; max-width: 36ch; }
+.home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 250ms ease, translate 250ms var(--ease); }
+.home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
+.home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 250ms ease, translate 250ms var(--ease); }
+.home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
+[data-swap] .home-note-default, [data-swap] .home-tagline-default { opacity: 0; translate: 0 -6px; }
+[data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
+/* Pinned to the vertical center, out of the grid flow, so the swapping paragraph and
+   statement never move the pills under the pointer. */
+.home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, opacity 250ms ease, translate 250ms var(--ease); }
 .home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: rgb(255 255 255 / 0.2); translate: 4px 0; }
 .home-pick[data-dim] { opacity: 0.4; }
 .home-pick:disabled { cursor: default; }
 .home-pick-index { font: 500 11px/1 var(--font-mono); color: var(--muted); }
-.home-tagline { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; max-width: 13ch; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(48px, 6.5vw, 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
+.home-tagline { max-width: 13ch; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(48px, 6.5vw, 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
 .home-ask { grid-column: 1; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: 12px; width: min(100%, 400px); }
 .home-composer { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 4px 4px 4px 18px; border: 1px solid rgb(255 255 255 / 0.16); border-radius: 999px; background: rgb(255 255 255 / 0.06); backdrop-filter: blur(12px); transition: border-color 250ms ease; }
 .home-composer:hover { border-color: rgb(255 255 255 / 0.3); }
@@ -2472,9 +2482,10 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 @media (max-width: 63.99rem) {
   .intro-stage.home-stage { height: auto; min-height: 100svh; }
   .intro-surface.home-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 32px; padding: 96px var(--project-text-inset) 40px; }
-  .home-tagline { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
+  .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
+  .home-tagline { max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
   .home-note { grid-column: 1; grid-row: 2; justify-self: start; }
-  .home-picks { grid-column: 1; grid-row: 3; align-self: start; }
+  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks ol { flex-direction: row; flex-wrap: wrap; }
   .home-ask { grid-column: 1; grid-row: 4; width: 100%; }
   .home-backdrop-layer .devsign-loop { width: max(100%, 160svh); }
@@ -2482,7 +2493,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 }
 @media (prefers-reduced-motion: reduce) {
   .home-answer, .home-answer-dot { animation: none; }
-  .home-backdrop-layer, .home-pick { transition: none; }
+  .home-backdrop-layer, .home-pick, .home-note > p, .home-tagline-wrap > *, .home-backdrop .intro-ambient { transition: none; }
 }
 
 /* Over the dark landing stage the header controls and name read light. */
