@@ -21,12 +21,13 @@ type Props = { projects: StageProject[]; onSelect: (index: number, from?: HTMLEl
 // picker as pills. With nothing (or About me) hovered the stage reads the
 // positioning: the first half as the big statement bottom right, the second
 // half as the paragraph bottom left. Hovering or focusing a project pill swaps
-// them to that case: its name, its problem line, the object takes its colour,
-// and the case's media rises in as a flat card at the top right (after
-// metalab.com's project photo: its own frame, no 3D pose — the Devsign
-// browser window with the live prototype, or the Gemini phone on its blue
-// surface). About me shows the name as the statement over the whole
-// positioning line.
+// the stage into that case's world (metalab.com): the whole backdrop becomes
+// its surface (Devsign's dark canvas, Gemini's blue night) while the loop
+// fades, its media sits in a large card at the top right (the Devsign browser
+// window with the live prototype, or the Gemini phone on its surface), the
+// role sits top centre, the name large at the left of centre and the problem
+// line bottom right. About me shows the name as the statement over the whole
+// positioning line, on the plain stage.
 export function HomeIntro({ projects, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
@@ -40,6 +41,11 @@ export function HomeIntro({ projects, onSelect }: Props) {
   // name and the whole positioning line for About me. Kept while it fades out.
   const next = shown ? { name: shown.name, text: shown.problem } : about ? { name: site.name, text: t.positioning } : null;
   if (next && (next.name !== recent?.name)) setRecent(next);
+  // The hovered project's world: the whole stage takes its surface and its
+  // media sits in a large card; its role, name and problem are laid out
+  // across the stage (metalab.com). Kept while it fades out.
+  const [recentProject, setRecentProject] = useState<StageProject | null>(null);
+  if (shown && shown !== recentProject) setRecentProject(shown);
   // The live Devsign prototype starts loading the first time its pill is
   // hovered, so it is ready by the click.
   const [live, setLive] = useState(false);
@@ -69,10 +75,11 @@ export function HomeIntro({ projects, onSelect }: Props) {
   };
 
   return (
-    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]">
+    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={shown?.slug}>
       <div className="home-backdrop" data-project={shown?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
         <HeroObject className="home-object" variant={shown?.slug ?? "default"} />
+        {projects.map((p) => <div key={p.slug} className="home-world" data-project={p.slug} data-active={shown?.slug === p.slug || undefined} />)}
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
@@ -114,6 +121,9 @@ export function HomeIntro({ projects, onSelect }: Props) {
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
+        {recentProject?.role && <p className="home-world-role" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject.role}</p>}
+        <p className="home-world-name" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject?.name}</p>
+        <p className="home-world-problem" data-on={shown ? "" : undefined} aria-hidden={!shown}>{recentProject?.problem}</p>
       </div>
     </section>
   );
