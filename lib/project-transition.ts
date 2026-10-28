@@ -28,7 +28,10 @@ export function freezeAmbient(source: HTMLElement) {
 
 // The picked case's device grows to fill the screen, then settles into the
 // case opener's media frame once the case page is there (after metalab.com).
-export type ZoomOptions = { from: HTMLElement; to: string; project: string };
+// `live`: a page to show in the layer at the real viewport size (the Devsign
+// prototype), scaling up from the device box and down into the opener; the
+// device copy stands in until it has loaded.
+export type ZoomOptions = { from: HTMLElement; to: string; project: string; live?: string };
 
 // The new page rises a short way and fades in over the old view, which drifts
 // up slightly and fades out. The two overlap, so there is no seam between them.
@@ -49,6 +52,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   const grow = 650;
   const zoomStart = performance.now();
   let layer: HTMLElement | null = null;
+  let liveFrame: HTMLIFrameElement | null = null;
   if (zoom && !reduced) {
     const source = zoom.from;
     const box = source.getBoundingClientRect();
@@ -56,14 +60,29 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       layer = document.createElement("div");
       layer.className = "project-zoom";
       layer.dataset.project = zoom.project;
+      if (zoom.live) layer.dataset.live = "true";
       layer.inert = true;
       layer.setAttribute("aria-hidden", "true");
-      const copy = source.cloneNode(true) as HTMLElement;
+      const poster = (zoom.live ? source.querySelector<HTMLElement>(".devsign-loop") : null) ?? source;
+      const copy = poster.cloneNode(true) as HTMLElement;
       copy.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
       // Cloned images are fetched from cache but decoded lazily; without this
       // the layer's first frame is its bare background.
       copy.querySelectorAll("img").forEach((img) => { img.loading = "eager"; img.decoding = "sync"; });
       layer.appendChild(copy);
+      if (zoom.live) {
+        liveFrame = document.createElement("iframe");
+        liveFrame.className = "project-zoom-live";
+        liveFrame.src = zoom.live;
+        liveFrame.title = "";
+        liveFrame.tabIndex = -1;
+        liveFrame.setAttribute("aria-hidden", "true");
+        liveFrame.setAttribute("sandbox", "allow-scripts allow-same-origin");
+        Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
+        liveFrame.addEventListener("load", () => { if (liveFrame) liveFrame.dataset.loaded = "true"; });
+        layer.appendChild(liveFrame);
+        liveFrame.animate([{ transform: `scale(${box.width / window.innerWidth})` }, { transform: "scale(1)" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
+      }
       Object.assign(layer.style, { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` });
       document.body.appendChild(layer);
       const posed = source.matches(".gemini-device, .home-device-window") ? source : source.querySelector<HTMLElement>(".gemini-device, .home-device-window");
@@ -260,6 +279,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
             { duration: timing.duration, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
           );
           animations.push(settle);
+          if (liveFrame) animations.push(liveFrame.animate([{ transform: "scale(1)" }, { transform: `scale(${box.width / window.innerWidth})` }], { duration: timing.duration, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" }));
           // Blend into the real media over the last stretch.
           animations.push(layer.animate([{ opacity: 1 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }], { duration: timing.duration, delay: timing.delay, fill: "both" }));
         } else {
