@@ -11,6 +11,7 @@ import { DevsignLoop } from "@/components/devsign-loop";
 import { prepareDevsignZoom } from "@/components/devsign-live";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
+import { Emphasis } from "@/components/emphasis";
 import { HeroObject } from "./hero-object";
 import type { AboutWorld, StageProject } from "./project-stage";
 
@@ -28,9 +29,9 @@ type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: n
 // role sits top centre, the name large at the left of centre and the problem
 // line bottom right. Each world has its own composition (CSS by data-world):
 // Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
-// cropped at the bottom right), About like Midjourney (name bottom centre, a
-// no card: the site's own loop stays as the image, the three principles sit
-// under the headline).
+// cropped at the bottom right), About like Midjourney (name bottom centre, no
+// card: the site's own loop stays as the image, the headline is the statement
+// with "End-to-end" set apart).
 export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
@@ -48,11 +49,11 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // (or, for About, a card of facts) sits in a large card; a role line, the
   // name and a paragraph are laid out across the stage, each world in its own
   // composition (metalab.com's per-project layouts). Kept while it fades out.
-  type World = { slug: string; role?: string; name: string; text: string };
+  type World = { slug: string; role?: string; emphasis?: string; name: string; text: string };
   const world: World | null = shown
     ? { slug: shown.slug, role: shown.role, name: shown.name, text: shown.problem }
     : about && aboutCopy
-      ? { slug: "about", role: aboutCopy.headline, name: site.name, text: aboutCopy.bio }
+      ? { slug: "about", role: aboutCopy.headline, emphasis: aboutCopy.emphasis, name: site.name, text: aboutCopy.bio }
       : null;
   // The copy changes in two beats (metalab.com): the current world's lines
   // leave (220ms) before the next world's lines arrive, staggered. `displayed`
@@ -105,7 +106,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         {projects.map((p) => (
           <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
             {p.slug === "workflow-app"
-              ? <div className="home-device-window"><div className="devsign-hero-chrome" aria-hidden="true"><span /><span /><span /><i /></div><DevsignLoop alt="" /></div>
+              ? <div className="home-device-window"><DevsignLoop alt="" /></div>
               : p.slug === "gemini-privacy"
                 ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
                 : null}
@@ -143,14 +144,9 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
-        {displayed?.role && <p className="home-world-role" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed.role}</p>}
+        {displayed?.role && <p className={`home-world-role${displayed.emphasis ? " has-emphasis" : ""}`} data-on={copyOn || undefined} aria-hidden={!copyOn}><Emphasis text={displayed.role} phrase={displayed.emphasis} /></p>}
         <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name}</p>
         <p className="home-world-problem" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.text}</p>
-        {displayed?.slug === "about" && aboutCopy && (
-          <ol className="home-world-list" data-on={copyOn || undefined} aria-hidden={!copyOn}>
-            {aboutCopy.principles.map((line, i) => <li key={line}><span>{String(i + 1).padStart(2, "0")}</span>{line}</li>)}
-          </ol>
-        )}
       </div>
     </section>
   );
