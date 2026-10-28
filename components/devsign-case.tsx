@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
+import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { withBase } from "@/lib/site";
 
@@ -9,7 +10,6 @@ import { withBase } from "@/lib/site";
 
 type Img = { src: string; width: number; height: number; alt?: string; caption?: string };
 type Lead = { method?: string; title: string; lead?: string; text?: string };
-type Pair = { src: string; alt: string; text: string; lead?: string };
 // The study object is authored in MDX; its exact shape is checked there by eye.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Study = Record<string, any>;
@@ -53,26 +53,7 @@ function Section({ id, title, band, children }: { id: string; title: string; ban
   );
 }
 
-function Comparison({ before, after }: { before: Pair; after: Pair }) {
-  return (
-    <div className="dv-compare">
-      {[
-        { label: "As-is", ...before, muted: true },
-        { label: "To-be", ...after, muted: false },
-      ].map(({ label, src, alt, text, lead, muted }) => (
-        <figure key={label} className="dv-compare-item reveal" data-before={muted || undefined}>
-          <Image src={withBase(src)} alt={alt} width={960} height={540} sizes="(max-width: 767px) 100vw, 50vw" />
-          <figcaption>
-            <span className="dv-compare-label">{label}</span>
-            <span className="dv-compare-text">{lead && <em>{lead}</em>}{text}</span>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
-function DoubleDiamond({ stages, pivot }: { stages: { name: string; methods: string[]; current?: boolean }[]; pivot: string }) {
+function DoubleDiamond({ stages, pivot, labels }: { stages: { name: string; methods: string[]; current?: boolean }[]; pivot: string; labels: Study }) {
   // Geometry from the Figma frame (1440 x 520): four half-diamonds of 256 x 400.
   const halves = [
     { x: 200, d: "M0 200L256 0V400Z" },
@@ -88,11 +69,11 @@ function DoubleDiamond({ stages, pivot }: { stages: { name: string; methods: str
           <path key={x} d={d} transform={`translate(${x} 30)`} className={stages[i]?.current ? "dv-diamond-current" : `dv-diamond-half dv-diamond-half-${i}`} />
         ))}
         <path d="M199.5 50V410M1240.5 50V410M720.5 170V290" className="dv-diamond-dash" />
-        <text x="111" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">PROBLEM</text>
-        <text x="1331" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">SOLUTION</text>
-        <text x="720" y="84" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="14">CORE PROBLEM</text>
-        <text x="460" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">RESEARCH</text>
-        <text x="980" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">DESIGN</text>
+        <text x="111" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">{labels.problem.toUpperCase()}</text>
+        <text x="1331" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">{labels.solution.toUpperCase()}</text>
+        <text x="720" y="84" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="14">{labels.coreProblem.toUpperCase()}</text>
+        <text x="460" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">{labels.research.toUpperCase()}</text>
+        <text x="980" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">{labels.design.toUpperCase()}</text>
         {stages.map((stage, i) => (
           <g key={stage.name}>
             <text x={centers[i]} y="200" textAnchor="middle" fontSize="22" className={stage.current ? "dv-svg-accent" : "dv-svg-strong"}>{stage.name.toUpperCase()}</text>
@@ -114,7 +95,7 @@ function Journey({ journey }: { journey: Study }) {
   const xs = [90, 329, 568, 808, 1047, 1286];
   return (
     <div className="dv-journey dv-scroll reveal">
-      <svg viewBox="0 0 1376 340" role="img" aria-label={`Journey across ${journey.steps.join(", ")}. ${journey.developerLow} at Find context for the developer; ${journey.designerLow} at Ship for the designer.`}>
+      <svg viewBox="0 0 1376 340" role="img" aria-label={`${journey.steps.join(" → ")}. ${journey.developer}: ${journey.developerLow}. ${journey.designer}: ${journey.designerLow}.`}>
         {xs.map((x, i) => (
           <g key={x}>
             <path d={`M${x + 0.5} 52V322`} className="dv-journey-grid" />
@@ -125,9 +106,9 @@ function Journey({ journey }: { journey: Study }) {
         <path transform="translate(87.5 157.52)" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         <text x="584" y="115" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
         <text x="1071" y="211" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
-        <circle cx="329" cy="286" r="9" className="dv-journey-low dv-journey-low-developer" />
+        <image href={withBase("/images/devsign/emoji-angry.svg")} x="312" y="269" width="34" height="34" />
         <text x="329" y="325" textAnchor="middle" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
-        <circle cx="1047" cy="286" r="9" className="dv-journey-low dv-journey-low-designer" />
+        <image href={withBase("/images/devsign/emoji-angry.svg")} x="1030" y="269" width="34" height="34" />
         <text x="1047" y="325" textAnchor="middle" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </div>
@@ -146,7 +127,7 @@ function Donut({ ratio, missed }: { ratio: number; missed?: boolean }) {
 }
 
 export function DevsignCase({ study, children }: { study: Study; children: ReactNode }) {
-  const { overview, discover, define, develop, deliver, testing, takeaway } = study;
+  const { overview, discover, define, develop, deliver, testing, takeaway, labels } = study;
   const nav = [
     { id: "overview", label: "Overview" },
     { id: "discover", label: "Discover" },
@@ -158,7 +139,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
   return (
     <div className="dv">
-      <DevsignNav items={nav} title="Devsign · Case study" />
+      <DevsignNav items={nav} title={labels.navTitle} />
 
       <Section id="overview" title="Overview">
         <p className="dv-headline reveal">
@@ -168,7 +149,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
           <p className="dv-body reveal">{overview.process.body}</p>
-          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
+          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} labels={labels} />
         </div>
       </Section>
 
@@ -202,7 +183,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-answer reveal">{discover.q2.answer}</p>
           <div className="dv-scroll dv-gap-48 reveal">
             <table className="dv-matrix">
-              <caption className="sr-only">{discover.q2.auditLabel}: which jobs each tool category covers</caption>
+              <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
                 <tr>
                   <th scope="col" className="dv-caps">{discover.q2.auditLabel}</th>
@@ -218,7 +199,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                     {row.marks.map((mark, i) => (
                       <td key={i}>
                         <span className="dv-mark" data-on={mark ? "" : undefined} />
-                        <span className="sr-only">{mark ? "Yes" : "No"}</span>
+                        <span className="sr-only">{mark ? labels.yes : labels.no}</span>
                       </td>
                     ))}
                   </tr>
@@ -284,12 +265,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </div>
               <div className="dv-persona-details">
                 <div>
-                  <p className="dv-caps dv-persona-role">Context</p>
+                  <p className="dv-caps dv-persona-role">{labels.context}</p>
                   <p className="dv-persona-context">{person.context} <strong>{person.contextLead}</strong></p>
                 </div>
                 <table className="dv-needs">
                   <thead>
-                    <tr><th scope="col">Pain point</th><td aria-hidden="true" /><th scope="col">Need</th></tr>
+                    <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
                   </thead>
                   <tbody>
                     {person.pairs.map(([pain, need]: string[]) => (
@@ -321,7 +302,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </div>
                 <h4>{item.title}</h4>
                 <p>{item.body}</p>
-                <p className="dv-from"><strong>From · </strong>{item.from}</p>
+                <p className="dv-from"><strong>{labels.from} · </strong>{item.from}</p>
               </li>
             ))}
           </ol>
@@ -408,7 +389,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
         <div className="dv-subsection-120">
           <Block {...testing.iteration1} />
-          <div className="dv-gap-40"><Comparison before={testing.iteration1.before} after={testing.iteration1.after} /></div>
+          <div className="dv-gap-40"><DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} labels={labels} /></div>
         </div>
         <div className="dv-subsection-120">
           <Block {...testing.iteration2} />
@@ -421,7 +402,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </ol>
             </div>
           </div>
-          <div className="dv-gap-40"><Comparison before={testing.iteration2.before} after={testing.iteration2.after} /></div>
+          <div className="dv-gap-40"><DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} labels={labels} /></div>
         </div>
       </section>
 

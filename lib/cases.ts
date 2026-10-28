@@ -56,17 +56,17 @@ export function getCaseSlugs(): string[] {
 }
 
 // Reads `- **Problem:** ...` style lines from the <TLDR> block (Korean cases
-// use 문제 / 역할 / 결과).
+// use 문제 / 역할 / 결과, or the English labels). The colon is optional.
 const TLDR_LABELS = { en: ["Problem", "My role", "Outcome"], ko: ["문제", "역할", "결과"] } as const;
 function readTldr(source: string, locale: Locale = "en"): Tldr {
   const block = source.match(/<TLDR>([\s\S]*?)<\/TLDR>/)?.[1] ?? "";
   const line = (label: string) =>
     block
-      .match(new RegExp(`\\*\\*${label}:\\*\\*(.*)$`, "m"))?.[1]
+      .match(new RegExp(`\\*\\*${label}:?\\*\\*(.*)$`, "m"))?.[1]
       .replace(/\{\/\*.*?\*\/\}/g, "") // drop MDX comments
       .trim() ?? "";
-  const [problem, role, outcome] = TLDR_LABELS[locale];
-  return { problem: line(problem), role: line(role), outcome: line(outcome) };
+  const pick = (i: 0 | 1 | 2) => line(TLDR_LABELS[locale][i]) || line(TLDR_LABELS.en[i]);
+  return { problem: pick(0), role: pick(1), outcome: pick(2) };
 }
 
 // Table of contents: the TL;DR box, then every `## ` heading in the body.
