@@ -2424,81 +2424,63 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 }
 
 /* Landing stage after metalab.com's home: one dark screen that never scrolls.
-   Backdrop: the hovered (else first) case's loop, dimmed. Grid: paragraph top
-   right, case pills left-center, the serif statement bottom right, the local
-   chat bottom left. Always the dark media palette, whatever the site theme. */
+   A glossy raymarched object turns behind everything (HeroObject). Grid: local
+   time top right, case pills pinned left-center, the paragraph bottom left,
+   the display statement bottom right. Hovering a case pill recolours the
+   object, swaps the copy and raises that case's device at the right. Always
+   the dark media palette, whatever the site theme. */
 .intro-stage.home-stage { --bg: #080909; --surface: #151918; --ink: #e8ecea; --muted: #8e9895; --line: #262c2a; --accent: #7f93ff; --color-fill: rgb(255 255 255 / 0.08); --color-fill-strong: rgb(255 255 255 / 0.14); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); color-scheme: dark; }
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
-.home-backdrop-layer { position: absolute; inset: 0; opacity: 0; filter: brightness(0.42) saturate(0.8) blur(1.5px); transition: opacity 600ms ease; }
-.home-backdrop-layer[data-active] { opacity: 1; }
-.home-backdrop .intro-ambient { opacity: 1; transition: opacity 600ms ease; }
-.home-backdrop[data-project] .intro-ambient { opacity: 0; }
-.home-backdrop-layer[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 62% 30%, rgb(66 133 244 / 0.35), transparent 70%), radial-gradient(55% 45% at 30% 80%, rgb(167 139 250 / 0.28), transparent 70%) #0c0f16; }
-.home-backdrop-layer .devsign-loop { position: absolute; top: 50%; left: 50%; width: max(100%, 178svh); max-width: none; margin: 0; translate: -50% -50%; border: 0; border-radius: 0; box-shadow: none; }
-.home-backdrop-phone { position: absolute; top: 12%; left: 60%; display: block; height: 108%; aspect-ratio: 1000 / 1100; translate: -50% 0; }
-.home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 20%, rgb(8 9 9 / 0.78) 100%), linear-gradient(to top, rgb(8 9 9 / 0.9), transparent 48%); }
+.home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
+.home-backdrop[data-project] .intro-ambient { opacity: 0.35; }
+.home-object { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.home-device { position: absolute; top: 36%; right: 12vw; width: min(36vw, 560px); aspect-ratio: 16 / 10; translate: 0 -46%; opacity: 0; transition: opacity 500ms ease, translate 600ms var(--ease); pointer-events: none; }
+.home-device[data-active] { opacity: 1; translate: 0 -50%; }
+.home-device-window { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgb(0 0 0 / 0.6); transform: perspective(1600px) rotateY(-14deg) rotateX(4deg); transform-origin: 60% 50%; }
+.home-device-window .devsign-loop { max-width: none; margin: 0; border: 1px solid rgb(255 255 255 / 0.1); border-radius: 18px; box-shadow: none; }
+.home-device-phone { position: absolute; top: 50%; left: 50%; height: 115%; aspect-ratio: 1000 / 1100; translate: -50% -50%; container-type: size; display: grid; place-items: center; perspective: 1600px; }
+.home-device-phone .gemini-device { transform: rotateY(-22deg) rotateX(6deg) rotateZ(-6deg); filter: drop-shadow(0 40px 80px rgb(0 0 0 / 0.6)); }
+.home-backdrop::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 50%, transparent 30%, rgb(8 9 9 / 0.6) 100%), linear-gradient(to top, rgb(8 9 9 / 0.85), transparent 45%), linear-gradient(to bottom, rgb(8 9 9 / 0.75), transparent 140px); pointer-events: none; }
 .intro-surface.home-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: 24px 48px; height: 100%; padding: 104px var(--project-text-inset) 48px; overflow: visible; }
-.home-note { grid-column: 2; grid-row: 1; justify-self: end; display: grid; max-width: 36ch; }
-.home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 250ms ease, translate 250ms var(--ease); }
-.home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
-.home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 250ms ease, translate 250ms var(--ease); }
-.home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
-[data-swap] .home-note-default, [data-swap] .home-tagline-default { opacity: 0; translate: 0 -6px; }
-[data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
+.home-meta { grid-column: 2; grid-row: 1; justify-self: end; margin: 0; color: var(--muted); font: 500 13px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 /* Pinned to the vertical center, out of the grid flow, so the swapping paragraph and
    statement never move the pills under the pointer. */
 .home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, opacity 250ms ease, translate 250ms var(--ease); }
+.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 150ms ease, translate 250ms var(--ease); }
 .home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: rgb(255 255 255 / 0.2); translate: 4px 0; }
-.home-pick[data-dim] { opacity: 0.4; }
-.home-pick:disabled { cursor: default; }
 .home-pick-index { font: 500 11px/1 var(--font-mono); color: var(--muted); }
+.home-note { grid-column: 1; grid-row: 3; align-self: end; display: grid; width: min(100%, 36ch); }
+.home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 250ms ease, translate 250ms var(--ease); }
+.home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
+.home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 250ms ease, translate 250ms var(--ease); }
 .home-tagline { max-width: 13ch; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(48px, 6.5vw, 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
-.home-ask { grid-column: 1; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: 12px; width: min(100%, 400px); }
-.home-composer { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 4px 4px 4px 18px; border: 1px solid rgb(255 255 255 / 0.16); border-radius: 999px; background: rgb(255 255 255 / 0.06); backdrop-filter: blur(12px); transition: border-color 250ms ease; }
-.home-composer:hover { border-color: rgb(255 255 255 / 0.3); }
-.home-composer:focus-within { border-color: var(--accent); }
-.home-composer input { flex: 1; min-width: 0; min-height: 38px; background: transparent; color: var(--ink); font-size: 15px; outline: none; }
-.home-composer input::placeholder { color: var(--muted); }
-.home-composer-send { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; color: var(--ink); background: rgb(255 255 255 / 0.12); cursor: pointer; transition: background-color 250ms var(--ease), color 250ms var(--ease); }
-.home-composer-send[data-ready] { color: #0c0e0e; background: var(--ink); }
-.home-composer-send:disabled:not([data-ready]) { cursor: default; }
-[data-phase="typing"] .home-composer, [data-phase="sending"] .home-composer { border-color: var(--accent); }
-.prompt-send-icon { display: block; width: 18px; height: 18px; }
-.home-chips { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 0; padding: 0 0 0 4px; list-style: none; }
-.home-chip { min-height: 32px; padding: 6px 12px; border: 1px solid rgb(255 255 255 / 0.14); border-radius: 999px; color: var(--ink); font-size: 13px; font-weight: 500; line-height: 1.4; text-align: left; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; }
-.home-chip:hover, .home-chip:focus-visible { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.3); }
-.home-chip:disabled { cursor: default; opacity: 0.45; }
-.home-answer { display: grid; grid-template-columns: 8px minmax(0, 1fr); column-gap: 12px; row-gap: 10px; padding-left: 4px; animation: chat-message-in 400ms var(--ease) both; }
-.home-answer-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: var(--accent); animation: home-answer-pulse 1.2s ease-in-out infinite; }
-.home-answer p { margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.5; }
-.home-answer-actions { grid-column: 2; display: flex; gap: 20px; font-size: 13px; font-weight: 500; }
-.home-answer-opening { color: var(--accent); }
-.home-answer-another { color: var(--muted); cursor: pointer; }
-@keyframes home-answer-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } }
-.home-status { margin: 0; padding-left: 4px; color: var(--muted); font-size: 13px; }
-[data-phase="sending"] .home-tagline, [data-phase="leaving"] .home-tagline, [data-phase="sending"] .home-note, [data-phase="leaving"] .home-note { opacity: 0.35; transition: opacity 400ms ease; }
+.home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
+[data-swap] .home-note-default, [data-swap] .home-tagline-default { opacity: 0; translate: 0 -6px; }
+[data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
 @media (max-width: 63.99rem) {
   .intro-stage.home-stage { height: auto; min-height: 100svh; }
   .intro-surface.home-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 32px; padding: 96px var(--project-text-inset) 40px; }
-  .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
+  .home-meta { grid-column: 1; grid-row: 1; justify-self: start; }
+  .home-tagline-wrap { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; justify-items: start; }
   .home-tagline { max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
-  .home-note { grid-column: 1; grid-row: 2; justify-self: start; }
-  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 3; align-self: start; }
+  .home-note { grid-column: 1; grid-row: 3; align-self: start; }
+  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
   .home-picks ol { flex-direction: row; flex-wrap: wrap; }
-  .home-ask { grid-column: 1; grid-row: 4; width: 100%; }
-  .home-backdrop-layer .devsign-loop { width: max(100%, 160svh); }
-  .home-backdrop-phone { left: 70%; top: 20%; height: 100%; }
+  .home-device { right: -10vw; width: 80vw; top: auto; bottom: -6vh; translate: 0 0; }
+  .home-device[data-active] { translate: 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-answer, .home-answer-dot { animation: none; }
-  .home-backdrop-layer, .home-pick, .home-note > p, .home-tagline-wrap > *, .home-backdrop .intro-ambient { transition: none; }
+  .home-object { display: none; }
+  .home-backdrop .intro-ambient { opacity: 1; }
+  .home-pick, .home-note > p, .home-tagline-wrap > *, .home-backdrop .intro-ambient, .home-device { transition: none; }
 }
 
-/* Over the dark landing stage the header controls and name read light. */
-header[data-home]:not([data-compact]) { --ink: #e8ecea; --muted: #8e9895; --color-fill: rgb(255 255 255 / 0.08); --color-fill-strong: rgb(255 255 255 / 0.14); color: var(--ink); }
-
+/* Over the dark landing stage the header controls and name read light, the
+   controls get frosted pill backgrounds, and a scrim fades in behind them. */
+header[data-home]:not([data-compact]) { --ink: #e8ecea; --muted: #8e9895; --color-fill: rgb(255 255 255 / 0.1); --color-fill-strong: rgb(255 255 255 / 0.18); color: var(--ink); }
+header[data-home]:not([data-compact]) .header-menu-trigger { background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); }
+header[data-home]:not([data-compact]) .header-menu-trigger:hover { background: rgb(255 255 255 / 0.18); }
 /* Gemini opener: same frame as Devsign, with the phone loop on the Gemini surface. */
 .devsign-hero[data-project="gemini-privacy"] .devsign-hero-media { position: relative; background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
 .devsign-hero-phone { position: absolute; top: 6%; left: 50%; display: block; height: 100%; aspect-ratio: 1000 / 1100; translate: -50% 0; }
