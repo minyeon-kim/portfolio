@@ -2,7 +2,7 @@
 
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
@@ -90,13 +90,20 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
 
         {projects.map((p) => (
-          <div key={p.slug} className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
-            {p.slug === "workflow-app"
-              ? <div className="home-device-window"><DevsignLoop alt="" /></div>
-              : p.slug === "gemini-privacy"
-                ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
-                : null}
-          </div>
+          <Fragment key={p.slug}>
+            <div className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
+              {p.slug === "workflow-app"
+                ? <div className="home-device-window"><DevsignLoop alt="" /></div>
+                : p.slug === "gemini-privacy"
+                  ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
+                  : null}
+            </div>
+            {/* The card's caption (after lusion.co/work): what it is, the role and when. */}
+            <p className="home-device-caption" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
+              <span className="home-device-caption-title">{p.caption ?? p.title}</span>
+              <span className="home-device-caption-meta"><span>{[p.role, p.timeline].filter(Boolean).join(" · ")}</span><span aria-hidden="true">↘</span></span>
+            </p>
+          </Fragment>
         ))}
       </div>
       <div className="intro-surface home-grid">

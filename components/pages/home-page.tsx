@@ -22,6 +22,7 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           slug,
           name: meta.short ?? meta.title,
           title: meta.title,
+          caption: meta.caption,
           problem: tldr.problem,
           role: meta.role,
           timeline: meta.timeline,

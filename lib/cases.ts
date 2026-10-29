@@ -23,6 +23,7 @@ export type CaseTeaser =
 export type CaseMeta = {
   title: string;
   short?: string; // compact name for the landing page index and section rail
+  caption?: string; // one line for the home card's caption block
   teaser?: CaseTeaser;
   role?: string; // short, for the meta row and home card
   timeline?: string;

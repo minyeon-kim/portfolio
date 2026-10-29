@@ -632,14 +632,10 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: a field of points that takes each case's form
-- Replaces the decoding sphere. components/home/hero-object.tsx draws 70,000 WebGL points filling the stage (camera z 3, perspective). Default: 48 drifting wave streams crossing the screen in depth (scattered information); the cursor gathers nearby points into concentric orbits that brighten, and the streams quicken while the mouse moves (press: in 0.2s, out 1.2s after 2.5s rest).
-- Hover forms (OBJECT_STATES.form = [Gemini, Devsign, About], eased with τ 0.6s; tints τ 0.45s):
-  - Gemini: seven source streams converge on one answer near the phone card; the two top streams are "off" (dim, stop short).
-  - Devsign: two line grids (design/code) offset and turned, sliding into register and apart (sin 0.45).
-  - About me: one continuous wave sheet in the band between the headline and the name.
-- The worlds keep only their glows (no solid surfaces, no Devsign dot grid) and the canvas stays visible under them (`.home-backdrop[data-project] .home-object { opacity: 0 }` removed; the duplicate About surface rule with #0b0d0e removed). HomeIntro passes variant = "about" on About hover.
-- Performance: DPR 1, drawn count drops ×0.8 to a third after ~60 slow frames; pauses offscreen/hidden/during navigation; reduced motion skips it.
+## Hero object: particle-love dust (GPU simulation) + Lusion-style cards
+- components/home/hero-object.tsx is a WebGL 2 particle simulation (256² = 65,536 points; positions and velocities in RGBA32F textures, ping-ponged; needs EXT_color_buffer_float, else nothing is drawn and the CSS ambient shows). Each frame: velocity pass (pull toward a loose home `gather` 0.8, ABC swirl flow and a shifting "valley" field ×`stir` 0.65, cursor sweep/swirl from the mouse delta, damping), position pass, then additive points (light theme: over-blending, darker ink).
+- States (OBJECT_STATES): default = a loop, Gemini (blue) = the Gemini constellation (Castor/Pollux and the twins' lines), Devsign (purple) = two groups joined by streams with a bolt between, About (teal) = a hexagonal lattice. Homes are loose clouds with a wide dust halo, so the form is only hinted (the user rejected crisp shapes, blobs, rings, beams, coaster, crystals).
+- Cards: plate backgrounds per case (Devsign violet gradient with the window set in at 9% 7% and cropped at the bottom; Gemini sky-to-indigo plate with the phone). A caption block (`.home-device-caption`, ≥64rem) overlaps a corner: `meta.caption` (new CaseMeta field, EN/KO in the case MDX) and role · timeline with ↘.
 
 ## Pills after metalab.com (from the user's screenshot)
 - Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
