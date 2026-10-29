@@ -623,3 +623,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - The Devsign zoom no longer uses a prepared live-prototype iframe (it opened on the prototype's loading screen). `prepareDevsignZoom` and the `live`/`prepared` zoom options are gone. The layer is a copy of the hovered device; `syncAnimations(source, copy)` carries each CSS loop over at the same `currentTime`, and at settle the opener's own loop is synced to the layer's.
 - The copy is appended straight into `.project-zoom-stage` (moving nodes later restarts CSS animations).
 - The copy's media (`.devsign-loop, .gemini-phone`) starts exactly on the card's media rect via `translate`/`scale` and eases to none over the grow.
+
+## Header and home picker share one edge and one pill
+- `.site-header-bar` / `.site-menu-bar` no longer override the inset to 24px/12px; they use `--project-text-inset` like the page copy, so Menu, the home case picker and the bottom-left note line up (48px at 1920, 36 at 1440, 16 mobile). Compact header keeps 24px.
+- `.home-pick` now matches `.header-menu-trigger`: 40px tall, 0 16px padding, no border, ink 8% tint, 15px/500; hover/active = transparent with 1px inset ink 70%.
