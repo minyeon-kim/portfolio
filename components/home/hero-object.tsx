@@ -163,11 +163,13 @@ void main() {
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.3 ? 0.35 : (symbol > 1.5 && symbol < 2.5 && cat > 0.8 ? 0.3 : 0.0);
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
-  vLight *= 0.75 + 0.5 * sin(time * (1.0 + 2.0 * vSeed) + vSeed * 40.0) * 0.5 + 0.25;
-  // Mostly fine dust, some grains, a few big soft out-of-focus motes.
-  float grain = fract(sin(i * 7.31) * 12543.17);
-  vSize = mix(1.0, 2.6, vDepth) * (0.7 + 0.8 * grain * grain) + 18.0 * pow(grain, 14.0) + 6.0 * pow(vSeed, 10.0);
-  gl_PointSize = vSize * (1.0 + 0.4 * vStar) * (0.85 + 0.35 * min(vLight, 1.5));
+  // Twinkle: every point breathes a little; a few flare now and then.
+  float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
+  float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
+  vLight *= 0.7 + 0.3 * sin(phase * 1.7);
+  vSize = flare;
+  // Fine, even points; a flaring one grows a little to show its glint.
+  gl_PointSize = mix(1.6, 2.8, vDepth) * (1.0 + 0.3 * vStar) + flare * 12.0;
 }`;
 
 const drawFragment = `#version 300 es
@@ -175,12 +177,15 @@ precision highp float;
 in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
-  // Big motes are soft and faint (out of focus); dust is crisp.
-  float soft = smoothstep(3.0, 14.0, vSize);
-  float a = smoothstep(0.5, mix(0.0, 0.1, soft), length(gl_PointCoord - 0.5)) * mix(1.0, 0.18, soft);
+  // A crisp bright core; a flaring point adds a thin four-point glint.
+  vec2 q = gl_PointCoord - 0.5;
+  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 6.0, vSize));
+  float rays = vSize * (exp(-abs(q.x) * 60.0) + exp(-abs(q.y) * 60.0)) * smoothstep(0.5, 0.0, length(q));
+  float a = min(core + rays, 1.0);
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
-  float alpha = a * (0.3 + 0.6 * e + 0.4 * vStar) * (0.6 + 0.4 * vDepth) * vLight;
+  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
+  c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
   c = mix(c, c * 0.55, light);
   alpha *= mix(1.0, 0.8, light);
