@@ -25,230 +25,304 @@ export const meta = {
   featured: true,
   order: 1,
   hero: {
-    title: "연결은 한 번에 됐는데, 정리하려면 설정 깊숙이 들어가야 했다.",
+    title: "Gemini는 왜 설명할 수 있는 것보다 나를 더 많이 알까?",
     details: [
-      { label: "Duration", value: "2026" },
-      { label: "Team", value: "팀원 1명과 리서치, 이후 단독 진행" },
-      { label: "Role", value: "리서치, 문제 정의, 코드 프로토타입, 사용성 테스트" },
-      { label: "Tools", value: "Miro, FigJam, HTML/JS 프로토타입" },
+      { label: "기간", value: "2026 · 콘셉트 프로젝트" },
+      { label: "팀", value: "팀원 1명과 리서치, 이후 단독 진행" },
+      { label: "역할", value: "UX/UI 디자인, 사용자 리서치, 프로토타이핑, 사용성 테스트" },
+      { label: "도구", value: "Miro, FigJam, HTML/JS, Claude Code" },
     ],
   },
 };
 
-{/*
-  Korean copy of content/cases/gemini-privacy.mdx. Keep the facts, numbers and
-  sources identical to the English file; when one changes, change the other.
-*/}
+{/* 본문 문구와 구성은 Figma 프레임 "Gemini · 케이스 스터디 · KO · 1920"
+(파일 LqJO7XywHn9gvcPvCnHyy0, 노드 733:3)을 따르고, 레이아웃은
+components/devsign-case.tsx. 리서치는 "우리", Define부터는 "나". 사용성 테스트 결과는 아직 없다. */}
 
+export const study = {
+  labels: {
+    problem: "문제",
+    solution: "해결",
+    coreProblem: "핵심 문제",
+    research: "리서치",
+    design: "디자인",
+    context: "상황",
+    painPoint: "페인포인트",
+    need: "니즈",
+    from: "출처",
+    asIs: "As-is",
+    toBe: "To-be",
+    compare: "As-is와 To-be를 전환해 비교",
+    yes: "있음",
+    no: "없음",
+  },
+  overview: {
+    headline: "연결은 한 번의 탭.",
+    headlineAccent: "정리는 설정 화면까지 가야 했다.",
+    process: {
+      title: "Process · Double Diamond",
+      body: "AI 프라이버시는 범위가 넓어서 먼저 넓게 리서치했다. Define에서 문제를 한 번 재정의했다. 입력할 때 경고하는 것에서, 이미 연결된 것을 통제하는 것으로.",
+      stages: [
+        { name: "Discover", methods: ["경쟁 서비스 분석", "데스크 리서치", "심층 인터뷰"] },
+        { name: "Define", methods: ["어피니티 매핑", "페르소나", "HMW"], current: true },
+        { name: "Develop", methods: ["스케치", "콘셉트 피드백", "디자인 원칙"] },
+        { name: "Deliver", methods: ["HTML/JS 프로토타입", "사용성 테스트", "SUS · SEQ"] },
+      ],
+      pivot: "↺ 스케치 11개 → 콘셉트 2개",
+    },
+    features: {
+      method: "주요 기능",
+      title: "보고, 끄고, 사라졌는지 확인한다.",
+      link: "Deliver에서 실제 화면 보기 ↓",
+      items: [
+        { kicker: "01 보기 · 답변에서", name: "출처 배지", body: "개인 정보를 쓴 답변 아래 배지가 어떤 Memory, Gmail, Calendar 항목이 답에 쓰였는지 보여 준다." },
+        { kicker: "02 끄기 · 그 자리에서", name: "인라인 컨트롤", body: "출처마다 토글 하나. Gmail과 Calendar는 차단되고, Memory는 삭제할 수 있으며, 4초 안에 되돌릴 수 있다." },
+        { kicker: "03 삭제 · 요청해서", name: "요청해서 삭제", body: "결과를 ‘삭제돼요’와 ‘참조만 차단돼요’로 나누고, 지금 확인하기로 확인한다." },
+      ],
+    },
+  },
+  discover: {
+    desk: {
+      method: "Secondary research",
+      title: "Desk research",
+      lead: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모른다.",
+      text: "AI 서비스 5곳의 프라이버시 컨트롤을 비교하고, 개인정보 보호법(GDPR)과 AI 메모리 UX 논문 6편을 읽고, 2025–2026년 설문 데이터를 살폈다.",
+    },
+    q1: {
+      label: "질문 1 · 사람들은 통제를 원할까?",
+      answer: "원한다. 하지만 대부분은 통제하고 있다고 느끼지 못한다.",
+      surveyLabel: "설문 · Pew Research Center 2025–2026",
+      stats: [
+        { value: "61%", text: "AI가 삶에 쓰이는 방식을 더 통제하고 싶은 미국 성인 비율. 지금 수준에 만족하는 사람은 17%뿐이다" },
+        { value: "71%", text: "AI가 늘수록 개인 정보가 덜 안전해질 거라고 보는 비율" },
+      ],
+      communityLabel: "논문 · AI 메모리 UX 연구 6편",
+      groups: [
+        { name: "기억된다는 사실에 놀란다", detail: "AI가 자신을 기억한다는 걸 알면 놀라고 불안해한다 · 기억이 보이지 않으면 신뢰가 떨어진다" },
+        { name: "출처가 많을수록 확인할 것도 많다", detail: "출처를 한꺼번에 보여 주면 확인 부담이 커진다 · 자세한 내용은 한 단계씩 보여 줄 때 가장 좋다" },
+        { name: "걱정하지만 계속 쓴다", detail: "편리해서 AI를 계속 쓴다 · 신뢰가 깨지면 연동을 끈다" },
+      ],
+    },
+    q2: {
+      label: "질문 2 · 지금의 컨트롤로 해결될까?",
+      answer: "아직이다. 컨트롤은 두 곳에 있고, 어디에서도 끈 뒤에 무엇이 남는지 보여 주지 않는다.",
+      auditLabel: "AI 서비스 5곳 · 컨트롤이 놓친 것",
+      groups: [
+        { name: "끄는 스위치는 있지만 결과는 없다", detail: "모든 서비스가 메모리나 기록을 끌 수 있게 한다 · 끈 뒤에 무엇이 남는지는 어디에도 없다" },
+        { name: "Gemini는 통제가 두 곳으로 나뉜다", detail: "Gemini 앱 설정은 3–4번 클릭 · 학습 거부는 Google 계정 페이지에 있어 4–5번 클릭" },
+        { name: "삭제와 차단이 똑같아 보인다", detail: "법은 삭제와 처리 제한을 구분한다 · 화면에는 ‘삭제’ 하나만 있다" },
+      ],
+    },
+    synthesis: {
+      label: "종합",
+      title: "통제가 끊기는 지점",
+      withAi: "현재",
+      gap: "공백",
+      rows: [
+        { stage: "나타날 때", withAi: "답변에 개인 정보가 나타난다", gap: "출처가 보이지 않는다" },
+        { stage: "끌 때", withAi: "Gemini 앱과 Google 계정에 나뉜 스위치", gap: "두 곳, 각각 3–5번 클릭" },
+        { stage: "삭제할 때", withAi: "‘삭제’와 ‘차단’이 똑같아 보인다", gap: "원본은 Gmail이나 Photos에 남는다" },
+        { stage: "확인할 때", withAi: "활동을 꺼도 대화는 72시간 보관, 검토된 대화는 3년", gap: "무엇이 사라졌는지 확인할 방법이 없다" },
+      ],
+    },
+    interview: {
+      method: "Primary research",
+      title: "In-depth interview",
+      lead: "걱정하지만 계속 쓴다.",
+      text: "리서치는 컨트롤이 예측하기 어렵다는 건 보여 줬지만, 그게 어떻게 느껴지는지는 보여 주지 않았다. 그래서 개인 정보의 양쪽에 있는 사람들과 이야기했다. 매일 개인 정보를 요청하는 사람과, AI에 개인 정보를 주는 사람.",
+      questionsLabel: "알고 싶었던 것",
+      questions: [
+        "AI가 내 개인 정보를 쓸 때 사람들은 무엇을 걱정할까?",
+        "걱정은 언제 시작될까? 정보를 입력할 때일까, 답변에서 다시 볼 때일까?",
+        "무엇이 있어야 삭제를 믿을 수 있을까?",
+      ],
+      participantColumns: ["#", "역할", "선정 이유", "유형"],
+      participants: [
+        ["K01", "콜센터 상담원", "사람들에게 개인 정보를 요청한다", "외부"],
+        ["U01", "일상적인 AI 사용자", "매일 AI를 쓴다", "외부"],
+        ["D01", "디자이너 (팀원)", "가이드 테스트", "내부"],
+        ["S01", "보안 전문가 (본인)", "가이드 테스트", "내부"],
+      ],
+    },
+  },
+  define: {
+    personas: {
+      method: "사용자 정의",
+      title: "Persona & user journey map",
+      lead: "페르소나 한 명, 중요한 순간 하나. 개인 정보가 나타나는 그 답변.",
+      people: [
+        {
+          role: "Gemini 사용자",
+          name: "김유나",
+          bio: "29세 · 회사원, 일과 생활 모두 개인 Gemini 계정 하나로 쓴다",
+          quote: "“이걸 어디서 알았지? 말한 적 없는데.”",
+          context: "편해서 Gmail, Calendar, Photos를 연결했다.",
+          contextLead: "이제 회사에서도 답변에 사적인 정보가 튀어나온다.",
+          pairs: [
+            ["출처 없이 개인 정보가 나타난다", "각 정보가 어디서 왔는지 본다"],
+            ["끄려면 설정 화면 두 곳을 거쳐야 하고, 꺼졌다는 증거도 없다", "나타난 자리에서 끄고, 결과를 확인한다"],
+          ],
+        },
+      ],
+      journey: {
+        steps: ["질문", "답변", "정보 발견", "출처 찾기", "끄기", "계속 사용"],
+        designer: "유나 · 현재",
+        developer: "유나 · 디자인 목표",
+        developerLow: "잠깐 떨어졌다가, 직접 결과를 확인한다",
+        designerLow: "최저점 · 어디서 왔는지 알 수 없음",
+      },
+      summary: "지금은 개인 정보가 출처 없이 나타날 때 최저점을 찍고, 설정 화면 두 곳을 거치는 내내 낮게 머문다. 디자인 목표는 출처와 스위치를 답변 바로 위에 두어 그 하락을 짧게 만드는 것이다.",
+    },
+    affinity: {
+      method: "리서치 분석",
+      title: "Affinity mapping",
+      lead: "인용 79개를 색으로 분류한 뒤, 라벨 없이 다시 묶어 테마 6개로 정리했다.",
+      text: "불안이 가장 커진 순간은 정보를 입력할 때가 아니라, 답변에서 다시 나올 때였다.",
+      board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "인터뷰 인용 79개를 테마 6개로 다시 묶은 어피니티 맵" },
+    },
+    problems: {
+      method: "문제 정의",
+      title: "핵심 인사이트",
+      lead: "테마 6개에서 나온 인사이트 4개, 그리고 문제를 옮긴 하나.",
+      lowest: "문제를 재정의함",
+      items: [
+        { title: "공개는 매번 결정된다", body: "정보 공유는 한 번의 동의가 아니다. 질문할 때마다 위험과 이득을 따진다.", role: "인사이트", from: "테마 I01" },
+        { title: "쓴다고 믿는 건 아니다", body: "사람들은 AI를 믿어서가 아니라, 직접 확인하면서 계속 쓴다.", role: "인사이트", from: "테마 I02" },
+        { title: "보이지 않는 영향이 불안을 키운다", body: "무엇이 기억됐는지, 삭제가 무엇을 했는지 보이지 않을 때 걱정이 커진다.", role: "핵심 인사이트", from: "테마 I03", lowest: true },
+        { title: "적절한 순간에 행동하게", body: "알림보다, 마음을 바꿀 수 있는 순간에 행동할 방법이 더 중요하다.", role: "인사이트", from: "테마 I04" },
+      ],
+    },
+    core: {
+      method: "문제 정의",
+      title: "Core problem",
+      lead: "Gemini는 내 정보를 답변에 가져오지만,",
+      text: "나는 그게 어디서 왔는지 볼 수도, 그 자리에서 끌 수도, 사라졌는지 확인할 수도 없다.",
+    },
+    hmw: {
+      method: "디자인 챌린지",
+      title: "How might we",
+      question: "Gemini 사용자가 답변 속 개인 정보가 어디서 왔는지 보고, 그 자리에서 끄거나 삭제하고, 그 결과를 믿을 수 있게 하려면 어떻게 해야 할까?",
+      successLabel: "성공의 기준",
+      success: ["힌트 없이 10초 안에 출처와 스위치를 찾는다", "차단과 삭제의 차이를 자기 말로 설명한다"],
+    },
+  },
+  develop: {
+    ideation: {
+      method: "발산 → 수렴",
+      title: "아이디에이션",
+      text: "방향 6개(기능 24개)가 문제를 옮긴 뒤 3개로 좁혀졌다. 메모리 통제, 처리 투명성, 출처. 이어서 손 스케치 11개와 콘셉트 4개 피드백을 거쳐, 설정 화면으로 보내지 않는 두 가지가 남았다.",
+    },
+    blocks: [
+      {
+        method: "아이디에이션",
+        title: "개선 방향",
+        lead: "방향 6개, 기능 24개.",
+        text: "입력 보호, 메모리 통제, 처리 투명성, 출처, 목적 기반 요청, 작업 규칙. 문제를 재정의하면서 메모리 통제, 투명성, 출처가 남았다.",
+      },
+      {
+        method: "아이디에이션",
+        title: "콘셉트 피드백",
+        lead: "콘셉트 4개, 팀 피드백.",
+        text: "남긴 것: 인라인 컨트롤(“그냥 켰다 껐다 하면 돼서 쉬워요”)과 채팅에서 삭제(“어디 갈 필요가 없어요”). 뺀 것: 파일별 보관 기간(관리할 게 더 많아짐)과 카테고리 대시보드(민감한 항목에 집중).",
+        images: [
+          { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "팀 피드백이 달린 인라인 데이터 관리 콘셉트" },
+          { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "팀 피드백이 달린 채팅으로 삭제 콘셉트" },
+        ],
+      },
+      {
+        method: "선별",
+        title: "공백에서 나온 기능",
+        lead: "기능마다 Discover의 공백 하나에 답하고, 세 기능 모두 답변 위에 있다.",
+        featuresLabel: "핵심 기능 3개",
+        features: [
+          { name: "출처 배지", solves: "해결: 어디서 왔는지 알 수 없다" },
+          { name: "인라인 컨트롤", solves: "해결: 끄는 스위치가 멀다" },
+          { name: "요청해서 삭제", solves: "해결: 사라졌는지 믿을 수 없다" },
+        ],
+      },
+      {
+        method: "아이디에이션",
+        title: "스케치",
+        lead: "무엇이든 만들기 전에, HMW 질문마다 한 줄씩 손 스케치 11개.",
+        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "HMW 질문별 손 스케치" },
+      },
+      {
+        rule: true,
+        method: "구조",
+        title: "화면 뒤의 두 가지 규칙",
+        lead: "1. 출처마다 할 수 있는 일을 보여 준다.",
+        text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 되며 원본은 남는다. 2. 출처는 한 단계씩 보여 준다. 답변에는 배지만, 전체 패널은 탭했을 때.",
+      },
+      {
+        method: "구조",
+        title: "사용자 흐름",
+        lead: "유나의 하루에서 나온 두 시나리오.",
+        text: "A: 말한 적 없는 이름이 맛집 추천에 나타나고, 출처 배지를 탭해 Gmail을 끈다. B: Gemini에게 잊어 달라고 하고, 무엇이 삭제되고 무엇이 차단만 되는지 본 뒤 확인한다.",
+        images: [
+          { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "시나리오 A: 답변 아래 출처 배지" },
+          { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "시나리오 A: Gmail을 끈 출처 패널" },
+          { src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "시나리오 B: 삭제되는 것과 차단만 되는 것" },
+          { src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "시나리오 B: 한 줄씩 보여 주는 결과와 지금 확인하기" },
+        ],
+      },
+    ],
+  },
+  deliver: {
+    method: "최종 디자인",
+    title: "Prototype",
+    lead: "답변 안에서 보고, 끄고, 확인한다.",
+    text: "진행자 모드와 참여자 모드가 있어 모든 클릭을 기록하는 HTML/JS 프로토타입으로 만들었다.",
+    changes: [
+      { title: "답변 아래 출처 배지", before: "어디서 왔는지 알기 어려움.", after: "Gmail, Calendar, Memory별 항목이 담긴 출처 배지.", src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "답변 아래 출처 배지" },
+      { title: "출처마다 토글 하나", before: "설정 화면 두 곳, 각각 3–5번 클릭.", after: "채팅을 떠나지 않고 토글 하나.", src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "출처마다 토글이 있는 패널" },
+      { title: "삭제와 차단을 나눠서", before: "삭제와 차단이 똑같아 보임.", after: "‘삭제돼요’와 ‘참조만 차단돼요’를 나눠서 표시.", src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "삭제되는 것과 차단만 되는 것 목록" },
+      { title: "확인할 수 있는 결과", before: "결과를 믿는 건 사용자 몫.", after: "한 줄씩 보여 주는 결과와 지금 확인하기.", src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "한 줄씩 보여 주는 결과와 지금 확인하기 버튼" },
+    ],
+  },
+  testing: {
+    method: "검증",
+    title: "사용성 테스트 · 진행 중",
+    lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",
+    usability: {
+      method: "테스트 계획",
+      title: "Moderated think-aloud",
+      text: "최대 5명, AI 사용량(많음/적음)과 프라이버시 민감도(높음/낮음)를 섞어 모집. 시나리오 A(인라인 컨트롤) 다음 B(요청해서 삭제), 가상 페르소나의 데이터를 써서 참여자는 자기 정보를 공유하지 않는다.",
+      scores: [
+        { value: "10", unit: "초", ratio: 0, title: "스위치 찾기", note: "목표 · 힌트 없이 10초 안에" },
+        { value: "68+", unit: "SUS", ratio: 0, title: "SUS 목표", note: "목표 · 평균 이상" },
+        { value: "1–7", unit: "SEQ", ratio: 0, title: "과제 난이도", note: "시나리오마다 질문" },
+        { value: "1–7", unit: "부담", ratio: 0, title: "정보 부담", note: "출처 패널이 너무 많을까?" },
+      ],
+    },
+  },
+  takeaway: {
+    headline: "신뢰는 화면 위의 약속이 아니다. 사용자가 직접 확인하는 것이다.",
+    text: "프라이버시 원칙을 UI 요구사항으로 바꿨고, 개인 정보를 공유하는 사람과 다루는 사람 양쪽의 이야기를 들었다.",
+    reviewTitle: "프로젝트 회고",
+    review: [
+      { title: "원칙이 요구사항이 됐다", body: "삭제와 처리 제한의 차이를 도움말이 아니라 화면 구조에 담았다." },
+      { title: "편향을 줄이려고 다시 묶었다", body: "라벨을 지우고 인용 79개를 다시 묶어, 첫 분류가 결과를 이끌지 않게 했다." },
+      { title: "테스트를 위해 만든 프로토타입", body: "클릭, 잘못된 클릭, 배지를 찾는 시간을 기록해 모든 세션이 행동 데이터가 된다." },
+    ],
+    limitationsTitle: "한계",
+    limitations: [
+      { lead: "외부 인터뷰는 2명뿐", text: " — 4명 중 2명은 팀 내부라 가이드 테스트에만 썼다." },
+      { lead: "아직 결과 없음", text: " — 사용성 테스트가 진행 중이다." },
+      { lead: "고정된 흐름", text: " — 채팅의 자유로운 요청은 테스트하지 않았다." },
+    ],
+    next: {
+      label: "다음 단계",
+      title: "사용성 테스트를 마치고, 채팅에서 삭제를 어떻게 발견하게 할지, 카테고리별 보관 기간, 여러 출처가 합쳐질 때의 위험을 디자인한다.",
+      text: "성공 기준 2(차단과 삭제를 자기 말로 설명하기)를 여기서 측정한다.",
+      chips: ["신뢰 측정", "발견 가능성 테스트", "합쳐진 데이터의 위험 표시"],
+    },
+  },
+};
+
+<DevsignCase study={study}>
 <TLDR>
-- **문제:** Gemini는 Gmail, Calendar, Photos의 정보를 답변에 끌어오지만, 그 정보가 어디서 왔는지 알 수 없고, 끄려면 설정 화면 두 곳을 차례로 찾아 들어가야 합니다.
-- **역할:** 팀원 1명과 함께 리서치하고, 문제 정의부터 코드로 만든 프로토타입과 사용성 테스트까지 혼자 진행했습니다.
-- **결과:** 답변 아래에서 출처를 보여 주고, 그 자리에서 끄고, 삭제가 제대로 됐는지 직접 확인할 수 있는 동작하는 프로토타입. 사용성 테스트 진행 중.
+- **문제** Personal Intelligence(2026년 1월) 이후 Gemini는 묻지 않아도 Gmail, Calendar, Photos, YouTube, 검색 기록을 읽어 답을 맞춤화한다. 하지만 답변은 어떤 정보가 어디서 왔는지 말하지 않고, 스위치는 두 곳에 나뉘어 있으며, 삭제는 확인할 수 없다.
+- **해결** 통제권을 답변 자체로 옮긴다. 출처를 보고, 그 자리에서 끄고, 결과를 확인한다.
+- **임팩트** 설정 화면 두 번이 답변 아래 토글 하나가 되고, 삭제하겠다는 약속이 확인할 수 있는 결과가 됐다. 이것이 신뢰로 이어지는지는 사용성 테스트로 측정한다.
 </TLDR>
-
-<CaseSection id="overview" label="01 / 개요" title="연결은 한 번에 됐는데, | 정리하려면 설정 깊숙이 들어가야 했다.">
-
-2026년 1월 Google은 [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/)를 내놓았습니다. 이 기능을 켜면 Gemini가 Gmail, Calendar, Photos, YouTube, 검색 기록을 읽어 답변을 개인화하고, 묻지 않아도 그 정보를 꺼내 씁니다. [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/)의 한 필자는 데이트할 레스토랑을 물었다가, 메뉴 추천과 함께 작년 봄 전 여자친구 Sarah와 그곳에 갔었다는 말을 들었습니다.
-
-편리한 건 맞습니다. 문제는 통제입니다. 답변은 그 기억이 어느 앱에서 왔는지 알려 주지 않고, 끄는 곳은 Gemini 앱과 Google 계정 두 곳에 나뉘어 있습니다. 삭제도 사람들이 기대하는 것과 다릅니다. Google의 [Privacy Hub](https://support.google.com/gemini/answer/13594961?hl=en)에 따르면 활동 기록을 꺼도 대화는 72시간 동안 보관되고, 사람이 검토하도록 선택된 대화는 삭제해도 3년 동안 남으며, Gemini 활동을 지워도 Gmail이나 Photos의 원본은 그대로 남습니다.
-
-개인적으로 진행한 컨셉 프로젝트이며, Google과 관련이 없습니다.
-
-</CaseSection>
-
-<CaseFindings
-  title="세 가지 빈틈"
-  items={[
-    { label: "01", title: "어디서 왔는지 알 수 없다", body: "답변에 개인 정보가 섞여 나오지만, 이메일인지 사진인지 예전 대화인지 알려 주지 않습니다." },
-    { label: "02", title: "끄는 곳이 멀다", body: "직접 따라가 보니 Gemini 설정까지 3–4번, 학습 거부는 별도의 Google 계정 페이지에서 4–5번 눌러야 했습니다." },
-    { label: "03", title: "정말 지워졌는지 믿을 수 없다", body: "사람들은 ‘삭제’하면 다 지워질 거라 기대하지만, 원본은 Gmail에 그대로 남습니다. Gemini가 읽지 않게 될 뿐입니다." },
-  ]}
-/>
-
-<CaseSection id="keywords" label="02 / 키워드" title="투명성과 통제감.">
-
-새 기능이 아니라, 이미 있는 설정을 찾기 쉽고 이해하기 쉽고 믿을 수 있게 만드는 것. 그래야 사람들이 개인화를 끄지 않고 계속 씁니다.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "투명성", title: "답변을 읽는 그 자리에서 출처를 보여 준다", body: "설정 메뉴가 아닌 답변 바로 아래에서." },
-    { label: "통제감", title: "약속이 아니라 확인에서 오는 신뢰", body: "“삭제됨”이라는 문구 대신, 결과를 직접 확인합니다." },
-  ]}
-/>
-
-<CaseSection id="features" label="03 / 주요 기능" title="보고, 끄고, 지워졌는지 확인한다.">
-
-세 기능 모두, 궁금증이 생기는 바로 그 자리, 답변 위에 두었습니다.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "출처 배지", title: "이 답변이 어디서 왔는지 안다", body: "답변 아래 배지를 누르면 답변에 쓰인 Memory, Gmail, Calendar 항목이 열립니다." },
-    { label: "인라인 설정", title: "그 자리에서 출처를 끈다", body: "토글로 출처를 차단하고, Memory는 삭제할 수 있습니다. 4초 안에 되돌릴 수 있습니다." },
-    { label: "채팅으로 삭제", title: "잊어 달라고 하고, 확인한다", body: "결과를 ‘삭제돼요’와 ‘참조만 차단돼요’로 나눠 보여 주고, 지금 확인하기로 확인합니다." },
-  ]}
-/>
-
-<CaseSection id="process" label="04 / 과정" title="더블 다이아몬드: | 넓게, 좁게, 그리고 다시 정의하기.">
-
-AI 프라이버시는 범위가 넓어서, 좁히기 전에 넓게 조사했습니다. Define 단계에서는 문제를 한 번 다시 정의했습니다. 입력할 때 경고하는 것에서, 이미 연결된 것을 통제하는 것으로 바꿨습니다.
-
-</CaseSection>
-
-<CaseDiamond
-  pivot="↺ 입력 중 경고 → 연결된 것을 통제"
-  items={[
-    { label: "Discover", title: "끄는 버튼은 있지만, 무엇이 남는지 모른다", methods: ["경쟁 분석", "Desk Research", "사용자 인터뷰", "Affinity Mapping"], output: "지금의 설정이 부족한 지점, 테마 6개" },
-    { label: "Define", current: true, title: "불안은 내 정보가 나타날 때 시작된다", methods: ["Insight", "Persona", "문제 재정의", "HMW"], output: "How-Might-We 질문" },
-    { label: "Develop", title: "설정이 아니라 답변에서 통제한다", methods: ["스케치", "컨셉 피드백", "디자인 원칙"], output: "컨셉 2개와 그 뒤의 원칙" },
-    { label: "Deliver", title: "직접 확인하면 신뢰가 생길까?", methods: ["HTML/JS 프로토타입", "Think-aloud 테스트", "SUS · SEQ"], output: "사용성 테스트 진행 중" },
-  ]}
-/>
-
-<CaseSection id="discover" label="05 / Discover" title="끄는 버튼은 있지만, | 끄고 나서 무엇이 남는지는 모른다.">
-
-AI 서비스 5개의 프라이버시 설정을 비교했습니다. Gemini는 설정이 앱과 Google 계정으로 나뉘어 있고, 무언가를 끈 뒤 무엇이 남는지 알려 주는 화면은 없었습니다.
-
-</CaseSection>
-
-<CaseKey>설정은 두 곳에 있지만, 끈 뒤에 <strong>무엇이 남는지 보여 주는 곳은 없다</strong>.</CaseKey>
-
-<CaseStats
-  items={[
-    { value: "61%", label: "의 미국 성인이 AI가 내 삶에 쓰이는 방식을 더 통제하고 싶다고 답했다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "17%", label: "만이 지금 가진 통제 수준에 만족한다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "71%", label: "가 AI 사용이 늘면 내 개인 정보가 덜 안전해질 거라고 본다", source: "Pew Research Center, survey of U.S. adults (Feb 2026)" },
-  ]}
-/>
-
-<CaseSection id="discover-primary" label="05 / Discover · 인터뷰" title="걱정하면서도, 계속 쓴다.">
-
-콜센터 상담원과 일상적인 AI 사용자를 인터뷰하고, 가이드를 검증하려고 디자이너와 보안 종사자인 우리도 같은 질문에 답했습니다. 모두 편리해서 AI를 계속 썼지만, 신뢰가 깨지면 연동을 껐습니다. 사람들에게 개인 정보를 요청하는 일을 하는 콜센터 상담원은, 삭제 요청을 하면 모든 게 지워질 거라 기대한다고 했습니다.
-
-> “삭제해도 기록이 정말 지워졌는지 모르겠어요.”
-
-인터뷰 발화 79개를 색으로 구분한 뒤, 처음 묶음이 결과를 이끌지 않도록 라벨을 떼고 아래에서부터 다시 묶어 테마 6개로 정리했습니다.
-
-</CaseSection>
-
-<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="인터뷰 발화 79개를 테마 6개로 묶은 Affinity Map" caption="다시 한 Affinity Mapping: 발화 79개, 라벨을 떼고 테마 6개로 재분류." />
-
-<CaseStats
-  items={[
-    { value: "50%", label: "의 미국 성인이 일상 속 AI 확산에 기대보다 걱정이 크다고 답했다(2021년 37%에서 증가)", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "38%", label: "는 기대와 걱정이 반반이다. 걱정하면서도 떠나지는 않는다", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-  ]}
-/>
-
-<CaseSection id="define" label="06 / Define" title="불안은 입력할 때가 아니라, | 내 정보가 나타날 때 시작된다.">
-
-테마 6개를 보면, 불안이 가장 큰 순간은 개인 정보를 입력할 때가 아니라, 그 정보가 답변에 나타났는데 어디서 왔는지 모를 때였습니다. 여기서 페르소나를 정했습니다. 김유나, 29세, 업무와 일상에 Gemini 계정 하나를 함께 씁니다.
-
-</CaseSection>
-
-<CaseFindings
-  title="디자인을 바꾼 인사이트"
-  items={[
-    { title: "쓴다고 믿는 건 아니다", body: "사람들은 낮은 신뢰를 직접 확인하는 것으로 메웁니다." },
-    { title: "보이지 않는 영향이 불안을 키운다", body: "무엇이 기억되는지, 삭제가 무엇을 했는지 볼 수 없을 때 걱정이 커집니다." },
-    { title: "마음이 바뀔 수 있는 순간에 행동하게 한다", body: "안내 문구보다, 마음을 바꿀 수 있는 순간에 바로 행동할 방법이 더 중요합니다." },
-  ]}
-/>
-
-<CaseKey>그래서 문제를 옮겼습니다. 입력할 때 경고하는 것에서, <strong>이미 연결된 것을 나타나는 그 자리에서 통제하는 것</strong>으로.</CaseKey>
-
-
-<CaseSection id="develop" label="07 / Develop" title="설정이 아니라, 답변에서 통제한다.">
-
-How-Might-We 질문별로 손 스케치 11개를 그리고, 컨셉 4개에 대한 피드백을 받았습니다. 그중 2개가 남았습니다.
-
-</CaseSection>
-
-<CaseMedia src="/images/cases/gemini-privacy/sketches.webp" width={1166} height={2226} variant="portrait" label="How-Might-We 질문별 손 스케치" caption="넓게 그려 보기: How-Might-We 질문 하나당 한 줄, 손 스케치 11개." />
-
-<CaseKey>남은 두 가지는 <strong>설정 화면으로 보내지 않는다</strong>.</CaseKey>
-
-<CaseCompare
-  before="뺀 것"
-  after="남긴 것"
-  rows={[
-    { before: "파일별 보관 기간 설정: 관리할 게 줄지 않고 늘어남.", after: "인라인 설정: “쉬웁니다, 그냥 켰다 껐다 하면 되니까요.”" },
-    { before: "카테고리 관리와 대시보드: 전부가 아니라 민감한 항목에 집중해야 함.", after: "채팅으로 삭제: “어디 갈 필요가 없네요.”" },
-  ]}
-/>
-
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/gemini-privacy/concept-inline.webp" width={1600} height={1186} variant="screen" label="팀 피드백이 달린 인라인 데이터 관리 컨셉" caption="남긴 것 ①: 인라인 데이터 관리." />
-  <CaseMedia src="/images/cases/gemini-privacy/concept-chat.webp" width={1600} height={1197} variant="screen" label="팀 피드백이 달린 채팅으로 삭제 컨셉" caption="남긴 것 ②: 채팅으로 기록 삭제." />
-</CaseMediaPair>
-
-<CaseFindings
-  title="화면 뒤의 두 가지 결정"
-  items={[
-    { label: "결정 1", title: "출처마다 할 수 있는 일을 보여 준다", body: "Memory는 삭제할 수 있지만, Gmail과 Calendar는 차단만 되고 원본은 그 자리에 남습니다. 그 차이를 숨기지 않고 화면 구조로 보여 줍니다." },
-    { label: "결정 2", title: "출처는 한 단계씩 연다", body: "출처를 한 번에 많이 보여 주면 확인할 부담이 커져서, 답변에는 배지만 두고 누르면 전체 패널이 열립니다." },
-  ]}
-/>
-
-<CaseSection id="deliver" label="08 / Deliver" title="실제로 눌러 볼 수 있고, | 테스트를 위해 만든 프로토타입.">
-
-HTML과 JavaScript로 진행자 모드와 참가자 모드를 만들었습니다. 클릭, 오클릭, 출처 배지를 찾는 데 걸린 시간을 기록해서, 세션마다 행동 데이터가 남습니다.
-
-</CaseSection>
-
-<CaseSection id="prototype" label="09 / 최종 프로토타입" title="답변이 있는 그 자리에서, | 확인하고 끈다.">
-
-두 테스트 시나리오는 페르소나 유나의 가상 데이터로 진행해서, 참가자의 실제 정보는 쓰지 않습니다.
-
-**시나리오 A.** 사용자가 말한 적 없는 이름, 정민이 레스토랑 추천에 나옵니다. 이건 어디서 왔고, 끌 수 있을까요?
-
-**시나리오 B.** “정민에 대한 건 다 지워 줘.” 실제로 무엇이 사라지고, 사라졌는지 어떻게 알 수 있을까요?
-
-</CaseSection>
-
-<CasePrototype
-  device="phone"
-  stepsBelow
-  href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant"
-  label="정민이 어디서 왔는지 보고, 그 출처를 끄기"
-  steps={[
-    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "답변 아래 출처 배지", before: "어디서 왔는지 알기 어려움.", body: "Gmail, Calendar, Memory별 항목이 담긴 출처 배지." },
-    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "출처마다 토글 하나", before: "설정 화면 두 곳, 각각 3–5번 클릭.", body: "채팅을 떠나지 않고 토글 하나." },
-    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "삭제와 차단을 나눠서", before: "삭제와 차단이 똑같아 보임.", body: "‘삭제돼요’와 ‘참조만 차단돼요’를 나눠서 표시." },
-    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "확인할 수 있는 결과", before: "결과를 믿는 건 사용자 몫.", body: "한 줄씩 보여 주는 결과와 지금 확인하기." },
-  ]}
-/>
-
-
-<CaseSection id="usability-testing" label="10 / 사용성 테스트" title="테스트 중: | 직접 확인하면 신뢰가 생길까?">
-
-AI 사용 정도와 프라이버시 민감도가 다른 최대 5명과, 진행자가 함께하는 Think-aloud 테스트를 합니다. 시나리오에 가상의 인물을 써서, 참가자의 실제 데이터는 쓰지 않습니다.
-
-<Todo>add usability test results (SUS and 1–2 key numbers) once the sessions are done</Todo>
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "관찰", title: "스스로 찾아낼까?", body: "묻지 않아도 출처 배지와 지금 확인하기를 누르는지." },
-    { label: "성공 기준", title: "힌트 없이 10초 안에", body: "그리고 차단과 삭제의 차이를 자기 말로 설명할 수 있는지." },
-    { label: "측정", title: "SUS, 과제 난이도, 신뢰", body: "SUS(68 이상이면 평균 이상), SEQ 1–7, 정보량 1–7." },
-  ]}
-/>
-
-<CaseSection id="review" label="11 / 리뷰와 한계" title="신뢰는 화면 속 약속이 아니라, | 사용자가 직접 확인하는 것이다.">
-
-개인 정보를 내주는 사람과 그 정보를 다루는 사람 양쪽의 이야기를 들은 덕분에, 삭제와 차단의 차이를 어떻게 설명할지 정할 수 있었습니다.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "잘된 점", title: "원칙이 요구사항이 됐다", points: ["삭제와 처리 제한의 차이를 UI에 반영", "라벨을 떼고 다시 묶은 분석", "행동을 기록하는 프로토타입"] },
-    { label: "한계", title: "아직 남은 것", points: ["인터뷰 4건 중 외부 참가자는 2건", "테스트 결과는 아직", "정해진 흐름만 있고 자유 요청은 미검증"] },
-    { label: "다음", title: "다음에 할 것", points: ["채팅으로 삭제할 수 있다는 걸 어떻게 알게 할지", "카테고리별 보관 기간", "데이터가 합쳐질 때의 위험을 보여 주기"] },
-  ]}
-/>
+</DevsignCase>

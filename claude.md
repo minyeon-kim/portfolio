@@ -659,3 +659,9 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Sparkle restored but small: points 1.6–2.8px, ~25% flare (+5px) with a crisp core and a thin four-point glint.
 - Pills matched to the metalab screenshot: fill light-dark(rgb(14 17 17/.08), rgb(255 255 255/.14)) + blur(30px), no rim, no saturate (the backdrop colour shows through); home picks 30px tall, 0 16px, 15px/400, 8px gap.
 - The margin stage list sits at `--edge-inset` (24px), the same edge as the header's Menu pill.
+
+## Gemini case in the Devsign layout (from Figma 657:254 / 733:3)
+- Gemini EN/KO now render through `DevsignCase` with a `study` object in content/(ko/)cases/gemini-privacy.mdx; copy is verbatim from the Figma frames. The old CaseSection body is gone; CaseBody no longer adds `data-skin="dv"` or a separate GEMINI_NAV.
+- DevsignCase variants chosen by data shape: q1 `boards` → chips + board, else `Groups` rows (papers); q2 `groups` → rows instead of the tool matrix; interview/usability `photo` optional; `develop.blocks` → generic `DevelopBlock`s (text + image | images pair | 4-screen row `.dv-screens` | features), `rule` starts a subsection; `deliver.changes` → 4 change cards (`.dv-points.dv-changes`, phone screens) instead of CaseGallery; iterations optional; persona avatar optional (`.dv-avatar-blank`). Images with `fit` sit whole inside a box of that aspect (`.dv-fit`). Feature grids use `--n` columns.
+- Devsign copy synced to Figma: feature kickers "01 See/02 Merge/03 Decide/04 Record" with short bodies, stat texts, group details, review bodies, next-step title (EN + KO).
+- Figma: case stage lists moved to 24px; Main pills set to white 14% + background blur 30, case pills 30px.
