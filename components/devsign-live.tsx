@@ -25,6 +25,31 @@ export function setDevsignLanguage(locale: "en" | "ko") {
   try { localStorage.setItem(DEVSIGN_LANGUAGE_KEY, JSON.stringify({ version: 1, language: locale })); } catch { /* storage unavailable: the prototype keeps its default */ }
 }
 
+// The frame's load event fires before the prototype (a React app) has drawn
+// anything, so revealing it then covered the image loop with an empty dark
+// screen. Where the frame is readable (same origin on GitHub Pages), wait until
+// its root has content and two frames have painted; otherwise give it a fixed
+// grace period.
+const PAINT_GRACE_MS = 1500;
+const PAINT_MAX_MS = 6000;
+function whenPainted(frame: HTMLIFrameElement, done: () => void) {
+  let doc: Document | null = null;
+  try { doc = frame.contentDocument; } catch { /* cross-origin */ }
+  if (!doc) { window.setTimeout(done, PAINT_GRACE_MS); return; }
+  const start = performance.now();
+  const check = () => {
+    const root = doc?.getElementById("root") ?? doc?.body;
+    if (root && root.childElementCount > 0 && root.getBoundingClientRect().height > 0) {
+      requestAnimationFrame(() => requestAnimationFrame(done));
+    } else if (performance.now() - start > PAINT_MAX_MS) {
+      done();
+    } else {
+      window.setTimeout(check, 100);
+    }
+  };
+  check();
+}
+
 // The live prototype in a frame, laid out at its desktop width (1440) and
 // scaled to fill whatever box it sits in, so it shows its real UI at any
 // browser size. The image loop stands in underneath until the page has
@@ -54,7 +79,7 @@ export function DevsignLive({ alt }: { alt: string }) {
   return (
     <div ref={box} className="devsign-live" data-loaded={loaded || undefined}>
       <DevsignLoop alt={alt} />
-      <iframe src={devsignUrl(locale)} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={() => setLoaded(true)} />
+      <iframe src={devsignUrl(locale)} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={(e) => whenPainted(e.currentTarget, () => setLoaded(true))} />
     </div>
   );
 }
