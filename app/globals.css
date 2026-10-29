@@ -2197,6 +2197,13 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-groups dt { font-weight: 700; }
 .dv-groups dd { margin: 0; color: var(--dv-muted); font-weight: 500; }
 .dv-boards { padding-top: 34px; }
+.dv-groups-evidence > div { grid-template-columns: 220px minmax(0, 1fr) 320px; align-items: start; }
+.dv-evidence { display: block; overflow: hidden; border-radius: 10px; box-shadow: 0 0 0 1px var(--dv-line); transition: box-shadow var(--dur-fast) var(--ease); }
+.dv-evidence:hover { box-shadow: 0 0 0 2px var(--case-accent); }
+.dv-evidence img { display: block; width: 100%; height: auto; }
+.dv-evidence-note { margin-top: 14px; color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.5; }
+.dv-evidence-note a { color: var(--case-accent); text-decoration: none; }
+.dv-evidence-note a:hover { text-decoration: underline; }
 .dv-matrix { width: 100%; min-width: 760px; border-collapse: collapse; }
 .dv-matrix th, .dv-matrix td { padding: 14px 8px; border-bottom: 1px solid var(--dv-line); text-align: center; }
 .dv-matrix thead th { padding-block: 0 16px; color: var(--dv-muted); font-size: 14px; font-weight: 700; line-height: 1.4; vertical-align: bottom; }
@@ -2412,7 +2419,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-psi li strong { padding-top: 0; }
   .dv-two, .dv-compare, .dv-problems, .dv-scores { grid-template-columns: 1fr; }
   .dv-problems { gap: 40px; }
-  .dv-groups > div { grid-template-columns: 1fr; gap: 4px; }
+  .dv-groups > div, .dv-groups-evidence > div { grid-template-columns: 1fr; gap: 4px; }
+  .dv-evidence { margin-top: 10px; }
   .dv-boards { padding-top: 0; }
   .dv-stat strong { font-size: 36px; }
   .dv-stages-head { display: none; }
