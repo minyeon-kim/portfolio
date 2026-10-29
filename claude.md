@@ -682,3 +682,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Devsign bolt is loose like the Gemini sparkle (outline loose ×0.5, body ×0.75), a hint rather than a crisp shape.
 - Case pages (dark): background is the page `--bg` (#050506) instead of `--surface`, hero gradient included.
 - Case images reveal Metalab-like: each `.dv-figure` image (img/.dv-crop/.dv-fit) and `.dv-point-media` arrives at scale 1.14 inside a clip-path window inset 9%/7%, then settles to scale 1 / full window (1.6s/1.4s, ease-out-soft) when its `.reveal` gets `data-shown`.
+- About form: three stars (research, design, engineering) joined by faint lines, loose like the Gemini sparkle; replaces the fingerprint.
+- Dark subpages unified on `--bg` (#050506): footer (`--ft-bg`), `--dv-band` / `--dv-tint` / `--dv-tint-core` now mix over `--bg` instead of `--surface`.
+- Home hover keeps the page theme: the `[data-world]` dark override on the stage and header is gone, so in light mode a hovered project stays on the light page; the dust keeps its light rendering. Light-mode dust ink is saturated (pow(c, 1.7)·0.95) instead of greyed (c·0.55).
+- Devsign bolt is slimmer: x scaled ×0.75.
