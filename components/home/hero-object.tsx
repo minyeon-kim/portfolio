@@ -11,10 +11,10 @@ import { useEffect, useRef } from "react";
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
-// - default: a Milky Way band
+// - default: a spiral galaxy, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: two groups joined by streams, a bolt where they meet
-// - About me, teal: a hexagonal lattice, the security background
+// - About me, teal: a shield with a keyhole, the security background
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // DPR 1, paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
@@ -39,27 +39,49 @@ vec3 homeOf(vec2 uv) {
   vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
-    vec2 cell = floor(vec2(b, c) * vec2(7.0, 6.0)) - vec2(3.0, 2.5);
-    vec2 centre = vec2(cell.x * 0.32 + mod(cell.y, 2.0) * 0.16, cell.y * 0.28);
-    float t = a * 6.2831853, k = floor(t / 1.0471976);
-    vec2 v0 = vec2(cos(k * 1.0471976 + 0.5236), sin(k * 1.0471976 + 0.5236));
-    vec2 v1 = vec2(cos((k + 1.0) * 1.0471976 + 0.5236), sin((k + 1.0) * 1.0471976 + 0.5236));
-    vec2 q = centre + mix(v0, v1, fract(t / 1.0471976)) * 0.165;
-    p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.3);
+    // A shield with a keyhole, the security background: its outline drawn
+    // densely, the keyhole too, the body filled lightly.
+    float side = step(0.5, b) * 2.0 - 1.0;
+    vec2 q;
+    if (a < 0.4) {
+      float u = c;
+      if (u < 0.28) {
+        float x = u / 0.28;
+        q = vec2(side * x * 0.82, 0.86 - 0.05 * x * x);
+      } else {
+        float v = (u - 0.28) / 0.72;
+        float w = v < 0.42 ? 1.0 : pow(1.0 - (v - 0.42) / 0.58, 0.8);
+        q = vec2(side * 0.82 * w, 0.81 - v * 1.81);
+      }
+    } else if (a < 0.6) {
+      float t = c * 6.2831853;
+      q = c < 0.7 ? vec2(0.0, 0.22) + vec2(cos(t / 0.7), sin(t / 0.7)) * 0.17
+                  : vec2(side * mix(0.07, 0.13, (c - 0.7) / 0.3), 0.1 - (c - 0.7) / 0.3 * 0.42);
+    } else {
+      float v = c;
+      float w = v < 0.42 ? 1.0 : pow(1.0 - (v - 0.42) / 0.58, 0.8);
+      q = vec2(side * 0.8 * w * sqrt(h1(n * 6.3)), 0.8 - v * 1.78);
+    }
+    p = vec3(q * 1.15 + vec2(0.25, 0.0), (h1(n * 4.4) - 0.5) * 0.25);
+    loose *= a < 0.6 ? 0.3 : 0.6;
   } else if (symbol > 1.5) {
     if (a < 0.35) {
       float side = step(0.5, b) * 2.0 - 1.0;
       p = vec3(side * 0.95, 0.15, 0.0) + (vec3(h1(n * 6.1), h1(n * 6.7), h1(n * 7.3)) - 0.5) * 0.55;
-    } else if (a < 0.72) {
+    } else if (a < 0.66) {
       float lane = floor(c * 5.0) - 2.0;
       p = vec3(mix(-0.95, 0.95, b), 0.15 + sin(b * 3.14159) * lane * 0.16, sin(b * 3.14159) * lane * 0.1);
       loose *= 0.9;
     } else {
-      float seg = floor(b * 3.0), u = fract(b * 3.0);
-      vec2 A = seg < 0.5 ? vec2(0.12, 0.62) : (seg < 1.5 ? vec2(-0.13, 0.17) : vec2(0.13, 0.17));
-      vec2 B = seg < 0.5 ? vec2(-0.13, 0.17) : (seg < 1.5 ? vec2(0.13, 0.17) : vec2(-0.1, -0.3));
-      p = vec3(mix(A, B, u) * 1.3, 0.0);
-      loose *= 0.45;
+      // A filled bolt: two thick slanted bars, the lower set off to the
+      // right, joined by a short crossbar.
+      float u = b, w = c - 0.5;
+      vec2 q;
+      if (h1(n * 6.9) < 0.45) q = mix(vec2(0.18, 0.66), vec2(-0.12, 0.12), u) + vec2(w * 0.08, 0.0);
+      else if (h1(n * 6.9) < 0.6) q = vec2(mix(-0.16, 0.18, u), 0.12 + w * 0.07);
+      else q = mix(vec2(0.14, 0.12), vec2(-0.14, -0.42), u) + vec2(w * 0.08, 0.0);
+      p = vec3(q * 1.35, 0.0);
+      loose *= 0.3;
     }
     // Up and to the left, so the bolt sits above the title, clear of the
     // project window on the right.
@@ -74,12 +96,21 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    // The Milky Way: one long band rising to the right, brightest along its
-    // spine and gently waving.
-    float t = a * 2.0 - 1.0;
-    vec2 dir = normalize(vec2(1.0, 0.42)), nrm = vec2(-dir.y, dir.x);
-    float across = (b + c - 1.0) * 0.42 + sin(t * 2.6 + 0.8) * 0.14;
-    p = vec3(dir * t * 2.9 + nrm * across, (h1(n * 4.4) - 0.5) * 0.4);
+    // A spiral galaxy seen at a slant: a bright core and two arms winding
+    // out, turning slowly.
+    vec2 q;
+    if (a < 0.14) {
+      q = (vec2(b, c) - 0.5) * 0.55 * sqrt(h1(n * 6.1));
+    } else {
+      float r = 0.18 + pow((a - 0.14) / 0.86, 0.8) * 2.0;
+      float t = floor(b * 2.0) * 3.14159 + r * 2.3 + time * 0.02 + (c - 0.5) * 0.5;
+      q = vec2(cos(t), sin(t)) * r;
+    }
+    q.y *= 0.42;
+    float ct = cos(0.38), st = sin(0.38);
+    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
+    p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.3);
+    loose *= 0.5;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -181,7 +212,7 @@ void main() {
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.72 ? 0.3 : 0.0);
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.66 ? 0.3 : (symbol > 2.5 && cat < 0.6 ? 0.3 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
