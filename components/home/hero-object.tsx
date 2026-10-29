@@ -5,8 +5,7 @@ import { useEffect, useRef } from "react";
 // The landing object: a sphere of about 60,000 points, the positioning line
 // as an image. Most of the points are out of place, drifting in a cloud like
 // ciphertext; the cursor decodes: near it every point falls into place on the
-// shell, so the sphere sharpens wherever you look, and the points right under
-// the cursor step aside. It turns slowly and leans toward the cursor; when the
+// shell, so the sphere sharpens wherever you look. It turns slowly and leans toward the cursor; when the
 // mouse rests, the decoding lens drifts around the sphere on its own. The
 // research-to-shipped work of the cases is the same move: making what is
 // hidden or scattered legible. Hovering a case recolours the points (Gemini
@@ -50,15 +49,10 @@ void main() {
   // everywhere, all of them near the lens.
   vec2 sa = project(a);
   float d = length((sa - lens) * vec2(aspect, 1.0));
-  float share = clamp(order + (1.0 - order) * smoothstep(reach, 0.05, d), 0.0, 1.0);
+  float share = clamp(order + (1.0 - order) * smoothstep(reach, 0.0, d), 0.0, 1.0);
   float o = smoothstep(rnd.y - 0.08, rnd.y + 0.08, share);
   vec3 p = mix(b, a, o);
-  vec2 s = project(p);
-  // The points right under the lens step aside.
-  vec2 away = (s - lens) * vec2(aspect, 1.0);
-  float r = length(away);
-  s += normalize(away + 1e-4) / vec2(aspect, 1.0) * 0.05 * exp(-r * r / 0.02);
-  gl_Position = vec4(s, 0.0, 1.0);
+  gl_Position = vec4(project(p), 0.0, 1.0);
   vDepth = clamp((p.z + 3.0) / 6.0, 0.0, 1.0);
   vOrder = o;
   gl_PointSize = (1.4 + 1.6 * o) * (0.6 + 0.8 * vDepth);
@@ -210,7 +204,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uTime, clock);
       gl.uniform2f(uPointer, pointer.x, pointer.y);
       gl.uniform2f(uLens, autoX + (cursor.x - autoX) * cursor.press, autoY + (cursor.y - autoY) * cursor.press);
-      gl.uniform1f(uReach, 0.55 + 0.2 * cursor.press);
+      gl.uniform1f(uReach, 0.85 + 0.15 * cursor.press);
       gl.uniform1f(uAspect, width / height);
       gl.uniform1f(uOrder, 0.2);
       gl.uniform1f(uSpread, current.spread);
