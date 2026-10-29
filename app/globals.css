@@ -2469,12 +2469,13 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   isolation: isolate;
   overflow: clip;
   padding: clamp(72px, 8svh, 96px) var(--dh-pad) 72px;
-  background: light-dark(#f5f5f5, var(--surface));
+  /* Fades into the page below, so there is no edge where the case begins. */
+  background: linear-gradient(to bottom, light-dark(#f5f5f5, var(--surface)) 45%, light-dark(#ffffff, var(--surface)));
   color: var(--dh-ink);
 }
 .devsign-hero[data-project="gemini-privacy"] { --dh-glow: #4285f4; --dh-glow-2: #a78bfa; }
 /* A soft wash of the project's colour behind the media, like a product shot's backdrop. */
-.devsign-hero::before { content: ""; position: absolute; inset: 28% -10% -12%; z-index: -1; background: radial-gradient(42% 42% at 42% 58%, color-mix(in srgb, var(--dh-glow) light-dark(24%, 30%), transparent), transparent 72%), radial-gradient(36% 40% at 66% 50%, color-mix(in srgb, var(--dh-glow-2) light-dark(20%, 24%), transparent), transparent 72%); filter: blur(30px); pointer-events: none; }
+.devsign-hero::before { content: ""; position: absolute; inset: 22% -10% 0; z-index: -1; background: radial-gradient(46% 46% at 42% 52%, color-mix(in srgb, var(--dh-glow) light-dark(13%, 20%), transparent), transparent 75%), radial-gradient(40% 44% at 66% 46%, color-mix(in srgb, var(--dh-glow-2) light-dark(11%, 16%), transparent), transparent 75%); filter: blur(40px); -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent); mask-image: linear-gradient(to bottom, #000 55%, transparent); pointer-events: none; }
 .project-hero.devsign-hero-page, .selected-stage.selected-stage-hero { padding: 0; background: none; color: inherit; }
 .devsign-hero-page .devsign-hero { padding-top: clamp(8px, 2svh, 16px); }
 @media (min-width: 48rem) {
