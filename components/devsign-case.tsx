@@ -155,16 +155,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <p key={stat.value} className="dv-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
             ))}
           </div>
-          <div className="dv-two dv-gap-56">
-            <div>
-              <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
-              <dl className="dv-groups">
-                {discover.q1.groups.map((group: { name: string; detail: string }) => (
-                  <div key={group.name} className="reveal"><dt>{group.name}</dt><dd>{group.detail}</dd></div>
-                ))}
-              </dl>
-            </div>
-            <Figure img={{ ...discover.q1.boards, alt: "Research boards with community posts grouped by pattern" }} sizes="(max-width: 767px) 100vw, 50vw" className="dv-boards" />
+          {/* Each problem with a close-up of the research board behind it; the full boards open from the link below. */}
+          <div className="dv-gap-56">
+            <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
+            <dl className="dv-groups dv-groups-evidence">
+              {discover.q1.groups.map((group: { name: string; detail: string; image?: Img }) => (
+                <div key={group.name} className="reveal">
+                  <dt>{group.name}</dt>
+                  <dd>{group.detail}</dd>
+                  {group.image && (
+                    <a className="dv-evidence" href={withBase(group.image.src)} target="_blank" rel="noreferrer">
+                      <Image src={withBase(group.image.src)} alt="" width={group.image.width} height={group.image.height} sizes="(max-width: 767px) 100vw, 320px" />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </dl>
+            <p className="dv-evidence-note reveal">
+              {discover.q1.boards.caption} · <a href={withBase(discover.q1.boards.src)} target="_blank" rel="noreferrer">{discover.q1.boards.link} ↗</a>
+            </p>
           </div>
         </div>
 
