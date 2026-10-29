@@ -611,3 +611,6 @@ Devsign Discover, community posts: each of the three problems carries a close-up
 Devsign case (later): content column max 1200px (was 1440; --dv-max and every --dv-pad / --dh-pad formula use 1200), section padding 120/160 (band 160, phones 72/96), questions 96px apart. Community posts: no per-problem list or click-through close-ups — the three problem names as chips in one row, then the full research board image (4096px) across the column.
 
 Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-lead/.dv-body, section copy, review, limits, PSI/TL;DR text columns, plain paragraphs in .case-content), --dv-measure-wide 900px for headline-size lines (.dv-headline, .dv-answer, .dv-summary, .dv-core-text, .dv-hmw-question, case section titles). The 1200 column is for images, cards and tables. The column caps use :where(...) so these measures win on direct children.
+
+## Case zoom: case content mounts after the transition
+- `CasePanels` (components/home/case-panels.tsx) no longer mounts the picked case during the intro → case zoom. While `data-project-navigation` is on `<html>`, it renders nothing; once the flag is removed it mounts in an idle callback. Mounting the full case mid-zoom was a 120–320ms long task that froze the hold/settle frames (Devsign: layout alone ~160ms). Now ~58ms (opener only).
