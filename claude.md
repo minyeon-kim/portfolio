@@ -657,3 +657,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Glass pills (Menu, lang toggle, theme, home picks, menu links): ink 9% fill, blur(18px) saturate(1.7), 1px ink-12% inner ring and a 1px top highlight (Apple/metalab-like see-through).
 - Pills back to metalab: no rim or highlight lines, ink 15% fill, blur(24px) saturate(1.2).
 - Sparkle restored but small: points 1.6–2.8px, ~25% flare (+5px) with a crisp core and a thin four-point glint.
+- Pills matched to the metalab screenshot: fill light-dark(rgb(14 17 17/.08), rgb(255 255 255/.14)) + blur(30px), no rim, no saturate (the backdrop colour shows through); home picks 30px tall, 0 16px, 15px/400, 8px gap.
