@@ -12,7 +12,6 @@ import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { DevsignHero, type DevsignHeroData } from "@/components/devsign-hero";
-import { DEVSIGN_URL } from "@/components/devsign-live";
 import { withBase } from "@/lib/site";
 
 export type StageProject = {
@@ -46,12 +45,12 @@ export function ProjectStage({ projects, about }: Props) {
   // From a case pill, the hovered device grows to the screen and settles into
   // the opener's media frame; from elsewhere (segmented control, More work)
   // the page just rises in.
-  const select = (index: number, from?: HTMLElement | null, prepared?: HTMLElement | null) => {
+  const select = (index: number, from?: HTMLElement | null) => {
     const project = projects[index];
     revealNextProject(
       () => setUi({ activeCase: index }),
       () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)),
-      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug, live: project.slug === "workflow-app" ? DEVSIGN_URL : undefined, prepared: prepared ?? undefined } : undefined,
+      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug } : undefined,
     );
   };
   const p = active !== null ? projects[active] : null;
