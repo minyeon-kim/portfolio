@@ -2116,7 +2116,10 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .case-study:has(.dv) { padding-top: 0; }
 /* The whole case sheet (body, Next project, up to the footer) sits on the surface tone in dark. */
 .case-study:has(.dv), .case-study[data-skin="dv"] { background: light-dark(transparent, var(--surface)); }
-.dv > section > *, .dv-nav > * { max-width: var(--dv-max); }
+/* Reading measures: body copy stays near 70 characters a line, headline-size lines a little wider; images, cards and tables use the full 1200 column. */
+.dv, .case-study[data-skin="dv"] { --dv-measure: 740px; --dv-measure-wide: 900px; }
+/* Zero specificity, so the reading measures below still apply to direct children. */
+:where(.dv > section > *, .dv-nav > *) { max-width: var(--dv-max); }
 .dv :where(h2, h3, h4, p, ol, ul, dl, figure) { margin: 0; }
 .dv :where(ol, ul) { list-style: none; padding: 0; }
 .dv :where(strong) { font-weight: 600; }
@@ -2130,12 +2133,12 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-section.dv-band { padding-block: 160px; }
 .dv-section-head { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 1px solid var(--dv-line); }
 .dv-section-title { font-size: clamp(32px, 3.2vw, 48px); font-weight: 700; line-height: 1.2; letter-spacing: 0.03em; text-transform: uppercase; }
-.dv-headline { max-width: 960px; font-size: clamp(24px, 2.4vw, 32px); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; }
+.dv-headline { max-width: var(--dv-measure-wide); font-size: clamp(24px, 2.4vw, 32px); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; }
 .dv-headline span { color: var(--case-accent); }
 .dv-method { color: var(--dv-muted); font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 .dv-block-title { font-size: clamp(22px, 2vw, 28px); font-weight: 700; line-height: 1.25; letter-spacing: 0.03em; text-transform: uppercase; }
 .dv-method + .dv-block-title { margin-top: 8px; }
-.dv-lead, .dv-body { max-width: 960px; margin-top: 12px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
+.dv-lead, .dv-body { max-width: var(--dv-measure); margin-top: 12px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-lead strong { color: var(--dv-ink); }
 .dv-muted { color: var(--dv-muted); }
 .dv-accent { color: var(--case-accent); }
@@ -2158,7 +2161,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-psi { margin-top: 56px; }
 .dv-psi section[aria-labelledby="tldr"] { margin: 0; padding: 0; border-radius: 0; background: none; }
 .dv-psi #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.dv-psi li { display: grid; grid-template-columns: 160px minmax(0, 1000px); gap: 24px; margin: 0; padding-bottom: 32px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.5; }
+.dv-psi li { display: grid; grid-template-columns: 160px minmax(0, var(--dv-measure)); gap: 24px; margin: 0; padding-bottom: 32px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.5; }
 .dv-psi li strong { display: block; margin: 0; padding-top: 0.45em; color: var(--dv-muted); font-family: inherit; font-size: 13px; font-weight: 700; line-height: 1.3; letter-spacing: 0.08em; text-transform: uppercase; }
 .dv-psi li:nth-child(2) strong { color: var(--case-accent); }
 .dv-process { margin-top: 96px; padding-top: 48px; }
@@ -2187,7 +2190,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 
 /* Discover */
 .dv-question { margin-top: 96px; padding-top: 48px; border-top: 1px solid var(--dv-line); }
-.dv-answer { max-width: 1100px; margin-top: 8px; font-size: clamp(20px, 1.8vw, 24px); font-weight: 700; line-height: 1.3; }
+.dv-answer { max-width: var(--dv-measure-wide); margin-top: 8px; font-size: clamp(20px, 1.8vw, 24px); font-weight: 700; line-height: 1.3; }
 .dv-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 16px; }
 .dv-stat { display: flex; align-items: center; gap: 16px; padding-block: 4px; }
 .dv-stat strong { font-size: 44px; font-weight: 700; line-height: 1.2; }
@@ -2262,7 +2265,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-journey-line { fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 .dv-journey-designer { stroke: var(--case-accent); }
 .dv-journey-developer { stroke: var(--dv-second); }
-.dv-summary { max-width: 960px; margin-top: 28px; font-size: 20px; font-weight: 700; line-height: 1.35; }
+.dv-summary { max-width: var(--dv-measure-wide); margin-top: 28px; font-size: 20px; font-weight: 700; line-height: 1.35; }
 .dv-board img { border-radius: 16px; }
 .dv-problems { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 48px; }
 .dv-problems li { display: flex; flex-direction: column; gap: 12px; padding-top: 24px; border-top: 1px solid var(--dv-line); }
@@ -2276,10 +2279,10 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-from strong { font-weight: 700; }
 .dv-core { margin: 120px calc(-1 * var(--dv-pad)) 0; padding: 96px var(--dv-pad); background: var(--dv-tint-core); }
 .dv > section > .dv-core { max-width: none; }
-.dv-core > * { max-width: var(--dv-max); }
-.dv-core-text { max-width: 1200px; margin-top: 12px; font-size: clamp(24px, 2.6vw, 36px); font-weight: 700; line-height: 1.35; }
+:where(.dv-core > *) { max-width: var(--dv-max); }
+.dv-core-text { max-width: var(--dv-measure-wide); margin-top: 12px; font-size: clamp(24px, 2.6vw, 36px); font-weight: 700; line-height: 1.35; }
 .dv-hmw { padding-top: 120px; }
-.dv-hmw-question { max-width: 1120px; margin-top: 12px; font-size: 22px; font-weight: 500; line-height: 1.4; }
+.dv-hmw-question { max-width: var(--dv-measure-wide); margin-top: 12px; font-size: 22px; font-weight: 500; line-height: 1.4; }
 .dv-checks { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
 .dv-checks li { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 500; line-height: 1.35; }
 .dv-checks span { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--case-accent); color: light-dark(#fff, var(--bg)); font-size: 14px; font-weight: 700; }
@@ -2362,13 +2365,13 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 /* Takeaway */
 .dv-headline-plain + .dv-body { margin-top: 12px; }
 .dv-review-title { font-size: 28px; font-weight: 700; line-height: 1.25; }
-.dv-review { display: flex; flex-direction: column; gap: 32px; max-width: 960px; margin-top: 32px; }
+.dv-review { display: flex; flex-direction: column; gap: 32px; max-width: var(--dv-measure); margin-top: 32px; }
 .dv-review li { display: flex; gap: 24px; }
 .dv-review li > span { flex-shrink: 0; width: 64px; color: var(--case-accent); font-size: 40px; font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; }
 .dv-review h4 { padding-top: 4px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; line-height: 1.25; }
 .dv-review p { margin-top: 6px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-limit-title { font-size: 20px; font-weight: 700; line-height: 1.35; }
-.dv .dv-limits { max-width: 960px; margin-top: 12px; padding-left: 24px; list-style: disc; }
+.dv .dv-limits { max-width: var(--dv-measure); margin-top: 12px; padding-left: 24px; list-style: disc; }
 .dv-limits li { margin-top: 8px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-limits strong { color: var(--dv-ink); font-weight: 500; }
 .dv-next { display: flex; flex-direction: column; gap: 12px; padding: 40px 48px; border-radius: 16px; background: var(--dv-tint); }
@@ -2630,7 +2633,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] > ul { display: block; }
-.case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li { display: grid; grid-template-columns: 160px minmax(0, 1000px); gap: 24px; margin: 0; padding-bottom: 32px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.5; }
+.case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li { display: grid; grid-template-columns: 160px minmax(0, var(--dv-measure)); gap: 24px; margin: 0; padding-bottom: 32px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.5; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li strong { display: block; padding-top: 0.45em; color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 700; line-height: 1.3; letter-spacing: 0.08em; text-transform: uppercase; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li:nth-child(2) strong { color: var(--case-accent); }
 .case-study[data-skin="dv"] .case-section { margin-top: 72px; padding: 0; border: 0; scroll-margin-top: 72px; }
@@ -2644,8 +2647,9 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .case-study[data-skin="dv"] #review::before { content: "Takeaway"; }
 .case-study[data-skin="dv"] .case-content .case-eyebrow { margin: 0 0 8px; color: var(--muted); font-family: inherit; font-size: 14px; font-weight: 500; line-height: 1.4; letter-spacing: 0.08em; text-transform: uppercase; }
 .case-study[data-skin="dv"] .case-section-grid { display: block; }
-.case-study[data-skin="dv"] .case-section-title { max-width: 1100px; margin: 0 0 12px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
-.case-study[data-skin="dv"] .case-section-copy { max-width: 960px; padding: 0; }
+.case-study[data-skin="dv"] .case-section-title { max-width: var(--dv-measure-wide); margin: 0 0 12px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.case-study[data-skin="dv"] .case-section-copy { max-width: var(--dv-measure); padding: 0; }
+.case-study[data-skin="dv"] .case-content > :is(p, ul, ol, blockquote) { max-width: var(--dv-measure); }
 .case-study[data-skin="dv"] .case-section-copy :is(p, ul, ol) { margin-bottom: 16px; color: var(--muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .case-study[data-skin="dv"] .case-section-copy strong { color: var(--ink); font-weight: 600; }
 .case-study[data-skin="dv"] .case-section-copy blockquote { margin: 24px 0; padding-left: 20px; border-left: 2px solid var(--case-accent); }
