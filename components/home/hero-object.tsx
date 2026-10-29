@@ -2,21 +2,21 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing object, after metalab.com's home: an oversized glossy black
-// chrome form that crosses the whole screen, lit by long white studio
-// highlights and deep violet and blue reflections, with film grain. Here the
-// form is one continuous loop with a softly squared path: the positioning
-// line made solid, the research-design-engineering loop that closes on
-// itself. Behind it the room itself is drawn in: soft violet and blue bands
-// swirl slowly into a darker centre. It turns slowly and answers the cursor:
-// it tilts toward it, a glint follows it across the chrome, the tube swells
-// where the cursor points, and the backdrop's pull quickens a little while
-// the mouse moves. Hovering a case changes the reflections to that case's
-// colours (Gemini blue and lavender, Devsign purple) and the loop's weight.
-// Raymarched in a fragment shader (no model, no runtime), capped at DPR 1 and
-// 1100px, drawn at the display's rate and rendered smaller if frames run
-// long; paused offscreen, hidden or during the page transition, and skipped
-// with reduced motion (CSS shows the static ambient light instead).
+// The landing object, after metalab.com's home (its four chrome bars meeting
+// in a star) but made to mean something: three flat bevelled chrome beams,
+// research, design and engineering, run in from beyond the screen, folding
+// slowly along their length, and melt into one at a single point, the
+// product. Lit by a long white studio highlight and deep violet and blue
+// reflections, with film grain; behind it soft violet and blue bands drift
+// slowly into a darker centre. It turns slowly and answers the cursor: it
+// tilts toward it, a glint follows it across the chrome, and the backdrop's
+// pull quickens a little while the mouse moves. Hovering a case changes the
+// reflections to that case's colours (Gemini blue and lavender, Devsign
+// purple) and the beams' width. Raymarched in a fragment shader (no model, no
+// runtime), capped at DPR 1 and 1100px, drawn at the display's rate and
+// rendered smaller if frames run long; paused offscreen, hidden or during the
+// page transition, and skipped with reduced motion (CSS shows the static
+// ambient light instead).
 const vertex = `
 attribute vec2 position;
 void main() { gl_Position = vec4(position, 0.0, 1.0); }
@@ -41,27 +41,34 @@ mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 
 vec3 orient(vec3 p) {
-  p.yz = rot(1.15 + pointer.y * 0.22) * p.yz;
-  p.xz = rot(time * 0.07 - pointer.x * 0.34) * p.xz;
-  p.xy = rot(-0.5) * p.xy;
+  p.yz = rot(0.38 + pointer.y * 0.2) * p.yz;
+  p.xz = rot(0.22 * sin(time * 0.05) - pointer.x * 0.3) * p.xz;
+  p.xy = rot(time * 0.03) * p.xy;
   return p;
 }
-// The camera, shared with main(): the cursor's ray through the scene.
-const vec3 eye = vec3(0.0, 0.0, 4.8);
-// A thick loop on a softly squared path, breathing a little along its length,
-// swelling a little where the cursor points.
+float box(vec3 p, vec3 b, float r) { vec3 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0) - r; }
+float smin(float a, float b, float k) { float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
+// One flat bevelled chrome beam from the centre out past the edge of the
+// stage, at angle a in the plane and lifted out of it a little, folding
+// slowly along its length.
+float beam(vec3 p, float a, float lift) {
+  p.xy = rot(a) * p.xy;
+  p.xz = rot(lift) * p.xz;
+  float x = max(p.x, 0.0);
+  p.yz = rot(0.8 * sin(x * 0.5 - time * 0.15) + x * 0.12) * p.yz;
+  p.x -= 3.2;
+  return box(p, vec3(3.2, 0.28 + 0.04 * spread, 0.12), 0.06);
+}
+// Three beams (research, design, engineering) running in from beyond the
+// screen and melting into one at the centre: the product.
 float map(vec3 p) {
-  vec3 ray = normalize(vec3(cursor, -1.9));
-  vec3 w = p - eye;
-  float near = length(w - ray * dot(w, ray));
-  float swell = 0.09 * press * exp(-near * near / 0.12);
+  // The meeting point sits a little above the middle, clear of the headline.
+  p.y -= 0.45;
   p = orient(p);
-  float ang = atan(p.z, p.x);
-  vec2 q = abs(p.xz) - vec2(0.55);
-  float path = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - 0.95;
-  float y = p.y + 0.1 * sin(ang * 2.0 + time * 0.3);
-  float r = 0.46 + 0.06 * spread + 0.03 * sin(ang * 3.0 - time * 0.2);
-  return length(vec2(path, y)) - r - swell;
+  float d = beam(p, 1.5708, 0.28);
+  d = smin(d, beam(p, 1.5708 + 2.0944, -0.32), 0.45);
+  d = smin(d, beam(p, 1.5708 + 4.1888, 0.18), 0.45);
+  return d * 0.75;
 }
 vec3 normalAt(vec3 p) {
   vec2 e = vec2(0.0015, 0.0);
@@ -105,7 +112,7 @@ vec4 shade(vec3 p, vec3 rd) {
   vec3 col = mix(vec3(0.012), vec3(0.4, 0.42, 0.47), light) + refl * (0.55 + 0.45 * fres) + tint1 * mix(0.03, 0.14, light) + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
   return vec4(col, 1.0);
 }
-// Behind the loop: soft colour bands that drift slowly into a darker centre,
+// Behind the beams: soft colour bands that drift slowly into a darker centre,
 // as if the room were being drawn into the screen. Polar, on a log radius,
 // so each band keeps shrinking toward the middle as flow grows.
 vec3 backdrop(vec2 uv) {
@@ -124,8 +131,8 @@ vec3 backdrop(vec2 uv) {
 }
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
-  // Camera close, so the loop sweeps past the edges of the stage.
-  vec3 ro = eye;
+  // Camera close enough that the beams run past the edges of the stage.
+  vec3 ro = vec3(0.0, 0.0, 7.5);
   vec3 rd = normalize(vec3(uv, -1.9));
   float t = 0.0; float hit = -1.0; float dm = 1e9; float tm = 0.0;
   for (int i = 0; i < 90; i++) {
@@ -134,7 +141,7 @@ void main() {
     if (d < dm) { dm = d; tm = t; }
     if (d < 0.001) { hit = t; break; }
     t += d * 0.92;
-    if (t > 11.0) break;
+    if (t > 14.0) break;
   }
   float grain = (hash(gl_FragCoord.xy + fract(time) * 7.0) - 0.5) * 0.045;
   vec3 back = backdrop(uv);
@@ -153,14 +160,14 @@ void main() {
 `;
 
 // Per case: the colours of the three reflections (sky, floor, front), the
-// loop's extra weight and whether its edge lights up.
+// beams' extra width and whether their edges light up.
 export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; focus: number }> = {
   default: { tints: [[0.28, 0.4, 0.95], [0.5, 0.3, 0.95], [0.75, 0.8, 0.95]], spread: 0, focus: 0 },
   "gemini-privacy": { tints: [[0.26, 0.55, 1.0], [0.62, 0.55, 1.0], [0.78, 0.86, 1.0]], spread: 0.3, focus: 1 },
   "workflow-app": { tints: [[0.38, 0.26, 0.9], [0.6, 0.42, 1.0], [0.7, 0.62, 1.0]], spread: -0.4, focus: 0.6 },
 };
 
-// `active` false (a world covers the loop) stops drawing after the fade, so
+// `active` false (a world covers the object) stops drawing after the fade, so
 // the GPU is free for the prototype frame.
 export function HeroObject({ variant = "default", active = true, className }: { variant?: string; active?: boolean; className?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
