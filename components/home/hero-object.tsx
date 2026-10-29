@@ -13,8 +13,8 @@ import { useEffect, useRef } from "react";
 // toward a hint of its own form, never a hard shape:
 // - default: a spiral galaxy, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
-// - Devsign, purple: two groups joined by streams, a bolt where they meet
-// - About me, teal: a shield with a keyhole, the security background
+// - Devsign, purple: the Devsign bolt, purple with a cyan edge
+// - About me, teal: a fingerprint, identity and the security background
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // DPR 1, paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
@@ -32,6 +32,17 @@ uniform float symbol;
 uniform float SIZE;
 uniform float focus;  // 0 at rest, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
+// The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
+const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(470.0, 215.0), vec2(660.0, 230.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(235.0, 215.0), vec2(0.0, 205.0));
+vec2 boltPoint(vec2 v) { return vec2(v.x - 330.0, 312.0 - v.y) * (1.7 / 625.0); }
+bool inBolt(vec2 q) {
+  bool inside = false;
+  for (int i = 0, j = 8; i < 9; j = i++) {
+    vec2 a = boltPoint(BOLT[i]), b = boltPoint(BOLT[j]);
+    if ((a.y > q.y) != (b.y > q.y) && q.x < (b.x - a.x) * (q.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
+  }
+  return inside;
+}
 // Where each particle leans: a loose cloud with a wide halo of dust.
 vec3 homeOf(vec2 uv) {
   float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
@@ -39,53 +50,35 @@ vec3 homeOf(vec2 uv) {
   vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
-    // A shield with a keyhole, the security background: its outline drawn
-    // densely, the keyhole too, the body filled lightly.
-    float side = step(0.5, b) * 2.0 - 1.0;
-    vec2 q;
-    if (a < 0.4) {
-      float u = c;
-      if (u < 0.28) {
-        float x = u / 0.28;
-        q = vec2(side * x * 0.82, 0.86 - 0.05 * x * x);
-      } else {
-        float v = (u - 0.28) / 0.72;
-        float w = v < 0.42 ? 1.0 : pow(1.0 - (v - 0.42) / 0.58, 0.8);
-        q = vec2(side * 0.82 * w, 0.81 - v * 1.81);
-      }
-    } else if (a < 0.6) {
-      float t = c * 6.2831853;
-      q = c < 0.7 ? vec2(0.0, 0.22) + vec2(cos(t / 0.7), sin(t / 0.7)) * 0.17
-                  : vec2(side * mix(0.07, 0.13, (c - 0.7) / 0.3), 0.1 - (c - 0.7) / 0.3 * 0.42);
-    } else {
-      float v = c;
-      float w = v < 0.42 ? 1.0 : pow(1.0 - (v - 0.42) / 0.58, 0.8);
-      q = vec2(side * 0.8 * w * sqrt(h1(n * 6.3)), 0.8 - v * 1.78);
-    }
-    p = vec3(q * 1.15 + vec2(0.25, 0.0), (h1(n * 4.4) - 0.5) * 0.25);
-    loose *= a < 0.6 ? 0.3 : 0.6;
+    // A fingerprint, for identity and the security background: ridges
+    // looping around a core, each broken here and there.
+    float k = floor(b * 9.0);
+    float t = c * 6.2831853;
+    float gap = h1(k * 13.7 + 1.0) * 6.2831853;
+    t += step(abs(fract((t - gap) / 6.2831853 + 0.5) - 0.5), 0.05) * 0.6;
+    float r = 0.12 + k * 0.105 + 0.03 * sin(t * 2.0 + k);
+    vec2 q = vec2(cos(t) * r * 0.78, sin(t) * r + (sin(t) > 0.0 ? k * 0.02 : 0.0));
+    if (a > 0.85) q *= 0.6 + 0.4 * h1(n * 6.3);
+    p = vec3(q * 1.15 + vec2(0.25, 0.05), (h1(n * 4.4) - 0.5) * 0.2);
+    loose *= a > 0.85 ? 0.6 : 0.22;
   } else if (symbol > 1.5) {
-    if (a < 0.35) {
-      float side = step(0.5, b) * 2.0 - 1.0;
-      p = vec3(side * 0.95, 0.15, 0.0) + (vec3(h1(n * 6.1), h1(n * 6.7), h1(n * 7.3)) - 0.5) * 0.55;
-    } else if (a < 0.66) {
-      float lane = floor(c * 5.0) - 2.0;
-      p = vec3(mix(-0.95, 0.95, b), 0.15 + sin(b * 3.14159) * lane * 0.16, sin(b * 3.14159) * lane * 0.1);
-      loose *= 0.9;
+    // The Devsign bolt: its outline drawn densely, its body filled evenly,
+    // set above the title, clear of the project window on the right.
+    vec2 q;
+    if (a < 0.3) {
+      float e = b * 9.0, k = floor(e);
+      int ki = int(k);
+      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
+      loose *= 0.25;
     } else {
-      // A filled bolt: two thick slanted bars, the lower set off to the
-      // right, joined by a short crossbar.
-      float u = b, w = c - 0.5;
-      vec2 q;
-      if (h1(n * 6.9) < 0.45) q = mix(vec2(0.18, 0.66), vec2(-0.12, 0.12), u) + vec2(w * 0.08, 0.0);
-      else if (h1(n * 6.9) < 0.6) q = vec2(mix(-0.16, 0.18, u), 0.12 + w * 0.07);
-      else q = mix(vec2(0.14, 0.12), vec2(-0.14, -0.42), u) + vec2(w * 0.08, 0.0);
-      p = vec3(q * 1.35, 0.0);
-      loose *= 0.3;
+      q = vec2(0.0, 0.1);
+      for (int t = 0; t < 10; t++) {
+        vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.84, 1.75);
+        if (inBolt(r)) { q = r; break; }
+      }
+      loose *= 0.2;
     }
-    // Up and to the left, so the bolt sits above the title, clear of the
-    // project window on the right.
-    p += vec3(-0.6, 0.3, 0.0);
+    p = vec3(q + vec2(-0.6, 0.42), (h1(n * 4.4) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
     // The Gemini sparkle: a four-point star with concave sides, its edge
     // drawn densely and its body filled more lightly.
@@ -190,7 +183,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -209,10 +202,18 @@ void main() {
   tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
   vTint = tips;
   vSpec = spectrum * smoothstep(0.1, 1.0, length(g));
+  // Devsign: the logo's violet, cyan along the lower right, and a soft
+  // white sheen across the upper slab.
+  vec2 d = (p.xy - vec2(0.35, 0.12)) / 1.6 - vec2(-0.6, 0.42);
+  float cyan = smoothstep(0.25, 0.55, dot(d, normalize(vec2(1.0, -0.7))));
+  float sheen = exp(-pow(dot(d - vec2(-0.25, 0.35), normalize(vec2(0.3, 1.0))) / 0.08, 2.0)) * 0.6;
+  vec3 boltTint = mix(mix(vec3(0.56, 0.28, 1.0), vec3(0.3, 0.8, 1.0), cyan), vec3(0.95, 0.9, 1.0), sheen);
+  vTint = mix(vTint, boltTint, bolt);
+  vSpec = mix(vSpec, 0.85, bolt);
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.66 ? 0.3 : (symbol > 2.5 && cat < 0.6 ? 0.3 : 0.0));
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat < 0.85 ? 0.2 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
@@ -245,7 +246,7 @@ void main() {
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
   c = mix(c, c * 0.55, light);
-  alpha *= mix(1.0, 1.6, light);
+  alpha *= mix(1.0, 2.3, light);
   o = vec4(c * alpha, alpha);
 }`;
 
@@ -266,7 +267,9 @@ void main() {
   float edge = exp(-pow(across - 0.55, 2.0) * 9.0);
   vec3 deep = calm * vec3(0.9, 0.7, 1.15);
   c += (mix(deep, mix(calm, fast, 0.25), 0.5 + 0.5 * sin(q.x * 0.6 + time * 0.04)) * band * 0.3 + deep * edge * 0.08) * (1.0 - light);
-  o = vec4(c, 0.0);
+  // Light theme: the same band as a faint tinted haze over the page.
+  float haze = (band * 0.08 + l * 0.04) * light;
+  o = vec4(c + mix(calm, accent, 0.5 + 0.5 * s.x) * 0.55 * haze, haze);
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -369,7 +372,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -385,8 +388,10 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
       const k = 1 - Math.exp(-dt / 0.5);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
-      colours.light += (lightTarget - colours.light) * k;
+      // A project's world is always dark, so its dust glows even in the light theme.
+      colours.light += ((target.symbol > 0 ? 0 : lightTarget) - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
+      colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
@@ -432,6 +437,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
+      gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
