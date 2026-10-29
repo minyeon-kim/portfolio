@@ -2,21 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing object, after metalab.com's home: an oversized glossy black
-// chrome form that crosses the whole screen, lit by long white studio
-// highlights and deep violet and blue reflections, with film grain. Here the
-// form is one continuous loop with a softly squared path: the positioning
-// line made solid, the research-design-engineering loop that closes on
-// itself; its three stages ride along it as labels (Research, Design,
-// Engineering), so the form says what it stands for. It turns slowly and
-// answers the cursor: it tilts toward it, a glint follows it across the
-// chrome, and the tube swells where the cursor points. Hovering a case
-// changes the reflections to that case's colours (Gemini blue and lavender,
-// Devsign purple) and the loop's weight. Raymarched in a fragment shader (no
-// model, no runtime), capped at DPR 1 and 1100px, drawn at the display's rate
-// and rendered smaller if frames run long; paused offscreen, hidden or during
-// the page transition, and skipped with reduced motion (CSS shows the static
-// ambient light instead).
+// The landing backdrop: a ride. The camera runs down a chrome coaster track
+// that swoops and banks through a chrome coil, so the stage keeps pulling
+// you in (the research-design-engineering loop as a track that never stops).
+// Same studio as before: glossy black chrome lit by long white highlights and
+// violet and blue reflections, with film grain. The cursor turns the head and
+// slides a glint over the chrome; moving the mouse speeds the ride up a little.
+// Hovering a case changes the reflections to that case's colours (Gemini blue
+// and lavender, Devsign purple) and the coil's width. Raymarched in a fragment
+// shader (no model, no runtime), capped at DPR 1 and 1100px, drawn at the
+// display's rate and rendered smaller if frames run long; paused offscreen,
+// hidden or during the page transition, and skipped with reduced motion (CSS
+// shows the static ambient light instead).
 const vertex = `
 attribute vec2 position;
 void main() { gl_Position = vec4(position, 0.0, 1.0); }
@@ -36,34 +33,33 @@ uniform float light;
 uniform vec2 cursor;
 uniform float press;
 
+uniform float travel;
+
 mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 
-vec3 orient(vec3 p) {
-  p.yz = rot(1.15 + pointer.y * 0.22) * p.yz;
-  p.xz = rot(time * 0.07 - pointer.x * 0.34) * p.xz;
-  p.xy = rot(-0.5) * p.xy;
-  return p;
-}
-// The camera, shared with main(): the cursor's ray through the scene.
-const vec3 eye = vec3(0.0, 0.0, 4.8);
-// A thick loop on a softly squared path, breathing a little along its length,
-// swelling a little where the cursor points.
+// The ride's centreline: a long swooping curve the camera follows down z.
+vec2 path(float z) { return vec2(sin(z * 0.16) * 1.8 + sin(z * 0.061) * 1.4, sin(z * 0.11) * 0.7 + cos(z * 0.043) * 0.5); }
+// The scene, in coordinates that follow the path (gentle curves, so the
+// distance to a curve is close enough to the distance in the plane): a
+// coaster track under the camera (two chrome rails on ties) and a chrome
+// coil wound around the ride, its rings rushing past.
 float map(vec3 p) {
-  vec3 ray = normalize(vec3(cursor, -1.9));
-  vec3 w = p - eye;
-  float near = length(w - ray * dot(w, ray));
-  float swell = 0.09 * press * exp(-near * near / 0.12);
-  p = orient(p);
-  float ang = atan(p.z, p.x);
-  vec2 q = abs(p.xz) - vec2(0.55);
-  float path = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - 0.95;
-  float y = p.y + 0.1 * sin(ang * 2.0 + time * 0.3);
-  float r = 0.46 + 0.06 * spread + 0.03 * sin(ang * 3.0 - time * 0.2);
-  return length(vec2(path, y)) - r - swell;
+  vec2 q = p.xy - path(p.z);
+  vec2 b = q - vec2(0.0, -0.75);
+  float rails = length(vec2(abs(b.x) - 0.42, b.y)) - 0.055;
+  float zt = mod(p.z, 0.7) - 0.35;
+  vec3 tie = abs(vec3(b.x, b.y + 0.09, zt)) - vec3(0.5, 0.025, 0.05);
+  float ties = length(max(tie, 0.0)) + min(max(tie.x, max(tie.y, tie.z)), 0.0);
+  // The coil as a true helix (radius R, k turns per unit of z): the gap along
+  // z to the nearest turn, tilted by the helix's pitch.
+  float R = 1.5 + 0.1 * spread, k = 1.25;
+  float dz = mod(p.z - atan(q.y, q.x) / k + 3.14159 / k, 6.28318 / k) - 3.14159 / k;
+  float coil = length(vec2(length(q) - R, dz * k * R / sqrt(k * k * R * R + 1.0))) - 0.085;
+  return min(min(rails, ties), coil) * 0.6;
 }
 vec3 normalAt(vec3 p) {
-  vec2 e = vec2(0.0015, 0.0);
+  vec2 e = vec2(0.002, 0.0);
   return normalize(vec3(map(p + e.xyy) - map(p - e.xyy), map(p + e.yxy) - map(p - e.yxy), map(p + e.yyx) - map(p - e.yyx)));
 }
 // A long thin light: bright where the reflected ray is near a great circle.
@@ -105,35 +101,36 @@ vec4 shade(vec3 p, vec3 rd) {
 }
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
-  // Camera close, so the loop sweeps past the edges of the stage.
-  vec3 ro = eye;
-  vec3 rd = normalize(vec3(uv, -1.9));
-  float t = 0.0; float hit = -1.0; float dm = 1e9; float tm = 0.0;
-  for (int i = 0; i < 90; i++) {
-    vec3 p = ro + rd * t;
-    float d = map(p);
-    if (d < dm) { dm = d; tm = t; }
-    if (d < 0.001) { hit = t; break; }
-    t += d * 0.92;
-    if (t > 11.0) break;
+  // Riding the path: the camera a little above the centreline, looking down
+  // the curve ahead, banking into the turns; the cursor turns the head.
+  float z = travel;
+  vec3 ro = vec3(path(z), z);
+  vec3 ahead = vec3(path(z + 4.0), z + 4.0);
+  vec3 fw = normalize(ahead - ro + vec3(pointer.x * 0.5, -pointer.y * 0.3, 0.0));
+  float bank = (path(z + 2.0).x - 2.0 * path(z + 1.0).x + path(z).x) * 1.2;
+  vec3 up = vec3(sin(bank), cos(bank), 0.0);
+  vec3 rt = normalize(cross(fw, up));
+  up = cross(rt, fw);
+  vec3 rd = normalize(uv.x * rt + uv.y * up + 1.25 * fw);
+  float t = 0.05; float hit = -1.0;
+  for (int i = 0; i < 110; i++) {
+    float d = map(ro + rd * t);
+    if (d < 0.0012 * t) { hit = t; break; }
+    t += max(d, 0.002);
+    if (t > 24.0) break;
   }
   float grain = (hash(gl_FragCoord.xy + fract(time) * 7.0) - 0.5) * 0.045;
-  if (hit >= 0.0) {
-    vec4 c = shade(ro + rd * hit, rd);
-    gl_FragColor = vec4(c.rgb + grain, 1.0);
-    return;
-  }
-  // Missed: soften the silhouette by about a pixel.
-  float px = tm / resolution.y * 1.3;
-  float edge = 1.0 - smoothstep(0.0, px, dm);
-  if (edge < 0.002) { gl_FragColor = vec4(0.0); return; }
-  vec4 c = shade(ro + rd * tm, rd);
-  gl_FragColor = vec4((c.rgb + grain) * edge, edge);
+  if (hit < 0.0) { gl_FragColor = vec4(0.0); return; }
+  vec4 c = shade(ro + rd * hit, rd);
+  c.rgb *= mix(1.6, 0.8, light);
+  // Far chrome sinks into the stage's own background.
+  float a = exp(-hit * 0.15);
+  gl_FragColor = vec4((c.rgb + grain) * a, a);
 }
 `;
 
 // Per case: the colours of the three reflections (sky, floor, front), the
-// loop's extra weight and whether its edge lights up.
+// coil's extra width and whether the chrome's edges light up.
 export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; focus: number }> = {
   default: { tints: [[0.28, 0.4, 0.95], [0.5, 0.3, 0.95], [0.75, 0.8, 0.95]], spread: 0, focus: 0 },
   "gemini-privacy": { tints: [[0.26, 0.55, 1.0], [0.62, 0.55, 1.0], [0.78, 0.86, 1.0]], spread: 0.3, focus: 1 },
@@ -142,27 +139,8 @@ export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; 
 
 // `active` false (a world covers the loop) stops drawing after the fade, so
 // the GPU is free for the prototype frame.
-// The loop's path in its own plane, as in map(): a rounded square of half-size
-// 1.5 with corner radius 0.95. The radius along the angle `a`, by bisection.
-function pathRadius(a: number) {
-  const x = Math.abs(Math.cos(a)), z = Math.abs(Math.sin(a));
-  const sdf = (r: number) => {
-    const qx = x * r - 0.55, qz = z * r - 0.55;
-    return Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - 0.95;
-  };
-  let lo = 0, hi = 3;
-  for (let i = 0; i < 20; i++) { const mid = (lo + hi) / 2; if (sdf(mid) < 0) lo = mid; else hi = mid; }
-  return lo;
-}
-const turn = (a: number, b: number, angle: number): [number, number] => {
-  // GLSL rot(angle) * vec2(a, b) with mat2(c, -s, s, c) (column-major).
-  const c = Math.cos(angle), s = Math.sin(angle);
-  return [c * a + s * b, -s * a + c * b];
-};
-
-export function HeroObject({ variant = "default", active = true, className, labels = [] }: { variant?: string; active?: boolean; className?: string; labels?: string[] }) {
+export function HeroObject({ variant = "default", active = true, className }: { variant?: string; active?: boolean; className?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const labelBox = useRef<HTMLDivElement>(null);
   const state = useRef(variant);
   useEffect(() => { state.current = variant; }, [variant]);
   const running = useRef(active);
@@ -190,7 +168,7 @@ export function HeroObject({ variant = "default", active = true, className, labe
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const u = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light"), uCursor = u("cursor"), uPress = u("press");
+    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light"), uCursor = u("cursor"), uPress = u("press"), uTravel = u("travel");
     // The theme: the explicit choice on <html>, else the system's.
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -200,14 +178,12 @@ export function HeroObject({ variant = "default", active = true, className, labe
     const themeObserver = new MutationObserver(onTheme);
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-    let width = 0, height = 0, cssWidth = 1, cssHeight = 1;
+    let width = 0, height = 0;
     // Lowered (to half at most) while frames run long.
     let quality = 1;
     const resize = () => {
       const rect = el.getBoundingClientRect();
-      cssWidth = Math.max(1, rect.width);
-      cssHeight = Math.max(1, rect.height);
-      const scale = Math.min(1, 1100 / cssWidth) * quality;
+      const scale = Math.min(1, 1100 / Math.max(1, rect.width)) * quality;
       width = Math.max(1, Math.round(rect.width * scale));
       height = Math.max(1, Math.round(rect.height * scale));
       if (el.width !== width || el.height !== height) { el.width = width; el.height = height; }
@@ -238,60 +214,8 @@ export function HeroObject({ variant = "default", active = true, className, labe
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
 
-    // The labels ride the loop's centreline: object space → the scene (the
-    // inverse of orient()) → the screen (the camera in main()). The loop is
-    // larger than the stage, so they are spread evenly over the part of it
-    // that is on screen, drifting slowly along it; behind the tube they fade.
-    const labelEls = Array.from(labelBox.current?.children ?? []) as HTMLElement[];
-    const radii = Array.from({ length: 144 }, (_, i) => pathRadius((i / 144) * Math.PI * 2));
-    const project = (i: number) => {
-      const a = (i / 144) * Math.PI * 2;
-      let x = Math.cos(a) * radii[i], z = Math.sin(a) * radii[i];
-      let y = -0.1 * Math.sin(a * 2 + clock * 0.3);
-      [x, y] = turn(x, y, 0.5);
-      [x, z] = turn(x, z, -(clock * 0.07 - pointer.x * 0.34));
-      [y, z] = turn(y, z, -(1.15 + pointer.y * 0.22));
-      const k = 1.9 / (4.8 - z);
-      return { x: cssWidth / 2 + x * k * cssHeight, y: cssHeight / 2 - y * k * cssHeight, front: Math.min(1, Math.max(0, (z + 1.1) / 1.6)) };
-    };
-    // The stage's copy (headline, picker, note) and the header: kept clear of
-    // labels. Measured every half second, in the canvas's coordinates.
-    let avoid: { l: number; t: number; r: number; b: number }[] = [];
-    let measuredAt = -1e9;
-    const measure = (now: number) => {
-      if (now - measuredAt < 500) return;
-      measuredAt = now;
-      const origin = el.getBoundingClientRect();
-      avoid = Array.from(document.querySelectorAll<HTMLElement>(".home-tagline-wrap, .home-picks, .home-note, header"))
-        .map((node) => node.getBoundingClientRect())
-        .filter((r) => r.width > 0 && r.height > 0)
-        .map((r) => ({ l: r.left - origin.left - 70, t: r.top - origin.top - 24, r: r.right - origin.left + 70, b: r.bottom - origin.top + 24 }));
-    };
-    const placeLabels = (now: number) => {
-      if (!labelEls.length) return;
-      measure(now);
-      const points = radii.map((_, i) => project(i));
-      const inside = (q: { x: number; y: number }) => q.x > 80 && q.x < cssWidth - 80 && q.y > 90 && q.y < cssHeight - 60
-        && !avoid.some((z) => q.x > z.l && q.x < z.r && q.y > z.t && q.y < z.b);
-      // The longest run of on-screen points (the loop closes, so walk it twice).
-      let best: number[] = [], run: number[] = [];
-      for (let n = 0; n < 288; n++) {
-        const i = n % 144;
-        if (inside(points[i]) && run.length < 144) run.push(i); else run = [];
-        if (run.length > best.length) best = [...run];
-      }
-      if (best.length < labelEls.length * 4) { labelEls.forEach((label) => { label.style.opacity = "0"; }); return; }
-      const drift = (clock * 0.02) % 1;
-      labelEls.forEach((label, i) => {
-        const at = (((i + 0.5) / labelEls.length + drift * 0.3) % 1) * 0.84 + 0.08;
-        const q = points[best[Math.floor(at * (best.length - 1))]];
-        label.style.transform = `translate3d(${q.x.toFixed(1)}px, ${q.y.toFixed(1)}px, 0) translate(-50%, -50%)`;
-        label.style.opacity = (0.75 + 0.25 * q.front).toFixed(3);
-      });
-      labelBox.current?.setAttribute("data-ready", "");
-    };
-
-    let frame = 0, last = performance.now(), clock = 0, slow = 0;
+    // Distance down the track; the speed eases up while the mouse moves.
+    let frame = 0, last = performance.now(), clock = 0, slow = 0, travel = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -316,6 +240,7 @@ export function HeroObject({ variant = "default", active = true, className, labe
       cursor.y += (cursor.ty - cursor.y) * follow;
       const engaged = now - cursor.movedAt < 1800 ? 1 : 0;
       cursor.press += (engaged - cursor.press) * (1 - Math.exp(-dt / (engaged ? 0.25 : 0.9)));
+      travel += dt * (1.8 + 1.4 * cursor.press);
       gl.uniform2f(uRes, width, height);
       gl.uniform2f(uPointer, pointer.x, pointer.y);
       gl.uniform1f(uTime, clock);
@@ -325,10 +250,10 @@ export function HeroObject({ variant = "default", active = true, className, labe
       gl.uniform1f(uLight, current.light);
       gl.uniform2f(uCursor, cursor.x, cursor.y);
       gl.uniform1f(uPress, cursor.press);
+      gl.uniform1f(uTravel, travel);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      placeLabels(now);
     };
     frame = requestAnimationFrame(draw);
     return () => {
@@ -345,14 +270,5 @@ export function HeroObject({ variant = "default", active = true, className, labe
     };
   }, []);
 
-  return (
-    <>
-      <canvas ref={canvas} className={className} aria-hidden="true" />
-      {labels.length > 0 && (
-        <div ref={labelBox} className="hero-object-labels" aria-hidden="true">
-          {labels.map((label) => <span key={label}>{label}</span>)}
-        </div>
-      )}
-    </>
-  );
+  return <canvas ref={canvas} className={className} aria-hidden="true" />;
 }

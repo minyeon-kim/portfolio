@@ -2553,14 +2553,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
 /* About keeps the loop (the site's own object stands for the person); the headline is the statement, "End-to-end" set apart. */
 .home-backdrop[data-project="about"] .home-object { opacity: 1; }
-/* The loop's three stages riding along it (placed per frame by HeroObject).
-   Quiet on the landing, clear on About me, gone with a case world. */
-.hero-object-labels { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 700ms ease; }
-.hero-object-labels[data-ready] { opacity: 1; }
-.home-backdrop[data-project] .hero-object-labels { opacity: 0; }
-.home-backdrop[data-project="about"] .hero-object-labels[data-ready] { opacity: 1; }
-.hero-object-labels > span { position: absolute; top: 0; left: 0; display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 62%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent); backdrop-filter: blur(10px); color: var(--ink); font: 500 11px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; will-change: transform, opacity; }
-.hero-object-labels > span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%), #0b0d0e; }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
