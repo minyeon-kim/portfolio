@@ -25,7 +25,7 @@
 /* Dark: follow the system unless the user picked light in the header toggle. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0c0e0e;
+    --bg: #050506;
     --surface: #151918;
     --ink: #e8ecea;
     --muted: #8e9895;
@@ -37,7 +37,7 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0c0e0e;
+  --bg: #050506;
   --surface: #151918;
   --ink: #e8ecea;
   --muted: #8e9895;
@@ -196,7 +196,7 @@ details[open]::details-content {
  * either theme, so light text reads on a darkened image.
  */
 :root {
-  --media-bg: #0c0e0e;
+  --media-bg: #050506;
 }
 @utility on-media {
   --bg: var(--media-bg);
@@ -2527,7 +2527,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    object, swaps the copy and raises that case's device at the right. Always
    the dark media palette, whatever the site theme. */
 /* The landing follows the theme: near-black with a black chrome loop in dark, the page grey with a pearl chrome loop in light. */
-.intro-stage.home-stage { --bg: light-dark(#eef0ee, #080909); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); }
+.intro-stage.home-stage { --bg: light-dark(#eef0ee, #080909); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); transition: background-color 700ms ease, color 500ms ease; }
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
 .home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
 .home-backdrop[data-project] .intro-ambient { opacity: 0.35; }
