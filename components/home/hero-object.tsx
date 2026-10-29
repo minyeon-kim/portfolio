@@ -159,8 +159,8 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse;
-out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum;
+out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
   float i = float(gl_VertexID);
@@ -169,6 +169,15 @@ void main() {
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
   gl_Position = vec4(s, 0.0, 1.0);
   vSpeed = length(u);
+  // Gemini: the sparkle takes the logo's colours, blue at its heart and
+  // warmer towards its points (coral up, yellow left, green down).
+  vec2 g = p.xy - vec2(0.35, 0.12);
+  float ga = atan(g.y, g.x);
+  vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
+    + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
+  tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
+  vTint = tips;
+  vSpec = spectrum * smoothstep(0.1, 1.0, length(g));
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
@@ -190,7 +199,7 @@ void main() {
 
 const drawFragment = `#version 300 es
 precision highp float;
-in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
+in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
@@ -200,6 +209,7 @@ void main() {
   float a = min(core + rays, 1.0) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
+  c = mix(c, vTint * mix(1.3, 1.5, e), vSpec);
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
@@ -328,7 +338,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -345,6 +355,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const k = 1 - Math.exp(-dt / 0.5);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
+      colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
@@ -389,6 +400,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
+      gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
