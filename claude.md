@@ -645,3 +645,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 
 ## Case stage nav: quiet, only where the margin has room
 - The vertical stage list in the left margin now needs ≥100rem (1600px); below that the sticky top bar is used. In the margin it is 12px/500 muted (80%), the current stage in full ink at 600, 10px gap, box height 172px (first section climbs back -172px).
+- Header bar is 64px tall again (py 18px around the 28px controls): the home stage and openers pull up by exactly 64px (`md:-mt-[64px]`), and a shorter header left a strip at the bottom of the landing.
