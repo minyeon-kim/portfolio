@@ -51,8 +51,8 @@ vec3 homeOf(vec2 uv) {
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
     // A landscape of dots, seen low from the front: a regular grid rolling
-    // into slow waves, rising into ridges at the sides, with faint streams
-    // of data falling behind it.
+    // into slow waves, rising into ridges at the sides, with faint, loose
+    // streams of data falling behind it.
     if (a < 0.82) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
@@ -62,8 +62,8 @@ vec3 homeOf(vec2 uv) {
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
-      p = vec3((col / 46.0 - 0.5) * 6.0, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
-      loose *= 0.08;
+      p = vec3((col / 46.0 - 0.5) * 6.0 + (h1(n * 6.1) - 0.5) * 0.35, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
+      loose *= 0.6;
     }
   } else if (symbol > 1.5) {
     // The Devsign bolt, loosely: its outline a little denser than its body,
@@ -108,7 +108,7 @@ vec3 homeOf(vec2 uv) {
     float ct = cos(0.38), st = sin(0.38);
     q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
     p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.3);
-    loose *= 0.85;
+    loose *= 0.75;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -188,7 +188,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float light;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -215,6 +215,16 @@ void main() {
   vec3 boltTint = mix(mix(vec3(0.56, 0.28, 1.0), vec3(0.3, 0.8, 1.0), cyan), vec3(0.95, 0.9, 1.0), sheen);
   vTint = mix(vTint, boltTint, bolt);
   vSpec = mix(vSpec, 0.85, bolt);
+  // The landing galaxy is the richest: every project's colour wound through
+  // its arms (blue, violet, teal, a touch of pink) round a warm white core.
+  vec2 gq = (p.xy - vec2(0.35, 0.12)) / 1.6;
+  float gr = length(gq), gt = atan(gq.y, gq.x);
+  float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
+  vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
+  arms = mix(arms, vec3(1.0, 0.55, 0.85), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
+  vec3 galaxyTint = mix(arms, vec3(1.0, 0.92, 0.88), exp(-gr * gr / 0.06));
+  vTint = mix(vTint, galaxyTint, galaxy);
+  vSpec = mix(vSpec, 0.8, galaxy);
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
@@ -224,15 +234,17 @@ void main() {
   if (symbol > 2.5) vLight = max(vLight, 0.85);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
-  float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
+  float flare = pow(max(sin(phase), 0.0), 16.0) * step(mix(0.75, 0.6, galaxy), fract(vSeed * 7.7));
   vLight *= 0.7 + 0.3 * sin(phase * 1.7);
   // Most of it is fine dust, faint on its own so that only where it gathers
   // does it add up into a milky haze; a few in a hundred are stars, and only
   // those flare.
-  float star = step(0.965, fract(vSeed * 13.1));
+  float star = step(mix(0.965, 0.94, galaxy), fract(vSeed * 13.1));
   vSize = flare * star;
   float size = mix(mix(1.0, 1.4, vDepth), mix(1.5, 2.1, vDepth), star) * (1.0 + 0.2 * vStar);
   vFaint = mix(1.15, 1.5, star);
+  // In the dark the landing galaxy shines brighter than any project's form.
+  vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
   gl_PointSize = size * mix(1.0, 1.4, light) + vSize * 3.0;
 }`;
@@ -261,9 +273,13 @@ void main() {
 // The pools' own soft light on the room behind the dust.
 const glowFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform vec3 fast; uniform float light;
+uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform vec3 fast; uniform float lightIn;
 ${pools}
 void main() {
+  // The theme flips this layer at once: half-way values would leave pixels
+  // with a little alpha under bright colour, which the page composites as
+  // hard-edged blobs while the theme changes.
+  float light = step(0.5, lightIn);
   vec2 s = v * 2.0 - 1.0;
   float l = max(pools(s, aspect, time) - 0.25, 0.0);
   vec3 c = mix(calm, accent, 0.5 + 0.5 * s.x) * l * 0.07 * (1.0 - light);
@@ -380,7 +396,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -399,6 +415,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
+      colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
@@ -431,7 +448,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.useProgram(pGlow);
       gl.bindVertexArray(vaoQuad);
-      gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "light"), colours.light);
+      gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "lightIn"), colours.light);
       gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       gl.useProgram(pDraw);
@@ -445,6 +462,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
+      gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);

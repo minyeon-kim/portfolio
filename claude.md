@@ -688,3 +688,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Devsign bolt is slimmer: x scaled ×0.75.
 - Default galaxy looser (arm spread ×1.8, loose ×0.85). Light theme dust: points ×1.4 larger and alpha ×2.8 so the pale page doesn't feel empty.
 - About form: a rolling landscape of dots (regular grid from the particle's own uv, slow waves, ridges at the sides) with faint streams of data falling behind it, after a reference the owner liked; carries its own light (vLight ≥ 0.85). Replaces the constellation/orbits.
+- Theme switch: the glow layer flips its theme at once (`step(0.5, light)`); half-way values left low-alpha pixels under bright colour that composited as hard-edged blobs during a light→dark switch.
+- About data streams are loose (×0.6 plus x jitter) instead of crisp columns.
+- Devsign card opens horizontally from its centre (clip-path inset 0 50% → 0, no rise); Gemini keeps the wipe up. Cards and captions sit above the backdrop vignette (z-index 1), so the light theme's pale edge no longer washes over them.
+- The landing galaxy is the richest state (`galaxy` uniform): arms tinted blue/violet/teal with touches of pink round a warm white core, more stars and flares, ×1.7 brighter in the dark, loose ×0.75.

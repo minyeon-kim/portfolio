@@ -2592,6 +2592,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* The hovered case's media: a large flat card at the top right, in its own frame (metalab.com's project shot), not a posed device. */
 .home-device { position: absolute; top: 14%; right: var(--project-text-inset); width: min(44vw, 680px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 22px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
 .home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 22px); transition: opacity 500ms ease 80ms, translate 1400ms var(--ease-out-soft) 80ms, clip-path 1400ms var(--ease-out-soft) 80ms; }
+/* The cards sit above the backdrop's vignette, so the light theme's pale edge never washes over them. */
+.home-backdrop .home-device, .home-backdrop .home-device-caption { z-index: 1; }
+.home-device[data-project="workflow-app"] { translate: 0 0; clip-path: inset(0 50% 0 50% round 22px); }
+.home-device[data-project="workflow-app"][data-active] { clip-path: inset(0 0 0 0 round 22px); }
 .home-device > * { scale: 1.12; transition: scale 500ms var(--ease-out-soft); }
 .home-device[data-active] > * { scale: 1; transition: scale 1800ms var(--ease-out-soft) 80ms; }
 /* The cards sit on the case's own colour plate, the screen set into it (after lusion.co/work). */
