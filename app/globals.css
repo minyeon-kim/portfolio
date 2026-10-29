@@ -307,6 +307,20 @@ details[open]::details-content {
   }
 }
 
+/* Case images (Metalab-like): each one arrives enlarged inside a narrower
+   window, then settles to its own size as the window opens to full. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready .dv-figure > :is(img, .dv-crop, .dv-fit), .reveal-ready .dv-point-media {
+    transition: scale 1600ms var(--ease-out-soft), clip-path 1400ms var(--ease-out-soft);
+    clip-path: inset(0 round 16px);
+  }
+  .reveal-ready .reveal:not([data-shown]) :is(.dv-figure > :is(img, .dv-crop, .dv-fit), .dv-point-media),
+  .reveal-ready .dv-figure.reveal:not([data-shown]) > :is(img, .dv-crop, .dv-fit) {
+    scale: 1.14;
+    clip-path: inset(9% 7% round 16px);
+  }
+}
+
 /*
  * Scroll-driven interactions. Pure CSS tied to scroll position, so they never
  * hijack or block scrolling. Browsers without animation-timeline, and anyone
@@ -2081,7 +2095,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    surfaces with a lighter purple for contrast. */
 .dv {
   /* Dark keeps the opener's surface tone rather than the page's near-black, so the case reads as one lifted sheet; the footer below goes darker instead. */
-  --dv-bg: light-dark(#ffffff, var(--surface));
+  --dv-bg: light-dark(#ffffff, var(--bg));
   --dv-surface: light-dark(#ffffff, var(--surface));
   --dv-ink: light-dark(#1d1d1f, var(--ink));
   --dv-muted: light-dark(#5e5e63, var(--muted));
@@ -2111,7 +2125,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 }
 .case-study:has(.dv) { padding-top: 0; }
 /* The whole case sheet (body, Next project, up to the footer) sits on the surface tone in dark. */
-.case-study:has(.dv), .case-study[data-skin="dv"] { background: light-dark(transparent, var(--surface)); }
+.case-study:has(.dv), .case-study[data-skin="dv"] { background: light-dark(transparent, var(--bg)); }
 /* Reading measures: body copy stays near 70 characters a line, headline-size lines a little wider; images, cards and tables use the full 1200 column. */
 .dv, .case-study[data-skin="dv"] { --dv-measure: 740px; --dv-measure-wide: 900px; }
 /* Zero specificity, so the reading measures below still apply to direct children. */
@@ -2471,7 +2485,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   overflow: clip;
   padding: clamp(72px, 8svh, 96px) var(--dh-pad) 72px;
   /* Fades into the page below, so there is no edge where the case begins. */
-  background: linear-gradient(to bottom, light-dark(#f5f5f5, var(--surface)) 45%, light-dark(#ffffff, var(--surface)));
+  background: linear-gradient(to bottom, light-dark(#f5f5f5, var(--bg)) 45%, light-dark(#ffffff, var(--bg)));
   color: var(--dh-ink);
 }
 .devsign-hero[data-project="gemini-privacy"] { --dh-glow: #4285f4; --dh-glow-2: #a78bfa; }
@@ -2655,7 +2669,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Gemini body in the Devsign body language (no Figma frame yet): the generic
    MDX blocks take the Devsign margins, stage titles, labels, cards and tables. */
-.case-study[data-skin="dv"] { --dv-bg: light-dark(var(--bg), var(--surface)); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
+.case-study[data-skin="dv"] { --dv-bg: var(--bg); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
 .case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1200px; margin-left: 0; margin-right: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }

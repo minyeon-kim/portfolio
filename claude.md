@@ -679,3 +679,6 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Dark theme background is #050506 (was #0c0e0e), also for `--media-bg`.
 - Light theme home backdrop: dust alpha ×2.3 and a faint tinted haze along the glow band. A hovered project's world is always dark, so the dust switches to its dark (glowing) rendering on hover even in the light theme; the stage background fades over 700ms.
 - Devsign form is now the Devsign logo bolt (9-point polygon `BOLT`, filled by rejection sampling + dense outline), violet with cyan towards the lower right and a soft white sheen (`bolt` uniform). About form is a fingerprint (broken ridges around a core), replacing the shield.
+- Devsign bolt is loose like the Gemini sparkle (outline loose ×0.5, body ×0.75), a hint rather than a crisp shape.
+- Case pages (dark): background is the page `--bg` (#050506) instead of `--surface`, hero gradient included.
+- Case images reveal Metalab-like: each `.dv-figure` image (img/.dv-crop/.dv-fit) and `.dv-point-media` arrives at scale 1.14 inside a clip-path window inset 9%/7%, then settles to scale 1 / full window (1.6s/1.4s, ease-out-soft) when its `.reveal` gets `data-shown`.
