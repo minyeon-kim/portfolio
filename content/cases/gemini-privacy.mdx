@@ -25,233 +25,305 @@ export const meta = {
   featured: true,
   order: 1,
   hero: {
-    title: "Connecting took one tap. Cleaning up took a trip to settings.",
+    title: "Why does Gemini know more about me than it can explain?",
     details: [
-      { label: "Duration", value: "2026" },
-      { label: "Team", value: "Research with one teammate, then solo" },
-      { label: "Role", value: "Research, problem definition, coded prototype, usability test" },
-      { label: "Tools", value: "Miro, FigJam, HTML/JS prototype" },
+      { label: "Duration", value: "2026 · concept project" },
+      { label: "Team", value: "Research with 1 teammate, then solo" },
+      { label: "Role", value: "UX/UI Design, User Research, Prototyping, Usability Test" },
+      { label: "Tools", value: "Miro, FigJam, HTML/JS, Claude Code" },
     ],
   },
 };
 
-{/*
-  Follows the course "Project wrap up" order: 1 Overview, 2 Keywords, 3 Main
-  features, 4 Process, 5 Discover / Define / Develop / Deliver, 6 Final
-  prototype, 7 Usability testing, 8 Review & limitations.
-  Copy comes from the Notion pages "Portfolio — Gemini Privacy Revamp" (site
-  copy) and "Project wrap up_Gemini" (detail). Research is "we", Define onward
-  is "I". Usability test results are not in yet.
-*/}
+{/* Body copy and layout follow the Figma case study frame
+"Gemini · Case study · 1920" (file LqJO7XywHn9gvcPvCnHyy0, node 657:254),
+in the Devsign layout (components/devsign-case.tsx); every word is here.
+Research is "we", Define onward is "I". Usability test results are not in yet. */}
 
+export const study = {
+  labels: {
+    problem: "Problem",
+    solution: "Solution",
+    coreProblem: "Core problem",
+    research: "Research",
+    design: "Design",
+    context: "Context",
+    painPoint: "Pain point",
+    need: "Need",
+    from: "From",
+    asIs: "As-is",
+    toBe: "To-be",
+    compare: "Switch between as-is and to-be",
+    yes: "Yes",
+    no: "No",
+  },
+  overview: {
+    headline: "Connecting took one tap.",
+    headlineAccent: "Cleaning up took a trip to settings.",
+    process: {
+      title: "Process · Double Diamond",
+      body: "AI privacy is a broad topic, so we researched widely first. In Define I redefined the problem once: from warning people as they type, to controlling what's already connected.",
+      stages: [
+        { name: "Discover", methods: ["Competitive analysis", "Desk research", "In-depth interview"] },
+        { name: "Define", methods: ["Affinity mapping", "Persona", "How might we"], current: true },
+        { name: "Develop", methods: ["Sketching", "Concept feedback", "Design principles"] },
+        { name: "Deliver", methods: ["HTML/JS prototype", "Usability test", "SUS · SEQ"] },
+      ],
+      pivot: "↺ 11 sketches → 2 concepts",
+    },
+    features: {
+      method: "Main features",
+      title: "See it, turn it off, check that it's gone.",
+      link: "See them in action in Deliver ↓",
+      items: [
+        { kicker: "01 See · On the answer", name: "Source badge", body: "A badge under any answer that used personal data shows which Memory, Gmail or Calendar items shaped it." },
+        { kicker: "02 Turn off · In place", name: "Inline controls", body: "One toggle per source. Gmail and Calendar are blocked, Memory can be deleted, with four seconds to undo." },
+        { kicker: "03 Delete · By asking", name: "Delete by asking", body: "Results split into “will be deleted” and “only blocked,” then Check now confirms it." },
+      ],
+    },
+  },
+  discover: {
+    desk: {
+      method: "Secondary research",
+      title: "Desk research",
+      lead: "There's an off switch, but no one knows what's left after.",
+      text: "We compared the privacy controls of five AI services, read data-protection law (GDPR) and six papers on AI memory UX, and looked at 2025–2026 survey data.",
+    },
+    q1: {
+      label: "Question 1 · Do people want control?",
+      answer: "Yes, but most don't feel they have it.",
+      surveyLabel: "Survey · Pew Research Center 2025–2026",
+      stats: [
+        { value: "61%", text: "of U.S. adults want more control over how AI is used in their lives; only 17% are comfortable with what they have" },
+        { value: "71%", text: "think more AI will make their personal information less secure" },
+      ],
+      communityLabel: "Papers · 6 studies on AI memory UX",
+      groups: [
+        { name: "Being remembered surprises people", detail: "People are surprised and uneasy to learn AI remembers them · Trust drops when memory can't be seen" },
+        { name: "More sources, more to check", detail: "Showing many sources at once raises the checking burden · Detail works best one step at a time" },
+        { name: "Worried, but still using it", detail: "People keep using AI for convenience · They switch integrations off when trust breaks" },
+      ],
+    },
+    q2: {
+      label: "Question 2 · Do today's controls solve it?",
+      answer: "Not yet. Controls exist in two places, and none shows what's left after.",
+      auditLabel: "5 AI services · What the controls miss",
+      groups: [
+        { name: "Off switches, but no result", detail: "Every service lets you turn memory or history off · None shows what remains after you do" },
+        { name: "Gemini splits control in two", detail: "Gemini app settings take 3–4 clicks · Training opt-out sits on the Google account page, 4–5 clicks away" },
+        { name: "Delete and block look the same", detail: "The law separates erasure from restricted processing · The screens show one “delete”" },
+      ],
+    },
+    synthesis: {
+      label: "Synthesis",
+      title: "Where control breaks",
+      withAi: "Today",
+      gap: "Gap",
+      rows: [
+        { stage: "Shows up", withAi: "Personal data appears in an answer", gap: "No source shown" },
+        { stage: "Turn off", withAi: "Switches in the Gemini app and the Google account", gap: "Two places, 3–5 clicks each" },
+        { stage: "Delete", withAi: "“Delete” and “block” look the same", gap: "Originals stay in Gmail or Photos" },
+        { stage: "Check", withAi: "Chats kept 72 hours with activity off; reviewed chats 3 years", gap: "No way to confirm what's gone" },
+      ],
+    },
+    interview: {
+      method: "Primary research",
+      title: "In-depth interview",
+      lead: "Worried, but still using it.",
+      text: "Research showed controls are unpredictable, not how that feels. So we talked to people on both sides of personal data: someone who asks for it every day, and someone who gives it to AI.",
+      questionsLabel: "What we wanted to know",
+      questions: [
+        "What do people worry about when AI uses their personal data?",
+        "When does the worry start: typing data in, or seeing it come back?",
+        "What would make a deletion feel trustworthy?",
+      ],
+      participantColumns: ["#", "Role", "Why them", "Type"],
+      participants: [
+        ["K01", "Call-center worker", "Asks people for personal data", "External"],
+        ["U01", "Everyday AI user", "Uses AI daily", "External"],
+        ["D01", "Designer (teammate)", "Tested the guide", "Self"],
+        ["S01", "Security professional (me)", "Tested the guide", "Self"],
+      ],
+    },
+  },
+  define: {
+    personas: {
+      method: "User definition",
+      title: "Persona & user journey map",
+      lead: "One persona, one moment that matters: the answer where personal data shows up.",
+      people: [
+        {
+          role: "Gemini user",
+          name: "Yuna Kim",
+          bio: "29 · Office worker, one personal Gemini account for work and life",
+          quote: "“Where did it get that? I never told it.”",
+          context: "Connected Gmail, Calendar and Photos for convenience.",
+          contextLead: "Now private details pop up in answers, even at work.",
+          pairs: [
+            ["Personal details show up with no source", "See where each detail came from"],
+            ["Turning it off means two settings pages, and no proof it worked", "Switch it off where it appears, and check the result"],
+          ],
+        },
+      ],
+      journey: {
+        steps: ["Ask", "Answer", "Spot a detail", "Find the source", "Turn it off", "Keep using"],
+        designer: "Yuna · today",
+        developer: "Yuna · design goal",
+        developerLow: "Dips, then checks the result herself",
+        designerLow: "Lowest · can't tell where it came from",
+      },
+      summary: "Today the lowest point comes when personal data appears with no source, and stays low through two settings pages. The design goal: keep that dip short by putting the source and the switch right on the answer.",
+    },
+    affinity: {
+      method: "Research analysis",
+      title: "Affinity mapping",
+      lead: "79 quotes, color-coded, then re-clustered without labels into six themes.",
+      text: "Anxiety peaked not when people typed data in, but when it came back out in an answer.",
+      board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "Affinity map of 79 interview quotes regrouped into six themes" },
+    },
+    problems: {
+      method: "Problem definition",
+      title: "Key insights",
+      lead: "Four insights from the six themes, and the one that moved the problem.",
+      lowest: "Reframed the problem",
+      items: [
+        { title: "Disclosure is decided every time", body: "Sharing data isn't one consent. People weigh risk and benefit with every question.", role: "Insight", from: "Theme I01" },
+        { title: "Using it isn't trusting it", body: "People keep using AI by checking things themselves, not because they trust it.", role: "Insight", from: "Theme I02" },
+        { title: "Unseen effects feed anxiety", body: "Worry grows when you can't see what's remembered or what deleting did.", role: "Core insight", from: "Theme I03", lowest: true },
+        { title: "Act at the right moment", body: "A way to act when you could change your mind matters more than a notice.", role: "Insight", from: "Theme I04" },
+      ],
+    },
+    core: {
+      method: "Problem definition",
+      title: "Core problem",
+      lead: "Gemini brings my data into answers,",
+      text: "but I can't see where it came from, switch it off there, or check that it's gone.",
+    },
+    hmw: {
+      method: "Design challenge",
+      title: "How might we",
+      question: "How might Gemini users see where the personal data in an answer came from, and turn it off or delete it right there, with a result they can trust?",
+      successLabel: "Success looks like",
+      success: ["People find the source and the switch without hints, within 10 seconds", "People can explain blocking vs. deleting in their own words"],
+    },
+  },
+  develop: {
+    ideation: {
+      method: "Diverge → converge",
+      title: "Ideation",
+      text: "Six directions (24 features) narrowed to three once the problem moved: memory control, processing transparency and sources. Then 11 hand sketches and feedback on 4 concepts left two that never send you to settings.",
+    },
+    blocks: [
+      {
+        method: "Ideation",
+        title: "Improvement directions",
+        lead: "6 directions, 24 features:",
+        text: "input protection, memory control, processing transparency, sources, purpose-based requests and work rules. Reframing the problem kept memory control, transparency and sources.",
+      },
+      {
+        method: "Ideation",
+        title: "Concept feedback",
+        lead: "4 concepts, team feedback.",
+        text: "Kept: inline controls (“Easy, I can just toggle it on and off”) and deleting from chat (“I don't have to go anywhere”). Dropped: per-file retention (more to manage) and a category dashboard (focus on sensitive items).",
+        images: [
+          { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "Inline data-control concept with team feedback notes" },
+          { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "Delete-by-chat concept with team feedback notes" },
+        ],
+      },
+      {
+        method: "Selection",
+        title: "Features from gaps",
+        lead: "Each feature answers one gap from Discover, and all three live on the answer itself.",
+        featuresLabel: "3 core features",
+        features: [
+          { name: "Source badge", solves: "Solves: Can't tell where it came from" },
+          { name: "Inline controls", solves: "Solves: The off switch is far away" },
+          { name: "Delete by asking", solves: "Solves: Can't trust that it's gone" },
+        ],
+      },
+      {
+        method: "Ideation",
+        title: "Sketching",
+        lead: "11 hand sketches, one row per How-Might-We question, before building anything.",
+        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "Hand-drawn solution sketches mapped to How-Might-We questions" },
+      },
+      {
+        rule: true,
+        method: "Structure",
+        title: "Two rules behind the screens",
+        lead: "1. Show what each source allows:",
+        text: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay. 2. Reveal sources one step at a time: only a badge on the answer, the full panel on tap.",
+      },
+      {
+        method: "Structure",
+        title: "User flow",
+        lead: "Two scenarios from Yuna's day.",
+        text: "A: a name she never mentioned appears in a restaurant suggestion; she taps the Source badge and switches Gmail off. B: she asks Gemini to forget, sees what will be deleted and what is only blocked, then checks.",
+        images: [
+          { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "Scenario A: the answer with a Source badge under it" },
+          { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "Scenario A: the source panel with Gmail switched off" },
+          { src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "Scenario B: what will be deleted and what is only blocked" },
+          { src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "Scenario B: the line-by-line result with Check now" },
+        ],
+      },
+    ],
+  },
+  deliver: {
+    method: "Final design",
+    title: "Prototype",
+    lead: "See, turn off and check, inside the answer.",
+    text: "Built in HTML/JS with moderator and participant modes that log every click.",
+    changes: [
+      { title: "A Source badge under the answer", before: "Hard to tell where it came from.", after: "A Source badge with items per Gmail, Calendar and Memory.", src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "The answer with a Source badge under it" },
+      { title: "One toggle per source", before: "Two settings pages, 3–5 clicks each.", after: "One toggle, without leaving the chat.", src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "The source panel with one toggle per source" },
+      { title: "Deleted vs. only blocked", before: "Delete and block look the same.", after: "“Will be deleted” and “only blocked,” shown apart.", src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "The list of what will be deleted and what is only blocked" },
+      { title: "A result you can check", before: "Trusting the result is up to you.", after: "A line-by-line result and Check now.", src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "The line-by-line result with a Check now button" },
+    ],
+  },
+  testing: {
+    method: "Validation",
+    title: "Usability test · in progress",
+    lead: "Testing now: does checking it yourself build trust?",
+    usability: {
+      method: "Test plan",
+      title: "Moderated think-aloud",
+      text: "Up to 5 people, mixed across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking), with a fictional persona's data, so no participant shares their own.",
+      scores: [
+        { value: "10", unit: "sec", ratio: 0, title: "Find the switch", note: "Goal · no hints, within 10 seconds" },
+        { value: "68+", unit: "SUS", ratio: 0, title: "SUS target", note: "Goal · above the average" },
+        { value: "1–7", unit: "SEQ", ratio: 0, title: "Task difficulty", note: "Asked after each scenario" },
+        { value: "1–7", unit: "load", ratio: 0, title: "Information load", note: "Is the source panel too much?" },
+      ],
+    },
+  },
+  takeaway: {
+    headline: "Trust isn't a promise on screen. It's something users check for themselves.",
+    text: "I turned a privacy principle into UI requirements, and heard from both the people who share personal data and the people who handle it.",
+    reviewTitle: "Project review",
+    review: [
+      { title: "Principles became requirements", body: "Erasure vs. restricted processing is built into the screen structure, not left to a help text." },
+      { title: "Re-clustered to reduce bias", body: "Removed the labels and regrouped 79 quotes, so the first grouping didn't steer the result." },
+      { title: "A prototype built to be tested", body: "It logs clicks, misclicks and time to find the badge, so every session turns into behavioral data." },
+    ],
+    limitationsTitle: "Limitations",
+    limitations: [
+      { lead: "Only 2 external interviews", text: " — two of four answers came from the team and were used only to test the guide." },
+      { lead: "Results not in yet", text: " — the usability test is still running." },
+      { lead: "Fixed flows", text: " — free-form requests in chat are untested." },
+    ],
+    next: {
+      label: "Next step",
+      title: "Finish the usability test, then design how people discover deleting from chat, retention by category, and the risk when several sources combine.",
+      text: "This is where success goal 2, explaining blocking vs. deleting in their own words, gets measured.",
+      chips: ["Measures trust", "Tests discoverability", "Shows combined-data risk"],
+    },
+  },
+};
+
+<DevsignCase study={study}>
 <TLDR>
-- **Problem:** Gemini can pull Gmail, Calendar and Photos into an answer, but people can't see where a detail came from, and turning it off means digging through two settings pages.
-- **My role:** Research with one teammate, then solo from problem definition to a coded prototype and usability test.
-- **Outcome:** A working prototype that shows the source under the answer, turns it off in place, and lets people check that a deletion worked. Usability test in progress.
+- **Problem** Since Personal Intelligence (Jan 2026), Gemini reads your Gmail, Calendar, Photos, YouTube and Search history to personalize answers, even unasked. But the answer doesn't say where a detail came from, the switches sit in two places, and a deletion can't be checked.
+- **Solution** Move control to the answer itself: see the source, switch it off in place, and check the result.
+- **Impact** Two settings trips became one toggle under the answer, and a promise of deletion became a result you can check. The usability test will measure whether that builds trust.
 </TLDR>
-
-<CaseSection id="overview" label="01 / Overview" title="Connecting took one tap. | Cleaning up took a trip to settings.">
-
-In January 2026, Google launched [Personal Intelligence](https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/). Turn it on, and Gemini reads your Gmail, Calendar, Photos, YouTube and Search history to personalize answers, even when you don't ask it to. A writer at [Android Police](https://www.androidpolice.com/gemini-cant-forget-my-ex/) asked for a date-night restaurant and got a dish recommendation, plus a reminder that they'd been there with Sarah, an ex, last spring.
-
-The convenience is real. The problem is control. The answer doesn't say which app a memory came from, and the switches sit in two places, the Gemini app and your Google account. Deleting doesn't mean what people expect, either. Per Google's own [Privacy Hub](https://support.google.com/gemini/answer/13594961?hl=en), chats are kept for 72 hours even with activity off, chats picked for human review are kept for three years even after you delete them, and deleting Gemini activity leaves the original in Gmail or Photos.
-
-A self-initiated concept, not affiliated with Google.
-
-</CaseSection>
-
-<CaseFindings
-  title="Three gaps"
-  items={[
-    { label: "01", title: "You can't tell where it came from", body: "An answer mixes in personal data without saying whether it came from an email, a photo or an old chat." },
-    { label: "02", title: "The off switch is far away", body: "In our walkthrough, Gemini settings took 3–4 clicks; opting out of training sits on a separate Google account page, 4–5 clicks away." },
-    { label: "03", title: "You can't trust that it's gone", body: "People expect “delete” to erase everything, but the original stays in Gmail. Only Gemini stops reading it." },
-  ]}
-/>
-
-<CaseSection id="keywords" label="02 / Keywords" title="Transparency and a sense of control.">
-
-Not a new feature: the controls that already exist, made easy to find, understand and trust, so people keep personalization on.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "Transparency", title: "Show the source where you read the answer", body: "Not in a settings menu." },
-    { label: "Sense of control", title: "Trust from checking, not from a promise", body: "People see the result for themselves instead of reading “Deleted.”" },
-  ]}
-/>
-
-<CaseSection id="features" label="03 / Main features" title="See it, turn it off, check that it's gone.">
-
-Three features, each placed where the question comes up: on the answer itself.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "Source badge", title: "Know where this answer came from", body: "A badge under the answer opens the Memory, Gmail and Calendar items it used." },
-    { label: "Inline controls", title: "Turn a source off right there", body: "A toggle blocks the source; Memory can be deleted. Four seconds to undo." },
-    { label: "Delete by asking", title: "Ask it to forget, then check", body: "Results split into “will be deleted” and “only blocked,” then Check now." },
-  ]}
-/>
-
-<CaseSection id="process" label="04 / Process" title="Double Diamond: | go wide, then narrow, then redefine.">
-
-AI privacy is broad, so we researched widely before narrowing. In Define I redefined the problem once: from warning people as they type, to controlling what's already connected.
-
-</CaseSection>
-
-<CaseDiamond
-  pivot="↺ Warn while typing → Control what's connected"
-  items={[
-    { label: "Discover", title: "Off switches exist, but no one knows what's left", methods: ["Competitive analysis", "Desk research", "User interviews", "Affinity mapping"], output: "Six themes on where today's controls fall short" },
-    { label: "Define", current: true, title: "Anxiety starts when your data shows up", methods: ["Insights", "Persona", "Problem reframing", "HMW"], output: "How-Might-We questions" },
-    { label: "Develop", title: "Control at the answer, not in settings", methods: ["Sketching", "Concept feedback", "Design principles"], output: "Two concepts and the rules behind them" },
-    { label: "Deliver", title: "Does checking it yourself build trust?", methods: ["HTML/JS prototype", "Think-aloud test", "SUS · SEQ"], output: "Usability test in progress" },
-  ]}
-/>
-
-<CaseSection id="discover" label="05 / Discover" title="There's an off switch — | but no one knows what's left after.">
-
-We compared the privacy controls of five AI services. Gemini splits them between the app and the Google account, and no screen says what remains after you switch something off.
-
-</CaseSection>
-
-<CaseKey>Controls exist in two places, and <strong>none of them shows what's left</strong> after you switch something off.</CaseKey>
-
-<CaseStats
-  items={[
-    { value: "61%", label: "of U.S. adults want more control over how AI is used in their lives", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "17%", label: "are comfortable with the amount of control they have now", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "71%", label: "think the increased use of AI will make their personal information less secure", source: "Pew Research Center, survey of U.S. adults (Feb 2026)" },
-  ]}
-/>
-
-<CaseSection id="discover-primary" label="05 / Discover · Interviews" title="Worried, but still using it.">
-
-We interviewed a call-center worker and an everyday AI user, and answered the same guide ourselves, as a designer and a security professional, to test it. Everyone kept using AI because it was convenient, but turned off integrations when trust broke. The call-center worker, who asks people for personal data, said they expect a deletion request to erase everything.
-
-> “Even when I delete it, I don't know if the record is really deleted.”
-
-I color-coded 79 interview quotes, removed the labels and re-clustered them from the bottom up into six themes, so the first grouping wouldn't steer the result.
-
-</CaseSection>
-
-<CaseMedia src="/images/cases/gemini-privacy/affinity.webp" width={1079} height={1938} variant="portrait" label="Affinity map of 79 interview quotes grouped into six themes" caption="Re-affinity mapping: 79 quotes, labels removed, regrouped into six themes." />
-
-<CaseStats
-  items={[
-    { value: "50%", label: "of U.S. adults are more concerned than excited about the increased use of AI in daily life, up from 37% in 2021", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-    { value: "38%", label: "feel equally excited and concerned: worried, but not walking away", source: "Pew Research Center, “How Americans View AI and Its Impact on People and Society” (Sept 2025)" },
-  ]}
-/>
-
-<CaseSection id="define" label="06 / Define" title="Anxiety starts when your data shows up, | not when you type it.">
-
-Across the six themes, anxiety peaked not when people typed personal data, but when it appeared in an answer and they couldn't tell where it came from. I wrote the persona from there: Yuna Kim, 29, one Gemini account for work and life.
-
-</CaseSection>
-
-<CaseFindings
-  title="Insights that shaped the design"
-  items={[
-    { title: "Using it isn't trusting it", body: "People make up for low trust by checking things themselves." },
-    { title: "Unseen effects feed anxiety", body: "Worry grows when you can't see what's remembered or what deleting did." },
-    { title: "Act at the right moment", body: "A way to act when you could change your mind matters more than a notice." },
-  ]}
-/>
-
-<CaseKey>So the problem moved: from warning people as they type <strong>to controlling what's already connected</strong>, right where it shows up.</CaseKey>
-
-<CaseSection id="develop" label="07 / Develop" title="Control at the answer, not in the settings.">
-
-I drew 11 hand sketches across the How-Might-We questions and gathered feedback on 4 concepts. Two survived.
-
-</CaseSection>
-
-<CaseMedia src="/images/cases/gemini-privacy/sketches.webp" width={1166} height={2226} variant="portrait" label="Hand-drawn solution sketches mapped to How-Might-We questions" caption="Going wide: 11 hand sketches, one row per How-Might-We question." />
-
-<CaseKey>The two that survived <strong>never send you to settings.</strong></CaseKey>
-
-<CaseCompare
-  before="Dropped"
-  after="Kept"
-  rows={[
-    { before: "Per-file retention settings: more to manage, not less.", after: "Inline controls: “Easy, I can just toggle it on and off.”" },
-    { before: "Category management and a dashboard: focus on sensitive items, not everything.", after: "Deletion from chat: “I don't have to go anywhere.”" },
-  ]}
-/>
-
-<CaseMediaPair>
-  <CaseMedia src="/images/cases/gemini-privacy/concept-inline.webp" width={1600} height={1186} variant="screen" label="Inline data management concept with team feedback" caption="Kept ①: inline data management." />
-  <CaseMedia src="/images/cases/gemini-privacy/concept-chat.webp" width={1600} height={1197} variant="screen" label="Deletion from chat concept with team feedback" caption="Kept ②: deleting records from chat." />
-</CaseMediaPair>
-
-<CaseFindings
-  title="Two decisions behind the screens"
-  items={[
-    { label: "Decision 1", title: "Show what each source allows", body: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay where they live. The screen's structure says so, instead of hiding the difference." },
-    { label: "Decision 2", title: "Reveal sources one step at a time", body: "Showing many sources at once raises the checking burden, so the answer carries only a badge and the full panel opens on tap." },
-  ]}
-/>
-
-<CaseSection id="deliver" label="08 / Deliver" title="A prototype you can actually click, built to be tested.">
-
-Built in HTML and JavaScript with a moderator and a participant mode. It logs clicks, misclicks and time to find the Source badge, so every session turns into behavioral data.
-
-</CaseSection>
-
-<CaseSection id="prototype" label="09 / Final prototype" title="Check it, turn it off, right where the answer is.">
-
-Both test scenarios follow the persona, Yuna, with made-up data, so no participant shares their own.
-
-**Scenario A.** Jeongmin, a name the user never mentioned, appears in a restaurant suggestion. Where did that come from, and can I switch it off?
-
-**Scenario B.** “Delete everything about Jeongmin.” What actually goes away, and how do I know it did?
-
-</CaseSection>
-
-<CasePrototype
-  device="phone"
-  stepsBelow
-  href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant"
-  label="See where Jeongmin came from, then turn that source off"
-  steps={[
-    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "A Source badge under the answer", before: "Hard to tell where it came from.", body: "A Source badge with items per Gmail, Calendar and Memory." },
-    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "One toggle per source", before: "Two settings pages, 3–5 clicks each.", body: "One toggle, without leaving the chat." },
-    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "Deleted vs. only blocked", before: "Delete and block look the same.", body: "“Will be deleted” and “only blocked,” shown apart." },
-    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "A result you can check", before: "Trusting the result is up to you.", body: "A line-by-line result and Check now." },
-  ]}
-/>
-
-
-<CaseSection id="usability-testing" label="10 / Usability testing" title="Testing now: does checking it yourself build trust?">
-
-A moderated think-aloud test with up to five people, mixed across AI use and privacy sensitivity. The scenario uses a fictional person, so no participant's real data is involved.
-
-<Todo>add usability test results (SUS and 1–2 key numbers) once the sessions are done</Todo>
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "Watching", title: "Do people find it on their own?", body: "Tapping the Source badge, and Check now, without being asked." },
-    { label: "Success", title: "Within 10 seconds, no hints", body: "And explaining blocking vs. deleting in their own words." },
-    { label: "Measures", title: "SUS, task difficulty, trust", body: "SUS (68+ is above average), SEQ 1–7, information load 1–7." },
-  ]}
-/>
-
-<CaseSection id="review" label="11 / Review & limitations" title="Trust isn't a promise on screen. | It's something users check for themselves.">
-
-Hearing from both people who share personal data and people who handle it shaped how the design explains deleting versus blocking.
-
-</CaseSection>
-
-<CaseFindings
-  items={[
-    { label: "What worked", title: "Principles became requirements", points: ["Erasure vs. restricted processing, built into the UI", "Re-clustering with labels removed", "A prototype that logs behavior"] },
-    { label: "Limitations", title: "What's still open", points: ["Only 2 of 4 interviews were external", "Test results not in yet", "Fixed flows; free-form requests untested"] },
-    { label: "Next", title: "Where it goes next", points: ["How people discover deletion from chat", "Retention periods by category", "Showing the risk when data combines"] },
-  ]}
-/>
+</DevsignCase>
