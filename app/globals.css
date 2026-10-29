@@ -2522,11 +2522,11 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 /* The hovered case's world: its surface takes the whole stage while the loop fades, and the stage reads light-on-dark whatever the theme. */
 .home-world { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
 .home-world[data-active] { opacity: 1; }
-.home-world[data-project="workflow-app"] { background: radial-gradient(60% 55% at 70% 30%, rgb(91 63 214 / 0.26), transparent 70%), radial-gradient(circle, #353535 1px, transparent 1.4px) 0 0 / 24px 24px, #1c1c1c; }
-.home-world[data-project="gemini-privacy"] { background: radial-gradient(60% 55% at 72% 24%, rgb(66 133 244 / 0.34), transparent 70%), radial-gradient(55% 50% at 28% 82%, rgb(167 139 250 / 0.26), transparent 70%), #0c0f16; }
-.home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.14), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.18), transparent 70%), #121415; }
+/* The worlds keep only their glows: the points take each case's form underneath (HeroObject). */
+.home-world[data-project="workflow-app"] { background: radial-gradient(60% 55% at 70% 30%, rgb(91 63 214 / 0.22), transparent 70%); }
+.home-world[data-project="gemini-privacy"] { background: radial-gradient(60% 55% at 72% 24%, rgb(66 133 244 / 0.24), transparent 70%), radial-gradient(55% 50% at 28% 82%, rgb(167 139 250 / 0.18), transparent 70%); }
+.home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%); }
 .home-backdrop .home-object { transition: opacity 700ms ease; }
-.home-backdrop[data-project] .home-object { opacity: 0; }
 .intro-stage.home-stage { transition: color 500ms ease; }
 .intro-stage.home-stage[data-world] { --ink: #e8ecea; --muted: #8e9895; --line: #262c2a; color-scheme: dark; }
 body:has(.home-stage[data-world]) header[data-home]:not([data-compact]) { --ink: #e8ecea; --muted: #8e9895; color: var(--ink); }
@@ -2557,9 +2557,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
 .home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 17%; translate: 0 16px; max-width: min(46vw, 20ch); font-size: clamp(28px, 2.6vw, 44px); font-weight: 500; line-height: 1.08; letter-spacing: -0.02em; white-space: normal; text-wrap: balance; }
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
-/* About keeps the loop (the site's own object stands for the person); the headline is the statement, "End-to-end" set apart. */
-.home-backdrop[data-project="about"] .home-object { opacity: 1; }
-.home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%), #0b0d0e; }
+/* About: the points form one continuous wave sheet (HeroObject); the headline is the statement, "End-to-end" set apart. */
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
 }
