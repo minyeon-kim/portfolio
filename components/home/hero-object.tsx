@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 
 // The landing backdrop, after particle-love.com: about 65,000 points of
 // light drifting like dust in a slow swirling flow, gathering in faint
-// threads, across the whole stage. Slow pools of light drift over it, so the
+// threads, across the whole stage. A quick flick of the mouse sets off a
+// burst: a ring that throws the dust outward like a firework (and decodes the
+// headline's letters as it passes them, see ScrambleHeadline). Slow pools of light drift over it, so the
 // dust glows in places and sinks into the dark elsewhere. Moving the mouse
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
@@ -28,6 +30,7 @@ const common = `
 uniform float time;
 uniform float symbol;
 uniform float SIZE;
+uniform float focus;  // 0 at rest, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
 vec2 gStar(float i) {
   return i < 0.5 ? vec2(-0.32, 0.95) : i < 1.5 ? vec2(0.3, 0.82) : i < 2.5 ? vec2(-0.55, 0.3) : i < 3.5 ? vec2(-0.82, -0.2) : i < 4.5 ? vec2(-1.0, -0.42)
@@ -82,7 +85,10 @@ vec3 homeOf(vec2 uv) {
     float t = a * 6.2831853;
     p = vec3(cos(t) * 1.2, sin(t) * 0.75, sin(t * 2.0) * 0.3) * 1.45;
   }
-  return p * 1.6 + j * loose * vec3(1.6, 1.0, 1.0) + vec3(0.35, 0.1, 0.0);
+  // While a case is hovered, most of the dust draws in so the form shows;
+  // the widest third stays out as haze.
+  loose *= mix(1.0, mix(0.22, 1.0, step(0.66, g)), focus);
+  return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // A swirling, divergence-free flow (ABC flow, two octaves).
 vec3 flow(vec3 p) {
@@ -115,9 +121,10 @@ precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
 uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir;
+uniform vec2 burstAt; uniform float burstAge; uniform float burstPower;
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
-  u += (homeOf(v) - p) * gather * dt;
+  u += (homeOf(v) - p) * mix(gather, gather * 3.0, focus) * dt;
   u += flow(p * 0.8) * 0.45 * stir * dt;
   u += valley(p * 0.9) * 0.6 * stir * dt;
   // The cursor sweeps nearby dust along its motion and swirls it.
@@ -125,7 +132,15 @@ void main() {
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
   float k = exp(-dot(d, d) / 0.16);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 0.9 + vec2(-d.y, d.x) * length(mv) * 4.0 + normalize(d + 1e-4) * length(mv) * 1.2) * k * dt * 2.0;
+  u.xy += (mv * 1.4 + vec2(-d.y, d.x) * length(mv) * 6.0 + normalize(d + 1e-4) * length(mv) * 2.0) * k * dt * 2.0;
+  // A burst: a ring expanding from where the mouse flicked, throwing the dust
+  // outward like a firework; the ring weakens as it grows.
+  vec2 bd = (s - burstAt) * vec2(aspect, 1.0);
+  float bl = length(bd), ring = burstAge * 1.4;
+  float bw = exp(-(bl - ring) * (bl - ring) / 0.012) * burstPower * exp(-burstAge * 1.6);
+  float jitter = h1(v.x * 37.0 + v.y * 91.0);
+  u.xy += normalize(bd + 1e-4) * bw * (4.0 + 6.0 * jitter) * dt * 10.0;
+  u.z += (jitter - 0.5) * bw * 20.0 * dt;
   u *= exp(-dt * 0.9);
   o = vec4(u, 1.0);
 }`;
@@ -298,16 +313,19 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     resize();
 
     // The mouse over the stage (-1..1, y up) and where it was last frame.
-    const mouse = { x: 9, y: 9, px: 9, py: 9 };
+    const mouse = { x: 9, y: 9, px: 9, py: 9, cx: 0, cy: 0 };
+    // The last burst: where (clip space), when, how strong.
+    const burst = { x: 0, y: 0, at: -1e9, power: 0 };
     const onMove = (event: PointerEvent) => {
       if (event.pointerType !== "mouse") return;
       const rect = el.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = 1 - ((event.clientY - rect.top) / rect.height) * 2;
+      mouse.cx = event.clientX; mouse.cy = event.clientY;
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -324,16 +342,25 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const k = 1 - Math.exp(-dt / 0.5);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
+      colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
       mouse.px = mouse.x; mouse.py = mouse.y;
+      // A quick flick sets off a burst (at most every 0.7s), and tells the
+      // headline so its letters decode as the ring passes them.
+      const speed = Math.hypot(vx, vy) / Math.max(dt, 1e-3);
+      if (speed > 2.2 && clock - burst.at > 0.7) {
+        Object.assign(burst, { x: mouse.x, y: mouse.y, at: clock, power: Math.min(1.6, speed / 3) });
+        window.dispatchEvent(new CustomEvent("hero-burst", { detail: { x: mouse.cx, y: mouse.cy, pxPerSecond: (1.4 * height) / 2, power: burst.power } }));
+      }
 
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "stir"), 0.65);
+        gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
+        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "stir"), 0.65);
       });
       V.reverse();
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
