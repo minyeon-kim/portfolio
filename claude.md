@@ -643,3 +643,6 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Hero object: one softbox streak only (the second crossed it at the tube's edge and read as the chrome folding over itself); streak width 0.12; backdrop tint ×0.4.
 - Sizes bumped a step (user: "a little bigger"): header controls 28px (13px text; lang knob/options 24px, 10px mono; theme icon 13px); list pills 34px.
 - The opened Menu's links (`.header-menu-panel a`) use the same list pill as the home case list: 34px, 0 16px, 15px/400, frosted grey, 1px ring on hover / current page. Panel offset -2px so the pills line up with the Menu pill.
+
+## Case stage nav: quiet, only where the margin has room
+- The vertical stage list in the left margin now needs ≥100rem (1600px); below that the sticky top bar is used. In the margin it is 12px/500 muted (80%), the current stage in full ink at 600, 10px gap, box height 172px (first section climbs back -172px).
