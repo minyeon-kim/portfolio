@@ -1319,13 +1319,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .project-zoom-stage > * { position: absolute; inset: 0; width: 100%; height: 100%; translate: none; }
 .project-zoom .home-device-window { display: grid; place-items: center; border-radius: 0; box-shadow: none; transform: none; }
 .project-zoom .home-device-window .devsign-loop { width: min(100%, 160vh); }
-.project-zoom .devsign-loop :is(.devsign-loop-pin, .devsign-loop-panel, .devsign-loop-approve, .devsign-loop-approved) { animation-delay: -2.1s; }
-/* Live Devsign: the loop copy is the poster, the real prototype scales up over it once loaded. */
-.project-zoom[data-live] { display: grid; place-items: center; }
-.project-zoom[data-prepared] { visibility: hidden; top: 0; left: 0; width: 100vw; height: 100vh; }
 .project-zoom-stage > .devsign-loop { position: relative; inset: auto; width: min(100%, 160vh); height: auto; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
-.project-zoom-live { position: absolute; top: 0; left: 0; transform-origin: 0 0; border: 0; background: transparent; opacity: 0; pointer-events: none; transition: opacity 300ms ease; will-change: transform; }
-.project-zoom-live[data-loaded] { opacity: 1; }
 /* DevsignLive: the prototype at its desktop width, scaled to the box; the loop underneath until it loads. */
 .devsign-live { position: relative; width: 100%; height: 100%; overflow: hidden; background: #141414; }
 .devsign-live > .devsign-loop { position: absolute; inset: 0; width: 100%; max-width: none; height: auto; margin: 0; border: 0; border-radius: 0; box-shadow: none; }

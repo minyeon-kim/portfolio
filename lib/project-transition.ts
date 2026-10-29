@@ -28,12 +28,32 @@ export function freezeAmbient(source: HTMLElement) {
 
 // The picked case's device grows to fill the screen, then settles into the
 // case opener's media frame once the case page is there (after metalab.com).
-// `live`: a page to show in the layer at the real viewport size (the Devsign
-// prototype), scaling up from the device box and down into the opener; the
-// device copy stands in until it has loaded.
-// `prepared`: a layer built ahead of time (the live prototype, already loaded),
-// used instead of building one now.
-export type ZoomOptions = { from: HTMLElement; to: string; project: string; live?: string; prepared?: HTMLElement };
+// The layer is a copy of exactly what the device shows, its loops carried on
+// from the same moment, so the hover preview, the zoom and the opener read as
+// one continuous picture.
+export type ZoomOptions = { from: HTMLElement; to: string; project: string };
+
+// Carries the CSS animations of `source` (and its descendants) over to the
+// same elements in `copy`, at the same point of their cycle. A fresh copy
+// would otherwise restart every loop from its first frame.
+// The looping media inside a device: what the layer keeps in step.
+const LOOP = ".devsign-loop, .gemini-phone";
+
+export function syncAnimations(source: Element, copy: Element) {
+  const from = [source, ...Array.from(source.querySelectorAll("*"))];
+  const to = [copy, ...Array.from(copy.querySelectorAll("*"))];
+  from.forEach((element, index) => {
+    const target = to[index];
+    if (!target) return;
+    const running = element.getAnimations().filter((a): a is CSSAnimation => "animationName" in a);
+    if (!running.length) return;
+    const copies = target.getAnimations().filter((a): a is CSSAnimation => "animationName" in a);
+    running.forEach((animation) => {
+      const match = copies.find((c) => c.animationName === animation.animationName);
+      if (match && animation.currentTime !== null) match.currentTime = animation.currentTime;
+    });
+  });
+}
 
 // The new page rises a short way and fades in over the old view, which drifts
 // up slightly and fades out. The two overlap, so there is no seam between them.
@@ -54,7 +74,6 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   const grow = 650;
   const zoomStart = performance.now();
   let layer: HTMLElement | null = null;
-  let liveFrame: HTMLIFrameElement | null = null;
   // The layer is a viewport-sized box moved with transforms only, so the
   // compositor runs the whole grow and settle even while the main thread is
   // busy (the click-time snapshot, the case rendering). Its box is scaled to
@@ -115,45 +134,46 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   if (zoom && !reduced) {
     const source = zoom.from;
     const box = source.getBoundingClientRect();
-    if (box.width > 10 && box.height > 10 && zoom.prepared) {
-      layer = zoom.prepared;
-      delete layer.dataset.prepared;
-      liveFrame = layer.querySelector("iframe");
-      if (liveFrame) Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
-      growLayer(layer, box);
-    } else if (box.width > 10 && box.height > 10) {
+    if (box.width > 10 && box.height > 10) {
       layer = document.createElement("div");
       layer.className = "project-zoom";
       layer.dataset.project = zoom.project;
-      if (zoom.live) layer.dataset.live = "true";
       layer.inert = true;
       layer.setAttribute("aria-hidden", "true");
-      const poster = (zoom.live ? source.querySelector<HTMLElement>(".devsign-loop") : null) ?? source;
-      const copy = poster.cloneNode(true) as HTMLElement;
+      const copy = source.cloneNode(true) as HTMLElement;
       copy.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
       // Cloned images are fetched from cache but decoded lazily; without this
       // the layer's first frame is its bare background.
       copy.querySelectorAll("img").forEach((img) => { img.loading = "eager"; img.decoding = "sync"; });
-      layer.appendChild(copy);
-      if (zoom.live) {
-        liveFrame = document.createElement("iframe");
-        liveFrame.className = "project-zoom-live";
-        liveFrame.src = zoom.live;
-        liveFrame.title = "";
-        liveFrame.tabIndex = -1;
-        liveFrame.setAttribute("aria-hidden", "true");
-        liveFrame.setAttribute("sandbox", "allow-scripts allow-same-origin");
-        Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
-        liveFrame.addEventListener("load", () => { if (liveFrame) liveFrame.dataset.loaded = "true"; });
-        layer.appendChild(liveFrame);
-      }
+      // Straight into the stage: moving it there later would restart its loops.
+      stageOf(layer).appendChild(copy);
       document.body.appendChild(layer);
+      syncAnimations(source, copy);
       const posed = source.matches(".gemini-device, .home-device-window") ? source : source.querySelector<HTMLElement>(".gemini-device, .home-device-window");
       const posedCopy = posed === source ? copy : copy.querySelector<HTMLElement>(".gemini-device, .home-device-window");
       if (posed && posedCopy) {
         posedCopy.animate([{ transform: getComputedStyle(posed).transform }, { transform: "none" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
       }
       growLayer(layer, box);
+      // The copy is laid out at the viewport size, so its media can sit a
+      // little apart from where the card shows it (the Gemini phone is sized
+      // to the card's height). Start it exactly on the card's media and let
+      // the offset go as the layer grows.
+      const media = source.querySelector<HTMLElement>(LOOP);
+      const mediaCopy = copy.querySelector<HTMLElement>(LOOP);
+      if (media && mediaCopy) {
+        const a = media.getBoundingClientRect();
+        const b = mediaCopy.getBoundingClientRect();
+        if (a.width > 0 && b.width > 0) {
+          const cover = Math.max(box.width / vw, box.height / vh);
+          const dx = (a.left + a.width / 2 - (b.left + b.width / 2)) / cover;
+          const dy = (a.top + a.height / 2 - (b.top + b.height / 2)) / cover;
+          mediaCopy.animate(
+            [{ translate: `${dx}px ${dy}px`, scale: `${a.width / b.width}` }, { translate: "0px 0px", scale: "1" }],
+            { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
+          );
+        }
+      }
     }
   }
   const canvasColor = () => {
@@ -333,6 +353,11 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         const target = incoming.querySelector<HTMLElement>(zoom.to);
         const box = target?.getBoundingClientRect();
         const radius = target ? getComputedStyle(target).borderRadius : "14px";
+        // The opener's own loop picks up where the layer's is, so the blend
+        // into the real media at the end doesn't jump.
+        const layerLoop = layer.querySelector(LOOP);
+        const targetLoop = target?.querySelector(LOOP);
+        if (layerLoop && targetLoop) syncAnimations(layerLoop, targetLoop);
         if (box && box.width > 0) {
           const settleTiming = { duration: timing.duration, delay: timing.delay, fill: "both" as FillMode };
           animations.push(...morph(layer, FULL, boxOf(box), [0, parseFloat(radius) || 14], settleTiming));

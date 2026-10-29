@@ -25,33 +25,6 @@ export function setDevsignLanguage(locale: "en" | "ko") {
   try { localStorage.setItem(DEVSIGN_LANGUAGE_KEY, JSON.stringify({ version: 1, language: locale })); } catch { /* storage unavailable: the prototype keeps its default */ }
 }
 
-// A full-screen copy of the prototype for the home → case zoom, built ahead
-// (on the first hover of the Devsign pill) so it is loaded by the click. It is
-// hidden until revealNextProject takes it over as the zoom layer; the caller
-// removes it if it is never used.
-export function prepareDevsignZoom(locale: "en" | "ko") {
-  setDevsignLanguage(locale);
-  const layer = document.createElement("div");
-  layer.className = "project-zoom";
-  layer.dataset.project = "workflow-app";
-  layer.dataset.live = "true";
-  layer.dataset.prepared = "true";
-  layer.inert = true;
-  layer.setAttribute("aria-hidden", "true");
-  const frame = document.createElement("iframe");
-  frame.className = "project-zoom-live";
-  frame.src = devsignUrl(locale);
-  frame.title = "";
-  frame.tabIndex = -1;
-  frame.setAttribute("aria-hidden", "true");
-  frame.setAttribute("sandbox", "allow-scripts allow-same-origin");
-  Object.assign(frame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
-  frame.addEventListener("load", () => { frame.dataset.loaded = "true"; });
-  layer.appendChild(frame);
-  document.body.appendChild(layer);
-  return layer;
-}
-
 // The live prototype in a frame, laid out at its desktop width (1440) and
 // scaled to fill whatever box it sits in, so it shows its real UI at any
 // browser size. The image loop stands in underneath until the page has
