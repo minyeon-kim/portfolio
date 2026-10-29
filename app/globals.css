@@ -2283,7 +2283,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-checks span { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--case-accent); color: light-dark(#fff, var(--bg)); font-size: 14px; font-weight: 700; }
 
 /* Develop */
-.dv-matrix-img .dv-crop { width: min(100%, 376px); margin-inline: auto; border-radius: 12px; }
+/* As tall as the value proposition canvas below (same column width): 0.4475 × 440/376. */
+.dv-matrix-img .dv-crop { width: 38.2%; margin-inline: 0; border-radius: 12px; }
 .dv-canvas-img img { border-radius: 0; }
 .dv-features { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 24px; margin-top: 16px; }
 .dv-avatar-blank { display: block; width: 88px; height: 88px; border-radius: 50%; background: color-mix(in srgb, var(--case-accent) 20%, var(--dv-alt)); }
