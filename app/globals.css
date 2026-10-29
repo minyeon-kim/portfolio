@@ -2376,14 +2376,18 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-chips li { display: flex; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--dv-surface); font-size: 14px; font-weight: 500; line-height: 1.4; }
 .dv-chips span { color: var(--case-accent); font-weight: 700; }
 
-/* Wide screens: the stage nav is a vertical list in the left margin. It starts
-   beside the Overview title, then stays centered on the screen (the list is
-   about 204px tall). It takes no height, so the column starts right away. */
-@media (min-width: 75rem) {
-  .dv-nav { top: calc(50vh - 102px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--project-text-inset) - 24px); height: 204px; margin: 0 0 0 calc(var(--project-text-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
+/* Very wide screens (1600+, where the margin has room): the stage nav is a
+   quiet vertical list in the left margin, small and muted with only the
+   current stage in full ink. It starts beside the Overview title, then stays
+   centered on the screen (the list is about 172px tall). It takes no height,
+   so the column starts right away. Narrower screens keep the sticky top bar. */
+@media (min-width: 100rem) {
+  .dv-nav { top: calc(50vh - 86px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--project-text-inset) - 24px); height: 172px; margin: 0 0 0 calc(var(--project-text-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
   /* The list has a real box so sticky keeps it inside the case; the first section climbs back over that box. */
-  .dv-nav + section { margin-top: -204px; }
-  .dv-nav-links { flex-direction: column; gap: 12px; overflow: visible; }
+  .dv-nav + section { margin-top: -172px; }
+  .dv-nav-links { flex-direction: column; gap: 10px; overflow: visible; }
+  .dv-nav-links a { color: color-mix(in srgb, var(--dv-muted) 80%, transparent); font-size: 12px; font-weight: 500; letter-spacing: 0.01em; }
+  .dv-nav-links a[aria-current] { color: var(--dv-ink); font-weight: 600; }
 }
 @media (max-width: 63.99rem) {
   .dv-split { grid-template-columns: 1fr; gap: 32px; }
