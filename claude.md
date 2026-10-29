@@ -636,3 +636,8 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Back to the single chrome loop (tilt toward the cursor, glint, swell). The coaster ride and the nested-loop vortex were tried and rejected; the stage labels are gone.
 - The canvas is now opaque: where the ray misses, `backdrop(uv)` draws soft tint bands on a log-polar radius that drift into a slightly darker centre (`flow` uniform, +0.12/s, ×2 while the mouse moves; a gentle 0.5 twist). Dark: near black + tint×0.6; light: pale pearl + tint×0.3. Keep it subtle (the user asked for no strong swirl).
 - No 30fps cap; render width cap 1100 and `quality` drops (×0.8, min 0.5) after ~60 slow frames.
+
+## Pills after metalab.com (from the user's screenshot)
+- Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
+- Home case list: 30px pills, 0 16px, 15px/400, ink 16% frosted, 8px gap, no index numbers (`.home-pick-index` hidden); hover/active stays the 1px outline ring.
+- Hero object: one softbox streak only (the second crossed it at the tube's edge and read as the chrome folding over itself); streak width 0.12; backdrop tint ×0.4.
