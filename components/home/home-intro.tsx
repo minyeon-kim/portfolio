@@ -86,7 +86,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={shown?.slug ?? "default"} active={!world || world.slug === "about"} />
+        <HeroObject className="home-object" variant={hover === "about" ? "about" : shown?.slug ?? "default"} />
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
 
         {projects.map((p) => (

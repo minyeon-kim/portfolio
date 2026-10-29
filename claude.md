@@ -632,10 +632,14 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: the decoding sphere (points)
-- Replaces the raymarched chrome forms (loop, coaster, nested loops, three beams were all tried and rejected). components/home/hero-object.tsx draws 60,000 WebGL points: each has a place on a Fibonacci sphere (r 1.2, above-middle-right: screen offset (0.1, 0.26)) and a place in a drifting cloud. A share of points (`order` 0.2) sits in place everywhere; near the decoding lens all of them do (per-point threshold `rnd.y`, so points are either placed or scattered, never halfway). No push under the cursor (the little hole it made read as a small sphere following the mouse); the lens is broad and soft (reach 0.85–1.0, smoothstep to 0). The lens follows the mouse while it moves (press eases in 0.2s, out 1.2s after 2.5s rest); at rest it circles the sphere on its own. Tilt follows the pointer; turn 0.06 rad/s.
-- Colours per case from OBJECT_STATES (`tints[0]` scattered, `tints[1]` placed; `spread` resizes). Dark: additive blending (ONE, ONE); light: premultiplied over (ONE, ONE_MINUS_SRC_ALPHA), grey scattered / deep case colour placed.
-- Performance: DPR 1, no frame cap; after ~60 slow frames the drawn count drops ×0.8 down to a third (indices are shuffled so the sphere thins evenly). Pauses offscreen, hidden, under a case world and during the page transition; skipped with reduced motion.
+## Hero object: a field of points that takes each case's form
+- Replaces the decoding sphere. components/home/hero-object.tsx draws 70,000 WebGL points filling the stage (camera z 3, perspective). Default: 48 drifting wave streams crossing the screen in depth (scattered information); the cursor gathers nearby points into concentric orbits that brighten, and the streams quicken while the mouse moves (press: in 0.2s, out 1.2s after 2.5s rest).
+- Hover forms (OBJECT_STATES.form = [Gemini, Devsign, About], eased with τ 0.6s; tints τ 0.45s):
+  - Gemini: seven source streams converge on one answer near the phone card; the two top streams are "off" (dim, stop short).
+  - Devsign: two line grids (design/code) offset and turned, sliding into register and apart (sin 0.45).
+  - About me: one continuous wave sheet in the band between the headline and the name.
+- The worlds keep only their glows (no solid surfaces, no Devsign dot grid) and the canvas stays visible under them (`.home-backdrop[data-project] .home-object { opacity: 0 }` removed; the duplicate About surface rule with #0b0d0e removed). HomeIntro passes variant = "about" on About hover.
+- Performance: DPR 1, drawn count drops ×0.8 to a third after ~60 slow frames; pauses offscreen/hidden/during navigation; reduced motion skips it.
 
 ## Pills after metalab.com (from the user's screenshot)
 - Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
