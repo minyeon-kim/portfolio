@@ -2032,7 +2032,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* Closing footer after metalab.com: a dark full-bleed band — a big question, large ways onward, a quiet bottom row. */
 .site-footer { --ft-bg: light-dark(#0e1111, #0a0c0c); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
 /* Devsign-skinned cases: the footer's text lines up with the case column (--dv-pad) and its band runs edge to edge. */
-.case-study:has(.dv) { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); }
+.case-study:has(.dv) { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); }
 .case-study[data-skin="dv"] .site-footer, .case-study:has(.dv) .site-footer { padding-inline: var(--dv-pad); }
 .case-study[data-skin="dv"] .site-footer { margin-inline: calc(-1 * var(--dv-pad)); }
 .site-footer-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
@@ -2105,8 +2105,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg)));
   --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg)));
   --dv-diamond-current: light-dark(#e9e4fc, color-mix(in srgb, #a594ff 16%, var(--bg)));
-  --dv-max: 1440px;
-  /* Figma frame: 240px sides at 1920 (12.5%), a 1440px column beyond. */
+  --dv-max: 1200px;
+  /* A 1200px column at most; at least 12.5% sides (240px at 1920 would leave 1440, too wide to read). */
   --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - var(--dv-max)) / 2));
   margin-inline: calc(-1 * var(--project-text-inset));
   padding-inline: var(--dv-pad);
@@ -2125,9 +2125,9 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-nav-links a { color: var(--dv-muted); font-size: 13px; font-weight: 700; line-height: 1.35; letter-spacing: 0.03em; white-space: nowrap; text-decoration: none; transition: color var(--dur-fast) var(--ease); }
 .dv-nav-links a:hover { color: var(--dv-ink); }
 .dv-nav-links a[aria-current] { color: var(--case-accent); }
-.dv-section { padding-block: 80px 120px; scroll-margin-top: 72px; }
+.dv-section { padding-block: 120px 160px; scroll-margin-top: 72px; }
 .dv-band { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: var(--dv-band); }
-.dv-section.dv-band { padding-block: 120px; }
+.dv-section.dv-band { padding-block: 160px; }
 .dv-section-head { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 1px solid var(--dv-line); }
 .dv-section-title { font-size: clamp(32px, 3.2vw, 48px); font-weight: 700; line-height: 1.2; letter-spacing: 0.03em; text-transform: uppercase; }
 .dv-headline { max-width: 960px; font-size: clamp(24px, 2.4vw, 32px); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; }
@@ -2186,7 +2186,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-link a:hover, .dv-link a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 
 /* Discover */
-.dv-question { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--dv-line); }
+.dv-question { margin-top: 96px; padding-top: 48px; border-top: 1px solid var(--dv-line); }
 .dv-answer { max-width: 1100px; margin-top: 8px; font-size: clamp(20px, 1.8vw, 24px); font-weight: 700; line-height: 1.3; }
 .dv-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 16px; }
 .dv-stat { display: flex; align-items: center; gap: 16px; padding-block: 4px; }
@@ -2196,14 +2196,9 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-groups > div { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding-block: 18px; border-top: 1px solid var(--dv-line); font-size: 17px; line-height: 1.5; }
 .dv-groups dt { font-weight: 700; }
 .dv-groups dd { margin: 0; color: var(--dv-muted); font-weight: 500; }
-.dv-boards { padding-top: 34px; }
-.dv-groups-evidence > div { grid-template-columns: 220px minmax(0, 1fr) 320px; align-items: start; }
-.dv-evidence { display: block; overflow: hidden; border-radius: 10px; box-shadow: 0 0 0 1px var(--dv-line); transition: box-shadow var(--dur-fast) var(--ease); }
-.dv-evidence:hover { box-shadow: 0 0 0 2px var(--case-accent); }
-.dv-evidence img { display: block; width: 100%; height: auto; }
-.dv-evidence-note { margin-top: 14px; color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.5; }
-.dv-evidence-note a { color: var(--case-accent); text-decoration: none; }
-.dv-evidence-note a:hover { text-decoration: underline; }
+.dv-boards { padding-top: 0; }
+.dv-problem-chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-problem-chips li { padding: 8px 16px; border-radius: 999px; background: var(--dv-alt); font-size: 16px; font-weight: 600; line-height: 1.4; }
 .dv-matrix { width: 100%; min-width: 760px; border-collapse: collapse; }
 .dv-matrix th, .dv-matrix td { padding: 14px 8px; border-bottom: 1px solid var(--dv-line); text-align: center; }
 .dv-matrix thead th { padding-block: 0 16px; color: var(--dv-muted); font-size: 14px; font-weight: 700; line-height: 1.4; vertical-align: bottom; }
@@ -2407,8 +2402,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-crops-overview { grid-template-columns: 1fr; }
   .dv-nav { padding-block: 16px; }
   .dv-nav-links { gap: 24px; }
-  .dv-section { padding-block: 56px 72px; }
-  .dv-section.dv-band { padding-block: 72px; }
+  .dv-section { padding-block: 72px 96px; }
+  .dv-section.dv-band { padding-block: 96px; }
   .dv-section-head { margin-bottom: 32px; }
   .dv-gap-56, .dv-gap-64, .dv-gap-72, .dv-gap-80, .dv-gap-96 { margin-top: 48px; }
   .dv-subsection, .dv-subsection-120, .dv-process, .dv-core { margin-top: 72px; }
@@ -2419,8 +2414,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-psi li strong { padding-top: 0; }
   .dv-two, .dv-compare, .dv-problems, .dv-scores { grid-template-columns: 1fr; }
   .dv-problems { gap: 40px; }
-  .dv-groups > div, .dv-groups-evidence > div { grid-template-columns: 1fr; gap: 4px; }
-  .dv-evidence { margin-top: 10px; }
+  .dv-groups > div { grid-template-columns: 1fr; gap: 4px; }
   .dv-boards { padding-top: 0; }
   .dv-stat strong { font-size: 36px; }
   .dv-stages-head { display: none; }
@@ -2454,7 +2448,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dh-ink: light-dark(#1d1d1f, var(--ink));
   --dh-muted: light-dark(#5e5e63, var(--muted));
   --dh-line: light-dark(#d6d6d6, var(--line));
-  --dh-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2));
+  --dh-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2));
   --dh-glow: #5b3fd6;
   --dh-glow-2: #a594ff;
   /* Fits one screen: the opener (brand, question, media, facts) sizes to the viewport height. */
@@ -2631,8 +2625,8 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Gemini body in the Devsign body language (no Figma frame yet): the generic
    MDX blocks take the Devsign margins, stage titles, labels, cards and tables. */
-.case-study[data-skin="dv"] { --dv-bg: light-dark(var(--bg), var(--surface)); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
-.case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1440px; margin-left: 0; margin-right: 0; }
+.case-study[data-skin="dv"] { --dv-bg: light-dark(var(--bg), var(--surface)); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
+.case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1200px; margin-left: 0; margin-right: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] > ul { display: block; }
@@ -2722,7 +2716,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
 @media (min-width: 75rem) {
-  .dv, .case-study[data-skin="dv"], .case-study:has(.dv) { --dv-pad: max(224px, 12.5vw, calc((100vw - 1440px) / 2)); }
+  .dv, .case-study[data-skin="dv"], .case-study:has(.dv) { --dv-pad: max(224px, 12.5vw, calc((100vw - 1200px) / 2)); }
 }
 
 /* The footer closes the page: whatever wraps it drops its bottom padding, so no strip of page shows under it. */
