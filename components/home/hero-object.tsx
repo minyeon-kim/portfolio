@@ -12,7 +12,7 @@ import { useEffect, useRef } from "react";
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
 // - default: a loop (research, design and engineering closing on itself)
-// - Gemini privacy revamp, blue: the Gemini constellation, the twins
+// - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: two groups joined by streams, a bolt where they meet
 // - About me, teal: a hexagonal lattice, the security background
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
@@ -32,17 +32,6 @@ uniform float symbol;
 uniform float SIZE;
 uniform float focus;  // 0 at rest, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
-vec2 gStar(float i) {
-  return i < 0.5 ? vec2(-0.32, 0.95) : i < 1.5 ? vec2(0.3, 0.82) : i < 2.5 ? vec2(-0.55, 0.3) : i < 3.5 ? vec2(-0.82, -0.2) : i < 4.5 ? vec2(-1.0, -0.42)
-       : i < 5.5 ? vec2(-0.35, -0.5) : i < 6.5 ? vec2(0.12, 0.25) : i < 7.5 ? vec2(0.02, -0.22) : i < 8.5 ? vec2(-0.12, -0.78) : vec2(0.42, -0.35);
-}
-vec2 gLine(float i, out vec2 b) {
-  vec2 a;
-  if (i < 0.5) { a = gStar(0.0); b = gStar(2.0); } else if (i < 1.5) { a = gStar(2.0); b = gStar(3.0); } else if (i < 2.5) { a = gStar(3.0); b = gStar(4.0); }
-  else if (i < 3.5) { a = gStar(2.0); b = gStar(5.0); } else if (i < 4.5) { a = gStar(1.0); b = gStar(6.0); } else if (i < 5.5) { a = gStar(6.0); b = gStar(7.0); }
-  else if (i < 6.5) { a = gStar(7.0); b = gStar(8.0); } else if (i < 7.5) { a = gStar(6.0); b = gStar(9.0); } else { a = gStar(0.0); b = gStar(1.0); }
-  return a;
-}
 // Where each particle leans: a loose cloud with a wide halo of dust.
 vec3 homeOf(vec2 uv) {
   float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
@@ -73,14 +62,14 @@ vec3 homeOf(vec2 uv) {
       loose *= 0.6;
     }
   } else if (symbol > 0.5) {
-    if (a < 0.3) {
-      p = vec3(gStar(floor(b * 10.0)) * 1.1, 0.0);
-      loose *= 0.5;
-    } else {
-      vec2 e; vec2 s = gLine(floor(b * 9.0), e);
-      p = vec3(mix(s, e, c) * 1.1, 0.0);
-      loose *= 0.8;
-    }
+    // The Gemini sparkle: a four-point star with concave sides, its edge
+    // drawn densely and its body filled more lightly.
+    float t = b * 6.2831853;
+    vec2 dir = vec2(cos(t), sin(t));
+    float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
+    float fill = a < 0.45 ? 1.0 : sqrt(c);
+    p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
+    loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
     float t = a * 6.2831853;
     p = vec3(cos(t) * 1.2, sin(t) * 0.75, sin(t * 2.0) * 0.3) * 1.45;
@@ -132,14 +121,14 @@ void main() {
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
   float k = exp(-dot(d, d) / 0.16);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 1.4 + vec2(-d.y, d.x) * length(mv) * 6.0 + normalize(d + 1e-4) * length(mv) * 2.0) * k * dt * 2.0;
+  u.xy += (mv * 1.0 + vec2(-d.y, d.x) * length(mv) * 4.0 + normalize(d + 1e-4) * length(mv) * 1.2) * k * dt * 2.0;
   // A burst: a ring expanding from where the mouse flicked, throwing the dust
   // outward like a firework; the ring weakens as it grows.
   vec2 bd = (s - burstAt) * vec2(aspect, 1.0);
   float bl = length(bd), ring = burstAge * 1.4;
   float bw = exp(-(bl - ring) * (bl - ring) / 0.012) * burstPower * exp(-burstAge * 1.6);
   float jitter = h1(v.x * 37.0 + v.y * 91.0);
-  u.xy += normalize(bd + 1e-4) * bw * (4.0 + 6.0 * jitter) * dt * 10.0;
+  u.xy += normalize(bd + 1e-4) * bw * (2.6 + 4.0 * jitter) * dt * 10.0;
   u.z += (jitter - 0.5) * bw * 20.0 * dt;
   u *= exp(-dt * 0.9);
   o = vec4(u, 1.0);
@@ -176,7 +165,7 @@ void main() {
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.3 ? 0.35 : (symbol > 1.5 && symbol < 2.5 && cat > 0.8 ? 0.3 : 0.0);
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.8 ? 0.3 : 0.0);
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
@@ -352,8 +341,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // A quick flick sets off a burst (at most every 0.7s), and tells the
       // headline so its letters decode as the ring passes them.
       const speed = Math.hypot(vx, vy) / Math.max(dt, 1e-3);
-      if (speed > 2.2 && clock - burst.at > 0.7) {
-        Object.assign(burst, { x: mouse.x, y: mouse.y, at: clock, power: Math.min(1.6, speed / 3) });
+      if (speed > 2.8 && clock - burst.at > 0.7) {
+        Object.assign(burst, { x: mouse.x, y: mouse.y, at: clock, power: Math.min(1.2, speed / 4) });
         window.dispatchEvent(new CustomEvent("hero-burst", { detail: { x: mouse.cx, y: mouse.cy, pxPerSecond: (1.4 * height) / 2, power: burst.power } }));
       }
 
