@@ -641,3 +641,5 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
 - Home case list: 30px pills, 0 16px, 15px/400, ink 16% frosted, 8px gap, no index numbers (`.home-pick-index` hidden); hover/active stays the 1px outline ring.
 - Hero object: one softbox streak only (the second crossed it at the tube's edge and read as the chrome folding over itself); streak width 0.12; backdrop tint ×0.4.
+- Sizes bumped a step (user: "a little bigger"): header controls 28px (13px text; lang knob/options 24px, 10px mono; theme icon 13px); list pills 34px.
+- The opened Menu's links (`.header-menu-panel a`) use the same list pill as the home case list: 34px, 0 16px, 15px/400, frosted grey, 1px ring on hover / current page. Panel offset -2px so the pills line up with the Menu pill.
