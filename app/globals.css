@@ -2040,7 +2040,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 
 /* Closing block (components/site-footer.tsx): the last thing on a case page. */
 /* Closing footer after metalab.com: a dark full-bleed band — a big question, large ways onward, a quiet bottom row. */
-.site-footer { --ft-bg: light-dark(#0e1111, #0a0c0c); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
+.site-footer { --ft-bg: light-dark(#0e1111, var(--bg)); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
 /* Devsign-skinned cases: the footer's text lines up with the case column (--dv-pad) and its band runs edge to edge. */
 .case-study:has(.dv) { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); }
 .case-study[data-skin="dv"] .site-footer, .case-study:has(.dv) .site-footer { padding-inline: var(--dv-pad); }
@@ -2101,11 +2101,11 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-muted: light-dark(#5e5e63, var(--muted));
   --dv-line: light-dark(#d6d6d6, var(--line));
   --dv-alt: light-dark(#f5f5f7, color-mix(in srgb, var(--ink) 7%, transparent));
-  --dv-band: light-dark(#f3f3f5, color-mix(in srgb, var(--ink) 5%, var(--surface)));
+  --dv-band: light-dark(#f3f3f5, color-mix(in srgb, var(--ink) 4%, var(--bg)));
   --dv-arrow: light-dark(#9e9ea6, var(--muted));
   --case-accent: var(--devsign-title);
-  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #a594ff 14%, var(--surface)));
-  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #a594ff 12%, var(--surface)));
+  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #a594ff 12%, var(--bg)));
+  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #a594ff 10%, var(--bg)));
   --dv-second: light-dark(#e8742c, #f0965a);
   --dv-tint-second: light-dark(#fdf0e7, color-mix(in srgb, #f0965a 12%, var(--bg)));
   --dv-alert: light-dark(#c7383d, #ff8a80);
@@ -2538,15 +2538,15 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    A glossy raymarched object turns behind everything (HeroObject). Grid: local
    time top right, case pills pinned left-center, the paragraph bottom left,
    the display statement bottom right. Hovering a case pill recolours the
-   object, swaps the copy and raises that case's device at the right. Always
-   the dark media palette, whatever the site theme. */
+   object, swaps the copy and raises that case's device at the right.
+   In the page's own theme. */
 /* The landing follows the theme: near-black with a black chrome loop in dark, the page grey with a pearl chrome loop in light. */
 .intro-stage.home-stage { --bg: light-dark(#eef0ee, #080909); position: relative; isolation: isolate; height: 100svh; min-height: 680px; overflow: clip; color: var(--ink); background: var(--bg); transition: background-color 700ms ease, color 500ms ease; }
 .home-backdrop { position: absolute; inset: 0; z-index: 0; }
 .home-backdrop .intro-ambient { opacity: 0.7; transition: opacity 600ms ease; }
 .home-backdrop[data-project] .intro-ambient { opacity: 0.35; }
 .home-object { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-/* The hovered case's world: its surface takes the whole stage while the loop fades, and the stage reads light-on-dark whatever the theme. */
+/* The hovered case's world: its surface takes the whole stage while the loop fades, in the page's own theme. */
 .home-world { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
 .home-world[data-active] { opacity: 1; }
 /* The worlds keep only their glows: the points take each case's form underneath (HeroObject). */
@@ -2555,8 +2555,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%); }
 .home-backdrop .home-object { transition: opacity 700ms ease; }
 .intro-stage.home-stage { transition: color 500ms ease; }
-.intro-stage.home-stage[data-world] { --ink: #e8ecea; --muted: #8e9895; --line: #262c2a; color-scheme: dark; }
-body:has(.home-stage[data-world]) header[data-home]:not([data-compact]) { --ink: #e8ecea; --muted: #8e9895; color: var(--ink); }
 header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[data-home] .lang-toggle-option { transition-property: background-color, box-shadow, color; }
 /* The world's copy: role top centre, the name large left of centre, the problem bottom right. */
 /* Leaving is quick (220ms, up); arriving is slow and staggered (role, name, then the paragraph), so a switch reads as out-then-in. */
