@@ -669,3 +669,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Case hero: background fades from #f5f5f5 (45%) to the white page below (no edge); the colour wash behind the media is lighter (13%/11% light, 20%/16% dark), blurred 40px, masked out toward the bottom.
 - Home backdrop: the Gemini state forms the Gemini sparkle (four-point star with concave sides, dense edge + lighter fill) instead of a constellation. Cursor sweep and burst are softer: sweep 1.0/4.0/1.2, burst push 2.6+4j, burst triggers above speed 2.8 with power ≤1.2.
 - Home backdrop dust is finer, like the Milky Way rather than beads: 320² (102k) points, dust 1.0–1.4px with a soft core, ~3.5% stars at 1.5–2.1px, and only stars flare (fainter, shorter glint). Light theme ink keeps more of its colour (c·0.7) at alpha ×1.1.
+- Light theme dust is darker: ink c·0.55, alpha ×1.6 (dark theme unchanged).

@@ -196,8 +196,8 @@ void main() {
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
-  c = mix(c, c * 0.7, light);
-  alpha *= mix(1.0, 1.1, light);
+  c = mix(c, c * 0.55, light);
+  alpha *= mix(1.0, 1.6, light);
   o = vec4(c * alpha, alpha);
 }`;
 
