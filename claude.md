@@ -632,7 +632,8 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: cursor response and stage labels
-- Shader: stronger tilt (pointer 0.22/0.34), a cursor glint in `env()` and a swell of the tube along the cursor ray (`cursor`, `press` uniforms; press eases in while the mouse moves, out ~1.8s after it rests).
+## Hero object: the coaster ride
+- The landing backdrop is now a ride: the camera runs down `path(z)` (swooping, banking) along a chrome coaster track (two rails on ties) through a chrome helix coil. Same studio env/shade (black chrome, white streaks, case tints). `travel` uniform = distance, advanced in JS at 1.8 + 1.4·press units/s; the cursor turns the head (`pointer`) and moves a glint (`cursor`, `press`).
+- Coil distance is a true helix (pitch-corrected dz); the plane-distance approximation is fine for the gentle path. Far chrome fades out (alpha exp(-0.15·t)); dark mode is brightened ×1.6, light ×0.8.
+- The Research/Design/Engineering labels were removed (looked odd).
 - No 30fps cap; render width cap 1100 and `quality` drops (×0.8, min 0.5) after ~60 slow frames.
-- Labels (Research/Design/Engineering, KO 리서치/디자인/엔지니어링) passed from home-intro; positioned each frame by projecting the loop centreline (JS mirror of `orient()` + camera). Spread over the longest on-screen run of the loop, avoiding `.home-tagline-wrap, .home-picks, .home-note, header`. `.hero-object-labels` hides with the case worlds like the canvas.
