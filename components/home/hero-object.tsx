@@ -119,7 +119,7 @@ void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
   u += (homeOf(v) - p) * gather * dt;
   u += flow(p * 0.8) * 0.45 * stir * dt;
-  u += valley(p * 0.9) * 0.35 * stir * dt;
+  u += valley(p * 0.9) * 0.6 * stir * dt;
   // The cursor sweeps nearby dust along its motion and swirls it.
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
@@ -168,8 +168,9 @@ void main() {
   float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
   vLight *= 0.7 + 0.3 * sin(phase * 1.7);
   vSize = flare;
-  // Fine, even points; a flaring one grows a little to show its glint.
-  gl_PointSize = mix(1.6, 2.8, vDepth) * (1.0 + 0.3 * vStar) + flare * 12.0;
+  // Fine, even points; a flaring one only brightens. Light reads from where
+  // the dust gathers densely, not from big particles.
+  gl_PointSize = mix(1.4, 2.4, vDepth) * (1.0 + 0.2 * vStar);
 }`;
 
 const drawFragment = `#version 300 es
@@ -177,11 +178,8 @@ precision highp float;
 in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
-  // A crisp bright core; a flaring point adds a thin four-point glint.
   vec2 q = gl_PointCoord - 0.5;
-  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 6.0, vSize));
-  float rays = vSize * (exp(-abs(q.x) * 60.0) + exp(-abs(q.y) * 60.0)) * smoothstep(0.5, 0.0, length(q));
-  float a = min(core + rays, 1.0);
+  float a = smoothstep(0.5, 0.0, length(q));
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
@@ -195,12 +193,20 @@ void main() {
 // The pools' own soft light on the room behind the dust.
 const glowFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform float light;
+uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform vec3 fast; uniform float light;
 ${pools}
 void main() {
   vec2 s = v * 2.0 - 1.0;
   float l = max(pools(s, aspect, time) - 0.25, 0.0);
   vec3 c = mix(calm, accent, 0.5 + 0.5 * s.x) * l * 0.07 * (1.0 - light);
+  // A wide diagonal band of soft light, lower left to upper right, drifting
+  // slowly: the room's own gradient behind the dust.
+  vec2 q = vec2(s.x * aspect, s.y);
+  float across = dot(q, normalize(vec2(-0.55, 1.0))) + 0.25 * sin(time * 0.05) + 0.15 * sin(q.x * 0.8 + time * 0.07);
+  float band = exp(-across * across * 1.6);
+  float edge = exp(-pow(across - 0.55, 2.0) * 9.0);
+  vec3 deep = calm * vec3(0.9, 0.7, 1.15);
+  c += (mix(deep, mix(calm, fast, 0.25), 0.5 + 0.5 * sin(q.x * 0.6 + time * 0.04)) * band * 0.3 + deep * edge * 0.08) * (1.0 - light);
   o = vec4(c, 0.0);
 }`;
 
@@ -342,7 +348,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pGlow);
       gl.bindVertexArray(vaoQuad);
       gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "light"), colours.light);
-      gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent);
+      gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
