@@ -55,19 +55,28 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   const zoomStart = performance.now();
   let layer: HTMLElement | null = null;
   let liveFrame: HTMLIFrameElement | null = null;
-  // The layer always covers the viewport; what moves is a clip (its visible
-  // box) and its content's transform (scaled to cover that box). Neither
-  // needs layout, so the grow keeps its frames while the page renders.
+  // The layer is a viewport-sized box moved with transforms only, so the
+  // compositor runs the whole grow and settle even while the main thread is
+  // busy (the click-time snapshot, the case rendering). Its box is scaled to
+  // the device's (or the opener's) box, and its stage is counter-scaled so the
+  // content keeps its proportions and covers that box. The counter-scale is not
+  // linear in time, so both are sampled as keyframes along the easing curve.
+  // (A clip-path grow was repainted on the main thread every frame and
+  // stuttered whenever the main thread was busy.)
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const clipOf = (b: DOMRect, radius: string) => `inset(${b.top}px ${vw - b.right}px ${vh - b.bottom}px ${b.left}px round ${radius})`;
-  const fitOf = (b: DOMRect) => {
-    const scale = Math.max(b.width / vw, b.height / vh);
-    return `translate(${b.left + (b.width - vw * scale) / 2}px, ${b.top + (b.height - vh * scale) / 2}px) scale(${scale})`;
+  type Box = { left: number; top: number; width: number; height: number };
+  const FULL: Box = { left: 0, top: 0, width: vw, height: vh };
+  // cubic-bezier(0.2, 0.8, 0.2, 1), solved for the curve's x by bisection.
+  const easeOut = (x: number) => {
+    const at = (t: number, a: number, b: number) => 3 * (1 - t) * (1 - t) * t * a + 3 * (1 - t) * t * t * b + t * t * t;
+    let lo = 0, hi = 1, t = x;
+    for (let i = 0; i < 24; i++) {
+      if (at(t, 0.2, 0.2) < x) lo = t; else hi = t;
+      t = (lo + hi) / 2;
+    }
+    return at(t, 0.8, 1);
   };
-  const FULL_CLIP = "inset(0px 0px 0px 0px round 0px)";
-  const FULL_FIT = "translate(0px, 0px) scale(1)";
-  const ease = "cubic-bezier(0.2, 0.8, 0.2, 1)";
   const stageOf = (target: HTMLElement) => {
     let stage = target.querySelector<HTMLElement>(":scope > .project-zoom-stage");
     if (!stage) {
@@ -78,10 +87,30 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     }
     return stage;
   };
-  const growLayer = (target: HTMLElement, box: DOMRect) => {
+  const morph = (target: HTMLElement, from: Box, to: Box, radii: [number, number], timing: KeyframeAnimationOptions) => {
+    const box: Keyframe[] = [], content: Keyframe[] = [], corners: Keyframe[] = [];
+    const steps = 40;
+    for (let i = 0; i <= steps; i++) {
+      const offset = i / steps;
+      const e = easeOut(offset);
+      const mix = (a: number, b: number) => a + (b - a) * e;
+      const b = { left: mix(from.left, to.left), top: mix(from.top, to.top), width: mix(from.width, to.width), height: mix(from.height, to.height) };
+      const sx = b.width / vw, sy = b.height / vh, cover = Math.max(sx, sy);
+      const kx = cover / sx, ky = cover / sy;
+      const radius = mix(radii[0], radii[1]);
+      box.push({ offset, transform: `translate(${b.left}px, ${b.top}px) scale(${sx}, ${sy})` });
+      content.push({ offset, transform: `translate(${(vw - vw * kx) / 2}px, ${(vh - vh * ky) / 2}px) scale(${kx}, ${ky})` });
+      corners.push({ offset, borderRadius: `${radius / sx}px / ${radius / sy}px` });
+    }
+    const linear = { ...timing, easing: "linear" };
+    // The corners can't be composited; on their own animation they don't hold
+    // the transforms back to the main thread.
+    return [target.animate(box, linear), stageOf(target).animate(content, linear), target.animate(corners, linear)];
+  };
+  const boxOf = (rect: DOMRect): Box => ({ left: rect.left, top: rect.top, width: rect.width, height: rect.height });
+  const growLayer = (target: HTMLElement, rect: DOMRect) => {
     Object.assign(target.style, { top: "0px", left: "0px", width: `${vw}px`, height: `${vh}px` });
-    target.animate([{ clipPath: clipOf(box, "18px") }, { clipPath: FULL_CLIP }], { duration: grow, easing: ease, fill: "both" });
-    stageOf(target).animate([{ transform: fitOf(box) }, { transform: FULL_FIT }], { duration: grow, easing: ease, fill: "both" });
+    morph(target, boxOf(rect), FULL, [18, 0], { duration: grow, fill: "both" });
   };
   if (zoom && !reduced) {
     const source = zoom.from;
@@ -305,9 +334,8 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         const box = target?.getBoundingClientRect();
         const radius = target ? getComputedStyle(target).borderRadius : "14px";
         if (box && box.width > 0) {
-          const settleTiming = { duration: timing.duration, delay: timing.delay, easing: ease, fill: "both" as FillMode };
-          animations.push(layer.animate([{ clipPath: FULL_CLIP }, { clipPath: clipOf(box, radius.split(" ")[0] || "14px") }], settleTiming));
-          animations.push(stageOf(layer).animate([{ transform: FULL_FIT }, { transform: fitOf(box) }], settleTiming));
+          const settleTiming = { duration: timing.duration, delay: timing.delay, fill: "both" as FillMode };
+          animations.push(...morph(layer, FULL, boxOf(box), [0, parseFloat(radius) || 14], settleTiming));
           // Blend into the real media over the last stretch.
           animations.push(layer.animate([{ opacity: 1 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }], { duration: timing.duration, delay: timing.delay, fill: "both" }));
         } else {

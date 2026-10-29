@@ -614,3 +614,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 
 ## Case zoom: case content mounts after the transition
 - `CasePanels` (components/home/case-panels.tsx) no longer mounts the picked case during the intro → case zoom. While `data-project-navigation` is on `<html>`, it renders nothing; once the flag is removed it mounts in an idle callback. Mounting the full case mid-zoom was a 120–320ms long task that froze the hold/settle frames (Devsign: layout alone ~160ms). Now ~58ms (opener only).
+
+## Case zoom: transform-only grow and settle
+- The zoom layer no longer animates `clip-path` (repainted on the main thread every frame → stutter while the click-time snapshot / case render ran). `morph()` in lib/project-transition.ts moves the viewport-sized layer with `translate + scale(sx, sy)` and counter-scales `.project-zoom-stage` so content covers the box; both sampled as 40 keyframes along cubic-bezier(0.2,0.8,0.2,1) with linear easing. Corner radius is a separate (main-thread) animation so the transforms stay on the compositor. `.project-zoom` has `transform-origin: 0 0`.
+- Local builds: Turbopack's `.next` cache once served stale CSS; `rm -rf .next` if a CSS change doesn't show up.
