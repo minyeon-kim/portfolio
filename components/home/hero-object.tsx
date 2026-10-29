@@ -73,7 +73,7 @@ float streak(vec3 r, vec3 n, vec3 c, float w) {
   return band * smoothstep(-0.3, 0.6, dot(r, c));
 }
 // The studio around the object: near black, a violet sky, blue from below,
-// two white softbox streaks.
+// one long white softbox streak.
 vec3 env(vec3 r) {
   // Dark: a near-black room. Light: a bright pearl room, where the streaks
   // read as dark seams instead.
@@ -83,9 +83,10 @@ vec3 env(vec3 r) {
   c += tint2 * 0.18 * pow(max(dot(r, normalize(vec3(0.2, 0.2, 1.0))), 0.0), 6.0);
   // In light the streaks widen and soften: a narrow dark seam over pale chrome
   // reads as a crease in the surface.
-  float s1 = streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), mix(0.085, 0.16, light));
-  float s2 = streak(r, normalize(vec3(-0.9, 0.15, 0.4)), normalize(vec3(0.35, -0.25, 0.9)), mix(0.06, 0.12, light));
-  c += vec3(1.0) * mix(2.0, 0.45, light) * s1 + vec3(0.95, 0.95, 1.0) * mix(1.3, 0.3, light) * s2;
+  float s1 = streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), mix(0.12, 0.18, light));
+  // One softbox only: a second streak crossed this one at the tube's edge
+  // and read as the chrome folding over itself.
+  c += vec3(1.0) * mix(2.0, 0.45, light) * s1;
   c -= vec3(0.6, 0.6, 0.66) * light * 0.5 * streak(r, normalize(vec3(0.6, 0.7, -0.3)), normalize(vec3(-0.2, 0.3, 1.0)), 0.2);
   // A small softbox held where the cursor is: its glint slides over the chrome.
   float glint = pow(max(dot(r, normalize(vec3(cursor * 1.6, 1.0))), 0.0), 60.0);
@@ -117,7 +118,7 @@ vec3 backdrop(vec2 uv) {
   float m = 0.5 + 0.5 * sin(z * 1.3 - sw * 2.0 + 1.3);
   float glow = pow(n, 1.6) * smoothstep(0.05, 0.75, r) * (1.0 - 0.35 * smoothstep(0.9, 1.6, r));
   vec3 tint = mix(tint0, tint1, m);
-  vec3 dark = vec3(0.012, 0.012, 0.02) + tint * glow * 0.6;
+  vec3 dark = vec3(0.012, 0.012, 0.02) + tint * glow * 0.4;
   vec3 pale = mix(vec3(0.93, 0.935, 0.945), tint, glow * 0.3) - 0.05 * (1.0 - smoothstep(0.0, 0.6, r));
   return mix(dark, pale, light);
 }
