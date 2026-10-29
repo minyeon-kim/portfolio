@@ -183,9 +183,8 @@ void main() {
   float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
   vLight *= 0.7 + 0.3 * sin(phase * 1.7);
   vSize = flare;
-  // Fine, even points; a flaring one only brightens. Light reads from where
-  // the dust gathers densely, not from big particles.
-  gl_PointSize = mix(1.4, 2.4, vDepth) * (1.0 + 0.2 * vStar);
+  // Fine, even points; a flaring one brightens and glints, staying small.
+  gl_PointSize = mix(1.6, 2.8, vDepth) * (1.0 + 0.2 * vStar) + flare * 5.0;
 }`;
 
 const drawFragment = `#version 300 es
@@ -194,7 +193,10 @@ in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLigh
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
-  float a = smoothstep(0.5, 0.0, length(q));
+  // A crisp core; a flaring point shows a thin four-point glint.
+  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 3.5, vSize));
+  float rays = vSize * (exp(-abs(q.x) * 70.0) + exp(-abs(q.y) * 70.0)) * smoothstep(0.5, 0.05, length(q));
+  float a = min(core + rays, 1.0);
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
