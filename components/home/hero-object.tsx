@@ -14,7 +14,7 @@ import { useEffect, useRef } from "react";
 // - default: a spiral galaxy, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
-// - About me, teal: three stars joined (research, design, engineering)
+// - About me, teal: a rolling landscape of dots under falling data
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // DPR 1, paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
@@ -50,24 +50,21 @@ vec3 homeOf(vec2 uv) {
   vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
-    // Three stars, research, design and engineering, joined by faint lines:
-    // a small constellation, loose like the Gemini sparkle.
-    vec2 A = vec2(-0.85, -0.3), B = vec2(0.05, 0.5), C = vec2(0.85, -0.05);
-    vec2 q;
-    if (a < 0.36) {
-      float k = floor(b * 3.0);
-      vec2 star = k < 0.5 ? A : (k < 1.5 ? B : C);
-      float t = c * 6.2831853, r = 0.13 * pow(h1(n * 6.3), 1.5);
-      q = star + vec2(cos(t), sin(t)) * r;
-      loose *= 0.3;
-    } else if (a < 0.7) {
-      q = b < 0.5 ? mix(A, B, c) : mix(B, C, c);
-      loose *= 0.55;
+    // A landscape of dots, seen low from the front: a regular grid rolling
+    // into slow waves, rising into ridges at the sides, with faint streams
+    // of data falling behind it.
+    if (a < 0.82) {
+      vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
+      float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
+      float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
+      float y = 0.16 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.08 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 0.75;
+      p = vec3(x, y - 0.8, z);
+      loose *= 0.06;
     } else {
-      q = mix(A, C, c) + vec2(0.0, (b - 0.5) * 0.9);
-      loose *= 0.9;
+      float col = floor(b * 46.0);
+      p = vec3((col / 46.0 - 0.5) * 6.0, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
+      loose *= 0.08;
     }
-    p = vec3(q + vec2(0.3, 0.0), (h1(n * 4.4) - 0.5) * 0.25);
   } else if (symbol > 1.5) {
     // The Devsign bolt, loosely: its outline a little denser than its body,
     // both spreading softly like the Gemini sparkle;
@@ -97,21 +94,21 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    // A spiral galaxy seen at a slant: a bright core and two arms winding
-    // out, turning slowly.
+    // A spiral galaxy seen at a slant, loosely: a bright core and two arms
+    // winding out through a wide haze, turning slowly.
     vec2 q;
     if (a < 0.14) {
       q = (vec2(b, c) - 0.5) * 0.55 * sqrt(h1(n * 6.1));
     } else {
       float r = 0.18 + pow((a - 0.14) / 0.86, 0.8) * 2.0;
-      float t = floor(b * 2.0) * 3.14159 + r * 2.3 + time * 0.02 + (c - 0.5) * 0.5;
+      float t = floor(b * 2.0) * 3.14159 + r * 2.3 + time * 0.02 + (c - 0.5) * 0.9;
       q = vec2(cos(t), sin(t)) * r;
     }
     q.y *= 0.42;
     float ct = cos(0.38), st = sin(0.38);
     q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
     p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.3);
-    loose *= 0.5;
+    loose *= 0.85;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -191,7 +188,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float light;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -221,8 +218,10 @@ void main() {
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat < 0.36 ? 0.35 : 0.0));
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat >= 0.82 ? 0.3 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
+  // The About landscape spans the whole stage, so it carries its own light.
+  if (symbol > 2.5) vLight = max(vLight, 0.85);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
   float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
@@ -234,7 +233,8 @@ void main() {
   vSize = flare * star;
   float size = mix(mix(1.0, 1.4, vDepth), mix(1.5, 2.1, vDepth), star) * (1.0 + 0.2 * vStar);
   vFaint = mix(1.15, 1.5, star);
-  gl_PointSize = size + vSize * 3.0;
+  // Light theme: ink on a pale page needs a little more body to read.
+  gl_PointSize = size * mix(1.0, 1.4, light) + vSize * 3.0;
 }`;
 
 const drawFragment = `#version 300 es
@@ -254,7 +254,7 @@ void main() {
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
   c = mix(c, pow(c, vec3(1.7)) * 0.95, light);
-  alpha *= mix(1.0, 2.3, light);
+  alpha *= mix(1.0, 2.8, light);
   o = vec4(c * alpha, alpha);
 }`;
 

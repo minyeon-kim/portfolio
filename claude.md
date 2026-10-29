@@ -686,3 +686,5 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Dark subpages unified on `--bg` (#050506): footer (`--ft-bg`), `--dv-band` / `--dv-tint` / `--dv-tint-core` now mix over `--bg` instead of `--surface`.
 - Home hover keeps the page theme: the `[data-world]` dark override on the stage and header is gone, so in light mode a hovered project stays on the light page; the dust keeps its light rendering. Light-mode dust ink is saturated (pow(c, 1.7)·0.95) instead of greyed (c·0.55).
 - Devsign bolt is slimmer: x scaled ×0.75.
+- Default galaxy looser (arm spread ×1.8, loose ×0.85). Light theme dust: points ×1.4 larger and alpha ×2.8 so the pale page doesn't feel empty.
+- About form: a rolling landscape of dots (regular grid from the particle's own uv, slow waves, ridges at the sides) with faint streams of data falling behind it, after a reference the owner liked; carries its own light (vLight ≥ 0.85). Replaces the constellation/orbits.
