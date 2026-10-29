@@ -214,23 +214,13 @@ HTML과 JavaScript로 진행자 모드와 참가자 모드를 만들었습니다
   href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant"
   label="정민이 어디서 왔는지 보고, 그 출처를 끄기"
   steps={[
-    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "답변 아래 출처 배지", body: "개인 정보는 설정이 아니라 나타나는 그 자리에서 표시됩니다." },
-    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "출처마다 토글 하나", body: "채팅을 떠나지 않고 Gmail, Calendar, Memory를 끕니다." },
-    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "삭제와 차단을 나눠서", body: "요청을 항목마다 실제로 어떻게 되는지에 따라 나눠 보여 줍니다." },
-    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "확인할 수 있는 결과", body: "한 줄씩 결과를 보여 주고, 지금 확인하기로 사라졌는지 확인합니다." },
+    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "답변 아래 출처 배지", before: "어디서 왔는지 알기 어려움.", body: "Gmail, Calendar, Memory별 항목이 담긴 출처 배지." },
+    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "출처마다 토글 하나", before: "설정 화면 두 곳, 각각 3–5번 클릭.", body: "채팅을 떠나지 않고 토글 하나." },
+    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "삭제와 차단을 나눠서", before: "삭제와 차단이 똑같아 보임.", body: "‘삭제돼요’와 ‘참조만 차단돼요’를 나눠서 표시." },
+    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "확인할 수 있는 결과", before: "결과를 믿는 건 사용자 몫.", body: "한 줄씩 보여 주는 결과와 지금 확인하기." },
   ]}
 />
 
-<CaseCompare
-  before="As-is"
-  after="To-be"
-  rows={[
-    { topic: "개인 정보가 나타날 때", before: "어디서 왔는지 알기 어려움.", after: "Gmail, Calendar, Memory별 항목이 담긴 출처 배지." },
-    { topic: "끄고 싶을 때", before: "설정 화면 두 곳, 각각 3–5번 클릭.", after: "채팅을 떠나지 않고 토글 하나." },
-    { topic: "지우고 싶을 때", before: "삭제와 차단이 똑같아 보임.", after: "‘삭제돼요’와 ‘참조만 차단돼요’를 나눠서 표시." },
-    { topic: "삭제한 뒤", before: "결과를 믿는 건 사용자 몫.", after: "한 줄씩 보여 주는 결과와 지금 확인하기." },
-  ]}
-/>
 
 <CaseSection id="usability-testing" label="10 / 사용성 테스트" title="테스트 중: | 직접 확인하면 신뢰가 생길까?">
 
