@@ -658,3 +658,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Pills back to metalab: no rim or highlight lines, ink 15% fill, blur(24px) saturate(1.2).
 - Sparkle restored but small: points 1.6–2.8px, ~25% flare (+5px) with a crisp core and a thin four-point glint.
 - Pills matched to the metalab screenshot: fill light-dark(rgb(14 17 17/.08), rgb(255 255 255/.14)) + blur(30px), no rim, no saturate (the backdrop colour shows through); home picks 30px tall, 0 16px, 15px/400, 8px gap.
+- The margin stage list sits at `--edge-inset` (24px), the same edge as the header's Menu pill.
