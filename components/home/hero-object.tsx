@@ -14,7 +14,7 @@ import { useEffect, useRef } from "react";
 // - default: a spiral galaxy, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
-// - About me, teal: a fingerprint, identity and the security background
+// - About me, teal: three stars joined (research, design, engineering)
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // DPR 1, paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
@@ -34,7 +34,7 @@ uniform float focus;  // 0 at rest, 1 while a case is hovered: the form gathers 
 float h1(float n) { return fract(sin(n) * 43758.5453); }
 // The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
 const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(470.0, 215.0), vec2(660.0, 230.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(235.0, 215.0), vec2(0.0, 205.0));
-vec2 boltPoint(vec2 v) { return vec2(v.x - 330.0, 312.0 - v.y) * (1.7 / 625.0); }
+vec2 boltPoint(vec2 v) { return vec2((v.x - 330.0) * 0.75, 312.0 - v.y) * (1.7 / 625.0); }
 bool inBolt(vec2 q) {
   bool inside = false;
   for (int i = 0, j = 8; i < 9; j = i++) {
@@ -50,17 +50,24 @@ vec3 homeOf(vec2 uv) {
   vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
-    // A fingerprint, for identity and the security background: ridges
-    // looping around a core, each broken here and there.
-    float k = floor(b * 9.0);
-    float t = c * 6.2831853;
-    float gap = h1(k * 13.7 + 1.0) * 6.2831853;
-    t += step(abs(fract((t - gap) / 6.2831853 + 0.5) - 0.5), 0.05) * 0.6;
-    float r = 0.12 + k * 0.105 + 0.03 * sin(t * 2.0 + k);
-    vec2 q = vec2(cos(t) * r * 0.78, sin(t) * r + (sin(t) > 0.0 ? k * 0.02 : 0.0));
-    if (a > 0.85) q *= 0.6 + 0.4 * h1(n * 6.3);
-    p = vec3(q * 1.15 + vec2(0.25, 0.05), (h1(n * 4.4) - 0.5) * 0.2);
-    loose *= a > 0.85 ? 0.6 : 0.22;
+    // Three stars, research, design and engineering, joined by faint lines:
+    // a small constellation, loose like the Gemini sparkle.
+    vec2 A = vec2(-0.85, -0.3), B = vec2(0.05, 0.5), C = vec2(0.85, -0.05);
+    vec2 q;
+    if (a < 0.36) {
+      float k = floor(b * 3.0);
+      vec2 star = k < 0.5 ? A : (k < 1.5 ? B : C);
+      float t = c * 6.2831853, r = 0.13 * pow(h1(n * 6.3), 1.5);
+      q = star + vec2(cos(t), sin(t)) * r;
+      loose *= 0.3;
+    } else if (a < 0.7) {
+      q = b < 0.5 ? mix(A, B, c) : mix(B, C, c);
+      loose *= 0.55;
+    } else {
+      q = mix(A, C, c) + vec2(0.0, (b - 0.5) * 0.9);
+      loose *= 0.9;
+    }
+    p = vec3(q + vec2(0.3, 0.0), (h1(n * 4.4) - 0.5) * 0.25);
   } else if (symbol > 1.5) {
     // The Devsign bolt, loosely: its outline a little denser than its body,
     // both spreading softly like the Gemini sparkle;
@@ -74,7 +81,7 @@ vec3 homeOf(vec2 uv) {
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 10; t++) {
-        vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.84, 1.75);
+        vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.4, 1.75);
         if (inBolt(r)) { q = r; break; }
       }
       loose *= 0.75;
@@ -214,7 +221,7 @@ void main() {
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat < 0.85 ? 0.2 : 0.0));
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat < 0.36 ? 0.35 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
@@ -246,7 +253,7 @@ void main() {
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
-  c = mix(c, c * 0.55, light);
+  c = mix(c, pow(c, vec3(1.7)) * 0.95, light);
   alpha *= mix(1.0, 2.3, light);
   o = vec4(c * alpha, alpha);
 }`;
@@ -389,8 +396,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
       const k = 1 - Math.exp(-dt / 0.5);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
-      // A project's world is always dark, so its dust glows even in the light theme.
-      colours.light += ((target.symbol > 0 ? 0 : lightTarget) - colours.light) * k;
+      colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
