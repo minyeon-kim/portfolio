@@ -882,11 +882,11 @@ details[open]::details-content {
   html, body, body * { cursor: auto; }
 }
 
-:root { --project-text-inset: clamp(24px, 2.5vw, 48px); }
+:root { --project-text-inset: clamp(24px, 2.5vw, 48px); --edge-inset: 24px; }
 .selected-stage-copy, .project-hero-heading { padding-inline: var(--project-text-inset); }
 .project-rail { left: calc(var(--project-text-inset) - 16px); }
 @media (max-width: 47.99rem) {
-  :root { --project-text-inset: 16px; }
+  :root { --project-text-inset: 16px; --edge-inset: 16px; }
 }
 
 /* Theme-aware presentation tokens: light defaults, system or explicit dark. */
@@ -1265,8 +1265,10 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
   .case-comparison-grid { grid-template-columns: 1fr; gap: 32px; }
 }
 
-/* Header controls share the body's inset (--project-text-inset, set above), so
-   the Menu button, the home case picker and the page copy line up on one edge. */
+/* Header controls sit at the screen edge inset; the home stage uses the same
+   inset for its picker, note and headline, so they line up with the Menu. */
+.site-header-bar, .site-menu-bar { padding-inline: var(--edge-inset); }
+.intro-stage.home-stage { --project-text-inset: var(--edge-inset); }
 
 /* Preserve the outgoing detail until the intro is ready behind it. */
 .return-to-main-layer {
@@ -1596,13 +1598,13 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 /* Original floating pills, anchored beside their header control. */
 .header-menu { position: relative; width: fit-content; }
 /* Header controls are pills in the case picker's language: soft ink fill, outline ring when active. */
-.header-menu-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px transparent; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
+.header-menu-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px transparent; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
 .header-menu-trigger:hover, .header-menu-trigger[aria-expanded="true"] { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); color: var(--ink); }
-.header-menu-trigger.theme-toggle { width: 40px; padding: 0; }
-.lang-toggle { position: relative; display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 3px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); backdrop-filter: blur(12px); }
-.lang-toggle-knob { position: absolute; top: 3px; left: 3px; width: 34px; height: 34px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 14%, transparent); transition: translate 250ms var(--ease); }
-.lang-toggle[data-active="ko"] .lang-toggle-knob { translate: 36px 0; }
-.lang-toggle-option { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; color: var(--muted); font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; transition: color 250ms ease; }
+.header-menu-trigger.theme-toggle { width: 36px; padding: 0; }
+.lang-toggle { position: relative; display: inline-flex; align-items: center; gap: 2px; height: 36px; padding: 3px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); backdrop-filter: blur(12px); }
+.lang-toggle-knob { position: absolute; top: 3px; left: 3px; width: 30px; height: 30px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 14%, transparent); transition: translate 250ms var(--ease); }
+.lang-toggle[data-active="ko"] .lang-toggle-knob { translate: 32px 0; }
+.lang-toggle-option { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; color: var(--muted); font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; transition: color 250ms ease; }
 .lang-toggle-option:hover, .lang-toggle-option[aria-current="page"] { color: var(--ink); }
 .lang-toggle-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .lang-toggle-knob { transition: none; } }
@@ -2551,6 +2553,14 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-stage[data-world="about"] .home-world-role[data-on] { translate: 0 0; }
 /* About keeps the loop (the site's own object stands for the person); the headline is the statement, "End-to-end" set apart. */
 .home-backdrop[data-project="about"] .home-object { opacity: 1; }
+/* The loop's three stages riding along it (placed per frame by HeroObject).
+   Quiet on the landing, clear on About me, gone with a case world. */
+.hero-object-labels { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 700ms ease; }
+.hero-object-labels[data-ready] { opacity: 1; }
+.home-backdrop[data-project] .hero-object-labels { opacity: 0; }
+.home-backdrop[data-project="about"] .hero-object-labels[data-ready] { opacity: 1; }
+.hero-object-labels > span { position: absolute; top: 0; left: 0; display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 62%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent); backdrop-filter: blur(10px); color: var(--ink); font: 500 11px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; will-change: transform, opacity; }
+.hero-object-labels > span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%), #0b0d0e; }
 @media (min-width: 64rem) {
   .home-stage[data-world] .home-tagline-project, .home-stage[data-world] .home-note-project { visibility: hidden; }
@@ -2577,7 +2587,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
 /* Same pill as the menu's page links (.header-menu-panel a). */
 /* Same pill as the header's Menu button: one control style across the page. */
-.home-pick { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
+.home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(12px); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
 /* Hovered or active: see-through, just the line (metalab.com). */
 .home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; backdrop-filter: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
 .home-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
