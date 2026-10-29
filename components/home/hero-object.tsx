@@ -2,18 +2,21 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing backdrop: a ride. The camera runs down a chrome coaster track
-// that swoops and banks through a chrome coil, so the stage keeps pulling
-// you in (the research-design-engineering loop as a track that never stops).
-// Same studio as before: glossy black chrome lit by long white highlights and
-// violet and blue reflections, with film grain. The cursor turns the head and
-// slides a glint over the chrome; moving the mouse speeds the ride up a little.
-// Hovering a case changes the reflections to that case's colours (Gemini blue
-// and lavender, Devsign purple) and the coil's width. Raymarched in a fragment
-// shader (no model, no runtime), capped at DPR 1 and 1100px, drawn at the
-// display's rate and rendered smaller if frames run long; paused offscreen,
-// hidden or during the page transition, and skipped with reduced motion (CSS
-// shows the static ambient light instead).
+// The landing object, after metalab.com's home: an oversized glossy black
+// chrome form that crosses the whole screen, lit by long white studio
+// highlights and deep violet and blue reflections, with film grain. Here the
+// form is one continuous loop with a softly squared path: the positioning
+// line made solid, the research-design-engineering loop that closes on
+// itself. Behind it the room itself is drawn in: soft violet and blue bands
+// swirl slowly into a darker centre. It turns slowly and answers the cursor:
+// it tilts toward it, a glint follows it across the chrome, the tube swells
+// where the cursor points, and the backdrop's pull quickens a little while
+// the mouse moves. Hovering a case changes the reflections to that case's
+// colours (Gemini blue and lavender, Devsign purple) and the loop's weight.
+// Raymarched in a fragment shader (no model, no runtime), capped at DPR 1 and
+// 1100px, drawn at the display's rate and rendered smaller if frames run
+// long; paused offscreen, hidden or during the page transition, and skipped
+// with reduced motion (CSS shows the static ambient light instead).
 const vertex = `
 attribute vec2 position;
 void main() { gl_Position = vec4(position, 0.0, 1.0); }
@@ -32,34 +35,36 @@ uniform float focus;
 uniform float light;
 uniform vec2 cursor;
 uniform float press;
-
-uniform float travel;
+uniform float flow;
 
 mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 
-// The ride's centreline: a long swooping curve the camera follows down z.
-vec2 path(float z) { return vec2(sin(z * 0.16) * 1.8 + sin(z * 0.061) * 1.4, sin(z * 0.11) * 0.7 + cos(z * 0.043) * 0.5); }
-// The scene, in coordinates that follow the path (gentle curves, so the
-// distance to a curve is close enough to the distance in the plane): a
-// coaster track under the camera (two chrome rails on ties) and a chrome
-// coil wound around the ride, its rings rushing past.
+vec3 orient(vec3 p) {
+  p.yz = rot(1.15 + pointer.y * 0.22) * p.yz;
+  p.xz = rot(time * 0.07 - pointer.x * 0.34) * p.xz;
+  p.xy = rot(-0.5) * p.xy;
+  return p;
+}
+// The camera, shared with main(): the cursor's ray through the scene.
+const vec3 eye = vec3(0.0, 0.0, 4.8);
+// A thick loop on a softly squared path, breathing a little along its length,
+// swelling a little where the cursor points.
 float map(vec3 p) {
-  vec2 q = p.xy - path(p.z);
-  vec2 b = q - vec2(0.0, -0.75);
-  float rails = length(vec2(abs(b.x) - 0.42, b.y)) - 0.055;
-  float zt = mod(p.z, 0.7) - 0.35;
-  vec3 tie = abs(vec3(b.x, b.y + 0.09, zt)) - vec3(0.5, 0.025, 0.05);
-  float ties = length(max(tie, 0.0)) + min(max(tie.x, max(tie.y, tie.z)), 0.0);
-  // The coil as a true helix (radius R, k turns per unit of z): the gap along
-  // z to the nearest turn, tilted by the helix's pitch.
-  float R = 1.5 + 0.1 * spread, k = 1.25;
-  float dz = mod(p.z - atan(q.y, q.x) / k + 3.14159 / k, 6.28318 / k) - 3.14159 / k;
-  float coil = length(vec2(length(q) - R, dz * k * R / sqrt(k * k * R * R + 1.0))) - 0.085;
-  return min(min(rails, ties), coil) * 0.6;
+  vec3 ray = normalize(vec3(cursor, -1.9));
+  vec3 w = p - eye;
+  float near = length(w - ray * dot(w, ray));
+  float swell = 0.09 * press * exp(-near * near / 0.12);
+  p = orient(p);
+  float ang = atan(p.z, p.x);
+  vec2 q = abs(p.xz) - vec2(0.55);
+  float path = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - 0.95;
+  float y = p.y + 0.1 * sin(ang * 2.0 + time * 0.3);
+  float r = 0.46 + 0.06 * spread + 0.03 * sin(ang * 3.0 - time * 0.2);
+  return length(vec2(path, y)) - r - swell;
 }
 vec3 normalAt(vec3 p) {
-  vec2 e = vec2(0.002, 0.0);
+  vec2 e = vec2(0.0015, 0.0);
   return normalize(vec3(map(p + e.xyy) - map(p - e.xyy), map(p + e.yxy) - map(p - e.yxy), map(p + e.yyx) - map(p - e.yyx)));
 }
 // A long thin light: bright where the reflected ray is near a great circle.
@@ -99,38 +104,55 @@ vec4 shade(vec3 p, vec3 rd) {
   vec3 col = mix(vec3(0.012), vec3(0.4, 0.42, 0.47), light) + refl * (0.55 + 0.45 * fres) + tint1 * mix(0.03, 0.14, light) + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
   return vec4(col, 1.0);
 }
+// Behind the loop: soft colour bands that drift slowly into a darker centre,
+// as if the room were being drawn into the screen. Polar, on a log radius,
+// so each band keeps shrinking toward the middle as flow grows.
+vec3 backdrop(vec2 uv) {
+  vec2 c = uv - vec2(0.08, 0.04);
+  float r = length(c) + 0.001;
+  float a = atan(c.y, c.x);
+  float z = log(r) + flow;
+  float sw = a + log(r) * 0.5;
+  float n = 0.5 + 0.5 * sin(z * 2.6 + 0.9 * sin(sw * 2.0 + z * 0.7));
+  float m = 0.5 + 0.5 * sin(z * 1.3 - sw * 2.0 + 1.3);
+  float glow = pow(n, 1.6) * smoothstep(0.05, 0.75, r) * (1.0 - 0.35 * smoothstep(0.9, 1.6, r));
+  vec3 tint = mix(tint0, tint1, m);
+  vec3 dark = vec3(0.012, 0.012, 0.02) + tint * glow * 0.6;
+  vec3 pale = mix(vec3(0.93, 0.935, 0.945), tint, glow * 0.3) - 0.05 * (1.0 - smoothstep(0.0, 0.6, r));
+  return mix(dark, pale, light);
+}
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
-  // Riding the path: the camera a little above the centreline, looking down
-  // the curve ahead, banking into the turns; the cursor turns the head.
-  float z = travel;
-  vec3 ro = vec3(path(z), z);
-  vec3 ahead = vec3(path(z + 4.0), z + 4.0);
-  vec3 fw = normalize(ahead - ro + vec3(pointer.x * 0.5, -pointer.y * 0.3, 0.0));
-  float bank = (path(z + 2.0).x - 2.0 * path(z + 1.0).x + path(z).x) * 1.2;
-  vec3 up = vec3(sin(bank), cos(bank), 0.0);
-  vec3 rt = normalize(cross(fw, up));
-  up = cross(rt, fw);
-  vec3 rd = normalize(uv.x * rt + uv.y * up + 1.25 * fw);
-  float t = 0.05; float hit = -1.0;
-  for (int i = 0; i < 110; i++) {
-    float d = map(ro + rd * t);
-    if (d < 0.0012 * t) { hit = t; break; }
-    t += max(d, 0.002);
-    if (t > 24.0) break;
+  // Camera close, so the loop sweeps past the edges of the stage.
+  vec3 ro = eye;
+  vec3 rd = normalize(vec3(uv, -1.9));
+  float t = 0.0; float hit = -1.0; float dm = 1e9; float tm = 0.0;
+  for (int i = 0; i < 90; i++) {
+    vec3 p = ro + rd * t;
+    float d = map(p);
+    if (d < dm) { dm = d; tm = t; }
+    if (d < 0.001) { hit = t; break; }
+    t += d * 0.92;
+    if (t > 11.0) break;
   }
   float grain = (hash(gl_FragCoord.xy + fract(time) * 7.0) - 0.5) * 0.045;
-  if (hit < 0.0) { gl_FragColor = vec4(0.0); return; }
-  vec4 c = shade(ro + rd * hit, rd);
-  c.rgb *= mix(1.6, 0.8, light);
-  // Far chrome sinks into the stage's own background.
-  float a = exp(-hit * 0.15);
-  gl_FragColor = vec4((c.rgb + grain) * a, a);
+  vec3 back = backdrop(uv);
+  if (hit >= 0.0) {
+    vec4 c = shade(ro + rd * hit, rd);
+    gl_FragColor = vec4(c.rgb + grain, 1.0);
+    return;
+  }
+  // Missed: soften the silhouette by about a pixel.
+  float px = tm / resolution.y * 1.3;
+  float edge = 1.0 - smoothstep(0.0, px, dm);
+  if (edge < 0.002) { gl_FragColor = vec4(back + grain, 1.0); return; }
+  vec4 c = shade(ro + rd * tm, rd);
+  gl_FragColor = vec4(mix(back, c.rgb, edge) + grain, 1.0);
 }
 `;
 
 // Per case: the colours of the three reflections (sky, floor, front), the
-// coil's extra width and whether the chrome's edges light up.
+// loop's extra weight and whether its edge lights up.
 export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; focus: number }> = {
   default: { tints: [[0.28, 0.4, 0.95], [0.5, 0.3, 0.95], [0.75, 0.8, 0.95]], spread: 0, focus: 0 },
   "gemini-privacy": { tints: [[0.26, 0.55, 1.0], [0.62, 0.55, 1.0], [0.78, 0.86, 1.0]], spread: 0.3, focus: 1 },
@@ -168,7 +190,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const u = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light"), uCursor = u("cursor"), uPress = u("press"), uTravel = u("travel");
+    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light"), uCursor = u("cursor"), uPress = u("press"), uFlow = u("flow");
     // The theme: the explicit choice on <html>, else the system's.
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -214,8 +236,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
 
-    // Distance down the track; the speed eases up while the mouse moves.
-    let frame = 0, last = performance.now(), clock = 0, slow = 0, travel = 0;
+    // How far the backdrop has been drawn in; a little faster while the mouse
+    // moves.
+    let frame = 0, last = performance.now(), clock = 0, slow = 0, flow = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -240,7 +263,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       cursor.y += (cursor.ty - cursor.y) * follow;
       const engaged = now - cursor.movedAt < 1800 ? 1 : 0;
       cursor.press += (engaged - cursor.press) * (1 - Math.exp(-dt / (engaged ? 0.25 : 0.9)));
-      travel += dt * (1.8 + 1.4 * cursor.press);
+      flow += dt * (0.12 + 0.12 * cursor.press);
       gl.uniform2f(uRes, width, height);
       gl.uniform2f(uPointer, pointer.x, pointer.y);
       gl.uniform1f(uTime, clock);
@@ -250,7 +273,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uLight, current.light);
       gl.uniform2f(uCursor, cursor.x, cursor.y);
       gl.uniform1f(uPress, cursor.press);
-      gl.uniform1f(uTravel, travel);
+      gl.uniform1f(uFlow, flow);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
