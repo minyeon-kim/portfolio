@@ -632,10 +632,9 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: one loop over a drawn-in backdrop
-- Back to the single chrome loop (tilt toward the cursor, glint, swell). The coaster ride and the nested-loop vortex were tried and rejected; the stage labels are gone.
-- The canvas is now opaque: where the ray misses, `backdrop(uv)` draws soft tint bands on a log-polar radius that drift into a slightly darker centre (`flow` uniform, +0.12/s, ×2 while the mouse moves; a gentle 0.5 twist). Dark: near black + tint×0.6; light: pale pearl + tint×0.3. Keep it subtle (the user asked for no strong swirl).
-- No 30fps cap; render width cap 1100 and `quality` drops (×0.8, min 0.5) after ~60 slow frames.
+## Hero object: three beams meeting (after metalab's star, with meaning)
+- Replaces the loop. Three flat bevelled chrome beams (research, design, engineering; `beam()` = rounded box from the centre out to x=6.4, half-size 0.28×0.12, bevel 0.06, folding along x by `0.8·sin(0.5x − 0.15t) + 0.12x`) run in from beyond the stage and melt together (smin 0.45) at one point, the product, 0.45 above the middle. Each beam is lifted out of the plane a little (0.28 / −0.32 / 0.18). Camera z 7.5. Orientation tilts toward the pointer and turns slowly (0.03 rad/s).
+- One softbox streak, the cursor glint, the soft drawn-in backdrop (`flow`) as before. `spread` widens the beams per case.
 
 ## Pills after metalab.com (from the user's screenshot)
 - Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
