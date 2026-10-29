@@ -2565,8 +2565,24 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .home-world-role, .home-world-name, .home-world-problem { display: none; }
 }
 /* The hovered case's media: a large flat card at the top right, in its own frame (metalab.com's project shot), not a posed device. */
-.home-device { position: absolute; top: 14%; right: var(--project-text-inset); width: min(44vw, 680px); aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 20px; background: #141414; box-shadow: 0 40px 100px -24px rgb(0 0 0 / 0.45), 0 12px 32px -12px rgb(0 0 0 / 0.3); opacity: 0; translate: 0 28px; scale: 1.02; transition: opacity 320ms ease, translate 320ms var(--ease), scale 320ms var(--ease); pointer-events: none; }
+.home-device { position: absolute; top: 14%; right: var(--project-text-inset); width: min(44vw, 680px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 28px; scale: 1.02; transition: opacity 320ms ease, translate 320ms var(--ease), scale 320ms var(--ease); pointer-events: none; }
 .home-device[data-active] { opacity: 1; translate: 0 0; scale: 1; transition: opacity 600ms ease 120ms, translate 800ms var(--ease) 120ms, scale 1000ms var(--ease) 120ms; }
+/* The cards sit on the case's own colour plate, the screen set into it (after lusion.co/work). */
+.home-device[data-project="workflow-app"] { background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
+.home-device[data-project="workflow-app"] .home-device-window { inset: 9% 7% -6% 7%; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
+.home-device[data-project="gemini-privacy"] { background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
+.home-device[data-project="gemini-privacy"] .home-device-phone { background: none; }
+/* Its caption: a black block overlapping a corner of the card. */
+.home-device-caption { position: absolute; z-index: 2; display: none; width: 300px; margin: 0; padding: 22px 24px 20px; border-radius: 2px; background: #0a0a0b; color: #f2f2f4; opacity: 0; translate: 0 20px; pointer-events: none; transition: opacity 300ms ease, translate 300ms var(--ease); }
+.home-device-caption[data-active] { opacity: 1; translate: 0 0; transition: opacity 600ms ease 260ms, translate 800ms var(--ease) 260ms; }
+.home-device-caption-title { display: block; margin-bottom: 34px; font-family: var(--font-display), var(--font-sans); font-size: 22px; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; }
+.home-device-caption-meta { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; color: #b9b9c2; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.home-device-caption-meta > span:last-child { color: #fff; font-size: 20px; line-height: 1; }
+@media (min-width: 64rem) {
+  .home-device-caption { display: block; }
+  .home-device-caption[data-project="workflow-app"] { right: var(--project-text-inset); top: calc(14% + min(44vw, 680px) * 0.625 - 72px); }
+  .home-device-caption[data-project="gemini-privacy"] { right: calc(min(34vw, 520px) - 2vw - 110px); bottom: 12vh; }
+}
 .home-device-window { position: absolute; inset: 0; display: flex; flex-direction: column; }
 .home-device-window .devsign-live, .home-device-window .devsign-loop { position: relative; inset: auto; flex: 1; min-height: 0; max-width: none; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
 .home-device-window .devsign-loop { overflow: hidden; }
