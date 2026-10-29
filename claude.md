@@ -670,3 +670,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Home backdrop: the Gemini state forms the Gemini sparkle (four-point star with concave sides, dense edge + lighter fill) instead of a constellation. Cursor sweep and burst are softer: sweep 1.0/4.0/1.2, burst push 2.6+4j, burst triggers above speed 2.8 with power ≤1.2.
 - Home backdrop dust is finer, like the Milky Way rather than beads: 320² (102k) points, dust 1.0–1.4px with a soft core, ~3.5% stars at 1.5–2.1px, and only stars flare (fainter, shorter glint). Light theme ink keeps more of its colour (c·0.7) at alpha ×1.1.
 - Light theme dust is darker: ink c·0.55, alpha ×1.6 (dark theme unchanged).
+- Figma Main frames: the chrome-loop stand-ins, the vignette, the Gemini 'World · Gemini night' fill and the phone Ellipse are hidden. Each Backdrop now holds a 'Dust · WebGL stand-in' image: a live capture of the current dust (default, Devsign, Gemini sparkle, About, light, phone).
