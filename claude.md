@@ -666,3 +666,4 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Devsign copy synced to Figma: feature kickers "01 See/02 Merge/03 Decide/04 Record" with short bodies, stat texts, group details, review bodies, next-step title (EN + KO).
 - Figma: case stage lists moved to 24px; Main pills set to white 14% + background blur 30, case pills 30px.
 - Devsign prioritization matrix is 38.2% of its column, so it is as tall as the value proposition canvas below and left-aligned with it.
+- Case hero: background fades from #f5f5f5 (45%) to the white page below (no edge); the colour wash behind the media is lighter (13%/11% light, 20%/16% dark), blurred 40px, masked out toward the bottom.
