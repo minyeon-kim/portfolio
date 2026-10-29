@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
-// - default: a loop (research, design and engineering closing on itself)
+// - default: a Milky Way band
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: two groups joined by streams, a bolt where they meet
 // - About me, teal: a hexagonal lattice, the security background
@@ -50,7 +50,7 @@ vec3 homeOf(vec2 uv) {
     if (a < 0.35) {
       float side = step(0.5, b) * 2.0 - 1.0;
       p = vec3(side * 0.95, 0.15, 0.0) + (vec3(h1(n * 6.1), h1(n * 6.7), h1(n * 7.3)) - 0.5) * 0.55;
-    } else if (a < 0.8) {
+    } else if (a < 0.72) {
       float lane = floor(c * 5.0) - 2.0;
       p = vec3(mix(-0.95, 0.95, b), 0.15 + sin(b * 3.14159) * lane * 0.16, sin(b * 3.14159) * lane * 0.1);
       loose *= 0.9;
@@ -58,9 +58,12 @@ vec3 homeOf(vec2 uv) {
       float seg = floor(b * 3.0), u = fract(b * 3.0);
       vec2 A = seg < 0.5 ? vec2(0.12, 0.62) : (seg < 1.5 ? vec2(-0.13, 0.17) : vec2(0.13, 0.17));
       vec2 B = seg < 0.5 ? vec2(-0.13, 0.17) : (seg < 1.5 ? vec2(0.13, 0.17) : vec2(-0.1, -0.3));
-      p = vec3(mix(A, B, u), 0.0);
-      loose *= 0.6;
+      p = vec3(mix(A, B, u) * 1.3, 0.0);
+      loose *= 0.45;
     }
+    // Up and to the left, so the bolt sits above the title, clear of the
+    // project window on the right.
+    p += vec3(-0.6, 0.3, 0.0);
   } else if (symbol > 0.5) {
     // The Gemini sparkle: a four-point star with concave sides, its edge
     // drawn densely and its body filled more lightly.
@@ -71,8 +74,12 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    float t = a * 6.2831853;
-    p = vec3(cos(t) * 1.2, sin(t) * 0.75, sin(t * 2.0) * 0.3) * 1.45;
+    // The Milky Way: one long band rising to the right, brightest along its
+    // spine and gently waving.
+    float t = a * 2.0 - 1.0;
+    vec2 dir = normalize(vec2(1.0, 0.42)), nrm = vec2(-dir.y, dir.x);
+    float across = (b + c - 1.0) * 0.42 + sin(t * 2.6 + 0.8) * 0.14;
+    p = vec3(dir * t * 2.9 + nrm * across, (h1(n * 4.4) - 0.5) * 0.4);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -165,7 +172,7 @@ void main() {
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
-  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.8 ? 0.3 : 0.0);
+  vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat > 0.72 ? 0.3 : 0.0);
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
