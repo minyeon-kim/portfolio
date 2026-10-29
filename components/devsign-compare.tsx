@@ -1,7 +1,5 @@
-"use client";
-
 import Image from "next/image";
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { withBase } from "@/lib/site";
 
 type Side = { src: string; alt: string; text: string; lead?: string };
@@ -9,60 +7,76 @@ type Side = { src: string; alt: string; text: string; lead?: string };
 type Box = [number, number, number, number];
 type Change = { title: string; before: string; after: string; a?: Box; b?: Box };
 
-// As-is / To-be in one dark browser window (the opener's framing), switched
-// with a toggle. The two layouts differ, so a wipe would mix unrelated halves;
-// each screen stays whole, crossfades, and numbered boxes mark what changed.
-// Hovering or focusing a change in the list below emphasises its box.
-export function DevsignCompare({ before, after, changes = [], labels }: { before: Side; after: Side; changes?: Change[]; labels: { asIs: string; toBe: string; compare: string } }) {
-  const [view, setView] = useState<0 | 1>(1);
-  const [focus, setFocus] = useState<number | null>(null);
-  const sides = [
-    { key: "before" as const, label: labels.asIs, side: before },
-    { key: "after" as const, label: labels.toBe, side: after },
-  ];
-  const current = sides[view];
+const W = 960;
+const H = 540;
+const ASPECT = 16 / 10;
+
+// The part of the screenshot to show for a box: the box plus some context,
+// widened to one shared aspect (so every pair lines up) and kept inside the
+// image. Returns the crop and the box inside it, both in percent.
+function crop(box: Box) {
+  const [bx, by, bw, bh] = [(box[0] / 100) * W, (box[1] / 100) * H, (box[2] / 100) * W, (box[3] / 100) * H];
+  const pad = 28;
+  let rw = Math.max(bw + pad * 2, (bh + pad * 2) * ASPECT, 340);
+  let rh = rw / ASPECT;
+  if (rh > H) { rh = H; rw = H * ASPECT; }
+  if (rw > W) { rw = W; rh = W / ASPECT; }
+  const rx = Math.min(Math.max(bx + bw / 2 - rw / 2, 0), W - rw);
+  const ry = Math.min(Math.max(by + bh / 2 - rh / 2, 0), H - rh);
+  return {
+    img: { width: `${(W / rw) * 100}%`, left: `${(-rx / rw) * 100}%`, top: `${(-ry / rh) * 100}%` },
+    mark: { left: `${((bx - rx) / rw) * 100}%`, top: `${((by - ry) / rh) * 100}%`, width: `${(bw / rw) * 100}%`, height: `${(bh / rh) * 100}%` },
+  };
+}
+
+function Crop({ side, box, label, text, after }: { side: Side; box: Box; label: string; text: string; after?: boolean }) {
+  const c = crop(box);
   return (
-    <figure className="dv-toggle reveal" data-view={current.key}>
-      <div className="dv-toggle-switch" role="tablist" aria-label={labels.compare}>
-        {sides.map(({ key, label }, i) => (
-          <button key={key} type="button" role="tab" aria-selected={view === i} onClick={() => setView(i as 0 | 1)}>{label}</button>
+    <figure className="dv-crop" data-side={after ? "after" : "before"}>
+      <div className="dv-crop-frame">
+        <Image src={withBase(side.src)} alt="" width={W} height={H} sizes="(max-width: 767px) 200vw, 90vw" style={c.img as CSSProperties} />
+        <span className="dv-crop-mark" style={c.mark} aria-hidden="true" />
+        <span className="dv-crop-tag">{label}</span>
+      </div>
+      <figcaption>{text}</figcaption>
+    </figure>
+  );
+}
+
+// As-is / To-be, change by change. The two iteration layouts differ and a
+// whole app screen is unreadable when shrunk, so each change gets its own row:
+// a close-up of that area before and after, side by side, with one line each.
+// The whole screens sit above as small thumbnails for context.
+export function DevsignCompare({ before, after, changes = [], labels }: { before: Side; after: Side; changes?: Change[]; labels: { asIs: string; toBe: string; compare: string } }) {
+  return (
+    <div className="dv-crops reveal" aria-label={labels.compare} role="group">
+      <div className="dv-crops-overview">
+        {[{ key: "before", label: labels.asIs, side: before }, { key: "after", label: labels.toBe, side: after }].map(({ key, label, side }) => (
+          <figure key={key} data-side={key}>
+            <div className="dv-crops-thumb">
+              <Image src={withBase(side.src)} alt={side.alt} width={W} height={H} sizes="(max-width: 767px) 100vw, 45vw" />
+            </div>
+            <figcaption>
+              <span className="dv-compare-label">{label}</span>
+              <span className="dv-crops-summary">{side.lead && <em>{side.lead}</em>}{side.text}</span>
+            </figcaption>
+          </figure>
         ))}
       </div>
-      <div className="dv-wipe-window">
-        <div className="dv-wipe-chrome" aria-hidden="true"><span /><span /><span /><i /></div>
-        <div className="dv-toggle-frame">
-          {sides.map(({ key, side }, i) => (
-            <div key={key} className="dv-toggle-shot" aria-hidden={view !== i}>
-              <Image src={withBase(side.src)} alt={side.alt} width={960} height={540} sizes="(max-width: 767px) 100vw, 90vw" />
-              {changes.map((c, n) => {
-                const box = key === "before" ? c.a : c.b;
-                if (!box) return null;
-                return (
-                  <span key={n} className="dv-toggle-box" data-focus={focus === n || undefined} style={{ "--x": `${box[0]}%`, "--y": `${box[1]}%`, "--w": `${box[2]}%`, "--h": `${box[3]}%`, "--i": n } as CSSProperties}>
-                    <b>{n + 1}</b>
-                  </span>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-      <figcaption className="dv-toggle-caption">
-        <span className="dv-compare-label">{current.label}</span>
-        <span className="dv-compare-text">{current.side.lead && <em>{current.side.lead}</em>}{current.side.text}</span>
-      </figcaption>
       {changes.length > 0 && (
-        <ol className="dv-toggle-list" style={{ "--n": changes.length } as CSSProperties}>
+        <ol className="dv-crops-list">
           {changes.map((c, n) => (
-            <li key={n} tabIndex={0} onMouseEnter={() => setFocus(n)} onMouseLeave={() => setFocus(null)} onFocus={() => setFocus(n)} onBlur={() => setFocus(null)}>
-              <b aria-hidden="true">{n + 1}</b>
-              <strong>{c.title}</strong>
-              <span data-active={view === 0 || undefined}>{labels.asIs} · {c.before}</span>
-              <span data-active={view === 1 || undefined}>{labels.toBe} · {c.after}</span>
+            <li key={n}>
+              <p className="dv-crops-title"><b aria-hidden="true">{n + 1}</b>{c.title}</p>
+              <div className="dv-crops-pair">
+                {c.a && <Crop side={before} box={c.a} label={labels.asIs} text={c.before} />}
+                <span className="dv-crops-arrow" aria-hidden="true">→</span>
+                {c.b && <Crop side={after} box={c.b} label={labels.toBe} text={c.after} after />}
+              </div>
             </li>
           ))}
         </ol>
       )}
-    </figure>
+    </div>
   );
 }

@@ -2319,38 +2319,32 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-compare-text { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-compare-text em { color: var(--case-accent); font-style: normal; }
 
-/* As-is / To-be: a toggle over one dark browser window (the opener's framing); numbered boxes mark the changes listed below. */
-.dv-wipe-window { overflow: hidden; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 20px; background: #141414; box-shadow: 0 40px 100px -24px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.3); }
-.dv-wipe-chrome { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; background: #1c1c1c; border-bottom: 1px solid rgb(255 255 255 / 0.08); }
-.dv-wipe-chrome span { width: 10px; height: 10px; border-radius: 50%; background: rgb(255 255 255 / 0.16); }
-.dv-wipe-chrome i { flex: 1; max-width: 320px; height: 20px; margin-inline: auto; border-radius: 999px; background: rgb(255 255 255 / 0.06); translate: -16px 0; }
-.dv-toggle { display: grid; gap: 20px; }
-.dv-toggle-switch { justify-self: start; display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--dv-line); border-radius: 999px; }
-.dv-toggle-switch button { min-width: 88px; height: 34px; padding: 0 16px; border-radius: 999px; color: var(--muted); font-size: 14px; font-weight: 600; transition: background-color 200ms, color 200ms; }
-.dv-toggle-switch button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.dv-toggle[data-view="after"] .dv-toggle-switch button[aria-selected="true"] { background: var(--case-accent); color: #fff; }
-.dv-toggle-switch button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
-.dv-toggle-frame { position: relative; aspect-ratio: 16 / 9; }
-.dv-toggle-shot { position: absolute; inset: 0; opacity: 0; transition: opacity 240ms ease; }
-.dv-toggle-shot:not([aria-hidden="true"]) { opacity: 1; }
-.dv-toggle-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.dv-toggle-box { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h); border: 2px solid var(--case-accent); border-radius: 6px; opacity: 0; transition: opacity 200ms ease, background-color 200ms ease, box-shadow 200ms ease; }
-.dv-toggle-shot:not([aria-hidden="true"]) .dv-toggle-box { opacity: 1; transition-delay: calc(160ms + var(--i) * 60ms), 0ms, 0ms; }
-.dv-toggle[data-view="before"] .dv-toggle-box { border-color: rgb(255 255 255 / 0.75); }
-.dv-toggle-box[data-focus] { background: color-mix(in srgb, var(--case-accent) 16%, transparent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--case-accent) 30%, transparent); }
-.dv-toggle-box b, .dv-toggle-list b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--case-accent); color: #fff; font-size: 12px; font-weight: 700; line-height: 1; }
-.dv-toggle-box b { position: absolute; left: -11px; top: -11px; box-shadow: 0 0 0 2px #fff; }
-.dv-toggle[data-view="before"] .dv-toggle-box b { background: #5c5c5c; }
-.dv-toggle-caption { display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid var(--dv-line); }
-.dv-toggle[data-view="after"] .dv-toggle-caption { border-top-color: var(--case-accent); }
-.dv-toggle[data-view="after"] .dv-toggle-caption .dv-compare-label { color: var(--case-accent); }
-.dv-toggle-list { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 0 24px; margin: 4px 0 0; padding: 0; list-style: none; }
-.dv-toggle-list li { display: grid; grid-template-columns: 22px 1fr; gap: 6px 10px; align-content: start; padding-top: 14px; border-top: 1px solid var(--dv-line); font-size: 15px; line-height: 1.5; outline: none; }
-.dv-toggle-list li:focus-visible strong { text-decoration: underline; }
-.dv-toggle-list strong { align-self: center; font-weight: 600; }
-.dv-toggle-list span { grid-column: 2; color: var(--muted); transition: color 200ms; }
-.dv-toggle-list span[data-active] { color: var(--ink); }
-@media (prefers-reduced-motion: reduce) { .dv-toggle-shot, .dv-toggle-box { transition: none; } }
+/* As-is / To-be, change by change: small whole screens on top, then one row per change with close-ups before → after. */
+.dv-crops { display: grid; gap: 56px; }
+.dv-crops-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.dv-crops-overview figure { display: grid; gap: 14px; margin: 0; }
+.dv-crops-thumb { overflow: hidden; border: 1px solid var(--dv-line); border-radius: 12px; background: #141414; }
+.dv-crops-thumb img { display: block; width: 100%; height: auto; }
+.dv-crops-overview figcaption { display: flex; flex-direction: column; gap: 6px; }
+.dv-crops-overview [data-side="after"] .dv-compare-label { color: var(--case-accent); }
+.dv-crops-summary { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-crops-summary em { color: var(--case-accent); font-style: normal; }
+.dv-crops-list { display: grid; gap: 48px; margin: 0; padding: 0; list-style: none; }
+.dv-crops-list li { display: grid; gap: 16px; padding-top: 24px; border-top: 1px solid var(--dv-line); }
+.dv-crops-title { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 20px; font-weight: 700; line-height: 1.35; }
+.dv-crops-title b, .dv-crop-tag { flex-shrink: 0; }
+.dv-crops-title b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--case-accent); color: #fff; font-size: 13px; font-weight: 700; }
+.dv-crops-pair { display: grid; grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr); align-items: start; gap: 12px; }
+.dv-crops-arrow { align-self: center; margin-top: -32px; color: var(--dv-muted); font-size: 22px; text-align: center; }
+.dv-crop { display: grid; gap: 10px; margin: 0; }
+.dv-crop-frame { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--dv-line); border-radius: 12px; background: #141414; }
+.dv-crop-frame img { position: absolute; max-width: none; height: auto; }
+.dv-crop-mark { position: absolute; border: 2px solid rgb(255 255 255 / 0.7); border-radius: 6px; box-shadow: 0 0 0 9999px rgb(0 0 0 / 0.28); }
+.dv-crop[data-side="after"] .dv-crop-mark { border-color: var(--case-accent); }
+.dv-crop-tag { position: absolute; top: 10px; left: 10px; padding: 4px 9px; border-radius: 999px; background: rgb(0 0 0 / 0.6); backdrop-filter: blur(8px); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.4; letter-spacing: 0.06em; text-transform: uppercase; }
+.dv-crop[data-side="after"] .dv-crop-tag { background: var(--case-accent); }
+.dv-crop figcaption { color: var(--dv-muted); font-size: 15px; font-weight: 500; line-height: 1.5; }
+.dv-crop[data-side="after"] figcaption { color: var(--dv-ink); }
 
 /* Takeaway */
 .dv-headline-plain + .dv-body { margin-top: 12px; }
@@ -2385,13 +2379,15 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-split > .dv-block { order: -1; }
   .dv-two { grid-template-columns: 1fr; }
   .dv-boards { padding-top: 0; }
-  .dv-toggle-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
   .dv-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dv-persona { grid-template-columns: 260px minmax(0, 1fr); }
   .dv-stats { grid-template-columns: 1fr; gap: 16px; }
 }
 @media (max-width: 47.99rem) {
   .dv { --dv-pad: var(--project-text-inset); }
+  .dv-crops-overview { grid-template-columns: 1fr; }
+  .dv-crops-pair { grid-template-columns: 1fr; }
+  .dv-crops-arrow { margin: -4px 0; rotate: 90deg; }
   .dv-nav { padding-block: 16px; }
   .dv-nav-links { gap: 24px; }
   .dv-section { padding-block: 56px 72px; }
@@ -2681,8 +2677,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @media (max-width: 47.99rem) { .case-study[data-skin="dv"] .case-diamond-notes { grid-template-columns: 1fr; } }
 .case-study[data-skin="dv"] .case-prototype { margin-top: 40px; }
 @media (max-width: 47.99rem) {
-  .dv-toggle-list { grid-template-columns: 1fr; gap: 16px; }
-  .dv-toggle-box b { width: 18px; height: 18px; left: -9px; top: -9px; font-size: 10px; }
   .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li { grid-template-columns: 1fr; gap: 8px; padding-bottom: 24px; }
   .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] li strong { padding-top: 0; }
   .case-study[data-skin="dv"] .case-section { margin-top: 48px; }
