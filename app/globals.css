@@ -2382,7 +2382,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
    centered on the screen (the list is about 172px tall). It takes no height,
    so the column starts right away. Narrower screens keep the sticky top bar. */
 @media (min-width: 100rem) {
-  .dv-nav { top: calc(50vh - 86px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--project-text-inset) - 24px); height: 172px; margin: 0 0 0 calc(var(--project-text-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
+  .dv-nav { top: calc(50vh - 86px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--edge-inset) - 24px); height: 172px; margin: 0 0 0 calc(var(--edge-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
   /* The list has a real box so sticky keeps it inside the case; the first section climbs back over that box. */
   .dv-nav + section { margin-top: -172px; }
   .dv-nav-links { flex-direction: column; gap: 10px; overflow: visible; }
