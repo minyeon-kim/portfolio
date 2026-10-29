@@ -18,6 +18,7 @@ export type StageProject = {
   slug: string;
   name: string;
   title: string;
+  caption?: string; // the home card's caption line
   problem: string;
   role?: string;
   timeline?: string;
