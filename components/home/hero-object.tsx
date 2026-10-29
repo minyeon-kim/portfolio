@@ -2,170 +2,97 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing object, after metalab.com's home (its four chrome bars meeting
-// in a star) but made to mean something: three flat bevelled chrome beams,
-// research, design and engineering, run in from beyond the screen, folding
-// slowly along their length, and melt into one at a single point, the
-// product. Lit by a long white studio highlight and deep violet and blue
-// reflections, with film grain; behind it soft violet and blue bands drift
-// slowly into a darker centre. It turns slowly and answers the cursor: it
-// tilts toward it, a glint follows it across the chrome, and the backdrop's
-// pull quickens a little while the mouse moves. Hovering a case changes the
-// reflections to that case's colours (Gemini blue and lavender, Devsign
-// purple) and the beams' width. Raymarched in a fragment shader (no model, no
-// runtime), capped at DPR 1 and 1100px, drawn at the display's rate and
-// rendered smaller if frames run long; paused offscreen, hidden or during the
-// page transition, and skipped with reduced motion (CSS shows the static
-// ambient light instead).
+// The landing object: a sphere of about 60,000 points, the positioning line
+// as an image. Most of the points are out of place, drifting in a cloud like
+// ciphertext; the cursor decodes: near it every point falls into place on the
+// shell, so the sphere sharpens wherever you look, and the points right under
+// the cursor step aside. It turns slowly and leans toward the cursor; when the
+// mouse rests, the decoding lens drifts around the sphere on its own. The
+// research-to-shipped work of the cases is the same move: making what is
+// hidden or scattered legible. Hovering a case recolours the points (Gemini
+// blue and lavender, Devsign purple). Plain WebGL points (no model, no
+// runtime), DPR 1, drawn at the display's rate with fewer points if frames
+// run long; paused offscreen, hidden or during the page transition, and
+// skipped with reduced motion (CSS shows the static ambient light instead).
 const vertex = `
-attribute vec2 position;
-void main() { gl_Position = vec4(position, 0.0, 1.0); }
+attribute float idx;
+attribute vec3 rnd;
+uniform float count;
+uniform float time;
+uniform vec2 pointer;    // tilt, -1..1
+uniform vec2 lens;       // where the decoding lens is, -1..1, y up
+uniform float reach;     // the lens's size
+uniform float aspect;    // width / height
+uniform float order;     // share of points in place away from the lens
+uniform float spread;
+varying float vOrder;
+varying float vDepth;
+
+mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+vec3 turn(vec3 p) {
+  p.xz = rot(time * 0.06 + pointer.x * 0.35) * p.xz;
+  p.yz = rot(0.25 - pointer.y * 0.25) * p.yz;
+  return p;
+}
+// The form sits above the middle, a little right, clear of the copy.
+vec2 project(vec3 p) { vec2 s = p.xy * 2.1 / (5.0 - p.z) + vec2(0.1, 0.26); s.x /= aspect; return s; }
+
+void main() {
+  // In place: an even shell (a Fibonacci sphere). Out of place: the same
+  // point flung out into a drifting cloud.
+  float phi = acos(1.0 - 2.0 * (idx + 0.5) / count);
+  float th = 3.14159265 * (1.0 + sqrt(5.0)) * idx;
+  vec3 shell = (1.2 + 0.08 * spread) * vec3(sin(phi) * cos(th), cos(phi), sin(phi) * sin(th));
+  vec3 drift = vec3(sin(time * 0.31 + rnd.x * 6.28), sin(time * 0.27 + rnd.y * 6.28), sin(time * 0.23 + rnd.z * 6.28));
+  vec3 cloud = shell * (1.0 + rnd.x * 0.9) + (rnd - 0.5) * vec3(3.6, 2.4, 2.4) + drift * 0.25;
+  vec3 a = turn(shell), b = turn(cloud);
+  // Each point is either in place or out in the cloud: a share of them
+  // everywhere, all of them near the lens.
+  vec2 sa = project(a);
+  float d = length((sa - lens) * vec2(aspect, 1.0));
+  float share = clamp(order + (1.0 - order) * smoothstep(reach, 0.05, d), 0.0, 1.0);
+  float o = smoothstep(rnd.y - 0.08, rnd.y + 0.08, share);
+  vec3 p = mix(b, a, o);
+  vec2 s = project(p);
+  // The points right under the lens step aside.
+  vec2 away = (s - lens) * vec2(aspect, 1.0);
+  float r = length(away);
+  s += normalize(away + 1e-4) / vec2(aspect, 1.0) * 0.05 * exp(-r * r / 0.02);
+  gl_Position = vec4(s, 0.0, 1.0);
+  vDepth = clamp((p.z + 3.0) / 6.0, 0.0, 1.0);
+  vOrder = o;
+  gl_PointSize = (1.4 + 1.6 * o) * (0.6 + 0.8 * vDepth);
+}
 `;
 
 const fragment = `
 precision highp float;
-uniform vec2 resolution;
-uniform vec2 pointer;
-uniform float time;
+uniform float light;
 uniform vec3 tint0;
 uniform vec3 tint1;
-uniform vec3 tint2;
-uniform float spread;
-uniform float focus;
-uniform float light;
-uniform vec2 cursor;
-uniform float press;
-uniform float flow;
-
-mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
-float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-
-vec3 orient(vec3 p) {
-  p.yz = rot(0.38 + pointer.y * 0.2) * p.yz;
-  p.xz = rot(0.22 * sin(time * 0.05) - pointer.x * 0.3) * p.xz;
-  p.xy = rot(time * 0.03) * p.xy;
-  return p;
-}
-float box(vec3 p, vec3 b, float r) { vec3 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0) - r; }
-float smin(float a, float b, float k) { float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
-// One flat bevelled chrome beam from the centre out past the edge of the
-// stage, at angle a in the plane and lifted out of it a little, folding
-// slowly along its length.
-float beam(vec3 p, float a, float lift) {
-  p.xy = rot(a) * p.xy;
-  p.xz = rot(lift) * p.xz;
-  float x = max(p.x, 0.0);
-  p.yz = rot(0.8 * sin(x * 0.5 - time * 0.15) + x * 0.12) * p.yz;
-  p.x -= 3.2;
-  return box(p, vec3(3.2, 0.28 + 0.04 * spread, 0.12), 0.06);
-}
-// Three beams (research, design, engineering) running in from beyond the
-// screen and melting into one at the centre: the product.
-float map(vec3 p) {
-  // The meeting point sits a little above the middle, clear of the headline.
-  p.y -= 0.45;
-  p = orient(p);
-  float d = beam(p, 1.5708, 0.28);
-  d = smin(d, beam(p, 1.5708 + 2.0944, -0.32), 0.45);
-  d = smin(d, beam(p, 1.5708 + 4.1888, 0.18), 0.45);
-  return d * 0.75;
-}
-vec3 normalAt(vec3 p) {
-  vec2 e = vec2(0.0015, 0.0);
-  return normalize(vec3(map(p + e.xyy) - map(p - e.xyy), map(p + e.yxy) - map(p - e.yxy), map(p + e.yyx) - map(p - e.yyx)));
-}
-// A long thin light: bright where the reflected ray is near a great circle.
-float streak(vec3 r, vec3 n, vec3 c, float w) {
-  float band = exp(-pow(dot(r, n) / w, 2.0));
-  return band * smoothstep(-0.3, 0.6, dot(r, c));
-}
-// The studio around the object: near black, a violet sky, blue from below,
-// one long white softbox streak.
-vec3 env(vec3 r) {
-  // Dark: a near-black room. Light: a bright pearl room, where the streaks
-  // read as dark seams instead.
-  vec3 c = mix(vec3(0.01, 0.01, 0.016), mix(vec3(0.42, 0.44, 0.5), vec3(0.9, 0.91, 0.94), smoothstep(-0.4, 0.8, r.y)), light);
-  c += tint1 * 0.78 * pow(max(dot(r, normalize(vec3(-0.35, 0.75, 0.55))), 0.0), 2.2);
-  c += tint0 * 0.5 * pow(max(dot(r, normalize(vec3(0.65, -0.45, 0.6))), 0.0), 2.6);
-  c += tint2 * 0.18 * pow(max(dot(r, normalize(vec3(0.2, 0.2, 1.0))), 0.0), 6.0);
-  // In light the streaks widen and soften: a narrow dark seam over pale chrome
-  // reads as a crease in the surface.
-  float s1 = streak(r, normalize(vec3(0.25, 1.0, 0.35)), normalize(vec3(0.1, 0.25, 1.0)), mix(0.12, 0.18, light));
-  // One softbox only: a second streak crossed this one at the tube's edge
-  // and read as the chrome folding over itself.
-  c += vec3(1.0) * mix(2.0, 0.45, light) * s1;
-  c -= vec3(0.6, 0.6, 0.66) * light * 0.5 * streak(r, normalize(vec3(0.6, 0.7, -0.3)), normalize(vec3(-0.2, 0.3, 1.0)), 0.2);
-  // A small softbox held where the cursor is: its glint slides over the chrome.
-  float glint = pow(max(dot(r, normalize(vec3(cursor * 1.6, 1.0))), 0.0), 60.0);
-  c += mix(vec3(1.0), tint2, 0.3) * glint * press * mix(2.4, 0.8, light);
-  return c;
-}
-vec4 shade(vec3 p, vec3 rd) {
-  vec3 n = normalAt(p);
-  vec3 v = -rd;
-  float nv = max(dot(n, v), 0.0);
-  float fres = 0.08 + 0.92 * pow(1.0 - nv, 3.0);
-  vec3 r = reflect(rd, n);
-  vec3 refl = env(r);
-  // Black chrome: almost everything is reflection; a trace of the case colour
-  // in the body, and a soft lit edge when a case is picked.
-  vec3 col = mix(vec3(0.012), vec3(0.4, 0.42, 0.47), light) + refl * (0.55 + 0.45 * fres) + tint1 * mix(0.03, 0.14, light) + tint0 * focus * pow(1.0 - nv, 2.0) * 0.25;
-  return vec4(col, 1.0);
-}
-// Behind the beams: soft colour bands that drift slowly into a darker centre,
-// as if the room were being drawn into the screen. Polar, on a log radius,
-// so each band keeps shrinking toward the middle as flow grows.
-vec3 backdrop(vec2 uv) {
-  vec2 c = uv - vec2(0.08, 0.04);
-  float r = length(c) + 0.001;
-  float a = atan(c.y, c.x);
-  float z = log(r) + flow;
-  float sw = a + log(r) * 0.5;
-  float n = 0.5 + 0.5 * sin(z * 2.6 + 0.9 * sin(sw * 2.0 + z * 0.7));
-  float m = 0.5 + 0.5 * sin(z * 1.3 - sw * 2.0 + 1.3);
-  float glow = pow(n, 1.6) * smoothstep(0.05, 0.75, r) * (1.0 - 0.35 * smoothstep(0.9, 1.6, r));
-  vec3 tint = mix(tint0, tint1, m);
-  vec3 dark = vec3(0.012, 0.012, 0.02) + tint * glow * 0.4;
-  vec3 pale = mix(vec3(0.93, 0.935, 0.945), tint, glow * 0.3) - 0.05 * (1.0 - smoothstep(0.0, 0.6, r));
-  return mix(dark, pale, light);
-}
+varying float vOrder;
+varying float vDepth;
 void main() {
-  vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
-  // Camera close enough that the beams run past the edges of the stage.
-  vec3 ro = vec3(0.0, 0.0, 7.5);
-  vec3 rd = normalize(vec3(uv, -1.9));
-  float t = 0.0; float hit = -1.0; float dm = 1e9; float tm = 0.0;
-  for (int i = 0; i < 90; i++) {
-    vec3 p = ro + rd * t;
-    float d = map(p);
-    if (d < dm) { dm = d; tm = t; }
-    if (d < 0.001) { hit = t; break; }
-    t += d * 0.92;
-    if (t > 14.0) break;
-  }
-  float grain = (hash(gl_FragCoord.xy + fract(time) * 7.0) - 0.5) * 0.045;
-  vec3 back = backdrop(uv);
-  if (hit >= 0.0) {
-    vec4 c = shade(ro + rd * hit, rd);
-    gl_FragColor = vec4(c.rgb + grain, 1.0);
-    return;
-  }
-  // Missed: soften the silhouette by about a pixel.
-  float px = tm / resolution.y * 1.3;
-  float edge = 1.0 - smoothstep(0.0, px, dm);
-  if (edge < 0.002) { gl_FragColor = vec4(back + grain, 1.0); return; }
-  vec4 c = shade(ro + rd * tm, rd);
-  gl_FragColor = vec4(mix(back, c.rgb, edge) + grain, 1.0);
+  float a = smoothstep(0.5, 0.15, length(gl_PointCoord - 0.5));
+  // Dark: dim blue when scattered, bright lavender-white in place. Light:
+  // grey when scattered, the case's deep colour in place.
+  vec3 dark = mix(tint0 * 0.55, mix(tint1 * 1.15, vec3(0.95, 0.95, 1.0), 0.5), vOrder);
+  vec3 ink = mix(vec3(0.55, 0.56, 0.66), tint1 * 0.62, vOrder);
+  vec3 col = mix(dark, ink, light);
+  float alpha = a * mix(0.4, 0.95, vOrder) * (0.45 + 0.55 * vDepth);
+  gl_FragColor = vec4(col * alpha, alpha);
 }
 `;
 
-// Per case: the colours of the three reflections (sky, floor, front), the
-// beams' extra width and whether their edges light up.
-export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number; focus: number }> = {
-  default: { tints: [[0.28, 0.4, 0.95], [0.5, 0.3, 0.95], [0.75, 0.8, 0.95]], spread: 0, focus: 0 },
-  "gemini-privacy": { tints: [[0.26, 0.55, 1.0], [0.62, 0.55, 1.0], [0.78, 0.86, 1.0]], spread: 0.3, focus: 1 },
-  "workflow-app": { tints: [[0.38, 0.26, 0.9], [0.6, 0.42, 1.0], [0.7, 0.62, 1.0]], spread: -0.4, focus: 0.6 },
+// Per case: the colours of the scattered and the placed points, and the
+// sphere's extra size.
+export const OBJECT_STATES: Record<string, { tints: number[][]; spread: number }> = {
+  default: { tints: [[0.45, 0.5, 0.95], [0.6, 0.45, 0.95]], spread: 0 },
+  "gemini-privacy": { tints: [[0.3, 0.55, 1.0], [0.62, 0.6, 1.0]], spread: 0.6 },
+  "workflow-app": { tints: [[0.42, 0.3, 0.92], [0.66, 0.46, 1.0]], spread: -0.4 },
 };
+
+const COUNT = 60000;
 
 // `active` false (a world covers the object) stops drawing after the fade, so
 // the GPU is free for the prototype frame.
@@ -191,14 +118,25 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.error("hero-object", gl.getProgramInfoLog(program)); return; }
     gl.useProgram(program);
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    const position = gl.getAttribLocation(program, "position");
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    // Per point: its index on the sphere and three random numbers (where it
+    // drifts in the cloud, and how readily it falls into place). Shuffled
+    // order, so drawing fewer points thins the sphere evenly.
+    const idx = new Float32Array(COUNT), rnd = new Float32Array(COUNT * 3);
+    for (let i = 0; i < COUNT; i++) { idx[i] = i; rnd[i * 3] = Math.random(); rnd[i * 3 + 1] = Math.random(); rnd[i * 3 + 2] = Math.random(); }
+    for (let i = COUNT - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+    const buffers = [["idx", idx, 1], ["rnd", rnd, 3]].map(([name, data, size]) => {
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, data as Float32Array, gl.STATIC_DRAW);
+      const at = gl.getAttribLocation(program, name as string);
+      gl.enableVertexAttribArray(at);
+      gl.vertexAttribPointer(at, size as number, gl.FLOAT, false, 0, 0);
+      return buffer;
+    });
     const u = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = u("resolution"), uPointer = u("pointer"), uTime = u("time"), uT = [u("tint0"), u("tint1"), u("tint2")], uSpread = u("spread"), uFocus = u("focus"), uLight = u("light"), uCursor = u("cursor"), uPress = u("press"), uFlow = u("flow");
+    const uCount = u("count"), uTime = u("time"), uPointer = u("pointer"), uLens = u("lens"), uReach = u("reach"), uAspect = u("aspect"), uOrder = u("order"), uSpread = u("spread"), uLight = u("light"), uT0 = u("tint0"), uT1 = u("tint1");
+    gl.uniform1f(uCount, COUNT);
+    gl.enable(gl.BLEND);
     // The theme: the explicit choice on <html>, else the system's.
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -208,14 +146,11 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const themeObserver = new MutationObserver(onTheme);
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-    let width = 0, height = 0;
-    // Lowered (to half at most) while frames run long.
-    let quality = 1;
+    let width = 1, height = 1;
     const resize = () => {
       const rect = el.getBoundingClientRect();
-      const scale = Math.min(1, 1100 / Math.max(1, rect.width)) * quality;
-      width = Math.max(1, Math.round(rect.width * scale));
-      height = Math.max(1, Math.round(rect.height * scale));
+      width = Math.max(1, Math.round(rect.width));
+      height = Math.max(1, Math.round(rect.height));
       if (el.width !== width || el.height !== height) { el.width = width; el.height = height; }
       gl.viewport(0, 0, width, height);
     };
@@ -223,30 +158,30 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     observer.observe(el);
     resize();
 
-    // pointer: the tilt (-1..1 over the window). cursor: where it points, in
-    // the shader's screen units (height 1, centre 0, y up), and how engaged
-    // it is (eases in while the mouse moves over the stage, out when it rests).
+    // pointer: the tilt (-1..1 over the window). cursor: where the mouse is
+    // over the stage (-1..1, y up) and how engaged it is (eases in while the
+    // mouse moves, out a while after it rests).
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-    const cursor = { x: 0, y: 0, tx: 0, ty: 0, press: 0, movedAt: -1e9 };
+    const cursor = { x: 0.3, y: 0.3, tx: 0.3, ty: 0.3, press: 0, movedAt: -1e9 };
     const onMove = (event: PointerEvent) => {
       if (event.pointerType !== "mouse") return;
       pointer.tx = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.ty = (event.clientY / window.innerHeight) * 2 - 1;
       const rect = el.getBoundingClientRect();
-      cursor.tx = (event.clientX - rect.left - rect.width / 2) / rect.height;
-      cursor.ty = -(event.clientY - rect.top - rect.height / 2) / rect.height;
+      cursor.tx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      cursor.ty = 1 - ((event.clientY - rect.top) / rect.height) * 2;
       cursor.movedAt = performance.now();
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const current = { tints: OBJECT_STATES.default.tints.map((c) => [...c]), spread: OBJECT_STATES.default.spread, focus: 0, light: lightTarget };
+    const current = { tints: OBJECT_STATES.default.tints.map((c) => [...c]), spread: 0, light: lightTarget };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
 
-    // How far the backdrop has been drawn in; a little faster while the mouse
-    // moves.
-    let frame = 0, last = performance.now(), clock = 0, slow = 0, flow = 0;
+    // Fewer points (down to a third) while frames run long.
+    let drawn = COUNT, slow = 0;
+    let frame = 0, last = performance.now(), clock = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -254,37 +189,39 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const covered = !running.current && idleSince.current !== null && now - idleSince.current > 800;
       const paused = !visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation");
       if (paused) return;
-      // Frames over ~22ms for a second running: render smaller.
       slow = dt > 0.022 ? slow + 1 : Math.max(0, slow - 1);
-      if (slow > 60 && quality > 0.5) { quality = Math.max(0.5, quality * 0.8); slow = 0; resize(); }
+      if (slow > 60 && drawn > COUNT / 3) { drawn = Math.max(Math.round(COUNT / 3), Math.round(drawn * 0.8)); slow = 0; }
       clock += dt;
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
       const k = 1 - Math.exp(-dt / 0.45);
-      for (let s = 0; s < 3; s++) for (let i = 0; i < 3; i++) current.tints[s][i] += (target.tints[s][i] - current.tints[s][i]) * k;
+      for (let s = 0; s < 2; s++) for (let i = 0; i < 3; i++) current.tints[s][i] += (target.tints[s][i] - current.tints[s][i]) * k;
       current.spread += (target.spread - current.spread) * k;
-      current.focus += (target.focus - current.focus) * k;
       current.light += (lightTarget - current.light) * k;
       pointer.x += (pointer.tx - pointer.x) * (1 - Math.exp(-dt / 0.6));
       pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt / 0.6));
-      const follow = 1 - Math.exp(-dt / 0.12);
+      const follow = 1 - Math.exp(-dt / 0.15);
       cursor.x += (cursor.tx - cursor.x) * follow;
       cursor.y += (cursor.ty - cursor.y) * follow;
-      const engaged = now - cursor.movedAt < 1800 ? 1 : 0;
-      cursor.press += (engaged - cursor.press) * (1 - Math.exp(-dt / (engaged ? 0.25 : 0.9)));
-      flow += dt * (0.12 + 0.12 * cursor.press);
-      gl.uniform2f(uRes, width, height);
-      gl.uniform2f(uPointer, pointer.x, pointer.y);
+      const engaged = now - cursor.movedAt < 2500 ? 1 : 0;
+      cursor.press += (engaged - cursor.press) * (1 - Math.exp(-dt / (engaged ? 0.2 : 1.2)));
+      // At rest the lens circles the sphere on its own.
+      const autoX = 0.1 * (height / width) + Math.cos(clock * 0.35) * 0.45 * (height / width) * 1.4;
+      const autoY = 0.26 + Math.sin(clock * 0.35) * 0.4;
       gl.uniform1f(uTime, clock);
-      for (let s = 0; s < 3; s++) gl.uniform3f(uT[s], current.tints[s][0], current.tints[s][1], current.tints[s][2]);
+      gl.uniform2f(uPointer, pointer.x, pointer.y);
+      gl.uniform2f(uLens, autoX + (cursor.x - autoX) * cursor.press, autoY + (cursor.y - autoY) * cursor.press);
+      gl.uniform1f(uReach, 0.55 + 0.2 * cursor.press);
+      gl.uniform1f(uAspect, width / height);
+      gl.uniform1f(uOrder, 0.2);
       gl.uniform1f(uSpread, current.spread);
-      gl.uniform1f(uFocus, current.focus);
       gl.uniform1f(uLight, current.light);
-      gl.uniform2f(uCursor, cursor.x, cursor.y);
-      gl.uniform1f(uPress, cursor.press);
-      gl.uniform1f(uFlow, flow);
+      gl.uniform3f(uT0, current.tints[0][0], current.tints[0][1], current.tints[0][2]);
+      gl.uniform3f(uT1, current.tints[1][0], current.tints[1][1], current.tints[1][2]);
+      // Dark: the points add up into light. Light: they lie over the page.
+      if (current.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.drawArrays(gl.POINTS, 0, drawn);
     };
     frame = requestAnimationFrame(draw);
     return () => {
@@ -296,7 +233,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       themeObserver.disconnect();
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
-      gl.deleteBuffer(buffer);
+      buffers.forEach((buffer) => gl.deleteBuffer(buffer));
       gl.deleteProgram(program);
     };
   }, []);

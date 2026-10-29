@@ -632,9 +632,10 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: three beams meeting (after metalab's star, with meaning)
-- Replaces the loop. Three flat bevelled chrome beams (research, design, engineering; `beam()` = rounded box from the centre out to x=6.4, half-size 0.28×0.12, bevel 0.06, folding along x by `0.8·sin(0.5x − 0.15t) + 0.12x`) run in from beyond the stage and melt together (smin 0.45) at one point, the product, 0.45 above the middle. Each beam is lifted out of the plane a little (0.28 / −0.32 / 0.18). Camera z 7.5. Orientation tilts toward the pointer and turns slowly (0.03 rad/s).
-- One softbox streak, the cursor glint, the soft drawn-in backdrop (`flow`) as before. `spread` widens the beams per case.
+## Hero object: the decoding sphere (points)
+- Replaces the raymarched chrome forms (loop, coaster, nested loops, three beams were all tried and rejected). components/home/hero-object.tsx draws 60,000 WebGL points: each has a place on a Fibonacci sphere (r 1.2, above-middle-right: screen offset (0.1, 0.26)) and a place in a drifting cloud. A share of points (`order` 0.2) sits in place everywhere; near the decoding lens all of them do (per-point threshold `rnd.y`, so points are either placed or scattered, never halfway). Points right under the lens step aside. The lens follows the mouse while it moves (press eases in 0.2s, out 1.2s after 2.5s rest); at rest it circles the sphere on its own. Tilt follows the pointer; turn 0.06 rad/s.
+- Colours per case from OBJECT_STATES (`tints[0]` scattered, `tints[1]` placed; `spread` resizes). Dark: additive blending (ONE, ONE); light: premultiplied over (ONE, ONE_MINUS_SRC_ALPHA), grey scattered / deep case colour placed.
+- Performance: DPR 1, no frame cap; after ~60 slow frames the drawn count drops ×0.8 down to a third (indices are shuffled so the sphere thins evenly). Pauses offscreen, hidden, under a case world and during the page transition; skipped with reduced motion.
 
 ## Pills after metalab.com (from the user's screenshot)
 - Header: Menu is the word alone (`.header-menu-icon` hidden), 24px tall, 12px/500, 0 14px, ink 16% frosted; theme toggle 24px round (12px icon); lang toggle 24px with 20px knob/options (9px mono).
