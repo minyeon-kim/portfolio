@@ -20,7 +20,7 @@ import { useEffect, useRef } from "react";
 // with reduced motion or without float render targets (CSS shows the static
 // ambient light instead).
 
-const SIZE = 256;
+const SIZE = 320; // 102,400 points
 
 const quadVertex = `#version 300 es
 in vec2 a; out vec2 v;
@@ -153,7 +153,7 @@ float pools(vec2 s, float aspect, float time) {
 const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse;
-out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize;
+out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
   float i = float(gl_VertexID);
@@ -171,28 +171,33 @@ void main() {
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
   float flare = pow(max(sin(phase), 0.0), 16.0) * step(0.75, fract(vSeed * 7.7));
   vLight *= 0.7 + 0.3 * sin(phase * 1.7);
-  vSize = flare;
-  // Fine, even points; a flaring one brightens and glints, staying small.
-  gl_PointSize = mix(1.6, 2.8, vDepth) * (1.0 + 0.2 * vStar) + flare * 5.0;
+  // Most of it is fine dust, faint on its own so that only where it gathers
+  // does it add up into a milky haze; a few in a hundred are stars, and only
+  // those flare.
+  float star = step(0.965, fract(vSeed * 13.1));
+  vSize = flare * star;
+  float size = mix(mix(1.0, 1.4, vDepth), mix(1.5, 2.1, vDepth), star) * (1.0 + 0.2 * vStar);
+  vFaint = mix(1.15, 1.5, star);
+  gl_PointSize = size + vSize * 3.0;
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
-in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; out vec4 o;
+in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
-  // A crisp core; a flaring point shows a thin four-point glint.
-  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 3.5, vSize));
-  float rays = vSize * (exp(-abs(q.x) * 70.0) + exp(-abs(q.y) * 70.0)) * smoothstep(0.5, 0.05, length(q));
-  float a = min(core + rays, 1.0);
+  // A soft core; a flaring star shows a faint four-point glint.
+  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 3.0, vSize));
+  float rays = 0.5 * vSize * (exp(-abs(q.x) * 60.0) + exp(-abs(q.y) * 60.0)) * smoothstep(0.5, 0.1, length(q));
+  float a = min(core + rays, 1.0) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
-  c = mix(c, c * 0.55, light);
-  alpha *= mix(1.0, 0.8, light);
+  c = mix(c, c * 0.7, light);
+  alpha *= mix(1.0, 1.1, light);
   o = vec4(c * alpha, alpha);
 }`;
 
