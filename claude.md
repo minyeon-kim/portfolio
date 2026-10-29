@@ -692,3 +692,5 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - About data streams are loose (×0.6 plus x jitter) instead of crisp columns.
 - Devsign card opens horizontally from its centre (clip-path inset 0 50% → 0, no rise); Gemini keeps the wipe up. Cards and captions sit above the backdrop vignette (z-index 1), so the light theme's pale edge no longer washes over them.
 - The landing galaxy is the richest state (`galaxy` uniform): arms tinted blue/violet/teal with touches of pink round a warm white core, more stars and flares, ×1.7 brighter in the dark, loose ×0.75.
+- Landing galaxy reads as a spiral: logarithmic two-arm spiral (tilt 0.62, core 16%), arm jitter small, and `focus` rests at 0.85 on the landing (1 on a case) so it gathers like a case's form instead of the full loose haze. Light theme tints are deepened (×0.62) so the colours read on the pale page.
+- Devsign card opens from the right edge towards the left (clip-path inset left 100% → 0).

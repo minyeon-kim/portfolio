@@ -30,7 +30,7 @@ const common = `
 uniform float time;
 uniform float symbol;
 uniform float SIZE;
-uniform float focus;  // 0 at rest, 1 while a case is hovered: the form gathers tighter
+uniform float focus;  // 0.85 on the landing galaxy, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
 // The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
 const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(470.0, 215.0), vec2(660.0, 230.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(235.0, 215.0), vec2(0.0, 205.0));
@@ -94,21 +94,24 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    // A spiral galaxy seen at a slant, loosely: a bright core and two arms
-    // winding out through a wide haze, turning slowly.
+    // A spiral galaxy, tilted a little: a bright core and two arms winding
+    // out, turning slowly; loose like the Gemini sparkle, but clearly a spiral.
     vec2 q;
-    if (a < 0.14) {
-      q = (vec2(b, c) - 0.5) * 0.55 * sqrt(h1(n * 6.1));
+    if (a < 0.16) {
+      float t = c * 6.2831853;
+      q = vec2(cos(t), sin(t)) * 0.3 * pow(h1(n * 6.1), 1.6);
+      loose *= 0.3;
     } else {
-      float r = 0.18 + pow((a - 0.14) / 0.86, 0.8) * 2.0;
-      float t = floor(b * 2.0) * 3.14159 + r * 2.3 + time * 0.02 + (c - 0.5) * 0.9;
+      float u = (a - 0.16) / 0.84;
+      float r = 0.2 + pow(u, 0.75) * 1.9;
+      float t = floor(b * 2.0) * 3.14159 + log(r / 0.2) * 2.4 + time * 0.03 + (c - 0.5) * (0.25 + 0.2 * u);
       q = vec2(cos(t), sin(t)) * r;
+      loose *= 0.35 + 0.35 * u;
     }
-    q.y *= 0.42;
-    float ct = cos(0.38), st = sin(0.38);
+    q.y *= 0.62;
+    float ct = cos(0.32), st = sin(0.32);
     q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
-    p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.3);
-    loose *= 0.75;
+    p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.25);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -261,7 +264,7 @@ void main() {
   float a = min(core + rays, 1.0) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
-  c = mix(c, vTint * mix(1.3, 1.5, e), vSpec);
+  c = mix(c, vTint * mix(1.3, 1.5, e) * mix(1.0, 0.62, light), vSpec);
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
@@ -416,7 +419,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
-      colours.focus += ((target.symbol > 0 ? 1 : 0) - colours.focus) * (1 - Math.exp(-dt / 0.6));
+      // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
+      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.6));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
