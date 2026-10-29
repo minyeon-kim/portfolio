@@ -8,14 +8,13 @@ import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
-import { prepareDevsignZoom } from "@/components/devsign-live";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { Emphasis } from "@/components/emphasis";
 import { HeroObject } from "./hero-object";
 import type { AboutWorld, StageProject } from "./project-stage";
 
-type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: number, from?: HTMLElement | null, prepared?: HTMLElement | null) => void };
+type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: number, from?: HTMLElement | null) => void };
 
 // The landing stage, after metalab.com's home: one dark screen, no scroll.
 // A glossy object (HeroObject) turns slowly behind everything. Left: the case
@@ -68,19 +67,6 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     return () => clearTimeout(timer);
   }, [worldSlug, displayedSlug]);
   const copyOn = world !== null && displayed !== null && world.slug === displayed.slug;
-  // The first hover of the Devsign pill builds the hidden full-screen
-  // prototype for the zoom, so it is loaded by the click; the small card keeps
-  // the image loop (one live frame at a time keeps the stage smooth). It is
-  // removed with the stage if it was never used.
-  const [live, setLive] = useState(false);
-  if (hover === "workflow-app" && !live) setLive(true);
-  const zoomLayer = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    if (!live || zoomLayer.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    zoomLayer.current = prepareDevsignZoom(locale);
-  }, [live, locale]);
-  useEffect(() => () => { if (zoomLayer.current?.dataset.prepared) zoomLayer.current.remove(); zoomLayer.current = null; }, []);
-
   const open = (slug: string) => {
     if (slug === "about") {
       revealNextProject(
@@ -93,7 +79,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     // The raised device is what grows into the case page; without one (touch,
     // keyboard before hover settled) the page just rises in.
     const device = document.querySelector<HTMLElement>(`.home-device[data-project="${slug}"][data-active] > *`);
-    if (index >= 0) onSelect(index, device, slug === "workflow-app" ? zoomLayer.current : null);
+    if (index >= 0) onSelect(index, device);
   };
 
   return (

@@ -618,3 +618,8 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 ## Case zoom: transform-only grow and settle
 - The zoom layer no longer animates `clip-path` (repainted on the main thread every frame → stutter while the click-time snapshot / case render ran). `morph()` in lib/project-transition.ts moves the viewport-sized layer with `translate + scale(sx, sy)` and counter-scales `.project-zoom-stage` so content covers the box; both sampled as 40 keyframes along cubic-bezier(0.2,0.8,0.2,1) with linear easing. Corner radius is a separate (main-thread) animation so the transforms stay on the compositor. `.project-zoom` has `transform-origin: 0 0`.
 - Local builds: Turbopack's `.next` cache once served stale CSS; `rm -rf .next` if a CSS change doesn't show up.
+
+## Case zoom: continuous with the hover preview
+- The Devsign zoom no longer uses a prepared live-prototype iframe (it opened on the prototype's loading screen). `prepareDevsignZoom` and the `live`/`prepared` zoom options are gone. The layer is a copy of the hovered device; `syncAnimations(source, copy)` carries each CSS loop over at the same `currentTime`, and at settle the opener's own loop is synced to the layer's.
+- The copy is appended straight into `.project-zoom-stage` (moving nodes later restarts CSS animations).
+- The copy's media (`.devsign-loop, .gemini-phone`) starts exactly on the card's media rect via `translate`/`scale` and eases to none over the grow.
