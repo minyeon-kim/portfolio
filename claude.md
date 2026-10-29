@@ -632,8 +632,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
 - All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
 
-## Hero object: the coaster ride
-- The landing backdrop is now a ride: the camera runs down `path(z)` (swooping, banking) along a chrome coaster track (two rails on ties) through a chrome helix coil. Same studio env/shade (black chrome, white streaks, case tints). `travel` uniform = distance, advanced in JS at 1.8 + 1.4·press units/s; the cursor turns the head (`pointer`) and moves a glint (`cursor`, `press`).
-- Coil distance is a true helix (pitch-corrected dz); the plane-distance approximation is fine for the gentle path. Far chrome fades out (alpha exp(-0.15·t)); dark mode is brightened ×1.6, light ×0.8.
-- The Research/Design/Engineering labels were removed (looked odd).
+## Hero object: one loop over a drawn-in backdrop
+- Back to the single chrome loop (tilt toward the cursor, glint, swell). The coaster ride and the nested-loop vortex were tried and rejected; the stage labels are gone.
+- The canvas is now opaque: where the ray misses, `backdrop(uv)` draws soft tint bands on a log-polar radius that drift into a slightly darker centre (`flow` uniform, +0.12/s, ×2 while the mouse moves; a gentle 0.5 twist). Dark: near black + tint×0.6; light: pale pearl + tint×0.3. Keep it subtle (the user asked for no strong swirl).
 - No 30fps cap; render width cap 1100 and `quality` drops (×0.8, min 0.5) after ~60 slow frames.
