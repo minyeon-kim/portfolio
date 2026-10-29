@@ -627,3 +627,12 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 ## Header and home picker share one edge and one pill
 - `.site-header-bar` / `.site-menu-bar` no longer override the inset to 24px/12px; they use `--project-text-inset` like the page copy, so Menu, the home case picker and the bottom-left note line up (48px at 1920, 36 at 1440, 16 mobile). Compact header keeps 24px.
 - `.home-pick` now matches `.header-menu-trigger`: 40px tall, 0 16px padding, no border, ink 8% tint, 15px/500; hover/active = transparent with 1px inset ink 70%.
+
+## Edge inset and one pill height
+- `--edge-inset` (24px, 16 mobile): `.site-header-bar`/`.site-menu-bar` padding, and `.intro-stage.home-stage` sets `--project-text-inset: var(--edge-inset)` so picker, note, headline and worlds sit at the same edge as the Menu. Case pages keep `--project-text-inset` for their copy.
+- All header controls and home picks are 36px tall (Menu 0 14px, theme 36×36, lang toggle 36 with 30px knob/options, `.home-pick` 0 14px).
+
+## Hero object: cursor response and stage labels
+- Shader: stronger tilt (pointer 0.22/0.34), a cursor glint in `env()` and a swell of the tube along the cursor ray (`cursor`, `press` uniforms; press eases in while the mouse moves, out ~1.8s after it rests).
+- No 30fps cap; render width cap 1100 and `quality` drops (×0.8, min 0.5) after ~60 slow frames.
+- Labels (Research/Design/Engineering, KO 리서치/디자인/엔지니어링) passed from home-intro; positioned each frame by projecting the loop centreline (JS mirror of `orient()` + camera). Spread over the longest on-screen run of the loop, avoiding `.home-tagline-wrap, .home-picks, .home-note, header`. `.hero-object-labels` hides with the case worlds like the canvas.
