@@ -62,21 +62,22 @@ vec3 homeOf(vec2 uv) {
     p = vec3(q * 1.15 + vec2(0.25, 0.05), (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a > 0.85 ? 0.6 : 0.22;
   } else if (symbol > 1.5) {
-    // The Devsign bolt: its outline drawn densely, its body filled evenly,
+    // The Devsign bolt, loosely: its outline a little denser than its body,
+    // both spreading softly like the Gemini sparkle;
     // set above the title, clear of the project window on the right.
     vec2 q;
     if (a < 0.3) {
       float e = b * 9.0, k = floor(e);
       int ki = int(k);
       q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
-      loose *= 0.25;
+      loose *= 0.5;
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 10; t++) {
         vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.84, 1.75);
         if (inBolt(r)) { q = r; break; }
       }
-      loose *= 0.2;
+      loose *= 0.75;
     }
     p = vec3(q + vec2(-0.6, 0.42), (h1(n * 4.4) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
