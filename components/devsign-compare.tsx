@@ -30,21 +30,20 @@ function crop(box: Box) {
   };
 }
 
-function Crop({ src, box, label, side }: { src: string; box: Box; label: string; side: "before" | "after" }) {
+function Crop({ src, box }: { src: string; box: Box }) {
   const c = crop(box);
   return (
-    <div className="dv-crop" data-side={side}>
-      <Image src={withBase(src)} alt="" width={W * 2} height={H * 2} sizes={side === "after" ? "(max-width: 767px) 300vw, 120vw" : "(max-width: 767px) 120vw, 50vw"} style={c.img as CSSProperties} />
-      <span className="dv-crop-mark" style={c.mark} aria-hidden="true" />
-      <span className="dv-crop-tag">{label}</span>
+    <div className="dv-zoom">
+      <Image src={withBase(src)} alt="" width={W * 2} height={H * 2} sizes="(max-width: 767px) 300vw, 100vw" style={c.img as CSSProperties} />
+      <span className="dv-zoom-mark" style={c.mark} aria-hidden="true" />
     </div>
   );
 }
 
-// As-is / To-be: the two whole screens side by side, then the few changes that
-// matter, one row each: the To-be close-up large with the As-is close-up tucked
-// into its corner, and the change in a title and two short lines beside it.
-// Rows alternate sides.
+// As-is / To-be: the two whole screens side by side carry the comparison. Under
+// them, the three changes that matter as cards in one row: a close-up of the
+// To-be screen with the changed area outlined, a title, and one line from
+// before to after.
 export function DevsignCompare({ before, after, changes = [], labels }: { before: Side; after: Side; changes?: Change[]; labels: { asIs: string; toBe: string; compare: string } }) {
   return (
     <div className="dv-crops reveal" aria-label={labels.compare} role="group">
@@ -62,19 +61,15 @@ export function DevsignCompare({ before, after, changes = [], labels }: { before
         ))}
       </div>
       {changes.length > 0 && (
-        <ol className="dv-crops-list">
+        <ol className="dv-points">
           {changes.map((c, n) => (
             <li key={n} className="dv-point">
-              <div className="dv-point-text">
-                <span className="dv-point-num" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
-                <p className="dv-point-title">{c.title}</p>
-                <p className="dv-point-line" data-side="before"><span>{labels.asIs}</span>{c.before}</p>
-                <p className="dv-point-line" data-side="after"><span>{labels.toBe}</span>{c.after}</p>
-              </div>
-              <div className="dv-point-visual">
-                {c.b && <Crop src={after.src} box={c.b} label={labels.toBe} side="after" />}
-                {c.a && <Crop src={before.src} box={c.a} label={labels.asIs} side="before" />}
-              </div>
+              {c.b && <div className="dv-point-media"><Crop src={after.src} box={c.b} /></div>}
+              <p className="dv-point-title"><b aria-hidden="true">{n + 1}</b>{c.title}</p>
+              <p className="dv-point-change">
+                <span className="dv-point-before">{c.before}</span>
+                <span className="dv-point-after">{c.after}</span>
+              </p>
             </li>
           ))}
         </ol>
