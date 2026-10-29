@@ -24,7 +24,8 @@ const EMPHASIS_START = 0.95; // seconds, the emphasized word starts resolving
 type Props = { text: string; className?: string; emphasis?: string };
 
 // "Decrypted" hero headline: scrambles in left to right on load, then
-// characters near the mouse cursor briefly re-scramble. With reduced motion
+// characters near the mouse cursor briefly re-scramble, and a burst in the
+// home backdrop re-scrambles the letters its ring sweeps past. With reduced motion
 // none of this runs and the server-rendered text is shown as is.
 export function ScrambleHeadline({ text, className, emphasis }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
@@ -68,6 +69,25 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
           }
         };
 
+        // A burst in the backdrop (HeroObject): the letters re-scramble as its
+        // ring sweeps past them, nearest first.
+        const onBurst = (e: Event) => {
+          const { x, y, pxPerSecond, power } = (e as CustomEvent<{ x: number; y: number; pxPerSecond: number; power: number }>).detail;
+          const reach = 260 + 220 * power;
+          for (const char of chars) {
+            const r = char.getBoundingClientRect();
+            const dist = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+            if (dist > reach) continue;
+            gsap.to(char, {
+              delay: dist / pxPerSecond,
+              duration: 0.25 + 0.35 * (1 - dist / reach),
+              ease: "none",
+              overwrite: true,
+              scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED },
+            });
+          }
+        };
+
         const onPointerMove = (e: PointerEvent) => {
           if (e.pointerType !== "mouse") return;
           pointer = { x: e.clientX, y: e.clientY };
@@ -100,7 +120,7 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
         gsap.set(chars, { autoAlpha: 0 });
         const load = gsap.timeline({
           onStart: () => gsap.set(el, { visibility: "visible" }),
-          onComplete: () => window.addEventListener("pointermove", onPointerMove),
+          onComplete: () => { window.addEventListener("pointermove", onPointerMove); window.addEventListener("hero-burst", onBurst); },
         });
         const span = (held.size ? TYPE_END : LOAD_DURATION) - GLYPH_SCRAMBLE;
         const heldChars = chars.filter((char) => held.has(char));
@@ -145,6 +165,7 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
 
         return () => {
           window.removeEventListener("pointermove", onPointerMove);
+          window.removeEventListener("hero-burst", onBurst);
           cancelAnimationFrame(frame);
           split.revert();
         };

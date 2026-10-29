@@ -651,3 +651,7 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Points are now even, crisp sparkles (no varied grain sizes or big soft motes — read as "virus-like"): size 1.6–2.8 by depth; each breathes, and ~25% flare briefly (pow(sin,16)) into a white core with a thin four-point glint (point grows +12px while flaring).
 - No more growing cross-glint flares (big particles read badly): all points stay 1.4–2.4px; flaring only brightens. Brightness comes from dense gathering (valley strength 0.6).
 - Glow pass adds a wide diagonal band of violet-navy light (lower left → upper right, drifting), tinted by the state colours (after a flowty-style hero gradient). Dark theme only.
+- Hover gathers the form: uniform `focus` (eased τ0.6s, 1 when a case/About is hovered) tightens 2/3 of the dust (loose ×0.22) and triples gather; the widest third stays as haze. Dust spreads lower (y ×1.35). Cursor sweep stronger.
+- Burst: a quick flick (clip-space speed > 2.2/s, ≤ once per 0.7s) sets off an expanding ring (1.4 units/s) that throws dust outward like a firework. It dispatches `window` event `hero-burst` {x, y, pxPerSecond, power}; ScrambleHeadline re-scrambles each letter when the ring reaches it (delay = distance / pxPerSecond, reach 260–480px).
+- The extra corner colour lights were tried and reverted (user preferred the single diagonal band).
+- Glass pills (Menu, lang toggle, theme, home picks, menu links): ink 9% fill, blur(18px) saturate(1.7), 1px ink-12% inner ring and a 1px top highlight (Apple/metalab-like see-through).
