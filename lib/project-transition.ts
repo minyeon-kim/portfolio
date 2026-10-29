@@ -55,6 +55,34 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   const zoomStart = performance.now();
   let layer: HTMLElement | null = null;
   let liveFrame: HTMLIFrameElement | null = null;
+  // The layer always covers the viewport; what moves is a clip (its visible
+  // box) and its content's transform (scaled to cover that box). Neither
+  // needs layout, so the grow keeps its frames while the page renders.
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const clipOf = (b: DOMRect, radius: string) => `inset(${b.top}px ${vw - b.right}px ${vh - b.bottom}px ${b.left}px round ${radius})`;
+  const fitOf = (b: DOMRect) => {
+    const scale = Math.max(b.width / vw, b.height / vh);
+    return `translate(${b.left + (b.width - vw * scale) / 2}px, ${b.top + (b.height - vh * scale) / 2}px) scale(${scale})`;
+  };
+  const FULL_CLIP = "inset(0px 0px 0px 0px round 0px)";
+  const FULL_FIT = "translate(0px, 0px) scale(1)";
+  const ease = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+  const stageOf = (target: HTMLElement) => {
+    let stage = target.querySelector<HTMLElement>(":scope > .project-zoom-stage");
+    if (!stage) {
+      stage = document.createElement("div");
+      stage.className = "project-zoom-stage";
+      stage.append(...Array.from(target.childNodes));
+      target.appendChild(stage);
+    }
+    return stage;
+  };
+  const growLayer = (target: HTMLElement, box: DOMRect) => {
+    Object.assign(target.style, { top: "0px", left: "0px", width: `${vw}px`, height: `${vh}px` });
+    target.animate([{ clipPath: clipOf(box, "18px") }, { clipPath: FULL_CLIP }], { duration: grow, easing: ease, fill: "both" });
+    stageOf(target).animate([{ transform: fitOf(box) }, { transform: FULL_FIT }], { duration: grow, easing: ease, fill: "both" });
+  };
   if (zoom && !reduced) {
     const source = zoom.from;
     const box = source.getBoundingClientRect();
@@ -63,13 +91,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       delete layer.dataset.prepared;
       liveFrame = layer.querySelector("iframe");
       if (liveFrame) Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
-      Object.assign(layer.style, { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` });
-      layer.animate(
-        [{ top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "18px" },
-         { top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" }],
-        { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
-      );
-      liveFrame?.animate([{ transform: `scale(${box.width / window.innerWidth})` }, { transform: "scale(1)" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
+      growLayer(layer, box);
     } else if (box.width > 10 && box.height > 10) {
       layer = document.createElement("div");
       layer.className = "project-zoom";
@@ -95,20 +117,14 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         Object.assign(liveFrame.style, { width: `${window.innerWidth}px`, height: `${window.innerHeight}px` });
         liveFrame.addEventListener("load", () => { if (liveFrame) liveFrame.dataset.loaded = "true"; });
         layer.appendChild(liveFrame);
-        liveFrame.animate([{ transform: `scale(${box.width / window.innerWidth})` }, { transform: "scale(1)" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
       }
-      Object.assign(layer.style, { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` });
       document.body.appendChild(layer);
       const posed = source.matches(".gemini-device, .home-device-window") ? source : source.querySelector<HTMLElement>(".gemini-device, .home-device-window");
       const posedCopy = posed === source ? copy : copy.querySelector<HTMLElement>(".gemini-device, .home-device-window");
       if (posed && posedCopy) {
         posedCopy.animate([{ transform: getComputedStyle(posed).transform }, { transform: "none" }], { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" });
       }
-      layer.animate(
-        [{ top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "18px" },
-         { top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" }],
-        { duration: grow, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
-      );
+      growLayer(layer, box);
     }
   }
   const canvasColor = () => {
@@ -267,9 +283,11 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // With the device layer: wait for it to fill the screen, hold it there a
       // moment (the prototype keeps playing), then fade the new page in while
       // the device shrinks into the opener's media frame.
-      const wait = layer ? Math.max(0, grow - (performance.now() - zoomStart)) : 0;
+      // The hold is counted from the end of the grow; the new page rendered
+      // during it, so whatever that took comes out of the hold.
+      const hold = layer ? Math.max(0, zoomStart + grow + 600 - performance.now()) : 0;
       const timing = layer
-        ? { duration: 750, delay: wait + 700, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
+        ? { duration: 750, delay: hold, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
         : { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       animations.push(snapshot.animate(
         [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, -2vh, 0)", opacity: 0, filter: "blur(6px)" }],
@@ -287,13 +305,9 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         const box = target?.getBoundingClientRect();
         const radius = target ? getComputedStyle(target).borderRadius : "14px";
         if (box && box.width > 0) {
-          const settle = layer.animate(
-            [{ top: "0px", left: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px" },
-             { top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: radius }],
-            { duration: timing.duration, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" },
-          );
-          animations.push(settle);
-          if (liveFrame) animations.push(liveFrame.animate([{ transform: "scale(1)" }, { transform: `scale(${box.width / window.innerWidth})` }], { duration: timing.duration, delay: timing.delay, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" }));
+          const settleTiming = { duration: timing.duration, delay: timing.delay, easing: ease, fill: "both" as FillMode };
+          animations.push(layer.animate([{ clipPath: FULL_CLIP }, { clipPath: clipOf(box, radius.split(" ")[0] || "14px") }], settleTiming));
+          animations.push(stageOf(layer).animate([{ transform: FULL_FIT }, { transform: fitOf(box) }], settleTiming));
           // Blend into the real media over the last stretch.
           animations.push(layer.animate([{ opacity: 1 }, { opacity: 1, offset: 0.75 }, { opacity: 0 }], { duration: timing.duration, delay: timing.delay, fill: "both" }));
         } else {
@@ -326,6 +340,14 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     history.replaceState(history.state, "", window.location.pathname + window.location.search);
   }
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  // With the device layer, the new page is rendered only once the device has
+  // filled the screen. Rendering a whole case is a long task; run during the
+  // grow it stalled the layer's frames (the grow animates its box, which needs
+  // the main thread). Behind the full-screen layer it can take its time.
+  if (layer) {
+    window.setTimeout(() => { change(); begin(); }, Math.max(0, grow - (performance.now() - zoomStart)));
+    return;
+  }
   change();
   begin();
 }

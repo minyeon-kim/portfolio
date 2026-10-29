@@ -1312,16 +1312,18 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 /* Curved page slide with a slower outgoing layer for depth. */
 .project-navigation-floor { position: fixed; inset: 0; z-index: 17; background: var(--bg); pointer-events: none; }
 /* The picked case's device, copied and grown to the screen, then settled into the opener's media frame. */
-.project-zoom { position: fixed; z-index: 30; overflow: hidden; pointer-events: none; background: #141414; will-change: top, left, width, height; }
+.project-zoom { position: fixed; z-index: 30; overflow: hidden; pointer-events: none; background: #141414; will-change: clip-path; }
+/* Everything in the layer sits in one stage the size of the viewport; the grow and settle scale the stage, never the layer's box. */
+.project-zoom-stage { position: absolute; inset: 0; display: grid; place-items: center; transform-origin: 0 0; will-change: transform; }
 .project-zoom[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
-.project-zoom > * { position: absolute; inset: 0; width: 100%; height: 100%; translate: none; }
+.project-zoom-stage > * { position: absolute; inset: 0; width: 100%; height: 100%; translate: none; }
 .project-zoom .home-device-window { display: grid; place-items: center; border-radius: 0; box-shadow: none; transform: none; }
 .project-zoom .home-device-window .devsign-loop { width: min(100%, 160vh); }
 .project-zoom .devsign-loop :is(.devsign-loop-pin, .devsign-loop-panel, .devsign-loop-approve, .devsign-loop-approved) { animation-delay: -2.1s; }
 /* Live Devsign: the loop copy is the poster, the real prototype scales up over it once loaded. */
 .project-zoom[data-live] { display: grid; place-items: center; }
 .project-zoom[data-prepared] { visibility: hidden; top: 0; left: 0; width: 100vw; height: 100vh; }
-.project-zoom > .devsign-loop { position: relative; inset: auto; width: min(100%, 160vh); height: auto; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+.project-zoom-stage > .devsign-loop { position: relative; inset: auto; width: min(100%, 160vh); height: auto; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
 .project-zoom-live { position: absolute; top: 0; left: 0; transform-origin: 0 0; border: 0; background: transparent; opacity: 0; pointer-events: none; transition: opacity 300ms ease; will-change: transform; }
 .project-zoom-live[data-loaded] { opacity: 1; }
 /* DevsignLive: the prototype at its desktop width, scaled to the box; the loop underneath until it loads. */
@@ -1948,6 +1950,16 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .case-prototype-phone[data-steps-below] .case-prototype-steps { margin-top: 40px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 28px 24px; }
 .case-prototype-phone[data-steps-below] .case-prototype-steps li { grid-template-columns: 1fr; }
 .case-prototype-phone[data-steps-below] .case-prototype-thumb img { width: min(100%, 160px); border-radius: 14px; }
+/* Steps that are changes read like the Devsign key-change cards: the screen on a light tile, a numbered title, the old way struck through, then the new way. */
+.case-prototype-steps li[data-change] .case-prototype-thumb { display: grid; place-items: start center; height: clamp(240px, 22vw, 320px); padding: 16px 16px 0; overflow: hidden; border-radius: 16px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.case-prototype-phone[data-steps-below] .case-prototype-steps li[data-change] .case-prototype-thumb img { width: min(100%, 200px); border-radius: 18px 18px 0 0; border-bottom: 0; }
+.case-prototype-step-title { display: flex; align-items: flex-start; gap: 10px; }
+.case-prototype-step-title b { display: grid; flex-shrink: 0; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: var(--case-accent, var(--accent)); color: #fff; font-size: 12px; font-weight: 700; }
+.case-prototype-steps .case-prototype-step-title strong { margin: 0; font-size: 17px; font-weight: 700; }
+.case-prototype-change { display: flex; flex-direction: column; gap: 4px; margin: 10px 0 0 32px !important; font-size: 15px !important; line-height: 1.5; }
+.case-prototype-change [data-side="before"] { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent); }
+.case-prototype-change [data-side="after"] { color: var(--ink); }
+.case-prototype-change [data-side="after"]::before { content: "→ "; color: var(--case-accent, var(--accent)); }
 
 /* Cards in a row come in one after another, a beat apart, once their group shows. */
 @media (prefers-reduced-motion: no-preference) {
@@ -2019,7 +2031,10 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 /* Closing block (components/site-footer.tsx): the last thing on a case page. */
 /* Closing footer after metalab.com: a dark full-bleed band — a big question, large ways onward, a quiet bottom row. */
 .site-footer { --ft-bg: light-dark(#0e1111, #0a0c0c); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
+/* Devsign-skinned cases: the footer's text lines up with the case column (--dv-pad) and its band runs edge to edge. */
+.case-study:has(.dv) { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1440px) / 2)); }
 .case-study[data-skin="dv"] .site-footer, .case-study:has(.dv) .site-footer { padding-inline: var(--dv-pad); }
+.case-study[data-skin="dv"] .site-footer { margin-inline: calc(-1 * var(--dv-pad)); }
 .site-footer-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
 .site-footer-headline { margin: 0; color: var(--ft-ink); font-family: var(--font-display), var(--font-sans); font-size: clamp(40px, 5.5vw, 88px); font-weight: 500; line-height: 0.98; letter-spacing: -0.03em; text-wrap: balance; }
 .site-footer-actions { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
@@ -2380,7 +2395,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   .dv-stats { grid-template-columns: 1fr; gap: 16px; }
 }
 @media (max-width: 47.99rem) {
-  .dv { --dv-pad: var(--project-text-inset); }
+  .dv, .case-study:has(.dv) { --dv-pad: var(--project-text-inset); }
   .dv-points { grid-template-columns: 1fr; gap: 32px; }
   .dv-crops-overview { grid-template-columns: 1fr; }
   .dv-nav { padding-block: 16px; }
@@ -2699,7 +2714,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
 @media (min-width: 75rem) {
-  .dv, .case-study[data-skin="dv"] { --dv-pad: max(224px, 12.5vw, calc((100vw - 1440px) / 2)); }
+  .dv, .case-study[data-skin="dv"], .case-study:has(.dv) { --dv-pad: max(224px, 12.5vw, calc((100vw - 1440px) / 2)); }
 }
 
 /* The footer closes the page: whatever wraps it drops its bottom padding, so no strip of page shows under it. */

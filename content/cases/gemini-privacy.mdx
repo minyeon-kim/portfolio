@@ -217,23 +217,13 @@ Both test scenarios follow the persona, Yuna, with made-up data, so no participa
   href="https://minyeon-kim.github.io/gemini_privacy/?mode=participant"
   label="See where Jeongmin came from, then turn that source off"
   steps={[
-    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "A Source badge under the answer", body: "Personal data is flagged where it shows up, not in settings." },
-    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "One toggle per source", body: "Gmail, Calendar and Memory switch off without leaving the chat." },
-    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "Deleted vs. only blocked", body: "The request is split by what will really happen to each item." },
-    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "A result you can check", body: "Line by line, with Check now to confirm it's gone." },
+    { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", srcDark: "/images/cases/gemini-privacy/screen-a2-badge-dark.webp", title: "A Source badge under the answer", before: "Hard to tell where it came from.", body: "A Source badge with items per Gmail, Calendar and Memory." },
+    { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", srcDark: "/images/cases/gemini-privacy/screen-a3-panel-dark.webp", title: "One toggle per source", before: "Two settings pages, 3–5 clicks each.", body: "One toggle, without leaving the chat." },
+    { src: "/images/cases/gemini-privacy/screen-b2-list.webp", srcDark: "/images/cases/gemini-privacy/screen-b2-list-dark.webp", title: "Deleted vs. only blocked", before: "Delete and block look the same.", body: "“Will be deleted” and “only blocked,” shown apart." },
+    { src: "/images/cases/gemini-privacy/screen-b3-result.webp", srcDark: "/images/cases/gemini-privacy/screen-b3-result-dark.webp", title: "A result you can check", before: "Trusting the result is up to you.", body: "A line-by-line result and Check now." },
   ]}
 />
 
-<CaseCompare
-  before="As-is"
-  after="To-be"
-  rows={[
-    { topic: "Personal data shows up", before: "Hard to tell where it came from.", after: "A Source badge with items per Gmail, Calendar and Memory." },
-    { topic: "You want it off", before: "Two settings pages, 3–5 clicks each.", after: "One toggle, without leaving the chat." },
-    { topic: "You want it gone", before: "Delete and block look the same.", after: "“Will be deleted” and “only blocked,” shown apart." },
-    { topic: "After deleting", before: "Trusting the result is up to you.", after: "A line-by-line result and Check now." },
-  ]}
-/>
 
 <CaseSection id="usability-testing" label="10 / Usability testing" title="Testing now: does checking it yourself build trust?">
 
