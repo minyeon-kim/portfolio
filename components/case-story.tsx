@@ -55,7 +55,8 @@ export function CaseStatement({ children }: { children: ReactNode }) {
   return <div className="case-statement reveal">{children}</div>;
 }
 
-type PrototypeStep = { src: string; srcDark?: string; title: string; body: string; width?: number; height?: number };
+// With `before`, a step reads as a change: the old way struck through, then the step's body as the new way.
+type PrototypeStep = { src: string; srcDark?: string; title: string; body: string; before?: string; width?: number; height?: number };
 
 // The playable prototype with a numbered walkthrough beside it. The frame is a
 // slot for now and links out; the embed will load only after a click, so the
@@ -72,15 +73,24 @@ export function CasePrototype({ label, href, device = "desktop", steps = [], ste
       {steps.length ? (
         <ol className="case-prototype-steps">
           {steps.map((step, i) => (
-            <li key={step.src}>
+            <li key={step.src} data-change={step.before ? "" : undefined}>
               <div className="case-prototype-thumb">
                 <Image src={withBase(step.src)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes={device === "phone" ? "160px" : "(max-width: 767px) 100vw, 280px"} data-theme-show={step.srcDark ? "light" : undefined} />
                 {step.srcDark && <Image src={withBase(step.srcDark)} alt="" width={step.width ?? 750} height={step.height ?? 1624} sizes="160px" data-theme-show="dark" />}
               </div>
               <div>
-                <span className="case-prototype-step-index">{String(i + 1).padStart(2, "0")}</span>
-                <strong>{step.title}</strong>
-                <p>{step.body}</p>
+                {step.before ? (
+                  <span className="case-prototype-step-title"><b aria-hidden="true">{i + 1}</b><strong>{step.title}</strong></span>
+                ) : <>
+                  <span className="case-prototype-step-index">{String(i + 1).padStart(2, "0")}</span>
+                  <strong>{step.title}</strong>
+                </>}
+                {step.before ? (
+                  <p className="case-prototype-change">
+                    <span data-side="before">{step.before}</span>
+                    <span data-side="after">{step.body}</span>
+                  </p>
+                ) : <p>{step.body}</p>}
               </div>
             </li>
           ))}
