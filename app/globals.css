@@ -2706,3 +2706,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @media (min-width: 75rem) {
   .dv, .case-study[data-skin="dv"] { --dv-pad: max(224px, 12.5vw, calc((100vw - 1440px) / 2)); }
 }
+
+/* The footer closes the page: whatever wraps it drops its bottom padding, so no strip of page shows under it. */
+.case-study:has(> .site-footer), main > div:has(> .site-footer) { padding-bottom: 0; }
