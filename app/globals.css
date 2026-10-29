@@ -1312,7 +1312,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 /* Curved page slide with a slower outgoing layer for depth. */
 .project-navigation-floor { position: fixed; inset: 0; z-index: 17; background: var(--bg); pointer-events: none; }
 /* The picked case's device, copied and grown to the screen, then settled into the opener's media frame. */
-.project-zoom { position: fixed; z-index: 30; overflow: hidden; pointer-events: none; background: #141414; will-change: clip-path; }
+.project-zoom { position: fixed; z-index: 30; overflow: hidden; pointer-events: none; background: #141414; transform-origin: 0 0; will-change: transform; }
 /* Everything in the layer sits in one stage the size of the viewport; the grow and settle scale the stage, never the layer's box. */
 .project-zoom-stage { position: absolute; inset: 0; display: grid; place-items: center; transform-origin: 0 0; will-change: transform; }
 .project-zoom[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 20%, rgb(66 133 244 / 0.3), transparent 70%), radial-gradient(55% 45% at 75% 80%, rgb(167 139 250 / 0.24), transparent 70%) #0c0f16; }
