@@ -655,3 +655,5 @@ Reading measures (Devsign-skinned cases): --dv-measure 740px for body copy (.dv-
 - Burst: a quick flick (clip-space speed > 2.2/s, ≤ once per 0.7s) sets off an expanding ring (1.4 units/s) that throws dust outward like a firework. It dispatches `window` event `hero-burst` {x, y, pxPerSecond, power}; ScrambleHeadline re-scrambles each letter when the ring reaches it (delay = distance / pxPerSecond, reach 260–480px).
 - The extra corner colour lights were tried and reverted (user preferred the single diagonal band).
 - Glass pills (Menu, lang toggle, theme, home picks, menu links): ink 9% fill, blur(18px) saturate(1.7), 1px ink-12% inner ring and a 1px top highlight (Apple/metalab-like see-through).
+- Pills back to metalab: no rim or highlight lines, ink 15% fill, blur(24px) saturate(1.2).
+- Sparkle restored but small: points 1.6–2.8px, ~25% flare (+5px) with a crisp core and a thin four-point glint.
