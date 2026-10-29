@@ -4,8 +4,10 @@ import { useEffect, useRef } from "react";
 
 // The landing backdrop, after particle-love.com: about 65,000 points of
 // light drifting like dust in a slow swirling flow, gathering in faint
-// threads. Moving the mouse sweeps the dust along and stirs it into wisps
-// that brighten, then it settles again. Each state leans the dust, loosely,
+// threads, across the whole stage. Slow pools of light drift over it, so the
+// dust glows in places and sinks into the dark elsewhere. Moving the mouse
+// sweeps a wide swathe of dust along and stirs it into wisps that brighten,
+// then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
 // - default: a loop (research, design and engineering closing on itself)
 // - Gemini privacy revamp, blue: the Gemini constellation, the twins
@@ -43,7 +45,7 @@ vec3 homeOf(vec2 uv) {
   float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
   float a = h1(n * 1.17), b = h1(n * 2.31), c = h1(n * 3.77), g = h1(n * 5.13);
   vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
-  vec3 p; float loose = mix(0.3, 3.0, pow(g, 1.4));
+  vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
     vec2 cell = floor(vec2(b, c) * vec2(7.0, 6.0)) - vec2(3.0, 2.5);
     vec2 centre = vec2(cell.x * 0.32 + mod(cell.y, 2.0) * 0.16, cell.y * 0.28);
@@ -80,7 +82,7 @@ vec3 homeOf(vec2 uv) {
     float t = a * 6.2831853;
     p = vec3(cos(t) * 1.2, sin(t) * 0.75, sin(t * 2.0) * 0.3) * 1.45;
   }
-  return p * 1.2 + j * loose + vec3(0.6, 0.2, 0.0);
+  return p * 1.6 + j * loose * vec3(1.6, 1.0, 1.0) + vec3(0.35, 0.1, 0.0);
 }
 // A swirling, divergence-free flow (ABC flow, two octaves).
 vec3 flow(vec3 p) {
@@ -121,7 +123,7 @@ void main() {
   // The cursor sweeps nearby dust along its motion and swirls it.
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
-  float k = exp(-dot(d, d) / 0.05);
+  float k = exp(-dot(d, d) / 0.16);
   vec2 mv = mouseVel / max(dt, 1e-3);
   u.xy += (mv * 0.9 + vec2(-d.y, d.x) * length(mv) * 4.0 + normalize(d + 1e-4) * length(mv) * 1.2) * k * dt * 2.0;
   u *= exp(-dt * 0.9);
@@ -133,10 +135,22 @@ precision highp float; in vec2 v; out vec4 o;
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
 void main() { o = vec4(texture(pos, v).xyz + texture(vel, v).xyz * dt, 1.0); }`;
 
+const pools = `
+// Two or three wide pools of light drifting slowly over the stage: the dust
+// inside them glows, the rest sinks into the dark.
+float pools(vec2 s, float aspect, float time) {
+  vec2 a = vec2(0.45 + 0.35 * sin(time * 0.05), 0.25 + 0.25 * cos(time * 0.07));
+  vec2 b = vec2(-0.55 + 0.3 * cos(time * 0.04 + 1.0), -0.35 + 0.3 * sin(time * 0.06));
+  vec2 c = vec2(0.1 + 0.5 * sin(time * 0.03 + 2.0), 0.65 + 0.2 * cos(time * 0.05));
+  vec2 q = vec2(aspect, 1.0);
+  return 0.25 + 1.3 * exp(-dot((s - a) * q, (s - a) * q) / 0.35) + 0.9 * exp(-dot((s - b) * q, (s - b) * q) / 0.25) + 0.6 * exp(-dot((s - c) * q, (s - c) * q) / 0.2);
+}`;
+
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol;
-out float vSpeed; out float vDepth; out float vSeed; out float vStar;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse;
+out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize;
+${pools}
 void main() {
   float i = float(gl_VertexID);
   vec2 uv = (vec2(mod(i, SIZE), floor(i / SIZE)) + 0.5) / SIZE;
@@ -148,22 +162,41 @@ void main() {
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.3 ? 0.35 : (symbol > 1.5 && symbol < 2.5 && cat > 0.8 ? 0.3 : 0.0);
-  gl_PointSize = mix(1.5, 3.4, vDepth) * (0.8 + 0.7 * vSeed) * (1.0 + 0.4 * vStar);
+  vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
+  vLight *= 0.75 + 0.5 * sin(time * (1.0 + 2.0 * vSeed) + vSeed * 40.0) * 0.5 + 0.25;
+  // Mostly fine dust, some grains, a few big soft out-of-focus motes.
+  float grain = fract(sin(i * 7.31) * 12543.17);
+  vSize = mix(1.0, 2.6, vDepth) * (0.7 + 0.8 * grain * grain) + 18.0 * pow(grain, 14.0) + 6.0 * pow(vSeed, 10.0);
+  gl_PointSize = vSize * (1.0 + 0.4 * vStar) * (0.85 + 0.35 * min(vLight, 1.5));
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
-in float vSpeed; in float vDepth; in float vSeed; in float vStar; out vec4 o;
+in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
-  float a = smoothstep(0.5, 0.0, length(gl_PointCoord - 0.5));
+  // Big motes are soft and faint (out of focus); dust is crisp.
+  float soft = smoothstep(3.0, 14.0, vSize);
+  float a = smoothstep(0.5, mix(0.0, 0.1, soft), length(gl_PointCoord - 0.5)) * mix(1.0, 0.18, soft);
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
-  float alpha = a * (0.42 + 0.6 * e + 0.4 * vStar) * (0.6 + 0.4 * vDepth);
+  float alpha = a * (0.3 + 0.6 * e + 0.4 * vStar) * (0.6 + 0.4 * vDepth) * vLight;
   // Light theme: the dust is ink over the page rather than light.
   c = mix(c, c * 0.55, light);
   alpha *= mix(1.0, 0.8, light);
   o = vec4(c * alpha, alpha);
+}`;
+
+// The pools' own soft light on the room behind the dust.
+const glowFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform float light;
+${pools}
+void main() {
+  vec2 s = v * 2.0 - 1.0;
+  float l = max(pools(s, aspect, time) - 0.25, 0.0);
+  vec3 c = mix(calm, accent, 0.5 + 0.5 * s.x) * l * 0.07 * (1.0 - light);
+  o = vec4(c, 0.0);
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -199,13 +232,13 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (!gl.getProgramParameter(p, gl.LINK_STATUS)) console.error("hero-object", gl.getProgramInfoLog(p));
       return p;
     };
-    const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment);
+    const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const vaoQuad = gl.createVertexArray();
     gl.bindVertexArray(vaoQuad);
-    for (const p of [pInit, pVel, pPos]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
+    for (const p of [pInit, pVel, pPos, pGlow]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
     const vaoDraw = gl.createVertexArray();
     // Positions and velocities, two of each to read one and write the other.
     const target = () => {
@@ -299,13 +332,20 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.viewport(0, 0, width, height);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE);
+      gl.useProgram(pGlow);
+      gl.bindVertexArray(vaoQuad);
+      gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "light"), colours.light);
+      gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
-      gl.enable(gl.BLEND);
       // Dark: the dust adds up into light. Light: it lies over the page.
       if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
+      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
@@ -321,7 +361,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      [pInit, pVel, pPos, pDraw].forEach((p) => gl.deleteProgram(p));
+      [pInit, pVel, pPos, pDraw, pGlow].forEach((p) => gl.deleteProgram(p));
       gl.deleteBuffer(quad);
     };
   }, []);
