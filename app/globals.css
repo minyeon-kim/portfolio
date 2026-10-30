@@ -3202,3 +3202,22 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   --dv-tint-core: light-dark(#eef3fd, color-mix(in srgb, #8ab4f8 10%, var(--bg)));
   --dv-diamond-current: light-dark(#e3ebfa, color-mix(in srgb, #8ab4f8 16%, var(--bg)));
 }
+
+/* Numbered lists: the number never shrinks onto its own line. */
+.dv-numbered li::before { flex: none; }
+
+/* Interview: the three questions side by side, then photo | participants,
+   the four cards sharing the photo's height. */
+.dv-numbered-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 16px; }
+.dv-media-row-stretch { align-items: stretch; }
+.dv-people-stack { display: grid; grid-template-columns: 1fr; grid-auto-rows: 1fr; gap: 12px; }
+.dv-people-stack li { justify-content: center; gap: 4px; padding: 16px 24px; }
+@media (max-width: 63.99rem) {
+  .dv-numbered-row { grid-template-columns: 1fr; gap: 12px; }
+  .dv-people-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+}
+@media (max-width: 47.99rem) { .dv-people-stack { grid-template-columns: 1fr; } }
+.dv-people-stack { gap: 8px; }
+.dv-people-stack li { gap: 2px; padding: 12px 20px; }
+.dv-people-stack strong { font-size: 16px; }
+.dv-people-stack li > span:last-child { font-size: 14px; }

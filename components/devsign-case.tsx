@@ -319,24 +319,26 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
-          <div className="dv-media-row dv-gap-40">
-            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
-            <div>
-              <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
-              <ol className="dv-numbered dv-numbered-loose">
-                {discover.interview.questions.map((q: string) => <li key={q} className="reveal">{q}</li>)}
-              </ol>
-            </div>
+          {/* What we asked comes first, as its own row; then the session photo
+              with the four participants stacked beside it. */}
+          <div className="dv-gap-40">
+            <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
+            <ol className="dv-numbered dv-numbered-row">
+              {discover.interview.questions.map((q: string) => <li key={q} className="reveal">{q}</li>)}
+            </ol>
           </div>
-          <ul className="dv-people dv-gap-48">
-            {discover.interview.participants.map((p: string[]) => (
-              <li key={p[0]} className="reveal">
-                <span>{p[0]}</span>
-                <strong>{p[1]}</strong>
-                <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="dv-media-row dv-media-row-stretch dv-gap-48">
+            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
+            <ul className="dv-people dv-people-stack">
+              {discover.interview.participants.map((p: string[]) => (
+                <li key={p[0]} className="reveal">
+                  <span>{p[0]}</span>
+                  <strong>{p[1]}</strong>
+                  <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         ) : (
         <div className="dv-subsection dv-rule">
