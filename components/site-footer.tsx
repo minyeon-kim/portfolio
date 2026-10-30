@@ -33,6 +33,7 @@ export function SiteFooter() {
           <li><Link href={localize("/", locale)}>{t.work}</Link></li>
           <li><Link href={localize("/about/", locale)}>{t.about}</Link></li>
           {site.email && <li><a href={`mailto:${site.email}`}>{t.email}</a></li>}
+          {site.linkedinUrl && <li><a href={site.linkedinUrl}>LinkedIn</a></li>}
         </ul>
         <button type="button" onClick={toTop} className="site-footer-top-link">{t.backToTop} <span aria-hidden="true">↑</span></button>
       </div>
