@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
-// - default: a spiral galaxy, slowly turning
+// - default: a face-on spiral galaxy, three arms, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
@@ -94,23 +94,29 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    // A spiral galaxy, tilted a little: a bright core and two arms winding
-    // out, turning slowly; loose like the Gemini sparkle, but clearly a spiral.
+    // A spiral galaxy seen nearly face-on: a bright core, three arms winding
+    // out round it and fine dust between them, turning slowly. Set a little
+    // above the centre, clear of the headline.
     vec2 q;
-    if (a < 0.16) {
+    if (a < 0.14) {
       float t = c * 6.2831853;
-      q = vec2(cos(t), sin(t)) * 0.3 * pow(h1(n * 6.1), 1.6);
+      q = vec2(cos(t), sin(t)) * 0.24 * pow(h1(n * 6.1), 1.6);
       loose *= 0.3;
-    } else {
-      float u = (a - 0.16) / 0.84;
-      float r = 0.2 + pow(u, 0.75) * 1.9;
-      float t = floor(b * 2.0) * 3.14159 + log(r / 0.2) * 2.4 + time * 0.03 + (c - 0.5) * (0.25 + 0.2 * u);
+    } else if (a < 0.8) {
+      float u = (a - 0.14) / 0.66;
+      float r = 0.16 + pow(u, 0.8) * 1.35;
+      float t = floor(b * 3.0) * 2.0943951 + log(r / 0.16) * 2.2 + time * 0.03 + (c - 0.5) * (0.3 + 0.25 * u);
       q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.35 + 0.35 * u;
+      loose *= 0.3 + 0.3 * u;
+    } else {
+      // The disc between the arms.
+      float t = c * 6.2831853, r = 0.2 + pow(h1(n * 6.7), 0.7) * 1.35;
+      q = vec2(cos(t), sin(t)) * r;
+      loose *= 0.45;
     }
-    q.y *= 0.62;
-    float ct = cos(0.32), st = sin(0.32);
-    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
+    q.y *= 0.9;
+    float ct = cos(0.2), st = sin(0.2);
+    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y) + vec2(0.0, 0.22);
     p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.25);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
@@ -220,7 +226,7 @@ void main() {
   vSpec = mix(vSpec, 0.85, bolt);
   // The landing galaxy is the richest: every project's colour wound through
   // its arms (blue, violet, teal, a touch of pink) round a warm white core.
-  vec2 gq = (p.xy - vec2(0.35, 0.12)) / 1.6;
+  vec2 gq = (p.xy - vec2(0.35, 0.49)) / 1.6;
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
