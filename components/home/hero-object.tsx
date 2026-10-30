@@ -106,7 +106,7 @@ vec3 formOf(float n, vec2 uv) {
     float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
     float fill = a < 0.6 ? mix(0.62, 1.0, sqrt(c)) : sqrt(c);
     // Top left, above the title, clear of the card and the paragraph.
-    p = vec3(dir * r * fill * 0.55 + vec2(-1.69, 0.84), (hq(n, 18u) - 0.5) * 0.2);
+    p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
     // A sparse ring, after byotone.com: most of the dust on one thin
@@ -249,7 +249,7 @@ void main() {
   vSpeed = length(u);
   // Gemini: the sparkle takes the logo's colours, blue at its heart and
   // warmer towards its points (coral up, yellow left, green down).
-  vec2 g = (p.xy - vec2(-2.35, 1.46)) / 0.55;
+  vec2 g = (p.xy - vec2(-2.21, 1.56)) / 0.85;
   float ga = atan(g.y, g.x);
   vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
     + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
@@ -570,7 +570,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.bindVertexArray(vaoQuad);
       gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "lightIn"), colours.light);
       // Where each form sits and how much light it casts on the room.
-      const formTarget = target.symbol === 1 ? [-2.35, 1.46, 1.1, 1] : target.symbol === 2 ? [-2.37, 1.32, 1.3, 0.9] : target.symbol === 3 ? [0.35, -0.3, 2.4, 0.35] : [0, 0.1, 1.6, 0.4];
+      const formTarget = target.symbol === 1 ? [-2.21, 1.56, 1.6, 1] : target.symbol === 2 ? [-2.37, 1.32, 1.3, 0.9] : target.symbol === 3 ? [0.35, -0.3, 2.4, 0.35] : [0, 0.1, 1.6, 0.4];
       for (let i = 0; i < 4; i++) colours.form[i] += (formTarget[i] - colours.form[i]) * k;
       gl.uniform4f(uniform(pGlow, "form"), colours.form[0], colours.form[1], colours.form[2], colours.form[3]); gl.uniform1f(uniform(pGlow, "spectrum"), colours.spectrum);
       gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
