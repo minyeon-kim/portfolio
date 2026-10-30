@@ -3002,3 +3002,17 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-next-row { display: block; }
 .dv-next-row .dv-finding { margin-top: 8px; }
 @media (max-width: 47.99rem) { .dv-review-lines li { grid-template-columns: 32px minmax(0, 1fr); } .dv-review-lines li > span:last-child { grid-column: 2; } }
+
+/* Next project, compact: no rule above, a quiet sentence-case label, a
+   smaller deck and a tighter caption, so the end of a case stays short. */
+.more-work { margin-top: clamp(32px, 3vw, 56px); padding-top: 0; border-top: 0; }
+.more-work-label { margin-bottom: 20px; color: var(--muted); font: 500 13px/1.35 var(--font-sans); letter-spacing: 0; text-transform: none; }
+.more-work-deck { --deck-card: clamp(150px, 12vw, 190px); --deck-peek: 38%; --deck-fan: 62%; height: calc(var(--deck-card) * 1.25 + 16px); }
+.more-work-hit, .more-work-cover { border-radius: 16px; }
+.more-work-caption { gap: 6px; margin-top: 16px; }
+.more-work-name { font-size: clamp(22px, 2vw, 28px); }
+.more-work-arrow { width: 20px; height: 20px; flex-basis: 20px; }
+.more-work-description { max-width: 56ch; font-size: 14px; }
+@media (max-width: 47.99rem) { .more-work-deck { --deck-card: min(40vw, 170px); } }
+/* The case sheet stays one colour down to the footer, Next project included (no white-to-grey seam). */
+.case-study:has(.dv) { background: light-dark(#ffffff, var(--bg)); }
