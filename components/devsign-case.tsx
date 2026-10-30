@@ -98,7 +98,11 @@ function LowBadge({ x, n, role }: { x: number; n: number; role: string }) {
 
 function Journey({ journey, numbered }: { journey: Study; numbered?: boolean }) {
   // Coordinates from the Figma emotion curve (1376 x 340 inside the journey panel).
-  const xs = [90, 329, 568, 808, 1047, 1286];
+  // The numbered version stretches the curve towards the panel edges (first
+  // and last step at 40 / 1336), keeping text and stroke widths unscaled.
+  const k = numbered ? 1296 / 1196 : 1;
+  const sx = (x: number) => 688 + (x - 688) * k;
+  const xs = [90, 329, 568, 808, 1047, 1286].map(sx);
   return (
     <div className="dv-journey dv-scroll reveal">
       <svg viewBox="0 0 1376 340" role="img" aria-label={`${journey.steps.join(" → ")}. ${journey.developer}: ${journey.developerLow}. ${journey.designer}: ${journey.designerLow}.`}>
@@ -108,14 +112,16 @@ function Journey({ journey, numbered }: { journey: Study; numbered?: boolean }) 
             <text x={x} y="14" textAnchor="middle" fontSize="13" className="dv-svg-strong">{journey.steps[i]}</text>
           </g>
         ))}
-        <path transform="translate(87.5 125.23)" className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
-        <path transform="translate(87.5 157.52)" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
-        <text x="584" y="115" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
-        <text x="1071" y="211" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
-        {numbered ? <LowBadge x={329} n={2} role="developer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="312" y="269" width="34" height="34" />}
-        <text x="329" y="325" textAnchor="middle" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
-        {numbered ? <LowBadge x={1047} n={1} role="designer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="1030" y="269" width="34" height="34" />}
-        <text x="1047" y="325" textAnchor="middle" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
+        <g transform={`matrix(${k} 0 0 1 ${688 * (1 - k)} 0)`}>
+          <path transform="translate(87.5 125.23)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
+          <path transform="translate(87.5 157.52)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
+        </g>
+        <text x={sx(584)} y="115" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
+        <text x={sx(1071)} y="211" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
+        {numbered ? <LowBadge x={sx(329)} n={2} role="developer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="312" y="269" width="34" height="34" />}
+        <text x={sx(329)} y="325" textAnchor="middle" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
+        {numbered ? <LowBadge x={sx(1047)} n={1} role="designer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="1030" y="269" width="34" height="34" />}
+        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </div>
   );
