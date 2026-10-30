@@ -17,7 +17,8 @@ import { useEffect, useRef } from "react";
 // - About me, teal: a rolling landscape of dots under falling data
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // drawn at the screen's own resolution (DPR up to 2) so the finest dust is a
-// device pixel; 262,144 points on desktop, 102,400 on phones; paused offscreen, hidden or during the page transition, skipped
+// device pixel; 46,656 points on desktop, 22,500 on phones (sparse, after
+// byotone.com); paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
 // ambient light instead).
 
@@ -107,26 +108,23 @@ vec3 formOf(float n, vec2 uv) {
     p = vec3(dir * r * fill * 1.0 + vec2(0.05, -0.42), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
-    // A round galaxy: a bright core in a soft round disc of dust, thinning
-    // outwards, with only a faint swirl in it; turning slowly.
+    // A sparse ring, after byotone.com: most of the dust on one thin
+    // circle, a loose swirl inside it and a little drifting through the
+    // middle; lots of empty space, turning slowly.
     vec2 q;
     float t = hq(n, 11u) * 6.2831853 + time * 0.03;
-    // In the light theme a dense core reads as a dark blot, so the dust
-    // gathers towards the rim instead.
-    if (a < mix(0.16, 0.02, lightTheme)) {
-      q = vec2(cos(t), sin(t)) * 0.22 * pow(hq(n, 12u), 1.4);
-      loose *= 0.3;
-    } else if (a < 0.8) {
-      float rd = 0.12 + 1.0 * (1.0 - exp(-hq(n, 13u) * 2.4)) / (1.0 - exp(-2.4));
-      float r = mix(rd, 0.35 + 0.75 * pow(hq(n, 13u), 0.6), lightTheme);
+    if (a < 0.62) {
+      float r = 1.05 + (hq(n, 13u) - 0.5) * 0.1 + (hq(n, 12u) - 0.5) * 0.05 * sin(t * 5.0 + time * 0.2);
       q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.22;
-    } else {
-      // The faint swirl: dust a little denser along three gentle arms.
-      float r = 0.18 + pow(hq(n, 13u), 0.8) * 0.95;
-      float arm = floor(hq(n, 15u) * 3.0) * 2.0943951 + log(r / 0.2) * 1.6 + time * 0.03 + (hq(n, 14u) - 0.5) * 0.7;
+      loose *= 0.1;
+    } else if (a < 0.85) {
+      float r = 0.25 + pow(hq(n, 13u), 0.7) * 0.75;
+      float arm = floor(hq(n, 15u) * 2.0) * 3.14159 + log(r / 0.25) * 2.0 + time * 0.03 + (hq(n, 14u) - 0.5) * 0.35;
       q = vec2(cos(arm), sin(arm)) * r;
-      loose *= 0.3;
+      loose *= 0.18;
+    } else {
+      q = vec2(cos(t), sin(t)) * 1.3 * sqrt(hq(n, 13u));
+      loose *= 0.5;
     }
     // Centred on the stage (formOf shifts every form 0.35 right, undone here).
     q += vec2(-0.2, 0.0);
@@ -170,8 +168,16 @@ void main() {
 
 // The view: the camera turns a little towards the mouse (cam, -1..1), so
 // near dust slides against far dust and the room reads in depth.
+// Switching state is a journey: the camera flies forward through the dust
+// (move.z) and swings a little sideways (move.xy), and the new form is there
+// when it settles.
 const view = `
+uniform vec3 move;
 vec2 project(vec3 p, vec2 cam, float aspect) {
+  p.xy -= move.xy;
+  p.z += move.z;
+  // Dust the camera has flown past is out of view.
+  if (5.0 - p.z < 0.35) return vec2(9.0);
   float ay = cam.x * 0.22, ax = -cam.y * 0.14;
   p.xz = mat2(cos(ay), -sin(ay), sin(ay), cos(ay)) * p.xz;
   p.yz = mat2(cos(ax), -sin(ax), sin(ax), cos(ax)) * p.yz;
@@ -295,8 +301,10 @@ void main() {
   // Three grains, in CSS pixels: most of it fine dust (about a device pixel
   // on a retina screen), some coarser dust, and the few stars.
   float fine = step(0.42, fract(vSeed * 29.3)) * (1.0 - star) * (1.0 - dark);
-  float size = mix(mix(mix(mix(0.8, 1.0, vDepth), mix(1.0, 1.4, vDepth), dark), mix(0.55, 0.7, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
-  vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star);
+  // Sparse dust, so each grain is a little larger and sized by depth: far
+  // ones small and sharp, near ones large and soft.
+  float size = mix(0.65, 2.2, vDepth * vDepth) * mix(mix(mix(mix(0.9, 1.1, vDepth), mix(1.0, 1.3, vDepth), dark), mix(0.7, 0.85, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
+  vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star) * 2.0;
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
@@ -310,6 +318,9 @@ void main() {
     * smoothstep(clearRect.y - m.y, clearRect.y, s.y) * smoothstep(clearRect.w + m.y, clearRect.w, s.y);
   vFaint *= 1.0 - 0.85 * inside;
   px *= mix(mix(0.8, 1.0, smoothstep(0.3, 0.5, vDepth)), 1.7, vNear);
+  // Flying through: dust grows as the camera nears it.
+  px *= clamp((5.0 - p.z) / max(5.0 - p.z - move.z, 0.35), 1.0, 6.0);
+  vFaint *= 1.0 - smoothstep(4.0, 7.0, (5.0 - p.z) / max(5.0 - p.z - move.z, 0.35));
   gl_PointSize = max(px, 1.0);
 }`;
 
@@ -418,7 +429,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const el = canvas.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 320 : 512;
+    const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 150 : 216;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const gl = el.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "high-performance" });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
@@ -517,6 +528,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const mouse = { x: 9, y: 9, px: 9, py: 9, cx: 0, cy: 0 };
     // The camera's turn, easing after the mouse (centre when it is away).
     const cam = { x: 0, y: 0 };
+    // The journey between states: when it started, and which way it swings.
+    const trip = { at: -1e9, symbol: -1, side: 1 };
     // The last burst: where (clip space), when, how strong.
     const burst = { x: 0, y: 0, at: -1e9, power: 0 };
     const onMove = (event: PointerEvent) => {
@@ -561,6 +574,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
       colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
+      if (target.symbol !== trip.symbol) { if (trip.symbol >= 0) { trip.at = clock; trip.side = -trip.side; } trip.symbol = target.symbol; }
+      const tu = Math.min(1, (clock - trip.at) / 1.6), swell = tu < 1 ? Math.pow(Math.sin(Math.PI * tu), 1.4) : 0;
+      const move = [trip.side * 0.6 * swell, 0.15 * swell, 3.6 * swell];
       const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
       const ck = 1 - Math.exp(-dt / 1.2);
       cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
@@ -579,7 +595,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
-        gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y);
+        gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
         gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
@@ -613,7 +629,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       dustBlend();
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
-      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y);
+      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
