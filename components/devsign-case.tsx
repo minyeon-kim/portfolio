@@ -102,19 +102,19 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
         {xs.map((x, i) => (
           <g key={x}>
             <path d={`M${x + 0.5} 52V322`} className="dv-journey-grid" />
-            <text x={x} y="14" textAnchor="middle" fontSize="13" className="dv-svg-strong">{journey.steps[i]}</text>
+            <text x={x} y="17" textAnchor="middle" fontSize="18" className="dv-svg-strong">{journey.steps[i]}</text>
           </g>
         ))}
         <g transform={`matrix(${k} 0 0 1 ${688 * (1 - k)} 0)`}>
           <path transform="translate(87.5 125.23)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
           <path transform="translate(87.5 157.52)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         </g>
-        <text x={sx(584)} y="115" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
-        <text x={sx(1071)} y="211" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
+        <text x={sx(584)} y="115" fontSize="18" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
+        <text x={sx(1071)} y="211" fontSize="18" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
         <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" />
-        <text x={sx(329)} y="325" textAnchor="middle" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
+        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
         <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" />
-        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
+        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </div>
   );
