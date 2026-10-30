@@ -182,16 +182,18 @@ void main() {
   // The cursor sweeps nearby dust along its motion and swirls it.
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
-  float k = exp(-dot(d, d) / 0.16);
+  // A wide, soft reach, so the cursor moves broad swathes rather than
+  // punching small holes.
+  float k = exp(-dot(d, d) / 0.45);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 1.0 + vec2(-d.y, d.x) * length(mv) * 4.0 + normalize(d + 1e-4) * length(mv) * 1.2) * k * dt * 2.0;
+  u.xy += (mv * 0.8 + vec2(-d.y, d.x) * length(mv) * 2.0 + normalize(d + 1e-4) * length(mv) * 0.8) * k * dt * 2.0;
   // A burst: a ring expanding from where the mouse flicked, throwing the dust
-  // outward like a firework; the ring weakens as it grows.
+  // outward like a firework; a broad ring that travels far and fades slowly.
   vec2 bd = (s - burstAt) * vec2(aspect, 1.0);
-  float bl = length(bd), ring = burstAge * 1.4;
-  float bw = exp(-(bl - ring) * (bl - ring) / 0.012) * burstPower * exp(-burstAge * 1.6);
+  float bl = length(bd), ring = burstAge * 2.4;
+  float bw = exp(-(bl - ring) * (bl - ring) / 0.06) * burstPower * exp(-burstAge * 0.9);
   float jitter = h1(v.x * 37.0 + v.y * 91.0);
-  u.xy += normalize(bd + 1e-4) * bw * (2.6 + 4.0 * jitter) * dt * 10.0;
+  u.xy += normalize(bd + 1e-4) * bw * (2.0 + 3.0 * jitter) * dt * 10.0;
   u.z += (jitter - 0.5) * bw * 20.0 * dt;
   u *= exp(-dt * 0.9);
   o = vec4(u, 1.0);
@@ -502,12 +504,12 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
       mouse.px = mouse.x; mouse.py = mouse.y;
-      // A quick flick sets off a burst (at most every 0.7s), and tells the
+      // A quick flick sets off a burst (at most every 1.2s), and tells the
       // headline so its letters decode as the ring passes them.
       const speed = Math.hypot(vx, vy) / Math.max(dt, 1e-3);
-      if (speed > 2.8 && clock - burst.at > 0.7) {
+      if (speed > 2.8 && clock - burst.at > 1.2) {
         Object.assign(burst, { x: mouse.x, y: mouse.y, at: clock, power: Math.min(1.2, speed / 4) });
-        window.dispatchEvent(new CustomEvent("hero-burst", { detail: { x: mouse.cx, y: mouse.cy, pxPerSecond: (1.4 * height) / 2, power: burst.power } }));
+        window.dispatchEvent(new CustomEvent("hero-burst", { detail: { x: mouse.cx, y: mouse.cy, pxPerSecond: (2.4 * height) / 2, power: burst.power } }));
       }
 
       pass(pVel, V[1], () => {

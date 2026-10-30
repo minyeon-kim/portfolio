@@ -782,3 +782,4 @@ Personas, calmer: no numbers anywhere (journey keeps its emoji only, summary and
 - Fuzzy "complex" reverted (the owner didn't like the blur): headline is plain again, no full stop; "clear" / "명확하게" still resolves last in the scramble, and word matching stays script-agnostic.
 Affinity themes folded into the key problem cards: the separate "Themes → problems" list is gone; each card ends with its theme chips and card counts (13px, ink, sr-only "Grouped from" / "묶인 테마"). Site and Figma.
 Key problem theme chips replaced by one quiet muted line ("테마 · 수동 검토, 직군 간 경계 흐려짐" / "Themes · …", 13px, no counts or pills). Site and Figma.
+- Cursor and burst feel broad, not small dots of rings: cursor reach 0.45 (was 0.16) at gentler strength; burst ring 2.4/s (was 1.4), width 0.06 (was 0.012), fades over ~1s (decay 0.9), at most every 1.2s; headline decode follows the faster ring.
