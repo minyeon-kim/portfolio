@@ -41,12 +41,13 @@ float hq(float n, uint k) {
   return float(v) / 4294967295.0;
 }
 // The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
-// Narrow at the top, so the upper slab reads as a bolt rather than a wide wedge.
-const vec2 BOLT[7] = vec2[7](vec2(270.0, 0.0), vec2(560.0, 0.0), vec2(440.0, 240.0), vec2(650.0, 240.0), vec2(290.0, 625.0), vec2(370.0, 360.0), vec2(150.0, 360.0));
-vec2 boltPoint(vec2 v) { return vec2((v.x - 330.0) * 0.75, 312.0 - v.y) * (1.7 / 625.0); }
+// Traced from the Devsign logo (659×625): an upper slab leaning right, a
+// notch each side where it steps over, and a lower slab tapering to a point.
+const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(460.0, 205.0), vec2(660.0, 225.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(240.0, 220.0), vec2(0.0, 205.0));
+vec2 boltPoint(vec2 v) { return vec2((v.x - 330.0) * 0.9, 312.0 - v.y) * (1.6 / 625.0); }
 bool inBolt(vec2 q) {
   bool inside = false;
-  for (int i = 0, j = 6; i < 7; j = i++) {
+  for (int i = 0, j = 8; i < 9; j = i++) {
     vec2 a = boltPoint(BOLT[i]), b = boltPoint(BOLT[j]);
     if ((a.y > q.y) != (b.y > q.y) && q.x < (b.x - a.x) * (q.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
   }
@@ -80,14 +81,14 @@ vec3 homeOf(vec2 uv) {
     // set above the title, clear of the project window on the right.
     vec2 q;
     if (a < 0.3) {
-      float e = b * 7.0, k = floor(e);
+      float e = b * 9.0, k = floor(e);
       int ki = int(k);
-      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 7]), fract(e));
+      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
       loose *= 0.3;
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 10; t++) {
-        vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.4, 1.75);
+        vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(1.56, 1.64);
         if (inBolt(r)) { q = r; break; }
       }
       loose *= 0.4;
