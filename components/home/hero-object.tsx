@@ -80,18 +80,18 @@ vec3 homeOf(vec2 uv) {
     // both spreading softly like the Gemini sparkle;
     // set above the title, clear of the project window on the right.
     vec2 q;
-    if (a < 0.3) {
+    if (a < 0.1) {
       float e = b * 9.0, k = floor(e);
       int ki = int(k);
       q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
-      loose *= 0.3;
+      loose *= 0.55;
     } else {
       q = vec2(0.0, 0.1);
-      for (int t = 0; t < 10; t++) {
+      for (int t = 0; t < 16; t++) {
         vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(1.56, 1.64);
         if (inBolt(r)) { q = r; break; }
       }
-      loose *= 0.4;
+      loose *= 0.65;
     }
     p = vec3(q + vec2(-0.6, 0.42), (h1(n * 4.4) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
