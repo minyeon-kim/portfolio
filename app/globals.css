@@ -3087,3 +3087,15 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-evidence-stats { padding-top: 0; border-top: 0; }
 /* Text on the case accent: white on the deep light-theme purple, near-black on the pale dark-theme purple (white failed contrast there). */
 .dv-prototype-link, .dv-story-area[data-on] b, .dv-story-item[data-on] .dv-story-change b, .dv-story-points li[data-on] b, .dv-point-title b, .dv-story-switch button[aria-pressed="true"], .dv-checks span { color: light-dark(#ffffff, #120f24); }
+
+/* Prototype link: a quiet outline pill, not a primary button. */
+.dv-prototype-link { padding: 7px 14px; border: 1px solid color-mix(in srgb, var(--case-accent) 55%, transparent); background: transparent; color: var(--case-accent); font-size: 14px; }
+.dv-prototype-link:hover, .dv-prototype-link:focus-visible { background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
+/* Results open with the usability finding. */
+.dv-result-lead { margin-top: 8px; }
+.dv-result-lead + .dv-scores-row { margin-top: 24px; }
+/* Closing zone: less space above the deck; the footer rule spans the full band. */
+.dv > section:last-child { padding-bottom: clamp(56px, 5vw, 80px); }
+.case-study .more-work { padding-top: clamp(48px, 4vw, 64px); }
+.case-study .more-work + .site-footer { padding-top: 24px; border-top: 1px solid var(--ft-line); }
+.more-work + .site-footer .site-footer-bottom { padding-top: 0; border-top: 0; }
