@@ -26,14 +26,14 @@ export function DoubleDiamond({ stages, pivot, labels }: { stages: DiamondStage[
         <path d="M199.5 50V410M1240.5 50V410M720.5 170V290" className="dv-diamond-dash" />
         <text x="111" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">{labels.problem.toUpperCase()}</text>
         <text x="1331" y="238" className="dv-svg-strong" textAnchor="middle" fontSize="20">{labels.solution.toUpperCase()}</text>
-        <text x="720" y="84" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="14">{labels.coreProblem.toUpperCase()}</text>
+        <text x="720" y="84" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="19">{labels.coreProblem.toUpperCase()}</text>
         <text x="460" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">{labels.research.toUpperCase()}</text>
         <text x="980" y="477" className="dv-svg-muted dv-svg-caps" textAnchor="middle" fontSize="18">{labels.design.toUpperCase()}</text>
         {stages.map((stage, i) => (
           <g key={stage.name}>
             <text x={centers[i]} y="200" textAnchor="middle" fontSize="22" className={stage.current ? "dv-svg-accent" : "dv-svg-strong"}>{stage.name.toUpperCase()}</text>
             {stage.methods.map((method, j) => (
-              <text key={method} x={centers[i]} y={226 + j * 22.4} textAnchor="middle" fontSize="14" className="dv-svg-muted">{method}</text>
+              <text key={method} x={centers[i]} y={228 + j * 26} textAnchor="middle" fontSize="19" className="dv-svg-muted">{method}</text>
             ))}
           </g>
         ))}
@@ -41,7 +41,7 @@ export function DoubleDiamond({ stages, pivot, labels }: { stages: DiamondStage[
           <>
             <path d={`M${callout} 312V380`} className="dv-diamond-callout" />
             <circle cx={callout} cy="312" r="3" className="dv-svg-dot" />
-            <text x={callout} y="402" textAnchor="middle" fontSize="14" className="dv-svg-accent dv-svg-regular">{pivot}</text>
+            <text x={callout} y="402" textAnchor="middle" fontSize="19" className="dv-svg-accent dv-svg-regular">{pivot}</text>
           </>
         )}
       </svg>

@@ -133,7 +133,7 @@ export const study = {
       lead: "Desk research showed what hurts: checking and merging. We interviewed four practitioners to see how that slows real teams down.",
       text: "Secondary sources only named the problem. So we asked designers, developers and a PM, for 60 minutes each, how they actually pick one of several AI drafts and who makes the final call. All four gave the same answer: everyone re-checks AI output, but no one owns the decision.",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "A remote interview session: a shared FigJam board with sticky notes next to participant video tiles" },
-      questionsLabel: "What we wanted to know",
+      questionsLabel: "Research questions",
       questions: [
         "Where do AI outputs get stuck between designers and developers?",
         "When design and build differ, who decides, and in which channel?",
@@ -215,7 +215,7 @@ export const study = {
     },
     core: {
       method: "Problem definition",
-      title: "Core problem",
+      title: "Problem statement",
       lead: "Most AI output has no place to comment or discuss, so a team’s discussion never builds up.",
       text: "Designers and developers get stuck at different steps, but for this same reason: who decided what, and why, gets buried in chat, and design and build slowly drift apart. So we chose to let teams discuss right on the AI output, with every step in one place.",
     },
@@ -239,7 +239,7 @@ export const study = {
       title: "Value proposition canvas",
       lead: "We then checked each idea against a real user pain, to keep only the ones users needed.",
       text: "The circle on the right holds what users are trying to do, what gets in their way (pains) and what they hope for (gains), all from the interviews. The square on the left holds, for each idea, the pain it relieves, so every idea is pinned to a pain. Grouping ideas that aimed at the same pain left five candidates, A to E.",
-      candidatesLabel: "Each candidate and the pain it came from",
+      candidatesLabel: "Feature candidates and the pain points they address",
       candidates: [
         { id: "A", name: "Decision log & history", kind: "Pain", pain: "Outputs get shared, but not why they were decided, so people read them differently and dig through old chats.", to: "History" },
         { id: "B", name: "Risk-based review gate", kind: "Pain", pain: "Developers ship first, so the designer’s moment to step in disappears.", to: "Conflict Points" },
@@ -386,7 +386,7 @@ export const study = {
       lead: "With a practicing designer, we cut the parts users had to read.",
       text: "Why: in the usability test, the designer read the screens as a developer tool. So with a practicing designer we voted on 5 prototype screens (3 sticker colors, 3 votes each) to decide what to remove.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "Co-design session on a video call, voting with colored stickers on prototype screens" },
-      agreedLabel: "What we agreed: take things away instead of adding",
+      agreedLabel: "Co-design outcome: remove, don’t add",
       agreed: ["Four panels became three tabs.", "App screens we used to open one at a time on the canvas moved onto one board.", "The AI panel starts folded."],
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: a four-panel developer layout", text: "A four-panel layout like a developer tool, showing everything at once." },
       after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "Three tabs and a board of app screens.", text: " The AI panel starts folded." },
@@ -400,7 +400,7 @@ export const study = {
   takeaway: {
     headline: "A collaboration tool for the AI era should help teams decide, not just make.",
     text: "Making drafts is already fast. Teams get stuck comparing them, merging them, and recording who decided what and why. Devsign turns that step into one flow.",
-    reviewTitle: "What I learned",
+    reviewTitle: "Key learnings",
     review: [
       { title: "The problem starts after AI makes something", body: "Research showed teams stall at comparing, merging and recording decisions, not at generating. So all four features help with that step." },
       { title: "Changed the structure to fit the test", body: "The designer and the developer both called the shared review screen “the other team’s tool,” so we split it into a decision screen for the designer and a fix screen for the developer." },
