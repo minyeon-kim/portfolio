@@ -147,6 +147,18 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       copy.querySelectorAll("img").forEach((img) => { img.loading = "eager"; img.decoding = "sync"; });
       // Straight into the stage: moving it there later would restart its loops.
       stageOf(layer).appendChild(copy);
+      // The card's own surface (e.g. Gemini's bright blue) laid under the
+      // copy, fading into the layer's darker opener ground as it grows, so the
+      // colour changes gradually instead of switching on the first frame.
+      const card = source.closest<HTMLElement>(".home-device");
+      const surface = card ? getComputedStyle(card).backgroundImage : "none";
+      if (surface && surface !== "none") {
+        const tint = document.createElement("div");
+        tint.className = "project-zoom-tint";
+        tint.style.backgroundImage = surface;
+        layer.insertBefore(tint, layer.firstChild);
+        tint.animate([{ opacity: 1 }, { opacity: 1, offset: 0.25 }, { opacity: 0 }], { duration: grow + 600, easing: "ease-in-out", fill: "both" });
+      }
       document.body.appendChild(layer);
       syncAnimations(source, copy);
       const posed = source.matches(".gemini-device, .home-device-window") ? source : source.querySelector<HTMLElement>(".gemini-device, .home-device-window");
