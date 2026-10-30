@@ -3079,3 +3079,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .more-work + .site-footer .site-footer-headline { font-size: clamp(28px, 3vw, 44px); }
 .more-work + .site-footer .site-footer-bottom { margin-top: clamp(48px, 4.5vw, 64px); }
 .case-study .more-work .more-work-name { font-size: clamp(24px, 2.2vw, 32px); }
+/* After the Next project deck the footer is only its quiet bottom row (the ask and the pills were too much for the closing zone). */
+.more-work + .site-footer .site-footer-top { display: none; }
+.more-work + .site-footer .site-footer-bottom { margin-top: 0; padding-top: 24px; border-top: 1px solid var(--ft-line); }
