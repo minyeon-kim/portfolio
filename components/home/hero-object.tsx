@@ -492,14 +492,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (!visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation")) { mouse.px = mouse.x; mouse.py = mouse.y; return; }
       clock += dt;
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-      const k = 1 - Math.exp(-dt / 0.5);
+      const k = 1 - Math.exp(-dt / 0.35);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
-      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.6));
+      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
@@ -517,7 +517,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
-        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
