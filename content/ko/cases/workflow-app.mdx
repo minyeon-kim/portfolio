@@ -88,12 +88,13 @@ export const study = {
         { value: "29%", text: "AI 결과를 믿는 개발자 비율. AI를 쓰는 비율은 80%다." },
         { value: "66%", text: "‘거의 맞지만 조금 틀린’ AI 코드를 가장 큰 불만으로 꼽은 개발자 비율." },
       ],
-      communityLabel: "커뮤니티 글 · 같은 문제 세 가지가 반복됐다",
+      communityLabel: "커뮤니티 글 · Reddit, Hacker News, Medium 100여 개",
       groups: [
-        { name: "결정의 흔적이 사라진다", detail: "최종본과 맥락이 도구 사이에서 사라진다." },
-        { name: "역할이 부딪힌다", detail: "디자인·개발 경계가 흐려진다." },
-        { name: "결국 사람이 다시 본다", detail: "검수는 사람 몫, AI는 뉘앙스를 놓친다." },
+        { name: "결정의 흔적이 사라진다", detail: "최종본과 맥락이 도구 사이에서 사라진다.", quote: "The reviewer asks ‘why did you structure it this way.’ The author says ‘the AI suggested it.’ They don’t know why.", source: "r/cscareerquestions" },
+        { name: "역할이 부딪힌다", detail: "디자인·개발 경계가 흐려진다.", quote: "An engineer opens a design branch and can’t tell which parts are deliberate design decisions and which parts the agent generated.", source: "r/DesignSystems" },
+        { name: "결국 사람이 다시 본다", detail: "검수는 사람 몫, AI는 뉘앙스를 놓친다.", quote: "Claude generated a button… But it wasn’t their button. Wrong blue. Wrong radius. Wrong spacing.", source: "Medium · “Your Design System Isn’t AI-Readable Yet”" },
       ],
+      boardsLink: "리서치 보드 전체 보기 ↗",
       boards: { src: "/images/devsign/research-boards.webp", width: 4096, height: 1310, caption: "리서치 보드 · Reddit, Hacker News, Medium 글을 패턴별로 정리" },
     },
     q2: {
