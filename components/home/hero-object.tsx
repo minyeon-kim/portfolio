@@ -140,21 +140,21 @@ vec2 strandField(vec2 p) {
 // Where each particle leans. Not a cloud of separate grains: the particles
 // share a few thousand seeds spread over the form, and each lies some way
 // along a fine strand flowing out of its seed, so the dust reads as threads
-// with dark gaps between them rather than sprayed powder. The About
-// landscape is already a grid of lines and keeps its own points.
+// with dark gaps between them rather than sprayed powder.
 vec3 homeOf(vec2 uv) {
   float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
-  if (symbol > 2.5) return formOf(n, uv);
+  // Strands are for the landing galaxy; each case's form keeps its own dust so
+  // the logo or landscape reads clearly.
+  if (symbol > 0.5) return formOf(n, uv);
   float seed = floor(hq(n, 30u) * 3000.0);
   vec3 p = formOf(seed, uv);
-  // On the galaxy the strands wind round its core, so it stays round; on a
-  // case's form they stay short so the form still reads.
-  float len = (0.2 + 0.5 * hq(seed, 32u)) * hq(n, 31u) * (symbol > 0.5 ? 0.3 : 1.0);
+  // The strands wind round the galaxy's core, so it stays round.
+  float len = (0.2 + 0.5 * hq(seed, 32u)) * hq(n, 31u);
   vec2 q = p.xy;
   for (int k = 0; k < 6; k++) {
     vec2 r = q - vec2(0.0, 0.1);
     vec2 orbit = vec2(-r.y, r.x) / max(length(r), 0.2);
-    vec2 dir = symbol > 0.5 ? strandField(q) : orbit * 1.6 + strandField(q) * 0.5;
+    vec2 dir = orbit * 1.6 + strandField(q) * 0.5;
     q += normalize(dir + 1e-4) * len / 6.0;
   }
   vec3 hair = vec3(hq(n, 33u), hq(n, 34u), hq(n, 35u)) - 0.5;
