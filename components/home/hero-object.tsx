@@ -103,7 +103,8 @@ vec3 formOf(float n, vec2 uv) {
     vec2 dir = vec2(cos(t), sin(t));
     float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
     float fill = a < 0.6 ? mix(0.62, 1.0, sqrt(c)) : sqrt(c);
-    p = vec3(dir * r * fill * 1.15, (hq(n, 18u) - 0.5) * 0.2);
+    // Set lower than the other forms, under the paragraph rather than behind it.
+    p = vec3(dir * r * fill * 1.0 + vec2(0.05, -0.42), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
     // A round galaxy: a bright core in a soft round disc of dust, thinning
@@ -226,7 +227,7 @@ void main() {
   vSpeed = length(u);
   // Gemini: the sparkle takes the logo's colours, blue at its heart and
   // warmer towards its points (coral up, yellow left, green down).
-  vec2 g = p.xy - vec2(0.35, 0.12);
+  vec2 g = p.xy - vec2(0.43, -0.55);
   float ga = atan(g.y, g.x);
   vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
     + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
@@ -289,10 +290,10 @@ void main() {
   vFaint *= min(px, 1.0);
   // The case's paragraph stays readable: dust behind it (with a soft margin)
   // all but disappears. clearRect is its box in clip space (x0, y0, x1, y1).
-  vec2 m = vec2(0.04, 0.07);
+  vec2 m = vec2(0.09, 0.14);
   float inside = smoothstep(clearRect.x - m.x, clearRect.x, s.x) * smoothstep(clearRect.z + m.x, clearRect.z, s.x)
     * smoothstep(clearRect.y - m.y, clearRect.y, s.y) * smoothstep(clearRect.w + m.y, clearRect.w, s.y);
-  vFaint *= 1.0 - 0.92 * inside;
+  vFaint *= 1.0 - 0.85 * inside;
   px *= mix(mix(0.8, 1.0, smoothstep(0.3, 0.5, vDepth)), 1.7, vNear);
   gl_PointSize = max(px, 1.0);
 }`;
