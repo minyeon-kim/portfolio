@@ -49,7 +49,7 @@ export const study = {
     headlineAccent: "Working together got harder.",
     process: {
       title: "Process · Double Diamond",
-      body: "AI collaboration had little research behind it, so we went wide first, then narrowed. We changed direction once, in Develop: building our own versions with AI showed that merging took longer than making, so we dropped the AI mediator idea and focused on merging.",
+      body: "Little research looked at how teams work together with AI, so we started broad and narrowed down. We changed course once, in Develop. Building our own versions with AI, we spent longer merging them than making them, so we dropped the AI-mediator idea and focused on merging.",
       stages: [
         { name: "Discover", methods: ["Desk research", "Competitive analysis", "In-depth interview"] },
         { name: "Define", methods: ["Affinity mapping", "Persona & journey map", "How might we"] },
@@ -267,11 +267,17 @@ export const study = {
       text: "Designer A merges drafts, designer B decides on a request, developer C fixes and sends it. B and C see the same request from opposite sides, so neither has to explain it again in chat.",
       image: { src: "/images/devsign/user-flow.webp", width: 2400, height: 848, alt: "User flow in three swimlanes, one per role, meeting at a shared change request" },
     },
+    system: {
+      method: "Structure",
+      title: "Design system",
+      lead: "One token file set the rules for every screen.",
+      text: "Colour, spacing, shape and components live in one file that every page follows: a dark palette with a single mint primary (violet only on the design canvas), 32px controls, 12px gaps, 8 and 12px corners, built on shadcn/ui. Every panel opens the same way, beside the work rather than over it.",
+    },
   },
   deliver: {
     method: "Final design",
     title: "Prototype",
-    openLabel: "Open in the prototype ↗",
+    openLabel: "Try the live prototype ↗",
     lead: "One place to compare, decide and keep why.",
     features: [
       {
@@ -320,8 +326,14 @@ export const study = {
       method: "Testing",
       title: "Usability test",
       lead: "Both saw the value. Neither could finish alone.",
-      processLabel: "Process",
-      process: "1 designer and 1 developer · 7 tasks, twice each.",
+      processLabel: "Protocol",
+      protocol: [
+        { label: "Participants", value: "1 designer, 1 developer" },
+        { label: "Tasks", value: "7 tasks, each done twice" },
+        { label: "Measures", value: "Help needed on the first try (0–3), SUS, and a 5-point rating for “easier to find gaps”" },
+      ],
+      scenariosLabel: "Scenarios",
+      scenarioWord: "Scenario",
       scenarios: [
         { role: "Designer", feature: "Merge Studio", task: "Merge dashboard drafts A and B (2 vs 3 columns, CTA colour).", actions: "Compare, combine, save" },
         { role: "Designer", feature: "Conflict Points", task: "Review a mobile layout where the 2-column design overlaps in the build.", actions: "Compare, review, approve" },
@@ -391,8 +403,8 @@ export const study = {
 
 <DevsignCase study={study}>
 <TLDR>
-- **Problem** Both roles build with AI, but results and the reasons behind them are scattered across tools — so agreeing on one version still happens over chat, and design–build gaps surface only after release.
-- **Solution** One workspace from comparing drafts to a recorded decision: merge drafts by area, send build gaps to one decision-maker, and keep every decision with its screen.
-- **Impact** Scattered chat decisions became one traceable flow — in testing, both roles expected finding design–code gaps and tracing changes to get easier (5.0/5).
+- **Problem** Designers and developers both build with AI now, but the drafts and the reasons behind them end up in different tools. Teams still settle on one version in chat, and gaps between design and build show up after release.
+- **Solution** One workspace that takes a team from comparing drafts to a recorded decision. Drafts merge area by area, each build gap goes to one person who decides, and every decision stays with its screen.
+- **Impact** Decisions that used to scatter across chat now follow one path you can trace. In testing, both participants expected design–code gaps and the reasons for changes to be easier to find (5.0/5).
 </TLDR>
 </DevsignCase>

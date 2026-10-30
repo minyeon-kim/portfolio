@@ -2933,3 +2933,25 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-scenario-kicker { color: var(--case-accent); font-size: 13px; font-weight: 500; line-height: 1.35; }
 .dv-scenario-task { font-size: 15px; font-weight: 500; line-height: 1.45; }
 .dv-scenario-actions { color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.4; }
+
+/* Usability protocol: three labelled facts beside the photo, then the scenarios as cards. */
+.dv-protocol { margin-top: 12px; border-top: 1px solid var(--dv-line); }
+.dv-protocol > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; padding-block: 16px; border-bottom: 1px solid var(--dv-line); }
+.dv-protocol dt { color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.5; }
+.dv-protocol dd { margin: 0; font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-scenarios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 16px; border-top: 0; }
+.dv-scenarios li { gap: 8px; padding: 24px; border: 0; border-radius: 16px; background: var(--dv-alt); }
+.dv-scenarios strong { font-size: 18px; font-weight: 600; line-height: 1.4; }
+.dv-scenario-task { color: var(--dv-ink); font-size: 16px; }
+.dv-scenario-actions { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--dv-line); }
+/* Scores read as a centred row of four. */
+.dv-scores-row li { align-items: center; text-align: center; }
+.dv-scores-row li > div:last-child { align-items: center; }
+/* Deliver: tighter band and a shorter scroll per feature. */
+.dv-section.dv-band { padding-block: 112px; }
+.dv-story-item { min-height: 50vh; }
+.dv-story-iteration .dv-story-item { min-height: 40vh; }
+.dv-prototype-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 999px; background: var(--case-accent); color: #fff; font-size: 15px; font-weight: 500; line-height: 1.3; text-decoration: none; }
+.dv-prototype-link:hover, .dv-prototype-link:focus-visible { background: color-mix(in srgb, var(--case-accent) 86%, #000); }
+@media (max-width: 63.99rem) { .dv-scenarios { grid-template-columns: 1fr; } }
+@media (max-width: 47.99rem) { .dv-section.dv-band { padding-block: 80px; } }

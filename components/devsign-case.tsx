@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverStory, IterationStory } from "@/components/devsign-story";
+import { DeliverStory, IterationStory, PrototypeLink } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -533,12 +533,20 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Block {...develop.flow} ff={ff} />
             <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
           </div>
+          {/* Shown once its capture is added (`develop.system.image`). */}
+          {develop.system?.image && (
+            <div className="dv-gap-96">
+              <Block {...develop.system} ff={ff} />
+              <Figure img={develop.system.image} className="dv-board dv-system dv-gap-40" />
+            </div>
+          )}
         </div>
         </>}
       </Section>
 
       <Section id="deliver" title="Deliver" band>
         <Block {...deliver} ff={ff} />
+        {ff && deliver.openLabel && <p className="dv-gap-24 reveal"><PrototypeLink label={deliver.openLabel} /></p>}
         <div className="dv-gap-64">
           {deliver.changes ? (
             <ol className="dv-points dv-changes" style={{ "--n": deliver.changes.length } as React.CSSProperties}>
@@ -550,7 +558,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </li>
               ))}
             </ol>
-          ) : ff ? <DeliverStory features={deliver.features} openLabel={deliver.openLabel} />
+          ) : ff ? <DeliverStory features={deliver.features} />
             : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
         </div>
       </Section>
@@ -563,28 +571,36 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         ) : <Block {...testing} id="testing-title" />}
         <div className={ff ? "dv-gap-96" : "dv-gap-72"}>
-          {/* With `process` and `result`: how the test ran beside the photo, then
-              the four scores in one row with what they meant. */}
-          {testing.usability.process ? <>
+          {/* With a `protocol`: how the test ran beside the photo, the scenarios
+              as cards, then the four scores in one row with what they meant. */}
+          {testing.usability.protocol ? <>
           <Block {...testing.usability} text={undefined} ff={ff} />
           <div className="dv-media-row dv-gap-40">
             <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />
             <div>
               <p className="dv-caps reveal">{testing.usability.processLabel}</p>
-              <p className="dv-body reveal">{testing.usability.process}</p>
-              {testing.usability.scenarios && (
-                <ol className="dv-scenarios">
-                  {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
-                    <li key={sc.task} className="reveal">
-                      <span className="dv-scenario-kicker">{pad(i + 1)} · {sc.role} · {sc.feature}</span>
-                      <span className="dv-scenario-task">{sc.task}</span>
-                      <span className="dv-scenario-actions">{sc.actions}</span>
-                    </li>
-                  ))}
-                </ol>
-              )}
+              <dl className="dv-protocol">
+                {testing.usability.protocol.map((row: { label: string; value: string }) => (
+                  <div key={row.label} className="reveal"><dt>{row.label}</dt><dd>{row.value}</dd></div>
+                ))}
+              </dl>
             </div>
           </div>
+          {testing.usability.scenarios && (
+            <div className="dv-gap-48">
+              <p className="dv-caps reveal">{testing.usability.scenariosLabel}</p>
+              <ol className="dv-scenarios">
+                {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
+                  <li key={sc.task} className="reveal">
+                    <span className="dv-scenario-kicker">{testing.usability.scenarioWord} {pad(i + 1)}</span>
+                    <strong>{sc.role} · {sc.feature}</strong>
+                    <span className="dv-scenario-task">{sc.task}</span>
+                    <span className="dv-scenario-actions">{sc.actions}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           <div className="dv-gap-64">
             <p className="dv-caps reveal">{testing.usability.resultLabel}</p>
             <ul className="dv-scores dv-scores-row">

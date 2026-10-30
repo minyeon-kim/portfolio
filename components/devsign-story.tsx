@@ -54,8 +54,13 @@ function Progress({ count, active }: { count: number; active: number }) {
 
 type Feature = { kicker: string; title: string; body: string; points: string[]; src: string; width?: number; height?: number; alt?: string; areas: Box[] };
 
-export function DeliverStory({ features, openLabel }: { features: Feature[]; openLabel: string }) {
+// One way into the live prototype for the whole Deliver section, in the site's language.
+export function PrototypeLink({ label }: { label: string }) {
   const locale = useLocale();
+  return <a className="dv-prototype-link press" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{label}</a>;
+}
+
+export function DeliverStory({ features }: { features: Feature[] }) {
   const { active, items } = useActiveItem(features.length);
   // The hovered point belongs to one feature; a newly active feature starts at its first point.
   const [hovered, setHovered] = useState({ feature: 0, point: 0 });
@@ -91,7 +96,6 @@ export function DeliverStory({ features, openLabel }: { features: Feature[]; ope
                   </li>
                 ))}
               </ol>
-              <a className="dv-story-link" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{openLabel}</a>
             </div>
           </li>
         ))}
