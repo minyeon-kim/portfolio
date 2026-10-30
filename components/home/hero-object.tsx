@@ -130,35 +130,9 @@ vec3 formOf(float n, vec2 uv) {
   loose *= mix(1.0, mix(0.22, 1.0, step(0.66, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
-// A slow, swirling field the strands follow (a stream function's curl, so
-// strands curve without bunching).
-vec2 strandField(vec2 p) {
-  float t = time * 0.04;
-  return vec2(cos(p.y * 1.3 + t) + 0.6 * cos(p.y * 2.9 - p.x * 1.1 + 1.7),
-              -cos(p.x * 1.2 - t) - 0.6 * cos(p.x * 2.6 + p.y * 1.4 + 0.4));
-}
-// Where each particle leans. Not a cloud of separate grains: the particles
-// share a few thousand seeds spread over the form, and each lies some way
-// along a fine strand flowing out of its seed, so the dust reads as threads
-// with dark gaps between them rather than sprayed powder.
+// Where each particle leans.
 vec3 homeOf(vec2 uv) {
-  float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
-  // Strands are for the landing galaxy; each case's form keeps its own dust so
-  // the logo or landscape reads clearly.
-  if (symbol > 0.5) return formOf(n, uv);
-  float seed = floor(hq(n, 30u) * 3000.0);
-  vec3 p = formOf(seed, uv);
-  // The strands wind round the galaxy's core, so it stays round.
-  float len = (0.2 + 0.5 * hq(seed, 32u)) * hq(n, 31u);
-  vec2 q = p.xy;
-  for (int k = 0; k < 6; k++) {
-    vec2 r = q - vec2(0.0, 0.1);
-    vec2 orbit = vec2(-r.y, r.x) / max(length(r), 0.2);
-    vec2 dir = orbit * 1.6 + strandField(q) * 0.5;
-    q += normalize(dir + 1e-4) * len / 6.0;
-  }
-  vec3 hair = vec3(hq(n, 33u), hq(n, 34u), hq(n, 35u)) - 0.5;
-  return vec3(q, p.z) + hair * 0.025;
+  return formOf(floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE, uv);
 }
 // A swirling, divergence-free flow (ABC flow, two octaves).
 vec3 flow(vec3 p) {
