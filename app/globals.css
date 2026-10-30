@@ -3188,3 +3188,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-personas-short .dv-persona-context { color: var(--dv-muted); }
 .dv-needs td:last-child { color: var(--dv-ink); }
 .dv-needs :is(td, th):nth-child(2) { font-weight: 500; }
+
+/* Key problem cards carry the affinity themes they came from (card counts). */
+.dv-problems .dv-problem-themes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.dv-problem-themes .dv-theme-chip { padding: 5px 12px; color: var(--dv-ink); font-size: 13px; }
