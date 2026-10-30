@@ -2,8 +2,11 @@
 
 import { useLayoutEffect } from "react";
 
-const STEP_MS = 90; // stagger between items that come into view together
-const MAX_STEPS = 4; // so nothing waits more than ~0.4s
+const STEP_MS = 60; // stagger between groups that come into view together
+const MAX_STEPS = 3; // so nothing waits more than ~0.2s
+// A text block (label, heading, body) rises as one piece instead of line by
+// line (class feedback: sections should come up together, at one pace).
+const GROUP = ".dv-block, [data-reveal-group]";
 
 // Fades `.reveal` elements in as they scroll into view. Elements that enter
 // in the same moment appear one after another. Everything stays visible until
@@ -38,12 +41,20 @@ export function RevealObserver() {
               a.boundingClientRect.top - b.boundingClientRect.top ||
               a.boundingClientRect.left - b.boundingClientRect.left,
           );
-        entering.forEach((e, i) => {
-          show(e.target as HTMLElement, Math.min(i, MAX_STEPS) * STEP_MS);
-          observer.unobserve(e.target);
-        });
+        let step = 0;
+        for (const e of entering) {
+          const el = e.target as HTMLElement;
+          if (el.dataset.shown !== undefined) continue;
+          const group = el.closest<HTMLElement>(GROUP);
+          const members = group ? [...group.querySelectorAll<HTMLElement>(".reveal:not([data-shown])")] : [el];
+          const delay = Math.min(step++, MAX_STEPS) * STEP_MS;
+          for (const m of members) {
+            show(m, delay);
+            observer.unobserve(m);
+          }
+        }
       },
-      { rootMargin: "0px 0px -10% 0px" },
+      { rootMargin: "0px 0px -4% 0px" },
     );
 
     const watch = (scope: ParentNode) => {
@@ -70,10 +81,13 @@ export function RevealObserver() {
       for (const el of els) el.style.transition = "";
       requestAnimationFrame(() => {
         let step = 0;
+        const delays = new Map<Element, number>();
         for (const el of els) {
           const box = el.getBoundingClientRect();
           if (box.top < window.innerHeight && box.bottom > 0) {
-            show(el, Math.min(step++, MAX_STEPS) * STEP_MS);
+            const key = el.closest(GROUP) ?? el;
+            if (!delays.has(key)) delays.set(key, Math.min(step++, MAX_STEPS) * STEP_MS);
+            show(el, delays.get(key));
           } else {
             observer.observe(el);
           }
