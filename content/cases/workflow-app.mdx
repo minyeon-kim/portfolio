@@ -322,6 +322,11 @@ export const study = {
       lead: "Both saw the value. Neither could finish alone.",
       processLabel: "Process",
       process: "1 designer and 1 developer · 7 tasks, twice each.",
+      scenarios: [
+        { role: "Designer", feature: "Merge Studio", task: "Merge dashboard drafts A and B (2 vs 3 columns, CTA colour).", actions: "Compare, combine, save" },
+        { role: "Designer", feature: "Conflict Points", task: "Review a mobile layout where the 2-column design overlaps in the build.", actions: "Compare, review, approve" },
+        { role: "Developer", feature: "Conflict Points", task: "Fix a mobile grid overlap caused by CSS constraints.", actions: "Find the cause, fix, request approval" },
+      ],
       resultLabel: "Results",
       result: "Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },

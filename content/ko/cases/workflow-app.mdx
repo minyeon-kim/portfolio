@@ -325,6 +325,11 @@ export const study = {
       lead: "두 직군 모두 가치는 알아봤지만, 혼자 끝내지는 못했다.",
       processLabel: "진행",
       process: "디자이너 1명과 개발자 1명 · 과제 7개 × 2회.",
+      scenarios: [
+        { role: "디자이너", feature: "Merge Studio", task: "대시보드 시안 A/B 병합 (2열/3열, CTA 컬러).", actions: "비교·조합·저장" },
+        { role: "디자이너", feature: "Conflict Points", task: "2열 디자인이 구현에서 카드가 겹친 모바일 레이아웃 검토.", actions: "비교·검토·승인" },
+        { role: "개발자", feature: "Conflict Points", task: "그리드 구조와 CSS 제약으로 생긴 모바일 그리드 겹침 수정.", actions: "원인 분석·수정·승인 요청" },
+      ],
       resultLabel: "결과",
       result: "승인 흐름에서 누구 차례인지가 안 보였고, 디자이너에게는 개발 도구처럼 읽혔다. 콘셉트가 아니라 레이아웃과 용어의 문제였다. 가치는 전달됐기 때문에 기능은 그대로 두었다.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "사용성 테스트 중 노트북으로 프로토타입을 사용하는 참가자 두 명" },

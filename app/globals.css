@@ -2926,3 +2926,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-scores-row .dv-donut-value-text { font-size: 22px; }
 .dv-result { margin-top: 24px; }
 @media (max-width: 63.99rem) { .dv-scores-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; } }
+
+/* Usability test scenarios under the process line. */
+.dv-scenarios { margin-top: 20px; border-top: 1px solid var(--dv-line); }
+.dv-scenarios li { display: flex; flex-direction: column; gap: 4px; padding-block: 14px; border-bottom: 1px solid var(--dv-line); }
+.dv-scenario-kicker { color: var(--case-accent); font-size: 13px; font-weight: 500; line-height: 1.35; }
+.dv-scenario-task { font-size: 15px; font-weight: 500; line-height: 1.45; }
+.dv-scenario-actions { color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.4; }
