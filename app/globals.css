@@ -3180,3 +3180,11 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-low-badge { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; background: var(--dv-role); color: light-dark(#ffffff, #120f24); font-size: 12px; font-weight: 600; vertical-align: 2px; }
 .dv-journey-badge text { font-size: 11px; }
 .dv-personas-short .dv-persona-context { font-size: 16px; }
+
+/* Persona cards, two weights only: 600 for the small labels, 500 for the
+   rest; colour (muted vs ink) does the ranking instead of boldness. */
+.dv-persona :is(.dv-caps, .dv-needs th) { font-weight: 600; }
+.dv-persona :is(.dv-persona-name, .dv-persona-bio, .dv-persona-quote, .dv-persona-context, .dv-needs td, .dv-needs strong) { font-weight: 500; }
+.dv-personas-short .dv-persona-context { color: var(--dv-muted); }
+.dv-needs td:last-child { color: var(--dv-ink); }
+.dv-needs :is(td, th):nth-child(2) { font-weight: 500; }
