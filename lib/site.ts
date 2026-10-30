@@ -3,7 +3,7 @@
 export const site = {
   name: "Minyeon Kim",
   positioning:
-    "Product designer with a cybersecurity background, connecting research, design, and engineering to bring ideas to life with AI.",
+    "Making complex systems clear. Product designer who builds with AI, from research to a working prototype, with a background in cybersecurity.",
   resumeUrl: "/resume.pdf", // TODO: add public/resume.pdf
   email: "minyeon.kim3@gmail.com",
   linkedinUrl: "https://www.linkedin.com/in/minyeon-kim-56b21228a/",
