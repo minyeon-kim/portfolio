@@ -30,6 +30,7 @@ const common = `
 uniform float time;
 uniform float symbol;
 uniform float SIZE;
+uniform float lightTheme;  // 1 in the light theme
 uniform float focus;  // 0.85 on the landing galaxy, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
 // An integer hash (PCG): sin() above loses precision for large n, which
@@ -83,16 +84,16 @@ vec3 formOf(float n, vec2 uv) {
       float e = b * 9.0, k = floor(e);
       int ki = int(k);
       q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
-      loose *= 0.55;
+      loose *= 0.45;
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 16; t++) {
         vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(1.56, 1.64);
         if (inBolt(r)) { q = r; break; }
       }
-      loose *= 0.65;
+      loose *= 0.45;
     }
-    p = vec3(q + vec2(-0.6, 0.42), (h1(n * 4.4) - 0.5) * 0.2);
+    p = vec3(q + vec2(-0.78, 0.4), (hq(n, 17u) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
     // The Gemini sparkle: a four-point star with concave sides, its edge
     // drawn densely and its body filled more lightly.
@@ -107,11 +108,14 @@ vec3 formOf(float n, vec2 uv) {
     // outwards, with only a faint swirl in it; turning slowly.
     vec2 q;
     float t = hq(n, 11u) * 6.2831853 + time * 0.03;
-    if (a < 0.16) {
+    // In the light theme a dense core reads as a dark blot, so the dust
+    // gathers towards the rim instead.
+    if (a < mix(0.16, 0.02, lightTheme)) {
       q = vec2(cos(t), sin(t)) * 0.22 * pow(hq(n, 12u), 1.4);
       loose *= 0.3;
     } else if (a < 0.8) {
-      float r = 0.12 + 1.0 * (1.0 - exp(-hq(n, 13u) * 2.4)) / (1.0 - exp(-2.4));
+      float rd = 0.12 + 1.0 * (1.0 - exp(-hq(n, 13u) * 2.4)) / (1.0 - exp(-2.4));
+      float r = mix(rd, 0.35 + 0.75 * pow(hq(n, 13u), 0.6), lightTheme);
       q = vec2(cos(t), sin(t)) * r;
       loose *= 0.22;
     } else {
@@ -123,7 +127,7 @@ vec3 formOf(float n, vec2 uv) {
     }
     // Centred on the stage (formOf shifts every form 0.35 right, undone here).
     q += vec2(-0.2, 0.0);
-    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.25);
+    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.9);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -208,7 +212,7 @@ float pools(vec2 s, float aspect, float time) {
 const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr;
-out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
+out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
   float i = float(gl_VertexID);
@@ -246,6 +250,9 @@ void main() {
   vSpec = mix(vSpec, 0.8, galaxy);
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
+  // Depth of field: dust nearer than the form's plane grows large, soft and
+  // faint; dust beyond it shrinks and stays crisp.
+  vNear = smoothstep(0.5, 0.75, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06);
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat >= 0.82 ? 0.3 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
@@ -274,23 +281,24 @@ void main() {
   float px = (size * mix(1.0, 1.1, light) + vSize * mix(3.0, 1.5, light)) * dpr;
   // Below a device pixel a point can't shrink, so it fades instead.
   vFaint *= min(px, 1.0);
+  px *= mix(mix(0.85, 1.0, smoothstep(0.3, 0.5, vDepth)), 2.6, vNear);
   gl_PointSize = max(px, 1.0);
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
-in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
+in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
   // A soft core; a flaring star shows a faint four-point glint.
-  float core = smoothstep(0.5, 0.0, length(q) * mix(1.0, 3.0, vSize));
+  float core = smoothstep(0.5, 0.5 * vNear * 0.8, length(q) * mix(1.0, 3.0, vSize));
   float rays = 0.5 * vSize * (exp(-abs(q.x) * 60.0) + exp(-abs(q.y) * 60.0)) * smoothstep(0.5, 0.1, length(q));
   float a = min(core + rays, 1.0) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
-  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
+  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight * mix(1.0, 0.35, vNear);
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
@@ -471,7 +479,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
-        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
