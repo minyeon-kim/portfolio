@@ -2915,3 +2915,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-features .dv-feature-origin span + span { color: var(--dv-muted); }
 .dv-feature-origin b { display: block; margin-bottom: 2px; color: var(--dv-muted); font-size: 12px; font-weight: 500; }
 .dv-features-shots li > span:nth-of-type(3) { margin-bottom: 20px; }
+/* Core problem band: tighter inside (was 96px top and bottom). */
+.dv-core { padding-block: 64px; }
+@media (max-width: 47.99rem) { .dv-core { padding-block: 48px; } }
