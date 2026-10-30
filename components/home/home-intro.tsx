@@ -133,7 +133,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <p className="home-note-default">{t.heroParagraph}</p>
           <p className="home-note-project" aria-hidden={!next}>{recent?.text}</p>
         </div>
-        <div className="home-tagline-wrap" data-swap={next ? "" : undefined}>
+        <div className="home-tagline-wrap" lang={locale} data-swap={next ? "" : undefined}>
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
