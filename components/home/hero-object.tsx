@@ -95,14 +95,15 @@ vec3 formOf(float n, vec2 uv) {
     }
     p = vec3(q + vec2(-0.78, 0.4), (hq(n, 17u) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
-    // The Gemini sparkle: a four-point star with concave sides, its edge
-    // drawn densely and its body filled more lightly.
+    // The Gemini sparkle: a four-point star with concave sides, filled with a
+    // thick band of dust inside its edge rather than a thin outline, so its
+    // arms read as solid strokes.
     float t = b * 6.2831853;
     vec2 dir = vec2(cos(t), sin(t));
     float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
-    float fill = a < 0.45 ? 1.0 : sqrt(c);
-    p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
-    loose *= a < 0.45 ? 0.45 : 0.7;
+    float fill = a < 0.6 ? mix(0.62, 1.0, sqrt(c)) : sqrt(c);
+    p = vec3(dir * r * fill * 1.15, (hq(n, 18u) - 0.5) * 0.2);
+    loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
     // A round galaxy: a bright core in a soft round disc of dust, thinning
     // outwards, with only a faint swirl in it; turning slowly.
