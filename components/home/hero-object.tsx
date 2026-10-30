@@ -16,11 +16,11 @@ import { useEffect, useRef } from "react";
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
-// DPR 1, paused offscreen, hidden or during the page transition, skipped
+// drawn at the screen's own resolution (DPR up to 2) so the finest dust is a
+// device pixel; 200,704 points on desktop, 65,536 on phones; paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
 // ambient light instead).
 
-const SIZE = 320; // 102,400 points
 
 const quadVertex = `#version 300 es
 in vec2 a; out vec2 v;
@@ -191,7 +191,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -242,14 +242,20 @@ void main() {
   // Most of it is fine dust, faint on its own so that only where it gathers
   // does it add up into a milky haze; a few in a hundred are stars, and only
   // those flare.
-  float star = step(mix(0.965, 0.94, galaxy), fract(vSeed * 13.1));
+  float star = step(mix(0.97, 0.955, galaxy), fract(vSeed * 13.1));
   vSize = flare * star;
-  float size = mix(mix(1.0, 1.4, vDepth), mix(1.5, 2.1, vDepth), star) * (1.0 + 0.2 * vStar);
-  vFaint = mix(1.15, 1.5, star);
+  // Three grains, in CSS pixels: most of it fine dust (about a device pixel
+  // on a retina screen), some coarser dust, and the few stars.
+  float fine = step(0.42, fract(vSeed * 29.3)) * (1.0 - star);
+  float size = mix(mix(mix(0.8, 1.0, vDepth), mix(0.55, 0.7, vDepth), fine), mix(1.2, 1.6, vDepth) * mix(1.0, 0.7, light), star) * (1.0 + 0.2 * vStar);
+  vFaint = mix(mix(1.1, 0.95, fine), 1.5, star);
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
-  gl_PointSize = size * mix(1.0, 1.4, light) + vSize * 3.0;
+  float px = (size * mix(1.0, 1.1, light) + vSize * mix(3.0, 1.5, light)) * dpr;
+  // Below a device pixel a point can't shrink, so it fades instead.
+  vFaint *= min(px, 1.0);
+  gl_PointSize = max(px, 1.0);
 }`;
 
 const drawFragment = `#version 300 es
@@ -269,7 +275,7 @@ void main() {
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page rather than light.
   c = mix(c, pow(c, vec3(1.7)) * 0.95, light);
-  alpha *= mix(1.0, 2.8, light);
+  alpha *= mix(1.0, 3.2, light);
   o = vec4(c * alpha, alpha);
 }`;
 
@@ -321,6 +327,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const el = canvas.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 256 : 448;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const gl = el.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "high-performance" });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
     const compile = (type: number, src: string) => { const s = gl.createShader(type)!; gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error("hero-object shader", gl.getShaderInfoLog(s)); return s; };
@@ -378,8 +386,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     let width = 1, height = 1;
     const resize = () => {
       const rect = el.getBoundingClientRect();
-      width = Math.max(1, Math.round(rect.width));
-      height = Math.max(1, Math.round(rect.height));
+      width = Math.max(1, Math.round(rect.width * dpr));
+      height = Math.max(1, Math.round(rect.height * dpr));
       if (el.width !== width || el.height !== height) { el.width = width; el.height = height; }
     };
     const observer = new ResizeObserver(resize);
@@ -467,6 +475,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
+      gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
