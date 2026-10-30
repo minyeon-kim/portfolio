@@ -327,6 +327,68 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="define" title="Define">
+        {/* Findings first: affinity and key problems come straight after the
+            interviews, then the personas and journey drawn from them. */}
+        {ff ? <>
+        <div>
+          <Block {...define.affinity} ff={ff} />
+          <Figure img={define.affinity.board} className="dv-board dv-gap-72" />
+        </div>
+
+        <div className="dv-subsection">
+          <Block {...define.problems} ff={ff} />
+          <ol className="dv-problems dv-gap-40">
+            {define.problems.items.map((item: Study, index: number) => (
+              <li key={item.title} className="reveal">
+                <div className="dv-problem-top">
+                  <span className="dv-problem-number">{pad(index + 1)}</span>
+                  <span className="dv-pill">{item.role}</span>
+                  {item.lowest && <span className="dv-pill dv-pill-accent">{define.problems.lowest}</span>}
+                </div>
+                <h4>{item.title}</h4>
+                <p>{item.body}</p>
+                <p className="dv-from"><strong>{labels.from} · </strong>{item.from}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="dv-subsection">
+        <Block {...define.personas} ff={ff} />
+        <div className="dv-personas dv-gap-64">
+          {define.personas.people.map((person: Study, index: number) => (
+            <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
+              <div className="dv-persona-id">
+                {person.avatar ? <Image src={withBase(person.avatar)} alt="" width={88} height={88} className="dv-avatar" /> : <span className="dv-avatar dv-avatar-blank" aria-hidden="true" />}
+                <p className="dv-caps dv-persona-role">{person.role}</p>
+                <h3 className="dv-persona-name">{person.name}</h3>
+                <p className="dv-persona-bio">{person.bio}</p>
+                <p className="dv-persona-quote">{person.quote}</p>
+              </div>
+              <div className="dv-persona-details">
+                <div>
+                  <p className="dv-caps dv-persona-role">{labels.context}</p>
+                  <p className="dv-persona-context">{person.context} <strong>{person.contextLead}</strong></p>
+                </div>
+                <table className="dv-needs">
+                  <thead>
+                    <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
+                  </thead>
+                  <tbody>
+                    {person.pairs.map(([pain, need]: string[]) => (
+                      <tr key={pain}><td>{pain}</td><td aria-hidden="true">→</td><td><strong>{need}</strong></td></tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          ))}
+        </div>
+        <Journey journey={define.personas.journey} />
+        <p className="dv-summary reveal">{define.personas.summary}</p>
+        </div>
+
+        </> : <>
         <Block {...define.personas} ff={ff} />
         <div className="dv-personas dv-gap-64">
           {define.personas.people.map((person: Study, index: number) => (
@@ -382,6 +444,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ))}
           </ol>
         </div>
+
+        </>}
 
         <div className="dv-core">
           <p className="dv-method reveal">{define.core.method}</p>
