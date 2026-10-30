@@ -25,11 +25,12 @@ export const meta = {
 {/*
   Korean copy of content/cases/workflow-app.mdx. Body copy follows the Figma
   frame "Devsign · 케이스 스터디 · KO · 1920" (file LqJO7XywHn9gvcPvCnHyy0,
-  node 270:2). Keep the facts, numbers and images identical to the English
+  node 789:2442). Keep the facts, numbers and images identical to the English
   file; when one changes, change the other. Layout: components/devsign-case.tsx.
 */}
 
 export const study = {
+  findings: true,
   labels: {
     problem: "문제",
     solution: "해결",
@@ -65,10 +66,10 @@ export const study = {
       title: "보고, 합치고, 결정한다. 모든 단계는 기록된다.",
       link: "Deliver에서 실제 화면 보기 ↓",
       items: [
-        { kicker: "01 보기", name: "Live Workspace", body: "모든 화면을 한 보드에." },
-        { kicker: "02 합치기", name: "Merge Studio", body: "AI 시안의 좋은 부분만 합친다." },
-        { kicker: "03 결정하기", name: "Conflict Points", body: "디자인과 달라진 곳을 짚는다." },
-        { kicker: "04 기록하기", name: "History", body: "결정을 화면과 함께 남긴다." },
+        { kicker: "01 보기", name: "Live Workspace", body: "모든 화면을 한 보드에.", src: "/images/devsign/screen-live-workspace.webp" },
+        { kicker: "02 합치기", name: "Merge Studio", body: "AI 시안의 좋은 부분만 합친다.", src: "/images/devsign/screen-merge-studio.webp" },
+        { kicker: "03 결정하기", name: "Conflict Points", body: "디자인과 달라진 곳을 짚는다.", src: "/images/devsign/screen-conflict-points.webp" },
+        { kicker: "04 기록하기", name: "History", body: "결정을 화면과 함께 남긴다.", src: "/images/devsign/screen-history-ko.webp" },
       ],
     },
   },
@@ -116,7 +117,7 @@ export const study = {
       ],
     },
     synthesis: {
-      label: "종합",
+      label: "분석",
       title: "단계별로 어디서 끊기나",
       withAi: "AI와 함께",
       gap: "빈틈",
@@ -194,8 +195,8 @@ export const study = {
     affinity: {
       method: "Research analysis",
       title: "Affinity mapping",
-      lead: "발화 201개를 바텀업으로 묶어, 해결할 문제 4개로 좁혔다.",
-      text: "가장 많이 나온 테마는 ‘맥락 공유’(카드 55장)였다. 소통이 부족한 게 아니라, 나눈 대화가 작업물에 남지 않는 게 문제였다.",
+      lead: "나눈 대화가 작업물에 남지 않았다.",
+      text: "발화 201개를 바텀업으로 묶어, 해결할 문제 4개로 좁혔다. 가장 많이 나온 테마는 ‘맥락 공유’(카드 55장)였다. 소통이 부족한 게 아니라, 나눈 대화가 작업물에 남지 않는 게 문제였다.",
       board: { src: "/images/devsign/affinity-board.webp", width: 2400, height: 1044, alt: "어피니티 맵: 인터뷰 발화를 실시간 협업부터 AI 한계까지 색깔별 테마 7개로 묶은 보드" },
     },
     problems: {
@@ -231,38 +232,28 @@ export const study = {
       lead: "모든 기능은 네 가지 문제 중 하나에 답한다.",
       text: "초기 아이디어로 넓게 시작해, 사용자가 필요로 한 것에 맞춰 보고, 아이디어 26개를 기능 4개로 좁혔다.",
     },
-    matrix: {
-      method: "Ideation",
-      title: "Prioritization matrix",
-      lead: "초기 아이디어 13개를 가치와 노력으로 나눴다.",
-      image: { src: "/images/devsign/value-effort-matrix.webp", width: 900, height: 1054, alt: "가치 × 노력 매트릭스: 초기 아이디어 포스트잇을 네 사분면에 배치" },
-    },
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "사용자가 필요로 한 것, 그리고 우리가 제안한 것.",
+      lead: "페인 해결책을 묶어 기능 후보 5개(A–E)를 만들었다.",
       text: "아이디어를 내기 전에, 인터뷰 테마에서 사용자의 니즈와 페인포인트를 다시 정리하고, 페인 해결책을 묶어 기능 후보 5개(A–E)를 만들었다.",
       image: { src: "/images/devsign/value-proposition-canvas.webp", width: 1600, height: 716, alt: "가치 제안 캔버스: 기능과 페인 해결책을 담은 사각형과 고객의 일·페인·게인을 담은 원" },
-    },
-    dvf: {
-      method: "Ideation",
-      title: "DVF evaluation",
-      lead: "아이디어 26개에서 기능 4개로.",
-      text: "캔버스의 다섯 방향(A–E)에서 아이디어 26개를 내고, 원하는가·사업이 되는가·만들 수 있는가(DVF)로 평가한 뒤 팀 투표로 골랐다. 네 가지 문제 중 하나에 답하는 아이디어만 남겼다.",
-      featuresLabel: "핵심 기능 4개",
-      features: [
-        { name: "Merge Studio", solves: "해결하는 문제: 시안이 합쳐지지 않는다" },
-        { name: "Conflict Points", solves: "해결하는 문제: 누가 결정할지 정해져 있지 않다" },
-        { name: "Live Workspace", solves: "해결하는 문제: 변경이 흩어져 있다" },
-        { name: "History", solves: "해결하는 문제: 이유가 사라진다" },
-      ],
     },
     sketching: {
       method: "Ideation",
       title: "Sketching",
-      lead: "만들기 전에, 다섯 방향을 손으로 먼저 스케치했다.",
+      lead: "손으로 스케치한 다섯 방향이 기능 4개가 됐다.",
       text: "만들기 전에 각 방향을 덜어 줄 페인 옆에 두고 손으로 스케치했다. E(실시간 작업 현황)는 워크스페이스에 합쳐, 기능은 4개가 됐다.",
       image: { src: "/images/devsign/sketches.webp", width: 1280, height: 960, alt: "펜과 함께 놓인 손으로 그린 인터페이스 스케치" },
+    },
+    selection: {
+      label: "핵심 기능 4개",
+      items: [
+        { problem: "변경이 흩어져 있다", feature: "Live Workspace", from: "후보 D + E에서" },
+        { problem: "시안이 합쳐지지 않는다", feature: "Merge Studio", from: "후보 C에서" },
+        { problem: "누가 결정할지 정해져 있지 않다", feature: "Conflict Points", from: "후보 B에서" },
+        { problem: "이유가 사라진다", feature: "History", from: "후보 A에서" },
+      ],
     },
     ia: {
       method: "Structure",
@@ -282,6 +273,7 @@ export const study = {
   deliver: {
     method: "Final design",
     title: "Prototype",
+    openLabel: "프로토타입에서 열기 ↗",
     lead: "비교하고, 결정하고, 이유를 남기는 한 곳.",
     features: [
       {
@@ -289,24 +281,36 @@ export const study = {
         title: "Live Workspace",
         body: "모든 화면을 흐름 순서대로 한 보드에. 무엇이 바뀌었는지 보려고 Figma·GitHub·Slack을 하나씩 열 필요가 없다.",
         points: ["흐름 순서의 화면 보드", "변경 표시와 개수", "내 결정이 먼저"],
-        src: "/images/devsign/screen-live-workspace.webp",
+        src: "/images/devsign/iter2-to-be.webp", width: 2880, height: 1620,
         alt: "Live Workspace: 체크아웃 흐름의 모든 화면을 한 보드에 놓고, 수정된 화면에 변경 개수를 표시",
+        areas: [[2.4, 58.2, 95.2, 29.8], [47.2, 72, 4.4, 4.5], [0.6, 6.4, 98.8, 4.4]],
       },
       {
         kicker: "Feature 02 · Designer",
         title: "Merge Studio",
         body: "AI 시안을 통째로 고르거나 다시 그리는 대신, 시안마다 좋은 부분만 골라 하나로 합친다.",
         points: ["나란히 비교", "영역별로 고르기", "수정하고 저장, 출처는 기록"],
-        src: "/images/devsign/screen-merge-studio.webp",
+        src: "/images/devsign/screen-merge-studio.webp", width: 1280, height: 800,
         alt: "Merge Studio: 체크아웃 화면의 AI 시안들을 나란히 놓고 영역별로 골라 합치는 화면",
+        areas: [[54, 25.5, 44.5, 74], [54, 19.5, 21, 5.5], [1, 39, 32, 42]],
       },
       {
         kicker: "Feature 03 · Developer → decision-maker",
         title: "Conflict Points",
         body: "디자인과 달라진 곳을 찾아 표시한다. 개발자는 이유와 수정안을 보내고, 의사결정자는 한 화면에서 결정한다.",
         points: ["찾아서 표시", "이유와 함께 요청", "나란히 보고 결정"],
-        src: "/images/devsign/screen-conflict-points.webp",
+        src: "/images/devsign/screen-conflict-points.webp", width: 1280, height: 800,
         alt: "Conflict Points: 디자인과 구현의 차이를 표시하고, 개발자의 이유와 결정 버튼을 함께 보여 주는 화면",
+        areas: [[18, 85.5, 19, 9.5], [59.5, 63.5, 35.5, 14.5], [55.5, 38, 41, 60]],
+      },
+      {
+        kicker: "Feature 04 · Both roles",
+        title: "History",
+        body: "결정을 화면과 함께 남겨, 바뀐 이유를 나중에도 찾을 수 있다.",
+        points: ["변경 타임라인", "이전 버전과 비교", "확인 표시 유지"],
+        src: "/images/devsign/screen-history-ko.webp", width: 1600, height: 1000,
+        alt: "History: 변경 기록을 시간순으로 보여 주고 이전 버전과 비교하는 화면",
+        areas: [[3.4, 12.6, 15.6, 44], [22, 13.3, 19, 3.3], [30, 10.3, 4.2, 2.8]],
       },
     ],
   },
@@ -330,6 +334,8 @@ export const study = {
     iteration1: {
       method: "Iteration 1",
       title: "Split by role",
+      label: "Iteration 1 · Split by role",
+      feature: "바뀐 기능 · 03 Conflict Points",
       lead: "한 화면을 두 직군이 함께 쓰는 건 맞지 않아, 직군별로 흐름을 나눴다.",
       text: "범위는 UI 수정까지. 코드 충돌은 이미 Git이 다룬다.",
       before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: 두 직군이 함께 쓰는 리뷰 화면 하나", text: "모두가 같이 쓰는 화면 하나. 두 직군 모두 “상대 팀 도구”라고 불렀다." },
@@ -343,6 +349,8 @@ export const study = {
     iteration2: {
       method: "Iteration 2",
       title: "Co-design",
+      label: "Iteration 2 · Co-design",
+      feature: "바뀐 기능 · 01 Live Workspace",
       lead: "현업 디자이너와 함께, 읽어야 하는 부분을 덜어냈다.",
       text: "화면 5개, 스티커 3색, 1인당 3표.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "화상 회의로 진행한 코디자인 세션: 프로토타입 화면에 색 스티커로 투표" },
