@@ -75,14 +75,14 @@ export const study = {
       method: "Secondary research",
       title: "Desk research",
       lead: "The bottleneck moved from making to checking.",
-      text: "Merging AI outputs took us longer than making them. Before building anything, we checked two things: is this common, and do existing tools already solve it? We read community posts and industry data, and reviewed 9 tools.",
+      text: "Merging AI outputs took us longer than making them. Before building anything, we checked two things: where teams working with AI get stuck, and whether existing tools already solve it. We read community posts and industry data, and reviewed 9 tools.",
     },
     q1: {
-      label: "Question 1 · Is this common?",
-      answer: "Almost everyone builds with AI, but people still check what it makes. Reviewing and deciding is still on people.",
+      label: "Question 1 · Where do teams get stuck with AI?",
+      answer: "Making got faster with AI. Teams get stuck checking what it made and deciding.",
       surveyLabel: "Survey · Stack Overflow 2025",
       stats: [
-        { value: "29%", text: "of developers say AI output is accurate, though 80% use it" },
+        { value: "29%", text: "of developers say AI output is accurate" },
         { value: "66%", text: "say their top frustration is AI code that is almost right, but not quite" },
       ],
       communityLabel: "Community posts · 100+ on Reddit, Hacker News and Medium",
@@ -154,7 +154,6 @@ export const study = {
       title: "Persona & user journey map",
       lead: "Two roles stall at different steps, for one shared reason.",
       text: "One persona per role, drawn from the interviews. Each journey has one lowest point, and that is where the work stalls.",
-      wantsLabel: "Wants",
       people: [
         {
           role: "Designer",
@@ -162,8 +161,8 @@ export const study = {
           bio: "31 · Product designer, the only designer on a small team",
           quote: "“I want to know why it’s changing, and the context behind it.”",
           avatar: "/images/devsign/avatar-priya.webp",
-          context: "Generates screen options with AI and hands them to developers. Change requests come back as screenshots in Slack or KakaoTalk, often after the build is done.",
-          contextLead: "Merge the best of several AI options, and have a say before the build is final.",
+          context: "Hands AI-made screens to developers. Change requests come back in chat after the build.",
+          contextLead: "Wants to merge the best of several AI options and have a say before the build is final.",
           lowPair: 1,
           pairs: [
             ["Feedback piles up after the work, so she can’t tell what to fix first", "Context attached to every change request"],
@@ -176,8 +175,8 @@ export const study = {
           bio: "34 · Frontend developer, small product team",
           quote: "“Tell me what it’s for before I build it.”",
           avatar: "/images/devsign/avatar-marcus.webp",
-          context: "Generates UI code with AI and handles small UI fixes himself. Code lives in Git, but design changes are still agreed in chat.",
-          contextLead: "Know what to build against, and settle small UI changes without a meeting.",
+          context: "Builds UI with AI, but design changes are still agreed in chat.",
+          contextLead: "Wants to know what to build against and settle small UI changes without a meeting.",
           lowPair: 0,
           pairs: [
             ["Has to dig for the source of truth himself", "Intent and criteria with each request"],

@@ -3178,3 +3178,5 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-personas-short .dv-persona-context { margin-top: 8px; font-size: 18px; }
 .dv-needs tr[data-low] td:first-child { color: var(--dv-ink); }
 .dv-low-badge { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; background: var(--dv-role); color: light-dark(#ffffff, #120f24); font-size: 12px; font-weight: 600; vertical-align: 2px; }
+.dv-journey-badge text { font-size: 11px; }
+.dv-personas-short .dv-persona-context { font-size: 16px; }
