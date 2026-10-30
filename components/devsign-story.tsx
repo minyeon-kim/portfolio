@@ -60,46 +60,106 @@ export function PrototypeLink({ label }: { label: string }) {
   return <a className="dv-prototype-link press" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{label}</a>;
 }
 
-export function DeliverStory({ features }: { features: Feature[] }) {
-  const { active, items } = useActiveItem(features.length);
-  // The hovered point belongs to one feature; a newly active feature starts at its first point.
-  const [hovered, setHovered] = useState({ feature: 0, point: 0 });
-  const point = hovered.feature === active ? hovered.point : 0;
-  const setPoint = (p: number) => setHovered({ feature: active, point: p });
-  const shot = (f: Feature, sizes: string) => <Image src={withBase(f.src)} alt={f.alt ?? ""} width={f.width ?? 1280} height={f.height ?? 800} sizes={sizes} />;
+// Deliver as a demo reel (class feedback: the screens were too small and the
+// reader didn't know where to look). One large screen plays by itself while it
+// is on screen: each feature opens on the whole screen, then zooms into its
+// three areas one after another, and a bar under its tab fills until the next
+// feature takes over. Tabs pick a feature; hovering or focusing the demo pauses
+// it. With reduced motion nothing plays or zooms: the tabs and the boxed areas
+// do the work.
+const OVERVIEW_MS = 1600;
+const POINT_MS = 2600;
+const FEATURE_MS = OVERVIEW_MS + POINT_MS * 3;
+
+// Zoom so the box fills about half the frame (at most 1.8x), centred, without
+// showing past the image edge. --s lets the boxes keep their stroke width.
+function zoomTo(b: Box | null): React.CSSProperties {
+  if (!b) return { transform: "translate(0%, 0%) scale(1)", "--s": 1 } as React.CSSProperties;
+  const s = Math.min(1.8, Math.max(1, 45 / Math.max(b[2], b[3])));
+  const clamp = (v: number) => Math.min(0, Math.max(100 - 100 * s, v));
+  const tx = clamp(50 - (b[0] + b[2] / 2) * s);
+  const ty = clamp(50 - (b[1] + b[3] / 2) * s);
+  return { transform: `translate(${tx}%, ${ty}%) scale(${s})`, "--s": s } as React.CSSProperties;
+}
+
+export function DeliverShow({ features, labels }: { features: Feature[]; labels: { play: string; pause: string } }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [held, setHeld] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [still, setStill] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setStill(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.5 });
+    if (root.current) observer.observe(root.current);
+    return () => { observer.disconnect(); media.removeEventListener("change", sync); };
+  }, []);
+
+  const playing = visible && !held && !paused && !still;
+  const clock = useRef(0);
+  useEffect(() => {
+    if (!playing) return;
+    let last = performance.now();
+    let frame = requestAnimationFrame(function tick(now) {
+      clock.current += Math.min(100, now - last); // a hidden tab pauses frames; never skip ahead
+      last = now;
+      if (clock.current >= FEATURE_MS) {
+        clock.current = 0;
+        setActive((a) => (a + 1) % features.length);
+      }
+      setElapsed(clock.current);
+      frame = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [playing, features.length]);
+
+  const pick = (i: number) => { clock.current = 0; setActive(i); setElapsed(0); };
+  const point = still ? -1 : elapsed < OVERVIEW_MS ? -1 : Math.min(2, Math.floor((elapsed - OVERVIEW_MS) / POINT_MS));
+  const f = features[active];
 
   return (
-    <div className="dv-story dv-story-deliver">
-      <div className="dv-story-stage">
-        <div className="dv-story-screen" aria-hidden="true">
-          {features.map((f, i) => (
-            <div key={f.title} className="dv-story-shot" data-on={i === active || undefined}>
-              {shot(f, "(max-width: 1023px) 100vw, 720px")}
-              <Areas boxes={f.areas} current={point} onPick={setPoint} />
+    <div ref={root} className="dv-show" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
+      <div className="dv-show-screen">
+        {features.map((feature, i) => (
+          <div key={feature.title} className="dv-show-shot" data-on={i === active || undefined} aria-hidden={i !== active}>
+            <div className="dv-show-zoom" data-zoomed={i === active && point >= 0 || undefined} style={i === active ? zoomTo(point >= 0 ? feature.areas[point] : null) : undefined}>
+              <Image src={withBase(feature.src)} alt={feature.alt ?? ""} width={feature.width ?? 1280} height={feature.height ?? 800} sizes="(max-width: 1023px) 100vw, 1200px" loading="eager" />
+              <Areas boxes={feature.areas} current={i === active ? point : -1} />
             </div>
-          ))}
-        </div>
-        <Progress count={features.length} active={active} />
-      </div>
-      <ol className="dv-story-list">
-        {features.map((f, i) => (
-          <li key={f.title} ref={(el) => { items.current[i] = el; }} data-index={i} data-on={i === active || undefined} className="dv-story-item">
-            <div className="dv-story-shot-inline">{shot(f, "100vw")}</div>
-            <p className="dv-story-kicker">{f.kicker}</p>
-            <h4 className="dv-story-name"><span>{pad(i + 1)}</span>{f.title}</h4>
-            <div className="dv-story-detail">
-              <p className="dv-story-body">{f.body}</p>
-              <ol className="dv-story-points">
-                {f.points.map((p, j) => (
-                  <li key={p} data-on={i === active && j === point || undefined} onMouseEnter={() => setPoint(j)} onFocus={() => setPoint(j)} tabIndex={-1}>
-                    <b>{j + 1}</b>{p}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </li>
+          </div>
         ))}
-      </ol>
+        {!still && (
+          <button type="button" className="dv-show-toggle" onClick={() => setPaused((p) => !p)} aria-label={paused ? labels.play : labels.pause}>
+            {paused ? "▶" : "❚❚"}
+          </button>
+        )}
+      </div>
+      <div className="dv-show-tabs" role="tablist">
+        {features.map((feature, i) => (
+          <button key={feature.title} type="button" role="tab" aria-selected={i === active} className="dv-show-tab" onClick={() => pick(i)}>
+            <span className="dv-show-bar" aria-hidden="true">
+              <span style={{ transform: `scaleX(${i < active ? 1 : i === active ? (still ? 1 : elapsed / FEATURE_MS) : 0})` }} />
+            </span>
+            <span className="dv-show-tab-num">{pad(i + 1)}</span>
+            <span className="dv-show-tab-name">{feature.title}</span>
+          </button>
+        ))}
+      </div>
+      <div className="dv-show-text" role="tabpanel" aria-live="polite">
+        <p className="dv-story-kicker">{f.kicker}</p>
+        <p className="dv-show-body">{f.body}</p>
+        <ol className="dv-show-points">
+          {f.points.map((p, j) => (
+            <li key={p} data-on={j === point || undefined}><b>{j + 1}</b>{p}</li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }
