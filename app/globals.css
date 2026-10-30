@@ -2638,6 +2638,14 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-note { grid-column: 1; grid-row: 3; align-self: end; display: grid; width: min(100%, 36ch); }
 .home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 400ms ease, translate 400ms var(--ease); }
 .home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
+/* Headline: "complex" stays soft and dim while "clear" is crisp, so the line
+   reads as complexity resolving into clarity. */
+.home-tagline .sh-fuzzy { filter: blur(2px); opacity: 0.5; }
+.home-tagline .sh-clear { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .home-tagline .sh-fuzzy { animation: sh-fuzzy 5s ease-in-out infinite alternate; }
+}
+@keyframes sh-fuzzy { from { filter: blur(2.6px); opacity: 0.42; } to { filter: blur(1.2px); opacity: 0.6; } }
 .home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 400ms ease, translate 400ms var(--ease); }
 .home-tagline { max-width: 13ch; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(44px, min(6.5vw, 10.5svh), 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
 .home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
