@@ -63,7 +63,7 @@ export const study = {
     },
     features: {
       method: "주요 기능",
-      title: "네 가지 문제에, 기능 하나씩으로 답했다.",
+      title: "우리는 핵심 문제 네 가지에 기능을 하나씩 만들어 답했다.",
       link: "Deliver에서 실제 화면 보기 ↓",
       items: [
         { kicker: "01 보기", name: "Live Workspace", body: "앱의 모든 화면을 한 보드에.", src: "/images/devsign/screen-live-workspace.webp" },
@@ -234,21 +234,21 @@ export const study = {
     ideation: {
       method: "Diverge → converge",
       title: "Ideation",
-      lead: "HMW 질문에 답이 될 만한 아이디어를 거르지 않고 모두 적었더니 26개가 나왔다.",
-      text: "이 단계에서는 좋고 나쁨을 따지지 않았다. 그래서 이 중 무엇이 정말 필요한지는 아직 알 수 없었다.",
+      lead: "우리는 먼저 HMW 질문에 답이 될 만한 아이디어를 하나도 거르지 않고 적었고, 모두 26개가 나왔다.",
+      text: "이 단계의 목표는 좋은 아이디어보다 많은 아이디어였다. 그중 사용자에게 정말 필요한 것을 고르는 일은 다음 단계로 넘겼다.",
     },
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "어떤 아이디어가 정말 필요한지 보려고, 사용자의 페인에 하나씩 맞춰 봤다.",
-      text: "인터뷰에서 나온 사용자의 일·페인·게인을 한 장에 적고, 아이디어를 덜어 주는 페인 옆에 붙였다. 비슷한 것끼리 묶으니 기능 후보 5개(A–E)가 남았다. 남은 질문은 이 후보들이 실제 화면에서 어떻게 보일지였다.",
+      lead: "우리는 아이디어를 인터뷰에서 나온 사용자의 불편과 하나씩 맞춰 보고, 정말 필요한 것만 남겼다.",
+      text: "가치 제안 캔버스에 사용자가 하려는 일, 그 일을 막는 불편(페인), 바라는 것(게인)을 인터뷰 내용으로 채웠다. 그리고 아이디어마다 어떤 불편을 덜어 주는지 옆에 붙였다. 비슷한 것끼리 묶으니 기능 후보 5개(A–E)가 남았다.",
       image: { src: "/images/devsign/value-proposition-canvas.webp", width: 1600, height: 716, alt: "가치 제안 캔버스: 기능과 페인 해결책을 담은 사각형과 고객의 일·페인·게인을 담은 원" },
     },
     sketching: {
       method: "Ideation",
       title: "Sketching",
-      lead: "후보 5개가 화면에서 어떻게 보일지, 손으로 먼저 그려 봤다.",
-      text: "코드로 만들기 전에 후보마다 화면을 빠르게 그려, 겹치는 것과 빠진 것을 찾았다. 실시간 작업 현황(E)은 워크스페이스 화면과 겹쳐 하나로 합쳤고, 기능은 4개가 됐다.",
+      lead: "우리는 후보 5개가 실제 화면에서 어떻게 보일지 알기 위해, 코드를 짜기 전에 종이에 먼저 그려 봤다.",
+      text: "손으로 그리는 쪽이 만드는 것보다 빨랐고, 후보끼리 겹치는 부분과 빠진 부분이 바로 보였다. 실시간 작업 현황(E)은 워크스페이스 화면과 보여 주는 내용이 같아 하나로 합쳤고, 그래서 기능은 4개가 됐다.",
       image: { src: "/images/devsign/sketches.webp", width: 1280, height: 960, alt: "펜과 함께 놓인 손으로 그린 인터페이스 스케치" },
     },
     selection: {
@@ -264,21 +264,21 @@ export const study = {
     ia: {
       method: "Structure",
       title: "Information architecture",
-      lead: "모든 작업을 워크스페이스 하나에 모았다.",
-      text: "프로젝트를 열면 워크스페이스로 들어가고, 미리보기·화면·코드·병합 네 탭을 오가며 일한다. 모든 결정 기록은 History에 쌓인다.",
+      lead: "우리는 모든 작업을 워크스페이스 하나에 모으고, 그 안을 탭 네 개로 나눴다.",
+      text: "프로젝트를 열면 바로 워크스페이스로 들어가고, 미리보기·화면·코드·병합 탭을 오가며 일한다. 내린 결정은 모두 History에 기록된다.",
       image: { src: "/images/devsign/information-architecture.webp", width: 2400, height: 628, alt: "정보 구조: Dashboard, Project, Workspace와 Preview·Screens·Code·Merge 탭, 그 아래 화면들" },
     },
     flow: {
       method: "Structure",
       title: "User flow",
-      lead: "세 사람이 각자 다른 일을 하다가, 하나의 변경 요청에서 만난다.",
+      lead: "우리는 각자 다른 일을 하는 세 사람이 하나의 변경 요청에서 만나도록 흐름을 짰다.",
       text: "디자이너는 AI 시안을 합친다. 개발자는 디자인과 달라진 곳을 고치거나, 결정을 요청한다. 결정권자는 그 요청을 보고 정한다. 세 사람이 같은 변경 요청 화면을 보니, 채팅으로 다시 설명할 필요가 없다.",
       image: { src: "/images/devsign/user-flow.webp", width: 2400, height: 848, alt: "직군별 스윔레인 3개가 하나의 변경 요청에서 만나는 유저 플로우" },
     },
     system: {
       method: "Structure",
       title: "Design system",
-      lead: "화면마다 달라 보이지 않도록, 디자인 규칙을 한 곳에 정해 두었다.",
+      lead: "우리는 화면마다 달라 보이지 않도록, 디자인 규칙을 한 곳에 정해 두었다.",
       text: "색, 간격, 모서리, 버튼 규칙을 파일 하나에 적고 모든 화면이 따르게 했다. 예를 들어 주요 버튼은 늘 같은 민트색이고, 버튼과 입력창 높이는 모두 32px이다.",
     },
   },
@@ -286,7 +286,7 @@ export const study = {
     method: "Final design",
     title: "Prototype",
     openLabel: "프로토타입 직접 써 보기 ↗",
-    lead: "시안을 비교하고, 결정하고, 그 이유를 남기는 곳을 하나로 만들었다.",
+    lead: "우리는 시안을 비교하고, 결정하고, 그 이유를 남기는 곳을 하나로 만들었다.",
     features: [
       {
         kicker: "Feature 01 · Both roles",
