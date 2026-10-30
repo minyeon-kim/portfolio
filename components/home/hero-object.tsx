@@ -127,7 +127,7 @@ vec3 formOf(float n, vec2 uv) {
     }
     // Centred on the stage (formOf shifts every form 0.35 right, undone here).
     q += vec2(-0.2, 0.0);
-    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.9);
+    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.6);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -252,7 +252,7 @@ void main() {
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   // Depth of field: dust nearer than the form's plane grows large, soft and
   // faint; dust beyond it shrinks and stays crisp.
-  vNear = smoothstep(0.5, 0.75, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06);
+  vNear = smoothstep(0.62, 0.8, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06);
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat >= 0.82 ? 0.3 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
@@ -281,7 +281,7 @@ void main() {
   float px = (size * mix(1.0, 1.1, light) + vSize * mix(3.0, 1.5, light)) * dpr;
   // Below a device pixel a point can't shrink, so it fades instead.
   vFaint *= min(px, 1.0);
-  px *= mix(mix(0.85, 1.0, smoothstep(0.3, 0.5, vDepth)), 2.6, vNear);
+  px *= mix(mix(0.8, 1.0, smoothstep(0.3, 0.5, vDepth)), 1.7, vNear);
   gl_PointSize = max(px, 1.0);
 }`;
 
@@ -298,7 +298,7 @@ void main() {
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
-  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight * mix(1.0, 0.35, vNear);
+  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight * mix(1.0, 0.25, vNear);
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
