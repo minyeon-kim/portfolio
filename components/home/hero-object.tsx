@@ -158,11 +158,13 @@ void main() {
 
 // The view: the camera turns a little towards the mouse (cam, -1..1), so
 // near dust slides against far dust and the room reads in depth.
-// Switching state is a journey: the camera flies forward through the dust
-// (move.z) and swings a little sideways (move.xy), and the new form is there
-// when it settles.
+// Switching state is a journey, one way: each form sits at its own place in
+// space. The new form waits ahead (\`arrive\`, world units from here) and the
+// camera travels there (\`move\`, how far it has got), flying through the old
+// dust; when it arrives the world is re-centred on the camera.
 const view = `
 uniform vec3 move;
+uniform vec3 arrive;
 vec2 project(vec3 p, vec2 cam, float aspect) {
   p.xy -= move.xy;
   p.z += move.z;
@@ -179,12 +181,12 @@ const velocityFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
-uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam;
+uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam; uniform float hold;
 uniform vec2 burstAt; uniform float burstAge; uniform float burstPower;
 ${view}
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
-  u += (homeOf(v) - p) * mix(gather, gather * 3.0, focus) * dt;
+  u += (homeOf(v) + arrive - p) * mix(gather, gather * 3.0, focus) * hold * dt;
   u += flow(p * 0.8) * 0.45 * stir * dt;
   u += valley(p * 0.9) * 0.6 * stir * dt;
   // The cursor sweeps nearby dust along its motion and swirls it.
@@ -209,8 +211,16 @@ void main() {
 
 const positionFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
-void main() { o = vec4(texture(pos, v).xyz + texture(vel, v).xyz * dt, 1.0); }`;
+${common}
+${view}
+uniform sampler2D pos; uniform sampler2D vel; uniform float dt; uniform vec3 shift; uniform float travelling;
+void main() {
+  vec3 p = texture(pos, v).xyz + texture(vel, v).xyz * dt + shift;
+  // Dust the camera flies past reappears at its place in the new form ahead,
+  // so the form is waiting there when the camera arrives.
+  if (travelling > 0.5 && 5.0 - (p.z + move.z) < 0.5) p = homeOf(v) + arrive;
+  o = vec4(p, 1.0);
+}`;
 
 const pools = `
 // Two or three wide pools of light drifting slowly over the stage: the dust
@@ -380,6 +390,36 @@ void main() {
   o = vec4(c + hc * 0.55 * haze, haze);
 }`;
 
+// A far field of faint stars behind the dust. They live in a box that wraps
+// around the camera, offset by everything it has travelled (\`travel\`), so
+// when the camera moves the near dust streams past and the stars barely
+// shift: the depth the move happens in.
+const starVertex = `#version 300 es
+precision highp float;
+uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time;
+out float vA;
+${view}
+float hs(float n) { return fract(sin(n) * 43758.5453); }
+void main() {
+  float i = float(gl_VertexID);
+  vec3 b = vec3(hs(i * 1.31) * 16.0 - 8.0, hs(i * 2.17) * 10.0 - 5.0, hs(i * 3.73) * 12.0);
+  vec3 w = vec3(mod(b.x - travel.x + 8.0, 16.0) - 8.0, mod(b.y - travel.y + 5.0, 10.0) - 5.0, mod(b.z - travel.z, 12.0));
+  vec3 p = vec3(w.x, w.y, -15.0 + w.z);
+  vec2 s = project(p, cam, aspect);
+  gl_Position = vec4(s, 0.0, 1.0);
+  float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
+  vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
+  gl_PointSize = mix(1.0, 1.8, smoothstep(6.0, 12.0, w.z)) * dpr;
+}`;
+const starFragment = `#version 300 es
+precision highp float; in float vA; out vec4 o;
+uniform vec3 calm; uniform float light;
+void main() {
+  float a = smoothstep(0.5, 0.1, length(gl_PointCoord - 0.5)) * vA * mix(0.55, 0.35, light);
+  vec3 c = mix(mix(calm, vec3(1.0), 0.6), calm * 0.5, light);
+  o = vec4(c * a, a);
+}`;
+
 // Per state: which form the dust leans to, and its colours (calm, stirred,
 // accent).
 export const OBJECT_STATES: Record<string, { symbol: number; calm: number[]; fast: number[]; accent: number[] }> = {
@@ -416,6 +456,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       return p;
     };
     const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
+    const pStar = link(starVertex, starFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
@@ -474,7 +515,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     // The camera's turn, easing after the mouse (centre when it is away).
     const cam = { x: 0, y: 0 };
     // The journey between states: when it started, and which way it swings.
-    const trip = { at: -1e9, symbol: -1, side: 1 };
+    const trip = { at: -1e9, symbol: -1, side: 1, arrive: [0, 0, 0], travel: [0, 0, 0] };
+    const TRIP = 2.0;
+    const ease = (x: number) => x * x * (3 - 2 * x);
     // The last burst: where (clip space), when, how strong.
     const burst = { x: 0, y: 0, at: -1e9, power: 0 };
     const onMove = (event: PointerEvent) => {
@@ -519,9 +562,30 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
       colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
-      if (target.symbol !== trip.symbol) { if (trip.symbol >= 0) { trip.at = clock; trip.side = -trip.side; } trip.symbol = target.symbol; }
-      const tu = Math.min(1, (clock - trip.at) / 1.6), swell = tu < 1 ? Math.pow(Math.sin(Math.PI * tu), 1.4) : 0;
-      const move = [trip.side * 0.6 * swell, 0.15 * swell, 3.6 * swell];
+      // The journey: re-centre the world when a trip ends (or is cut short by
+      // the next), then set off towards the new form's place.
+      const shift = [0, 0, 0];
+      const rebase = (e: number) => {
+        for (let i = 0; i < 3; i++) { shift[i] -= trip.arrive[i] * e; trip.travel[i] += trip.arrive[i] * e; trip.arrive[i] = 0; }
+      };
+      if (target.symbol !== trip.symbol) {
+        if (trip.symbol >= 0) {
+          rebase(ease(Math.min(1, (clock - trip.at) / TRIP)));
+          trip.at = clock; trip.side = -trip.side;
+          trip.arrive = [trip.side * 1.3, 0.2, -5.5];
+        }
+        trip.symbol = target.symbol;
+      }
+      let tu = Math.min(1, (clock - trip.at) / TRIP);
+      if (tu >= 1 && trip.arrive[2] !== 0) rebase(1);
+      const travelling = trip.arrive[2] !== 0;
+      const e = travelling ? ease(tu) : 0;
+      // How far the camera has got: sideways and up as the world shifts, forward as depth.
+      const move = [trip.arrive[0] * e, trip.arrive[1] * e, -trip.arrive[2] * e];
+      // While under way the dust holds where it is, so the camera flies through
+      // it; it gathers into the new form for the last stretch.
+      const hold = travelling ? 0.05 + 0.95 * Math.max(0, (tu - 0.55) / 0.45) ** 2 : 1;
+      if (!travelling) tu = 1;
       const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
       const ck = 1 - Math.exp(-dt / 1.2);
       cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
@@ -540,13 +604,18 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
-        gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]);
+        gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
         gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
       });
       V.reverse();
-      pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
+      pass(pPos, P[1], () => {
+        bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt);
+        gl.uniform3f(uniform(pPos, "shift"), shift[0], shift[1], shift[2]); gl.uniform1f(uniform(pPos, "travelling"), travelling ? 1 : 0);
+        gl.uniform3f(uniform(pPos, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pPos, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
+        gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
+      });
       P.reverse();
 
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -564,6 +633,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform4f(uniform(pGlow, "form"), colours.form[0], colours.form[1], colours.form[2], colours.form[3]); gl.uniform1f(uniform(pGlow, "spectrum"), colours.spectrum);
       gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      // The far stars, before the dust.
+      if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.useProgram(pStar);
+      gl.bindVertexArray(vaoDraw);
+      gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
+      gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
+      gl.uniform3fv(uniform(pStar, "calm"), colours.calm); gl.uniform1f(uniform(pStar, "light"), colours.light);
+      gl.drawArrays(gl.POINTS, 0, 2400);
       // Dark: the dust adds up into light. Light: it lies over the page.
       const dustBlend = () => { if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); };
       gl.useProgram(pDraw);
@@ -571,6 +648,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       dustBlend();
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
+      gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
@@ -593,7 +671,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      [pInit, pVel, pPos, pDraw, pGlow].forEach((p) => gl.deleteProgram(p));
+      [pInit, pVel, pPos, pDraw, pGlow, pStar].forEach((p) => gl.deleteProgram(p));
       gl.deleteBuffer(quad);
     };
   }, []);
