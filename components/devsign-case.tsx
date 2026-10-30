@@ -518,10 +518,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Figure img={develop.matrix.image} sizes="(max-width: 767px) 100vw, 400px" className="dv-matrix-img" />
           <Block {...develop.matrix} />
         </div>}
-        <div className={ff ? "dv-split dv-split-canvas dv-gap-96" : "dv-split dv-gap-96"}>
+        {/* Findings first: text on top, the canvas across the whole column. */}
+        {ff ? <div className="dv-gap-96">
+          <Block {...develop.canvas} ff={ff} />
+          <Figure img={develop.canvas.image} className="dv-canvas-full dv-gap-40" />
+        </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
           <Block {...develop.canvas} ff={ff} />
-        </div>
+        </div>}
         {develop.dvf && <div className="dv-gap-96">
           <Block {...develop.dvf} />
           <p className="dv-caps dv-accent dv-gap-40 reveal">{develop.dvf.featuresLabel}</p>

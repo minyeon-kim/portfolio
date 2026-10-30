@@ -3232,3 +3232,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-people-stack li { gap: 2px; padding: 12px 20px; }
 .dv-people-stack strong { font-size: 16px; }
 .dv-people-stack li > span:last-child { font-size: 14px; }
+
+/* Value proposition canvas (findings first): whole image across the column. */
+.dv-canvas-full img { width: 100%; height: auto; border-radius: 0; }
