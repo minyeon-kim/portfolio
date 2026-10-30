@@ -58,7 +58,24 @@ function whenPainted(frame: HTMLIFrameElement, done: () => void) {
 export function DevsignLive({ alt }: { alt: string }) {
   const box = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
+  // The frame (a whole React app) loads only once the page transition has
+  // settled: loading it while the home device grows into this opener stalled
+  // the main thread and made the zoom stutter. The image loop shows meanwhile.
+  const [mount, setMount] = useState(false);
   const locale = useLocale();
+  useEffect(() => {
+    const root = document.documentElement;
+    let timer = 0;
+    const arm = () => { timer = window.setTimeout(() => setMount(true), 400); };
+    if (!root.hasAttribute("data-project-navigation")) { arm(); return () => clearTimeout(timer); }
+    const observer = new MutationObserver(() => {
+      if (root.hasAttribute("data-project-navigation")) return;
+      observer.disconnect();
+      arm();
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ["data-project-navigation"] });
+    return () => { observer.disconnect(); clearTimeout(timer); };
+  }, []);
   // Before the frame requests the page, so it opens in the site's language.
   useEffect(() => { setDevsignLanguage(locale); }, [locale]);
   useEffect(() => {
@@ -79,7 +96,7 @@ export function DevsignLive({ alt }: { alt: string }) {
   return (
     <div ref={box} className="devsign-live" data-loaded={loaded || undefined}>
       <DevsignLoop alt={alt} />
-      <iframe src={devsignUrl(locale)} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={(e) => whenPainted(e.currentTarget, () => setLoaded(true))} />
+      {mount && <iframe src={devsignUrl(locale)} title="Devsign prototype" tabIndex={-1} aria-hidden="true" sandbox="allow-scripts allow-same-origin" onLoad={(e) => whenPainted(e.currentTarget, () => setLoaded(true))} />}
     </div>
   );
 }

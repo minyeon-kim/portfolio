@@ -36,7 +36,9 @@ const CROPS: Record<string, [number, number, number, number, number]> = {
 
 function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" }: { img: Img; sizes?: string; className?: string }) {
   const crop = CROPS[img.src];
-  const image = <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} />;
+  // Eager: a lazy image fetched only once its row scrolls in arrived after the
+  // reveal had already played, and popped in late.
+  const image = <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} loading="eager" />;
   return (
     <figure className={`dv-figure reveal ${className}`}>
       {crop ? (
