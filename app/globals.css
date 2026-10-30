@@ -3105,3 +3105,26 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv > :is(#discover, #develop, #takeaway) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem) { background: light-dark(#ffffff, color-mix(in srgb, var(--ink) 7%, var(--bg))); }
 /* The case article pads by the page inset, so the deck band bleeds by that (it overflowed by the wider Devsign margin before); its content keeps the Devsign margins. */
 .case-study:has(.dv) .more-work { margin-inline: calc(-1 * var(--project-text-inset)); padding-inline: var(--dv-pad); }
+
+/* Personas: in dark the tinted identity panel read as muddy navy / brown
+   against the neutral details, so it shares the card surface there and a
+   hairline divides the two halves; light keeps the Figma tints. */
+.dv-persona .dv-persona-id, .dv-persona[data-variant="developer"] .dv-persona-id { border-right: 1px solid light-dark(transparent, var(--dv-line)); }
+.dv-persona .dv-persona-id { background: light-dark(var(--dv-tint), transparent); }
+.dv-persona[data-variant="developer"] .dv-persona-id { background: light-dark(var(--dv-tint-second), transparent); }
+@media (max-width: 47.99rem) { .dv-persona .dv-persona-id, .dv-persona[data-variant="developer"] .dv-persona-id { border-right: 0; border-bottom: 1px solid light-dark(transparent, var(--dv-line)); } }
+
+/* Takeaway "What I learned": the lesson, then the evidence for it. */
+.dv-review-lines li { grid-template-columns: 48px minmax(0, 400px) minmax(0, 1fr); padding-block: 24px; }
+.dv-review-lines li > span:last-child { max-width: 560px; }
+
+/* Footer row after the deck: name on the left; the links and Back to top
+   grouped on the right, one size, with a hairline between them. */
+.more-work + .site-footer .site-footer-bottom { justify-content: flex-start; gap: 12px 28px; font-size: 14px; }
+.more-work + .site-footer .site-footer-meta { margin-left: auto; gap: 28px; }
+.more-work + .site-footer .site-footer-top-link { padding-left: 28px; border-left: 1px solid var(--ft-line); }
+@media (max-width: 47.99rem) {
+  .more-work + .site-footer .site-footer-bottom { flex-direction: row; flex-wrap: wrap; }
+  .more-work + .site-footer .site-footer-meta { order: 3; flex-basis: 100%; margin-left: 0; gap: 20px; }
+  .more-work + .site-footer .site-footer-top-link { margin-left: auto; padding-left: 0; border-left: 0; }
+}
