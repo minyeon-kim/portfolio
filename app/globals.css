@@ -2645,14 +2645,15 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 [data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
 @media (max-width: 63.99rem) {
   .intro-stage.home-stage { height: auto; min-height: 100svh; }
-  .intro-surface.home-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 32px; padding: 96px var(--project-text-inset) 40px; }
+  /* The case card sits under the pills, so the grid keeps its height (card + 32px gap) free at the bottom. */
+  .intro-surface.home-grid { --phone-card-w: min(calc(100vw - 2 * var(--project-text-inset)), 560px); grid-template-columns: 1fr; grid-template-rows: auto; gap: 32px; padding: 96px var(--project-text-inset) calc(40px + 32px + var(--phone-card-w) * 0.625); }
   .home-meta { grid-column: 1; grid-row: 1; justify-self: start; }
   .home-tagline-wrap { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; justify-items: start; }
   .home-tagline { max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
   .home-picks ol { flex-direction: row; flex-wrap: wrap; }
-  .home-device { right: var(--project-text-inset); left: var(--project-text-inset); width: auto; top: auto; bottom: 26vh; translate: 0 12px; }
+  .home-device, .home-device[data-project="gemini-privacy"] { left: var(--project-text-inset); right: auto; width: min(calc(100vw - 2 * var(--project-text-inset)), 560px); aspect-ratio: 16 / 10; top: auto; bottom: 40px; translate: 0 12px; }
   .home-device[data-active] { translate: 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
