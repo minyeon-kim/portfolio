@@ -3016,3 +3016,40 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @media (max-width: 47.99rem) { .more-work-deck { --deck-card: min(40vw, 170px); } }
 /* The case sheet stays one colour down to the footer, Next project included (no white-to-grey seam). */
 .case-study:has(.dv) { background: light-dark(#ffffff, var(--bg)); }
+
+/* Discover Q1: survey numbers | community voices, side by side. */
+.dv-evidence { display: grid; grid-template-columns: minmax(0, 416fr) minmax(0, 720fr); gap: 64px; align-items: start; }
+.dv-evidence-stats { display: flex; flex-direction: column; gap: 24px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--dv-line); }
+.dv-evidence-stats .dv-stat { flex-direction: column; align-items: flex-start; gap: 6px; padding: 0; }
+.dv-voices { margin-top: 16px; border-top: 1px solid var(--dv-line); }
+.dv-voices li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding-block: 20px; border-bottom: 1px solid var(--dv-line); }
+.dv-voices li > span { color: var(--case-accent); font-size: 14px; font-weight: 500; line-height: 1.6; }
+.dv-voices strong { display: block; font-size: 18px; font-weight: 600; line-height: 1.4; }
+.dv-voices blockquote { margin: 8px 0 0; color: var(--dv-ink); font-size: 16px; font-weight: 400; line-height: 1.5; }
+.dv-voices cite { display: block; margin-top: 6px; color: var(--dv-muted); font-size: 13px; font-style: normal; font-weight: 500; }
+.dv-boards-link { margin-top: 16px; font-size: 15px; font-weight: 500; }
+.dv-boards-link a { color: var(--case-accent); text-decoration: none; }
+.dv-boards-link a:hover, .dv-boards-link a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 63.99rem) { .dv-evidence { grid-template-columns: 1fr; gap: 40px; } }
+
+/* End of a case: the Next project deck opens the dark footer band, and the
+   footer follows it centred (headline, actions as pills, quiet bottom row),
+   so the deck and the footer read as one closing zone. The deck keeps its
+   cards; tokens are switched to the dark band locally. */
+.case-study .more-work {
+  --bg: light-dark(#0e1111, #050506); --ink: #e8ecea; --muted: #8e9895;
+  --devsign-title: #a594ff;
+  --gemini-title: linear-gradient(90deg, #d6e2ff, #9dbeff 55%, #d5c5ff);
+  margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0;
+  padding: clamp(64px, 7vw, 112px) var(--project-text-inset) clamp(56px, 6vw, 88px);
+  background: var(--bg);
+  color: var(--ink);
+}
+.case-study:has(.dv) .more-work { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); }
+.case-study .more-work + .site-footer { margin-top: 0; padding-top: 0; }
+.more-work + .site-footer .site-footer-top { grid-template-columns: 1fr; justify-items: center; gap: 28px; padding-top: clamp(56px, 6vw, 88px); border-top: 1px solid var(--ft-line); text-align: center; }
+.more-work + .site-footer .site-footer-headline { font-size: clamp(32px, 3.6vw, 56px); }
+.more-work + .site-footer .site-footer-actions { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.more-work + .site-footer .site-footer-action, .more-work + .site-footer .site-footer-actions li:first-child .site-footer-action { gap: 10px; padding: 12px 20px; border: 1px solid var(--ft-line); border-radius: 999px; font-size: 16px; letter-spacing: 0; }
+.more-work + .site-footer .site-footer-action:hover { border-color: rgb(255 255 255 / 0.4); }
+.more-work + .site-footer .site-footer-bottom { margin-top: clamp(56px, 6vw, 88px); }

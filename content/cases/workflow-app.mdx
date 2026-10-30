@@ -85,12 +85,13 @@ export const study = {
         { value: "29%", text: "of developers trust AI output, though 80% use it" },
         { value: "66%", text: "say their top frustration is AI code that is almost right, but not quite" },
       ],
-      communityLabel: "Community posts · the same three problems kept coming up",
+      communityLabel: "Community posts · 100+ on Reddit, Hacker News and Medium",
       groups: [
-        { name: "Decisions lose their trail", detail: "Final versions and context get lost across tools." },
-        { name: "Roles collide", detail: "Design and dev lines blur." },
-        { name: "People still check it all", detail: "A human signs off. AI misses nuance." },
+        { name: "Decisions lose their trail", detail: "Final versions and context get lost across tools.", quote: "The reviewer asks ‘why did you structure it this way.’ The author says ‘the AI suggested it.’ They don’t know why.", source: "r/cscareerquestions" },
+        { name: "Roles collide", detail: "Design and dev lines blur.", quote: "An engineer opens a design branch and can’t tell which parts are deliberate design decisions and which parts the agent generated.", source: "r/DesignSystems" },
+        { name: "People still check it all", detail: "A human signs off. AI misses nuance.", quote: "Claude generated a button… But it wasn’t their button. Wrong blue. Wrong radius. Wrong spacing.", source: "Medium · “Your Design System Isn’t AI-Readable Yet”" },
       ],
+      boardsLink: "See all research boards ↗",
       boards: { src: "/images/devsign/research-boards.webp", width: 4096, height: 1310, caption: "Research boards · Reddit, Hacker News and Medium posts sorted by pattern" },
     },
     q2: {
