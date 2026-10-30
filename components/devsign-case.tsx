@@ -387,10 +387,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 {/* The affinity themes this problem was grouped from. */}
                 {define.affinity.themes?.[index] && (
                   <p className="dv-problem-themes">
-                    <span className="sr-only">{define.affinity.themesLabel}: </span>
-                    {define.affinity.themes[index].map(([name, cards]: [string, number]) => (
-                      <span key={name} className="dv-theme-chip">{name} <em>{cards}{define.affinity.cardsWord}</em></span>
-                    ))}
+                    {define.affinity.themesLabel} · {define.affinity.themes[index].map(([name]: [string, number]) => name).join(", ")}
                   </p>
                 )}
               </li>
