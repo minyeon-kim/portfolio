@@ -89,10 +89,10 @@ vec3 formOf(float n, vec2 uv) {
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 16; t++) {
-        vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(2.1, 1.64);
+        vec2 r = vec2(mix(-0.56, 0.85, hq(n, 20u + uint(t) * 2u)), mix(-0.81, 0.81, hq(n, 21u + uint(t) * 2u)));
         if (inBolt(r)) { q = r; break; }
       }
-      loose *= 0.45;
+      loose *= 0.3;
     }
     p = vec3(q + vec2(-0.78, 0.4), (hq(n, 17u) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
@@ -260,6 +260,9 @@ void main() {
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
   // The About landscape spans the whole stage, so it carries its own light.
   if (symbol > 2.5) vLight = max(vLight, 0.85);
+  // The bolt's upper slab sits where the room is darkest; lift it so the
+  // whole bolt reads evenly.
+  if (symbol > 1.5 && symbol < 2.5) vLight = max(vLight, 0.75);
   // Twinkle: every point breathes a little; a few flare now and then.
   float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
   float flare = pow(max(sin(phase), 0.0), 16.0) * step(mix(0.75, 0.6, galaxy), fract(vSeed * 7.7));
