@@ -3066,3 +3066,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-voices blockquote { margin-top: 12px; }
 .dv-voices cite { margin-top: auto; padding-top: 16px; }
 @media (max-width: 63.99rem) { .dv-voices { grid-template-columns: 1fr; } .dv-evidence-stats { flex-direction: column; } }
+/* Quote cards: the problem is the title, the quote reads as quieter evidence under it. */
+.dv-voices strong { font-size: 18px; font-weight: 600; }
+.dv-voices blockquote { margin-top: 10px; padding-left: 12px; border-left: 2px solid color-mix(in srgb, var(--case-accent) 40%, transparent); color: var(--dv-muted); font-size: 15px; font-style: italic; line-height: 1.55; }
+.dv-voices cite { font-size: 12px; }
