@@ -213,7 +213,7 @@ export const study = {
       method: "Problem definition",
       title: "Core problem",
       lead: "Most teams check and decide on AI output in chat.",
-      text: "Designers lose their say before release, and the team loses track of why things changed.",
+      text: "Who decided what, and why, gets buried in the conversation, and design and build slowly drift apart.",
     },
     hmw: {
       method: "HMW",
@@ -257,22 +257,22 @@ export const study = {
     ia: {
       method: "Structure",
       title: "Information architecture",
-      lead: "Everything happens in one workspace, across four tabs.",
-      text: "Co-design showed that a separate merge screen broke the flow, so Merge became the fourth tab next to Preview, Screens and Code. Dashboard → Project → Workspace → change detail → History.",
+      lead: "Everything happens in one workspace.",
+      text: "Opening a project takes you into the workspace, where you move between four tabs: Preview, Screens, Code and Merge. Merge started as a separate screen, but in co-design people said it broke the flow, so it became the fourth tab. Every decision is saved in History.",
       image: { src: "/images/devsign/information-architecture.webp", width: 2400, height: 628, alt: "Information architecture: Dashboard, Project and Workspace, with the Preview, Screens, Code and Merge tabs and their child screens" },
     },
     flow: {
       method: "Structure",
       title: "User flow",
-      lead: "Each role has its own path, and they meet at the same request.",
-      text: "Designer A merges drafts, designer B decides on a request, developer C fixes and sends it. B and C see the same request from opposite sides, so neither has to explain it again in chat.",
+      lead: "Three people do different jobs and meet at one change request.",
+      text: "The designer merges AI drafts. The developer fixes a gap from the design or asks for a decision. The decision-maker reviews that request and decides. Developer and decision-maker look at the same request, so nothing has to be explained again in chat.",
       image: { src: "/images/devsign/user-flow.webp", width: 2400, height: 848, alt: "User flow in three swimlanes, one per role, meeting at a shared change request" },
     },
     system: {
       method: "Structure",
       title: "Design system",
-      lead: "We set the visual rules once, so every screen matched.",
-      text: "Colour, spacing, shape and components are defined in one token file that every page uses: one mint colour for actions, 32px controls, 12px gaps, and 8 or 12px corners. Panels always open beside the work, never over it.",
+      lead: "One set of design rules keeps every screen looking the same.",
+      text: "Colours, spacing, corners and buttons are written down in one file, and every screen follows it. The main button is always the same mint, and buttons and inputs are always 32px tall. New screens follow the same rules, so nothing drifts apart.",
     },
   },
   deliver: {
