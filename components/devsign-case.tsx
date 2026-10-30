@@ -575,7 +575,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </>}
       </Section>
 
-      <Section id="deliver" title="Deliver" band>
+      <Section id="deliver" title="Deliver" band={!ff}>
         <Block {...deliver} ff={ff} />
         {ff && deliver.openLabel && <p className="dv-gap-24 reveal"><PrototypeLink label={deliver.openLabel} /></p>}
         <div className="dv-gap-64">
