@@ -648,6 +648,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-gap-64">
             <p className="dv-caps reveal">{testing.usability.resultLabel}</p>
             {testing.usability.resultLead && <p className="dv-finding dv-result-lead reveal">{testing.usability.resultLead}</p>}
+            {/* What the scores meant sits under the finding, before the numbers. */}
+            <p className="dv-body dv-result reveal">{testing.usability.result}</p>
             <ul className="dv-scores dv-scores-row">
               {testing.usability.scores.map((s: Study) => (
                 <li key={s.title} className="reveal">
@@ -662,7 +664,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </li>
               ))}
             </ul>
-            <p className="dv-body dv-result reveal">{testing.usability.result}</p>
           </div>
           </> : <>
           <Block {...testing.usability} ff={ff} />
