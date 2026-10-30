@@ -63,10 +63,10 @@ export const study = {
       title: "One feature for each of the four problems.",
       link: "See them in action in Deliver ↓",
       items: [
-        { kicker: "01 See", name: "Live Workspace", body: "All screens on one board.", src: "/images/devsign/screen-live-workspace.webp" },
+        { kicker: "01 See", name: "Live Workspace", body: "All of the app’s screens on one board.", src: "/images/devsign/screen-live-workspace.webp" },
         { kicker: "02 Merge", name: "Merge Studio", body: "Combine the best of several AI drafts.", src: "/images/devsign/screen-merge-studio.webp" },
         { kicker: "03 Decide", name: "Conflict Points", body: "Flags where the build drifts from the design.", src: "/images/devsign/screen-conflict-points.webp" },
-        { kicker: "04 Record", name: "History", body: "Every decision saved with its screen.", src: "/images/devsign/screen-history.webp" },
+        { kicker: "04 Record", name: "History", body: "Every decision saved with the screen it changed.", src: "/images/devsign/screen-history.webp" },
       ],
     },
   },
@@ -117,7 +117,7 @@ export const study = {
     synthesis: {
       label: "Analysis",
       title: "Every stage got faster, and every stage left a gap.",
-      text: "We laid both answers out stage by stage, from plan to ship.",
+      text: "We laid out both answers, where teams get stuck and whether tools solve it, stage by stage from plan to ship.",
       withAi: "With AI",
       gap: "Gap",
       rows: [
@@ -152,8 +152,8 @@ export const study = {
     personas: {
       method: "User definition",
       title: "Persona & user journey map",
-      lead: "Two roles stall at different steps, for one shared reason.",
-      text: "One persona per role, drawn from the interviews. Each journey has one lowest point, and that is where the work stalls.",
+      lead: "Designers and developers stall at different steps, for one shared reason.",
+      text: "One designer persona and one developer persona, drawn from the interviews. Each journey has one lowest point, and that is where the work stalls.",
       people: [
         {
           role: "Designer",
@@ -189,7 +189,7 @@ export const study = {
         developerLow: "Lowest · building on guesses",
         designerLow: "Lowest · no say before it’s final",
       },
-      summary: "Same work, different low points: Priya has no say before it’s final, Marcus builds on guesses.",
+      summary: "Same change requests, different low points: Priya, the designer, has no say before it’s final; Marcus, the developer, builds on guesses. Both work without knowing why things changed.",
     },
     affinity: {
       method: "Research analysis",
@@ -204,13 +204,13 @@ export const study = {
     problems: {
       method: "Problem definition",
       title: "Key problems",
-      lead: "Four problems came out, and each one hits a different role hardest.",
+      lead: "Four problems came out, and each one hits a different person hardest: the designer, the developer or the PO.",
       lowest: "Lowest point",
       items: [
         { title: "Drafts don’t merge", body: "Several AI drafts, but no way to combine the best parts of each.", role: "Designer", from: "Versions, options & finals (14)" },
         { title: "Unclear who decides", body: "When the build drifts from the design, the team settles again in chat whether the developer fixes it or the designer decides.", role: "Designer · PO", from: "Blurred role lines (28) · Manual review (29)", lowest: true },
         { title: "Changes are scattered", body: "Status and the reasons for changes live across Figma, Slack and GitHub.", role: "Developer", from: "Tool sprawl (38) · Real-time collaboration (25)", lowest: true },
-        { title: "Reasons get lost", body: "The cause, the decision and the result never connect.", role: "Both", from: "Shared context (55)" },
+        { title: "Reasons get lost", body: "Why it changed, who decided and whether the code was updated are stored apart, so nobody can trace them later.", role: "Designer · Developer", from: "Shared context (55)" },
       ],
     },
     core: {
@@ -224,7 +224,7 @@ export const study = {
       title: "How might we",
       question: "How might we help designers and developers turn separate AI outputs into one agreed result, and keep why it was decided?",
       successLabel: "Success looks like",
-      success: ["Each role finishes the flow without help", "Every decision keeps its reason"],
+      success: ["Designers and developers each finish their own flow without help", "Every decision keeps its reason"],
     },
   },
   develop: {
@@ -269,7 +269,7 @@ export const study = {
       method: "Structure",
       title: "User flow",
       lead: "Three people do different jobs and meet at one change request.",
-      text: "The designer merges AI drafts. The developer fixes what drifted from the design, or asks for a decision. The decision-maker decides from that request. All three see the same request screen, so nobody re-explains it in chat.",
+      text: "The designer merges AI drafts. The developer fixes what drifted from the design, or asks for a decision. The decision-maker decides from that request. All three see the same change request screen, so nobody re-explains it in chat.",
       image: { src: "/images/devsign/user-flow.webp", width: 2400, height: 848, alt: "User flow in three swimlanes, one per role, meeting at a shared change request" },
     },
     system: {
@@ -288,7 +288,7 @@ export const study = {
       {
         kicker: "Feature 01 · Both roles",
         title: "Live Workspace",
-        body: "Every screen on one board, in flow order. No more opening Figma, GitHub and Slack one by one to find what changed.",
+        body: "Every screen of the app on one board, in flow order. No more opening Figma, GitHub and Slack one by one to find what changed.",
         points: ["Screens in flow order", "Changes marked with a count", "Your decisions first"],
         src: "/images/devsign/iter2-to-be.webp", width: 2880, height: 1620,
         alt: "Live Workspace: every screen of a checkout flow laid out on one board, with change counts on edited screens",
@@ -306,7 +306,7 @@ export const study = {
       {
         kicker: "Feature 03 · Developer → decision-maker",
         title: "Conflict Points",
-        body: "Flags where the build drifts from the design. The developer sends a fix with its reason, and the decision-maker decides on one screen.",
+        body: "Flags where the build drifts from the design. The developer sends a fix with its reason, and the decision-maker (the designer or PO) decides with the gap and the fix side by side.",
         points: ["Found and flagged", "Request with a reason", "Decide side by side"],
         src: "/images/devsign/screen-conflict-points.webp", width: 1280, height: 800,
         alt: "Conflict Points: a flagged difference between design and build, with the developer's reason and decision controls",
@@ -315,7 +315,7 @@ export const study = {
       {
         kicker: "Feature 04 · Both roles",
         title: "History",
-        body: "Every decision is saved with its screen, so the reason behind a change can still be found later.",
+        body: "Every decision is saved with the screen it changed, so the reason behind a change can still be found later.",
         points: ["A timeline of every change", "Compare with the previous version", "Flags stay on the record"],
         src: "/images/devsign/screen-history.webp", width: 1280, height: 800,
         alt: "History: a timeline of changes with a comparison against the previous version",
@@ -345,8 +345,8 @@ export const study = {
         { role: "Developer", feature: "Conflict Points", task: "Fix a mobile screen that drifts from the design.", actions: "Find the cause → fix → request approval" },
       ],
       resultLabel: "Results",
-      resultLead: "Both saw the value. Neither could finish alone.",
-      result: "Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
+      resultLead: "The designer and the developer both saw the value. Neither could finish the tasks without help.",
+      result: "In the change approval flow it wasn’t clear whose turn it was, the designer’s or the developer’s, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       scores: [
         { value: "2.3", unit: "/3", ratio: 2.3 / 3, title: "Help needed on first try", note: "Goal ≤ 1.5 · missed success goal 1", missed: true },
@@ -360,14 +360,14 @@ export const study = {
       title: "Split by role",
       label: "Iteration 1 · Split by role",
       feature: "Feature changed · 03 Conflict Points",
-      lead: "One screen for both roles didn’t work, so each role got its own flow.",
-      text: "Scope: UI-level changes only. Git already handles code conflicts.",
-      before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: one shared review screen for both roles", text: "One shared screen. Both called it “the other team’s tool.”" },
-      after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", lead: "Split by role", text: ": the designer gets one decision; developers send fixes to the decision-maker." },
+      lead: "One review screen shared by designers and developers didn’t work, so we split it into a decision screen for the designer and a fix screen for the developer.",
+      text: "We narrowed Conflict Points to UI changes that drift from the design. Git already handles code conflicts.",
+      before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: one review screen shared by the designer and the developer", text: "One review screen for the designer and the developer. Both called it “the other team’s tool.”" },
+      after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", lead: "A decision screen and a fix screen", text: ": the designer makes one choice on the decision screen; the developer sends a fix to the decision-maker from the fix screen." },
       changes: [
         { title: "See the gap, don't read it", before: "Height and color listed as values and tokens.", after: "The current build and the proposed fix, side by side as pictures.", a: [25.83, 21.23, 47.5, 7.41], b: [26.67, 39.26, 45.83, 20.99] },
         { title: "One plain choice", before: "Three option cards full of values.", after: "Three short choices; the requested one is marked.", a: [25.83, 35.56, 47.5, 32.59], b: [26.67, 63.21, 45.83, 15.06] },
-        { title: "Context, not process", before: "A five-step tracker fills the side.", after: "Where the button sits on the screen, highlighted.", a: [77.5, 27.41, 19.44, 34.57], b: [76.39, 29.38, 19.44, 29.63] },
+        { title: "Context, not process", before: "A five-step tracker fills the side.", after: "Where the changed button sits on the app screen, highlighted.", a: [77.5, 27.41, 19.44, 34.57], b: [76.39, 29.38, 19.44, 29.63] },
       ],
     },
     iteration2: {
@@ -376,14 +376,14 @@ export const study = {
       label: "Iteration 2 · Co-design",
       feature: "Feature changed · 01 Live Workspace",
       lead: "A practicing designer helped us cut what had to be read.",
-      text: "5 screens, 3 sticker colors, 3 votes each.",
+      text: "We voted on 5 prototype screens with 3 sticker colors, 3 votes each.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "Co-design session on a video call, voting with colored stickers on prototype screens" },
       agreedLabel: "What we agreed: take things away instead of adding",
-      agreed: ["Four panels became three tabs.", "Scattered screens moved onto one board.", "The AI panel starts folded."],
+      agreed: ["Four panels became three tabs.", "App screens we used to open one at a time on the canvas moved onto one board.", "The AI panel starts folded."],
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: a four-panel developer layout", text: "4-panel dev layout, everything visible at once." },
-      after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "3 tabs, a screen board", text: ", AI panel folded by default." },
+      after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "3 tabs, a board of app screens", text: ", AI panel folded by default." },
       changes: [
-        { title: "Three tabs, one view", before: "File tree, tabs and canvas all open at once.", after: "Preview · Screens · Code: code is one tab away.", a: [83.06, 6.17, 16.39, 88.89], b: [4.17, 6.42, 12.92, 4.2] },
+        { title: "Three tabs instead of four panels", before: "File tree, tabs and canvas all open at once.", after: "Preview · Screens · Code: code is one tab away.", a: [83.06, 6.17, 16.39, 88.89], b: [4.17, 6.42, 12.92, 4.2] },
         { title: "Every screen in flow order", before: "One screen on the canvas at a time.", after: "Every screen on one board, changes marked.", a: [29.17, 11.36, 53.06, 83.7], b: [7.22, 22.22, 86.94, 65.93] },
         { title: "AI when you ask for it", before: "The AI chat panel takes a third of the screen.", after: "Folded into one button at the top right.", a: [3.47, 6.17, 24.86, 88.89], b: [93.47, 1.23, 5.0, 3.46] },
       ],
@@ -395,12 +395,12 @@ export const study = {
     reviewTitle: "What I learned",
     review: [
       { title: "The problem starts after AI makes something", body: "Research showed teams stall at comparing, merging and recording decisions, not at generating. So all four features help with that step." },
-      { title: "Changed the structure to fit the test", body: "Both roles called the shared screen “the other team’s tool,” so the decision screen was split by role." },
-      { title: "Took things away instead of adding", body: "Co-design requests were solved by tidying the screens, not by adding features: four panels became three tabs and the AI panel starts folded. v2 took two days." },
+      { title: "Changed the structure to fit the test", body: "The designer and the developer both called the shared review screen “the other team’s tool,” so we split it into a decision screen for the designer and a fix screen for the developer." },
+      { title: "Took things away instead of adding", body: "Co-design requests were solved by tidying the workspace, not by adding features: four panels became three tabs and the AI panel starts folded. v2 took two days." },
     ],
     next: {
       label: "Next step",
-      title: "Test the split screens by role, with real team data.",
+      title: "Test the decision and fix screens with real team data, with designers and developers separately.",
       text: "This is where success goal 2, “every decision keeps its reason,” gets measured.",
       chips: ["Checks the UI-only scope", "Uses real team data", "Measures success goal 2"],
     },
@@ -410,7 +410,7 @@ export const study = {
 <DevsignCase study={study}>
 <TLDR>
 - **Problem** Designers and developers both build with AI now, but the drafts and the reasons behind them end up in different tools. Teams still settle on one version in chat, and gaps between design and build show up after release.
-- **Solution** One workspace that takes a team from comparing drafts to a recorded decision. Drafts merge area by area, each build gap goes to one person who decides, and every decision stays with its screen.
-- **Impact** Decisions that used to scatter across chat now follow one path you can trace. In testing, both participants expected design–code gaps and the reasons for changes to be easier to find (5.0/5).
+- **Solution** One workspace that takes a team from comparing drafts to a recorded decision. Drafts merge area by area, each build gap goes to one decision-maker (the designer or PO), and every decision stays with the screen it changed.
+- **Impact** Decisions that used to scatter across chat now follow one path you can trace. In testing, the designer and the developer both expected design–code gaps and the reasons for changes to be easier to find (5.0/5).
 </TLDR>
 </DevsignCase>
