@@ -78,17 +78,17 @@ export const study = {
       method: "Secondary research",
       title: "Desk research",
       lead: "이제 병목은 만드는 일이 아니라 확인하는 일이다.",
-      text: "AI 결과물을 합치는 데 만드는 것보다 시간이 더 걸렸고, 이를 다룬 연구도 거의 없었다. 그래서 커뮤니티 글, 업계 데이터, 기존 도구 9개로 세컨더리 리서치부터 시작했다.",
+      text: "AI 결과물을 합치는 데 만드는 것보다 시간이 더 걸렸다. 만들기 전에 두 가지를 확인했다. 다른 팀도 겪는 문제인지, 기존 도구가 이미 해결하고 있는지. 커뮤니티 글과 업계 데이터를 읽고, 도구 9개를 검토했다.",
     },
     q1: {
-      label: "질문 1 · 얼마나 흔한가",
-      answer: "흔하다. 다들 AI로 만들고, 확인과 결정은 손으로 한다.",
+      label: "질문 1 · 다른 팀도 겪는가",
+      answer: "그렇다. 거의 모두 AI로 만들지만 결과를 믿는 사람은 적어서, 확인과 결정은 결국 사람이 한다.",
       surveyLabel: "설문 · Stack Overflow 2025",
       stats: [
-        { value: "29%", text: "AI 결과를 믿는 개발자 (사용률은 80%)" },
-        { value: "66%", text: "‘거의 맞는’ AI 코드가 가장 큰 불만" },
+        { value: "29%", text: "AI 결과를 믿는 개발자 비율. AI를 쓰는 비율은 80%다." },
+        { value: "66%", text: "‘거의 맞지만 조금 틀린’ AI 코드를 가장 큰 불만으로 꼽은 개발자 비율." },
       ],
-      communityLabel: "커뮤니티 글 · 패턴 7가지, 문제 3가지",
+      communityLabel: "커뮤니티 글 · 같은 문제 세 가지가 반복됐다",
       groups: [
         { name: "결정의 흔적이 사라진다", detail: "최종본과 맥락이 도구 사이에서 사라진다." },
         { name: "역할이 부딪힌다", detail: "디자인·개발 경계가 흐려진다." },
@@ -119,6 +119,7 @@ export const study = {
     synthesis: {
       label: "분석",
       title: "단계별로 어디서 끊기나",
+      text: "둘을 합쳐 보면, AI는 모든 단계를 빠르게 했고 단계마다 빈틈을 남겼다.",
       withAi: "AI와 함께",
       gap: "빈틈",
       rows: [
@@ -131,8 +132,8 @@ export const study = {
     interview: {
       method: "Primary research",
       title: "In-depth interview",
-      lead: "모두가 AI를 다시 확인하지만, 아무도 책임지지 않는다.",
-      text: "커뮤니티 글로는 무엇이 불편한지는 알 수 있었지만, 팀이 어떻게 결정하는지는 알 수 없었다. 그래서 실무자 4명과 각각 60분 세션을 진행했다.",
+      lead: "글로는 불편함만 보였다. 팀이 실제로 어떻게 결정하는지 봐야 했다.",
+      text: "그래서 실무자 4명에게 AI 결과물이 디자이너와 개발자 사이 어디서 막히는지, 최종 결정은 누가 하는지 물었다. 60분씩 네 번의 세션에서 나온 답은 같았다. 모두가 AI 결과를 다시 확인하지만, 결정을 책임지는 사람은 없었다.",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "원격 인터뷰 세션: 참가자 영상 옆에 포스트잇이 붙은 FigJam 보드를 함께 보는 화면" },
       questionsLabel: "알고 싶었던 것",
       questions: [
@@ -338,9 +339,9 @@ export const study = {
       scenariosLabel: "시나리오",
       scenarioWord: "시나리오",
       scenarios: [
-        { role: "디자이너", feature: "Merge Studio", task: "대시보드 시안 A/B 병합 (2열/3열, CTA 컬러).", actions: "비교·조합·저장" },
-        { role: "디자이너", feature: "Conflict Points", task: "2열 디자인이 구현에서 카드가 겹친 모바일 레이아웃 검토.", actions: "비교·검토·승인" },
-        { role: "개발자", feature: "Conflict Points", task: "그리드 구조와 CSS 제약으로 생긴 모바일 그리드 겹침 수정.", actions: "원인 분석·수정·승인 요청" },
+        { role: "디자이너", feature: "Merge Studio", task: "AI가 만든 대시보드 시안 두 개에서 좋은 부분만 골라 하나로 합치기.", actions: "두 시안 비교 → 부분 고르기 → 저장" },
+        { role: "디자이너", feature: "Conflict Points", task: "모바일에서 카드가 겹쳐 2열을 1열로 바꾸자는 개발자 요청에 결정하기.", actions: "디자인과 구현 비교 → 이유 확인 → 승인 여부 결정" },
+        { role: "개발자", feature: "Conflict Points", task: "모바일 화면이 디자인과 달라진 곳을 찾아, 직접 고치거나 디자이너에게 요청하기.", actions: "원인 확인 → 수정 → 승인 요청" },
       ],
       resultLabel: "결과",
       result: "승인 흐름에서 누구 차례인지가 안 보였고, 디자이너에게는 개발 도구처럼 읽혔다. 콘셉트가 아니라 레이아웃과 용어의 문제였다. 가치는 전달됐기 때문에 기능은 그대로 두었다.",
