@@ -563,6 +563,36 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         ) : <Block {...testing} id="testing-title" />}
         <div className={ff ? "dv-gap-96" : "dv-gap-72"}>
+          {/* With `process` and `result`: how the test ran beside the photo, then
+              the four scores in one row with what they meant. */}
+          {testing.usability.process ? <>
+          <Block {...testing.usability} text={undefined} ff={ff} />
+          <div className="dv-media-row dv-gap-40">
+            <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />
+            <div>
+              <p className="dv-caps reveal">{testing.usability.processLabel}</p>
+              <p className="dv-body reveal">{testing.usability.process}</p>
+            </div>
+          </div>
+          <div className="dv-gap-64">
+            <p className="dv-caps reveal">{testing.usability.resultLabel}</p>
+            <ul className="dv-scores dv-scores-row">
+              {testing.usability.scores.map((s: Study) => (
+                <li key={s.title} className="reveal">
+                  <div className="dv-donut">
+                    <Donut ratio={s.ratio} missed={s.missed} />
+                    <span className="dv-donut-value-text">{s.value}<small>{s.unit}</small></span>
+                  </div>
+                  <div>
+                    <strong>{s.title}</strong>
+                    <span data-missed={s.missed || undefined}>{s.note}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className="dv-body dv-result reveal">{testing.usability.result}</p>
+          </div>
+          </> : <>
           <Block {...testing.usability} ff={ff} />
           <div className={ff ? "dv-media-row dv-gap-40" : testing.usability.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
             {testing.usability.photo && <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />}
@@ -581,6 +611,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               ))}
             </ul>
           </div>
+          </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
           <Block {...testing.iteration1} ff={ff} />
@@ -619,14 +650,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ))}
           </ol>
         </div>
-        <div className="dv-gap-64">
+        {takeaway.limitations && <div className="dv-gap-64">
           <h3 className="dv-limit-title reveal">{takeaway.limitationsTitle}</h3>
           <ul className="dv-limits">
             {takeaway.limitations.map((l: { lead: string; text: string }) => (
               <li key={l.lead} className="reveal"><strong>{l.lead}</strong>{l.text}</li>
             ))}
           </ul>
-        </div>
+        </div>}
         <div className="dv-next dv-gap-80 reveal">
           <p className="dv-caps">{takeaway.next.label}</p>
           <p className="dv-next-title">{takeaway.next.title}</p>
