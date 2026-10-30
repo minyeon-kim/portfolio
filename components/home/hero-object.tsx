@@ -191,7 +191,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform float bloom;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -256,20 +256,12 @@ void main() {
   // Below a device pixel a point can't shrink, so it fades instead.
   vFaint *= min(px, 1.0);
   gl_PointSize = max(px, 1.0);
-  // The bloom pass: one point in twelve drawn again as a wide, faint halo of
-  // its own colour, so the dense parts shine.
-  if (bloom > 0.5) {
-    bool on = mod(i, 12.0) < 0.5;
-    gl_PointSize = on ? 12.0 * dpr : 0.0;
-    vFaint = on ? 1.0 : 0.0;
-    if (!on) gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
-  }
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
 in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
-uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light; uniform float bloom;
+uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
   // A soft core; a flaring star shows a faint four-point glint.
@@ -290,13 +282,6 @@ void main() {
   vec3 vivid = sat / max(max(sat.r, max(sat.g, sat.b)), 0.2) * mix(0.95, 0.8, lum);
   c = mix(c, vivid, light);
   alpha *= mix(1.0, 3.2, light);
-  if (bloom > 0.5) {
-    // A soft round halo, in the vivid colour, a few percent strong.
-    float h = exp(-dot(q, q) * 14.0) * vFaint;
-    vec3 hc = c;
-    alpha = h * 0.11 * vLight * (0.6 + 0.4 * vDepth);
-    c = hc;
-  }
   o = vec4(c * alpha, alpha);
 }`;
 
@@ -324,6 +309,45 @@ void main() {
   // Light theme: the same band as a faint tinted haze over the page.
   float haze = (band * 0.08 + l * 0.04) * light;
   o = vec4(c + mix(calm, accent, 0.5 + 0.5 * s.x) * 0.55 * haze, haze);
+}`;
+
+// Bloom: the scene's dense parts, shrunk to a quarter and blurred, laid back
+// over it so they shine. `bright` keeps only what is bright (dark) or dense
+// ink (light); `blur` is a 9-tap Gaussian along `dir`.
+const brightFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform sampler2D scene; uniform vec2 texel; uniform float light;
+void main() {
+  vec4 s = vec4(0.0);
+  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) s += texture(scene, v + vec2(x, y) * texel);
+  s /= 9.0;
+  float lum = dot(s.rgb, vec3(0.3, 0.59, 0.11));
+  // Dark: light above a threshold. Light: where the ink gathers, in its own
+  // colour (un-premultiplied), so the halo glows rather than smudges.
+  vec4 dark = s * smoothstep(0.05, 0.35, lum);
+  vec3 ink = s.rgb / max(s.a, 1e-3);
+  vec4 pale = vec4(ink, 1.0) * smoothstep(0.08, 0.5, s.a) * 0.9;
+  o = mix(dark, vec4(pale.rgb * pale.a, pale.a), step(0.5, light));
+}`;
+const blurFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform sampler2D src; uniform vec2 dir;
+void main() {
+  const float w[5] = float[5](0.227, 0.195, 0.122, 0.054, 0.016);
+  vec4 s = texture(src, v) * w[0];
+  for (int i = 1; i < 5; i++) s += (texture(src, v + dir * float(i)) + texture(src, v - dir * float(i))) * w[i];
+  o = s;
+}`;
+// The scene with its bloom, written so no pixel's colour exceeds its alpha:
+// premultiplied colour above alpha is what browsers draw as hard discs.
+const compositeFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform sampler2D scene; uniform sampler2D glow; uniform float strength;
+void main() {
+  vec4 c = texture(scene, v) + texture(glow, v) * strength;
+  c.a = clamp(max(c.a, max(c.r, max(c.g, c.b))), 0.0, 1.0);
+  c.rgb = min(c.rgb, vec3(c.a));
+  o = c;
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -362,12 +386,13 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       return p;
     };
     const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
+    const pBright = link(quadVertex, brightFragment), pBlur = link(quadVertex, blurFragment), pComposite = link(quadVertex, compositeFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const vaoQuad = gl.createVertexArray();
     gl.bindVertexArray(vaoQuad);
-    for (const p of [pInit, pVel, pPos, pGlow]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
+    for (const p of [pInit, pVel, pPos, pGlow, pBright, pBlur, pComposite]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
     const vaoDraw = gl.createVertexArray();
     // Positions and velocities, two of each to read one and write the other.
     const target = () => {
@@ -391,6 +416,31 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.disable(gl.BLEND);
       setup();
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
+    // Screen-sized targets for the bloom: the scene at full size, two at a
+    // quarter for the blur. Half floats, so the dark theme's added light can
+    // pass 1 before the composite settles it.
+    const screen = { w: 0, h: 0, scene: null as null | { texture: WebGLTexture; framebuffer: WebGLFramebuffer }, a: null as null | { texture: WebGLTexture; framebuffer: WebGLFramebuffer }, b: null as null | { texture: WebGLTexture; framebuffer: WebGLFramebuffer } };
+    const screenTarget = (w: number, h: number) => {
+      const texture = gl.createTexture()!;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      const framebuffer = gl.createFramebuffer()!;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+      return { texture, framebuffer };
+    };
+    const dropScreen = () => { for (const t of [screen.scene, screen.a, screen.b]) if (t) { gl.deleteTexture(t.texture); gl.deleteFramebuffer(t.framebuffer); } };
+    const ensureScreen = () => {
+      if (screen.w === width && screen.h === height && screen.scene) return;
+      dropScreen();
+      screen.w = width; screen.h = height;
+      const qw = Math.max(1, width >> 2), qh = Math.max(1, height >> 2);
+      screen.scene = screenTarget(width, height); screen.a = screenTarget(qw, qh); screen.b = screenTarget(qw, qh);
     };
     const bind = (p: WebGLProgram, name: string, unit: number, texture: WebGLTexture) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, texture); gl.uniform1i(uniform(p, name), unit); };
     const start = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
@@ -473,7 +523,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
       P.reverse();
 
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      ensureScreen();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, screen.scene!.framebuffer);
       gl.viewport(0, 0, width, height);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -497,10 +548,33 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
-      // The halos are for the light theme only; in the dark the dust is light already.
-      if (colours.light > 0.5) { gl.uniform1f(uniform(pDraw, "bloom"), 1); gl.drawArrays(gl.POINTS, 0, SIZE * SIZE); }
-      gl.uniform1f(uniform(pDraw, "bloom"), 0);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
+
+      // Bloom: bright parts to a quarter, blurred both ways twice, laid over.
+      const qw = Math.max(1, width >> 2), qh = Math.max(1, height >> 2);
+      gl.disable(gl.BLEND);
+      gl.bindVertexArray(vaoQuad);
+      gl.useProgram(pBright);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, screen.a!.framebuffer);
+      gl.viewport(0, 0, qw, qh);
+      bind(pBright, "scene", 0, screen.scene!.texture);
+      gl.uniform2f(uniform(pBright, "texel"), 1.5 / width, 1.5 / height); gl.uniform1f(uniform(pBright, "light"), colours.light);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.useProgram(pBlur);
+      for (let i = 0; i < 2; i++) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, screen.b!.framebuffer);
+        bind(pBlur, "src", 0, screen.a!.texture); gl.uniform2f(uniform(pBlur, "dir"), (1 + i) / qw, 0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, screen.a!.framebuffer);
+        bind(pBlur, "src", 0, screen.b!.texture); gl.uniform2f(uniform(pBlur, "dir"), 0, (1 + i) / qh);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, width, height);
+      gl.useProgram(pComposite);
+      bind(pComposite, "scene", 0, screen.scene!.texture); bind(pComposite, "glow", 1, screen.a!.texture);
+      gl.uniform1f(uniform(pComposite, "strength"), colours.light > 0.5 ? 0.35 : 1.1);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
     frame = requestAnimationFrame(draw);
     return () => {
@@ -513,7 +587,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      [pInit, pVel, pPos, pDraw, pGlow].forEach((p) => gl.deleteProgram(p));
+      dropScreen();
+      [pInit, pVel, pPos, pDraw, pGlow, pBright, pBlur, pComposite].forEach((p) => gl.deleteProgram(p));
       gl.deleteBuffer(quad);
     };
   }, []);
