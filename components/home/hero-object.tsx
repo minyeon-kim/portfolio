@@ -147,9 +147,16 @@ vec3 homeOf(vec2 uv) {
   if (symbol > 2.5) return formOf(n, uv);
   float seed = floor(hq(n, 30u) * 3000.0);
   vec3 p = formOf(seed, uv);
-  float len = (0.2 + 0.5 * hq(seed, 32u)) * hq(n, 31u);
+  // On the galaxy the strands wind round its core, so it stays round; on a
+  // case's form they stay short so the form still reads.
+  float len = (0.2 + 0.5 * hq(seed, 32u)) * hq(n, 31u) * (symbol > 0.5 ? 0.3 : 1.0);
   vec2 q = p.xy;
-  for (int k = 0; k < 6; k++) q += normalize(strandField(q) + 1e-4) * len / 6.0;
+  for (int k = 0; k < 6; k++) {
+    vec2 r = q - vec2(0.0, 0.1);
+    vec2 orbit = vec2(-r.y, r.x) / max(length(r), 0.2);
+    vec2 dir = symbol > 0.5 ? strandField(q) : orbit * 1.6 + strandField(q) * 0.5;
+    q += normalize(dir + 1e-4) * len / 6.0;
+  }
   vec3 hair = vec3(hq(n, 33u), hq(n, 34u), hq(n, 35u)) - 0.5;
   return vec3(q, p.z) + hair * 0.025;
 }
