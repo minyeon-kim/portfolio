@@ -77,6 +77,43 @@ function Block({ method, title, lead, text, id, label, feature, ff }: Lead & { i
   );
 }
 
+// Developer handoff as a numbered wireflow (class feedback): the screens in
+// flow order, each element numbered "screen-element" (2-3) so a developer can
+// point at it, a note on what moves the user to the next screen, then the
+// annotations screen by screen.
+function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[]; ff?: boolean }) {
+  const screens = handoff.order.map((i: number) => features[i]);
+  return (
+    <div className="dv-gap-96">
+      <Block {...(handoff as Lead)} ff={ff} />
+      <ol className="dv-wireflow dv-gap-40 reveal" data-reveal-group>
+        {screens.map((f: Study, s: number) => (
+          <li key={f.title}>
+            <p className="dv-wireflow-name"><b>{s + 1}</b>{f.title}</p>
+            <div className="dv-wireflow-screen">
+              <Image src={withBase(f.src)} alt={f.alt ?? ""} width={f.width ?? 1280} height={f.height ?? 800} sizes="(max-width: 1023px) 100vw, 280px" />
+              {f.areas.map((b: number[], e: number) => (
+                <span key={e} className="dv-wireflow-area" style={{ left: `${b[0]}%`, top: `${b[1]}%`, width: `${b[2]}%`, height: `${b[3]}%` }}><b>{s + 1}-{e + 1}</b></span>
+              ))}
+            </div>
+            {handoff.flows[s] && <p className="dv-wireflow-flow"><span aria-hidden="true">→</span>{handoff.flows[s]}</p>}
+          </li>
+        ))}
+      </ol>
+      <div className="dv-annotations dv-gap-40">
+        {screens.map((f: Study, s: number) => (
+          <section key={f.title} className="reveal" data-reveal-group>
+            <h4><b>{s + 1}</b>{f.title}</h4>
+            <ol>
+              {f.points.map((p: string, e: number) => <li key={p}><b>{s + 1}-{e + 1}</b>{p}</li>)}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Section({ id, title, band, children }: { id: string; title: string; band?: boolean; children: ReactNode }) {
   return (
     <section id={id} className={band ? "dv-section dv-band" : "dv-section"} aria-labelledby={`${id}-title`}>
@@ -513,6 +550,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       <Section id="develop" title="Develop">
         <Block {...develop.ideation} ff={ff} />
+        {/* Prioritization: how 26 ideas were ranked (DVF + team vote), each
+            criterion as its own row so it reads top to bottom. */}
+        {develop.priority && <div className="dv-gap-96">
+          <Block {...develop.priority} ff={ff} />
+          <ol className="dv-criteria dv-gap-24">
+            {develop.priority.criteria.map(([name, question]: [string, string]) => (
+              <li key={name} className="reveal"><strong>{name}</strong><span>{question}</span></li>
+            ))}
+          </ol>
+        </div>}
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
         {develop.matrix && <div className="dv-split dv-gap-80">
           <Figure img={develop.matrix.image} sizes="(max-width: 767px) 100vw, 400px" className="dv-matrix-img" />
@@ -624,6 +671,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           ) : ff ? <DeliverShow features={deliver.features} labels={{ play: deliver.playLabel ?? "Play", pause: deliver.pauseLabel ?? "Pause" }} />
             : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
         </div>
+        {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
       </Section>
 
       <section className="dv-section dv-testing" aria-labelledby="testing-title">
