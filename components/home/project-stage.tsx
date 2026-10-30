@@ -1,7 +1,7 @@
 "use client";
 
 import { useStrings } from "@/lib/use-locale";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import { ProjectTitle } from "@/components/project-title";
 import { HomeIntro } from "./home-intro";
@@ -46,8 +46,29 @@ export function ProjectStage({ projects, about }: Props) {
   // From a case pill, the hovered device grows to the screen and settles into
   // the opener's media frame; from elsewhere (segmented control, More work)
   // the page just rises in.
+  // Opening a case from the landing adds a history entry (same URL), so the
+  // browser's Back returns to the landing instead of leaving the site; switching
+  // between cases only replaces it. Back/Forward then follow that entry.
+  useEffect(() => {
+    const pop = () => {
+      const slug = (window.history.state as { homeCase?: string } | null)?.homeCase;
+      const index = slug ? projects.findIndex((x) => x.slug === slug) : -1;
+      setUi({ activeCase: index >= 0 ? index : null, menuOpen: false });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    };
+    window.addEventListener("popstate", pop);
+    return () => window.removeEventListener("popstate", pop);
+  }, [projects]);
+  // Leaving the case another way (the name in the header, overscroll at the
+  // top) steps back over its entry too, so one Back press never does nothing.
+  useEffect(() => {
+    if (active === null && (window.history.state as { homeCase?: string } | null)?.homeCase) window.history.back();
+  }, [active]);
   const select = (index: number, from?: HTMLElement | null) => {
     const project = projects[index];
+    const entry = { ...window.history.state, homeCase: project.slug };
+    if (active === null) window.history.pushState(entry, "");
+    else window.history.replaceState(entry, "");
     revealNextProject(
       () => setUi({ activeCase: index }),
       () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)),

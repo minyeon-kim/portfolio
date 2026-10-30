@@ -2023,10 +2023,15 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .more-work-cover[data-project="workflow-app"] { background: #141414; }
 .more-work-cover[data-project="gemini-privacy"] { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); }
 
-/* Header slides away while scrolling down and returns on any scroll up (md+, where it is sticky). */
-@media (min-width: 48rem) {
-  header.group\/header { transition: transform 320ms var(--ease), background-color 400ms var(--ease); }
-  header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
+/* Smart header: sticky at every width, slides away while scrolling down and
+   returns on any scroll up. While it is showing, the case stage bar sits just
+   under it instead of behind it. */
+header.group\/header { transition: transform 320ms var(--ease), background-color 400ms var(--ease); }
+header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
+.dv-nav { transition: top 320ms var(--ease); }
+@media (max-width: 99.99rem) {
+  html:has(header.group\/header[data-compact]:not([data-hidden])) .dv-nav,
+  html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
 
