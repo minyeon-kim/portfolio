@@ -191,7 +191,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform float bloom;
 out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -256,12 +256,20 @@ void main() {
   // Below a device pixel a point can't shrink, so it fades instead.
   vFaint *= min(px, 1.0);
   gl_PointSize = max(px, 1.0);
+  // The bloom pass: one point in twelve drawn again as a wide, faint halo of
+  // its own colour, so the dense parts shine.
+  if (bloom > 0.5) {
+    bool on = mod(i, 12.0) < 0.5;
+    gl_PointSize = on ? 12.0 * dpr : 0.0;
+    vFaint = on ? 1.0 : 0.0;
+    if (!on) gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
+  }
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
 in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
-uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
+uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light; uniform float bloom;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
   // A soft core; a flaring star shows a faint four-point glint.
@@ -270,12 +278,22 @@ void main() {
   float a = min(core + rays, 1.0) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
-  c = mix(c, vTint * mix(1.3, 1.5, e) * mix(1.0, 0.62, light), vSpec);
+  c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight;
   c = mix(c, vec3(1.0), 0.6 * vSize);
-  // Light theme: the dust is ink over the page rather than light.
-  c = mix(c, pow(c, vec3(1.7)) * 0.95, light);
+  // Light theme: the dust is ink over the page, but vivid ink: saturation
+  // pushed up, darkened only as much as a pale colour needs to read.
+  float lum = dot(c, vec3(0.3, 0.59, 0.11));
+  vec3 vivid = clamp(lum + (c - lum) * 1.8, 0.0, 1.0) * mix(0.9, 0.55, lum);
+  c = mix(c, vivid, light);
   alpha *= mix(1.0, 3.2, light);
+  if (bloom > 0.5) {
+    // A soft round halo, in the vivid colour, a few percent strong.
+    float h = exp(-dot(q, q) * 14.0) * vFaint;
+    vec3 hc = mix(c, clamp(lum + (c - lum) * 1.6, 0.0, 1.0), light);
+    alpha = h * mix(0.06, 0.09, light) * vLight * (0.6 + 0.4 * vDepth);
+    c = hc;
+  }
   o = vec4(c * alpha, alpha);
 }`;
 
@@ -476,6 +494,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
+      gl.uniform1f(uniform(pDraw, "bloom"), 1);
+      gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
+      gl.uniform1f(uniform(pDraw, "bloom"), 0);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
