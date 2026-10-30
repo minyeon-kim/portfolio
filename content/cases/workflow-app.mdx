@@ -234,10 +234,21 @@ export const study = {
       lead: "Before writing any ideas, we set three rules: the fewest steps, differences shown on screen instead of in words, and a layout developers already know.",
       text: "The rules came from the research: checking and merging took the most time, differences were hard to explain in chat, and developers should have little new to learn. With these rules and the HMW question above, we wrote down 26 ideas without judging any yet.",
     },
+    priority: {
+      method: "Prioritization",
+      title: "Prioritization",
+      lead: "We rated the 26 ideas on desirability, viability and feasibility, then ranked them with a team vote.",
+      text: "An idea that didn’t answer one of the four key problems was dropped, however well it scored.",
+      criteria: [
+        ["Desirability", "Do users really want it? Which need or pain does it solve?"],
+        ["Viability", "Can it last as a product and keep giving value?"],
+        ["Feasibility", "Can we build it with today’s technology, people and schedule?"],
+      ],
+    },
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "We then checked each idea against a real user pain, to keep only the ones users needed.",
+      lead: "We then matched the remaining ideas to real user pains, grouping ideas that aimed at the same pain into feature candidates.",
       text: "The circle on the right holds what users are trying to do, what gets in their way (pains) and what they hope for (gains), all from the interviews. The square on the left holds, for each idea, the pain it relieves, so every idea is pinned to a pain. Grouping ideas that aimed at the same pain left five candidates, A to E.",
       candidatesLabel: "Feature candidates and the pain points they address",
       candidates: [
@@ -330,6 +341,14 @@ export const study = {
         areas: [[4, 15, 21.5, 42], [31.5, 16.5, 41, 5], [47.5, 13.5, 9.5, 3.5]],
       },
     ],
+    handoff: {
+      method: "Developer handoff",
+      title: "Developer handoff",
+      lead: "We numbered every screen and element, so a developer can talk about them by number.",
+      text: "Screens are 1–4 in flow order; elements are “screen-element” (e.g. 3-2). Under each screen we wrote what takes the user to the next one.",
+      order: [1, 0, 2, 3],
+      flows: ["Saving the merged draft puts it on the workspace board (2).", "Clicking a changed screen’s change mark (2-2) opens that change in Conflict Points (3).", "A decision is recorded in History (4) together with its screen."],
+    },
   },
   testing: {
     method: "Validation",
@@ -343,6 +362,7 @@ export const study = {
       protocol: [
         { label: "Participants", value: "1 designer, 1 developer" },
         { label: "Tasks", value: "7 tasks, each done twice" },
+        { label: "Session", value: "Task brief → first attempt → reset and redo without help → retrospective and survey (SUS, a 5-point scale, six experience questions) → interview on current workflow and the UI. We analyzed observed behavior together with the post-test interview." },
         { label: "Measures", value: "Help needed on the first try (0–3), SUS, and a 5-point rating for “easier to find gaps”" },
       ],
       scenariosLabel: "Scenarios",

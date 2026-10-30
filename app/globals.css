@@ -3308,3 +3308,54 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .home-note { grid-column: 1; grid-row: 2; align-self: start; }
   .home-picks { top: 104px; translate: none; }
 }
+
+/* Prioritization criteria: one criterion per row, read top to bottom. */
+.dv-criteria { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--dv-line); }
+.dv-criteria li { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: 24px; padding-block: 20px; border-bottom: 1px solid var(--dv-line); }
+.dv-criteria strong { font-size: 18px; font-weight: 600; line-height: 1.4; }
+.dv-criteria span { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
+
+/* Rows instead of side-by-side cards (class feedback: reading across many
+   columns loses people): feature candidates and the community quotes. */
+.dv-candidates { grid-template-columns: 1fr; gap: 12px; }
+.dv-candidates li { display: grid; grid-template-columns: 32px minmax(0, 240px) minmax(0, 1fr) minmax(0, 220px); align-items: start; gap: 8px 24px; padding: 20px 24px; }
+.dv-candidates li > strong { line-height: 1.4; }
+.dv-candidate-pain span { margin-bottom: 4px; }
+.dv-candidate-to { margin: 0; padding-top: 0; border-top: 0; color: var(--case-accent); font-weight: 600; }
+.dv-voices { grid-template-columns: 1fr; gap: 12px; }
+.dv-voices li { display: grid; grid-template-columns: 40px minmax(0, 280px) minmax(0, 1fr); gap: 8px 24px; padding: 24px; }
+.dv-voices li > div { display: contents; }
+.dv-voices blockquote { margin-top: 0; }
+@media (max-width: 63.99rem) {
+  .dv-criteria li, .dv-candidates li, .dv-voices li { grid-template-columns: 1fr; gap: 6px; }
+  .dv-voices li > div { display: flex; flex-direction: column; }
+}
+
+/* A light parallax on cropped wide photos (CSS scroll timeline; static elsewhere). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-cover img { animation: dv-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes dv-drift { from { object-position: 50% 30%; } to { object-position: 50% 70%; } }
+  }
+}
+.dv-voices cite { grid-column: 3; margin-top: 0; }
+@media (max-width: 63.99rem) { .dv-voices cite { grid-column: auto; } }
+
+/* Developer handoff wireflow: numbered screens in flow order, numbered
+   elements on each, the step to the next screen underneath; annotations below. */
+.dv-wireflow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 0; list-style: none; }
+.dv-wireflow > li { display: flex; flex-direction: column; gap: 12px; }
+.dv-wireflow-name, .dv-annotations h4 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 18px; font-weight: 600; }
+.dv-wireflow-name b, .dv-annotations h4 b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 16px; }
+.dv-wireflow-screen { position: relative; overflow: hidden; aspect-ratio: 16 / 10; border-radius: 12px; background: #111; }
+.dv-wireflow-screen img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dv-wireflow-area { position: absolute; border: 1.5px solid var(--case-accent); border-radius: 4px; background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
+.dv-wireflow-area b { position: absolute; top: -10px; left: -6px; padding: 0 6px; border-radius: 999px; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 700; line-height: 1.4; white-space: nowrap; }
+.dv-wireflow-flow { display: flex; gap: 8px; margin: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-wireflow-flow span { color: var(--case-accent); font-weight: 700; }
+.dv-annotations { display: flex; flex-direction: column; gap: 24px; }
+.dv-annotations section { padding-top: 20px; border-top: 1px solid var(--dv-line); }
+.dv-annotations ol { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.dv-annotations li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; font-size: 18px; font-weight: 500; line-height: 1.5; }
+.dv-annotations li b { color: var(--case-accent); font-weight: 700; }
+@media (max-width: 63.99rem) { .dv-wireflow { grid-template-columns: 1fr; } }
