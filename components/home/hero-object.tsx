@@ -133,7 +133,7 @@ vec3 formOf(float n, vec2 uv) {
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
   // A case's form keeps only a thin haze round it, so the shape reads.
-  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 1.0, step(0.66, g)), focus);
+  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 1.0, step(0.8, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
@@ -304,7 +304,8 @@ void main() {
   // Sparse dust, so each grain is a little larger and sized by depth: far
   // ones small and sharp, near ones large and soft.
   float size = mix(0.65, 2.2, vDepth * vDepth) * mix(mix(mix(mix(0.9, 1.1, vDepth), mix(1.0, 1.3, vDepth), dark), mix(0.7, 0.85, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
-  vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star) * 2.0;
+  // With sparse dust, a case's form needs each grain brighter to read.
+  vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star) * 2.0 * mix(1.0, 1.7, step(0.5, symbol));
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
