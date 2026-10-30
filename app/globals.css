@@ -2992,3 +2992,13 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @media (max-width: 63.99rem) {
   .dv-review-cards, .dv-next-row { grid-template-columns: 1fr; gap: 24px; }
 }
+
+/* Takeaway review: one line per point; next step: label and title only. */
+.dv-review-lines { margin-top: 16px; border-top: 1px solid var(--dv-line); }
+.dv-review-lines li { display: grid; grid-template-columns: 48px minmax(0, 360px) minmax(0, 1fr); gap: 16px; align-items: baseline; padding-block: 18px; border-bottom: 1px solid var(--dv-line); }
+.dv-review-lines li > span:first-child { color: var(--case-accent); font-size: 14px; font-weight: 500; }
+.dv-review-lines strong { font-size: 18px; font-weight: 600; line-height: 1.4; }
+.dv-review-lines li > span:last-child { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-next-row { display: block; }
+.dv-next-row .dv-finding { margin-top: 8px; }
+@media (max-width: 47.99rem) { .dv-review-lines li { grid-template-columns: 32px minmax(0, 1fr); } .dv-review-lines li > span:last-child { grid-column: 2; } }
