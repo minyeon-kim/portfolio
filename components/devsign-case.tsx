@@ -263,6 +263,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-question">
           <p className="dv-caps reveal">{discover.synthesis.label}</p>
           <p className="dv-answer reveal">{discover.synthesis.title}</p>
+          {discover.synthesis.text && <p className="dv-body reveal">{discover.synthesis.text}</p>}
           <div className="dv-stages dv-gap-24">
             <div className="dv-stages-head" aria-hidden="true"><span /><span>{discover.synthesis.withAi}</span><span /><span>{discover.synthesis.gap}</span></div>
             {discover.synthesis.rows.map((row: { stage: string; withAi: string; gap: string }) => (
@@ -593,8 +594,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
                   <li key={sc.task} className="reveal">
                     <span className="dv-scenario-kicker">{testing.usability.scenarioWord} {pad(i + 1)}</span>
-                    <strong>{sc.role} · {sc.feature}</strong>
-                    <span className="dv-scenario-task">{sc.task}</span>
+                    <strong>{sc.task}</strong>
+                    <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
                     <span className="dv-scenario-actions">{sc.actions}</span>
                   </li>
                 ))}
@@ -664,6 +665,36 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
+        {ff ? <>
+        {/* Findings first: the statement, three review cards, then the next
+            step as a two-column row (what, then why and what it checks). */}
+        <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
+        <p className="dv-body reveal">{takeaway.text}</p>
+        <div className="dv-gap-80">
+          <p className="dv-caps reveal">{takeaway.reviewTitle}</p>
+          <ol className="dv-review-cards">
+            {takeaway.review.map((item: { title: string; body: string }, i: number) => (
+              <li key={item.title} className="reveal">
+                <span>{pad(i + 1)}</span>
+                <h4>{item.title}</h4>
+                <p>{item.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="dv-next-row dv-gap-80 reveal">
+          <div>
+            <p className="dv-caps dv-accent">{takeaway.next.label}</p>
+            <p className="dv-finding">{takeaway.next.title}</p>
+          </div>
+          <div>
+            <p className="dv-next-text">{takeaway.next.text}</p>
+            <ul className="dv-next-checks">
+              {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
+            </ul>
+          </div>
+        </div>
+        </> : <>
         <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
         <p className="dv-body dv-muted reveal">{takeaway.text}</p>
         <div className="dv-gap-64">
@@ -693,6 +724,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {takeaway.next.chips.map((chip: string) => <li key={chip}><span aria-hidden="true">→</span>{chip}</li>)}
           </ul>
         </div>
+        </>}
       </Section>
     </div>
   );

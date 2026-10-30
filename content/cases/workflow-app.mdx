@@ -75,17 +75,17 @@ export const study = {
       method: "Secondary research",
       title: "Desk research",
       lead: "The bottleneck moved from making to checking.",
-      text: "Merging AI outputs took us longer than making them, and little research covered it. So we started with secondary research: community posts, industry data and 9 existing tools.",
+      text: "Merging AI outputs took us longer than making them. Before building anything, we checked two things: is this common, and do existing tools already solve it? We read community posts and industry data, and reviewed 9 tools.",
     },
     q1: {
-      label: "Question 1 · How common is it?",
-      answer: "Very common. Teams build with AI, then check and decide by hand.",
+      label: "Question 1 · Is this common?",
+      answer: "Yes. Almost everyone builds with AI, but few trust the result, so they check and decide by hand.",
       surveyLabel: "Survey · Stack Overflow 2025",
       stats: [
-        { value: "29%", text: "trust AI output, while 80% use it" },
-        { value: "66%", text: "say “almost right” AI code is their top frustration" },
+        { value: "29%", text: "of developers trust AI output, though 80% use it" },
+        { value: "66%", text: "say their top frustration is AI code that is almost right, but not quite" },
       ],
-      communityLabel: "Community posts · 7 patterns, 3 problems",
+      communityLabel: "Community posts · the same three problems kept coming up",
       groups: [
         { name: "Decisions lose their trail", detail: "Final versions and context get lost across tools." },
         { name: "Roles collide", detail: "Design and dev lines blur." },
@@ -94,8 +94,8 @@ export const study = {
       boards: { src: "/images/devsign/research-boards.webp", width: 4096, height: 1310, caption: "Research boards · Reddit, Hacker News and Medium posts sorted by pattern" },
     },
     q2: {
-      label: "Question 2 · Do tools solve it?",
-      answer: "Not yet. Tools spot differences, but none merges AI drafts or keeps why.",
+      label: "Question 2 · Do existing tools solve it?",
+      answer: "Not yet. Tools find differences, but none helps merge AI drafts or keep the reason behind a decision.",
       auditLabel: "Tool audit · 9 design–dev tools",
       columns: [
         { name: "Handoff" },
@@ -116,6 +116,7 @@ export const study = {
     synthesis: {
       label: "Analysis",
       title: "Where each stage breaks",
+      text: "Put together: AI speeds up every stage, and each speed-up leaves a gap.",
       withAi: "With AI",
       gap: "Gap",
       rows: [
@@ -128,8 +129,8 @@ export const study = {
     interview: {
       method: "Primary research",
       title: "In-depth interview",
-      lead: "Everyone double-checks AI. No one owns it.",
-      text: "Posts showed what hurts, not how teams decide. So we ran 60-minute sessions with 4 practitioners.",
+      lead: "Posts showed what hurts. We needed to see how teams decide.",
+      text: "So we asked practitioners where AI output gets stuck between designers and developers, and who makes the final call. Four 60-minute sessions gave the same answer: everyone re-checks AI output, but no one owns the decision.",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "A remote interview session: a shared FigJam board with sticky notes next to participant video tiles" },
       questionsLabel: "What we wanted to know",
       questions: [
@@ -335,9 +336,9 @@ export const study = {
       scenariosLabel: "Scenarios",
       scenarioWord: "Scenario",
       scenarios: [
-        { role: "Designer", feature: "Merge Studio", task: "Merge dashboard drafts A and B (2 vs 3 columns, CTA colour).", actions: "Compare, combine, save" },
-        { role: "Designer", feature: "Conflict Points", task: "Review a mobile layout where the 2-column design overlaps in the build.", actions: "Compare, review, approve" },
-        { role: "Developer", feature: "Conflict Points", task: "Fix a mobile grid overlap caused by CSS constraints.", actions: "Find the cause, fix, request approval" },
+        { role: "Designer", feature: "Merge Studio", task: "Combine the best parts of two AI dashboard drafts into one.", actions: "Compare the drafts → pick parts → save" },
+        { role: "Designer", feature: "Conflict Points", task: "Decide on a developer’s request: cards overlap on mobile, so switch from 2 columns to 1?", actions: "Compare design and build → read the reason → approve or not" },
+        { role: "Developer", feature: "Conflict Points", task: "Find where the mobile build drifts from the design, then fix it or ask the designer.", actions: "Check the cause → fix → request approval" },
       ],
       resultLabel: "Results",
       result: "Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
