@@ -572,6 +572,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <div>
               <p className="dv-caps reveal">{testing.usability.processLabel}</p>
               <p className="dv-body reveal">{testing.usability.process}</p>
+              {testing.usability.scenarios && (
+                <ol className="dv-scenarios">
+                  {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
+                    <li key={sc.task} className="reveal">
+                      <span className="dv-scenario-kicker">{pad(i + 1)} · {sc.role} · {sc.feature}</span>
+                      <span className="dv-scenario-task">{sc.task}</span>
+                      <span className="dv-scenario-actions">{sc.actions}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </div>
           </div>
           <div className="dv-gap-64">
