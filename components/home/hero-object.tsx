@@ -284,14 +284,17 @@ void main() {
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
   float lum = dot(c, vec3(0.3, 0.59, 0.11));
-  vec3 vivid = clamp(lum + (c - lum) * 1.8, 0.0, 1.0) * mix(0.9, 0.55, lum);
+  // Fluorescent: the strongest channel pushed to full, the weakest pulled
+  // down, so each grain reads as coloured light rather than grey dust.
+  vec3 sat = clamp(lum + (c - lum) * 2.4, 0.0, 1.0);
+  vec3 vivid = sat / max(max(sat.r, max(sat.g, sat.b)), 0.2) * mix(0.95, 0.8, lum);
   c = mix(c, vivid, light);
   alpha *= mix(1.0, 3.2, light);
   if (bloom > 0.5) {
     // A soft round halo, in the vivid colour, a few percent strong.
     float h = exp(-dot(q, q) * 14.0) * vFaint;
-    vec3 hc = mix(c, clamp(lum + (c - lum) * 1.6, 0.0, 1.0), light);
-    alpha = h * mix(0.06, 0.09, light) * vLight * (0.6 + 0.4 * vDepth);
+    vec3 hc = c;
+    alpha = h * 0.11 * vLight * (0.6 + 0.4 * vDepth);
     c = hc;
   }
   o = vec4(c * alpha, alpha);
@@ -494,8 +497,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
-      gl.uniform1f(uniform(pDraw, "bloom"), 1);
-      gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
+      // The halos are for the light theme only; in the dark the dust is light already.
+      if (colours.light > 0.5) { gl.uniform1f(uniform(pDraw, "bloom"), 1); gl.drawArrays(gl.POINTS, 0, SIZE * SIZE); }
       gl.uniform1f(uniform(pDraw, "bloom"), 0);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
