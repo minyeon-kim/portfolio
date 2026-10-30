@@ -66,18 +66,19 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* 13 / 15 / 18 / 24 / 36 / 64. display (64) is the landing case name only. */
+  /* 13 / 15 / 18 / 24 / 36 / 64. display (64) is the landing case name only.
+     Line heights are relative, so they follow the size (class feedback). */
   --text-*: initial;
   --text-xs: 13px;
-  --text-xs--line-height: 20px;
+  --text-xs--line-height: 1.5;
   --text-sm: 15px;
-  --text-sm--line-height: 24px;
+  --text-sm--line-height: 1.6;
   --text-base: 18px;
-  --text-base--line-height: 28px;
+  --text-base--line-height: 1.55;
   --text-lg: 24px;
-  --text-lg--line-height: 32px;
+  --text-lg--line-height: 1.35;
   --text-xl: 36px;
-  --text-xl--line-height: 44px;
+  --text-xl--line-height: 1.2;
   --text-display: 64px;
   --text-display--line-height: 1.05;
 
