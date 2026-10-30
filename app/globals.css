@@ -2572,7 +2572,8 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 15px; font-weight: 500; line-height: 1.55; }
 /* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
 /* Gemini (Robinhood): a portrait card cropped at the bottom right, the name at the left of centre, the role under it, the problem top centre-right. */
-.home-device[data-project="gemini-privacy"] { top: auto; bottom: -8vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
+/* The Gemini phone keeps its bleed off the right edge and sits lower, below the pills. */
+.home-device[data-project="gemini-privacy"] { top: auto; bottom: -30vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
 /* The name starts clear of the pill column and stops short of the card (which begins at 68vw, or 102vw - 520px once the card caps). */
 .home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 300px)); }
 .home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: 44%; max-width: calc(min(68vw, 102vw - 520px) - var(--gx) - 48px); font-size: clamp(44px, 5.4vw, 104px); }
@@ -2591,7 +2592,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .home-world-role, .home-world-name, .home-world-problem { display: none; }
 }
 /* The hovered case's media: a large flat card at the top right, in its own frame (metalab.com's project shot), not a posed device. */
-.home-device { position: absolute; top: 14%; right: var(--project-text-inset); width: min(44vw, 680px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 22px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
+.home-device { position: absolute; top: 14%; right: calc(var(--project-text-inset) + var(--picks-gutter)); width: min(40vw, 620px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 22px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
 .home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 22px); transition: opacity 500ms ease 80ms, translate 1400ms var(--ease-out-soft) 80ms, clip-path 1400ms var(--ease-out-soft) 80ms; }
 /* The cards sit above the backdrop's vignette, so the light theme's pale edge never washes over them. */
 .home-backdrop .home-device, .home-backdrop .home-device-caption { z-index: 1; }
@@ -2612,7 +2613,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-device-caption-meta > span:last-child { color: #fff; font-size: 20px; line-height: 1; }
 @media (min-width: 64rem) {
   .home-device-caption { display: block; }
-  .home-device-caption[data-project="workflow-app"] { right: var(--project-text-inset); top: calc(14% + min(44vw, 680px) * 0.625 - 72px); }
+  .home-device-caption[data-project="workflow-app"] { right: calc(var(--project-text-inset) + var(--picks-gutter)); top: calc(14% + min(40vw, 620px) * 0.625 - 72px); }
   .home-device-caption[data-project="gemini-privacy"] { right: calc(min(34vw, 520px) - 2vw - 110px); bottom: 12vh; }
 }
 .home-device-window { position: absolute; inset: 0; display: flex; flex-direction: column; }
@@ -2627,8 +2628,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-meta { grid-column: 2; grid-row: 1; justify-self: end; margin: 0; color: var(--muted); font: 500 13px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 /* Pinned to the vertical center, out of the grid flow, so the swapping paragraph and
    statement never move the pills under the pointer. */
-.home-picks { position: absolute; top: 50%; left: var(--project-text-inset); translate: 0 -50%; }
-.home-picks ol { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0; padding: 0; list-style: none; }
+/* The case pills sit at the right edge, mid-height; the raised case devices
+   keep clear of them by --picks-gutter. */
+.home-stage { --picks-gutter: 0px; }
+@media (min-width: 64rem) { .home-stage { --picks-gutter: 236px; } }
+.home-picks { position: absolute; z-index: 3; top: 50%; right: var(--project-text-inset); translate: 0 -50%; }
+.home-picks ol { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin: 0; padding: 0; list-style: none; }
 /* After metalab.com's case list: compact frosted grey pills, the name alone. */
 .home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 16px; border: 0; border-radius: 999px; background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8); color: var(--ink); font-size: 15px; font-weight: 400; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
 /* Hovered or active: see-through, just the line (metalab.com). */
@@ -2658,7 +2663,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: auto; max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
-  .home-picks ol { flex-direction: row; flex-wrap: wrap; }
+  .home-picks ol { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
   .home-device, .home-device[data-project="gemini-privacy"] { left: var(--project-text-inset); right: auto; width: min(calc(100vw - 2 * var(--project-text-inset)), 560px); aspect-ratio: 16 / 10; top: auto; bottom: 40px; translate: 0 12px; }
   .home-device[data-active] { translate: 0 0; }
 }
