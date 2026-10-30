@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
+import { DeliverStory, IterationStory } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -30,7 +31,7 @@ const CROPS: Record<string, [number, number, number, number, number]> = {
   "/images/devsign/information-architecture.webp": [1440 / 279, 102.77, 115.63, -1.23, -10.74],
   "/images/devsign/user-flow.webp": [1440 / 351, 104.71, 126.42, -2.27, -18.71],
   "/images/devsign/value-effort-matrix.webp": [376 / 440, 103.73, 107.53, -1.87, -5.91],
-  "/images/devsign/codesign-session.webp": [700 / 421, 108.84, 118.47, -4.38, -13.12],
+  "/images/devsign/codesign-session.webp": [720 / 472, 108.84, 118.47, -4.38, -13.12],
 };
 
 function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" }: { img: Img; sizes?: string; className?: string }) {
@@ -47,7 +48,18 @@ function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" 
 }
 
 // Method label, uppercase block title, then a bold lead sentence running into muted text.
-function Block({ method, title, lead, text, id }: Lead & { id?: string }) {
+// Findings first (`ff`, the Devsign case): the method's name as a small label,
+// the finding or decision as the heading, then the text; `label` overrides the
+// label (Iteration 1 · Split by role) and `feature` tags the feature it changed.
+function Block({ method, title, lead, text, id, label, feature, ff }: Lead & { id?: string; label?: string; feature?: string; ff?: boolean }) {
+  if (ff) return (
+    <div className="dv-block">
+      <p className="dv-label reveal">{label ?? title}</p>
+      <h3 id={id} className="dv-finding reveal">{lead}</h3>
+      {feature && <p className="dv-tag reveal">{feature}</p>}
+      {text && <p className="dv-body reveal">{text}</p>}
+    </div>
+  );
   return (
     <div className="dv-block">
       {method && <p className="dv-method reveal">{method}</p>}
@@ -112,10 +124,10 @@ function Donut({ ratio, missed }: { ratio: number; missed?: boolean }) {
 }
 
 // Findings as rows: a bold name, then its detail.
-function Groups({ groups }: { groups: { name: string; detail: string }[] }) {
+function Groups({ groups, numbered }: { groups: { name: string; detail: string }[]; numbered?: boolean }) {
   return (
-    <dl className="dv-groups">
-      {groups.map((g) => <div key={g.name} className="reveal"><dt>{g.name}</dt><dd>{g.detail}</dd></div>)}
+    <dl className={numbered ? "dv-groups dv-groups-numbered" : "dv-groups"}>
+      {groups.map((g, i) => <div key={g.name} className="reveal">{numbered && <span aria-hidden="true">{pad(i + 1)}</span>}<dt>{g.name}</dt><dd>{g.detail}</dd></div>)}
     </dl>
   );
 }
@@ -148,6 +160,7 @@ function DevelopBlock({ block }: { block: Study }) {
 
 export function DevsignCase({ study, children }: { study: Study; children: ReactNode }) {
   const { overview, discover, define, develop, deliver, testing, takeaway, labels } = study;
+  const ff = Boolean(study.findings);
   const nav = [
     { id: "overview", label: "Overview" },
     { id: "discover", label: "Discover" },
@@ -173,10 +186,13 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
         {overview.features && (
           <div className="dv-main-features">
-            <Block method={overview.features.method} title={overview.features.title} />
-            <ul className="dv-features dv-gap-40" style={{ "--n": overview.features.items.length } as React.CSSProperties}>
-              {overview.features.items.map((f: { kicker: string; name: string; body: string }) => (
-                <li key={f.name} className="reveal"><span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span></li>
+            {ff ? <Block title={overview.features.method} lead={overview.features.title} ff={ff} /> : <Block method={overview.features.method} title={overview.features.title} />}
+            <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as React.CSSProperties}>
+              {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => (
+                <li key={f.name} className="reveal">
+                  {f.src && <Image src={withBase(f.src)} alt="" width={1280} height={800} sizes="(max-width: 767px) 100vw, 300px" className="dv-feature-shot" />}
+                  <span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span>
+                </li>
               ))}
             </ul>
             <p className="dv-link reveal"><a href="#deliver">{overview.features.link}</a></p>
@@ -185,7 +201,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="discover" title="Discover">
-        <Block {...discover.desk} />
+        <Block {...discover.desk} ff={ff} />
 
         <div className="dv-question">
           <p className="dv-caps reveal">{discover.q1.label}</p>
@@ -196,18 +212,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <p key={stat.value} className="dv-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
             ))}
           </div>
-          {/* With boards: the problems in one line, then the boards they came
-              from. Without: each finding as a row with its detail. */}
+          {/* Each finding as a row with its detail; with boards, numbered and
+              followed by a strip of the boards they came from. */}
           <div className="dv-gap-56">
             <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
-            {discover.q1.boards ? (
-              <>
-                <ul className="dv-problem-chips reveal">
-                  {discover.q1.groups.map((group: { name: string }) => <li key={group.name}>{group.name}</li>)}
-                </ul>
-                <Figure img={{ ...discover.q1.boards, alt: "Research boards with community posts grouped by pattern" }} sizes="(max-width: 767px) 100vw, 1200px" className="dv-boards dv-gap-24" />
-              </>
-            ) : <Groups groups={discover.q1.groups} />}
+            <Groups groups={discover.q1.groups} numbered={Boolean(discover.q1.boards)} />
+            {discover.q1.boards && <Figure img={{ ...discover.q1.boards, alt: "Research boards with community posts grouped by pattern" }} sizes="(max-width: 767px) 100vw, 1200px" className="dv-boards dv-strip dv-gap-24" />}
           </div>
         </div>
 
@@ -265,6 +275,29 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         </div>
 
+        {ff ? (
+        <div className="dv-subsection dv-rule">
+          <Block {...discover.interview} ff={ff} />
+          <div className="dv-media-row dv-gap-40">
+            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
+            <div>
+              <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
+              <ol className="dv-numbered dv-numbered-loose">
+                {discover.interview.questions.map((q: string) => <li key={q} className="reveal">{q}</li>)}
+              </ol>
+            </div>
+          </div>
+          <ul className="dv-people dv-gap-48">
+            {discover.interview.participants.map((p: string[]) => (
+              <li key={p[0]} className="reveal">
+                <span>{p[0]}</span>
+                <strong>{p[1]}</strong>
+                <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        ) : (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} />
           <div className={discover.interview.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
@@ -289,10 +322,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </div>
           </div>
         </div>
+        )}
       </Section>
 
       <Section id="define" title="Define">
-        <Block {...define.personas} />
+        <Block {...define.personas} ff={ff} />
         <div className="dv-personas dv-gap-64">
           {define.personas.people.map((person: Study, index: number) => (
             <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
@@ -326,12 +360,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-summary reveal">{define.personas.summary}</p>
 
         <div className="dv-subsection">
-          <Block {...define.affinity} />
+          <Block {...define.affinity} ff={ff} />
           <Figure img={define.affinity.board} className="dv-board dv-gap-72" />
         </div>
 
         <div className="dv-subsection">
-          <Block {...define.problems} />
+          <Block {...define.problems} ff={ff} />
           <ol className="dv-problems dv-gap-40">
             {define.problems.items.map((item: Study, index: number) => (
               <li key={item.title} className="reveal">
@@ -356,7 +390,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
         <div className="dv-hmw">
           <p className="dv-method reveal">{define.hmw.method}</p>
-          <h3 className="dv-block-title reveal">{define.hmw.title}</h3>
+          {!ff && <h3 className="dv-block-title reveal">{define.hmw.title}</h3>}
           <p className="dv-hmw-question reveal">{define.hmw.question}</p>
           <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
           <ol className="dv-checks">
@@ -366,17 +400,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="develop" title="Develop">
-        <Block {...develop.ideation} />
+        <Block {...develop.ideation} ff={ff} />
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
-        <div className="dv-split dv-gap-80">
+        {develop.matrix && <div className="dv-split dv-gap-80">
           <Figure img={develop.matrix.image} sizes="(max-width: 767px) 100vw, 400px" className="dv-matrix-img" />
           <Block {...develop.matrix} />
-        </div>
-        <div className="dv-split dv-gap-96">
+        </div>}
+        <div className={ff ? "dv-split dv-split-canvas dv-gap-96" : "dv-split dv-gap-96"}>
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
-          <Block {...develop.canvas} />
+          <Block {...develop.canvas} ff={ff} />
         </div>
-        <div className="dv-gap-96">
+        {develop.dvf && <div className="dv-gap-96">
           <Block {...develop.dvf} />
           <p className="dv-caps dv-accent dv-gap-40 reveal">{develop.dvf.featuresLabel}</p>
           <ul className="dv-features" style={{ "--n": develop.dvf.features.length } as React.CSSProperties}>
@@ -384,16 +418,30 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <li key={f.name} className="reveal"><strong>{f.name}</strong><span>{f.solves}</span></li>
             ))}
           </ul>
-        </div>
+        </div>}
         <div className="dv-gap-96">
-          <Block {...develop.sketching} />
+          <Block {...develop.sketching} ff={ff} />
           <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />
         </div>
+        {develop.selection && (
+          <div className="dv-gap-96">
+            <p className="dv-caps dv-accent reveal">{develop.selection.label}</p>
+            <ol className="dv-selection">
+              {develop.selection.items.map((item: { problem: string; feature: string; from: string }, i: number) => (
+                <li key={item.feature} className="reveal">
+                  <span className="dv-selection-problem">{item.problem}</span>
+                  <span className="dv-selection-arrow" aria-hidden="true">→</span>
+                  <span className="dv-selection-feature"><strong><b>{pad(i + 1)}</b>{item.feature}</strong><span>{item.from}</span></span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
         <div className="dv-subsection">
-          <Block {...develop.ia} />
+          <Block {...develop.ia} ff={ff} />
           <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
           <div className="dv-gap-96">
-            <Block {...develop.flow} />
+            <Block {...develop.flow} ff={ff} />
             <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
           </div>
         </div>
@@ -401,7 +449,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="deliver" title="Deliver" band>
-        <Block {...deliver} />
+        <Block {...deliver} ff={ff} />
         <div className="dv-gap-64">
           {deliver.changes ? (
             <ol className="dv-points dv-changes" style={{ "--n": deliver.changes.length } as React.CSSProperties}>
@@ -413,16 +461,22 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </li>
               ))}
             </ol>
-          ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
+          ) : ff ? <DeliverStory features={deliver.features} openLabel={deliver.openLabel} />
+            : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
         </div>
       </Section>
 
       <section className="dv-section dv-testing" aria-labelledby="testing-title">
-        <Block {...testing} id="testing-title" />
-        <div className="dv-gap-72">
-          <Block {...testing.usability} />
-          <div className={testing.usability.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
-            {testing.usability.photo && <Figure img={testing.usability.photo} sizes="(max-width: 767px) 100vw, 50vw" className="dv-photo" />}
+        {ff ? (
+          <div className="dv-block">
+            <p className="dv-label reveal">{testing.title}</p>
+            <h2 id="testing-title" className="dv-testing-head reveal">{testing.lead}</h2>
+          </div>
+        ) : <Block {...testing} id="testing-title" />}
+        <div className={ff ? "dv-gap-96" : "dv-gap-72"}>
+          <Block {...testing.usability} ff={ff} />
+          <div className={ff ? "dv-media-row dv-gap-40" : testing.usability.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
+            {testing.usability.photo && <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />}
             <ul className="dv-scores">
               {testing.usability.scores.map((s: Study) => (
                 <li key={s.title} className="reveal">
@@ -440,13 +494,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
-          <Block {...testing.iteration1} />
-          <div className="dv-gap-40"><DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} /></div>
+          <Block {...testing.iteration1} ff={ff} />
+          <div className="dv-gap-40">{ff
+            ? <IterationStory before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />
+            : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
-          <Block {...testing.iteration2} />
-          <div className="dv-two dv-gap-40 dv-center">
-            <Figure img={testing.iteration2.photo} sizes="(max-width: 767px) 100vw, 50vw" className="dv-photo" />
+          <Block {...testing.iteration2} ff={ff} />
+          <div className={ff ? "dv-media-row dv-gap-40" : "dv-two dv-gap-40 dv-center"}>
+            <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
             <div>
               <p className="dv-caps dv-accent reveal">{testing.iteration2.agreedLabel}</p>
               <ol className="dv-numbered">
@@ -454,7 +510,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </ol>
             </div>
           </div>
-          <div className="dv-gap-40"><DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
+          <div className={ff ? "dv-gap-96" : "dv-gap-40"}>{ff
+            ? <IterationStory before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />
+            : <DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />}</div>
         </div>}
       </section>
 
