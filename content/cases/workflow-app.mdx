@@ -212,8 +212,8 @@ export const study = {
     core: {
       method: "Problem definition",
       title: "Core problem",
-      lead: "Most teams check and decide AI outputs over chat,",
-      text: "so designers lose their say before release, and the team loses why each change was made.",
+      lead: "Most teams check and decide on AI output in chat.",
+      text: "Designers lose their say before release, and the team loses track of why things changed.",
     },
     hmw: {
       method: "HMW",
@@ -227,14 +227,14 @@ export const study = {
     ideation: {
       method: "Diverge → converge",
       title: "Ideation",
-      lead: "Every feature answers one of the four problems.",
-      text: "We started wide with early ideas, mapped them to what users needed, then narrowed 26 ideas down to four features.",
+      lead: "We went wide on the HMW question, then kept only ideas that answer the four problems.",
+      text: "First we wrote down every idea we had. Then we checked them against what users actually needed, and narrowed 26 ideas down to four features.",
     },
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "Pain relievers became five feature directions (A–E).",
-      text: "Before generating ideas, we re-stated users' needs and pain points from the interview themes, then grouped the pain relievers into five feature candidates (A–E).",
+      lead: "To check that ideas met real needs, we restated those needs first.",
+      text: "We put users’ jobs, pains and gains from the interviews on one canvas and listed a way to relieve each pain. Grouping them gave five feature directions (A–E).",
       image: { src: "/images/devsign/value-proposition-canvas.webp", width: 1600, height: 716, alt: "Value proposition canvas: the product square of features and pain relievers beside the customer circle of jobs, pains and gains" },
     },
     sketching: {
@@ -271,8 +271,8 @@ export const study = {
     system: {
       method: "Structure",
       title: "Design system",
-      lead: "One token file set the rules for every screen.",
-      text: "Colour, spacing, shape and components live in one file that every page follows: a dark palette with a single mint primary (violet only on the design canvas), 32px controls, 12px gaps, 8 and 12px corners, built on shadcn/ui. Every panel opens the same way, beside the work rather than over it.",
+      lead: "We set the visual rules once, so every screen matched.",
+      text: "Colour, spacing, shape and components are defined in one token file that every page uses: one mint colour for actions, 32px controls, 12px gaps, and 8 or 12px corners. Panels always open beside the work, never over it.",
     },
   },
   deliver: {
@@ -336,9 +336,9 @@ export const study = {
       scenariosLabel: "Scenarios",
       scenarioWord: "Scenario",
       scenarios: [
-        { role: "Designer", feature: "Merge Studio", task: "Combine the best parts of two AI dashboard drafts into one.", actions: "Compare the drafts → pick parts → save" },
-        { role: "Designer", feature: "Conflict Points", task: "Decide on a developer’s request: cards overlap on mobile, so switch from 2 columns to 1?", actions: "Compare design and build → read the reason → approve or not" },
-        { role: "Developer", feature: "Conflict Points", task: "Find where the mobile build drifts from the design, then fix it or ask the designer.", actions: "Check the cause → fix → request approval" },
+        { role: "Designer", feature: "Merge Studio", task: "Merge two AI dashboard drafts into one.", actions: "Compare → pick → save" },
+        { role: "Designer", feature: "Conflict Points", task: "Approve or reject a developer’s layout change.", actions: "Compare → check the reason → decide" },
+        { role: "Developer", feature: "Conflict Points", task: "Fix a mobile screen that drifts from the design.", actions: "Find the cause → fix → request approval" },
       ],
       resultLabel: "Results",
       result: "Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
