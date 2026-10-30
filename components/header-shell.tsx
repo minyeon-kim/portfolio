@@ -52,7 +52,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
     <header
       ref={ref}
       data-home={overStage || undefined}
-      className={`group/header z-20 transition-[background-color] duration-400 ease-standard md:sticky md:top-0 md:data-compact:bg-transparent md:data-compact:backdrop-blur-none ${
+      className={`group/header z-20 transition-[background-color] duration-400 ease-standard sticky top-0 md:data-compact:bg-transparent md:data-compact:backdrop-blur-none ${
         overStage || overHero
           ? "bg-bg/90 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none"
           : "bg-bg/90 backdrop-blur-sm"
