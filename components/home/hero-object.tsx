@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
-// - default: a face-on spiral galaxy, three arms, slowly turning
+// - default: a round galaxy, a bright core in a soft disc, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
@@ -32,12 +32,21 @@ uniform float symbol;
 uniform float SIZE;
 uniform float focus;  // 0.85 on the landing galaxy, 1 while a case is hovered: the form gathers tighter
 float h1(float n) { return fract(sin(n) * 43758.5453); }
+// An integer hash (PCG): sin() above loses precision for large n, which
+// leaves visible spokes when many points share an angle.
+float hq(float n, uint k) {
+  uint v = uint(n) * 747796405u + k * 2891336453u;
+  v = ((v >> ((v >> 28u) + 4u)) ^ v) * 277803737u;
+  v = (v >> 22u) ^ v;
+  return float(v) / 4294967295.0;
+}
 // The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
-const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(470.0, 215.0), vec2(660.0, 230.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(235.0, 215.0), vec2(0.0, 205.0));
+// Narrow at the top, so the upper slab reads as a bolt rather than a wide wedge.
+const vec2 BOLT[7] = vec2[7](vec2(270.0, 0.0), vec2(560.0, 0.0), vec2(440.0, 240.0), vec2(650.0, 240.0), vec2(290.0, 625.0), vec2(370.0, 360.0), vec2(150.0, 360.0));
 vec2 boltPoint(vec2 v) { return vec2((v.x - 330.0) * 0.75, 312.0 - v.y) * (1.7 / 625.0); }
 bool inBolt(vec2 q) {
   bool inside = false;
-  for (int i = 0, j = 8; i < 9; j = i++) {
+  for (int i = 0, j = 6; i < 7; j = i++) {
     vec2 a = boltPoint(BOLT[i]), b = boltPoint(BOLT[j]);
     if ((a.y > q.y) != (b.y > q.y) && q.x < (b.x - a.x) * (q.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
   }
@@ -46,8 +55,8 @@ bool inBolt(vec2 q) {
 // Where each particle leans: a loose cloud with a wide halo of dust.
 vec3 homeOf(vec2 uv) {
   float n = floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE;
-  float a = h1(n * 1.17), b = h1(n * 2.31), c = h1(n * 3.77), g = h1(n * 5.13);
-  vec3 j = vec3(h1(n * 7.1), h1(n * 8.3), h1(n * 9.7)) - 0.5;
+  float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
+  vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   if (symbol > 2.5) {
     // A landscape of dots, seen low from the front: a regular grid rolling
@@ -71,17 +80,17 @@ vec3 homeOf(vec2 uv) {
     // set above the title, clear of the project window on the right.
     vec2 q;
     if (a < 0.3) {
-      float e = b * 9.0, k = floor(e);
+      float e = b * 7.0, k = floor(e);
       int ki = int(k);
-      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
-      loose *= 0.5;
+      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 7]), fract(e));
+      loose *= 0.3;
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 10; t++) {
         vec2 r = (vec2(h1(n * 3.1 + float(t) * 1.7), h1(n * 5.9 + float(t) * 2.3)) - 0.5) * vec2(1.4, 1.75);
         if (inBolt(r)) { q = r; break; }
       }
-      loose *= 0.75;
+      loose *= 0.4;
     }
     p = vec3(q + vec2(-0.6, 0.42), (h1(n * 4.4) - 0.5) * 0.2);
   } else if (symbol > 0.5) {
@@ -94,30 +103,26 @@ vec3 homeOf(vec2 uv) {
     p = vec3(dir * r * fill * 1.1, (h1(n * 4.4) - 0.5) * 0.2);
     loose *= a < 0.45 ? 0.45 : 0.7;
   } else {
-    // A spiral galaxy seen nearly face-on: a bright core, three arms winding
-    // out round it and fine dust between them, turning slowly. Set a little
-    // above the centre, clear of the headline.
+    // A round galaxy: a bright core in a soft round disc of dust, thinning
+    // outwards, with only a faint swirl in it; turning slowly.
     vec2 q;
-    if (a < 0.14) {
-      float t = c * 6.2831853;
-      q = vec2(cos(t), sin(t)) * 0.24 * pow(h1(n * 6.1), 1.6);
+    float t = hq(n, 11u) * 6.2831853 + time * 0.03;
+    if (a < 0.16) {
+      q = vec2(cos(t), sin(t)) * 0.22 * pow(hq(n, 12u), 1.4);
       loose *= 0.3;
     } else if (a < 0.8) {
-      float u = (a - 0.14) / 0.66;
-      float r = 0.16 + pow(u, 0.8) * 1.35;
-      float t = floor(b * 3.0) * 2.0943951 + log(r / 0.16) * 2.2 + time * 0.03 + (c - 0.5) * (0.3 + 0.25 * u);
+      float r = 0.12 + 1.0 * (1.0 - exp(-hq(n, 13u) * 2.4)) / (1.0 - exp(-2.4));
       q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.3 + 0.3 * u;
+      loose *= 0.22;
     } else {
-      // The disc between the arms.
-      float t = c * 6.2831853, r = 0.2 + pow(h1(n * 6.7), 0.7) * 1.35;
-      q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.45;
+      // The faint swirl: dust a little denser along three gentle arms.
+      float r = 0.18 + pow(hq(n, 13u), 0.8) * 0.95;
+      float arm = floor(hq(n, 15u) * 3.0) * 2.0943951 + log(r / 0.2) * 1.6 + time * 0.03 + (hq(n, 14u) - 0.5) * 0.7;
+      q = vec2(cos(arm), sin(arm)) * r;
+      loose *= 0.3;
     }
-    q.y *= 0.9;
-    float ct = cos(0.2), st = sin(0.2);
-    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y) + vec2(0.0, 0.22);
-    p = vec3(q * 1.1, (h1(n * 4.4) - 0.5) * 0.25);
+    q += vec2(0.0, 0.22);
+    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.25);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -526,7 +531,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
-        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "stir"), 0.65);
+        gl.uniform1f(uniform(pVel, "gather"), 0.8); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
