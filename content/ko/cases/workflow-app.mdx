@@ -12,7 +12,7 @@ export const meta = {
   featured: true,
   order: 1,
   hero: {
-    title: "AI로 모두가 빨라졌는데, 왜 함께 일하기는 더 어려워졌을까?",
+    title: "AI 시대의 개발팀은 어떤 문제를 겪고 있을까?",
     details: [
       { label: "Duration", value: "10주" },
       { label: "Team", value: "UX 엔지니어 2명" },
@@ -48,8 +48,8 @@ export const study = {
     no: "없음",
   },
   overview: {
-    headline: "AI로 만드는 건 빨라졌는데,",
-    headlineAccent: "함께 일하기는 더 어려워졌다.",
+    headline: "AI 시대의 가장 큰 과제는",
+    headlineAccent: "AI가 만든 결과물을 확인하고 합치는 일이다.",
     process: {
       title: "Process · Double Diamond",
       body: "AI와 함께 일하는 방식을 다룬 연구가 적어서, 넓게 살펴본 뒤 좁혀 갔다. 방향은 Develop에서 한 번 바꿨다. 처음엔 AI가 디자이너와 개발자 사이를 중재하는 아이디어였다. 그런데 각자 AI로 만들어 보니 만드는 시간보다 합치는 시간이 더 길어서, 병합에 집중하기로 했다.",
@@ -88,7 +88,7 @@ export const study = {
         { value: "29%", text: "AI 결과가 정확하다고 보는 개발자 비율." },
         { value: "66%", text: "‘거의 맞지만 조금 틀린’ AI 코드를 가장 큰 불만으로 꼽은 개발자 비율." },
       ],
-      communityLabel: "커뮤니티 글 · Reddit, Hacker News, Medium 100여 개",
+      communityLabel: "커뮤니티 게시글 100여 개 · Reddit, Hacker News, Medium",
       groups: [
         { name: "결정의 흔적이 사라진다", detail: "최종본과 맥락이 도구 사이에서 사라진다.", quote: "The reviewer asks ‘why did you structure it this way.’ The author says ‘the AI suggested it.’ They don’t know why.", source: "r/cscareerquestions" },
         { name: "역할이 부딪힌다", detail: "디자인·개발 경계가 흐려진다.", quote: "An engineer opens a design branch and can’t tell which parts are deliberate design decisions and which parts the agent generated.", source: "r/DesignSystems" },
@@ -133,8 +133,8 @@ export const study = {
     interview: {
       method: "Primary research",
       title: "In-depth interview",
-      lead: "팀이 AI 결과물을 실제로 어떻게 확인하고 무엇을 내보낼지 정하는지 보려고, 실무자 4명을 인터뷰했다.",
-      text: "60분씩 진행한 세션마다 AI 결과물이 디자이너와 개발자 사이 어디서 막히는지, 최종 결정은 누가 하는지 물었다. 네 명의 답은 같았다. 모두가 AI 결과를 다시 확인하지만, 결정을 책임지는 사람은 없었다.",
+      lead: "데스크 리서치로 확인과 병합이 불편하다는 건 알았다. 우리는 이 불편이 실제 팀의 일을 어떻게 막는지 보려고 실무자 4명을 인터뷰했다.",
+      text: "2차 자료는 무엇이 문제인지만 알려 줬다. 그래서 디자이너, 개발자, PM이 여러 AI 시안 사이에서 실제로 어떻게 결정하는지, 60분씩 진행한 세션마다 AI 결과물이 어디서 막히는지와 최종 결정은 누가 하는지 물었다. 네 명의 답은 같았다. 모두가 AI 결과를 다시 확인하지만, 결정을 책임지는 사람은 없었다.",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "원격 인터뷰 세션: 참가자 영상 옆에 포스트잇이 붙은 FigJam 보드를 함께 보는 화면" },
       questionsLabel: "알고 싶었던 것",
       questions: [
@@ -198,10 +198,10 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       lead: "대화로 정한 내용이 작업물에는 남지 않았다.",
-      text: "인터뷰 발화 201개를 비슷한 것끼리 묶자 테마 7개가 나왔다. 가장 큰 테마는 ‘맥락 공유’(55장)였다. 대화가 부족한 게 아니라, 나눈 대화가 작업물에 남지 않는 게 문제였다. 테마를 다시 묶어 해결할 문제 4개로 좁혔다.",
+      text: "인터뷰 발화 201개를 비슷한 것끼리 묶자 테마 7개가 나왔다. 가장 큰 테마는 ‘변경 근거와 작업 히스토리를 찾기 어렵다’(55장)였다. 대화가 부족한 게 아니라, 나눈 대화가 작업물에 남지 않는 게 문제였다. 테마를 다시 묶어 해결할 문제 4개로 좁혔다.",
       themesLabel: "테마",
       cardsWord: "장",
-      themes: [[["버전/시안/최종본 관리", 14]], [["수동 검토", 29], ["직군 간 경계 흐려짐", 28]], [["업무 툴 파편화", 38], ["실시간 협업/소통", 25]], [["맥락 공유", 55]]],
+      themes: [[["여러 시안을 하나로 합치기 어렵다", 14]], [["수정 사항을 사람이 하나하나 확인한다", 29], ["누가 결정할지 직군 사이 경계가 흐리다", 28]], [["정보가 여러 도구에 흩어져 있다", 38], ["AI 결과물 위에 의견을 남기기 어렵다", 25]], [["변경 근거와 작업 히스토리를 찾기 어렵다", 55]]],
       board: { src: "/images/devsign/affinity-board.webp", width: 2400, height: 1044, alt: "어피니티 맵: 인터뷰 발화를 실시간 협업부터 AI 한계까지 색깔별 테마 7개로 묶은 보드" },
     },
     problems: {
@@ -219,8 +219,8 @@ export const study = {
     core: {
       method: "Problem definition",
       title: "Core problem",
-      lead: "대부분의 팀은 AI 결과물을 채팅으로 확인하고 결정한다.",
-      text: "그래서 누가 무엇을 왜 정했는지가 대화 속에 묻히고, 디자인과 구현은 조금씩 어긋난다.",
+      lead: "대부분의 AI 결과물에는 코멘트하고 논의할 곳이 없어, 팀의 논의가 쌓이지 않는다.",
+      text: "디자이너와 개발자는 막히는 단계는 달라도 이유는 같다. 누가 무엇을 왜 정했는지가 채팅 속에 묻히고, 디자인과 구현은 조금씩 어긋난다. 그래서 우리는 AI 결과물 위에서 바로 논의하고, 모든 과정을 한곳에 모으기로 했다.",
     },
     hmw: {
       method: "HMW",
@@ -234,8 +234,8 @@ export const study = {
     ideation: {
       method: "Diverge → converge",
       title: "Ideation",
-      lead: "우리는 먼저 ‘디자이너와 개발자가 각자의 AI 결과물을 하나로 합치고, 왜 그렇게 정했는지까지 남기려면 어떻게 해야 할까?’라는 질문에 답이 될 아이디어를 모두 적었다.",
-      text: "이 질문은 Define 마지막에 정한 HMW(How might we, ‘어떻게 하면 ~할 수 있을까’) 질문이다. 하나도 거르지 않고 적었더니 아이디어가 26개 나왔다. 이 단계의 목표는 좋은 아이디어보다 많은 아이디어였고, 그중 사용자에게 정말 필요한 것을 고르는 일은 다음 단계로 넘겼다.",
+      lead: "우리는 아이디어를 내기 전에 기준 세 가지를 정했다. 가장 적은 단계로, 차이는 말 대신 화면으로, 개발자에게 이미 익숙한 배치로.",
+      text: "기준은 리서치에서 나왔다. 확인과 병합에 시간이 가장 많이 들었고, 차이는 채팅으로 설명하기 어려웠고, 도구는 개발자가 새로 배울 것이 적어야 했다. 이 기준과 HMW 질문(‘디자이너와 개발자가 각자의 AI 결과물을 하나로 합치고 이유까지 남기려면 어떻게 해야 할까?’)을 바탕으로 아이디어 26개를 거르지 않고 적었고, 필요한 것을 고르는 일은 다음 단계로 넘겼다.",
     },
     canvas: {
       method: "Ideation",
@@ -372,7 +372,7 @@ export const study = {
       label: "Iteration 1 · Split by role",
       feature: "바뀐 기능 · 03 Conflict Points",
       lead: "리뷰 화면 하나를 디자이너와 개발자가 함께 쓰는 건 맞지 않아, 디자이너의 결정 화면과 개발자의 수정 화면으로 나눴다.",
-      text: "Conflict Points가 다루는 범위는 디자인과 달라진 UI 수정까지로 좁혔다. 코드 충돌은 이미 Git이 다룬다.",
+      text: "이유: 사용성 테스트에서 두 참가자 모두 함께 쓰는 리뷰 화면을 ‘상대 팀 도구’라고 불렀다. Conflict Points의 범위도 디자인과 달라진 UI 수정까지로 좁혔다. 코드 충돌은 이미 Git이 다룬다.",
       before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: 디자이너와 개발자가 함께 쓰는 리뷰 화면 하나", text: "디자이너와 개발자가 같이 쓰는 리뷰 화면 하나. 둘 다 “상대 팀 도구”라고 불렀다." },
       after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: 개발자의 수정 흐름과 분리된 디자이너의 결정 화면", lead: "결정 화면과 수정 화면으로 나눴다.", text: " 디자이너는 결정 화면에서 선택 하나만 하고, 개발자는 수정 화면에서 결정권자에게 수정안을 보낸다." },
       changes: [
@@ -387,7 +387,7 @@ export const study = {
       label: "Iteration 2 · Co-design",
       feature: "바뀐 기능 · 01 Live Workspace",
       lead: "현업 디자이너와 함께, 사용자가 읽어야 하는 부분을 덜어냈다.",
-      text: "프로토타입 화면 5개에 색 스티커 3가지로, 1인당 3표씩 투표했다.",
+      text: "이유: 사용성 테스트에서 디자이너에게는 화면이 개발 도구처럼 읽혔다. 그래서 현업 디자이너와 프로토타입 화면 5개에 색 스티커 3가지로 1인당 3표씩 투표해, 무엇을 덜어낼지 정했다.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "화상 회의로 진행한 코디자인 세션: 프로토타입 화면에 색 스티커로 투표" },
       agreedLabel: "합의한 것: 기능을 더하지 않고 덜어내기",
       agreed: ["패널 4개를 탭 3개로 줄였다.", "캔버스에서 하나씩 보던 앱 화면을 한 보드에 모았다.", "AI 패널은 처음에 접힌 채로 두었다."],

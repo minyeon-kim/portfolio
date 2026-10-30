@@ -213,7 +213,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <Block {...discover.desk} ff={ff} />
 
         <div className="dv-question">
-          <p className="dv-caps reveal">{discover.q1.label}</p>
+          <p className="dv-caps dv-question-label reveal">{discover.q1.label}</p>
           <p className="dv-answer reveal">{discover.q1.answer}</p>
           {/* With quotes: the two kinds of evidence side by side, survey numbers
               (scale) | the problems people kept posting, each with one real quote. */}
@@ -262,7 +262,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
 
         <div className="dv-question">
-          <p className="dv-caps reveal">{discover.q2.label}</p>
+          <p className="dv-caps dv-question-label reveal">{discover.q2.label}</p>
           <p className="dv-answer reveal">{discover.q2.answer}</p>
           {discover.q2.groups ? (
             <div className="dv-gap-48">

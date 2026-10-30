@@ -3247,3 +3247,8 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-candidate-to { margin: auto 0 0; padding-top: 12px; border-top: 1px solid var(--dv-line, var(--line)); font-size: 15px; font-weight: 500; }
 @media (max-width: 63.99rem) { .dv-candidates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 47.99rem) { .dv-candidates { grid-template-columns: 1fr; } }
+
+/* Discover: the two research questions and the survey numbers read first
+   (class feedback: key questions and numbers were too small). */
+.dv .dv-question-label { color: var(--case-accent); font-size: clamp(16px, 1.4vw, 18px); font-weight: 600; letter-spacing: 0; }
+.dv .dv-stat strong { color: var(--case-accent); }
