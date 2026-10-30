@@ -535,7 +535,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                     {pick && (
                       <p className="dv-feature-origin">
                         <span><b>{develop.selection.solves}</b>{pick.problem}</span>
-                        <span>{pick.from}</span>
                       </p>
                     )}
                   </li>
@@ -635,6 +634,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           )}
           <div className="dv-gap-64">
             <p className="dv-caps reveal">{testing.usability.resultLabel}</p>
+            {testing.usability.resultLead && <p className="dv-finding dv-result-lead reveal">{testing.usability.resultLead}</p>}
             <ul className="dv-scores dv-scores-row">
               {testing.usability.scores.map((s: Study) => (
                 <li key={s.title} className="reveal">
