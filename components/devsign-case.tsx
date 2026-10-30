@@ -207,6 +207,36 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-question">
           <p className="dv-caps reveal">{discover.q1.label}</p>
           <p className="dv-answer reveal">{discover.q1.answer}</p>
+          {/* With quotes: the two kinds of evidence side by side, survey numbers
+              (scale) | the problems people kept posting, each with one real quote. */}
+          {discover.q1.groups[0]?.quote ? (
+            <div className="dv-evidence dv-gap-40">
+              <div>
+                <p className="dv-caps reveal">{discover.q1.surveyLabel}</p>
+                <div className="dv-evidence-stats">
+                  {discover.q1.stats.map((stat: { value: string; text: string }) => (
+                    <p key={stat.value} className="dv-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
+                <ol className="dv-voices">
+                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }, i: number) => (
+                    <li key={g.name} className="reveal">
+                      <span>{pad(i + 1)}</span>
+                      <div>
+                        <strong>{g.name}</strong>
+                        <blockquote>“{g.quote}”</blockquote>
+                        <cite>{g.source}</cite>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                {discover.q1.boards && <p className="dv-boards-link reveal"><a href={withBase(discover.q1.boards.src)} target="_blank" rel="noreferrer">{discover.q1.boardsLink}</a></p>}
+              </div>
+            </div>
+          ) : <>
           <p className="dv-caps dv-gap-40 reveal">{discover.q1.surveyLabel}</p>
           <div className="dv-stats">
             {discover.q1.stats.map((stat: { value: string; text: string }) => (
@@ -220,6 +250,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Groups groups={discover.q1.groups} numbered={Boolean(discover.q1.boards)} />
             {discover.q1.boards && <Figure img={{ ...discover.q1.boards, alt: "Research boards with community posts grouped by pattern" }} sizes="(max-width: 767px) 100vw, 1200px" className="dv-boards dv-strip dv-gap-24" />}
           </div>
+          </>}
         </div>
 
         <div className="dv-question">
