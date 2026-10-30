@@ -135,7 +135,7 @@ vec3 formOf(float n, vec2 uv) {
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
   // A case's form keeps only a thin haze round it, so the shape reads.
-  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.45 : 1.0, step(0.66, g)), focus);
+  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 1.0, step(0.66, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
@@ -329,6 +329,7 @@ void main() {
 const glowFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform vec3 fast; uniform float lightIn;
+uniform vec4 form; uniform float spectrum; // the form's centre and radius (world units), its glow; Gemini's colours
 ${pools}
 void main() {
   // The theme flips this layer at once: half-way values would leave pixels
@@ -346,9 +347,20 @@ void main() {
   float edge = exp(-pow(across - 0.55, 2.0) * 9.0);
   vec3 deep = calm * vec3(0.9, 0.7, 1.15);
   c += (mix(deep, mix(calm, fast, 0.25), 0.5 + 0.5 * sin(q.x * 0.6 + time * 0.04)) * band * 0.3 + deep * edge * 0.08) * (1.0 - light);
+  // A soft light of the form's own colour under it, so the dust shades off
+  // into the room instead of ending in loose points.
+  vec2 w = q / 0.34, d = (w - form.xy) / form.z;
+  float fall = exp(-dot(d, d) * 1.4) * form.w;
+  float ga = atan(d.y, d.x);
+  vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
+    + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
+  tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
+  vec3 fc = mix(mix(calm, accent, 0.4), tips, spectrum * 0.8);
+  c += fc * fall * 0.16 * (1.0 - light);
   // Light theme: the same band as a faint tinted haze over the page.
-  float haze = (band * 0.08 + l * 0.04) * light;
-  o = vec4(c + mix(calm, accent, 0.5 + 0.5 * s.x) * 0.55 * haze, haze);
+  float haze = (band * 0.08 + l * 0.04 + fall * 0.1) * light;
+  vec3 hc = mix(mix(calm, accent, 0.5 + 0.5 * s.x), fc, clamp(fall * 3.0, 0.0, 1.0));
+  o = vec4(c + hc * 0.55 * haze, haze);
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -453,7 +465,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0, form: [0, 0.1, 1.6, 0] };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -518,6 +530,10 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pGlow);
       gl.bindVertexArray(vaoQuad);
       gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "lightIn"), colours.light);
+      // Where each form sits and how much light it casts on the room.
+      const formTarget = target.symbol === 1 ? [0.43, -0.55, 1.6, 1] : target.symbol === 2 ? [-0.9, 0.76, 1.3, 0.9] : target.symbol === 3 ? [0.35, -0.3, 2.4, 0.35] : [0, 0.1, 1.6, 0.4];
+      for (let i = 0; i < 4; i++) colours.form[i] += (formTarget[i] - colours.form[i]) * k;
+      gl.uniform4f(uniform(pGlow, "form"), colours.form[0], colours.form[1], colours.form[2], colours.form[3]); gl.uniform1f(uniform(pGlow, "spectrum"), colours.spectrum);
       gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       gl.useProgram(pDraw);
