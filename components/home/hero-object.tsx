@@ -122,7 +122,8 @@ vec3 homeOf(vec2 uv) {
       q = vec2(cos(arm), sin(arm)) * r;
       loose *= 0.3;
     }
-    q += vec2(0.0, 0.22);
+    // Centred on the stage (homeOf shifts every form 0.35 right, undone here).
+    q += vec2(-0.2, 0.0);
     p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.25);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
@@ -232,7 +233,7 @@ void main() {
   vSpec = mix(vSpec, 0.85, bolt);
   // The landing galaxy is the richest: every project's colour wound through
   // its arms (blue, violet, teal, a touch of pink) round a warm white core.
-  vec2 gq = (p.xy - vec2(0.35, 0.49)) / 1.6;
+  vec2 gq = (p.xy - vec2(0.0, 0.1)) / 1.6;
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
