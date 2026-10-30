@@ -672,27 +672,19 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-body reveal">{takeaway.text}</p>
         <div className="dv-gap-80">
           <p className="dv-caps reveal">{takeaway.reviewTitle}</p>
-          <ol className="dv-review-cards">
+          <ol className="dv-review-lines">
             {takeaway.review.map((item: { title: string; body: string }, i: number) => (
               <li key={item.title} className="reveal">
                 <span>{pad(i + 1)}</span>
-                <h4>{item.title}</h4>
-                <p>{item.body}</p>
+                <strong>{item.title}</strong>
+                <span>{item.body}</span>
               </li>
             ))}
           </ol>
         </div>
         <div className="dv-next-row dv-gap-80 reveal">
-          <div>
-            <p className="dv-caps dv-accent">{takeaway.next.label}</p>
-            <p className="dv-finding">{takeaway.next.title}</p>
-          </div>
-          <div>
-            <p className="dv-next-text">{takeaway.next.text}</p>
-            <ul className="dv-next-checks">
-              {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
-            </ul>
-          </div>
+          <p className="dv-caps dv-accent">{takeaway.next.label}</p>
+          <p className="dv-finding">{takeaway.next.title}</p>
         </div>
         </> : <>
         <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
