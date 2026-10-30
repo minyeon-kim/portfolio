@@ -136,8 +136,8 @@ export function IterationStory({ before, after, changes, labels }: { before: Sho
           <li key={c.title} ref={(el) => { items.current[i] = el; }} data-index={i} data-on={i === active || undefined} className="dv-story-item">
             <h4 className="dv-story-name dv-story-change"><b>{i + 1}</b>{c.title}</h4>
             <div className="dv-story-detail">
-              <p className="dv-story-before"><span className="sr-only">{labels.asIs}: </span>{c.before}</p>
-              <p className="dv-story-after"><span aria-hidden="true">→ </span><span className="sr-only">{labels.toBe}: </span>{c.after}</p>
+              <p className="dv-story-before"><span className="dv-story-tag">{labels.asIs}</span>{c.before}</p>
+              <p className="dv-story-after"><span className="dv-story-tag">{labels.toBe}</span>{c.after}</p>
             </div>
           </li>
         ))}

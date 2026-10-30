@@ -3153,3 +3153,17 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-problems li { gap: 8px; }
 .dv-themes li { grid-template-columns: minmax(0, 520px) 32px minmax(0, 1fr); }
 .dv-themes li { grid-template-columns: minmax(0, 360px) 32px minmax(0, 1fr); }
+
+/* HMW reads as the statement it is (the Core problem scale). */
+.dv-hmw-question { font-size: clamp(26px, 2.5vw, 36px); font-weight: 400; line-height: 1.35; }
+
+/* Iteration changes: As-is / To-be as small tags instead of a strike-through. */
+.dv-story-before, .dv-story-after { display: flex; align-items: baseline; gap: 10px; }
+.dv-story-before { text-decoration: none; }
+.dv-story-tag { flex: none; min-width: 44px; color: var(--dv-muted); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
+.dv-story-after .dv-story-tag { color: var(--case-accent); }
+
+/* Next step follows the review list on space alone, no second rule. */
+.dv-next-row { padding-top: 0; border-top: 0; }
+.dv-result-lead + .dv-result { margin-top: 12px; }
+.dv-result + .dv-scores-row { margin-top: 40px; }
