@@ -45,7 +45,8 @@ float hq(float n, uint k) {
 // Traced from the Devsign logo (659×625): an upper slab leaning right, a
 // notch each side where it steps over, and a lower slab tapering to a point.
 const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(460.0, 205.0), vec2(660.0, 225.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(240.0, 220.0), vec2(0.0, 205.0));
-vec2 boltPoint(vec2 v) { return vec2((v.x - 330.0) * 0.9, 312.0 - v.y) * (1.6 / 625.0); }
+// Sheared so the bolt leans like a slash (top to the right), not upright.
+vec2 boltPoint(vec2 v) { vec2 q = vec2((v.x - 330.0) * 0.8, 312.0 - v.y) * (1.6 / 625.0); return vec2(q.x + q.y * 0.45, q.y); }
 bool inBolt(vec2 q) {
   bool inside = false;
   for (int i = 0, j = 8; i < 9; j = i++) {
@@ -88,7 +89,7 @@ vec3 formOf(float n, vec2 uv) {
     } else {
       q = vec2(0.0, 0.1);
       for (int t = 0; t < 16; t++) {
-        vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(1.56, 1.64);
+        vec2 r = (vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) - 0.5) * vec2(2.1, 1.64);
         if (inBolt(r)) { q = r; break; }
       }
       loose *= 0.45;
