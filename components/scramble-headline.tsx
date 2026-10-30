@@ -21,13 +21,17 @@ const SPEED = 0.25; // how often a scrambled glyph changes (lower = calmer)
 const TYPE_END = 0.85; // seconds, the rest of the line has typed out
 const EMPHASIS_START = 0.95; // seconds, the emphasized word starts resolving
 
-type Props = { text: string; className?: string; emphasis?: string };
+// The fuzzy word stays a little blurred and keeps flickering through the
+// glyphs after load, so the line reads as complexity resolving into clarity.
+const FLICKER_EVERY = 0.45; // seconds between flickers of one fuzzy glyph
+
+type Props = { text: string; className?: string; emphasis?: string; fuzzy?: string };
 
 // "Decrypted" hero headline: scrambles in left to right on load, then
 // characters near the mouse cursor briefly re-scramble, and a burst in the
 // home backdrop re-scrambles the letters its ring sweeps past. With reduced motion
 // none of this runs and the server-rendered text is shown as is.
-export function ScrambleHeadline({ text, className, emphasis }: Props) {
+export function ScrambleHeadline({ text, className, emphasis, fuzzy }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
@@ -39,6 +43,8 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         let chars: HTMLElement[] = [];
         let held = new Set<HTMLElement>();
+        let fuzzyChars: HTMLElement[] = [];
+        let flicker: gsap.core.Tween | null = null;
         let frame = 0;
         let pointer = { x: 0, y: 0 };
 
@@ -100,11 +106,16 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
           autoSplit: true, // re-split when fonts load or the line wraps change
           onSplit(self) {
             chars = self.chars as HTMLElement[];
-            const word = emphasis?.toLowerCase();
-            const target = word
-              ? (self.words as HTMLElement[]).find((w) => (w.textContent ?? "").toLowerCase().replace(/[^a-z0-9-]/g, "") === word)
+            // Letters of any script, so a Korean word matches too.
+            const find = (word?: string) => word
+              ? (self.words as HTMLElement[]).find((w) => (w.textContent ?? "").toLowerCase().replace(/[^\p{L}\p{N}-]/gu, "") === word.toLowerCase())
               : undefined;
+            const target = find(emphasis);
             held = new Set(target ? chars.filter((char) => target.contains(char)) : []);
+            target?.classList.add("sh-clear");
+            const blurred = find(fuzzy);
+            blurred?.classList.add("sh-fuzzy");
+            fuzzyChars = blurred ? chars.filter((char) => blurred.contains(char)) : [];
             for (const char of chars) {
               char.dataset.char = char.textContent ?? "";
               // Lock each glyph's width so a scrambled glyph never reflows the line.
@@ -120,7 +131,17 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
         gsap.set(chars, { autoAlpha: 0 });
         const load = gsap.timeline({
           onStart: () => gsap.set(el, { visibility: "visible" }),
-          onComplete: () => { window.addEventListener("pointermove", onPointerMove); window.addEventListener("hero-burst", onBurst); },
+          onComplete: () => {
+            window.addEventListener("pointermove", onPointerMove);
+            window.addEventListener("hero-burst", onBurst);
+            // The fuzzy word never quite settles: one of its glyphs at a time
+            // flickers through the scramble.
+            if (fuzzyChars.length) flicker = gsap.delayedCall(FLICKER_EVERY, function tick() {
+              const char = fuzzyChars[Math.floor(Math.random() * fuzzyChars.length)];
+              gsap.to(char, { duration: 0.3, ease: "none", overwrite: true, scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED } });
+              flicker = gsap.delayedCall(FLICKER_EVERY * (0.6 + Math.random() * 0.8), tick);
+            });
+          },
         });
         const span = (held.size ? TYPE_END : LOAD_DURATION) - GLYPH_SCRAMBLE;
         const heldChars = chars.filter((char) => held.has(char));
@@ -167,12 +188,13 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
           window.removeEventListener("pointermove", onPointerMove);
           window.removeEventListener("hero-burst", onBurst);
           cancelAnimationFrame(frame);
+          flicker?.kill();
           split.revert();
         };
       });
       return () => mm.revert();
     },
-    { scope: ref, dependencies: [text, emphasis] },
+    { scope: ref, dependencies: [text, emphasis, fuzzy] },
   );
 
   return (
