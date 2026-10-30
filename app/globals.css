@@ -3053,3 +3053,16 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .more-work + .site-footer .site-footer-action, .more-work + .site-footer .site-footer-actions li:first-child .site-footer-action { gap: 10px; padding: 12px 20px; border: 1px solid var(--ft-line); border-radius: 999px; font-size: 16px; letter-spacing: 0; }
 .more-work + .site-footer .site-footer-action:hover { border-color: rgb(255 255 255 / 0.4); }
 .more-work + .site-footer .site-footer-bottom { margin-top: clamp(56px, 6vw, 88px); }
+
+/* Discover Q1, stacked (supersedes the two columns): the two survey numbers in
+   one row, then the three problems as quote cards in a row. One direction to
+   read at a time. */
+.dv-evidence { grid-template-columns: 1fr; gap: 56px; }
+.dv-evidence-stats { flex-direction: row; gap: 24px; }
+.dv-evidence-stats .dv-stat { flex: 1; }
+.dv-voices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; border-top: 0; }
+.dv-voices li { display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 0; border-radius: 16px; background: var(--dv-alt); }
+.dv-voices li > div { display: flex; flex: 1; flex-direction: column; }
+.dv-voices blockquote { margin-top: 12px; }
+.dv-voices cite { margin-top: auto; padding-top: 16px; }
+@media (max-width: 63.99rem) { .dv-voices { grid-template-columns: 1fr; } .dv-evidence-stats { flex-direction: column; } }
