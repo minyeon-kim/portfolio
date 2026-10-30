@@ -229,7 +229,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam; uniform float scale; uniform float onlyStars;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 ${view}
@@ -310,10 +310,7 @@ void main() {
     * smoothstep(clearRect.y - m.y, clearRect.y, s.y) * smoothstep(clearRect.w + m.y, clearRect.w, s.y);
   vFaint *= 1.0 - 0.85 * inside;
   px *= mix(mix(0.8, 1.0, smoothstep(0.3, 0.5, vDepth)), 1.7, vNear);
-  gl_PointSize = max(px * scale, 1.0);
-  // The sparkle pass draws only the stars, crisp, over the smooth dust.
-  if (onlyStars > 0.5 && star < 0.5) { gl_PointSize = 0.0; gl_Position = vec4(2.0, 2.0, 0.0, 1.0); }
-  if (onlyStars > 0.5) vFaint *= 0.7;
+  gl_PointSize = max(px, 1.0);
 }`;
 
 const drawFragment = `#version 300 es
@@ -381,35 +378,23 @@ void main() {
   o = vec4(c + hc * 0.55 * haze, haze);
 }`;
 
-// Smooth dust: the particles are gathered into a density field at a third of
-// the screen's resolution, blurred, held a moment as it fades (so it trails
-// like smoke), and shaded back onto the page as a soft, coloured haze; only
-// the stars are drawn crisp on top.
-const blurFragment = `#version 300 es
+// Trails: this frame's dust is kept with the last frames' faded a little, by
+// the brighter of the two (max), so moving dust leaves a short tail while
+// still dust looks exactly as bright as before.
+const trailFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D src; uniform vec2 dir;
+uniform sampler2D now; uniform sampler2D past; uniform float decay; uniform vec2 texel;
 void main() {
-  const float w[5] = float[5](0.227, 0.195, 0.122, 0.054, 0.016);
-  vec4 c = texture(src, v) * w[0];
-  for (int i = 1; i < 5; i++) c += (texture(src, v + dir * float(i)) + texture(src, v - dir * float(i))) * w[i];
-  o = c;
+  // The past spreads a little as it fades, so a tail dissolves into haze
+  // instead of standing as a crisp line.
+  vec4 old = (texture(past, v) * 2.0 + texture(past, v + vec2(texel.x, 0.0)) + texture(past, v - vec2(texel.x, 0.0))
+    + texture(past, v + vec2(0.0, texel.y)) + texture(past, v - vec2(0.0, texel.y))) / 6.0;
+  o = max(texture(now, v), old * decay * 0.82);
 }`;
-const settleFragment = `#version 300 es
+const copyFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D now; uniform sampler2D past; uniform float decay;
-void main() { o = max(texture(now, v), texture(past, v) * decay); }`;
-// Density (summed premultiplied dust) to a haze: its own average colour, its
-// opacity rising softly with how much dust is there. Colour never exceeds
-// opacity, so the page composites it cleanly.
-const hazeFragment = `#version 300 es
-precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D density; uniform float gain;
-void main() {
-  vec4 d = texture(density, v);
-  vec3 c = min(d.rgb / max(d.a, 1e-4), vec3(1.0));
-  float a = 1.0 - exp(-d.a * gain);
-  o = vec4(c * a, a);
-}`;
+uniform sampler2D src;
+void main() { o = texture(src, v); }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
 // accent).
@@ -447,13 +432,13 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       return p;
     };
     const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
-    const pBlur = link(quadVertex, blurFragment), pSettle = link(quadVertex, settleFragment), pHaze = link(quadVertex, hazeFragment);
+    const pTrail = link(quadVertex, trailFragment), pCopy = link(quadVertex, copyFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const vaoQuad = gl.createVertexArray();
     gl.bindVertexArray(vaoQuad);
-    for (const p of [pInit, pVel, pPos, pGlow, pBlur, pSettle, pHaze]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
+    for (const p of [pInit, pVel, pPos, pGlow, pTrail, pCopy]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
     const vaoDraw = gl.createVertexArray();
     // Positions and velocities, two of each to read one and write the other.
     const target = () => {
@@ -478,11 +463,11 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       setup();
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
-    // The density field's targets, a third of the screen: the dust, a blur
-    // scratch, and the settled field (two, read one and write the other).
+    // Screen-sized targets for the trails: this frame's dust, and the trail
+    // (two, read one and write the other). Half floats, premultiplied.
     type Target = { texture: WebGLTexture; framebuffer: WebGLFramebuffer };
-    const field = { w: 0, h: 0, sw: 0, sh: 0, dust: null as Target | null, scratch: null as Target | null, settled: [] as Target[] };
-    const fieldTarget = (w: number, h: number): Target => {
+    const screen = { w: 0, h: 0, now: null as Target | null, trail: [] as Target[] };
+    const screenTarget = (w: number, h: number): Target => {
       const texture = gl.createTexture()!;
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
@@ -497,14 +482,13 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.clear(gl.COLOR_BUFFER_BIT);
       return { texture, framebuffer };
     };
-    const dropField = () => { for (const t of [field.dust, field.scratch, ...field.settled]) if (t) { gl.deleteTexture(t.texture); gl.deleteFramebuffer(t.framebuffer); } };
-    const ensureField = () => {
-      if (field.sw === width && field.sh === height && field.dust) return;
-      dropField();
-      field.sw = width; field.sh = height;
-      field.w = Math.max(1, Math.ceil(width / 3)); field.h = Math.max(1, Math.ceil(height / 3));
-      field.dust = fieldTarget(field.w, field.h); field.scratch = fieldTarget(field.w, field.h);
-      field.settled = [fieldTarget(field.w, field.h), fieldTarget(field.w, field.h)];
+    const dropScreen = () => { for (const t of [screen.now, ...screen.trail]) if (t) { gl.deleteTexture(t.texture); gl.deleteFramebuffer(t.framebuffer); } };
+    const ensureScreen = () => {
+      if (screen.w === width && screen.h === height && screen.now) return;
+      dropScreen();
+      screen.w = width; screen.h = height;
+      screen.now = screenTarget(width, height);
+      screen.trail = [screenTarget(width, height), screenTarget(width, height)];
     };
     const bind = (p: WebGLProgram, name: string, unit: number, texture: WebGLTexture) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, texture); gl.uniform1i(uniform(p, name), unit); };
     const start = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
@@ -621,13 +605,12 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       // Dark: the dust adds up into light. Light: it lies over the page.
       const dustBlend = () => { if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); };
-      ensureField();
-      gl.bindFramebuffer(gl.FRAMEBUFFER, field.dust!.framebuffer);
-      gl.viewport(0, 0, field.w, field.h);
+      ensureScreen();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, screen.now!.framebuffer);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
-      gl.blendFunc(gl.ONE, gl.ONE);
+      dustBlend();
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y);
@@ -639,39 +622,23 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (clearTick++ % 10 === 0) readClear();
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
-      gl.uniform1f(uniform(pDraw, "scale"), 1 / 3); gl.uniform1f(uniform(pDraw, "onlyStars"), 0);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
-      // Blur the field both ways, then settle it against the last frames.
+      // The trail: the brighter of this frame and the last frames, faded over
+      // about a tenth of a second; then laid on the page as the dust was.
       gl.disable(gl.BLEND);
       gl.bindVertexArray(vaoQuad);
-      gl.useProgram(pBlur);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, field.scratch!.framebuffer);
-      bind(pBlur, "src", 0, field.dust!.texture); gl.uniform2f(uniform(pBlur, "dir"), 1.2 / field.w, 0);
+      gl.useProgram(pTrail);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, screen.trail[1].framebuffer);
+      bind(pTrail, "now", 0, screen.now!.texture); bind(pTrail, "past", 1, screen.trail[0].texture);
+      gl.uniform1f(uniform(pTrail, "decay"), Math.exp(-dt / 0.05)); gl.uniform2f(uniform(pTrail, "texel"), 1.2 * dpr / width, 1.2 * dpr / height);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, field.dust!.framebuffer);
-      bind(pBlur, "src", 0, field.scratch!.texture); gl.uniform2f(uniform(pBlur, "dir"), 0, 1.2 / field.h);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      gl.useProgram(pSettle);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, field.settled[1].framebuffer);
-      bind(pSettle, "now", 0, field.dust!.texture); bind(pSettle, "past", 1, field.settled[0].texture);
-      gl.uniform1f(uniform(pSettle, "decay"), Math.exp(-dt / 0.12));
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      field.settled.reverse();
-      // The haze onto the page, laid as the dust always was.
+      screen.trail.reverse();
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.viewport(0, 0, width, height);
       gl.enable(gl.BLEND);
       dustBlend();
-      gl.useProgram(pHaze);
-      bind(pHaze, "density", 0, field.settled[0].texture);
-      gl.uniform1f(uniform(pHaze, "gain"), colours.light > 0.5 ? 0.22 : 0.3);
+      gl.useProgram(pCopy);
+      bind(pCopy, "src", 0, screen.trail[0].texture);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      // The stars, crisp, at full resolution.
-      gl.useProgram(pDraw);
-      gl.bindVertexArray(vaoDraw);
-      bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
-      gl.uniform1f(uniform(pDraw, "scale"), 1); gl.uniform1f(uniform(pDraw, "onlyStars"), 1);
-      gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
     return () => {
@@ -684,8 +651,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      dropField();
-      [pInit, pVel, pPos, pDraw, pGlow, pBlur, pSettle, pHaze].forEach((p) => gl.deleteProgram(p));
+      dropScreen();
+      [pInit, pVel, pPos, pDraw, pGlow, pTrail, pCopy].forEach((p) => gl.deleteProgram(p));
       gl.deleteBuffer(quad);
     };
   }, []);
