@@ -17,7 +17,7 @@ import { useEffect, useRef } from "react";
 // - About me, teal: a rolling landscape of dots under falling data
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // drawn at the screen's own resolution (DPR up to 2) so the finest dust is a
-// device pixel; 200,704 points on desktop, 65,536 on phones; paused offscreen, hidden or during the page transition, skipped
+// device pixel; 262,144 points on desktop, 102,400 on phones; paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
 // ambient light instead).
 
@@ -252,8 +252,6 @@ void main() {
   float fine = step(0.42, fract(vSeed * 29.3)) * (1.0 - star) * (1.0 - dark);
   float size = mix(mix(mix(mix(0.8, 1.0, vDepth), mix(1.0, 1.4, vDepth), dark), mix(0.55, 0.7, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
   vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star);
-  // Dark draws every other point, about as many as before.
-  if (dark > 0.5 && SIZE > 300.0 && mod(i, 2.0) > 0.5) vFaint = 0.0;
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
@@ -377,7 +375,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const el = canvas.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 256 : 448;
+    const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 320 : 512;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const gl = el.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "high-performance" });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
@@ -528,8 +526,11 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       pass(pPos, P[1], () => { bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt); });
       P.reverse();
 
-      ensureScreen();
-      gl.bindFramebuffer(gl.FRAMEBUFFER, screen.scene!.framebuffer);
+      // Dark draws straight to the page as it always did (its glow is added
+      // light); only the light theme goes through the bloom targets.
+      const bloom = colours.light > 0.5;
+      if (bloom) ensureScreen();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, bloom ? screen.scene!.framebuffer : null);
       gl.viewport(0, 0, width, height);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -554,6 +555,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
+      if (!bloom) return;
 
       // Bloom (light theme only; the dark keeps its plain dust): bright parts
       // to a quarter, blurred both ways twice, laid over.
@@ -579,7 +581,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.viewport(0, 0, width, height);
       gl.useProgram(pComposite);
       bind(pComposite, "scene", 0, screen.scene!.texture); bind(pComposite, "glow", 1, screen.a!.texture);
-      gl.uniform1f(uniform(pComposite, "strength"), colours.light > 0.5 ? 0.35 : 0.0);
+      gl.uniform1f(uniform(pComposite, "strength"), 0.35);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
     frame = requestAnimationFrame(draw);
