@@ -215,7 +215,7 @@ export const study = {
       text: "so designers lose their say before release, and the team loses why each change was made.",
     },
     hmw: {
-      method: "Design challenge",
+      method: "HMW",
       title: "How might we",
       question: "How might we help designers and developers turn separate AI outputs into one agreed result, and keep why it was decided?",
       successLabel: "Success looks like",
@@ -320,7 +320,10 @@ export const study = {
       method: "Testing",
       title: "Usability test",
       lead: "Both saw the value. Neither could finish alone.",
-      text: "1 designer and 1 developer · 7 tasks, twice each. Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
+      processLabel: "Process",
+      process: "1 designer and 1 developer · 7 tasks, twice each.",
+      resultLabel: "Results",
+      result: "Whose turn it was in the approval flow wasn’t clear, and the designer read the screen as a developer tool. That was a layout and wording problem, not the concept. The value still landed, so we kept the features.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       scores: [
         { value: "2.3", unit: "/3", ratio: 2.3 / 3, title: "Help needed on first try", note: "Goal ≤ 1.5 · missed success goal 1", missed: true },
@@ -371,12 +374,6 @@ export const study = {
       { title: "Solved the after-AI problem", body: "Compare, merge, decide: the part AI doesn’t finish." },
       { title: "Let testing change the structure", body: "Split the screens by role after testing." },
       { title: "Turned feedback into a build fast", body: "Co-design to a working v2 in two days." },
-    ],
-    limitationsTitle: "Limitations",
-    limitations: [
-      { lead: "One participant per role", text: " — Repeating the same tasks measured learning, not new situations." },
-      { lead: "Mock data only", text: " — No real Figma or Git connection, so long-term use is unknown." },
-      { lead: "Scope based on one developer", text: " — The UI-only scope came from a single developer’s feedback." },
     ],
     next: {
       label: "Next step",
