@@ -87,11 +87,14 @@ function Section({ id, title, band, children }: { id: string; title: string; ban
 }
 
 
+// The low point keeps its emoji; a small number on its corner ties it to the
+// persona pain with the same number.
 function LowBadge({ x, n, role }: { x: number; n: number; role: string }) {
   return (
     <g className="dv-journey-badge" data-role={role}>
-      <circle cx={x} cy="286" r="16" />
-      <text x={x} y="291" textAnchor="middle" fontSize="14">{n}</text>
+      <image href={withBase("/images/devsign/emoji-angry.svg")} x={x - 17} y="269" width="34" height="34" />
+      <circle cx={x + 17} cy="270" r="10" />
+      <text x={x + 17} y="274" textAnchor="middle" fontSize="11">{n}</text>
     </g>
   );
 }
@@ -431,8 +434,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </div>
               <div className="dv-persona-details">
                 <div>
-                  <p className="dv-caps dv-persona-role">{define.personas.wantsLabel}</p>
-                  <p className="dv-persona-context"><strong>{person.contextLead}</strong></p>
+                  <p className="dv-caps dv-persona-role">{labels.context}</p>
+                  <p className="dv-persona-context">{person.context} <strong>{person.contextLead}</strong></p>
                 </div>
                 <table className="dv-needs">
                   <thead>
