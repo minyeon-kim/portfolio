@@ -522,6 +522,19 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <div className="dv-gap-96">
           <Block {...develop.canvas} ff={ff} />
           <Figure img={develop.canvas.image} className="dv-canvas-full dv-gap-40" />
+          {develop.canvas.candidates && <div className="dv-gap-40">
+            <p className="dv-caps reveal">{develop.canvas.candidatesLabel}</p>
+            <ol className="dv-candidates">
+              {develop.canvas.candidates.map((c: { id: string; name: string; kind: string; pain: string; to: string }) => (
+                <li key={c.id} className="reveal">
+                  <span className="dv-candidate-id">{c.id}</span>
+                  <strong>{c.name}</strong>
+                  <p className="dv-candidate-pain"><span>{c.kind}</span>{c.pain}</p>
+                  <p className="dv-candidate-to">→ {c.to}</p>
+                </li>
+              ))}
+            </ol>
+          </div>}
         </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
           <Block {...develop.canvas} ff={ff} />

@@ -238,7 +238,15 @@ export const study = {
       method: "Ideation",
       title: "Value proposition canvas",
       lead: "We then checked each idea against a real user pain, to keep only the ones users needed.",
-      text: "On a value proposition canvas, we filled in what users are trying to do, what gets in their way (pains) and what they hope for (gains), all from the interviews. Next to each idea we placed the pain it would relieve. Grouping similar ideas left five feature candidates, A to E.",
+      text: "The circle on the right holds what users are trying to do, what gets in their way (pains) and what they hope for (gains), all taken from the interviews. The square on the left holds, for each idea, the exact pain it relieves, so no idea stayed without a pain behind it. Grouping ideas that aimed at the same pain left five candidates, A to E, each built on one pain from the interviews.",
+      candidatesLabel: "Each candidate and the pain it came from",
+      candidates: [
+        { id: "A", name: "Decision log & history", kind: "Pain", pain: "Outputs get shared, but not why they were decided, so people read them differently and dig through old chats.", to: "History" },
+        { id: "B", name: "Risk-based review gate", kind: "Pain", pain: "Developers ship first, so the designer’s moment to step in disappears.", to: "Conflict Points" },
+        { id: "C", name: "Design compare & fine-tune", kind: "Pain", pain: "There is no rule for how to merge AI work.", to: "Merge Studio" },
+        { id: "D", name: "Unified workspace", kind: "Pain", pain: "Work is split across tools, so finding and linking information means extra hopping and repeat work.", to: "Live Workspace" },
+        { id: "E", name: "Live presence", kind: "Gain", pain: "See in real time what others are working on, and how.", to: "Merged into Live Workspace" },
+      ],
       image: { src: "/images/devsign/value-proposition-canvas.webp", width: 1600, height: 716, alt: "Value proposition canvas: the product square of features and pain relievers beside the customer circle of jobs, pains and gains" },
     },
     sketching: {
