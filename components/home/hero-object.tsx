@@ -133,7 +133,8 @@ vec3 formOf(float n, vec2 uv) {
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
-  loose *= mix(1.0, mix(0.22, 1.0, step(0.66, g)), focus);
+  // A case's form keeps only a thin haze round it, so the shape reads.
+  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.45 : 1.0, step(0.66, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
@@ -213,7 +214,7 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect;
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 void main() {
@@ -231,7 +232,7 @@ void main() {
     + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
   tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
   vTint = tips;
-  vSpec = spectrum * smoothstep(0.1, 1.0, length(g));
+  vSpec = spectrum * mix(0.55, 0.95, smoothstep(0.05, 0.7, length(g)));
   // Devsign: the logo's violet, cyan along the lower right, and a soft
   // white sheen across the upper slab.
   vec2 d = (p.xy - vec2(0.35, 0.12)) / 1.6 - vec2(-0.6, 0.42);
@@ -254,7 +255,7 @@ void main() {
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   // Depth of field: dust nearer than the form's plane grows large, soft and
   // faint; dust beyond it shrinks and stays crisp.
-  vNear = smoothstep(0.62, 0.8, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06);
+  vNear = smoothstep(0.62, 0.8, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06) * galaxy;
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat >= 0.82 ? 0.3 : 0.0));
   vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
@@ -286,6 +287,12 @@ void main() {
   float px = (size * mix(1.0, 1.1, light) + vSize * mix(3.0, 1.5, light)) * dpr;
   // Below a device pixel a point can't shrink, so it fades instead.
   vFaint *= min(px, 1.0);
+  // The case's paragraph stays readable: dust behind it (with a soft margin)
+  // all but disappears. clearRect is its box in clip space (x0, y0, x1, y1).
+  vec2 m = vec2(0.04, 0.07);
+  float inside = smoothstep(clearRect.x - m.x, clearRect.x, s.x) * smoothstep(clearRect.z + m.x, clearRect.z, s.x)
+    * smoothstep(clearRect.y - m.y, clearRect.y, s.y) * smoothstep(clearRect.w + m.y, clearRect.w, s.y);
+  vFaint *= 1.0 - 0.92 * inside;
   px *= mix(mix(0.8, 1.0, smoothstep(0.3, 0.5, vDepth)), 1.7, vNear);
   gl_PointSize = max(px, 1.0);
 }`;
@@ -450,6 +457,17 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
 
+    // The visible case paragraph's box in clip space, re-read now and then;
+    // off-screen when none is shown.
+    const clear = [9, 9, 9, 9];
+    let clearTick = 0;
+    const readClear = () => {
+      const p = document.querySelector<HTMLElement>(".home-world-problem[data-on]");
+      if (!p) { clear.fill(9); return; }
+      const c = el.getBoundingClientRect(), r = p.getBoundingClientRect();
+      clear[0] = ((r.left - c.left) / c.width) * 2 - 1; clear[2] = ((r.right - c.left) / c.width) * 2 - 1;
+      clear[1] = 1 - ((r.bottom - c.top) / c.height) * 2; clear[3] = 1 - ((r.top - c.top) / c.height) * 2;
+    };
     let frame = 0, last = performance.now(), clock = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
@@ -513,7 +531,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
+      if (clearTick++ % 10 === 0) readClear();
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
+      gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
