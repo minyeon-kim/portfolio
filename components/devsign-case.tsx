@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverStory, IterationStory, PrototypeLink } from "@/components/devsign-story";
+import { DeliverShow, IterationStory, PrototypeLink } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -621,7 +621,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </li>
               ))}
             </ol>
-          ) : ff ? <DeliverStory features={deliver.features} />
+          ) : ff ? <DeliverShow features={deliver.features} labels={{ play: deliver.playLabel ?? "Play", pause: deliver.pauseLabel ?? "Pause" }} />
             : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
         </div>
       </Section>
