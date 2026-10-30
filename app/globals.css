@@ -2640,9 +2640,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-note > p { grid-area: 1 / 1; margin: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.55; transition: opacity 400ms ease, translate 400ms var(--ease); }
 .home-tagline-wrap { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; display: grid; justify-items: end; }
 .home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 400ms ease, translate 400ms var(--ease); }
-/* Sized in em so the line breaks are the same at every width: three lines
-   ("Making complex / products / feel clear"). */
-.home-tagline { max-width: 7.8em; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(44px, min(6vw, 10.5svh), 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
+/* Two balanced lines at every width ("Making complex / products feel clear"):
+   a fixed width in em, wider than its grid column and running left from the
+   right edge, so the breaks never change with the window. */
+.home-tagline { width: 8.8em; max-width: none; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(44px, min(6.5vw, 10.5svh), 112px); font-weight: 500; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
 .home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
 [data-swap] .home-note-default, [data-swap] .home-tagline-default { opacity: 0; translate: 0 -6px; }
 [data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
@@ -2652,7 +2653,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .intro-surface.home-grid { --phone-card-w: min(calc(100vw - 2 * var(--project-text-inset)), 560px); grid-template-columns: 1fr; grid-template-rows: auto; gap: 32px; padding: 96px var(--project-text-inset) calc(40px + 32px + var(--phone-card-w) * 0.625); }
   .home-meta { grid-column: 1; grid-row: 1; justify-self: start; }
   .home-tagline-wrap { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; justify-items: start; }
-  .home-tagline { max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
+  .home-tagline { width: auto; max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
   .home-picks ol { flex-direction: row; flex-wrap: wrap; }
