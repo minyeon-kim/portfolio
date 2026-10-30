@@ -109,27 +109,16 @@ vec3 formOf(float n, vec2 uv) {
     p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
-    // A sparse ring, after byotone.com: most of the dust on one thin
-    // circle, a loose swirl inside it and a little drifting through the
-    // middle; lots of empty space, turning slowly.
-    vec2 q;
-    float t = hq(n, 11u) * 6.2831853 + time * 0.03;
-    if (a < 0.62) {
-      float r = 1.05 + (hq(n, 13u) - 0.5) * 0.1 + (hq(n, 12u) - 0.5) * 0.05 * sin(t * 5.0 + time * 0.2);
-      q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.1;
-    } else if (a < 0.85) {
-      float r = 0.25 + pow(hq(n, 13u), 0.7) * 0.75;
-      float arm = floor(hq(n, 15u) * 2.0) * 3.14159 + log(r / 0.25) * 2.0 + time * 0.03 + (hq(n, 14u) - 0.5) * 0.35;
-      q = vec2(cos(arm), sin(arm)) * r;
-      loose *= 0.18;
-    } else {
-      q = vec2(cos(t), sin(t)) * 1.3 * sqrt(hq(n, 13u));
-      loose *= 0.5;
-    }
-    // Centred on the stage (formOf shifts every form 0.35 right, undone here).
+    // A round cloud spreading from a soft centre: dense in the middle,
+    // thinning out to a wide halo with no edge, breathing slowly outward.
+    vec2 q; float z = (hq(n, 16u) - 0.5) * 0.8;
+    float t = hq(n, 11u) * 6.2831853 + time * 0.02;
+    float breathe = 1.0 + 0.06 * sin(time * 0.35);
+    float r = -log(1.0 - hq(n, 13u) * 0.985) * 0.42 * breathe;
+    q = vec2(cos(t), sin(t)) * r;
+    loose *= mix(0.12, 0.5, smoothstep(0.4, 1.4, r));
     q += vec2(-0.2, 0.0);
-    p = vec3(q * 1.1, (hq(n, 16u) - 0.5) * 0.6);
+    p = vec3(q * 1.1, z);
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
