@@ -3193,3 +3193,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-problems .dv-problem-themes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .dv-problem-themes .dv-theme-chip { padding: 5px 12px; color: var(--dv-ink); font-size: 13px; }
 .dv-problems .dv-problem-themes { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 13px; font-weight: 500; line-height: 1.5; }
+
+/* Gemini in the Devsign layout keeps its own colour (Figma 657:254 blue)
+   instead of the Devsign purple: accent, tints and the current diamond. */
+.case-study[data-project="gemini"] .dv {
+  --case-accent: light-dark(#245cc0, #8ab4f8);
+  --dv-tint: light-dark(#edf2fc, color-mix(in srgb, #8ab4f8 12%, var(--bg)));
+  --dv-tint-core: light-dark(#eef3fd, color-mix(in srgb, #8ab4f8 10%, var(--bg)));
+  --dv-diamond-current: light-dark(#e3ebfa, color-mix(in srgb, #8ab4f8 16%, var(--bg)));
+}
