@@ -242,13 +242,18 @@ void main() {
   // Most of it is fine dust, faint on its own so that only where it gathers
   // does it add up into a milky haze; a few in a hundred are stars, and only
   // those flare.
-  float star = step(mix(0.97, 0.955, galaxy), fract(vSeed * 13.1));
+  // Dark keeps the earlier grain (fewer, slightly larger points, more stars);
+  // light uses the finer, denser mix.
+  float dark = 1.0 - step(0.5, light);
+  float star = step(mix(mix(0.97, 0.955, galaxy), mix(0.965, 0.94, galaxy), dark), fract(vSeed * 13.1));
   vSize = flare * star;
   // Three grains, in CSS pixels: most of it fine dust (about a device pixel
   // on a retina screen), some coarser dust, and the few stars.
-  float fine = step(0.42, fract(vSeed * 29.3)) * (1.0 - star);
-  float size = mix(mix(mix(0.8, 1.0, vDepth), mix(0.55, 0.7, vDepth), fine), mix(1.2, 1.6, vDepth) * mix(1.0, 0.7, light), star) * (1.0 + 0.2 * vStar);
-  vFaint = mix(mix(1.1, 0.95, fine), 1.5, star);
+  float fine = step(0.42, fract(vSeed * 29.3)) * (1.0 - star) * (1.0 - dark);
+  float size = mix(mix(mix(mix(0.8, 1.0, vDepth), mix(1.0, 1.4, vDepth), dark), mix(0.55, 0.7, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
+  vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star);
+  // Dark draws every other point, about as many as before.
+  if (dark > 0.5 && SIZE > 300.0 && mod(i, 2.0) > 0.5) vFaint = 0.0;
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
@@ -550,7 +555,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
 
-      // Bloom: bright parts to a quarter, blurred both ways twice, laid over.
+      // Bloom (light theme only; the dark keeps its plain dust): bright parts
+      // to a quarter, blurred both ways twice, laid over.
       const qw = Math.max(1, width >> 2), qh = Math.max(1, height >> 2);
       gl.disable(gl.BLEND);
       gl.bindVertexArray(vaoQuad);
@@ -573,7 +579,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.viewport(0, 0, width, height);
       gl.useProgram(pComposite);
       bind(pComposite, "scene", 0, screen.scene!.texture); bind(pComposite, "glow", 1, screen.a!.texture);
-      gl.uniform1f(uniform(pComposite, "strength"), colours.light > 0.5 ? 0.35 : 1.1);
+      gl.uniform1f(uniform(pComposite, "strength"), colours.light > 0.5 ? 0.35 : 0.0);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
     frame = requestAnimationFrame(draw);
