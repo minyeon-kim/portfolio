@@ -168,19 +168,31 @@ void main() {
   o = which < 0.5 ? vec4(homeOf(v) + jitter * 2.5, 1.0) : vec4(0.0);
 }`;
 
+// The view: the camera turns a little towards the mouse (cam, -1..1), so
+// near dust slides against far dust and the room reads in depth.
+const view = `
+vec2 project(vec3 p, vec2 cam, float aspect) {
+  float ay = cam.x * 0.22, ax = -cam.y * 0.14;
+  p.xz = mat2(cos(ay), -sin(ay), sin(ay), cos(ay)) * p.xz;
+  p.yz = mat2(cos(ax), -sin(ax), sin(ax), cos(ax)) * p.yz;
+  vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
+  return s;
+}`;
+
 const velocityFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
-uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir;
+uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam;
 uniform vec2 burstAt; uniform float burstAge; uniform float burstPower;
+${view}
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
   u += (homeOf(v) - p) * mix(gather, gather * 3.0, focus) * dt;
   u += flow(p * 0.8) * 0.45 * stir * dt;
   u += valley(p * 0.9) * 0.6 * stir * dt;
   // The cursor sweeps nearby dust along its motion and swirls it.
-  vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
+  vec2 s = project(p, cam, aspect);
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
   // A wide, soft reach, so the cursor moves broad swathes rather than
   // punching small holes.
@@ -217,14 +229,15 @@ float pools(vec2 s, float aspect, float time) {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
+${view}
 void main() {
   float i = float(gl_VertexID);
   vec2 uv = (vec2(mod(i, SIZE), floor(i / SIZE)) + 0.5) / SIZE;
   vec3 p = texture(pos, uv).xyz, u = texture(vel, uv).xyz;
-  vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
+  vec2 s = project(p, cam, aspect);
   gl_Position = vec4(s, 0.0, 1.0);
   vSpeed = length(u);
   // Gemini: the sparkle takes the logo's colours, blue at its heart and
@@ -313,7 +326,7 @@ void main() {
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
-  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.6 + 0.4 * vDepth) * vLight * mix(1.0, 0.25, vNear);
+  float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.32 + 0.68 * vDepth) * vLight * mix(1.0, 0.25, vNear);
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
@@ -370,8 +383,14 @@ void main() {
 // still dust looks exactly as bright as before.
 const trailFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D now; uniform sampler2D past; uniform float decay;
-void main() { o = max(texture(now, v), texture(past, v) * decay); }`;
+uniform sampler2D now; uniform sampler2D past; uniform float decay; uniform vec2 texel;
+void main() {
+  // The past spreads a little as it fades, so a tail dissolves into haze
+  // instead of standing as a crisp line.
+  vec4 old = (texture(past, v) * 2.0 + texture(past, v + vec2(texel.x, 0.0)) + texture(past, v - vec2(texel.x, 0.0))
+    + texture(past, v + vec2(0.0, texel.y)) + texture(past, v - vec2(0.0, texel.y))) / 6.0;
+  o = max(texture(now, v), old * decay * 0.82);
+}`;
 const copyFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 uniform sampler2D src;
@@ -452,8 +471,10 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const texture = gl.createTexture()!;
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       const framebuffer = gl.createFramebuffer()!;
       gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
       gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
@@ -494,6 +515,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
 
     // The mouse over the stage (-1..1, y up) and where it was last frame.
     const mouse = { x: 9, y: 9, px: 9, py: 9, cx: 0, cy: 0 };
+    // The camera's turn, easing after the mouse (centre when it is away).
+    const cam = { x: 0, y: 0 };
     // The last burst: where (clip space), when, how strong.
     const burst = { x: 0, y: 0, at: -1e9, power: 0 };
     const onMove = (event: PointerEvent) => {
@@ -538,6 +561,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
       colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
+      const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
+      const ck = 1 - Math.exp(-dt / 1.2);
+      cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
@@ -553,6 +579,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
+        gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
         gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
@@ -586,7 +613,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       dustBlend();
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
-      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y);
+      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
@@ -603,7 +630,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pTrail);
       gl.bindFramebuffer(gl.FRAMEBUFFER, screen.trail[1].framebuffer);
       bind(pTrail, "now", 0, screen.now!.texture); bind(pTrail, "past", 1, screen.trail[0].texture);
-      gl.uniform1f(uniform(pTrail, "decay"), Math.exp(-dt / 0.06));
+      gl.uniform1f(uniform(pTrail, "decay"), Math.exp(-dt / 0.05)); gl.uniform2f(uniform(pTrail, "texel"), 1.2 * dpr / width, 1.2 * dpr / height);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       screen.trail.reverse();
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
