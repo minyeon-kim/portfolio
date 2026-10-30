@@ -3085,3 +3085,5 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* Fewer rules: only the stage title keeps its line. Questions are separated by space, the survey numbers sit without a rule. */
 .dv-question { padding-top: 0; border-top: 0; }
 .dv-evidence-stats { padding-top: 0; border-top: 0; }
+/* Text on the case accent: white on the deep light-theme purple, near-black on the pale dark-theme purple (white failed contrast there). */
+.dv-prototype-link, .dv-story-area[data-on] b, .dv-story-item[data-on] .dv-story-change b, .dv-story-points li[data-on] b, .dv-point-title b, .dv-story-switch button[aria-pressed="true"], .dv-checks span { color: light-dark(#ffffff, #120f24); }
