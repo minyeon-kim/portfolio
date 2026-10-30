@@ -3167,3 +3167,14 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-next-row { padding-top: 0; border-top: 0; }
 .dv-result-lead + .dv-result { margin-top: 12px; }
 .dv-result + .dv-scores-row { margin-top: 40px; }
+
+/* Journey first: the two low points are numbered, and each persona's pain
+   behind its low point carries the same number. */
+.dv-journey-badge circle { fill: var(--case-accent); }
+.dv-journey-badge[data-role="developer"] circle { fill: var(--dv-second); }
+.dv-journey-badge text { fill: light-dark(#ffffff, #120f24); font-weight: 600; }
+.dv-subsection > .dv-journey { margin-top: 48px; }
+.dv-personas-short { margin-top: 64px; }
+.dv-personas-short .dv-persona-context { margin-top: 8px; font-size: 18px; }
+.dv-needs tr[data-low] td:first-child { color: var(--dv-ink); }
+.dv-low-badge { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; background: var(--dv-role); color: light-dark(#ffffff, #120f24); font-size: 12px; font-weight: 600; vertical-align: 2px; }

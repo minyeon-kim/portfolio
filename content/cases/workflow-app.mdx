@@ -154,6 +154,7 @@ export const study = {
       title: "Persona & user journey map",
       lead: "Two roles stall at different steps, for one shared reason.",
       text: "One persona per role, drawn from the interviews. Each journey has one lowest point, and that is where the work stalls.",
+      wantsLabel: "Wants",
       people: [
         {
           role: "Designer",
@@ -162,7 +163,8 @@ export const study = {
           quote: "“I want to know why it’s changing, and the context behind it.”",
           avatar: "/images/devsign/avatar-priya.webp",
           context: "Generates screen options with AI and hands them to developers. Change requests come back as screenshots in Slack or KakaoTalk, often after the build is done.",
-          contextLead: "She wants to merge the best of several AI options and have a say before the build is final.",
+          contextLead: "Merge the best of several AI options, and have a say before the build is final.",
+          lowPair: 1,
           pairs: [
             ["Feedback piles up after the work, so she can’t tell what to fix first", "Context attached to every change request"],
             ["Finds design drift only after development ends", "A clear moment to decide, before it’s final"],
@@ -175,7 +177,8 @@ export const study = {
           quote: "“Tell me what it’s for before I build it.”",
           avatar: "/images/devsign/avatar-marcus.webp",
           context: "Generates UI code with AI and handles small UI fixes himself. Code lives in Git, but design changes are still agreed in chat.",
-          contextLead: "He wants to know what to build against, and settle small UI changes without a meeting.",
+          contextLead: "Know what to build against, and settle small UI changes without a meeting.",
+          lowPair: 0,
           pairs: [
             ["Has to dig for the source of truth himself", "Intent and criteria with each request"],
             ["Reaching agreement takes longer than the disagreement", "One clear decision-maker for each change"],
@@ -183,13 +186,14 @@ export const study = {
         },
       ],
       journey: {
+        lowLabel: "Lowest point",
         steps: ["Request", "Find context", "Make", "Review", "Ship", "Months later"],
         designer: "Priya · Designer",
         developer: "Marcus · Developer",
         developerLow: "Lowest · building on guesses",
         designerLow: "Lowest · no say before it’s final",
       },
-      summary: "Same work, different low points: Priya has no say before it’s final, Marcus builds on guesses.",
+      summary: "Same work, different low points: ① Priya has no say before it’s final, ② Marcus builds on guesses.",
     },
     affinity: {
       method: "Research analysis",

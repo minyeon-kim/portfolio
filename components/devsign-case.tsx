@@ -87,7 +87,16 @@ function Section({ id, title, band, children }: { id: string; title: string; ban
 }
 
 
-function Journey({ journey }: { journey: Study }) {
+function LowBadge({ x, n, role }: { x: number; n: number; role: string }) {
+  return (
+    <g className="dv-journey-badge" data-role={role}>
+      <circle cx={x} cy="286" r="16" />
+      <text x={x} y="291" textAnchor="middle" fontSize="14">{n}</text>
+    </g>
+  );
+}
+
+function Journey({ journey, numbered }: { journey: Study; numbered?: boolean }) {
   // Coordinates from the Figma emotion curve (1376 x 340 inside the journey panel).
   const xs = [90, 329, 568, 808, 1047, 1286];
   return (
@@ -103,9 +112,9 @@ function Journey({ journey }: { journey: Study }) {
         <path transform="translate(87.5 157.52)" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         <text x="584" y="115" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
         <text x="1071" y="211" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x="312" y="269" width="34" height="34" />
+        {numbered ? <LowBadge x={329} n={2} role="developer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="312" y="269" width="34" height="34" />}
         <text x="329" y="325" textAnchor="middle" fontSize="13" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x="1030" y="269" width="34" height="34" />
+        {numbered ? <LowBadge x={1047} n={1} role="designer" /> : <image href={withBase("/images/devsign/emoji-angry.svg")} x="1030" y="269" width="34" height="34" />}
         <text x="1047" y="325" textAnchor="middle" fontSize="13" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </div>
@@ -398,9 +407,13 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </ol>
         </div>
 
+        {/* Where it breaks first (the journey and its two numbered low points),
+            then who: each persona's pain carries the same number. */}
         <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
-        <div className="dv-personas dv-gap-64">
+        <Journey journey={define.personas.journey} numbered />
+        <p className="dv-summary reveal">{define.personas.summary}</p>
+        <div className="dv-personas dv-personas-short dv-gap-64">
           {define.personas.people.map((person: Study, index: number) => (
             <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
               <div className="dv-persona-id">
@@ -412,16 +425,20 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </div>
               <div className="dv-persona-details">
                 <div>
-                  <p className="dv-caps dv-persona-role">{labels.context}</p>
-                  <p className="dv-persona-context">{person.context} <strong>{person.contextLead}</strong></p>
+                  <p className="dv-caps dv-persona-role">{define.personas.wantsLabel}</p>
+                  <p className="dv-persona-context"><strong>{person.contextLead}</strong></p>
                 </div>
                 <table className="dv-needs">
                   <thead>
                     <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
                   </thead>
                   <tbody>
-                    {person.pairs.map(([pain, need]: string[]) => (
-                      <tr key={pain}><td>{pain}</td><td aria-hidden="true">→</td><td><strong>{need}</strong></td></tr>
+                    {person.pairs.map(([pain, need]: string[], p: number) => (
+                      <tr key={pain} data-low={p === person.lowPair || undefined}>
+                        <td>{p === person.lowPair && <span className="dv-low-badge" aria-label={define.personas.journey.lowLabel}>{index + 1}</span>}{pain}</td>
+                        <td aria-hidden="true">→</td>
+                        <td><strong>{need}</strong></td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -429,8 +446,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </article>
           ))}
         </div>
-        <Journey journey={define.personas.journey} />
-        <p className="dv-summary reveal">{define.personas.summary}</p>
         </div>
 
         </> : <>
