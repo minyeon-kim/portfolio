@@ -3128,3 +3128,28 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .more-work + .site-footer .site-footer-meta { order: 3; flex-basis: 100%; margin-left: 0; gap: 20px; }
   .more-work + .site-footer .site-footer-top-link { margin-left: auto; padding-left: 0; border-left: 0; }
 }
+
+/* Affinity result: which themes (with card counts) fed each key problem. */
+.dv-themes ol { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.dv-themes li { display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); align-items: center; gap: 16px; }
+.dv-themes-from { display: flex; flex-wrap: wrap; gap: 8px; }
+.dv-theme-chip { display: inline-flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); font-size: 15px; font-weight: 500; line-height: 1.3; }
+.dv-theme-chip em { color: var(--dv-muted); font-style: normal; font-variant-numeric: tabular-nums; }
+.dv-themes-arrow { color: var(--case-accent); text-align: center; }
+.dv-themes-to { display: flex; align-items: baseline; gap: 12px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+.dv-themes-to b { color: var(--case-accent); font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+@media (max-width: 47.99rem) {
+  .dv-themes ol { gap: 20px; }
+  .dv-themes li { grid-template-columns: 1fr; gap: 8px; }
+  .dv-themes-arrow { display: none; }
+}
+
+/* Key problems, quieter: number and role on one small line, then the title
+   and one sentence (the evidence now sits in the affinity themes above). */
+.dv-problems .dv-problem-top { gap: 12px; }
+.dv-problems .dv-problem-number { margin-right: 0; font-size: 14px; font-weight: 500; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.dv-problem-role { color: var(--dv-muted); font-size: 14px; font-weight: 500; line-height: 1.4; }
+.dv-problems h4 { margin-top: 4px; font-size: 20px; font-weight: 600; }
+.dv-problems li { gap: 8px; }
+.dv-themes li { grid-template-columns: minmax(0, 520px) 32px minmax(0, 1fr); }
+.dv-themes li { grid-template-columns: minmax(0, 360px) 32px minmax(0, 1fr); }

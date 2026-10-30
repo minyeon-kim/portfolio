@@ -195,7 +195,10 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       lead: "What got said never stayed with the work.",
-      text: "201 quotes, sorted bottom-up into four problems. The biggest theme was shared context, with 55 cards. The problem wasn’t too little talk; it was that what got said never stayed with the work.",
+      text: "Grouping 201 interview quotes by similarity gave seven themes. The biggest was shared context, with 55 cards. Teams talked plenty; what got said just never stayed with the work. Grouping the themes again narrowed them to four problems.",
+      themesLabel: "Which themes became which problem",
+      cardsWord: " cards",
+      themes: [[["Versions, options & finals", 14]], [["Manual review", 29], ["Blurred role lines", 28]], [["Tool sprawl", 38], ["Real-time collaboration", 25]], [["Shared context", 55]]],
       board: { src: "/images/devsign/affinity-board.webp", width: 2400, height: 1044, alt: "Affinity map: interview quotes grouped into seven colored theme columns, from real-time collaboration to AI limits" },
     },
     problems: {
@@ -205,7 +208,7 @@ export const study = {
       lowest: "Lowest point",
       items: [
         { title: "Drafts don’t merge", body: "Several AI drafts, but no way to combine the best parts of each.", role: "Designer", from: "Versions, options & finals (14)" },
-        { title: "Unclear who decides", body: "When the build differs from the design, who fixes and who approves is unclear.", role: "Designer or PO", from: "Blurred role lines (28) · Manual review (29)", lowest: true },
+        { title: "Unclear who decides", body: "When the build drifts from the design, the team settles again in chat whether the developer fixes it or the designer decides.", role: "Designer · PO", from: "Blurred role lines (28) · Manual review (29)", lowest: true },
         { title: "Changes are scattered", body: "Status and the reasons for changes live across Figma, Slack and GitHub.", role: "Developer", from: "Tool sprawl (38) · Real-time collaboration (25)", lowest: true },
         { title: "Reasons get lost", body: "The cause, the decision and the result never connect.", role: "Both", from: "Shared context (55)" },
       ],
@@ -375,8 +378,8 @@ export const study = {
       lead: "A practicing designer helped us cut what had to be read.",
       text: "5 screens, 3 sticker colors, 3 votes each.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "Co-design session on a video call, voting with colored stickers on prototype screens" },
-      agreedLabel: "What we agreed: cut, move, hide — not add",
-      agreed: ["Cut — four panels became three tabs.", "Move — the screens went onto one board.", "Hide — the AI panel stays folded by default."],
+      agreedLabel: "What we agreed: take things away instead of adding",
+      agreed: ["Four panels became three tabs.", "Scattered screens moved onto one board.", "The AI panel starts folded."],
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: a four-panel developer layout", text: "4-panel dev layout, everything visible at once." },
       after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "3 tabs, a screen board", text: ", AI panel folded by default." },
       changes: [

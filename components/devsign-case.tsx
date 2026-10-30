@@ -365,6 +365,21 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div>
           <Block {...define.affinity} ff={ff} />
           <Figure img={define.affinity.board} className="dv-board dv-gap-72" />
+          {/* The themes behind each problem, so the cards below stay short. */}
+          {define.affinity.themes && <div className="dv-themes dv-gap-56">
+            <p className="dv-caps reveal">{define.affinity.themesLabel}</p>
+            <ol>
+              {define.affinity.themes.map((group: [string, number][], i: number) => (
+                <li key={i} className="reveal">
+                  <span className="dv-themes-from">
+                    {group.map(([name, cards]) => <span key={name} className="dv-theme-chip">{name} <em>{cards}{define.affinity.cardsWord}</em></span>)}
+                  </span>
+                  <span className="dv-themes-arrow" aria-hidden="true">→</span>
+                  <span className="dv-themes-to"><b>{pad(i + 1)}</b>{define.problems.items[i]?.title}</span>
+                </li>
+              ))}
+            </ol>
+          </div>}
         </div>
 
         <div className="dv-subsection">
@@ -374,12 +389,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <li key={item.title} className="reveal">
                 <div className="dv-problem-top">
                   <span className="dv-problem-number">{pad(index + 1)}</span>
-                  <span className="dv-pill">{item.role}</span>
-                  {item.lowest && <span className="dv-pill dv-pill-accent">{define.problems.lowest}</span>}
+                  <span className="dv-problem-role">{item.role}</span>
                 </div>
                 <h4>{item.title}</h4>
                 <p>{item.body}</p>
-                <p className="dv-from"><strong>{labels.from} · </strong>{item.from}</p>
               </li>
             ))}
           </ol>
