@@ -184,7 +184,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body reveal">{overview.process.body}</p>
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} labels={labels} />
         </div>
-        {overview.features && (
+        {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
+        {overview.features && !(ff && develop.selection) && (
           <div className="dv-main-features">
             {ff ? <Block title={overview.features.method} lead={overview.features.title} ff={ff} /> : <Block method={overview.features.method} title={overview.features.title} />}
             <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as React.CSSProperties}>
@@ -423,7 +424,31 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...develop.sketching} ff={ff} />
           <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />
         </div>
-        {develop.selection && (
+        {/* Findings first: the four features as cards with their screens, each
+            closing on the problem it answers and the direction it came from. */}
+        {develop.selection && ff && overview.features ? (
+          <div className="dv-main-features">
+            <Block title={develop.selection.label} lead={overview.features.title} ff />
+            <ul className="dv-features dv-features-shots dv-gap-40" style={{ "--n": overview.features.items.length } as React.CSSProperties}>
+              {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => {
+                const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
+                return (
+                  <li key={f.name} className="reveal">
+                    {f.src && <Image src={withBase(f.src)} alt="" width={1280} height={800} sizes="(max-width: 767px) 100vw, 300px" className="dv-feature-shot" />}
+                    <span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span>
+                    {pick && (
+                      <p className="dv-feature-origin">
+                        <span><b>{develop.selection.solves}</b>{pick.problem}</span>
+                        <span>{pick.from}</span>
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="dv-link reveal"><a href="#deliver">{overview.features.link}</a></p>
+          </div>
+        ) : develop.selection && (
           <div className="dv-gap-96">
             <p className="dv-caps dv-accent reveal">{develop.selection.label}</p>
             <ol className="dv-selection">

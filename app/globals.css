@@ -2906,3 +2906,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 }
 /* Figures wait for their reveal at scale 1.14; clip them so the waiting image never widens the page. */
 .dv-figure, .dv-point-media { overflow: clip; }
+
+/* Feature cards in Develop close on the problem they answer and their direction. */
+.dv-section .dv-main-features { margin-top: 96px; }
+.dv-features-shots li { display: flex; flex-direction: column; }
+.dv-feature-origin { display: flex; flex-direction: column; gap: 4px; margin: auto 24px 0 !important; padding: 16px 0 0 !important; border-top: 1px solid var(--dv-line); font-size: 14px; font-weight: 500; line-height: 1.45; }
+.dv-features .dv-feature-origin span { color: var(--dv-ink); font-size: 14px; }
+.dv-features .dv-feature-origin span + span { color: var(--dv-muted); }
+.dv-feature-origin b { display: block; margin-bottom: 2px; color: var(--dv-muted); font-size: 12px; font-weight: 500; }
+.dv-features-shots li > span:nth-of-type(3) { margin-bottom: 20px; }
