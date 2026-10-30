@@ -2,8 +2,8 @@
 
 import { useLayoutEffect } from "react";
 
-const STEP_MS = 150; // stagger between items that come into view together
-const MAX_STEPS = 10;
+const STEP_MS = 90; // stagger between items that come into view together
+const MAX_STEPS = 4; // so nothing waits more than ~0.4s
 
 // Fades `.reveal` elements in as they scroll into view. Elements that enter
 // in the same moment appear one after another. Everything stays visible until
