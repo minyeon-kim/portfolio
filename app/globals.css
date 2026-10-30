@@ -3235,3 +3235,15 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Value proposition canvas (findings first): whole image across the column. */
 .dv-canvas-full img { width: 100%; height: auto; border-radius: 0; }
+
+/* Value proposition canvas: each candidate, the pain it relieves, the feature it became. */
+.dv-candidates { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-candidates li { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 16px; background: var(--dv-alt); }
+.dv > #develop .dv-candidates li { background: light-dark(#ffffff, color-mix(in srgb, var(--ink) 7%, var(--bg))); }
+.dv-candidate-id { color: var(--case-accent); font-size: 13px; font-weight: 600; }
+.dv-candidates strong { font-size: 18px; font-weight: 600; line-height: 1.3; }
+.dv-candidate-pain { margin: 0; color: var(--dv-muted); font-size: 15px; line-height: 1.5; }
+.dv-candidate-pain span { display: block; margin-bottom: 2px; color: var(--dv-ink, var(--ink)); font-size: 13px; font-weight: 600; }
+.dv-candidate-to { margin: auto 0 0; padding-top: 12px; border-top: 1px solid var(--dv-line, var(--line)); font-size: 15px; font-weight: 500; }
+@media (max-width: 63.99rem) { .dv-candidates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 47.99rem) { .dv-candidates { grid-template-columns: 1fr; } }
