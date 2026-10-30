@@ -3082,3 +3082,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* After the Next project deck the footer is only its quiet bottom row (the ask and the pills were too much for the closing zone). */
 .more-work + .site-footer .site-footer-top { display: none; }
 .more-work + .site-footer .site-footer-bottom { margin-top: 0; padding-top: 24px; border-top: 1px solid var(--ft-line); }
+/* Fewer rules: only the stage title keeps its line. Questions are separated by space, the survey numbers sit without a rule. */
+.dv-question { padding-top: 0; border-top: 0; }
+.dv-evidence-stats { padding-top: 0; border-top: 0; }
