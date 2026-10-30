@@ -20,15 +20,7 @@ export async function SiteHeader() {
         buttons drop their own pill backgrounds, so there is never a pill in a pill.
       */}
       <div className="site-header-bar mx-auto grid max-w-full grid-cols-[1fr_auto_1fr] items-center gap-2 py-[18px] transition-[max-width,margin,padding,background-color,border-color] duration-400 ease-standard md:group-data-compact/header:my-1 md:group-data-compact/header:max-w-[560px] md:group-data-compact/header:rounded-full md:group-data-compact/header:bg-surface/70 md:group-data-compact/header:py-1 md:group-data-compact/header:backdrop-blur-md">
-        <div>
-          <SiteMenu
-            contact={{
-              email: site.email,
-              linkedinUrl: site.linkedinUrl,
-              resumeUrl: hasResume ? site.resumeUrl : undefined,
-            }}
-          />
-        </div>
+        <div />
         <HomeLink className="header-name whitespace-nowrap">{site.name}</HomeLink>
         <div className="flex items-center justify-end gap-2">
           {/* TODO: add public/resume.pdf; the link appears once it exists. */}
@@ -39,6 +31,13 @@ export async function SiteHeader() {
           )}
           <LangToggle />
           <ThemeToggle />
+          <SiteMenu
+            contact={{
+              email: site.email,
+              linkedinUrl: site.linkedinUrl,
+              resumeUrl: hasResume ? site.resumeUrl : undefined,
+            }}
+          />
         </div>
       </div>
     </HeaderShell>
