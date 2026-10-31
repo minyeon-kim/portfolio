@@ -3392,3 +3392,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-gaps span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .dv-gaps p { margin: 0; color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
 @media (max-width: 47.99rem) { .dv-gaps { grid-template-columns: 1fr; } .dv-gaps li { padding: 24px; } .dv-gaps p { font-size: 18px; } }
+
+/* Landing after byotone.com: a flat charcoal stage, the grains alone. No ambient light fields,
+   no per-case glow, only a soft edge vignette. Reduced motion (no grains) keeps the ambient fields. */
+.intro-stage.home-stage { --bg: light-dark(#eef0ee, #161617); }
+.home-backdrop .intro-ambient, .home-backdrop[data-project] .intro-ambient { opacity: 0; }
+.home-backdrop .home-world { background: none; }
+@media (prefers-reduced-motion: reduce) { .home-backdrop .intro-ambient { opacity: 1; } }
