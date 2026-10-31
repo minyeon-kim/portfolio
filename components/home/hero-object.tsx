@@ -117,12 +117,12 @@ vec3 formOf(float n, vec2 uv) {
       loose *= 0.25;
     } else if (a < 0.7) {
       float u = (a - 0.08) / 0.62;
-      float r = 0.25 + pow(u, 0.9) * 2.6;
+      float r = 0.25 + pow(u, 0.9) * 1.8;
       float t = floor(b * 2.0) * 3.14159265 + log(r / 0.25) * 1.15 + time * 0.02 + (c - 0.5) * (0.6 + 0.6 * u);
       q = vec2(cos(t), sin(t)) * r;
       loose *= 0.25 + 0.45 * u;
     } else {
-      float t = c * 6.2831853, r = 0.3 + pow(hq(n, 13u), 0.6) * 2.8;
+      float t = c * 6.2831853, r = 0.3 + pow(hq(n, 13u), 0.6) * 1.9;
       q = vec2(cos(t), sin(t)) * r;
       loose *= 0.6;
     }
@@ -134,7 +134,7 @@ vec3 formOf(float n, vec2 uv) {
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
   // A case's form keeps only a thin haze round it, so the shape reads.
-  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 0.5, step(0.8, g)), focus);
+  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 0.35, step(0.8, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
@@ -322,8 +322,11 @@ void main() {
   // After byotone.com: fewer, slightly larger grains (2–3px), nearly even
   // in brightness and matte, so the form reads by density alone.
   float kept = step(fract(vSeed * 97.31), keep);
-  vFaint *= kept * mix(0.7, 1.1, fract(vSeed * 53.7)) * 0.85;
-  px = mix(2.4, 3.4, vDepth) * dpr * (1.0 + 0.15 * vStar);
+  // Mostly small grains, about one in eight a larger flake, so the field
+  // has depth instead of an even texture.
+  float flake = step(0.875, fract(vSeed * 71.9));
+  vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake);
+  px = mix(mix(1.6, 2.6, vDepth), mix(3.4, 4.8, vDepth), flake) * dpr;
   gl_PointSize = kept > 0.5 ? px : 0.0;
   if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
@@ -334,10 +337,9 @@ in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light; uniform float galaxy;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
-  // A soft core; a flaring star shows a faint four-point glint.
-  float core = smoothstep(0.5, 0.5 * vNear * 0.8, length(q) * mix(1.0, 3.0, vSize));
-  float rays = 0.5 * vSize * (exp(-abs(q.x) * 60.0) + exp(-abs(q.y) * 60.0)) * smoothstep(0.5, 0.1, length(q));
-  float a = min(core + rays, 1.0) * vFaint;
+  // A flat disc with a soft rim (after byotone.com), not a bright pinpoint:
+  // a cone-shaped point shows only its centre and reads as sharp grain.
+  float a = smoothstep(0.5, 0.3, length(q)) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
@@ -345,7 +347,10 @@ void main() {
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // One quiet colour (after byotone.com): the landing galaxy is a warm
   // off-white; a case's form keeps a hint of its own colour.
-  c = mix(c, vec3(0.86, 0.84, 0.8), mix(0.5, 1.0, galaxy) * (1.0 - light));
+  c = mix(c, vec3(0.8, 0.79, 0.76), mix(0.5, 1.0, galaxy) * (1.0 - light));
+  // Dark: grains lie over the stage like flakes (normal blending, capped
+  // opacity), so where they crowd they don't add up into hot white.
+  alpha = mix(min(alpha * 0.8, 0.6), alpha, light);
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
   float lum = dot(c, vec3(0.3, 0.59, 0.11));
@@ -592,8 +597,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       gl.uniform3fv(uniform(pStar, "calm"), colours.calm); gl.uniform1f(uniform(pStar, "light"), colours.light);
       gl.drawArrays(gl.POINTS, 0, 1600);
-      // Dark: the dust adds up into light. Light: it lies over the page.
-      const dustBlend = () => { if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); };
+      // The dust lies over the stage in both themes (no additive light).
+      const dustBlend = () => gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       const setupDust = () => {
         gl.useProgram(pDraw);
         gl.bindVertexArray(vaoDraw);
@@ -612,7 +617,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       };
       dustBlend();
       setupDust();
-      gl.uniform1f(uniform(pDraw, "keep"), 0.38);
+      gl.uniform1f(uniform(pDraw, "keep"), 0.32);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
