@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverShow, IterationStory, PrototypeLink } from "@/components/devsign-story";
+import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -86,6 +86,7 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
   return (
     <div className="dv-gap-96">
       <Block {...(handoff as Lead)} ff={ff} />
+      {handoff.video && <div className="dv-gap-40"><HandoffVideo {...handoff.video} steps={screens.map((f: Study) => f.title)} /></div>}
       <ol className="dv-wireflow dv-gap-40 reveal" data-reveal-group>
         {screens.map((f: Study, s: number) => (
           <li key={f.title}>

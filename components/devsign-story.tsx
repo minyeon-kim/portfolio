@@ -60,6 +60,66 @@ export function PrototypeLink({ label }: { label: string }) {
   return <a className="dv-prototype-link press" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{label}</a>;
 }
 
+// The handoff flow as a real recording of the live prototype (class feedback:
+// show it moving): one looping video of 1 Merge Studio → 2 Live Workspace →
+// 3 Conflict Points → 4 History, recorded with Playwright at 1440×900. The step
+// row under it lights the step the video is in (`starts`, seconds) and seeks
+// to a step when pressed. Plays only while on screen; with reduced motion it
+// doesn't autoplay and shows its controls instead.
+export function HandoffVideo({ src, poster, starts, steps, label }: { src: string; poster: string; starts: number[]; steps: string[]; label: string }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [step, setStep] = useState(0);
+  const [still, setStill] = useState(false);
+
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setStill(reduce);
+    if (reduce) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) el.play().catch(() => {});
+      else el.pause();
+    }, { threshold: 0.35 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const sync = () => {
+    const t = video.current?.currentTime ?? 0;
+    let i = 0;
+    starts.forEach((s, j) => { if (t >= s) i = j; });
+    setStep(i);
+  };
+  const seek = (i: number) => {
+    const el = video.current;
+    if (!el) return;
+    el.currentTime = starts[i];
+    setStep(i);
+    if (!still) el.play().catch(() => {});
+  };
+
+  return (
+    <figure className="dv-handoff-video">
+      <div className="dv-handoff-screen">
+        <video ref={video} muted loop playsInline preload="metadata" poster={withBase(poster)} controls={still} onTimeUpdate={sync} aria-label={label}>
+          <source src={withBase(`${src}.webm`)} type="video/webm" />
+          <source src={withBase(`${src}.mp4`)} type="video/mp4" />
+        </video>
+      </div>
+      <ol className="dv-handoff-steps">
+        {steps.map((name, i) => (
+          <li key={name}>
+            <button type="button" className="press" aria-current={i === step || undefined} onClick={() => seek(i)}>
+              <b>{i + 1}</b>{name}
+            </button>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  );
+}
+
 // Deliver as a demo reel (class feedback: the screens were too small and the
 // reader didn't know where to look). One large screen plays by itself while it
 // is on screen: each feature opens on the whole screen, then zooms into its
