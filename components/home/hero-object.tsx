@@ -229,7 +229,7 @@ const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
 uniform float keep;  // the share of the simulation drawn
-out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
+out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint; out float vFlake;
 ${view}
 void main() {
   float i = float(gl_VertexID);
@@ -325,21 +325,23 @@ void main() {
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture.
   float flake = step(0.875, fract(vSeed * 71.9));
+  vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake);
-  px = mix(mix(1.6, 2.6, vDepth), mix(3.4, 4.8, vDepth), flake) * dpr;
+  px = mix(mix(1.6, 2.4, vDepth), mix(4.0, 6.0, vDepth), flake) * dpr;
   gl_PointSize = kept > 0.5 ? px : 0.0;
   if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
 const drawFragment = `#version 300 es
 precision highp float;
-in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
+in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; in float vFlake; out vec4 o;
 uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light; uniform float galaxy;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
   // A flat disc with a soft rim (after byotone.com), not a bright pinpoint:
   // a cone-shaped point shows only its centre and reads as sharp grain.
-  float a = smoothstep(0.5, 0.3, length(q)) * vFaint;
+  // The larger flakes are out of focus: a wider soft rim, like bokeh.
+  float a = smoothstep(0.5, mix(0.3, 0.05, vFlake), length(q)) * vFaint;
   float e = smoothstep(0.25, 1.6, vSpeed);
   vec3 c = mix(mix(calm, accent, smoothstep(0.55, 0.95, vSeed)), fast, max(max(e, step(0.94, vSeed) * 0.6), vStar));
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
@@ -572,7 +574,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {
@@ -617,7 +619,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       };
       dustBlend();
       setupDust();
-      gl.uniform1f(uniform(pDraw, "keep"), 0.32);
+      gl.uniform1f(uniform(pDraw, "keep"), 0.22);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
