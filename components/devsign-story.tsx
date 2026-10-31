@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { devsignUrl } from "@/components/devsign-live";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
@@ -83,6 +83,7 @@ function zoomTo(b: Box | null): React.CSSProperties {
 }
 
 export function DeliverShow({ features, labels }: { features: Feature[]; labels: { play: string; pause: string } }) {
+  const track = useRef<HTMLDivElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -90,40 +91,69 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
   const [held, setHeld] = useState(false);
   const [paused, setPaused] = useState(false);
   const [still, setStill] = useState(false);
+  const [linked, setLinked] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setStill(media.matches);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const wide = window.matchMedia("(min-width: 64rem)");
+    const sync = () => { setStill(motion.matches); setLinked(wide.matches && !motion.matches); };
     sync();
-    media.addEventListener("change", sync);
+    motion.addEventListener("change", sync);
+    wide.addEventListener("change", sync);
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.5 });
     if (root.current) observer.observe(root.current);
-    return () => { observer.disconnect(); media.removeEventListener("change", sync); };
+    return () => { observer.disconnect(); motion.removeEventListener("change", sync); wide.removeEventListener("change", sync); };
   }, []);
 
+  // One position across all features (ms). Autoplay adds time; on wide
+  // screens scrolling through the pinned track also moves it (class
+  // feedback: zoom and move just by scrolling), forwards or back.
+  const total = FEATURE_MS * features.length;
+  const pos = useRef(0);
+  const apply = useCallback(() => {
+    const i = Math.min(features.length - 1, Math.floor(pos.current / FEATURE_MS));
+    setActive(i);
+    setElapsed(pos.current - i * FEATURE_MS);
+  }, [features.length]);
+
   const playing = visible && !held && !paused && !still;
-  const clock = useRef(0);
   useEffect(() => {
     if (!playing) return;
     let last = performance.now();
     let frame = requestAnimationFrame(function tick(now) {
-      clock.current += Math.min(100, now - last); // a hidden tab pauses frames; never skip ahead
+      pos.current = (pos.current + Math.min(100, now - last)) % total; // a hidden tab pauses frames; never skip ahead
       last = now;
-      if (clock.current >= FEATURE_MS) {
-        clock.current = 0;
-        setActive((a) => (a + 1) % features.length);
-      }
-      setElapsed(clock.current);
+      apply();
       frame = requestAnimationFrame(tick);
     });
     return () => cancelAnimationFrame(frame);
-  }, [playing, features.length]);
+  }, [playing, total, apply]);
 
-  const pick = (i: number) => { clock.current = 0; setActive(i); setElapsed(0); };
+  useEffect(() => {
+    if (!linked) return;
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY, dy = y - lastY;
+      lastY = y;
+      const el = track.current, show = root.current;
+      if (!el || !show) return;
+      const box = el.getBoundingClientRect();
+      const travel = box.height - show.offsetHeight;
+      const top = parseFloat(getComputedStyle(show).top) || 0;
+      if (travel <= 0 || box.top > top || box.bottom < show.offsetHeight + top) return; // only while pinned
+      pos.current = Math.max(0, Math.min(total - 1, pos.current + dy * (total / travel)));
+      apply();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [linked, total, apply]);
+
+  const pick = (i: number) => { pos.current = i * FEATURE_MS; apply(); };
   const point = still ? -1 : elapsed < OVERVIEW_MS ? -1 : Math.min(2, Math.floor((elapsed - OVERVIEW_MS) / POINT_MS));
   const f = features[active];
 
   return (
+    <div ref={track} className="dv-show-track" data-linked={linked || undefined}>
     <div ref={root} className="dv-show" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
       <div className="dv-show-screen">
         {features.map((feature, i) => (
@@ -160,6 +190,7 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
           ))}
         </ol>
       </div>
+    </div>
     </div>
   );
 }

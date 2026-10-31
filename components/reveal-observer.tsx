@@ -7,6 +7,9 @@ const MAX_STEPS = 3; // so nothing waits more than ~0.2s
 // A text block (label, heading, body) rises as one piece instead of line by
 // line (class feedback: sections should come up together, at one pace).
 const GROUP = ".dv-block, [data-reveal-group]";
+// In a case body the unit is a whole block of a stage (a direct child of the
+// stage section): it rises as one piece and everything inside shows with it.
+const UNIT = ".dv > section > *";
 
 // Fades `.reveal` elements in as they scroll into view. Elements that enter
 // in the same moment appear one after another. Everything stays visible until
@@ -23,6 +26,11 @@ export function RevealObserver() {
         el.addEventListener("transitionend", () => (el.style.transitionDelay = ""), { once: true });
       }
       el.dataset.shown = "";
+      const unit = el.closest<HTMLElement>(UNIT);
+      if (unit && unit.dataset.shown === undefined) {
+        if (delay) unit.style.transitionDelay = `${delay}ms`;
+        unit.dataset.shown = "";
+      }
     };
 
     const observer = new IntersectionObserver(
@@ -45,7 +53,7 @@ export function RevealObserver() {
         for (const e of entering) {
           const el = e.target as HTMLElement;
           if (el.dataset.shown !== undefined) continue;
-          const group = el.closest<HTMLElement>(GROUP);
+          const group = el.closest<HTMLElement>(UNIT) ?? el.closest<HTMLElement>(GROUP);
           const members = group ? [...group.querySelectorAll<HTMLElement>(".reveal:not([data-shown])")] : [el];
           const delay = Math.min(step++, MAX_STEPS) * STEP_MS;
           for (const m of members) {
@@ -73,19 +81,20 @@ export function RevealObserver() {
     const replay = (event: Event) => {
       const scope = (event as CustomEvent<Element>).detail;
       const els = [...scope.querySelectorAll<HTMLElement>(".reveal")];
-      for (const el of els) {
+      const units = [...scope.querySelectorAll<HTMLElement>(UNIT)];
+      for (const el of [...els, ...units]) {
         el.style.transition = "none"; // hide instantly, don't fade out
         delete el.dataset.shown;
       }
       void scope.getBoundingClientRect(); // commit the hidden state
-      for (const el of els) el.style.transition = "";
+      for (const el of [...els, ...units]) el.style.transition = "";
       requestAnimationFrame(() => {
         let step = 0;
         const delays = new Map<Element, number>();
         for (const el of els) {
           const box = el.getBoundingClientRect();
           if (box.top < window.innerHeight && box.bottom > 0) {
-            const key = el.closest(GROUP) ?? el;
+            const key = el.closest(UNIT) ?? el.closest(GROUP) ?? el;
             if (!delays.has(key)) delays.set(key, Math.min(step++, MAX_STEPS) * STEP_MS);
             show(el, delays.get(key));
           } else {

@@ -4,6 +4,7 @@ import { ViewTransition } from "react";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeScript } from "@/components/theme-script";
 import { site } from "@/lib/site";
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <HtmlLang />
         <RevealObserver />
+        <SmoothScroll />
         <ReturnToIntro />
       </body>
     </html>

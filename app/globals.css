@@ -3399,3 +3399,18 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .home-backdrop .intro-ambient, .home-backdrop[data-project] .intro-ambient { opacity: 0; }
 .home-backdrop .home-world { background: none; }
 @media (prefers-reduced-motion: reduce) { .home-backdrop .intro-ambient { opacity: 1; } }
+
+/* Demo reel pinned on wide screens: the reel sticks while 200svh of native
+   scroll pass, and that scroll moves it through the features (DeliverShow). */
+.dv-show-track[data-linked] { height: 300svh; }
+.dv-show-track[data-linked] .dv-show { position: sticky; top: 72px; }
+.dv-show-track[data-linked] .dv-show-screen { width: min(100%, calc((100svh - 320px) * 1.6)); }
+
+/* Case body reveals by section block (class feedback: the section rises, not
+   each line): a stage's block fades and rises 40px as one piece; the text and
+   cards inside don't move on their own, images still settle inside it. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready .dv > section > :has(.reveal) { transition: opacity 500ms var(--ease), translate 700ms var(--ease-out-soft); }
+  .reveal-ready .dv > section > :has(.reveal):not([data-shown]) { opacity: 0; translate: 0 40px; }
+  .reveal-ready .dv .reveal, .reveal-ready .dv .reveal:not([data-shown]) { opacity: 1; translate: none; transition: none; }
+}
