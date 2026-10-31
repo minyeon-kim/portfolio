@@ -301,10 +301,10 @@ void main() {
   // The bolt's upper slab sits where the room is darkest; lift it so the
   // whole bolt reads evenly.
   if (symbol > 1.5 && symbol < 2.5) vLight = max(vLight, 0.75);
-  // Twinkle: every point breathes a little; a few flare now and then.
-  float phase = time * (0.6 + 1.8 * vSeed) + vSeed * 40.0;
-  float flare = pow(max(sin(phase), 0.0), 16.0) * step(mix(0.75, 0.6, galaxy), fract(vSeed * 7.7));
-  vLight *= 0.7 + 0.3 * sin(phase * 1.7);
+  // No twinkle (after byotone.com): grains that breathe and flare one by one
+  // read as shimmering grain; still grains read as matter.
+  float flare = 0.0;
+  vLight *= 0.85;
   // Most of it is fine dust, faint on its own so that only where it gathers
   // does it add up into a milky haze; a few in a hundred are stars, and only
   // those flare.
@@ -347,9 +347,12 @@ void main() {
     // Crisp: every grain is drawn, so the form reads as clearly as before,
     // but not all alike: most sink low into the glow and only a few stay
     // bright. An even field of equally bright grains is what read as grain.
+    // After byotone.com: fewer, slightly larger grains (2–3px), nearly even
+    // in brightness and matte, so the form reads by density alone.
     float kept = step(fract(vSeed * 97.31), keep);
-    vFaint *= kept * mix(0.6, 2.0, pow(fract(vSeed * 53.7), 3.0));
-    gl_PointSize = kept > 0.5 ? max(px, 1.0) : 0.0;
+    vFaint *= kept * mix(0.7, 1.1, fract(vSeed * 53.7)) * 0.85;
+    px = mix(2.4, 3.4, vDepth) * dpr * (1.0 + 0.15 * vStar);
+    gl_PointSize = kept > 0.5 ? px : 0.0;
     if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   }
 }`;
@@ -383,7 +386,7 @@ void main() {
 const drawFragment = `#version 300 es
 precision highp float;
 in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; out vec4 o;
-uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light;
+uniform vec3 calm; uniform vec3 fast; uniform vec3 accent; uniform float light; uniform float galaxy;
 void main() {
   vec2 q = gl_PointCoord - 0.5;
   // A soft core; a flaring star shows a faint four-point glint.
@@ -395,6 +398,9 @@ void main() {
   c = mix(c, vTint * mix(mix(1.3, 1.5, e), 1.0, light), vSpec);
   float alpha = a * (0.7 + 0.6 * e + 0.4 * vStar + 1.5 * vSize) * (0.32 + 0.68 * vDepth) * vLight * mix(1.0, 0.25, vNear);
   c = mix(c, vec3(1.0), 0.6 * vSize);
+  // One quiet colour (after byotone.com): the landing galaxy is a warm
+  // off-white; a case's form keeps a hint of its own colour.
+  c = mix(c, vec3(0.86, 0.84, 0.8), mix(0.35, 0.88, galaxy) * (1.0 - light));
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
   float lum = dot(c, vec3(0.3, 0.59, 0.11));
@@ -765,12 +771,12 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pHaze);
       bind(pHaze, "src", 0, haze[0].texture);
       gl.uniform1f(uniform(pHaze, "dark"), colours.light < 0.5 ? 1 : 0);
-      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 1.5 : 0.5) * (0.5 + 0.5 * colours.galaxy));
+      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 0.35 : 0.3) * (0.5 + 0.5 * colours.galaxy));
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       // 2. Crisp: a few of the grains as stars over the glow.
       dustBlend();
       setupDust();
-      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 1.0);
+      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 0.45);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
