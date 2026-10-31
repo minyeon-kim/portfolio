@@ -2421,12 +2421,12 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 /* Very wide screens (1600+, where the margin has room): the stage nav is a
    quiet vertical list in the left margin, small and muted with only the
    current stage in full ink. It starts beside the Overview title, then stays
-   centered on the screen (the list is about 172px tall). It takes no height,
+   centered on the screen (the list is about 240px tall). It takes no height,
    so the column starts right away. Narrower screens keep the sticky top bar. */
 @media (min-width: 100rem) {
-  .dv-nav { top: calc(50vh - 86px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--edge-inset) - 24px); height: 172px; margin: 0 0 0 calc(var(--edge-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
+  .dv-nav { top: calc(50vh - 120px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--edge-inset) - 24px); height: 240px; margin: 0 0 0 calc(var(--edge-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
   /* The list has a real box so sticky keeps it inside the case; the first section climbs back over that box. */
-  .dv-nav + section { margin-top: -172px; }
+  .dv-nav + section { margin-top: -240px; }
   .dv-nav-links { flex-direction: column; gap: 10px; overflow: visible; }
   .dv-nav-links a { color: color-mix(in srgb, var(--dv-muted) 80%, transparent); font-size: 16px; font-weight: 500; letter-spacing: 0.01em; }
   .dv-nav-links a[aria-current] { color: var(--dv-ink); font-weight: 600; }
@@ -3127,10 +3127,14 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .case-study .more-work { padding-top: clamp(48px, 4vw, 64px); }
 .case-study .more-work + .site-footer { padding-top: 24px; border-top: 1px solid var(--ft-line); }
 .more-work + .site-footer .site-footer-bottom { padding-top: 0; border-top: 0; }
-/* Stages alternate between the page and a soft band so each one reads as its own chapter: Discover, Develop and Takeaway sit on the band (Deliver and its Testing stay on the page). */
-.dv > :is(#discover, #develop, #takeaway) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: light-dark(#f6f6f8, color-mix(in srgb, var(--ink) 4%, var(--bg))); }
-.dv > :is(#discover, #develop, #takeaway) > * { max-width: var(--dv-max); }
-.dv > :is(#discover, #develop, #takeaway) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem) { background: light-dark(#ffffff, color-mix(in srgb, var(--ink) 7%, var(--bg))); }
+/* Stages alternate between the page and a soft band so each one reads as its own chapter: Overview, Define, Deliver and Takeaway on the page; Discover, Develop and Testing on the band (Gemini, without a Testing stage, keeps Takeaway on the band). Dark: ink 7% so the band shows on the near-black page. */
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: light-dark(#f6f6f8, color-mix(in srgb, var(--ink) 7%, var(--bg))); }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) > * { max-width: var(--dv-max); }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: light-dark(#ffffff, color-mix(in srgb, var(--ink) 11%, var(--bg))); }
+/* Blocks inside a stage are numbered (01 Desk research, 02 …), so a long stage reads as steps, not one stream. Every block label in the stage counts (they are all steps). */
+.dv > section { counter-reset: dv-step; }
+.dv > section .dv-block > .dv-label { counter-increment: dv-step; }
+.dv > section .dv-block > .dv-label::before { content: counter(dv-step, decimal-leading-zero); display: inline-block; min-width: 2.25em; color: var(--case-accent); font-variant-numeric: tabular-nums; font-weight: 600; }
 /* The case article pads by the page inset, so the deck band bleeds by that (it overflowed by the wider Devsign margin before); its content keeps the Devsign margins. */
 .case-study:has(.dv) .more-work { margin-inline: calc(-1 * var(--project-text-inset)); padding-inline: var(--dv-pad); }
 
@@ -3256,7 +3260,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* Value proposition canvas: each candidate, the pain it relieves, the feature it became. */
 .dv-candidates { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 16px 0 0; padding: 0; list-style: none; }
 .dv-candidates li { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 16px; background: var(--dv-alt); }
-.dv > #develop .dv-candidates li { background: light-dark(#ffffff, color-mix(in srgb, var(--ink) 7%, var(--bg))); }
 .dv-candidate-id { color: var(--case-accent); font-size: 16px; font-weight: 600; }
 .dv-candidates strong { font-size: 18px; font-weight: 600; line-height: 1.3; }
 .dv-candidate-pain { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }

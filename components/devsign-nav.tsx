@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 type Item = { id: string; label: string };
 
 // Sticky stage nav for the Devsign case: the last section whose top has passed
-// the upper third of the screen is current (so Testing still reads as Deliver);
+// the upper third of the screen is current;
 // links jump to their section with native smooth scroll.
 export function DevsignNav({ items }: { items: Item[] }) {
   const [current, setCurrent] = useState(items[0]?.id);
