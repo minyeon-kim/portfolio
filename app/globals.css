@@ -3395,7 +3395,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Landing after byotone.com: a flat charcoal stage, the grains alone. No ambient light fields,
    no per-case glow, only a soft edge vignette. Reduced motion (no grains) keeps the ambient fields. */
-.intro-stage.home-stage { --bg: light-dark(#eef0ee, #1b1b1d); }
+.intro-stage.home-stage { --bg: light-dark(#eef0ee, #191a1e); }
 .home-backdrop .intro-ambient, .home-backdrop[data-project] .intro-ambient { opacity: 0; }
 .home-backdrop .home-world { background: none; }
 @media (prefers-reduced-motion: reduce) { .home-backdrop .intro-ambient { opacity: 1; } }
