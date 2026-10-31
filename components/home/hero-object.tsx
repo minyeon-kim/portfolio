@@ -344,10 +344,11 @@ void main() {
     // Kept small at the source so the sum stays well inside half-float range.
     vFaint *= 0.05;
   } else {
-    // Crisp: only a few grains stay as points, each its own brightness, so
-    // they read as stars over the glow instead of an even grain.
+    // Crisp: every grain is drawn, so the form reads as clearly as before,
+    // but not all alike: most sink low into the glow and only a few stay
+    // bright. An even field of equally bright grains is what read as grain.
     float kept = step(fract(vSeed * 97.31), keep);
-    vFaint *= kept * mix(0.6, 2.4, pow(fract(vSeed * 53.7), 2.0));
+    vFaint *= kept * mix(0.6, 2.0, pow(fract(vSeed * 53.7), 3.0));
     gl_PointSize = kept > 0.5 ? max(px, 1.0) : 0.0;
     if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   }
@@ -717,7 +718,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       gl.uniform3fv(uniform(pStar, "calm"), colours.calm); gl.uniform1f(uniform(pStar, "light"), colours.light);
-      gl.drawArrays(gl.POINTS, 0, 900);
+      gl.drawArrays(gl.POINTS, 0, 1600);
       // Dark: the dust adds up into light. Light: it lies over the page.
       const dustBlend = () => { if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); };
       const setupDust = () => {
@@ -764,12 +765,12 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pHaze);
       bind(pHaze, "src", 0, haze[0].texture);
       gl.uniform1f(uniform(pHaze, "dark"), colours.light < 0.5 ? 1 : 0);
-      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 1.4 : 0.6) * (0.5 + 0.5 * colours.galaxy));
+      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 1.5 : 0.5) * (0.5 + 0.5 * colours.galaxy));
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       // 2. Crisp: a few of the grains as stars over the glow.
       dustBlend();
       setupDust();
-      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 0.05);
+      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 1.0);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
