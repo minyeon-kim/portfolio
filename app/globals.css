@@ -3414,3 +3414,16 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .reveal-ready .dv > section > :has(.reveal):not([data-shown]) { opacity: 0; translate: 0 40px; }
   .reveal-ready .dv .reveal, .reveal-ready .dv .reveal:not([data-shown]) { opacity: 1; translate: none; transition: none; }
 }
+
+/* Elastic scroll (smooth-scroll.tsx sets --sv / --sva from scroll speed):
+   case blocks lean against the motion and stretch a touch, images swell
+   slightly inside their frames, and all of it settles when scrolling stops.
+   Blocks holding a pinned demo or story stay square so sticky reads clean. */
+@media (prefers-reduced-motion: no-preference) {
+  .dv > section > :not(.dv-section-head):not(:has(.dv-show-track, .dv-story)) {
+    transform: skewY(calc(var(--sv, 0) * -2deg)) scaleY(calc(1 + var(--sva, 0) * 0.04));
+    transform-origin: 50% 50%;
+  }
+  .dv-figure > :is(img, .dv-crop, .dv-fit) { transform: scale(calc(1 + var(--sva, 0) * 0.05)); }
+  .dv-section-title { letter-spacing: calc(var(--sva, 0) * 0.04em); }
+}

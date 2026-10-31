@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-// Eased wheel scrolling (class feedback: the scroll felt flat). The wheel only
+// Eased wheel scrolling (class feedback: the scroll felt flat, "not fun"). The wheel only
 // sets a target; the page glides to it over ~0.3s. It still moves the real
 // window scroll, so sticky blocks, scroll-driven animations and the top
 // overscroll return keep working. Fine pointers only, never with reduced
@@ -61,12 +61,47 @@ export function SmoothScroll() {
       target = window.scrollY;
     };
 
+    // Scroll speed as CSS variables, for any kind of scroll (wheel, trackpad,
+    // keys): --sv is the eased, signed speed in -1..1, --sva its size. Case
+    // blocks lean and images swell a little with it, then settle (globals.css).
+    let speedFrame = 0;
+    let prevY = window.scrollY;
+    let prevT = 0;
+    let speed = 0;
+    const speedTick = (now: number) => {
+      const dt = Math.max(8, Math.min(48, now - prevT || 16));
+      prevT = now;
+      const y = window.scrollY;
+      const v = ((y - prevY) / dt) * 16; // px per 60fps frame
+      prevY = y;
+      speed += (Math.max(-1, Math.min(1, v / 70)) - speed) * (1 - Math.exp(-dt / 90));
+      if (Math.abs(speed) < 0.002 && Math.abs(v) < 0.5) {
+        speed = 0;
+        root.style.removeProperty("--sv");
+        root.style.removeProperty("--sva");
+        speedFrame = 0;
+        return;
+      }
+      root.style.setProperty("--sv", speed.toFixed(3));
+      root.style.setProperty("--sva", Math.abs(speed).toFixed(3));
+      speedFrame = requestAnimationFrame(speedTick);
+    };
+    const track = () => {
+      if (reduce.matches || speedFrame) return;
+      prevY = window.scrollY;
+      prevT = performance.now();
+      speedFrame = requestAnimationFrame(speedTick);
+    };
+
     window.addEventListener("wheel", wheel, { passive: false });
     window.addEventListener("scroll", scroll, { passive: true });
+    window.addEventListener("scroll", track, { passive: true });
     return () => {
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(speedFrame);
       window.removeEventListener("wheel", wheel);
       window.removeEventListener("scroll", scroll);
+      window.removeEventListener("scroll", track);
     };
   }, []);
 
