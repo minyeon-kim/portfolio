@@ -3427,3 +3427,16 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .dv-figure > :is(img, .dv-crop, .dv-fit) { transform: scale(calc(1 + var(--sva, 0) * 0.05)); }
   .dv-section-title { letter-spacing: calc(var(--sva, 0) * 0.04em); }
 }
+
+/* Developer handoff: the recorded flow (HandoffVideo), the app screen in the
+   same dark window as the demo reel, with the four steps under it lighting up
+   as the video passes them. */
+.dv-handoff-video { margin: 0; }
+.dv-handoff-screen { overflow: hidden; border-radius: 16px; background: #111; aspect-ratio: 1280 / 800; }
+.dv-handoff-screen video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dv-handoff-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-handoff-steps button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 0 0; border: 0; border-top: 2px solid var(--dv-line); background: none; color: var(--dv-muted); font: inherit; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer; transition: color 250ms var(--ease), border-color 250ms var(--ease); }
+.dv-handoff-steps button b { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--dv-alt); font-size: 16px; transition: background-color 250ms var(--ease), color 250ms var(--ease); }
+.dv-handoff-steps button[aria-current] { border-top-color: var(--case-accent); color: var(--dv-ink); }
+.dv-handoff-steps button[aria-current] b { background: var(--case-accent); color: light-dark(#ffffff, #120f24); }
+@media (max-width: 47.99rem) { .dv-handoff-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
