@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 // sweeps a wide swathe of dust along and stirs it into wisps that brighten,
 // then it settles again. Each state leans the dust, loosely,
 // toward a hint of its own form, never a hard shape:
-// - default: a face-on two-arm spiral galaxy, slowly turning
+// - default: a wide, open galaxy across the stage, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
@@ -109,29 +109,28 @@ vec3 formOf(float n, vec2 uv) {
     p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   } else {
-    // A spiral galaxy seen nearly face-on, so the landing has one clear
-    // form (the soft round cloud read as neither shape nor background): a
-    // bright core, two arms winding out with sharp inner edges, and a little
-    // dust between them, turning slowly. The widest third of the dust still
-    // drifts round it as haze.
-    vec2 q; float z = (hq(n, 16u) - 0.5) * 0.3;
-    if (a < 0.12) {
+    // A wide, open galaxy laid across the whole stage, seen at a low angle:
+    // a small soft core and two broad arms that barely wind, feathering out
+    // into the disc dust around them, turning slowly. Spread, not a whirl
+    // (a tight spiral read as a vortex; a round cloud read as no shape).
+    vec2 q; float z = (hq(n, 16u) - 0.5) * 0.5;
+    if (a < 0.08) {
       float t = c * 6.2831853;
-      q = vec2(cos(t), sin(t)) * 0.2 * pow(hq(n, 13u), 1.4);
-      loose *= 0.12;
-    } else if (a < 0.86) {
-      float u = (a - 0.12) / 0.74;
-      float r = 0.14 + pow(u, 0.85) * 1.25;
-      float t = floor(b * 2.0) * 3.14159265 + log(r / 0.14) * 2.0 + time * 0.03 + (c - 0.5) * (0.18 + 0.2 * u);
+      q = vec2(cos(t), sin(t)) * 0.3 * pow(hq(n, 13u), 1.2);
+      loose *= 0.25;
+    } else if (a < 0.7) {
+      float u = (a - 0.08) / 0.62;
+      float r = 0.25 + pow(u, 0.9) * 2.6;
+      float t = floor(b * 2.0) * 3.14159265 + log(r / 0.25) * 1.15 + time * 0.02 + (c - 0.5) * (0.6 + 0.6 * u);
       q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.08 + 0.14 * u;
+      loose *= 0.25 + 0.45 * u;
     } else {
-      float t = c * 6.2831853, r = 0.2 + pow(hq(n, 13u), 0.7) * 1.2;
+      float t = c * 6.2831853, r = 0.3 + pow(hq(n, 13u), 0.6) * 2.8;
       q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.3;
+      loose *= 0.6;
     }
-    q.y *= 0.82;
-    float ct = cos(0.35), st = sin(0.35);
+    q.y *= 0.5;
+    float ct = cos(0.22), st = sin(0.22);
     q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y) + vec2(-0.2, 0.0);
     p = vec3(q * 1.1, z);
   }
