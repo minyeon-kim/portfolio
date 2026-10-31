@@ -2,23 +2,20 @@
 
 import { useEffect, useRef } from "react";
 
-// The landing backdrop, after particle-love.com: about 65,000 points of
-// light drifting like dust in a slow swirling flow, gathering in faint
-// threads, across the whole stage. A quick flick of the mouse sets off a
-// burst: a ring that throws the dust outward like a firework (and decodes the
-// headline's letters as it passes them, see ScrambleHeadline). Slow pools of light drift over it, so the
-// dust glows in places and sinks into the dark elsewhere. Moving the mouse
-// sweeps a wide swathe of dust along and stirs it into wisps that brighten,
-// then it settles again. Each state leans the dust, loosely,
-// toward a hint of its own form, never a hard shape:
+// The landing backdrop, after byotone.com: a few tens of thousands of still,
+// matte, off-white grains drifting slowly in a soft flow, gathered loosely
+// into a form. No glow, no twinkle; the cursor only nudges the grains right
+// beside it, and the camera barely leans toward it. Each state leans the dust,
+// loosely, toward a hint of its own form, and a change of state flows the
+// grains into the new form where they are:
 // - default: a wide, open galaxy across the stage, slowly turning
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // drawn at the screen's own resolution (DPR up to 2) so the finest dust is a
-// device pixel; 46,656 points on desktop, 22,500 on phones (sparse, after
-// byotone.com); paused offscreen, hidden or during the page transition, skipped
+// device pixel; 46,656 points simulated on desktop, 22,500 on phones, 45%
+// of them drawn; paused offscreen, hidden or during the page transition, skipped
 // with reduced motion or without float render targets (CSS shows the static
 // ambient light instead).
 
@@ -137,7 +134,7 @@ vec3 formOf(float n, vec2 uv) {
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
   // A case's form keeps only a thin haze round it, so the shape reads.
-  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 1.0, step(0.8, g)), focus);
+  loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 0.5, step(0.8, g)), focus);
   return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
@@ -184,7 +181,7 @@ vec2 project(vec3 p, vec2 cam, float aspect) {
   p.z += move.z;
   // Dust the camera has flown past is out of view.
   if (5.0 - p.z < 0.35) return vec2(9.0);
-  float ay = cam.x * 0.22, ax = -cam.y * 0.14;
+  float ay = cam.x * 0.06, ax = -cam.y * 0.04;
   p.xz = mat2(cos(ay), -sin(ay), sin(ay), cos(ay)) * p.xz;
   p.yz = mat2(cos(ax), -sin(ax), sin(ax), cos(ax)) * p.yz;
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
@@ -196,7 +193,6 @@ precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
 uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam; uniform float hold;
-uniform vec2 burstAt; uniform float burstAge; uniform float burstPower;
 ${view}
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
@@ -206,20 +202,13 @@ void main() {
   // The cursor sweeps nearby dust along its motion and swirls it.
   vec2 s = project(p, cam, aspect);
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
-  // A wide, soft reach, so the cursor moves broad swathes rather than
-  // punching small holes.
-  float k = exp(-dot(d, d) / 0.45);
+  // After byotone.com: only the grains right by the cursor give way a
+  // little, so the form never loses its shape (no wide sweep or swirl).
+  float k = exp(-dot(d, d) / 0.1);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 0.8 + vec2(-d.y, d.x) * length(mv) * 2.0 + normalize(d + 1e-4) * length(mv) * 0.8) * k * dt * 2.0;
-  // A burst: a ring expanding from where the mouse flicked, throwing the dust
-  // outward like a firework; a broad ring that travels far and fades slowly.
-  vec2 bd = (s - burstAt) * vec2(aspect, 1.0);
-  float bl = length(bd), ring = burstAge * 2.4;
-  float bw = exp(-(bl - ring) * (bl - ring) / 0.06) * burstPower * exp(-burstAge * 0.9);
-  float jitter = h1(v.x * 37.0 + v.y * 91.0);
-  u.xy += normalize(bd + 1e-4) * bw * (2.0 + 3.0 * jitter) * dt * 10.0;
-  u.z += (jitter - 0.5) * bw * 20.0 * dt;
-  u *= exp(-dt * 0.9);
+  u.xy += (mv * 0.15 + normalize(d + 1e-4) * length(mv) * 0.25) * k * dt * 2.0;
+  // Damped enough that a change of form flows in and settles without wobbling.
+  u *= exp(-dt * 2.4);
   o = vec4(u, 1.0);
 }`;
 
@@ -236,23 +225,11 @@ void main() {
   o = vec4(p, 1.0);
 }`;
 
-const pools = `
-// Two or three wide pools of light drifting slowly over the stage: the dust
-// inside them glows, the rest sinks into the dark.
-float pools(vec2 s, float aspect, float time) {
-  vec2 a = vec2(0.45 + 0.35 * sin(time * 0.05), 0.25 + 0.25 * cos(time * 0.07));
-  vec2 b = vec2(-0.55 + 0.3 * cos(time * 0.04 + 1.0), -0.35 + 0.3 * sin(time * 0.06));
-  vec2 c = vec2(0.1 + 0.5 * sin(time * 0.03 + 2.0), 0.65 + 0.2 * cos(time * 0.05));
-  vec2 q = vec2(aspect, 1.0);
-  return 0.25 + 1.3 * exp(-dot((s - a) * q, (s - a) * q) / 0.35) + 0.9 * exp(-dot((s - b) * q, (s - b) * q) / 0.25) + 0.6 * exp(-dot((s - c) * q, (s - c) * q) / 0.2);
-}`;
-
 const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
-uniform float mode; uniform float keep;  // mode 1: the haze pass (all dust, quarter size, blurred later); 0: the crisp stars (only keep of the dust)
+uniform float keep;  // the share of the simulation drawn
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
-${pools}
 ${view}
 void main() {
   float i = float(gl_VertexID);
@@ -295,7 +272,9 @@ void main() {
   vNear = smoothstep(0.62, 0.8, vDepth + (fract(vSeed * 41.3) - 0.5) * 0.06) * galaxy;
   float cat = fract(sin(i * 1.17) * 43758.5453);
   vStar = symbol > 0.5 && symbol < 1.5 && cat < 0.45 ? 0.3 : (symbol > 1.5 && symbol < 2.5 && cat < 0.3 ? 0.3 : (symbol > 2.5 && cat >= 0.82 ? 0.3 : 0.0));
-  vLight = pools(s, aspect, time) + 0.9 * exp(-dot((s - mouse) * vec2(aspect, 1.0), (s - mouse) * vec2(aspect, 1.0)) / 0.12);
+  // Even light (after byotone.com): no drifting pools or cursor glow, so
+  // the form reads by density alone.
+  vLight = 0.7;
   // The About landscape spans the whole stage, so it carries its own light.
   if (symbol > 2.5) vLight = max(vLight, 0.85);
   // The bolt's upper slab sits where the room is darkest; lift it so the
@@ -337,50 +316,16 @@ void main() {
   // Flying through: dust grows as the camera nears it.
   px *= clamp((5.0 - p.z) / max(5.0 - p.z - move.z, 0.35), 1.0, 2.2);
   vFaint *= 1.0 - smoothstep(4.0, 7.0, (5.0 - p.z) / max(5.0 - p.z - move.z, 0.35));
-  if (mode > 0.5) {
-    // Haze: every grain as a small dot in the quarter-size target; the blur
-    // turns their sum into soft light, so the form reads as a glow.
-    gl_PointSize = 2.0;
-    // Kept small at the source so the sum stays well inside half-float range.
-    vFaint *= 0.05;
-  } else {
     // Crisp: every grain is drawn, so the form reads as clearly as before,
     // but not all alike: most sink low into the glow and only a few stay
     // bright. An even field of equally bright grains is what read as grain.
-    // After byotone.com: fewer, slightly larger grains (2–3px), nearly even
-    // in brightness and matte, so the form reads by density alone.
-    float kept = step(fract(vSeed * 97.31), keep);
-    vFaint *= kept * mix(0.7, 1.1, fract(vSeed * 53.7)) * 0.85;
-    px = mix(2.4, 3.4, vDepth) * dpr * (1.0 + 0.15 * vStar);
-    gl_PointSize = kept > 0.5 ? px : 0.0;
-    if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
-  }
-}`;
-
-// The haze: a separable Gaussian blur at quarter size, then laid over the page.
-const blurFragment = `#version 300 es
-precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D src; uniform vec2 step;
-void main() {
-  vec4 c = texture(src, v) * 0.2270270;
-  c += (texture(src, v + step * 1.3846154) + texture(src, v - step * 1.3846154)) * 0.3162162;
-  c += (texture(src, v + step * 3.2307692) + texture(src, v - step * 3.2307692)) * 0.0702703;
-  o = c;
-}`;
-const hazeFragment = `#version 300 es
-precision highp float; in vec2 v; out vec4 o;
-uniform sampler2D src; uniform float strength; uniform float dark;
-void main() {
-  vec4 h = texture(src, v);
-  // A stray inf or NaN in the sum would show as a black patch.
-  if (any(isnan(h)) || any(isinf(h))) h = vec4(0.0);
-  // A soft exposure curve instead of a hard clip: the sum runs from huge at
-  // the core to almost nothing, and clipping it left a flat plateau with a
-  // sharp rim. A small floor keeps the thin haze far from the form dark.
-  vec3 e = max(clamp(h.rgb, 0.0, 64.0) * strength - 0.03, 0.0);
-  vec3 c = 1.0 - exp(-e);
-  float a = max(c.r, max(c.g, c.b));
-  o = vec4(c, a);
+  // After byotone.com: fewer, slightly larger grains (2–3px), nearly even
+  // in brightness and matte, so the form reads by density alone.
+  float kept = step(fract(vSeed * 97.31), keep);
+  vFaint *= kept * mix(0.7, 1.1, fract(vSeed * 53.7)) * 0.85;
+  px = mix(2.4, 3.4, vDepth) * dpr * (1.0 + 0.15 * vStar);
+  gl_PointSize = kept > 0.5 ? px : 0.0;
+  if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
 const drawFragment = `#version 300 es
@@ -400,7 +345,7 @@ void main() {
   c = mix(c, vec3(1.0), 0.6 * vSize);
   // One quiet colour (after byotone.com): the landing galaxy is a warm
   // off-white; a case's form keeps a hint of its own colour.
-  c = mix(c, vec3(0.86, 0.84, 0.8), mix(0.35, 0.88, galaxy) * (1.0 - light));
+  c = mix(c, vec3(0.86, 0.84, 0.8), mix(0.5, 1.0, galaxy) * (1.0 - light));
   // Light theme: the dust is ink over the page, but vivid ink: saturation
   // pushed up, darkened only as much as a pale colour needs to read.
   float lum = dot(c, vec3(0.3, 0.59, 0.11));
@@ -411,47 +356,6 @@ void main() {
   c = mix(c, vivid, light);
   alpha *= mix(1.0, 3.2, light);
   o = vec4(c * alpha, alpha);
-}`;
-
-// The pools' own soft light on the room behind the dust.
-const glowFragment = `#version 300 es
-precision highp float; in vec2 v; out vec4 o;
-uniform float aspect; uniform float time; uniform vec3 calm; uniform vec3 accent; uniform vec3 fast; uniform float lightIn;
-uniform vec4 form; uniform float spectrum; // the form's centre and radius (world units), its glow; Gemini's colours
-${pools}
-void main() {
-  // The theme flips this layer at once: half-way values would leave pixels
-  // with a little alpha under bright colour, which the page composites as
-  // hard-edged blobs while the theme changes.
-  float light = step(0.5, lightIn);
-  vec2 s = v * 2.0 - 1.0;
-  float l = max(pools(s, aspect, time) - 0.25, 0.0);
-  vec3 c = mix(calm, accent, 0.5 + 0.5 * s.x) * l * 0.07 * (1.0 - light);
-  // A wide diagonal band of soft light, lower left to upper right, drifting
-  // slowly: the room's own gradient behind the dust.
-  vec2 q = vec2(s.x * aspect, s.y);
-  float across = dot(q, normalize(vec2(-0.55, 1.0))) + 0.25 * sin(time * 0.05) + 0.15 * sin(q.x * 0.8 + time * 0.07);
-  float band = exp(-across * across * 1.6);
-  float edge = exp(-pow(across - 0.55, 2.0) * 9.0);
-  vec3 deep = calm * vec3(0.9, 0.7, 1.15);
-  c += (mix(deep, mix(calm, fast, 0.25), 0.5 + 0.5 * sin(q.x * 0.6 + time * 0.04)) * band * 0.3 + deep * edge * 0.08) * (1.0 - light);
-  // A soft light of the form's own colour under it, so the dust shades off
-  // into the room instead of ending in loose points.
-  vec2 w = q / 0.34, d = (w - form.xy) / form.z;
-  float fall = exp(-dot(d, d) * 1.4) * form.w;
-  float ga = atan(d.y, d.x);
-  vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
-    + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
-  tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
-  vec3 fc = mix(mix(calm, accent, 0.4), tips, spectrum * 0.8);
-  c += fc * fall * 0.16 * (1.0 - light);
-  // Light theme: the same band as a faint tinted haze over the page.
-  float haze = (band * 0.08 + l * 0.04 + fall * 0.1) * light;
-  vec3 hc = mix(mix(calm, accent, 0.5 + 0.5 * s.x), fc, clamp(fall * 3.0, 0.0, 1.0));
-  // Dark wrote this colour with zero alpha, which the page never showed but
-  // which surfaced as hard-rimmed patches wherever the haze added alpha over
-  // it; the dark glow now comes from the haze pass alone.
-  o = vec4(c * light + hc * 0.55 * haze, haze);
 }`;
 
 // A far field of faint stars behind the dust. They live in a box that wraps
@@ -519,15 +423,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (!gl.getProgramParameter(p, gl.LINK_STATUS)) console.error("hero-object", gl.getProgramInfoLog(p));
       return p;
     };
-    const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
+    const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment);
     const pStar = link(starVertex, starFragment);
-    const pBlur = link(quadVertex, blurFragment), pHaze = link(quadVertex, hazeFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const vaoQuad = gl.createVertexArray();
     gl.bindVertexArray(vaoQuad);
-    for (const p of [pInit, pVel, pPos, pGlow, pBlur, pHaze]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
+    for (const p of [pInit, pVel, pPos]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
     const vaoDraw = gl.createVertexArray();
     // Positions and velocities, two of each to read one and write the other.
     const target = () => {
@@ -571,24 +474,6 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       height = Math.max(1, Math.round(rect.height * dpr));
       if (el.width !== width || el.height !== height) { el.width = width; el.height = height; }
     };
-    // Two quarter-size RGBA16F targets for the haze and its blur.
-    const haze = [0, 1].map(() => ({ texture: gl.createTexture()!, framebuffer: gl.createFramebuffer()! }));
-    let hw = 0, hh = 0;
-    const sizeHaze = () => {
-      const w = Math.max(1, Math.round(width / 4)), h = Math.max(1, Math.round(height / 4));
-      if (w === hw && h === hh) return;
-      hw = w; hh = h;
-      for (const t of haze) {
-        gl.bindTexture(gl.TEXTURE_2D, t.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, t.framebuffer);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t.texture, 0);
-      }
-    };
     const observer = new ResizeObserver(resize);
     observer.observe(el);
     resize();
@@ -601,8 +486,6 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     const trip = { at: -1e9, symbol: -1, side: 1, arrive: [0, 0, 0], travel: [0, 0, 0] };
     const TRIP = 2.0;
     const ease = (x: number) => x * x * (3 - 2 * x);
-    // The last burst: where (clip space), when, how strong.
-    const burst = { x: 0, y: 0, at: -1e9, power: 0 };
     const onMove = (event: PointerEvent) => {
       if (event.pointerType !== "mouse") return;
       const rect = el.getBoundingClientRect();
@@ -612,7 +495,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0, form: [0, 0.1, 1.6, 0] };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -655,7 +538,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         if (trip.symbol >= 0) {
           rebase(ease(Math.min(1, (clock - trip.at) / TRIP)));
           trip.at = clock; trip.side = -trip.side;
-          trip.arrive = [trip.side * 1.3, 0.2, -5.5];
+          // No fly-through (after byotone.com): the grains flow into the new
+          // form where they are.
+          trip.arrive = [0, 0, 0];
         }
         trip.symbol = target.symbol;
       }
@@ -677,20 +562,11 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
       mouse.px = mouse.x; mouse.py = mouse.y;
-      // A quick flick sets off a burst (at most every 1.2s), and tells the
-      // headline so its letters decode as the ring passes them.
-      const speed = Math.hypot(vx, vy) / Math.max(dt, 1e-3);
-      if (speed > 2.8 && clock - burst.at > 1.2) {
-        Object.assign(burst, { x: mouse.x, y: mouse.y, at: clock, power: Math.min(1.2, speed / 4) });
-        window.dispatchEvent(new CustomEvent("hero-burst", { detail: { x: mouse.cx, y: mouse.cy, pxPerSecond: (2.4 * height) / 2, power: burst.power } }));
-      }
-
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform2f(uniform(pVel, "burstAt"), burst.x, burst.y); gl.uniform1f(uniform(pVel, "burstAge"), clock - burst.at); gl.uniform1f(uniform(pVel, "burstPower"), burst.power);
         gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.65 - 0.35 * colours.galaxy);
       });
       V.reverse();
@@ -708,15 +584,6 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.ONE, gl.ONE);
-      gl.useProgram(pGlow);
-      gl.bindVertexArray(vaoQuad);
-      gl.uniform1f(uniform(pGlow, "aspect"), width / height); gl.uniform1f(uniform(pGlow, "time"), clock); gl.uniform1f(uniform(pGlow, "lightIn"), colours.light);
-      // Where each form sits and how much light it casts on the room.
-      const formTarget = target.symbol === 1 ? [-2.21, 1.56, 1.6, 1] : target.symbol === 2 ? [-2.37, 1.32, 1.3, 0.9] : target.symbol === 3 ? [0.35, -0.3, 2.4, 0.35] : [0, 0.1, 1.6, 0.4];
-      for (let i = 0; i < 4; i++) colours.form[i] += (formTarget[i] - colours.form[i]) * k;
-      gl.uniform4f(uniform(pGlow, "form"), colours.form[0], colours.form[1], colours.form[2], colours.form[3]); gl.uniform1f(uniform(pGlow, "spectrum"), colours.spectrum);
-      gl.uniform3fv(uniform(pGlow, "calm"), colours.calm); gl.uniform3fv(uniform(pGlow, "accent"), colours.accent); gl.uniform3fv(uniform(pGlow, "fast"), colours.fast);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       // The far stars, before the dust.
       if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.useProgram(pStar);
@@ -743,40 +610,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pDraw, "dpr"), dpr);
         gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
       };
-      // 1. Haze: all the dust into a quarter-size target, blurred twice each
-      // way, then laid over the page as soft light.
-      sizeHaze();
-      gl.bindFramebuffer(gl.FRAMEBUFFER, haze[0].framebuffer);
-      gl.viewport(0, 0, hw, hh);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.blendFunc(gl.ONE, gl.ONE);
-      setupDust();
-      gl.uniform1f(uniform(pDraw, "mode"), 1); gl.uniform1f(uniform(pDraw, "keep"), 1);
-      gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
-      gl.disable(gl.BLEND);
-      gl.useProgram(pBlur);
-      gl.bindVertexArray(vaoQuad);
-      for (let it = 0; it < 2; it++) {
-        for (const [from, to, dx, dy] of [[0, 1, 1, 0], [1, 0, 0, 1]] as const) {
-          gl.bindFramebuffer(gl.FRAMEBUFFER, haze[to].framebuffer);
-          bind(pBlur, "src", 0, haze[from].texture);
-          gl.uniform2f(uniform(pBlur, "step"), (dx * (1 + it)) / hw, (dy * (1 + it)) / hh);
-          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        }
-      }
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.viewport(0, 0, width, height);
-      gl.enable(gl.BLEND);
-      dustBlend();
-      gl.useProgram(pHaze);
-      bind(pHaze, "src", 0, haze[0].texture);
-      gl.uniform1f(uniform(pHaze, "dark"), colours.light < 0.5 ? 1 : 0);
-      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 0.35 : 0.3) * (0.5 + 0.5 * colours.galaxy));
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      // 2. Crisp: a few of the grains as stars over the glow.
       dustBlend();
       setupDust();
-      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 0.45);
+      gl.uniform1f(uniform(pDraw, "keep"), 0.38);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
@@ -790,8 +626,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      [pInit, pVel, pPos, pDraw, pGlow, pStar, pBlur, pHaze].forEach((p) => gl.deleteProgram(p));
-      haze.forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
+      [pInit, pVel, pPos, pDraw, pStar].forEach((p) => gl.deleteProgram(p));
       gl.deleteBuffer(quad);
     };
   }, []);
