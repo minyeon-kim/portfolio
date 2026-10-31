@@ -546,7 +546,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-core-text reveal">{define.core.lead} <span>{define.core.text}</span></p>
         </div>
 
-        <div className="dv-hmw">
+        {/* Findings first (class feedback): no HMW block after the problems;
+            the ideation rules carry the thinking, the success goals move there. */}
+        {!ff && <div className="dv-hmw">
           <p className="dv-method reveal">{define.hmw.method}</p>
           {!ff && <h3 className="dv-block-title reveal">{define.hmw.title}</h3>}
           <p className="dv-hmw-question reveal">{define.hmw.question}</p>
@@ -554,11 +556,19 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <ol className="dv-checks">
             {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
           </ol>
-        </div>
+        </div>}
       </Section>
 
       <Section id="develop" title="Develop">
-        <Block {...develop.ideation} ff={ff} />
+        <div>
+          <Block {...develop.ideation} ff={ff} />
+          {ff && <>
+            <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
+            <ol className="dv-checks">
+              {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
+            </ol>
+          </>}
+        </div>
         {/* Prioritization: how 26 ideas were ranked (DVF + team vote), each
             criterion as its own row so it reads top to bottom. */}
         {develop.priority && <div className="dv-gap-96">
