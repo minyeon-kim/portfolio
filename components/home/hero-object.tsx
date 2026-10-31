@@ -250,6 +250,7 @@ float pools(vec2 s, float aspect, float time) {
 const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
+uniform float mode; uniform float keep;  // mode 1: the haze pass (all dust, quarter size, blurred later); 0: the crisp stars (only keep of the dust)
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint;
 ${pools}
 ${view}
@@ -336,7 +337,46 @@ void main() {
   // Flying through: dust grows as the camera nears it.
   px *= clamp((5.0 - p.z) / max(5.0 - p.z - move.z, 0.35), 1.0, 2.2);
   vFaint *= 1.0 - smoothstep(4.0, 7.0, (5.0 - p.z) / max(5.0 - p.z - move.z, 0.35));
-  gl_PointSize = max(px, 1.0);
+  if (mode > 0.5) {
+    // Haze: every grain as a small dot in the quarter-size target; the blur
+    // turns their sum into soft light, so the form reads as a glow.
+    gl_PointSize = 2.0;
+    // Kept small at the source so the sum stays well inside half-float range.
+    vFaint *= 0.05;
+  } else {
+    // Crisp: only a few grains stay as points, each its own brightness, so
+    // they read as stars over the glow instead of an even grain.
+    float kept = step(fract(vSeed * 97.31), keep);
+    vFaint *= kept * mix(0.6, 2.4, pow(fract(vSeed * 53.7), 2.0));
+    gl_PointSize = kept > 0.5 ? max(px, 1.0) : 0.0;
+    if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+  }
+}`;
+
+// The haze: a separable Gaussian blur at quarter size, then laid over the page.
+const blurFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform sampler2D src; uniform vec2 step;
+void main() {
+  vec4 c = texture(src, v) * 0.2270270;
+  c += (texture(src, v + step * 1.3846154) + texture(src, v - step * 1.3846154)) * 0.3162162;
+  c += (texture(src, v + step * 3.2307692) + texture(src, v - step * 3.2307692)) * 0.0702703;
+  o = c;
+}`;
+const hazeFragment = `#version 300 es
+precision highp float; in vec2 v; out vec4 o;
+uniform sampler2D src; uniform float strength; uniform float dark;
+void main() {
+  vec4 h = texture(src, v);
+  // A stray inf or NaN in the sum would show as a black patch.
+  if (any(isnan(h)) || any(isinf(h))) h = vec4(0.0);
+  // A soft exposure curve instead of a hard clip: the sum runs from huge at
+  // the core to almost nothing, and clipping it left a flat plateau with a
+  // sharp rim. A small floor keeps the thin haze far from the form dark.
+  vec3 e = max(clamp(h.rgb, 0.0, 64.0) * strength - 0.03, 0.0);
+  vec3 c = 1.0 - exp(-e);
+  float a = max(c.r, max(c.g, c.b));
+  o = vec4(c, a);
 }`;
 
 const drawFragment = `#version 300 es
@@ -401,7 +441,10 @@ void main() {
   // Light theme: the same band as a faint tinted haze over the page.
   float haze = (band * 0.08 + l * 0.04 + fall * 0.1) * light;
   vec3 hc = mix(mix(calm, accent, 0.5 + 0.5 * s.x), fc, clamp(fall * 3.0, 0.0, 1.0));
-  o = vec4(c + hc * 0.55 * haze, haze);
+  // Dark wrote this colour with zero alpha, which the page never showed but
+  // which surfaced as hard-rimmed patches wherever the haze added alpha over
+  // it; the dark glow now comes from the haze pass alone.
+  o = vec4(c * light + hc * 0.55 * haze, haze);
 }`;
 
 // A far field of faint stars behind the dust. They live in a box that wraps
@@ -471,12 +514,13 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     const pInit = link(quadVertex, initFragment), pVel = link(quadVertex, velocityFragment), pPos = link(quadVertex, positionFragment), pDraw = link(drawVertex, drawFragment), pGlow = link(quadVertex, glowFragment);
     const pStar = link(starVertex, starFragment);
+    const pBlur = link(quadVertex, blurFragment), pHaze = link(quadVertex, hazeFragment);
     const quad = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const vaoQuad = gl.createVertexArray();
     gl.bindVertexArray(vaoQuad);
-    for (const p of [pInit, pVel, pPos, pGlow]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
+    for (const p of [pInit, pVel, pPos, pGlow, pBlur, pHaze]) { const at = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0); }
     const vaoDraw = gl.createVertexArray();
     // Positions and velocities, two of each to read one and write the other.
     const target = () => {
@@ -519,6 +563,24 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       width = Math.max(1, Math.round(rect.width * dpr));
       height = Math.max(1, Math.round(rect.height * dpr));
       if (el.width !== width || el.height !== height) { el.width = width; el.height = height; }
+    };
+    // Two quarter-size RGBA16F targets for the haze and its blur.
+    const haze = [0, 1].map(() => ({ texture: gl.createTexture()!, framebuffer: gl.createFramebuffer()! }));
+    let hw = 0, hh = 0;
+    const sizeHaze = () => {
+      const w = Math.max(1, Math.round(width / 4)), h = Math.max(1, Math.round(height / 4));
+      if (w === hw && h === hh) return;
+      hw = w; hh = h;
+      for (const t of haze) {
+        gl.bindTexture(gl.TEXTURE_2D, t.texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, t.framebuffer);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t.texture, 0);
+      }
     };
     const observer = new ResizeObserver(resize);
     observer.observe(el);
@@ -596,9 +658,10 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const e = travelling ? ease(tu) : 0;
       // How far the camera has got: sideways and up as the world shifts, forward as depth.
       const move = [trip.arrive[0] * e, trip.arrive[1] * e, -trip.arrive[2] * e];
-      // While under way the dust holds where it is, so the camera flies through
-      // it; it gathers into the new form for the last stretch.
-      const hold = travelling ? 0.05 + 0.95 * Math.max(0, (tu - 0.55) / 0.45) ** 2 : 1;
+      // The dust sets off towards the new form at once and keeps flowing
+      // there through the whole trip (it used to hold still and then gather
+      // in the last stretch, which read as a late snap, not a move).
+      const hold = travelling ? 0.35 + 0.65 * ease(Math.min(1, tu / 0.7)) : 1;
       if (!travelling) tu = 1;
       const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
       const ck = 1 - Math.exp(-dt / 1.2);
@@ -654,24 +717,59 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       gl.uniform3fv(uniform(pStar, "calm"), colours.calm); gl.uniform1f(uniform(pStar, "light"), colours.light);
-      gl.drawArrays(gl.POINTS, 0, 2400);
+      gl.drawArrays(gl.POINTS, 0, 900);
       // Dark: the dust adds up into light. Light: it lies over the page.
       const dustBlend = () => { if (colours.light < 0.5) gl.blendFunc(gl.ONE, gl.ONE); else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); };
-      gl.useProgram(pDraw);
-      gl.bindVertexArray(vaoDraw);
+      const setupDust = () => {
+        gl.useProgram(pDraw);
+        gl.bindVertexArray(vaoDraw);
+        bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
+        gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
+        gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
+        gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
+        gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
+        gl.uniform1f(uniform(pDraw, "light"), colours.light);
+        gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
+        gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
+        gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
+        if (clearTick++ % 10 === 0) readClear();
+        gl.uniform1f(uniform(pDraw, "dpr"), dpr);
+        gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
+      };
+      // 1. Haze: all the dust into a quarter-size target, blurred twice each
+      // way, then laid over the page as soft light.
+      sizeHaze();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, haze[0].framebuffer);
+      gl.viewport(0, 0, hw, hh);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.blendFunc(gl.ONE, gl.ONE);
+      setupDust();
+      gl.uniform1f(uniform(pDraw, "mode"), 1); gl.uniform1f(uniform(pDraw, "keep"), 1);
+      gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
+      gl.disable(gl.BLEND);
+      gl.useProgram(pBlur);
+      gl.bindVertexArray(vaoQuad);
+      for (let it = 0; it < 2; it++) {
+        for (const [from, to, dx, dy] of [[0, 1, 1, 0], [1, 0, 0, 1]] as const) {
+          gl.bindFramebuffer(gl.FRAMEBUFFER, haze[to].framebuffer);
+          bind(pBlur, "src", 0, haze[from].texture);
+          gl.uniform2f(uniform(pBlur, "step"), (dx * (1 + it)) / hw, (dy * (1 + it)) / hh);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        }
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, width, height);
+      gl.enable(gl.BLEND);
       dustBlend();
-      bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
-      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
-      gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
-      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
-      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform3fv(uniform(pDraw, "fast"), colours.fast); gl.uniform3fv(uniform(pDraw, "accent"), colours.accent);
-      gl.uniform1f(uniform(pDraw, "light"), colours.light);
-      gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
-      gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
-      gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
-      if (clearTick++ % 10 === 0) readClear();
-      gl.uniform1f(uniform(pDraw, "dpr"), dpr);
-      gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
+      gl.useProgram(pHaze);
+      bind(pHaze, "src", 0, haze[0].texture);
+      gl.uniform1f(uniform(pHaze, "dark"), colours.light < 0.5 ? 1 : 0);
+      gl.uniform1f(uniform(pHaze, "strength"), (colours.light < 0.5 ? 1.4 : 0.6) * (0.5 + 0.5 * colours.galaxy));
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      // 2. Crisp: a few of the grains as stars over the glow.
+      dustBlend();
+      setupDust();
+      gl.uniform1f(uniform(pDraw, "mode"), 0); gl.uniform1f(uniform(pDraw, "keep"), 0.05);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
     };
     frame = requestAnimationFrame(draw);
@@ -685,7 +783,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
       [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
-      [pInit, pVel, pPos, pDraw, pGlow, pStar].forEach((p) => gl.deleteProgram(p));
+      [pInit, pVel, pPos, pDraw, pGlow, pStar, pBlur, pHaze].forEach((p) => gl.deleteProgram(p));
+      haze.forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
       gl.deleteBuffer(quad);
     };
   }, []);
