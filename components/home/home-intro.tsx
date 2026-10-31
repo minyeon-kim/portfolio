@@ -37,7 +37,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const router = useRouter();
   const [hover, setHover] = useState<string | null>(null);
   const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
-  const choices = [...projects, { slug: "about", name: t.aboutMe }];
+  // Only the projects: About is in the header now, so it isn't a pick here.
+  const choices: { slug: string; name: string }[] = projects;
   const shown = projects.find((p) => p.slug === hover) ?? null;
   const about = hover === "about";
   // The copy that replaces the positioning: a case's name and problem, or the

@@ -1627,8 +1627,18 @@ body:has(.project-selected) header[data-compact] .site-header-bar { background: 
 .lang-toggle-option:hover, .lang-toggle-option[aria-current="page"] { color: var(--ink); }
 .lang-toggle-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .lang-toggle-knob { transition: none; } }
-/* The wordmark steps aside on a project opener, so the opener starts at the top. */
-body:has(.project-selected, .project-detail) header:not([data-compact]) .header-name { opacity: 0; pointer-events: none; }
+/* Page links in the bar (md+): plain words, no pills, so the header reads as one quiet line.
+   The current page is in ink; the others muted, with the link underline on hover. Phones use the Menu. */
+.site-nav { display: none; margin-right: 16px; }
+.site-nav ul { display: flex; align-items: center; gap: 24px; margin: 0; padding: 0; list-style: none; }
+.site-nav a { color: var(--muted); font-size: 15px; font-weight: 500; line-height: 1.4; white-space: nowrap; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: color 150ms ease, text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+.site-nav a:hover, .site-nav a:focus-visible { color: var(--ink); text-decoration-color: currentColor; text-underline-offset: 4px; }
+.site-nav a[aria-current="page"], .site-nav li[aria-current="page"] > a { color: var(--ink); }
+.site-nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+@media (min-width: 48rem) {
+  .site-nav { display: block; }
+  .site-header-bar .header-menu { display: none; }
+}
 /* After metalab.com: the Menu pill is the word alone. */
 .header-menu-icon { display: none; position: relative; width: 14px; height: 10px; }
 .header-menu-icon > span { position: absolute; left: 0; width: 14px; height: 1px; background: currentColor; transition: transform 180ms ease, top 180ms ease; }
