@@ -212,6 +212,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
     { id: "define", label: "Define" },
     { id: "develop", label: "Develop" },
     { id: "deliver", label: "Deliver" },
+    ...(ff ? [{ id: "testing", label: "Testing" }] : []),
     { id: "takeaway", label: "Takeaway" },
   ];
 
@@ -674,13 +675,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
       </Section>
 
-      <section className="dv-section dv-testing" aria-labelledby="testing-title">
-        {ff ? (
-          <div className="dv-block">
-            <p className="dv-label reveal">{testing.title}</p>
-            <h2 id="testing-title" className="dv-testing-head reveal">{testing.lead}</h2>
+      {/* Findings first: Testing is a stage of its own (title, band, nav item),
+          so it no longer reads as the tail of Deliver. */}
+      <section id={ff ? "testing" : undefined} className="dv-section dv-testing" aria-labelledby="testing-title">
+        {ff ? <>
+          <div className="dv-section-head">
+            <h2 id="testing-title" className="dv-section-title reveal">Testing</h2>
           </div>
-        ) : <Block {...testing} id="testing-title" />}
+          <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
+        </> : <Block {...testing} id="testing-title" />}
         <div className={ff ? "dv-gap-96" : "dv-gap-72"}>
           {/* With a `protocol`: how the test ran beside the photo, the scenarios
               as cards, then the four scores in one row with what they meant. */}
