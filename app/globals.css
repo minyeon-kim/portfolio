@@ -3652,3 +3652,24 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-matrix tr[data-highlight] > :first-child { border-radius: var(--dv-card-radius) 0 0 var(--dv-card-radius); }
 .dv-matrix tr[data-highlight] > :last-child { border-radius: 0 var(--dv-card-radius) var(--dv-card-radius) 0; }
 .dv-wireflow-area, .dv-story-area { border-radius: 6px; }
+
+/* Testimonial-style cards (after railway.com's customer cards; no invented quotes): a hairline card, the words first, then a person row at the bottom: a round mark, a name, a quiet second line. Community posts carry an inner second frame; interview participants are just the person row. */
+.dv { --dv-card-line: color-mix(in srgb, var(--dv-ink) 12%, transparent); }
+.dv-person { display: flex; align-items: center; gap: 12px; margin: 0; }
+.dv-avatar { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-person-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dv-person-text strong, .dv-person-text cite { color: var(--dv-ink); font-size: 16px; font-style: normal; font-weight: 600; line-height: 1.35; }
+.dv-person-text > span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.35; }
+.dv-people-stack li.dv-person { flex-direction: row; justify-content: flex-start; gap: 14px; padding: 12px 18px; border: 1px solid var(--dv-card-line); }
+.dv-people-stack li.dv-person .dv-person-text > span { font-size: 16px; }
+.dv-voices li { padding: 32px; border: 1px solid var(--dv-card-line); outline: 1px solid var(--dv-card-line); outline-offset: -9px; }
+.dv-voices li > div { gap: 0; }
+.dv-voices strong { font-size: 20px; }
+.dv-voices .dv-person-text strong { font-size: 16px; }
+.dv-voices blockquote { margin-top: 12px; color: var(--dv-ink); font-size: 18px; line-height: 1.5; }
+.dv-voice-source { margin-top: auto; padding-top: 28px; }
+.dv-voices cite { margin: 0; padding: 0; color: var(--dv-ink); font-weight: 600; opacity: 1; }
+.dv-scenarios li { gap: 12px; padding: 28px; border: 1px solid var(--dv-card-line); }
+.dv-scenarios li > .dv-scenario-actions { margin-top: 0; padding-top: 0; border-top: 0; color: var(--dv-muted); }
+.dv-scenario-person { margin-top: auto; padding-top: 24px; }
+.dv-scenarios .dv-person-text strong { font-size: 16px; }

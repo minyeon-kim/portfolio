@@ -275,13 +275,21 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <div>
                 <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
                 <ol className="dv-voices">
-                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }, i: number) => (
+                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }) => (
                     <li key={g.name} className="reveal">
-                      <span>{pad(i + 1)}</span>
                       <div>
                         <strong>{g.name}</strong>
                         <blockquote>“{g.quote}”</blockquote>
-                        <cite>{g.source}</cite>
+                        {(() => {
+                          const reddit = g.source.startsWith("r/");
+                          const [platform, title] = reddit ? ["Reddit", g.source] : g.source.split(" · ");
+                          return (
+                            <p className="dv-person dv-voice-source">
+                              <span className="dv-avatar" aria-hidden="true">{reddit ? "r/" : platform[0]}</span>
+                              <span className="dv-person-text"><cite>{title ?? platform}</cite>{title && <span>{platform}</span>}</span>
+                            </p>
+                          );
+                        })()}
                       </div>
                     </li>
                   ))}
@@ -384,10 +392,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
             <ul className="dv-people dv-people-stack">
               {discover.interview.participants.map((p: string[]) => (
-                <li key={p[0]} className="reveal">
-                  <span>{p[0]}</span>
-                  <strong>{p[1]}</strong>
-                  <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+                <li key={p[0]} className="reveal dv-person">
+                  <span className="dv-avatar" aria-label={p[0]}>{p[0]}</span>
+                  <span className="dv-person-text">
+                    <strong>{p[1]}</strong>
+                    <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -761,10 +771,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <ol className="dv-scenarios">
                 {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
                   <li key={sc.task} className="reveal">
-                    <span className="dv-scenario-kicker">{testing.usability.scenarioWord} {pad(i + 1)}</span>
                     <strong>{sc.task}</strong>
-                    <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
                     <span className="dv-scenario-actions">{sc.actions}</span>
+                    <span className="dv-person dv-scenario-person">
+                      <span className="dv-avatar" aria-label={`${testing.usability.scenarioWord} ${pad(i + 1)}`}>{pad(i + 1)}</span>
+                      <span className="dv-person-text"><strong>{sc.role}</strong><span>{sc.feature}</span></span>
+                    </span>
                   </li>
                 ))}
               </ol>
