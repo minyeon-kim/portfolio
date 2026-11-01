@@ -237,6 +237,13 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
             </div>
           </div>
         ))}
+        {/* The current point sits on the screen, where the eye already is: at the
+            bottom, or at the top when the zoomed area sits low. */}
+        {point >= 0 && (
+          <p key={`${active}-${point}`} className="dv-show-caption" data-top={f.areas[point][1] + f.areas[point][3] / 2 > 60 || undefined}>
+            <b>{point + 1}</b>{f.points[point]}
+          </p>
+        )}
         {!still && (
           <button type="button" className="dv-show-toggle" onClick={() => setPaused((p) => !p)} aria-label={paused ? labels.play : labels.pause}>
             {paused ? "▶" : "❚❚"}
@@ -251,13 +258,13 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
             </span>
             <span className="dv-show-tab-num">{pad(i + 1)}</span>
             <span className="dv-show-tab-name">{feature.title}</span>
+            <span className="dv-show-tab-role">{feature.kicker.split(" · ").slice(1).join(" · ")}</span>
           </button>
         ))}
       </div>
       <div className="dv-show-text" role="tabpanel" aria-live="polite">
-        <p className="dv-story-kicker">{f.kicker}</p>
         <p className="dv-show-body">{f.body}</p>
-        <ol className="dv-show-points">
+        <ol className="dv-show-points" data-still={still || undefined}>
           {f.points.map((p, j) => (
             <li key={p} data-on={j === point || undefined}><b>{j + 1}</b>{p}</li>
           ))}
