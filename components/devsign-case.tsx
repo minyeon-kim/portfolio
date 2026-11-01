@@ -11,6 +11,7 @@ import { withBase } from "@/lib/site";
 // in the persona orange, anyone else in blue.
 const toneOf = (role: string) => (/design|디자인/i.test(role) ? "accent" : /develop|개발/i.test(role) ? "second" : "blue");
 const VOICE_TONES = ["accent", "blue", "second"];
+const PROBLEM_TONES = ["accent", "blue", "second", "teal"];
 
 const slugOf = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -455,7 +456,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {define.problems.items.map((item: Study, index: number) => {
               const answer = develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title);
               return (
-              <li key={item.title} id={`problem-${index + 1}`} className="reveal dv-link-target">
+              <li key={item.title} id={`problem-${index + 1}`} className="reveal dv-link-target" data-tone={PROBLEM_TONES[index % PROBLEM_TONES.length]}>
                 <div className="dv-problem-top">
                   <span className="dv-problem-number">{pad(index + 1)}</span>
                   <span className="dv-problem-role">{item.role}</span>
