@@ -76,6 +76,24 @@ export function RevealObserver() {
     watch(document);
     root.classList.add("reveal-ready");
 
+    // A jump (stage nav, anchor, a fast fling) can carry an element from
+    // below the screen to above it without it ever intersecting, so the
+    // observer never reports it. When scrolling settles, show everything
+    // above the bottom of the screen that is still hidden.
+    let settle = 0;
+    const catchUp = () => {
+      clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        document.querySelectorAll<HTMLElement>(".reveal:not([data-shown])").forEach((el) => {
+          if (el.getBoundingClientRect().top < window.innerHeight) {
+            show(el);
+            observer.unobserve(el);
+          }
+        });
+      }, 120);
+    };
+    window.addEventListener("scroll", catchUp, { passive: true });
+
     // Play the reveal again inside a container, e.g. when the work selector
     // swaps in another case. Dispatch: new CustomEvent("reveal:replay", { detail: el }).
     const replay = (event: Event) => {
@@ -122,6 +140,8 @@ export function RevealObserver() {
 
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(settle);
+      window.removeEventListener("scroll", catchUp);
       window.removeEventListener("reveal:replay", replay);
       observer.disconnect();
       mutations.disconnect();
