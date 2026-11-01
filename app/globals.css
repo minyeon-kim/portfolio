@@ -2041,10 +2041,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 header.group\/header { transition: transform 320ms var(--ease), background-color 400ms var(--ease); }
 header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
 .dv-nav { transition: top 320ms var(--ease); }
-@media (max-width: 99.99rem) {
-  html:has(header.group\/header[data-compact]:not([data-hidden])) .dv-nav,
-  html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
-}
+html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
 
 
