@@ -49,10 +49,10 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
           const view = crop(box);
           return (
             <figure key={key} className="dv-iter-side" data-side={key}>
+              <span className="dv-iter-tag">{tag}</span>
               <div className="dv-iter-view">
                 <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={view.img} />
                 <span key={active} className="dv-iter-mark" style={view.mark} aria-hidden="true" />
-                <span className="dv-iter-tag">{tag}</span>
               </div>
               <figcaption key={active}>{line}</figcaption>
             </figure>
