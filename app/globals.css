@@ -3635,3 +3635,4 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { margin-top: 32px; }
   .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin-inline: 8px; }
 }
+.devsign-hero-visit { white-space: nowrap; }
