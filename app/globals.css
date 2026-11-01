@@ -3127,11 +3127,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .case-study .more-work { padding-top: clamp(48px, 4vw, 64px); }
 .case-study .more-work + .site-footer { padding-top: 24px; border-top: 1px solid var(--ft-line); }
 .more-work + .site-footer .site-footer-bottom { padding-top: 0; border-top: 0; }
-/* Stages alternate between the page and a soft band so each one reads as its own chapter: Overview, Define, Deliver and Takeaway on the page; Discover, Develop and Testing on the band (Gemini, without a Testing stage, keeps Takeaway on the band). Dark: a clearly lighter charcoal (ink 13% with a touch of the case colour) so each banded stage reads as its own sheet; cards on it a step lighter again. */
-.dv { --dv-band-dark: color-mix(in srgb, var(--case-accent) 4%, color-mix(in srgb, var(--ink) 13%, var(--bg))); --dv-band-card-dark: color-mix(in srgb, var(--ink) 9%, var(--dv-band-dark)); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: light-dark(#f6f6f8, var(--dv-band-dark)); }
+/* Stages alternate between the page and a soft band so each one reads as its own chapter: Overview, Define, Deliver and Takeaway on the page; Discover, Develop and Testing on the band (Gemini, without a Testing stage, keeps Takeaway on the band). Dark: banded stages switch to the light sheet (light tokens, color-scheme light, dark text), so the page alternates black / light chapters. */
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { color-scheme: light; --bg: #f5f6f4; --surface: #ffffff; --ink: #0e1111; --muted: #5b6461; --line: #dadfdc; --devsign-title: #5b3fd6; --case-accent: var(--devsign-title); --dv-bg: #ffffff; --dv-surface: #ffffff; --dv-ink: #1d1d1f; --dv-muted: #5e5e63; --dv-line: #d6d6d6; --dv-alt: #f5f5f7; --dv-arrow: #9e9ea6; --dv-tint: #f1eefc; --dv-tint-core: #f4edff; --dv-second: #e8742c; --dv-tint-second: #fdf0e7; --dv-alert: #c7383d; --dv-tint-alert: #fdefef; --dv-diamond-1: #ececef; --dv-diamond-2: #dedee3; --dv-diamond-3: #d6d6dc; --dv-diamond-4: #cfcfd6; --dv-diamond-current: #e9e4fc; color: var(--dv-ink); }
+.case-study[data-project="gemini"] .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { --case-accent: #245cc0; --dv-tint: #edf2fc; --dv-tint-core: #eef3fd; }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: #f6f6f8; }
 .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) > * { max-width: var(--dv-max); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: #ffffff; }
 /* Blocks inside a stage are numbered (01 Desk research, 02 …), so a long stage reads as steps, not one stream. Every block label in the stage counts (they are all steps). */
 .dv > section { counter-reset: dv-step; }
 .dv > section .dv-block > .dv-label { counter-increment: dv-step; }
@@ -3388,7 +3389,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* Discover gap cards (gap only): four stages in a 2x2 grid, the stage in the alert red, the gap as one plain sentence. */
 .dv-gaps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
 .dv-gaps li { display: flex; flex-direction: column; gap: 12px; padding: 28px; border-radius: 16px; background: var(--dv-alt); }
-.dv > #discover .dv-gaps li { background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv > #discover .dv-gaps li { background: #ffffff; }
 .dv-gaps span { display: inline-flex; align-items: center; gap: 8px; color: var(--dv-alert); font-size: 16px; font-weight: 600; }
 .dv-gaps span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .dv-gaps p { margin: 0; color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
