@@ -208,6 +208,7 @@ const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
 uniform float keep;  // the share of the simulation drawn
+uniform float halo;  // light looks A–C: grains drawn larger as a glow (bright core, soft coloured halo)
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint; out float vFlake;
 ${view}
 void main() {
@@ -320,6 +321,7 @@ void main() {
   float glint = tw * pow(0.5 + 0.5 * sin(time * mix(0.6, 1.4, fract(vSeed * 19.3)) + vSeed * 40.0), 14.0);
   vFaint *= 1.0 + glint * 3.0;
   px *= 1.0 + glint * 0.8;
+  px *= mix(1.0, 5.0, halo);
   gl_PointSize = kept > 0.5 ? px : 0.0;
   if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
@@ -328,6 +330,7 @@ const drawFragment = `#version 300 es
 precision highp float;
 in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; in float vFlake; out vec4 o;
 uniform vec3 calm;  // each grain keeps its colour: the form's tint, else the state's
+uniform float halo;
 void main() {
   // Each grain is a soft sprite (a gaussian plus a small core; the larger
   // flakes mostly gaussian, out of focus). Only its intensity is written:
@@ -336,6 +339,11 @@ void main() {
   float r2 = dot(q, q) * 4.0;
   if (r2 > 1.0) discard;
   float cover = exp(-r2 * mix(3.2, 1.8, vFlake)) * 0.75 + (1.0 - smoothstep(0.3, 0.55, sqrt(r2))) * mix(0.45, 0.1, vFlake);
+  // Glow (the sprite is 5x larger): a hot core the grain's old size and a
+  // wide soft halo around it.
+  float rr = sqrt(r2);
+  float glow = exp(-pow(rr / mix(0.1, 0.18, vFlake), 2.0)) * mix(1.7, 0.7, vFlake) + exp(-pow(rr / 0.45, 2.0)) * 0.08;
+  cover = mix(cover, glow, halo);
   float i = cover * vFaint * vLight * (0.4 + 0.6 * vDepth) * mix(1.0, 0.35, vNear);
   vec3 c = mix(calm, vTint, clamp(vSpec * 1.2, 0.0, 1.0));
   c = mix(c, c * c * 1.6, 0.35);
@@ -384,6 +392,7 @@ precision highp float; in vec2 v; out vec4 o;
 uniform sampler2D scene; uniform float dpr; uniform float grainTime;
 uniform vec3 ground; uniform vec3 ink;
 uniform float time; uniform float light;
+uniform float lightLook; uniform float halo;  // light looks: 1 pearl, 2 dawn, 3 white (0 = the printed look)
 float hash(vec2 p) {
   vec3 q = fract(vec3(p.xyx) * 0.1031);
   q += dot(q, q.yzx + 33.33);
@@ -434,6 +443,21 @@ void main() {
   vivid = vivid / max(max(vivid.r, max(vivid.g, vivid.b)), 1e-3) * 0.9;
   vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05, vivid, light);
   o = vec4(mix(base, coloured, cover), 1.0);
+  // Light looks A–C: the grains glow instead of being printed. The ground
+  // steps down from white (A lavender pearl, B a dawn gradient, C white) so
+  // light can rise above it; each halo tints the ground towards its pastel
+  // colour, and dense, bright spots burn through to a near-white core.
+  if (halo > 0.001) {
+    vec3 pearl = vec3(0.906, 0.898, 0.941);
+    vec3 dawn = mix(vec3(0.965, 0.894, 0.855), vec3(0.855, 0.902, 0.965), smoothstep(0.0, 1.0, v.y));
+    dawn = mix(dawn, vec3(0.918, 0.886, 0.957), exp(-pow((v.y - 0.5) / 0.22, 2.0)) * 0.5);
+    vec3 paper = lightLook < 1.5 ? pearl : (lightLook < 2.5 ? dawn : vec3(0.933, 0.941, 0.933));
+    paper += (hash(cell + vec2(grainTime * 7.0, grainTime * 3.0)) - 0.5) * 0.012;
+    float aura = 1.0 - exp(-lum * 1.4);
+    vec3 col = mix(paper, vivid, aura * 0.9);
+    col = mix(col, mix(vivid, vec3(1.0), 0.7), smoothstep(1.0, 2.6, lum) * 0.85);
+    o = vec4(mix(o.rgb, col, halo), 1.0);
+  }
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -555,7 +579,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0, halo: 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -583,6 +607,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const k = 1 - Math.exp(-dt / 0.35);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
+      // Light looks under comparison (LookSwitch writes html[data-hero-look]: 1 now, 2–4 = A–C).
+      const look = Number(document.documentElement.dataset.heroLook ?? 1);
+      colours.halo += ((look > 1 ? lightTarget : 0) - colours.halo) * (1 - Math.exp(-dt / 0.25));
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
@@ -672,7 +699,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
       gl.uniform1f(uniform(pDraw, "keep"), 0.35);
-      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm);
+      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform1f(uniform(pDraw, "halo"), colours.halo);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
       // 2. Dithered onto the ground, opaque, each dot in its light's colour.
       // Dark: a deep blue-black space; light: deeper shades on the page.
@@ -684,6 +711,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
+      gl.uniform1f(uniform(pDither, "halo"), colours.halo); gl.uniform1f(uniform(pDither, "lightLook"), Math.max(1, Number(document.documentElement.dataset.heroLook ?? 1) - 1));
       const L = colours.light;
       const mixc = (a: number[], b: number[], t: number) => a.map((x, i) => x + (b[i] - x) * t);
       const ground = mixc([10 / 255, 11 / 255, 20 / 255], [238 / 255, 240 / 255, 238 / 255], L);
