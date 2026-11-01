@@ -3568,3 +3568,23 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @keyframes dv-target-ring { 0%, 60% { box-shadow: 0 0 0 2px var(--case-accent); } 100% { box-shadow: 0 0 0 2px transparent; } }
 .dv-link-target:target { animation: dv-target-ring 1800ms var(--ease) 300ms both; }
 @media (prefers-reduced-motion: reduce) { .dv-link-target:target { animation: none; box-shadow: 0 0 0 2px var(--case-accent); } }
+
+/* Fewer words, more shape: candidates are one line each (letter, name, the pain in a few words, the feature as a pill); the test protocol is tiles (big number + what it counts), numbered session steps and measure chips. */
+.dv-candidates li { display: grid; grid-template-columns: 32px minmax(0, 260px) minmax(0, 1fr) auto; align-items: center; gap: 8px 24px; padding: 18px 24px; }
+.dv-candidates strong { font-size: 18px; font-weight: 500; }
+.dv-candidate-pain { display: flex; align-items: baseline; gap: 10px; margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-candidate-pain span { flex: none; padding: 1px 8px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-candidate-to { display: inline-flex; align-items: center; gap: 8px; justify-self: end; margin: 0; padding: 6px 14px; border-radius: 999px; background: color-mix(in srgb, var(--case-accent) 14%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 500; white-space: nowrap; }
+@media (max-width: 63.99rem) { .dv-candidates li { grid-template-columns: 32px minmax(0, 1fr); } .dv-candidate-pain, .dv-candidate-to { grid-column: 2; justify-self: start; } }
+.dv-protocol-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.dv-protocol-tiles > div { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 18px 20px; border: 0; border-radius: 16px; background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-protocol-tiles > div:not([data-kind="big"]) { grid-column: 1 / -1; }
+.dv-protocol-tiles dt { color: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-protocol-tiles dd { display: flex; flex-direction: column; gap: 4px; margin: 0; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-protocol-tiles strong { color: var(--case-accent); font-size: 40px; font-weight: 300; line-height: 1; letter-spacing: -0.02em; }
+.dv-protocol-tiles dd ol { display: flex; flex-wrap: wrap; gap: 8px 6px; }
+.dv-protocol-tiles dd ol li { display: inline-flex; align-items: center; gap: 6px; }
+.dv-protocol-tiles dd ol li:not(:last-child)::after { content: "→"; margin-left: 4px; color: var(--dv-muted); }
+.dv-protocol-tiles dd ol b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1; }
+.dv-protocol-tiles dd ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.dv-protocol-tiles dd ul li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); }
