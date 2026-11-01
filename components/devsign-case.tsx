@@ -612,7 +612,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                   <span className="dv-candidate-id">{c.id}</span>
                   <strong>{c.name}</strong>
                   <p className="dv-candidate-pain"><span>{c.kind}</span>{c.pain}</p>
-                  <p className="dv-candidate-to"><span aria-hidden="true">→</span>{c.to}</p>
+                  <p className="dv-candidate-to">{c.to}</p>
                 </li>
               ))}
             </ol>
