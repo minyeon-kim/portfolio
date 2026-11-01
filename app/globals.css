@@ -3588,3 +3588,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-protocol-tiles dd ol b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1; }
 .dv-protocol-tiles dd ul { display: flex; flex-wrap: wrap; gap: 8px; }
 .dv-protocol-tiles dd ul li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); }
+
+/* Phones rendered the whole page zoomed out: the tool table's sr-only marks are absolutely positioned, so they escaped the static scroll wrapper and stretched the page to ~744px. The wrapper is their containing block now. */
+.dv-scroll { position: relative; }
+
+/* A stage that ends on the Problem statement band: while the next stage rises and opens from its inset card, the band's colour stays behind it instead of the page black, so the two colours meet with no strip between them. This stage also doesn't recede on its way out (shrinking and fading would uncover black around the band). */
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  .dv > section:has(> .dv-core:last-child) { position: relative; animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
+  .dv > section:has(> .dv-core:last-child)::after { content: ""; position: absolute; top: 100%; left: calc(-1 * var(--dv-pad)); right: calc(-1 * var(--dv-pad)); height: 100svh; background: var(--dv-tint-core); pointer-events: none; }
+} }
