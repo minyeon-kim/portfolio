@@ -3926,3 +3926,6 @@ td[data-highlight] .dv-tool-mark { width: 24px; height: 24px; color: #fff; }
   .dv-tool-table tbody th { font-size: 16px; }
   .dv-tool-table :is(thead, tbody) th:first-child { padding-left: 12px; }
 }
+
+/* The co-design fold keeps its distance from the close-up captions. */
+.dv-subsection-120 > details.dv-handoff-spec { margin-top: 32px; }
