@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverShow, FeatureReel, IterationCompare, PrototypeLink, TryPrototype } from "@/components/devsign-story";
+import { FeatureReel, IterationCompare, TryPrototype } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -721,28 +721,29 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       <Section id="deliver" title="Deliver" band={!ff}>
         <Block {...deliver} ff={ff} />
-        {ff && deliver.openLabel && <p className="dv-gap-24 reveal"><PrototypeLink label={deliver.openLabel} /></p>}
-        <div className="dv-gap-64">
-          {deliver.changes ? (
-            <ol className="dv-points dv-changes" style={{ "--n": deliver.changes.length } as React.CSSProperties}>
-              {deliver.changes.map((c: Study, n: number) => (
-                <li key={c.title} className="dv-point reveal">
-                  <div className="dv-point-media dv-point-phone"><Image src={withBase(c.src)} alt={c.alt ?? ""} width={c.width ?? 720} height={c.height ?? 1560} sizes="200px" /></div>
-                  <p className="dv-point-title"><b aria-hidden="true">{n + 1}</b>{c.title}</p>
-                  <p className="dv-point-change"><span className="dv-point-before">{c.before}</span><span className="dv-point-after">{c.after}</span></p>
-                </li>
-              ))}
-            </ol>
-          ) : ff ? <DeliverShow features={deliver.features} labels={{ play: deliver.playLabel ?? "Play", pause: deliver.pauseLabel ?? "Pause" }} />
-            : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
-        </div>
-        {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
+        {!ff && (
+          <div className="dv-gap-64">
+            {deliver.changes ? (
+              <ol className="dv-points dv-changes" style={{ "--n": deliver.changes.length } as React.CSSProperties}>
+                {deliver.changes.map((c: Study, n: number) => (
+                  <li key={c.title} className="dv-point reveal">
+                    <div className="dv-point-media dv-point-phone"><Image src={withBase(c.src)} alt={c.alt ?? ""} width={c.width ?? 720} height={c.height ?? 1560} sizes="200px" /></div>
+                    <p className="dv-point-title"><b aria-hidden="true">{n + 1}</b>{c.title}</p>
+                    <p className="dv-point-change"><span className="dv-point-before">{c.before}</span><span className="dv-point-after">{c.after}</span></p>
+                  </li>
+                ))}
+              </ol>
+            ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
+          </div>
+        )}
+        {/* The features already play in Develop, so Deliver leads with the real prototype. */}
         {deliver.tryIt && (
-          <div id="try" className="dv-gap-96">
+          <div id="try" className="dv-gap-64">
             <Block {...(deliver.tryIt as Lead)} ff={ff} />
             <div className="dv-gap-40 reveal"><TryPrototype {...deliver.tryIt} /></div>
           </div>
         )}
+        {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
       </Section>
 
       {/* Findings first: Testing is a stage of its own (title, band, nav item),
