@@ -242,6 +242,13 @@ void main() {
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
   arms = mix(arms, vec3(1.0, 0.55, 0.85), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
   vec3 galaxyTint = mix(arms, vec3(1.0, 0.92, 0.88), exp(-gr * gr / 0.06));
+  // Light theme: a brighter, sunnier palette on the pale page (sky blue,
+  // violet, hot pink, coral, mint) with no grey core, so it reads as
+  // glitter rather than ink.
+  vec3 lightArms = mix(mix(vec3(0.2, 0.62, 1.0), vec3(0.58, 0.36, 1.0), wave), vec3(1.0, 0.3, 0.62), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.8);
+  lightArms = mix(lightArms, vec3(1.0, 0.55, 0.3), smoothstep(0.7, 1.0, wave) * 0.6);
+  lightArms = mix(lightArms, vec3(0.1, 0.85, 0.7), smoothstep(0.8, 1.0, sin(gt * 5.0 + gr * 4.0) * 0.5 + 0.5) * 0.7);
+  galaxyTint = mix(galaxyTint, lightArms, step(0.5, light));
   vTint = mix(vTint, galaxyTint, galaxy);
   vSpec = mix(vSpec, 0.8, galaxy);
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
@@ -307,6 +314,12 @@ void main() {
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake);
   px = mix(mix(1.6, 2.4, vDepth), mix(4.0, 6.0, vDepth), flake) * dpr;
+  // Light theme: about one grain in twelve glints now and then (a slow,
+  // sharp swell in size and brightness, each on its own beat).
+  float tw = step(0.92, fract(vSeed * 37.7)) * step(0.5, light);
+  float glint = tw * pow(0.5 + 0.5 * sin(time * mix(0.6, 1.4, fract(vSeed * 19.3)) + vSeed * 40.0), 14.0);
+  vFaint *= 1.0 + glint * 3.0;
+  px *= 1.0 + glint * 0.8;
   gl_PointSize = kept > 0.5 ? px : 0.0;
   if (kept < 0.5) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
@@ -415,7 +428,11 @@ void main() {
   vec3 base = mix(ground, ink, g * g * 0.05);
   // Each dot is printed in the colour of its light (bright on the dark
   // ground, a deeper shade on the light page).
-  vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05, hue * 0.55, light);
+  // Light: saturated and bright (the strongest channel near full), not a
+  // darkened shade, so the page sparkles instead of looking inked.
+  vec3 vivid = clamp(mix(vec3(dot(hue, vec3(0.3, 0.5, 0.2))), hue, 1.6), 0.0, 1.0);
+  vivid = vivid / max(max(vivid.r, max(vivid.g, vivid.b)), 1e-3) * 0.9;
+  vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05, vivid, light);
   o = vec4(mix(base, coloured, cover), 1.0);
 }`;
 
