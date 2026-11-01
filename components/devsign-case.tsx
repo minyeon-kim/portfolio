@@ -221,7 +221,7 @@ function DevelopBlock({ block }: { block: Study }) {
 
 function CompareMark({ on }: { on: boolean }) {
   return (
-    <svg className="dv-compare-mark" data-on={on || undefined} width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <svg className="dv-tool-mark" data-on={on || undefined} width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <path d={on ? "M4 10.5 8.2 14.5 16 5.5" : "M5.5 5.5 14.5 14.5M14.5 5.5 5.5 14.5"} stroke="currentColor" strokeWidth={on ? 2 : 1.6} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -348,7 +348,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </div>
           ) : (
           <div className="dv-scroll dv-gap-48 reveal">
-            <table className="dv-compare">
+            <table className="dv-tool-table">
               <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
                 <tr>
