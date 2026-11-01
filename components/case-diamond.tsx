@@ -1,7 +1,6 @@
 "use client";
 
 import { DoubleDiamond } from "@/components/double-diamond";
-import { useStrings } from "@/lib/use-locale";
 
 type DiamondPhase = { label: string; title: string; methods?: string[]; output?: string; body?: string; current?: boolean };
 
@@ -10,14 +9,9 @@ type DiamondPhase = { label: string; title: string; methods?: string[]; output?:
 // and what it handed on. `current` marks the phase where the direction
 // changed; `pivot` is the short note hung under it.
 export function CaseDiamond({ items, pivot }: { items: DiamondPhase[]; pivot?: string }) {
-  const t = useStrings();
   return (
     <figure className="case-diamond reveal">
-      <DoubleDiamond
-        stages={items.map((item) => ({ name: item.label, methods: item.methods ?? [], current: item.current }))}
-        pivot={pivot}
-        labels={{ problem: t.problem, solution: t.solution, coreProblem: t.coreProblem, research: t.research, design: t.design }}
-      />
+      <DoubleDiamond stages={items.map((item) => ({ name: item.label, current: item.current }))} pivot={pivot} />
       <ol className="case-diamond-notes">
         {items.map((item) => (
           <li key={item.label} data-current={item.current || undefined}>

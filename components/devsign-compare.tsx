@@ -15,15 +15,16 @@ const ASPECT = 16 / 10;
 // The part of the screenshot to show for a box: the box plus some context,
 // widened to one shared aspect and kept inside the image. Returns the crop and
 // the box inside it, both in percent.
-function crop(box: Box) {
+export function crop(box: Box) {
   const [bx, by, bw, bh] = [(box[0] / 100) * W, (box[1] / 100) * H, (box[2] / 100) * W, (box[3] / 100) * H];
   const pad = 40;
-  let rw = Math.max(bw + pad * 2, (bh + pad * 2) * ASPECT, 400);
+  // A tall box doesn't pull the view out to the whole screen: its top part is shown.
+  let rw = Math.max(bw + pad * 2, Math.min((bh + pad * 2) * ASPECT, 800), 400);
   let rh = rw / ASPECT;
   if (rh > H) { rh = H; rw = H * ASPECT; }
   if (rw > W) { rw = W; rh = W / ASPECT; }
   const rx = Math.min(Math.max(bx + bw / 2 - rw / 2, 0), W - rw);
-  const ry = Math.min(Math.max(by + bh / 2 - rh / 2, 0), H - rh);
+  const ry = Math.min(Math.max(bh + pad * 2 > rh ? by - pad : by + bh / 2 - rh / 2, 0), H - rh);
   return {
     img: { width: `${(W / rw) * 100}%`, left: `${(-rx / rw) * 100}%`, top: `${(-ry / rh) * 100}%` },
     mark: { left: `${((bx - rx) / rw) * 100}%`, top: `${((by - ry) / rh) * 100}%`, width: `${(bw / rw) * 100}%`, height: `${(bh / rh) * 100}%` },
