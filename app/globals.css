@@ -3433,6 +3433,29 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   }
 }
 
+/* Chapters (owner: more dynamic, current style). Each stage enters as its
+   own chapter, all scroll-linked and reversible:
+   - the stage opens out: its band starts as an inset card (4% in, 48px
+     corners) and widens to full bleed as its top rises through the screen;
+   - the stage title rises out of its baseline (clipped from below) while the
+     rule under it draws left to right, and a chapter number 01–07 sits at the
+     right end of the rule. */
+.dv { counter-reset: dv-stage; }
+.dv-section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.dv-section-head::after { counter-increment: dv-stage; content: counter(dv-stage, decimal-leading-zero) " / 0" var(--dv-stages, "7"); flex: none; color: var(--dv-muted); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.6; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv > section { animation: dv-open linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
+    @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round 48px); } to { clip-path: inset(0 0 0 0 round 0); } }
+    .dv-section-head { border-bottom-color: transparent; background: linear-gradient(var(--dv-line), var(--dv-line)) no-repeat left bottom / 100% 1px; animation: dv-rule linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; }
+    @keyframes dv-rule { from { background-size: 0% 1px; } to { background-size: 100% 1px; } }
+    .dv-section-title { animation: dv-rise linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    @keyframes dv-rise { from { transform: translateY(0.6em); clip-path: inset(100% 0 -0.2em 0); } to { transform: none; clip-path: inset(0 0 -0.2em 0); } }
+    .dv-section-head::after { animation: dv-fade linear both; animation-timeline: view(); animation-range: entry 20% cover 40%; }
+    @keyframes dv-fade { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  }
+}
+
 /* Developer handoff: the recorded flow (HandoffVideo), the app screen in the
    same dark window as the demo reel, with the four steps under it lighting up
    as the video passes them. */
@@ -3446,3 +3469,9 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-handoff-steps button[aria-current] b { background: var(--case-accent); color: light-dark(#ffffff, #120f24); }
 @media (max-width: 47.99rem) { .dv-handoff-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
+
+/* Gemini has six stages (no Testing). */
+.dv:not(:has(> #testing)) { --dv-stages: "6"; }
+/* Define ends on the Problem statement band (no HMW block in findings-first
+   cases): no page-colour strip between it and Develop. */
+.dv > section:has(> .dv-core:last-child) { padding-bottom: 0; }
