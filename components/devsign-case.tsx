@@ -7,6 +7,8 @@ import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink, TryPrototype 
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
+const slugOf = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
 // Case body in the Devsign layout, after the Figma case study frames
 // ("Devsign · Case study · 1920", "Gemini · Case study · 1920"). All copy comes
 // from the case's MDX `study` object. Where the two cases differ, the shape of
@@ -431,8 +433,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-subsection">
           <Block {...define.problems} ff={ff} />
           <ol className="dv-problems dv-gap-40">
-            {define.problems.items.map((item: Study, index: number) => (
-              <li key={item.title} className="reveal">
+            {define.problems.items.map((item: Study, index: number) => {
+              const answer = develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title);
+              return (
+              <li key={item.title} id={`problem-${index + 1}`} className="reveal dv-link-target">
                 <div className="dv-problem-top">
                   <span className="dv-problem-number">{pad(index + 1)}</span>
                   <span className="dv-problem-role">{item.role}</span>
@@ -445,8 +449,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                     {define.affinity.themesLabel} · {define.affinity.themes[index].map(([name]: [string, number]) => name).join(", ")}
                   </p>
                 )}
+                {/* Problem → feature: jump to the card of the feature that answers it (and back from there). */}
+                {ff && answer && develop.selection.answeredBy && (
+                  <a className="dv-problem-answer" href={`#feature-${slugOf(answer.feature)}`}>
+                    <span>{develop.selection.answeredBy}</span><b>{answer.feature}</b><i aria-hidden="true">↓</i>
+                  </a>
+                )}
               </li>
-            ))}
+              );
+            })}
           </ol>
         </div>
 
@@ -632,12 +643,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 return (
-                  <li key={f.name} className="reveal">
+                  <li key={f.name} id={`feature-${slugOf(f.name)}`} className="reveal dv-link-target">
                     {f.src && <Image src={withBase(f.src)} alt="" width={1280} height={800} sizes="(max-width: 767px) 100vw, 300px" className="dv-feature-shot" />}
                     <span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span>
                     {pick && (
                       <p className="dv-feature-origin">
-                        <span><b>{develop.selection.solves}</b>{pick.problem}</span>
+                        {(() => {
+                          const at = define.problems?.items?.findIndex((item: Study) => item.title === pick.problem) ?? -1;
+                          return at >= 0
+                            ? <a href={`#problem-${at + 1}`}><b>{develop.selection.solves}</b>{pick.problem}<i aria-hidden="true">↑</i></a>
+                            : <span><b>{develop.selection.solves}</b>{pick.problem}</span>;
+                        })()}
                       </p>
                     )}
                   </li>
