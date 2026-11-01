@@ -3415,17 +3415,22 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .reveal-ready .dv .reveal, .reveal-ready .dv .reveal:not([data-shown]) { opacity: 1; translate: none; transition: none; }
 }
 
-/* Elastic scroll (smooth-scroll.tsx sets --sv / --sva from scroll speed):
-   case blocks lean against the motion and stretch a touch, images swell
-   slightly inside their frames, and all of it settles when scrolling stops.
-   Blocks holding a pinned demo or story stay square so sticky reads clean. */
-@media (prefers-reduced-motion: no-preference) {
-  .dv > section > :not(.dv-section-head):not(:has(.dv-show-track, .dv-story)) {
-    transform: skewY(calc(var(--sv, 0) * -2deg)) scaleY(calc(1 + var(--sva, 0) * 0.04));
-    transform-origin: 50% 50%;
+/* Scroll depth, the usual case-study pair (replaces the elastic lean):
+   - parallax: figures drift 32px slower than the text around them as they
+     cross the screen, so text never moves and images gain depth;
+   - media expand: the demo reel and the handoff recording grow from 90% to
+     full size as they rise into place, done by the time they settle.
+   CSS scroll timelines only; static without support or with reduced motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv .dv-figure { animation: dv-parallax linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes dv-parallax { from { transform: translateY(32px); } to { transform: translateY(-32px); } }
+    .dv-show-track { view-timeline: --dv-show block; }
+    .dv-show-screen { animation: dv-expand linear both; animation-timeline: --dv-show; animation-range: cover 0% cover 22%; }
+    .dv-show-track:not([data-linked]) .dv-show-screen { animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .dv-handoff-screen { animation: dv-expand linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    @keyframes dv-expand { from { transform: scale(0.9); border-radius: 28px; } to { transform: none; border-radius: 16px; } }
   }
-  .dv-figure > :is(img, .dv-crop, .dv-fit) { transform: scale(calc(1 + var(--sva, 0) * 0.05)); }
-  .dv-section-title { letter-spacing: calc(var(--sva, 0) * 0.04em); }
 }
 
 /* Developer handoff: the recorded flow (HandoffVideo), the app screen in the
