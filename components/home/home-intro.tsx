@@ -12,6 +12,7 @@ import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { Emphasis } from "@/components/emphasis";
 import { HeroObject } from "./hero-object";
+import { LookSwitch } from "./look-switch";
 import type { AboutWorld, StageProject } from "./project-stage";
 
 type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: number, from?: HTMLElement | null) => void };
@@ -85,6 +86,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
 
   return (
     <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
+      <LookSwitch />
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
         <HeroObject className="home-object" variant={hover === "about" ? "about" : shown?.slug ?? "default"} />
