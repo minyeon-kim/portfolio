@@ -126,10 +126,13 @@ vec3 formOf(float n, vec2 uv) {
       q = vec2(cos(t), sin(t)) * r;
       loose *= 0.6;
     }
-    q.y *= 0.5;
-    float ct = cos(0.22), st = sin(0.22);
-    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y) + vec2(-0.2, 0.0);
+    // Stretched into a long horizontal band across the whole stage (like
+    // the About landscape), only slightly tilted, its haze held close.
+    q *= vec2(1.75, 0.4);
+    float ct = cos(0.08), st = sin(0.08);
+    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
     p = vec3(q * 1.1, z);
+    loose *= 0.6;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -260,7 +263,7 @@ void main() {
   vSpec = mix(vSpec, 0.85, bolt);
   // The landing galaxy is the richest: every project's colour wound through
   // its arms (blue, violet, teal, a touch of pink) round a warm white core.
-  vec2 gq = (p.xy - vec2(0.0, 0.1)) / 1.6;
+  vec2 gq = (p.xy - vec2(0.35, 0.1)) / vec2(3.0, 0.7);
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
