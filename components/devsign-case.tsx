@@ -93,8 +93,11 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
   return (
     <div className="dv-gap-96">
       <Block {...(handoff as Lead)} ff={ff} />
-      {handoff.video && <div className="dv-gap-40"><HandoffVideo {...handoff.video} steps={screens.map((f: Study) => f.title)} /></div>}
-      <ol className="dv-wireflow dv-gap-40 reveal" data-reveal-group>
+      {handoff.video && <div className="dv-gap-40"><HandoffVideo {...handoff.video} steps={screens.map((f: Study) => f.title)} details={screens.map((f: Study, s: number) => ({ points: f.points, flow: handoff.flows[s] }))} /></div>}
+      {/* The full numbered spec stays for anyone who wants it, folded by default. */}
+      <details className="dv-handoff-spec dv-gap-32">
+        <summary>{handoff.specLabel}</summary>
+      <ol className="dv-wireflow dv-gap-24">
         {screens.map((f: Study, s: number) => (
           <li key={f.title}>
             <p className="dv-wireflow-name"><b>{s + 1}</b>{f.title}</p>
@@ -110,7 +113,7 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
       </ol>
       <div className="dv-annotations dv-gap-40">
         {screens.map((f: Study, s: number) => (
-          <section key={f.title} className="reveal" data-reveal-group>
+          <section key={f.title}>
             <h4><b>{s + 1}</b>{f.title}</h4>
             <ol>
               {f.points.map((p: string, e: number) => <li key={p}><b>{s + 1}-{e + 1}</b>{p}</li>)}
@@ -118,6 +121,7 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
           </section>
         ))}
       </div>
+      </details>
     </div>
   );
 }
