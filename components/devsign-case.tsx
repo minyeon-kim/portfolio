@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
@@ -148,23 +149,26 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
   const xs = [90, 329, 568, 808, 1047, 1286].map(sx);
   return (
     <div className="dv-journey dv-scroll reveal">
+      <div className="dv-journey-legend">
+        <button type="button" data-line="designer">{journey.designer}</button>
+        <button type="button" data-line="developer">{journey.developer}</button>
+      </div>
       <svg viewBox="0 0 1376 340" role="img" aria-label={`${journey.steps.join(" → ")}. ${journey.developer}: ${journey.developerLow}. ${journey.designer}: ${journey.designerLow}.`}>
         {xs.map((x, i) => (
           <g key={x}>
+            <rect x={x - (xs[1] - xs[0]) / 2} y="0" width={xs[1] - xs[0]} height="340" className="dv-journey-column" />
             <path d={`M${x + 0.5} 52V322`} className="dv-journey-grid" />
             <text x={x} y="17" textAnchor="middle" fontSize="18" className="dv-svg-strong">{journey.steps[i]}</text>
           </g>
         ))}
         <g transform={`matrix(${k} 0 0 1 ${688 * (1 - k)} 0)`}>
-          <path transform="translate(87.5 125.23)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
-          <path transform="translate(87.5 157.52)" vectorEffect="non-scaling-stroke" className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
+          <path transform="translate(87.5 125.23)" pathLength={1} className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
+          <path transform="translate(87.5 157.52)" pathLength={1} className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         </g>
-        <text x={sx(584)} y="115" fontSize="18" className="dv-svg-accent dv-svg-caps">{journey.designer.toUpperCase()}</text>
-        <text x={sx(1071)} y="211" fontSize="18" className="dv-svg-second dv-svg-caps">{journey.developer.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" />
-        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps">{journey.developerLow.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" />
-        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps">{journey.designerLow.toUpperCase()}</text>
+                        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" className="dv-journey-low" data-line="developer" />
+        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps dv-journey-low" data-line="developer">{journey.developerLow.toUpperCase()}</text>
+        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" className="dv-journey-low" data-line="designer" />
+        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps dv-journey-low" data-line="designer">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </div>
   );
@@ -499,7 +503,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <div className="dv-persona-details">
                 <div>
                   <p className="dv-caps dv-persona-role">{labels.context}</p>
-                  <p className="dv-persona-context">{person.context} {person.contextLead}</p>
+                  <p className="dv-persona-context">{person.context}</p>
                 </div>
                 <table className="dv-needs">
                   <thead>
@@ -507,7 +511,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                   </thead>
                   <tbody>
                     {person.pairs.map(([pain, need]: string[]) => (
-                      <tr key={pain}><td>{pain}</td><td aria-hidden="true">→</td><td>{need}</td></tr>
+                      <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td>{need}</td></tr>
                     ))}
                   </tbody>
                 </table>
@@ -540,7 +544,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                   </thead>
                   <tbody>
                     {person.pairs.map(([pain, need]: string[]) => (
-                      <tr key={pain}><td>{pain}</td><td aria-hidden="true">→</td><td><strong>{need}</strong></td></tr>
+                      <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td><strong>{need}</strong></td></tr>
                     ))}
                   </tbody>
                 </table>
