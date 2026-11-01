@@ -3895,3 +3895,7 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
   .dv-reel-media, .dv-reel:nth-child(even) .dv-reel-media { order: 0; margin-inline: 0; border-radius: var(--dv-card-radius); }
   .dv-reel-line { margin-top: 20px; }
 }
+
+/* The opener link lands with the whole Deliver title clear of the stage nav. */
+.dv #try { scroll-margin-top: 216px; }
+@media (max-width: 47.99rem) { .dv #try { scroll-margin-top: 184px; } }
