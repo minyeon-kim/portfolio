@@ -58,10 +58,11 @@ vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
   vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
-  if (symbol > 2.5) {
-    // A landscape of dots, seen low from the front: a regular grid rolling
-    // into slow waves, rising into ridges at the sides, with faint, loose
-    // streams of data falling behind it.
+  if (symbol > 2.5 || symbol < 0.5) {
+    // The landing (and About): a landscape of dots, seen low from the front,
+    // spread across the whole stage: a regular grid rolling into slow waves,
+    // rising into ridges at the sides, with faint, loose streams of data
+    // falling behind it.
     if (a < 0.82) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
@@ -94,7 +95,7 @@ vec3 formOf(float n, vec2 uv) {
     }
     // Top left, clear of the title below and the project card on the right.
     p = vec3(q + vec2(-1.75, 0.75), (hq(n, 17u) - 0.5) * 0.2);
-  } else if (symbol > 0.5) {
+  } else {
     // The Gemini sparkle: a four-point star with concave sides, filled with a
     // thick band of dust inside its edge rather than a thin outline, so its
     // arms read as solid strokes.
@@ -105,34 +106,6 @@ vec3 formOf(float n, vec2 uv) {
     // Top left, above the title, clear of the card and the paragraph.
     p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
-  } else {
-    // A wide, open galaxy laid across the whole stage, seen at a low angle:
-    // a small soft core and two broad arms that barely wind, feathering out
-    // into the disc dust around them, turning slowly. Spread, not a whirl
-    // (a tight spiral read as a vortex; a round cloud read as no shape).
-    vec2 q; float z = (hq(n, 16u) - 0.5) * 0.5;
-    if (a < 0.08) {
-      float t = c * 6.2831853;
-      q = vec2(cos(t), sin(t)) * 0.3 * pow(hq(n, 13u), 1.2);
-      loose *= 0.25;
-    } else if (a < 0.7) {
-      float u = (a - 0.08) / 0.62;
-      float r = 0.25 + pow(u, 0.9) * 1.8;
-      float t = floor(b * 2.0) * 3.14159265 + log(r / 0.25) * 1.15 + time * 0.02 + (c - 0.5) * (0.6 + 0.6 * u);
-      q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.25 + 0.45 * u;
-    } else {
-      float t = c * 6.2831853, r = 0.3 + pow(hq(n, 13u), 0.6) * 1.9;
-      q = vec2(cos(t), sin(t)) * r;
-      loose *= 0.6;
-    }
-    // Stretched into a long horizontal band across the whole stage (like
-    // the About landscape), only slightly tilted, its haze held close.
-    q *= vec2(2.6, 0.62);
-    float ct = cos(0.08), st = sin(0.08);
-    q = vec2(ct * q.x - st * q.y, st * q.x + ct * q.y);
-    p = vec3(q * 1.1, z);
-    loose *= 0.6;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
