@@ -3553,3 +3553,18 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-try-window, .dv-try-tasks { width: 100%; }
 .dv-try-chrome a { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-inline: 12px; }
 @media (max-width: 47.99rem) { .dv-try-chrome a { translate: none; } }
+
+/* Problem ↔ feature links: each key problem card ends on the feature that answers it (a link down to its card in Develop), and each feature card's Solves line links back up. The card you land on is clear of the header and stage bar and rings in the case colour for a moment. */
+.dv-link-target { scroll-margin-top: 160px; }
+.dv-problems li { display: flex; flex-direction: column; }
+.dv-problem-answer { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: auto; padding-top: 20px; color: var(--dv-muted); font-size: 16px; font-weight: 500; text-decoration: none; }
+.dv-problem-answer b { color: var(--case-accent); font-weight: 600; }
+.dv-problem-answer i, .dv-feature-origin a i { font-style: normal; color: var(--case-accent); transition: translate 250ms var(--ease); }
+.dv-problem-answer:hover i, .dv-problem-answer:focus-visible i { translate: 0 3px; }
+.dv-problem-answer:hover b, .dv-feature-origin a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.dv-feature-origin a { display: inline; color: inherit; text-decoration: none; }
+.dv-feature-origin a:hover i, .dv-feature-origin a:focus-visible i { translate: 0 -3px; }
+.dv-feature-origin a i { margin-left: 6px; display: inline-block; }
+@keyframes dv-target-ring { 0%, 60% { box-shadow: 0 0 0 2px var(--case-accent); } 100% { box-shadow: 0 0 0 2px transparent; } }
+.dv-link-target:target { animation: dv-target-ring 1800ms var(--ease) 300ms both; }
+@media (prefers-reduced-motion: reduce) { .dv-link-target:target { animation: none; box-shadow: 0 0 0 2px var(--case-accent); } }
