@@ -64,11 +64,14 @@ export function PrototypeLink({ label }: { label: string }) {
 // show it moving): one looping video of 1 Merge Studio → 2 Live Workspace →
 // 3 Conflict Points → 4 History, recorded with Playwright at 1440×900. The step
 // row under it lights the step the video is in (`starts`, seconds) and seeks
-// to a step when pressed. Plays only while on screen; with reduced motion it
-// doesn't autoplay and shows its controls instead.
-export function HandoffVideo({ src, poster, starts, steps, label }: { src: string; poster: string; starts: number[]; steps: string[]; label: string }) {
+// to a step when pressed. A bar on the current step fills as the video moves
+// through it, and the panel below explains only that step: its numbered elements
+// and what leads to the next screen. Plays only while on screen; with reduced
+// motion it doesn't autoplay and shows its controls instead.
+export function HandoffVideo({ src, poster, starts, steps, details, label }: { src: string; poster: string; starts: number[]; steps: string[]; details: { points: string[]; flow?: string }[]; label: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const [step, setStep] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [still, setStill] = useState(false);
 
   useEffect(() => {
@@ -90,12 +93,15 @@ export function HandoffVideo({ src, poster, starts, steps, label }: { src: strin
     let i = 0;
     starts.forEach((s, j) => { if (t >= s) i = j; });
     setStep(i);
+    const end = starts[i + 1] ?? video.current?.duration ?? t + 1;
+    setProgress(Math.min(1, Math.max(0, (t - starts[i]) / (end - starts[i]))));
   };
   const seek = (i: number) => {
     const el = video.current;
     if (!el) return;
     el.currentTime = starts[i];
     setStep(i);
+    setProgress(0);
     if (!still) el.play().catch(() => {});
   };
 
@@ -111,11 +117,18 @@ export function HandoffVideo({ src, poster, starts, steps, label }: { src: strin
         {steps.map((name, i) => (
           <li key={name}>
             <button type="button" className="press" aria-current={i === step || undefined} onClick={() => seek(i)}>
+              {i === step && <i aria-hidden="true" style={{ transform: `scaleX(${progress})` }} />}
               <b>{i + 1}</b>{name}
             </button>
           </li>
         ))}
       </ol>
+      <div key={step} className="dv-handoff-panel" aria-live="polite">
+        <ol>
+          {details[step]?.points.map((point, e) => <li key={point}><b>{step + 1}-{e + 1}</b>{point}</li>)}
+        </ol>
+        {details[step]?.flow && <p><span aria-hidden="true">→</span>{details[step].flow}</p>}
+      </div>
     </figure>
   );
 }

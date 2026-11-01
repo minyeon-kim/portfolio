@@ -3711,3 +3711,22 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 .dv > #testing .dv-scenarios li { gap: 8px; padding: 20px 0 0; border: 0; border-top: 1px solid var(--dv-card-line); border-radius: 0; background: none !important; }
 .dv > #testing .dv-scenarios strong { font-size: 18px; font-weight: 500; line-height: 1.4; }
 @media (max-width: 63.99rem) { .dv-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dv > #testing .dv-scenarios { grid-template-columns: 1fr; gap: 16px; } }
+
+/* Developer handoff, led by the moving screen: the step tabs show progress and the panel below explains only the current step. The full numbered spec is folded away. */
+.dv-handoff-steps button { position: relative; }
+.dv-handoff-steps button[aria-current] { border-top-color: var(--dv-line); }
+.dv-handoff-steps button i { position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background: var(--case-accent); transform-origin: left; transition: transform 250ms linear; }
+.dv-handoff-panel { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px 48px; min-height: 136px; margin-top: 24px; animation: dv-panel-in 400ms var(--ease) both; }
+@keyframes dv-panel-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: none; } }
+.dv-handoff-panel ol { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.dv-handoff-panel li { display: flex; gap: 14px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-handoff-panel li b { flex: none; width: 28px; color: var(--case-accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-handoff-panel p { display: flex; gap: 10px; margin: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-handoff-panel p span { color: var(--case-accent); }
+.dv-handoff-spec summary { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; cursor: pointer; list-style: none; transition: background-color 150ms var(--ease); }
+.dv-handoff-spec summary::-webkit-details-marker { display: none; }
+.dv-handoff-spec summary::after { content: "+"; color: var(--dv-muted); }
+.dv-handoff-spec[open] summary::after { content: "−"; }
+.dv-handoff-spec summary:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
+@media (max-width: 47.99rem) { .dv-handoff-panel { grid-template-columns: 1fr; min-height: 220px; } }
+@media (prefers-reduced-motion: reduce) { .dv-handoff-panel { animation: none; } .dv-handoff-steps button i { transition: none; } }
