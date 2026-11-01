@@ -3680,3 +3680,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv [data-tone="blue"] { --tone: light-dark(#2f5fd6, #7ea3ff); }
 .dv > :is(#discover, #testing) :is(.dv-voices, .dv-people, .dv-scenarios) > li[data-tone] { background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 16%), light-dark(#ffffff, var(--dv-band-card-dark))) 0%, light-dark(#ffffff, var(--dv-band-card-dark)) 62%); }
 .dv [data-tone] .dv-avatar { background: color-mix(in srgb, var(--tone) 20%, transparent); color: var(--tone); }
+
+/* The one emphasis block (after railway.com's closing call to action): Problem statement is a saturated gradient card floating on the page, 16px from the screen edges, white text in both themes. Used only here, or it stops being emphasis. As a floating card it no longer needs its colour painted behind the next stage. */
+.dv-core { --dv-ink: #ffffff; --dv-muted: rgb(255 255 255 / 0.78); margin: 120px calc(16px - var(--dv-pad)) 16px; padding-inline: calc(var(--dv-pad) - 16px); border-radius: var(--dv-band-radius); background: radial-gradient(60% 110% at 32% 0%, #3b22b4 0%, transparent 72%), linear-gradient(115deg, #4a1d96 0%, #5c1a90 48%, #7d1068 100%); color: #ffffff; }
+.dv-core :is(.dv-caps, .dv-block-label, p) { color: inherit; }
+.case-study[data-project="gemini"] .dv-core { background: radial-gradient(60% 110% at 32% 0%, #1a4fc4 0%, transparent 72%), linear-gradient(115deg, #17358f 0%, #2a3fa8 48%, #5a35b0 100%); }
+.dv > section:has(> .dv-core:last-child)::after { content: none; }
+@media (max-width: 47.99rem) { .dv-core { margin-inline: calc(8px - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - 8px); margin-bottom: 8px; } }
