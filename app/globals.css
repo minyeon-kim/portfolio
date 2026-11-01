@@ -3730,3 +3730,9 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 .dv-handoff-spec summary:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
 @media (max-width: 47.99rem) { .dv-handoff-panel { grid-template-columns: 1fr; min-height: 220px; } }
 @media (prefers-reduced-motion: reduce) { .dv-handoff-panel { animation: none; } .dv-handoff-steps button i { transition: none; } }
+
+/* Key problems as cards, one colour each (a soft corner gradient on the section surface), like the other card groups. The number takes the card's colour. */
+.dv [data-tone="teal"] { --tone: light-dark(#0f7f73, #5fd0c0); }
+.dv-problems { gap: 16px; }
+.dv-problems > li[data-tone] { padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 62%); }
+.dv-problems > li[data-tone] .dv-problem-number { color: var(--tone); }
