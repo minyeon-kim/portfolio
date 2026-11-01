@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink } from "@/components/devsign-story";
+import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink, TryPrototype } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -262,7 +262,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 <p className="dv-caps reveal">{discover.q1.surveyLabel}</p>
                 <div className="dv-evidence-stats">
                   {discover.q1.stats.map((stat: { value: string; text: string }) => (
-                    <p key={stat.value} className="dv-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
+                    <div key={stat.value} className="dv-meter reveal">
+                      <strong>{stat.value}</strong>
+                      <span className="dv-meter-bar" aria-hidden="true"><i style={{ width: stat.value }} /></span>
+                      <span>{stat.text}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -692,6 +696,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
         </div>
         {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
+        {deliver.tryIt && (
+          <div id="try" className="dv-gap-96">
+            <Block {...(deliver.tryIt as Lead)} ff={ff} />
+            <div className="dv-gap-40 reveal"><TryPrototype {...deliver.tryIt} /></div>
+          </div>
+        )}
       </Section>
 
       {/* Findings first: Testing is a stage of its own (title, band, nav item),
