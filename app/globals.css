@@ -3643,3 +3643,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .case-study[data-project="gemini"] .dv { --dv-band-dark: #161b27; --dv-band-card-dark: #222836; --dv-tint-core: light-dark(#eef3fd, #16203a); }
 .devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #1a1826); }
 .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #161b27); }
+
+/* One radius scale: sections and the opener panel 32px (24px on small screens), cards, tables, screens and media inside them 16px. Controls stay full pills; annotation boxes on screenshots stay small. */
+.dv, .devsign-hero { --dv-band-radius: clamp(24px, 2.4vw, 32px); --dv-card-radius: 16px; }
+.devsign-hero-panel { border-radius: var(--dv-band-radius); }
+.devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { border-radius: var(--dv-card-radius); }
+.dv :is(.dv-crop, .dv-wireflow-screen, .dv-journey, .dv-features li) { border-radius: var(--dv-card-radius); }
+.dv-matrix tr[data-highlight] > :first-child { border-radius: var(--dv-card-radius) 0 0 var(--dv-card-radius); }
+.dv-matrix tr[data-highlight] > :last-child { border-radius: 0 var(--dv-card-radius) var(--dv-card-radius) 0; }
+.dv-wireflow-area, .dv-story-area { border-radius: 6px; }
