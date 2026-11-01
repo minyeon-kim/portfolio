@@ -559,7 +559,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-core">
           {!ff && <p className="dv-method reveal">{define.core.method}</p>}
           <h3 className="dv-block-title reveal">{define.core.title}</h3>
-          <p className="dv-core-text reveal">{define.core.lead} <span>{define.core.text}</span></p>
+          <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
         </div>
 
         {/* Findings first (class feedback): no HMW block after the problems;
