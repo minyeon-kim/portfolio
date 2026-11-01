@@ -3694,3 +3694,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .devsign-hero-panel { background-image: var(--dh-art-dark); } }
 :root[data-theme="dark"] .devsign-hero-panel { background-image: var(--dh-art-dark); }
 @media (max-width: 47.99rem) { .devsign-hero-panel { background-size: 960px auto; } }
+
+/* Secondary action stays readable over the opener artwork; the highlighted tool row's gap takes the band colour, not the page's. */
+.devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.dv > #discover .dv-matrix tr[data-highlight] > * { border-top-color: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
