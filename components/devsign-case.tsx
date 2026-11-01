@@ -62,12 +62,11 @@ function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" 
 // Findings first (`ff`, the Devsign case): the method's name as a small label,
 // the finding or decision as the heading, then the text; `label` overrides the
 // label (Iteration 1 · Split by role) and `feature` tags the feature it changed.
-function Block({ method, title, lead, text, id, label, feature, ff }: Lead & { id?: string; label?: string; feature?: string; ff?: boolean }) {
+function Block({ method, title, lead, text, id, label, ff }: Lead & { id?: string; label?: string; ff?: boolean }) {
   if (ff) return (
     <div className="dv-block">
       <p className="dv-label reveal">{label ?? title}</p>
       <h3 id={id} className="dv-finding reveal">{lead}</h3>
-      {feature && <p className="dv-tag reveal">{feature}</p>}
       {text && <p className="dv-body reveal">{text}</p>}
     </div>
   );
@@ -847,18 +846,26 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
           <Block {...testing.iteration2} ff={ff} />
-          <div className={ff ? "dv-media-row dv-gap-40" : "dv-two dv-gap-40 dv-center"}>
-            <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
-            <div>
-              <p className="dv-caps dv-accent reveal">{testing.iteration2.agreedLabel}</p>
-              <ol className="dv-numbered">
-                {testing.iteration2.agreed.map((a: string) => <li key={a} className="reveal">{a}</li>)}
-              </ol>
+          {ff ? <>
+            <div className="dv-gap-40"><IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
+            {testing.iteration2.photo && (
+              <details className="dv-handoff-spec dv-gap-32">
+                <summary>{testing.iteration2.photoLabel}</summary>
+                <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />
+              </details>
+            )}
+          </> : <>
+            <div className="dv-two dv-gap-40 dv-center">
+              <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
+              <div>
+                <p className="dv-caps dv-accent reveal">{testing.iteration2.agreedLabel}</p>
+                <ol className="dv-numbered">
+                  {testing.iteration2.agreed.map((a: string) => <li key={a} className="reveal">{a}</li>)}
+                </ol>
+              </div>
             </div>
-          </div>
-          <div className={ff ? "dv-gap-96" : "dv-gap-40"}>{ff
-            ? <IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />
-            : <DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />}</div>
+            <div className="dv-gap-40"><DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
+          </>}
         </div>}
       </section>
 
