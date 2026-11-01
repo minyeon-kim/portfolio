@@ -3611,7 +3611,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1080px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
 .devsign-hero-panel .devsign-hero-media .devsign-loop { margin-top: 0; }
 .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin: clamp(40px, 5vw, 72px) calc(var(--dh-pad) - 16px) 0; }
-.dv-link-target, #try { scroll-margin-top: 160px; }
+.dv-link-target { scroll-margin-top: 160px; }
 @media (max-width: 47.99rem) {
   .devsign-hero:has(> .devsign-hero-panel) { padding: 72px 8px 56px; }
   .devsign-hero-page .devsign-hero:has(> .devsign-hero-panel) { padding-top: 8px; }
@@ -3899,3 +3899,30 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 /* The opener link lands with the whole Deliver title clear of the stage nav. */
 .dv-try-anchor { display: block; height: 0; scroll-margin-top: -56px; }
 @media (max-width: 47.99rem) { .dv-try-anchor { scroll-margin-top: -14px; } }
+
+/* Tool review: capabilities as rows, tools as columns, Devsign's column first in
+   a solid case colour (after pricing comparison tables). The last two rows are
+   what no other tool does, so their missing marks are red. */
+.dv-compare { --compare-colour: #4a2bd0; width: 100%; min-width: 720px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.dv-compare :is(th, td) { padding: 18px 12px; text-align: center; vertical-align: middle; transition: background-color 150ms var(--ease); }
+.dv-compare thead th { padding: 0 12px 20px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.35; vertical-align: bottom; }
+.dv-compare :is(thead, tbody) th:first-child { width: 26%; padding-left: 20px; text-align: left; }
+.dv-compare thead th[data-highlight] { width: 18%; padding-block: 24px 20px; border-radius: var(--dv-card-radius) var(--dv-card-radius) 0 0; background: var(--compare-colour); color: #fff; font-size: 20px; font-weight: 600; }
+.dv-compare tbody th { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.35; }
+.dv-compare tbody tr:nth-child(odd) > * { background: color-mix(in srgb, var(--dv-ink) 5%, transparent); }
+.dv-compare tbody tr:hover > * { background: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
+.dv-compare tbody tr > :first-child { border-radius: 12px 0 0 12px; }
+.dv-compare tbody tr > :last-child { border-radius: 0 12px 12px 0; }
+.dv-compare tbody tr > td[data-highlight], .dv-compare tbody tr:hover > td[data-highlight] { background: var(--compare-colour); color: #fff; }
+.dv-compare tbody tr:nth-child(odd) > td[data-highlight] { background: color-mix(in srgb, #000 14%, var(--compare-colour)); }
+.dv-compare tbody tr:last-child > td[data-highlight] { border-radius: 0 0 var(--dv-card-radius) var(--dv-card-radius); padding-bottom: 24px; }
+.dv-compare tr[data-accent] th { font-weight: 600; }
+.dv-compare-mark { display: inline-block; vertical-align: middle; color: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
+.dv-compare-mark[data-on] { color: var(--dv-ink); }
+td[data-highlight] .dv-compare-mark { width: 24px; height: 24px; color: #fff; }
+.dv-compare tr[data-accent] td:not([data-highlight]) .dv-compare-mark:not([data-on]) { color: light-dark(#c7383d, #ff7a7f); }
+@media (max-width: 47.99rem) {
+  .dv-compare { min-width: 640px; }
+  .dv-compare tbody th { font-size: 16px; }
+  .dv-compare :is(thead, tbody) th:first-child { padding-left: 12px; }
+}

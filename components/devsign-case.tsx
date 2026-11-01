@@ -219,6 +219,14 @@ function DevelopBlock({ block }: { block: Study }) {
   );
 }
 
+function CompareMark({ on }: { on: boolean }) {
+  return (
+    <svg className="dv-compare-mark" data-on={on || undefined} width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d={on ? "M4 10.5 8.2 14.5 16 5.5" : "M5.5 5.5 14.5 14.5M14.5 5.5 5.5 14.5"} stroke="currentColor" strokeWidth={on ? 2 : 1.6} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function DevsignCase({ study, children }: { study: Study; children: ReactNode }) {
   const { overview, discover, define, develop, deliver, testing, takeaway, labels } = study;
   const ff = Boolean(study.findings);
@@ -231,6 +239,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
     ...(ff ? [{ id: "testing", label: "Testing" }] : []),
     { id: "takeaway", label: "Takeaway" },
   ];
+
+  // The tool review reads capability by capability, with Devsign's column first.
+  const compareTools: { name: string; marks: number[]; highlight?: boolean }[] = [...(discover.q2.rows ?? [])].sort((x, y) => Number(!!y.highlight) - Number(!!x.highlight));
 
   return (
     <div className="dv">
@@ -337,24 +348,24 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </div>
           ) : (
           <div className="dv-scroll dv-gap-48 reveal">
-            <table className="dv-matrix">
+            <table className="dv-compare">
               <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
                 <tr>
-                  <th scope="col" className="dv-caps">{discover.q2.auditLabel}</th>
-                  {discover.q2.columns.map((col: { name: string; accent?: boolean }) => (
-                    <th key={col.name} scope="col" data-accent={col.accent || undefined}>{col.name}</th>
+                  <th scope="col">{discover.q2.auditLabel}</th>
+                  {compareTools.map((tool) => (
+                    <th key={tool.name} scope="col" data-highlight={tool.highlight || undefined}>{tool.name}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {discover.q2.rows.map((row: { name: string; marks: number[]; highlight?: boolean }) => (
-                  <tr key={row.name} data-highlight={row.highlight || undefined}>
-                    <th scope="row">{row.name}</th>
-                    {row.marks.map((mark, i) => (
-                      <td key={i}>
-                        <span className="dv-mark" data-on={mark ? "" : undefined} />
-                        <span className="sr-only">{mark ? labels.yes : labels.no}</span>
+                {discover.q2.columns.map((capability: { name: string; accent?: boolean }, i: number) => (
+                  <tr key={capability.name} data-accent={capability.accent || undefined}>
+                    <th scope="row">{capability.name}</th>
+                    {compareTools.map((tool) => (
+                      <td key={tool.name} data-highlight={tool.highlight || undefined}>
+                        <CompareMark on={!!tool.marks[i]} />
+                        <span className="sr-only">{tool.marks[i] ? labels.yes : labels.no}</span>
                       </td>
                     ))}
                   </tr>
