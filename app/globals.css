@@ -3697,7 +3697,7 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 @media (max-width: 47.99rem) { .dv-nav { padding: 4px; } .dv-nav-links a { padding: 6px 12px; } }
 
 /* Opener panel: no shape behind the product (anything large gets cut by the window). A straight fall of the project's colour from the top, much quieter than the Problem statement card, under a fine film grain so it isn't flat. */
-.devsign-hero-panel, .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 .7 0 0 0 -.24'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(to bottom, color-mix(in srgb, var(--dh-glow) light-dark(18%, 34%), transparent) 0%, transparent 62%); background-repeat: repeat, no-repeat; background-size: 240px 240px, auto; }
+.devsign-hero-panel, .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 .22 0 0 0 -.07'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(to bottom, color-mix(in srgb, var(--dh-glow) light-dark(14%, 24%), transparent) 0%, transparent 62%); background-repeat: repeat, no-repeat; background-size: 240px 240px, auto; }
 
 /* Usability test, fewer boxes: the photo across the column, the test as one row of facts, the scenarios as three plain columns under a hairline. */
 .dv-photo-wide { width: 100%; }
@@ -3708,6 +3708,6 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 .dv-facts dd { display: flex; flex-direction: column; gap: 4px; margin: 0; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.45; }
 .dv-facts strong { color: var(--case-accent); font-size: 40px; font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; }
 .dv > #testing .dv-scenarios { gap: 32px; }
-.dv > #testing .dv-scenarios li { gap: 8px; padding: 20px 0 0; border: 0; border-top: 1px solid var(--dv-card-line); border-radius: 0; background: none; }
+.dv > #testing .dv-scenarios li { gap: 8px; padding: 20px 0 0; border: 0; border-top: 1px solid var(--dv-card-line); border-radius: 0; background: none !important; }
 .dv > #testing .dv-scenarios strong { font-size: 18px; font-weight: 500; line-height: 1.4; }
 @media (max-width: 63.99rem) { .dv-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dv > #testing .dv-scenarios { grid-template-columns: 1fr; gap: 16px; } }
