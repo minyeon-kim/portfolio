@@ -3636,4 +3636,4 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin-inline: 8px; }
 }
 .devsign-hero-visit { white-space: nowrap; }
-@media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100%% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
+@media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
