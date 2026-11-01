@@ -7,6 +7,11 @@ import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink, TryPrototype 
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
+// Card colour by who the card is about: designers in the case colour, developers
+// in the persona orange, anyone else in blue.
+const toneOf = (role: string) => (/design|디자인/i.test(role) ? "accent" : /develop|개발/i.test(role) ? "second" : "blue");
+const VOICE_TONES = ["accent", "blue", "second"];
+
 const slugOf = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 // Case body in the Devsign layout, after the Figma case study frames
@@ -275,8 +280,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <div>
                 <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
                 <ol className="dv-voices">
-                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }) => (
-                    <li key={g.name} className="reveal">
+                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }, i: number) => (
+                    <li key={g.name} className="reveal" data-tone={VOICE_TONES[i % VOICE_TONES.length]}>
                       <div>
                         <strong>{g.name}</strong>
                         <blockquote>“{g.quote}”</blockquote>
@@ -392,7 +397,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
             <ul className="dv-people dv-people-stack">
               {discover.interview.participants.map((p: string[]) => (
-                <li key={p[0]} className="reveal dv-person">
+                <li key={p[0]} className="reveal dv-person" data-tone={toneOf(p[1])}>
                   <span className="dv-avatar" aria-label={p[0]}>{p[0]}</span>
                   <span className="dv-person-text">
                     <strong>{p[1]}</strong>
@@ -770,7 +775,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <p className="dv-caps reveal">{testing.usability.scenariosLabel}</p>
               <ol className="dv-scenarios">
                 {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
-                  <li key={sc.task} className="reveal">
+                  <li key={sc.task} className="reveal" data-tone={toneOf(sc.role)}>
                     <strong>{sc.task}</strong>
                     <span className="dv-scenario-actions">{sc.actions}</span>
                     <span className="dv-person dv-scenario-person">

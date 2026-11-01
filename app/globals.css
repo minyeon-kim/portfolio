@@ -3673,3 +3673,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-scenarios li > .dv-scenario-actions { margin-top: 0; padding-top: 0; border-top: 0; color: var(--dv-muted); }
 .dv-scenario-person { margin-top: auto; padding-top: 24px; }
 .dv-scenarios .dv-person-text strong { font-size: 16px; }
+
+/* Cards that differ get a soft corner gradient of their own colour instead of a flat fill (after railway.com's customer cards): designers in the case colour, developers orange, others blue. The round mark follows the card. */
+.dv [data-tone="accent"] { --tone: var(--case-accent); }
+.dv [data-tone="second"] { --tone: var(--dv-second); }
+.dv [data-tone="blue"] { --tone: light-dark(#2f5fd6, #7ea3ff); }
+.dv > :is(#discover, #testing) :is(.dv-voices, .dv-people, .dv-scenarios) > li[data-tone] { background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 16%), light-dark(#ffffff, var(--dv-band-card-dark))) 0%, light-dark(#ffffff, var(--dv-band-card-dark)) 62%); }
+.dv [data-tone] .dv-avatar { background: color-mix(in srgb, var(--tone) 20%, transparent); color: var(--tone); }
