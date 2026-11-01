@@ -310,6 +310,7 @@ export const study = {
       {
         kicker: "Feature 01 · Designer · Developer",
         title: "Live Workspace",
+        clip: { src: "/images/devsign/clips/en-workspace.mp4", poster: "/images/devsign/clips/en-workspace-poster.jpg", marks: [0.69, 1.69, 3.13] },
         body: "Every screen on one board, in the order users see them. No more hunting through Figma, GitHub and Slack.",
         points: ["Screens in the order users see them", "Changed screens show how many changes", "Decisions waiting for you come first"],
         src: "/images/devsign/iter2-to-be.webp", width: 2880, height: 1620,
@@ -319,6 +320,7 @@ export const study = {
       {
         kicker: "Feature 02 · Designer",
         title: "Merge Studio",
+        clip: { src: "/images/devsign/clips/en-merge.mp4", poster: "/images/devsign/clips/en-merge-poster.jpg", marks: [2.16, 5.03, 12.6] },
         body: "Take the best part of each AI draft and combine them into one.",
         points: ["Compare drafts side by side", "Pick the better version of each area", "Edit and save; where each part came from is kept"],
         src: "/images/devsign/screen-merge-studio.webp", width: 1280, height: 800,
@@ -328,6 +330,7 @@ export const study = {
       {
         kicker: "Feature 03 · Developer → decision-maker",
         title: "Conflict Points",
+        clip: { src: "/images/devsign/clips/en-conflict.mp4", poster: "/images/devsign/clips/en-conflict-poster.jpg", marks: [1.55, 4.65, 6.66] },
         body: "Points out where the app differs from the design. The developer sends a fix with a reason; the decision-maker decides side by side.",
         points: ["Differences found and marked", "Request sent with a reason", "Decide with both side by side"],
         src: "/images/devsign/screen-conflict-points.webp", width: 1280, height: 800,
@@ -337,6 +340,7 @@ export const study = {
       {
         kicker: "Feature 04 · Designer · Developer",
         title: "History",
+        clip: { src: "/images/devsign/clips/en-history.mp4", poster: "/images/devsign/clips/en-history-poster.jpg", marks: [2.65, 4.46, 7.12] },
         body: "Every decision is saved with the screen it changed, so the reason behind a change can still be found later.",
         points: ["A timeline of every change", "Compare with the previous version", "Review marks stay on the record"],
         src: "/images/devsign/screen-history.webp", width: 1280, height: 800,
@@ -351,7 +355,6 @@ export const study = {
       text: "Screens are 1–4 in flow order; elements are “screen-element” (e.g. 3-2). Under each screen: what leads to the next.",
       order: [1, 0, 2, 3],
       specLabel: "See the numbered screens",
-      video: { src: "/images/devsign/handoff-flow-en", poster: "/images/devsign/handoff-flow-en-poster.webp", starts: [0, 24.6, 26.6, 43.3], label: "Screen recording of the live prototype: combining drafts in Merge Studio, the workspace board, a change opened in Conflict Points and decided, then the decision in History" },
       flows: ["Saving the combined draft adds it to the workspace board (2).", "Clicking the change mark on a changed screen (2-2) opens that change in Conflict Points (3).", "Making a decision saves it in History (4), together with its screen."],
     },
     tryIt: {

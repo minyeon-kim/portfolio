@@ -52,7 +52,7 @@ function Progress({ count, active }: { count: number; active: number }) {
   );
 }
 
-type Feature = { kicker: string; title: string; body: string; points: string[]; src: string; width?: number; height?: number; alt?: string; areas: Box[] };
+type Feature = { kicker: string; title: string; body: string; points: string[]; src: string; width?: number; height?: number; alt?: string; areas: Box[]; clip: { src: string; poster: string; marks: number[] } };
 
 // One way into the live prototype for the whole Deliver section, in the site's language.
 export function PrototypeLink({ label }: { label: string }) {
@@ -60,187 +60,59 @@ export function PrototypeLink({ label }: { label: string }) {
   return <a className="dv-prototype-link press" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{label}</a>;
 }
 
-// The handoff flow as a real recording of the live prototype (class feedback:
-// show it moving): one looping video of 1 Merge Studio → 2 Live Workspace →
-// 3 Conflict Points → 4 History, recorded with Playwright at 1440×900. The step
-// row under it lights the step the video is in (`starts`, seconds) and seeks
-// to a step when pressed. A bar on the current step fills as the video moves
-// through it, and the panel below explains only that step: its numbered elements
-// and what leads to the next screen. Plays only while on screen; with reduced
-// motion it doesn't autoplay and shows its controls instead.
-export function HandoffVideo({ src, poster, starts, steps, details, label }: { src: string; poster: string; starts: number[]; steps: string[]; details: { points: string[]; flow?: string }[]; label: string }) {
-  const video = useRef<HTMLVideoElement>(null);
-  const [step, setStep] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [still, setStill] = useState(false);
-
-  useEffect(() => {
-    const el = video.current;
-    if (!el) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setStill(reduce);
-    if (reduce) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) el.play().catch(() => {});
-      else el.pause();
-    }, { threshold: 0.35 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const sync = () => {
-    const t = video.current?.currentTime ?? 0;
-    let i = 0;
-    starts.forEach((s, j) => { if (t >= s) i = j; });
-    setStep(i);
-    const end = starts[i + 1] ?? video.current?.duration ?? t + 1;
-    setProgress(Math.min(1, Math.max(0, (t - starts[i]) / (end - starts[i]))));
-  };
-  const seek = (i: number) => {
-    const el = video.current;
-    if (!el) return;
-    el.currentTime = starts[i];
-    setStep(i);
-    setProgress(0);
-    if (!still) el.play().catch(() => {});
-  };
-
-  return (
-    <figure className="dv-handoff-video">
-      <div className="dv-handoff-screen">
-        <video ref={video} muted loop playsInline preload="metadata" poster={withBase(poster)} controls={still} onTimeUpdate={sync} aria-label={label}>
-          <source src={withBase(`${src}.webm`)} type="video/webm" />
-          <source src={withBase(`${src}.mp4`)} type="video/mp4" />
-        </video>
-      </div>
-      <ol className="dv-handoff-steps">
-        {steps.map((name, i) => (
-          <li key={name}>
-            <button type="button" className="press" aria-current={i === step || undefined} onClick={() => seek(i)}>
-              {i === step && <i aria-hidden="true" style={{ transform: `scaleX(${progress})` }} />}
-              <b>{i + 1}</b>{name}
-            </button>
-          </li>
-        ))}
-      </ol>
-      <div key={step} className="dv-handoff-panel" aria-live="polite">
-        <ol>
-          {details[step]?.points.map((point, e) => <li key={point}><b>{step + 1}-{e + 1}</b>{point}</li>)}
-        </ol>
-        {details[step]?.flow && <p><span aria-hidden="true">→</span>{details[step].flow}</p>}
-      </div>
-    </figure>
-  );
-}
-
-// Deliver as a demo reel (class feedback: the screens were too small and the
-// reader didn't know where to look). One large screen plays by itself while it
-// is on screen: each feature opens on the whole screen, then zooms into its
-// three areas one after another, and a bar under its tab fills until the next
-// feature takes over. Tabs pick a feature; hovering or focusing the demo pauses
-// it. With reduced motion nothing plays or zooms: the tabs and the boxed areas
-// do the work.
-const OVERVIEW_MS = 1600;
-const POINT_MS = 2600;
-const FEATURE_MS = OVERVIEW_MS + POINT_MS * 3;
-
-// Zoom so the box fills about half the frame (at most 1.8x), centred, without
-// showing past the image edge. --s lets the boxes keep their stroke width.
-function zoomTo(b: Box | null): React.CSSProperties {
-  if (!b) return { transform: "translate(0%, 0%) scale(1)", "--s": 1 } as React.CSSProperties;
-  const s = Math.min(1.8, Math.max(1, 45 / Math.max(b[2], b[3])));
-  const clamp = (v: number) => Math.min(0, Math.max(100 - 100 * s, v));
-  const tx = clamp(50 - (b[0] + b[2] / 2) * s);
-  const ty = clamp(50 - (b[1] + b[3] / 2) * s);
-  return { transform: `translate(${tx}%, ${ty}%) scale(${s})`, "--s": s } as React.CSSProperties;
-}
-
+// The Deliver demo: real recordings of the live prototype, one short clip per
+// feature (captured at 2x with zooms applied in the page, so text stays sharp).
+// The current point sits on the screen as a caption, timed by the clip's `marks`;
+// a bar under each tab fills as its clip plays and the next feature takes over.
+// Plays only while on screen; with reduced motion nothing autoplays: the video
+// shows its controls and the points are listed below it.
+const PLAYBACK_RATE = 1.15;
 export function DeliverShow({ features, labels }: { features: Feature[]; labels: { play: string; pause: string } }) {
-  const track = useRef<HTMLDivElement>(null);
   const root = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [time, setTime] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [held, setHeld] = useState(false);
   const [paused, setPaused] = useState(false);
   const [still, setStill] = useState(false);
-  const [linked, setLinked] = useState(false);
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const wide = window.matchMedia("(min-width: 64rem)");
-    const sync = () => { setStill(motion.matches); setLinked(wide.matches && !motion.matches); };
+    const sync = () => setStill(motion.matches);
     sync();
     motion.addEventListener("change", sync);
-    wide.addEventListener("change", sync);
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.5 });
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.4 });
     if (root.current) observer.observe(root.current);
-    return () => { observer.disconnect(); motion.removeEventListener("change", sync); wide.removeEventListener("change", sync); };
+    return () => { observer.disconnect(); motion.removeEventListener("change", sync); };
   }, []);
 
-  // One position across all features (ms). Autoplay adds time; on wide
-  // screens scrolling through the pinned track also moves it (class
-  // feedback: zoom and move just by scrolling), forwards or back.
-  const total = FEATURE_MS * features.length;
-  const pos = useRef(0);
-  const apply = useCallback(() => {
-    const i = Math.min(features.length - 1, Math.floor(pos.current / FEATURE_MS));
-    setActive(i);
-    setElapsed(pos.current - i * FEATURE_MS);
-  }, [features.length]);
-
-  const playing = visible && !held && !paused && !still;
+  const playing = visible && !paused && !still;
   useEffect(() => {
-    if (!playing) return;
-    let last = performance.now();
-    let frame = requestAnimationFrame(function tick(now) {
-      pos.current = (pos.current + Math.min(100, now - last)) % total; // a hidden tab pauses frames; never skip ahead
-      last = now;
-      apply();
+    const el = video.current;
+    if (!el) return;
+    el.playbackRate = PLAYBACK_RATE;
+    if (!playing) { el.pause(); return; }
+    el.play().catch(() => {});
+    let frame = requestAnimationFrame(function tick() {
+      if (el.duration) setProgress(el.currentTime / el.duration);
+      setTime(el.currentTime);
       frame = requestAnimationFrame(tick);
     });
     return () => cancelAnimationFrame(frame);
-  }, [playing, total, apply]);
+  }, [playing, active]);
 
-  useEffect(() => {
-    if (!linked) return;
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY, dy = y - lastY;
-      lastY = y;
-      const el = track.current, show = root.current;
-      if (!el || !show) return;
-      const box = el.getBoundingClientRect();
-      const travel = box.height - show.offsetHeight;
-      const top = parseFloat(getComputedStyle(show).top) || 0;
-      if (travel <= 0 || box.top > top || box.bottom < show.offsetHeight + top) return; // only while pinned
-      pos.current = Math.max(0, Math.min(total - 1, pos.current + dy * (total / travel)));
-      apply();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [linked, total, apply]);
-
-  const pick = (i: number) => { pos.current = i * FEATURE_MS; apply(); };
-  const point = still ? -1 : elapsed < OVERVIEW_MS ? -1 : Math.min(2, Math.floor((elapsed - OVERVIEW_MS) / POINT_MS));
+  const pick = (i: number) => { setActive(i); setProgress(0); setTime(0); };
   const f = features[active];
+  const point = still ? -1 : f.clip.marks.reduce((at, mark, i) => (time >= mark ? i : at), -1);
 
   return (
-    <div ref={track} className="dv-show-track" data-linked={linked || undefined}>
-    <div ref={root} className="dv-show" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
+    <div className="dv-show-track">
+    <div ref={root} className="dv-show">
       <div className="dv-show-screen">
-        {features.map((feature, i) => (
-          <div key={feature.title} className="dv-show-shot" data-on={i === active || undefined} aria-hidden={i !== active}>
-            <div className="dv-show-zoom" data-zoomed={i === active && point >= 0 || undefined} style={i === active ? zoomTo(point >= 0 ? feature.areas[point] : null) : undefined}>
-              <Image src={withBase(feature.src)} alt={feature.alt ?? ""} width={feature.width ?? 1280} height={feature.height ?? 800} sizes="(max-width: 1023px) 100vw, 1200px" loading="eager" />
-              <Areas boxes={feature.areas} current={i === active ? point : -1} />
-            </div>
-          </div>
-        ))}
-        {/* The current point sits on the screen, where the eye already is: at the
-            bottom, or at the top when the zoomed area sits low. */}
+        <video key={f.clip.src} ref={video} src={withBase(f.clip.src)} poster={withBase(f.clip.poster)} muted playsInline preload="auto" controls={still} aria-label={f.alt ?? f.title} onEnded={() => pick((active + 1) % features.length)} />
         {point >= 0 && (
-          <p key={`${active}-${point}`} className="dv-show-caption" data-top={f.areas[point][1] + f.areas[point][3] / 2 > 60 || undefined}>
+          <p key={`${active}-${point}`} className="dv-show-caption">
             <b>{point + 1}</b>{f.points[point]}
           </p>
         )}
@@ -254,7 +126,7 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
         {features.map((feature, i) => (
           <button key={feature.title} type="button" role="tab" aria-selected={i === active} className="dv-show-tab" onClick={() => pick(i)}>
             <span className="dv-show-bar" aria-hidden="true">
-              <span style={{ transform: `scaleX(${i < active ? 1 : i === active ? (still ? 1 : elapsed / FEATURE_MS) : 0})` }} />
+              <span style={{ transform: `scaleX(${i < active ? 1 : i === active ? (still ? 1 : progress) : 0})` }} />
             </span>
             <span className="dv-show-tab-num">{pad(i + 1)}</span>
             <span className="dv-show-tab-name">{feature.title}</span>
@@ -262,7 +134,7 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
           </button>
         ))}
       </div>
-      <div className="dv-show-text" role="tabpanel" aria-live="polite">
+      <div className="dv-show-text" role="tabpanel">
         <p className="dv-show-body">{f.body}</p>
         <ol className="dv-show-points" data-still={still || undefined}>
           {f.points.map((p, j) => (
@@ -274,6 +146,7 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
     </div>
   );
 }
+
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };

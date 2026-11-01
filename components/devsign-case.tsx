@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverShow, HandoffVideo, IterationStory, PrototypeLink, TryPrototype } from "@/components/devsign-story";
+import { DeliverShow, IterationStory, PrototypeLink, TryPrototype } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -95,7 +95,6 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
   return (
     <div className="dv-gap-96">
       <Block {...(handoff as Lead)} ff={ff} />
-      {handoff.video && <div className="dv-gap-40"><HandoffVideo {...handoff.video} steps={screens.map((f: Study) => f.title)} details={screens.map((f: Study, s: number) => ({ points: f.points, flow: handoff.flows[s] }))} /></div>}
       {/* The full numbered spec stays for anyone who wants it, folded by default. */}
       <details className="dv-handoff-spec dv-gap-32">
         <summary>{handoff.specLabel}</summary>
