@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
+import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLive, DEVSIGN_URL } from "@/components/devsign-live";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { withBase } from "@/lib/site";
@@ -32,7 +33,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         {hero.subtitle && <p className="devsign-hero-subtitle">{hero.subtitle}</p>}
         {hero.actions && (
           <p className="devsign-hero-actions">
-            {hero.actions.map((a) => <a key={a.href} href={a.href} className="press" data-primary={a.primary || undefined}>{a.label}</a>)}
+            {hero.actions.map((a) => <a key={a.href} href={a.href} className="press" data-primary={a.primary || undefined}>{a.label}{a.primary && <ArrowIcon />}</a>)}
           </p>
         )}
       </div>

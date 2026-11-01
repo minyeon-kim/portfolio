@@ -3736,3 +3736,44 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 .dv-problems { gap: 16px; }
 .dv-problems > li[data-tone] { padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 62%); }
 .dv-problems > li[data-tone] .dv-problem-number { color: var(--tone); }
+
+/* Persona cards and journey on the same surfaces as the other card groups: section surface with a soft corner gradient of the role's colour, hairline, no inner tint or divider. Small labels are quiet sentence case; the role alone carries colour. */
+.dv { --dv-surface: light-dark(#ffffff, #1a1826); }
+.case-study[data-project="gemini"] .dv { --dv-surface: light-dark(#ffffff, #161b27); }
+.dv-persona { border-color: var(--dv-card-line); background: linear-gradient(115deg, color-mix(in srgb, var(--dv-role) light-dark(9%, 15%), light-dark(#f6f6f8, var(--dv-surface))) 0%, light-dark(#f6f6f8, var(--dv-surface)) 55%); }
+.dv-persona .dv-persona-id, .dv-persona[data-variant="developer"] .dv-persona-id { border: 0; background: none; }
+.dv-persona-details .dv-caps.dv-persona-role { color: var(--dv-muted); }
+.dv-persona .dv-needs th { color: var(--dv-muted); letter-spacing: 0; text-transform: none; font-weight: 500; }
+.dv-needs thead > tr > *, .dv-needs tbody tr:not(:last-child) > * { border-bottom-color: var(--dv-card-line); }
+.dv-needs { font-size: 16px; }
+.dv-needs td { padding-block: 14px; }
+.dv-needs td:nth-child(2) svg { display: inline-block; vertical-align: -3px; }
+.dv-persona-quote { font-size: 18px; }
+@media (max-width: 47.99rem) { .dv-needs td:last-child::before { content: none; } }
+
+/* Journey: the panel sits on the section surface; a legend replaces the labels on the lines. Lines draw in when the panel appears and the low points pop after them; hovering a name or a line brings that person forward; the column under the pointer lifts. */
+.dv-journey { background: var(--dv-surface); border: 1px solid var(--dv-card-line); }
+.dv-journey-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.dv-journey-legend button { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 7%, transparent); color: var(--dv-ink); font: inherit; font-size: 16px; font-weight: 500; cursor: default; transition: background-color 150ms var(--ease); }
+.dv-journey-legend button::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--case-accent); }
+.dv-journey-legend button[data-line="developer"]::before { background: var(--dv-second); }
+.dv-journey-legend button:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
+.dv-journey-column { fill: transparent; transition: fill 150ms var(--ease); }
+.dv-journey-column:hover { fill: color-mix(in srgb, var(--dv-ink) 5%, transparent); }
+.dv-journey-line { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1600ms cubic-bezier(0.45, 0, 0.2, 1), opacity 250ms var(--ease); }
+.dv-journey-developer { transition-delay: 200ms, 0ms; }
+.dv-journey-low { transform-box: fill-box; transform-origin: center; transition: opacity 400ms var(--ease) 1500ms, transform 400ms var(--ease) 1500ms; }
+.reveal-ready .dv-journey:not([data-shown]) .dv-journey-line { stroke-dashoffset: 1; }
+.reveal-ready .dv-journey:not([data-shown]) .dv-journey-low { opacity: 0; transform: scale(0.7); }
+.dv-journey:has(button[data-line="designer"]:is(:hover, :focus-visible)) :is(.dv-journey-developer, .dv-journey-low[data-line="developer"]),
+.dv-journey:has(.dv-journey-designer:hover) :is(.dv-journey-developer, .dv-journey-low[data-line="developer"]),
+.dv-journey:has(button[data-line="developer"]:is(:hover, :focus-visible)) :is(.dv-journey-designer, .dv-journey-low[data-line="designer"]),
+.dv-journey:has(.dv-journey-developer:hover) :is(.dv-journey-designer, .dv-journey-low[data-line="designer"]) { opacity: 0.15; transition-delay: 0ms; transition-duration: 250ms; }
+@media (prefers-reduced-motion: reduce) { .dv-journey-line, .dv-journey-low { transition: none; } .reveal-ready .dv-journey:not([data-shown]) .dv-journey-line { stroke-dashoffset: 0; } .reveal-ready .dv-journey:not([data-shown]) .dv-journey-low { opacity: 1; transform: none; } }
+
+/* Opener: commit to the project colour at the top instead of a greyed tint; a drawn arrow on the main action. */
+.devsign-hero-panel, .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-image: linear-gradient(to bottom, color-mix(in srgb, var(--dh-glow) light-dark(22%, 55%), transparent) 0%, transparent 70%); background-repeat: no-repeat; background-size: auto; }
+.devsign-hero-subtitle { color: light-dark(var(--dh-muted), rgb(255 255 255 / 0.74)); }
+.devsign-hero-actions a { gap: 8px; }
+.devsign-hero-actions a .arrow-icon { transition: translate 150ms var(--ease); }
+.devsign-hero-actions a:hover .arrow-icon { translate: 3px 0; }
