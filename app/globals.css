@@ -3777,3 +3777,7 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 .devsign-hero-actions a { gap: 8px; }
 .devsign-hero-actions a .arrow-icon { transition: translate 150ms var(--ease); }
 .devsign-hero-actions a:hover .arrow-icon { translate: 3px 0; }
+
+/* Usability test leads with the result; the method is folded. */
+.dv-ut-summary { margin-top: 12px; color: var(--dv-muted); }
+.dv-handoff-spec .dv-photo-wide { max-width: 800px; }
