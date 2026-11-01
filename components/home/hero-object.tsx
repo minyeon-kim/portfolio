@@ -416,7 +416,7 @@ float fbm(vec2 p) { float a = 0.5, s = 0.0; for (int k = 0; k < 4; k++) { s += a
 void main() {
   vec3 light3 = texture(scene, v).rgb;
   vec2 css = gl_FragCoord.xy / max(1.0, dpr);
-  // Faint nebula clouds drifting behind everything (blue, violet,
+  // A trace of nebula drifting behind everything (blue, violet,
   // teal, a little magenta), stippled with the rest.
   {
     vec2 q = css / 520.0 + vec2(time * 0.006, -time * 0.004);
@@ -425,7 +425,7 @@ void main() {
       + vec3(0.6, 0.3, 1.0) * smoothstep(0.5, 0.9, n2)
       + vec3(0.2, 0.85, 0.8) * smoothstep(0.58, 0.95, n3) * 0.7
       + vec3(1.0, 0.35, 0.7) * smoothstep(0.62, 0.95, n1 * n2 * 1.6) * 0.6;
-    light3 += neb * 0.16;
+    light3 += neb * 0.045;
   }
   float lum = max(light3.r, max(light3.g, light3.b));
   float signal = pow(clamp(lum * 1.6, 0.0, 1.0), 0.72);
