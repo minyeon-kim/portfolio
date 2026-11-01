@@ -50,7 +50,7 @@ export function OtpInput() {
 
   return (
     <div>
-      <div className="mb-1 flex items-center justify-between gap-1">
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-1">
         <p className="font-mono text-xs text-muted">
           Demo code <span className="text-ink">{DEMO_CODE.slice(0, 3)} {DEMO_CODE.slice(3)}</span>
         </p>
@@ -86,7 +86,7 @@ export function OtpInput() {
         ))}
       </div>
 
-      <div className="mt-1 flex min-h-4 items-center justify-between gap-1">
+      <div className="mt-1 flex min-h-4 flex-wrap items-center justify-between gap-1">
         <p role="status" className="font-mono text-xs">
           {status === "ok" && <span className="text-accent">Verified</span>}
           {status === "wrong" && "That code doesn't match. Try again."}

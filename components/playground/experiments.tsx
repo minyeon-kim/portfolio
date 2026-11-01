@@ -30,9 +30,9 @@ export const experiments: Experiment[] = [
 export function ExperimentGrid({ headingLevel = "h2" }: { headingLevel?: "h2" | "h3" }) {
   const Heading = headingLevel;
   return (
-    <ul className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
       {experiments.map((x) => (
-        <li key={x.title} className="reveal lift flex flex-col rounded-md bg-surface">
+        <li key={x.title} className="reveal lift flex min-w-0 flex-col rounded-md bg-surface">
           <div className="flex-1 p-3">{x.demo}</div>
           <div className="border-t border-fill p-3">
             <Heading className="mb-0.5 text-base font-medium">{x.title}</Heading>
