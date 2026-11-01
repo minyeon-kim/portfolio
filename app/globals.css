@@ -3693,3 +3693,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   @keyframes dv-open { from { clip-path: inset(0 1.5% 0 1.5% round calc(var(--dv-band-radius) * 1.25)); translate: 0 40px; } to { clip-path: inset(0 0 0 0 round var(--dv-band-radius)); translate: none; } }
 } }
 @media (max-width: 47.99rem) { .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)), .dv-core { padding-inline: 16px; } }
+
+/* Stage nav floats as a glass pill under the header pill instead of a full-width black band, so it no longer cuts across the section cards and nothing shows in a strip between two bars. */
+.dv-nav { top: 12px; width: fit-content; max-width: calc(100vw - 16px); margin: 16px auto 0; padding: 6px; gap: 0; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+.dv-nav-links { gap: 2px; }
+.dv-nav-links a { padding: 6px 14px; border-radius: 999px; font-weight: 500; letter-spacing: 0; transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease); }
+.dv-nav-links a:hover { background: color-mix(in srgb, var(--dv-ink) 8%, transparent); }
+.dv-nav-links a[aria-current] { background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); }
+html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
+@media (max-width: 47.99rem) { .dv-nav { padding: 4px; } .dv-nav-links a { padding: 6px 12px; } }
