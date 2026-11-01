@@ -749,39 +749,32 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               as cards, then the four scores in one row with what they meant. */}
           {testing.usability.protocol ? <>
           <Block {...testing.usability} text={undefined} ff={ff} />
-          <div className="dv-media-row dv-gap-40">
-            <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />
-            <div>
-              <p className="dv-caps reveal">{testing.usability.processLabel}</p>
-              {/* Facts as tiles (a big number + what it counts), the session as
-                  numbered steps and the measures as chips, instead of sentences. */}
-              <dl className="dv-protocol dv-protocol-tiles">
-                {testing.usability.protocol.map((row: { label: string; value?: string; big?: string; steps?: string[]; chips?: string[] }) => (
-                  <div key={row.label} className="reveal" data-kind={row.big ? "big" : row.steps ? "steps" : row.chips ? "chips" : undefined}>
-                    <dt>{row.label}</dt>
-                    <dd>
-                      {row.big && <strong>{row.big}</strong>}
-                      {row.value && <span>{row.value}</span>}
-                      {row.steps && <ol>{row.steps.map((step, i) => <li key={step}><b>{i + 1}</b>{step}</li>)}</ol>}
-                      {row.chips && <ul>{row.chips.map((chip) => <li key={chip}>{chip}</li>)}</ul>}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+          <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-photo dv-photo-wide dv-gap-40" />
+          <div className="dv-gap-32">
+            <p className="dv-caps reveal">{testing.usability.processLabel}</p>
+            {/* The test at a glance: one row, no boxes. */}
+            <dl className="dv-facts reveal">
+              {testing.usability.protocol.map((row: { label: string; value?: string; big?: string; steps?: string[]; chips?: string[] }) => (
+                <div key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>
+                    {row.big && <strong>{row.big}</strong>}
+                    {row.value && <span>{row.value}</span>}
+                    {row.steps && <span>{row.steps.join(" → ")}</span>}
+                    {row.chips?.map((chip) => <span key={chip}>{chip}</span>)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
           {testing.usability.scenarios && (
             <div className="dv-gap-48">
               <p className="dv-caps reveal">{testing.usability.scenariosLabel}</p>
               <ol className="dv-scenarios">
-                {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string; actions: string }, i: number) => (
-                  <li key={sc.task} className="reveal" data-tone={toneOf(sc.role)}>
+                {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
+                  <li key={sc.task} className="reveal">
                     <strong>{sc.task}</strong>
-                    <span className="dv-scenario-actions">{sc.actions}</span>
-                    <span className="dv-person dv-scenario-person">
-                      <span className="dv-avatar" aria-label={`${testing.usability.scenarioWord} ${pad(i + 1)}`}>{pad(i + 1)}</span>
-                      <span className="dv-person-text"><strong>{sc.role}</strong><span>{sc.feature}</span></span>
-                    </span>
+                    <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
                   </li>
                 ))}
               </ol>

@@ -18,11 +18,9 @@ export type DevsignHeroData = { title: string; subtitle?: string; actions?: { la
 // Used on the direct case page and on the home page's selected stage.
 export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroData; name: string; alt: string; project: string }) {
   const gemini = project === "gemini-privacy";
-  const art = gemini ? "/images/cases/gemini-privacy" : "/images/devsign";
   return (
     <div className="devsign-hero" data-project={project}>
-      {/* Dither artwork in the landing's language (the project's own form, as flat dots); the URLs carry the base path, so they are set here and not in the stylesheet. */}
-      <div className="devsign-hero-panel" style={{ "--dh-art-dark": `url(${withBase(`${art}/opener-dither-dark.png`)})`, "--dh-art-light": `url(${withBase(`${art}/opener-dither-light.png`)})` } as React.CSSProperties}>
+      <div className="devsign-hero-panel">
       <div className="devsign-hero-intro">
         <p className="devsign-hero-brand">
           {gemini

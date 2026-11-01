@@ -3672,13 +3672,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv > section:has(> .dv-core:last-child)::after { content: none; }
 @media (max-width: 47.99rem) { .dv-core { margin-inline: calc(8px - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - 8px); margin-bottom: 8px; } }
 
-/* Opener artwork: the project's form printed as flat dots behind the panel. One image pixel is one dot, drawn at a whole number of CSS px (2px, 1px on phones) and never smoothed, so it stays crisp. */
-.devsign-hero-panel { background-image: var(--dh-art-light); background-repeat: no-repeat; background-position: center top; background-size: 1920px auto; image-rendering: pixelated; }
-.devsign-hero-panel > * { image-rendering: auto; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .devsign-hero-panel { background-image: var(--dh-art-dark); } }
-:root[data-theme="dark"] .devsign-hero-panel { background-image: var(--dh-art-dark); }
-@media (max-width: 47.99rem) { .devsign-hero-panel { background-size: 960px auto; } }
-
 /* Secondary action stays readable over the opener artwork; the highlighted tool row's gap takes the band colour, not the page's. */
 .devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .dv > #discover .dv-matrix tr[data-highlight] > * { border-top-color: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
@@ -3702,3 +3695,19 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-nav-links a[aria-current] { background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); }
 html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 @media (max-width: 47.99rem) { .dv-nav { padding: 4px; } .dv-nav-links a { padding: 6px 12px; } }
+
+/* Opener panel: no shape behind the product (anything large gets cut by the window). A straight fall of the project's colour from the top, much quieter than the Problem statement card, under a fine film grain so it isn't flat. */
+.devsign-hero-panel, .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 .7 0 0 0 -.24'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(to bottom, color-mix(in srgb, var(--dh-glow) light-dark(18%, 34%), transparent) 0%, transparent 62%); background-repeat: repeat, no-repeat; background-size: 240px 240px, auto; }
+
+/* Usability test, fewer boxes: the photo across the column, the test as one row of facts, the scenarios as three plain columns under a hairline. */
+.dv-photo-wide { width: 100%; }
+.dv-photo-wide img { width: 100%; height: auto; }
+.dv-facts { display: grid; grid-template-columns: .7fr .7fr 1.5fr 1.3fr; gap: 32px; margin: 16px 0 0; padding-top: 20px; border-top: 1px solid var(--dv-card-line); }
+.dv-facts > div { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; border: 0; }
+.dv-facts dt { color: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-facts dd { display: flex; flex-direction: column; gap: 4px; margin: 0; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-facts strong { color: var(--case-accent); font-size: 40px; font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; }
+.dv > #testing .dv-scenarios { gap: 32px; }
+.dv > #testing .dv-scenarios li { gap: 8px; padding: 20px 0 0; border: 0; border-top: 1px solid var(--dv-card-line); border-radius: 0; background: none; }
+.dv > #testing .dv-scenarios strong { font-size: 18px; font-weight: 500; line-height: 1.4; }
+@media (max-width: 63.99rem) { .dv-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dv > #testing .dv-scenarios { grid-template-columns: 1fr; gap: 16px; } }
