@@ -3445,8 +3445,33 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-section-head::after { counter-increment: dv-stage; content: counter(dv-stage, decimal-leading-zero) " / 0" var(--dv-stages, "7"); flex: none; color: var(--dv-muted); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.6; }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .dv > section { animation: dv-open linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
-    @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round 48px); } to { clip-path: inset(0 0 0 0 round 0); } }
+    /* Every stage rises 96px into place and, once read, recedes (scales to
+       0.94 and dims) as it leaves the top. Banded stages, which bleed full
+       width, also open from an inset card and round off as they leave;
+       page-colour stages carry no clip, so full-bleed bands inside them
+       (the Problem statement) are never cut. */
+    .dv > section {
+      animation: dv-in linear both, dv-close linear forwards;
+      animation-timeline: view(), view();
+      animation-range: cover 0px cover 75vh, exit 35% exit 100%;
+      transform-origin: 50% 100%;
+    }
+    .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { animation-name: dv-open, dv-close-band; }
+    @keyframes dv-in { from { translate: 0 96px; } to { translate: none; } }
+    @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round 48px); translate: 0 96px; } to { clip-path: inset(0 0 0 0 round 0); translate: none; } }
+    @keyframes dv-close { from { scale: 1; opacity: 1; } to { scale: 0.94; opacity: 0.45; } }
+    @keyframes dv-close-band { from { scale: 1; opacity: 1; clip-path: inset(0 0 0 0 round 0); } to { scale: 0.94; opacity: 0.45; clip-path: inset(0 0 0 0 round 48px); } }
+    /* Statements light up top to bottom as they rise (Apple-style fill),
+       full ink once they reach the middle of the screen; accent and muted
+       spans keep their own colour. */
+    :is(.dv-headline, .dv-core-text) {
+      -webkit-text-fill-color: transparent;
+      background: linear-gradient(to bottom, currentColor 35%, color-mix(in srgb, currentColor 22%, transparent) 65%) no-repeat 0 100% / 100% 300%;
+      -webkit-background-clip: text; background-clip: text;
+      animation: dv-fill linear both; animation-timeline: view(); animation-range: entry 40% cover 50%;
+    }
+    .dv-headline span { -webkit-text-fill-color: currentColor; }
+    @keyframes dv-fill { from { background-position: 0 100%; } to { background-position: 0 0; } }
     .dv-section-head { border-bottom-color: transparent; background: linear-gradient(var(--dv-line), var(--dv-line)) no-repeat left bottom / 100% 1px; animation: dv-rule linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; }
     @keyframes dv-rule { from { background-size: 0% 1px; } to { background-size: 100% 1px; } }
     .dv-section-title { animation: dv-rise linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
