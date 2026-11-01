@@ -3597,3 +3597,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .dv > section:has(> .dv-core:last-child) { position: relative; animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
   .dv > section:has(> .dv-core:last-child)::after { content: ""; position: absolute; top: 100%; left: calc(-1 * var(--dv-pad)); right: calc(-1 * var(--dv-pad)); height: 100svh; background: var(--dv-tint-core); pointer-events: none; }
 } }
+
+/* Rounder chapters: banded stages keep their corners at rest instead of squaring off to full bleed, and the Problem statement band rounds its top, so sections read as stacked soft sheets. The band's colour shows in the corners of the stage after it; elsewhere the page does. */
+.dv { --dv-band-radius: clamp(24px, 3.4vw, 48px); }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { border-radius: var(--dv-band-radius); }
+.dv-core { border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; }
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round calc(var(--dv-band-radius) * 1.5)); translate: 0 96px; } to { clip-path: inset(0 0 0 0 round var(--dv-band-radius)); translate: none; } }
+  @keyframes dv-close-band { from { scale: 1; opacity: 1; clip-path: inset(0 0 0 0 round var(--dv-band-radius)); } to { scale: 0.94; opacity: 0.45; clip-path: inset(0 0 0 0 round calc(var(--dv-band-radius) * 1.5)); } }
+} }
