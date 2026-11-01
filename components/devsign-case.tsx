@@ -720,7 +720,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="deliver" title="Deliver" band={!ff}>
-        <Block {...deliver} ff={ff} />
+        <div id={deliver.tryIt ? "try" : undefined}>
+          <Block {...deliver} ff={ff} />
+          {deliver.tryIt && <div className="dv-gap-40 reveal"><TryPrototype {...deliver.tryIt} /></div>}
+        </div>
         {!ff && (
           <div className="dv-gap-64">
             {deliver.changes ? (
@@ -734,13 +737,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 ))}
               </ol>
             ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
-          </div>
-        )}
-        {/* The features already play in Develop, so Deliver leads with the real prototype. */}
-        {deliver.tryIt && (
-          <div id="try" className="dv-gap-64">
-            <Block {...(deliver.tryIt as Lead)} ff={ff} />
-            <div className="dv-gap-40 reveal"><TryPrototype {...deliver.tryIt} /></div>
           </div>
         )}
         {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
