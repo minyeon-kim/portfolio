@@ -3637,3 +3637,9 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 }
 .devsign-hero-visit { white-space: nowrap; }
 @media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
+
+/* Dark surfaces as steps: page #050506, surface #1a1826 (banded stages, opener panel), card #262433 on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
+.dv { --dv-band-dark: #1a1826; --dv-band-card-dark: #262433; --dv-tint-core: light-dark(#f4edff, #1f1a38); }
+.case-study[data-project="gemini"] .dv { --dv-band-dark: #161b27; --dv-band-card-dark: #222836; --dv-tint-core: light-dark(#eef3fd, #16203a); }
+.devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #1a1826); }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #161b27); }
