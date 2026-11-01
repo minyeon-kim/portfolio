@@ -408,10 +408,9 @@ export const study = {
     iteration1: {
       method: "Iteration 1",
       title: "Split by role",
-      label: "Iteration 1 · Split by role",
-      feature: "Feature changed · 03 Conflict Points",
+      label: "Iteration 1 · Conflict Points",
       lead: "Designers and developers didn’t want to share one review screen, so we split it in two: a screen where the designer decides, and a screen where the developer fixes.",
-      text: "Why: both participants called the shared screen “the other team’s tool.” Conflict Points now covers only screen differences; Git already handles code conflicts.",
+      text: "Why: both participants called the shared screen “the other team’s tool.”",
       before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: one review screen shared by the designer and the developer", text: "One review screen for the designer and the developer. Both called it “the other team’s tool.”" },
       after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", lead: "A decision screen and a fix screen", text: ": the designer makes one choice on the decision screen; the developer sends a fix to the decision-maker from the fix screen." },
       changes: [
@@ -423,13 +422,11 @@ export const study = {
     iteration2: {
       method: "Iteration 2",
       title: "Co-design",
-      label: "Iteration 2 · Co-design",
-      feature: "Feature changed · 01 Live Workspace",
+      label: "Iteration 2 · Live Workspace",
       lead: "Working with a practicing designer, we removed the parts users had to stop and read.",
-      text: "Why: the designer felt the screens were made for developers. With a working designer, we voted on 5 screens to decide what to remove.",
+      text: "Why: the designer felt the screens were made for developers, so we voted on 5 screens to decide what to remove.",
       photo: { src: "/images/devsign/codesign-session.webp", width: 1600, height: 1048, alt: "Co-design session on a video call, voting with colored stickers on prototype screens" },
-      agreedLabel: "Co-design outcome: remove, don’t add",
-      agreed: ["Four panels became three tabs.", "App screens we used to open one at a time on the canvas moved onto one board.", "The AI panel starts folded."],
+      photoLabel: "See the co-design session",
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: a four-panel developer layout", text: "A four-panel layout like a developer tool, showing everything at once." },
       after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "Three tabs and a board of app screens.", text: " The AI panel starts folded." },
       changes: [
