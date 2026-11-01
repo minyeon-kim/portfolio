@@ -250,7 +250,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-headline reveal">
           {overview.headline} <span>{overview.headlineAccent}</span>
         </p>
-        <div className="dv-psi">{children}</div>
+        {overview.summary ? (
+          <section className="dv-summary-block" aria-labelledby="tldr">
+            <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
+            <ul className="dv-summary reveal">
+              {overview.summary.items.map((item: { tone: string; label: string; title: string; count?: number; text: string }) => (
+                <li key={item.label} data-tone={item.tone}>
+                  <p className="dv-summary-label">{item.label}</p>
+                  {item.count ? (
+                    <p className="dv-summary-title dv-summary-score">
+                      <span className="sr-only">{item.title}</span>
+                      <span className="dv-summary-count" style={{ "--to": item.count } as React.CSSProperties} aria-hidden="true"> / {item.count}</span>
+                    </p>
+                  ) : <p className="dv-summary-title">{item.title}</p>}
+                  <p className="dv-summary-text">{item.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : <div className="dv-psi">{children}</div>}
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
           <p className="dv-body reveal">{overview.process.body}</p>
