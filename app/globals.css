@@ -2418,19 +2418,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-chips li { display: flex; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--dv-surface); font-size: 16px; font-weight: 500; line-height: 1.4; }
 .dv-chips span { color: var(--case-accent); font-weight: 700; }
 
-/* Very wide screens (1600+, where the margin has room): the stage nav is a
-   quiet vertical list in the left margin, small and muted with only the
-   current stage in full ink. It starts beside the Overview title, then stays
-   centered on the screen (the list is about 240px tall). It takes no height,
-   so the column starts right away. Narrower screens keep the sticky top bar. */
-@media (min-width: 100rem) {
-  .dv-nav { top: calc(50vh - 120px - 88px); z-index: 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; width: calc(var(--dv-pad) - var(--edge-inset) - 24px); height: 240px; margin: 0 0 0 calc(var(--edge-inset) - var(--dv-pad)); padding: 0; border: 0; background: none; transform: translateY(88px); }
-  /* The list has a real box so sticky keeps it inside the case; the first section climbs back over that box. */
-  .dv-nav + section { margin-top: -240px; }
-  .dv-nav-links { flex-direction: column; gap: 10px; overflow: visible; }
-  .dv-nav-links a { color: color-mix(in srgb, var(--dv-muted) 80%, transparent); font-size: 16px; font-weight: 500; letter-spacing: 0.01em; }
-  .dv-nav-links a[aria-current] { color: var(--dv-ink); font-weight: 600; }
-}
 @media (max-width: 63.99rem) {
   .dv-split { grid-template-columns: 1fr; gap: 32px; }
   .dv-split > .dv-block { order: -1; }
@@ -3698,3 +3685,13 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* Secondary action stays readable over the opener artwork; the highlighted tool row's gap takes the band colour, not the page's. */
 .devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .dv > #discover .dv-matrix tr[data-highlight] > * { border-top-color: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
+
+/* Every section card shares one edge: 16px from the screen (8px on phones), like the opener panel and Problem statement, so the page black reads as the ground they sit on. Cards rise less (40px) and open from close to their final edge, so little of it shows mid-scroll. */
+.dv { --dv-edge: 16px; }
+@media (max-width: 47.99rem) { .dv { --dv-edge: 8px; } }
+.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); }
+.dv-core { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); margin-bottom: var(--dv-edge); }
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  @keyframes dv-in { from { translate: 0 40px; } to { translate: none; } }
+  @keyframes dv-open { from { clip-path: inset(0 1.5% 0 1.5% round calc(var(--dv-band-radius) * 1.25)); translate: 0 40px; } to { clip-path: inset(0 0 0 0 round var(--dv-band-radius)); translate: none; } }
+} }
