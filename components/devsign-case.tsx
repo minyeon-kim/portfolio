@@ -744,7 +744,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 <li key={s.title} className="reveal">
                   <div className="dv-donut">
                     <Donut ratio={s.ratio} missed={s.missed} />
-                    <span className="dv-donut-value-text">{s.value}<small>{s.unit}</small></span>
+                    <span className="dv-donut-value-text" data-missed={s.missed || undefined}>{s.value}<small>{s.unit}</small></span>
                   </div>
                   <div>
                     <strong>{s.title}</strong>
@@ -763,7 +763,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 <li key={s.title} className="reveal">
                   <div className="dv-donut">
                     <Donut ratio={s.ratio} missed={s.missed} />
-                    <span className="dv-donut-value-text">{s.value}<small>{s.unit}</small></span>
+                    <span className="dv-donut-value-text" data-missed={s.missed || undefined}>{s.value}<small>{s.unit}</small></span>
                   </div>
                   <div>
                     <strong>{s.title}</strong>
