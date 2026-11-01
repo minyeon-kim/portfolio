@@ -3897,5 +3897,5 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 }
 
 /* The opener link lands with the whole Deliver title clear of the stage nav. */
-.dv #try { scroll-margin-top: 216px; }
-@media (max-width: 47.99rem) { .dv #try { scroll-margin-top: 184px; } }
+.dv-try-anchor { display: block; height: 0; scroll-margin-top: -56px; }
+@media (max-width: 47.99rem) { .dv-try-anchor { scroll-margin-top: -14px; } }
