@@ -3800,3 +3800,98 @@ html:has(header.group\/header:not([data-hidden])) .dv-nav { top: 64px; }
 
 /* Demo clips fill the screen; the page's tiles no longer zoom a still. */
 .dv-show-screen video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Overview double diamond, simplified: stage names in the shape, one outcome
+   under each, only the pivot in the case colour. Each stage links to its section. */
+.dv-dd { margin: 40px 0 0; padding: clamp(24px, 3vw, 40px); border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-surface); }
+.dv-dd-body { position: relative; }
+.dv-dd-lines { position: absolute; inset: 0 0 auto; display: block; width: 100%; height: auto; }
+.dv-dd-line { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 30%, transparent); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1400ms var(--ease-out-soft); }
+.dv-dd-half { fill: transparent; transition: fill 250ms var(--ease), opacity 700ms var(--ease) 700ms; }
+.dv-dd-half[data-current] { fill: color-mix(in srgb, var(--case-accent) 18%, transparent); }
+.dv-dd-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.dv-dd-stages a { display: block; height: 100%; border-radius: 12px; color: inherit; text-decoration: none; }
+.dv-dd-stages a:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
+.dv-dd-name { display: grid; aspect-ratio: 300 / 240; place-items: center; font-size: 24px; font-weight: 500; line-height: 1.2; transition: color 250ms var(--ease); }
+.dv-dd-stages li:nth-child(odd) .dv-dd-name { padding-left: 22%; }
+.dv-dd-stages li:nth-child(even) .dv-dd-name { padding-right: 22%; }
+.dv-dd-stages li[data-current] .dv-dd-name, .dv-dd-stages a:hover .dv-dd-name { color: var(--case-accent); }
+.dv-dd-outcome { display: block; margin-top: 24px; padding-right: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.45; transition: color 250ms var(--ease); }
+.dv-dd-stages a:hover .dv-dd-outcome { color: var(--dv-ink); }
+.dv-dd-pivot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 12px; padding-right: 24px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.35; }
+.dv-dd-body:has(li:nth-child(1) a:hover) .dv-dd-half:nth-of-type(1),
+.dv-dd-body:has(li:nth-child(2) a:hover) .dv-dd-half:nth-of-type(2),
+.dv-dd-body:has(li:nth-child(3) a:hover) .dv-dd-half:nth-of-type(3),
+.dv-dd-body:has(li:nth-child(4) a:hover) .dv-dd-half:nth-of-type(4) { fill: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready .dv-dd:not([data-shown]) .dv-dd-line { stroke-dashoffset: 1; }
+  .reveal-ready .dv-dd:not([data-shown]) .dv-dd-half { opacity: 0; }
+}
+@media (max-width: 47.99rem) {
+  .dv-dd-lines { position: static; margin-bottom: 8px; }
+  .dv-dd-stages { grid-template-columns: 1fr; }
+  .dv-dd-stages a { padding: 16px 0; }
+  .dv-dd-stages li + li a { border-top: 1px solid var(--dv-card-line); border-radius: 0; }
+  .dv-dd-name, .dv-dd-stages li:nth-child(n) .dv-dd-name { display: block; aspect-ratio: auto; padding: 0; font-size: 18px; }
+  .dv-dd-outcome { margin-top: 4px; padding: 0; }
+}
+
+/* Testing iterations: one change at a time, two large close-ups. */
+.dv-iter-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.dv-iter-tab { display: flex; gap: 10px; align-items: baseline; padding: 14px 0 0; border: 0; border-top: 3px solid var(--dv-card-line); background: none; color: var(--dv-muted); font: inherit; font-size: 18px; font-weight: 600; line-height: 1.3; text-align: left; cursor: pointer; transition: color 250ms var(--ease), border-color 250ms var(--ease); }
+.dv-iter-tab:hover { color: var(--dv-ink); }
+.dv-iter-tab[aria-selected="true"] { border-top-color: var(--case-accent); color: var(--dv-ink); }
+.dv-iter-tab b { color: var(--case-accent); font-weight: 600; }
+.dv-iter-tab:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; }
+.dv-iter-title { display: none; }
+.dv-iter-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
+.dv-iter-side { margin: 0; }
+.dv-iter-view { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--dv-card-radius); background: #0c0c10; }
+.dv-iter-view img { position: absolute; max-width: none; height: auto; transition: width 500ms var(--ease), left 500ms var(--ease), top 500ms var(--ease); }
+.dv-iter-mark { position: absolute; border: 2px solid rgb(255 255 255 / 0.7); border-radius: 8px; animation: dv-iter-in 300ms var(--ease) 350ms both; }
+.dv-iter-side[data-side="b"] .dv-iter-mark { border-color: var(--case-accent); }
+.dv-iter-tag { position: absolute; top: 12px; left: 12px; padding: 4px 12px; border-radius: 999px; background: rgb(12 12 16 / 0.7); color: #fff; font-size: 16px; font-weight: 500; line-height: 1.4; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.dv-iter-side[data-side="b"] .dv-iter-tag { background: var(--case-accent); color: light-dark(#fff, #120f24); }
+.dv-iter-side figcaption { margin-top: 14px; color: var(--dv-muted); font-size: 18px; line-height: 1.45; animation: dv-iter-in 300ms var(--ease) both; }
+.dv-iter-side[data-side="b"] figcaption { color: var(--dv-ink); }
+@keyframes dv-iter-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .dv-iter-view img { transition: none; }
+  .dv-iter-mark, .dv-iter-side figcaption { animation: none; }
+}
+@media (max-width: 47.99rem) {
+  .dv-iter-tabs { gap: 8px; }
+  .dv-iter-tab { justify-content: center; }
+  .dv-iter-tab span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dv-iter-title { display: block; margin-top: 16px; font-size: 18px; font-weight: 600; line-height: 1.3; }
+  .dv-iter-pair { grid-template-columns: 1fr; margin-top: 16px; }
+}
+
+/* Core features, one at a time: the clip runs to the edge of the sheet, a card
+   follows it through the feature's points, one large sentence beside it. */
+.dv-reels { display: grid; gap: clamp(64px, 8vw, 120px); margin-bottom: 0; padding: 0; list-style: none; }
+.dv-reel { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(32px, 4.4vw, 64px); align-items: center; scroll-margin-top: 120px; }
+.dv-reel:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); }
+.dv-reel-media { align-self: start; margin-inline-start: calc(var(--dv-edge) - var(--dv-pad)); aspect-ratio: 16 / 10; overflow: hidden; border-radius: 0 var(--dv-band-radius) var(--dv-band-radius) 0; background: #0c0c10; }
+.dv-reel:nth-child(even) .dv-reel-media { order: 2; margin-inline: 0 calc(var(--dv-edge) - var(--dv-pad)); border-radius: var(--dv-band-radius) 0 0 var(--dv-band-radius); }
+.dv-reel-media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dv-reel-status { padding: 18px 20px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-band-card, var(--dv-surface)); }
+.dv-reel-name { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; line-height: 1.3; }
+.dv-reel-name i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--case-accent); animation: dv-reel-pulse 1800ms var(--ease) infinite; }
+.dv-reel-name span { margin-left: auto; color: var(--dv-muted); font-size: 16px; font-weight: 500; white-space: nowrap; }
+.dv-reel-point { min-height: 2.9em; margin-top: 8px; padding-left: 18px; color: var(--dv-muted); font-size: 16px; line-height: 1.45; animation: dv-reel-point 400ms var(--ease) both; }
+.dv-reel-line { margin-top: 28px; font-size: clamp(28px, 3vw, 44px); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance; }
+.dv-reel-solves { margin-top: 20px; font-size: 16px; line-height: 1.4; }
+.dv-reel-solves a { color: inherit; text-decoration: none; }
+.dv-reel-solves a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.dv-reel-solves b { margin-right: 8px; color: var(--dv-muted); font-weight: 500; }
+.dv-reel-solves i { display: inline-block; margin-left: 6px; font-style: normal; color: var(--case-accent); transition: translate 250ms var(--ease); }
+.dv-reel-solves a:hover i { translate: 0 -3px; }
+@keyframes dv-reel-pulse { 50% { opacity: 0.35; } }
+@keyframes dv-reel-point { from { opacity: 0; translate: 0 6px; } }
+@media (prefers-reduced-motion: reduce) { .dv-reel-name i, .dv-reel-point { animation: none; } }
+@media (max-width: 63.99rem) {
+  .dv-reel, .dv-reel:nth-child(even) { grid-template-columns: 1fr; }
+  .dv-reel-media, .dv-reel:nth-child(even) .dv-reel-media { order: 0; margin-inline: 0; border-radius: var(--dv-card-radius); }
+  .dv-reel-line { margin-top: 20px; }
+}

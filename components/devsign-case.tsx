@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { DeliverShow, IterationStory, PrototypeLink, TryPrototype } from "@/components/devsign-story";
+import { DeliverShow, FeatureReel, IterationCompare, PrototypeLink, TryPrototype } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -244,7 +244,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
           <p className="dv-body reveal">{overview.process.body}</p>
-          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} labels={labels} />
+          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
         </div>
         {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
         {overview.features && !(ff && develop.selection) && (
@@ -657,33 +657,35 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...develop.sketching} ff={ff} />
           <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />
         </div>
-        {/* Findings first: the four features as cards with their screens, each
-            closing on the problem it answers and the direction it came from. */}
+        {/* Findings first: the four features one at a time, large, each playing
+            its prototype clip and closing on the problem it answers. */}
         {develop.selection && ff && overview.features ? (
           <div className="dv-main-features">
             <Block title={develop.selection.label} lead={overview.features.title} ff />
-            <ul className="dv-features dv-features-shots dv-gap-40" style={{ "--n": overview.features.items.length } as React.CSSProperties}>
-              {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => {
+            <ul className="dv-reels dv-gap-40">
+              {overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
+                const shown = deliver.features?.find((item: Study) => item.title === f.name);
+                const at = pick ? define.problems?.items?.findIndex((item: Study) => item.title === pick.problem) ?? -1 : -1;
                 return (
-                  <li key={f.name} id={`feature-${slugOf(f.name)}`} className="reveal dv-link-target">
-                    {f.src && <Image src={withBase(f.src)} alt="" width={1280} height={800} sizes="(max-width: 767px) 100vw, 300px" className="dv-feature-shot" />}
-                    <span className="dv-caps dv-accent">{f.kicker}</span><strong>{f.name}</strong><span>{f.body}</span>
-                    {pick && (
-                      <p className="dv-feature-origin">
-                        {(() => {
-                          const at = define.problems?.items?.findIndex((item: Study) => item.title === pick.problem) ?? -1;
-                          return at >= 0
-                            ? <a href={`#problem-${at + 1}`}><b>{develop.selection.solves}</b>{pick.problem}<i aria-hidden="true">↑</i></a>
-                            : <span><b>{develop.selection.solves}</b>{pick.problem}</span>;
-                        })()}
-                      </p>
-                    )}
-                  </li>
+                  <FeatureReel
+                    key={f.name}
+                    reel={{
+                      id: `feature-${slugOf(f.name)}`,
+                      kicker: f.kicker,
+                      name: f.name,
+                      body: f.body,
+                      alt: shown?.alt,
+                      points: shown?.points ?? [],
+                      clip: shown?.clip,
+                      solves: pick && (at >= 0
+                        ? <a href={`#problem-${at + 1}`}><b>{develop.selection.solves}</b>{pick.problem}<i aria-hidden="true">↑</i></a>
+                        : <span><b>{develop.selection.solves}</b>{pick.problem}</span>),
+                    }}
+                  />
                 );
               })}
             </ul>
-            <p className="dv-link reveal"><a href="#deliver">{overview.features.link}</a></p>
           </div>
         ) : develop.selection && (
           <div className="dv-gap-96">
@@ -829,7 +831,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {testing.iteration1 && <div className="dv-subsection-120">
           <Block {...testing.iteration1} ff={ff} />
           <div className="dv-gap-40">{ff
-            ? <IterationStory before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />
+            ? <IterationCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
@@ -844,7 +846,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </div>
           </div>
           <div className={ff ? "dv-gap-96" : "dv-gap-40"}>{ff
-            ? <IterationStory before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />
+            ? <IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />
             : <DevsignCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} />}</div>
         </div>}
       </section>

@@ -1,56 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { crop } from "@/components/devsign-compare";
 import { devsignUrl } from "@/components/devsign-live";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
-// Scroll stories after the Figma "Deliver · scroll story" and "Testing ·
-// iteration story" sections: one screen stays put (sticky) while the list
-// beside it scrolls; the item crossing the middle of the viewport becomes
-// active and the screen crossfades to it, with its areas boxed and numbered.
-// The page's own scroll drives it (IntersectionObserver), nothing is hijacked.
-// Below 64rem the screen sits above the list (or inside each item) and every
-// item is open.
-
 type Box = [number, number, number, number];
 const pad = (n: number) => String(n).padStart(2, "0");
-const boxStyle = (b: Box) => ({ left: `${b[0]}%`, top: `${b[1]}%`, width: `${b[2]}%`, height: `${b[3]}%` });
-
-// The index of the list item that crosses the middle band of the viewport.
-function useActiveItem(count: number) {
-  const [active, setActive] = useState(0);
-  const items = useRef<(HTMLLIElement | null)[]>([]);
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.index));
-    }, { rootMargin: "-45% 0px -45% 0px" });
-    items.current.slice(0, count).forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, [count]);
-  return { active, items };
-}
-
-function Areas({ boxes, current, onPick }: { boxes: Box[]; current: number; onPick?: (i: number) => void }) {
-  return (
-    <>
-      {boxes.map((b, i) => (
-        <span key={i} className="dv-story-area" data-on={i === current || undefined} style={boxStyle(b)} onMouseEnter={onPick && (() => onPick(i))}>
-          <b>{i + 1}</b>
-        </span>
-      ))}
-    </>
-  );
-}
-
-function Progress({ count, active }: { count: number; active: number }) {
-  return (
-    <ol className="dv-story-progress" aria-hidden="true">
-      {Array.from({ length: count }, (_, i) => <li key={i} data-on={i <= active || undefined} />)}
-    </ol>
-  );
-}
 
 type Feature = { kicker: string; title: string; body: string; points: string[]; src: string; width?: number; height?: number; alt?: string; areas: Box[]; clip: { src: string; poster: string; marks: number[] } };
 
@@ -151,42 +109,95 @@ export function DeliverShow({ features, labels }: { features: Feature[]; labels:
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
-export function IterationStory({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
-  const { active, items } = useActiveItem(changes.length);
-  const [view, setView] = useState<"a" | "b">("b");
-  const views = [["a", labels.asIs, before], ["b", labels.toBe, after]] as const;
-
+// One change of an iteration at a time: the changed area of the As-is and To-be
+// screens as large close-ups side by side. Picking another change pans both
+// screenshots to it (same image, so nothing reloads).
+export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
+  const [active, setActive] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const change = changes[active];
+  const sides = [
+    { key: "a", tag: labels.asIs, img: before, box: change.a, line: change.before },
+    { key: "b", tag: labels.toBe, img: after, box: change.b, line: change.after },
+  ] as const;
+  const onKey = (event: React.KeyboardEvent) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    event.preventDefault();
+    const next = (active + step + changes.length) % changes.length;
+    setActive(next);
+    tabs.current[next]?.focus();
+  };
   return (
-    <div className="dv-story dv-story-iteration">
-      <div className="dv-story-stage">
-        <div className="dv-story-screen dv-story-screen-wide">
-          {views.map(([key, , img]) => (
-            <div key={key} className="dv-story-shot" data-on={view === key || undefined} aria-hidden={view !== key}>
-              <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 1023px) 100vw, 720px" />
-              <Areas boxes={changes.map((c) => c[key])} current={active} />
-            </div>
-          ))}
-          <div className="dv-story-switch" role="group" aria-label={`${labels.asIs} / ${labels.toBe}`}>
-            {views.map(([key, label]) => (
-              <button key={key} type="button" aria-pressed={view === key} onClick={() => setView(key)}>{label}</button>
-            ))}
-          </div>
-        </div>
-        <p className="dv-story-caption">{view === "b" ? <><strong>{after.lead}</strong>{after.text}</> : before.text}</p>
-        <Progress count={changes.length} active={active} />
-      </div>
-      <ol className="dv-story-list">
+    <div className="dv-iter">
+      <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
         {changes.map((c, i) => (
-          <li key={c.title} ref={(el) => { items.current[i] = el; }} data-index={i} data-on={i === active || undefined} className="dv-story-item">
-            <h4 className="dv-story-name dv-story-change"><b>{i + 1}</b>{c.title}</h4>
-            <div className="dv-story-detail">
-              <p className="dv-story-before"><span className="dv-story-tag">{labels.asIs}</span>{c.before}</p>
-              <p className="dv-story-after"><span className="dv-story-tag">{labels.toBe}</span>{c.after}</p>
-            </div>
-          </li>
+          <button key={c.title} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === active ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
+            <b>{i + 1}</b><span>{c.title}</span>
+          </button>
         ))}
-      </ol>
+      </div>
+      <p className="dv-iter-title">{change.title}</p>
+      <div className="dv-iter-pair" role="tabpanel">
+        {sides.map(({ key, tag, img, box, line }) => {
+          const view = crop(box);
+          return (
+            <figure key={key} className="dv-iter-side" data-side={key}>
+              <div className="dv-iter-view">
+                <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={view.img} />
+                <span key={active} className="dv-iter-mark" style={view.mark} aria-hidden="true" />
+                <span className="dv-iter-tag">{tag}</span>
+              </div>
+              <figcaption key={active}>{line}</figcaption>
+            </figure>
+          );
+        })}
+      </div>
     </div>
+  );
+}
+
+// One core feature, large: the real prototype clip beside its one sentence. The
+// card above the sentence follows the clip through the feature's points, so the
+// text moves with the screen. Plays only while it is on screen; with reduced
+// motion nothing autoplays and the video shows its controls.
+type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
+export function FeatureReel({ reel }: { reel: Reel }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [point, setPoint] = useState(0);
+  const [still, setStill] = useState(false);
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setStill(motion.matches);
+    if (motion.matches) return;
+    el.playbackRate = PLAYBACK_RATE;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) el.play().catch(() => {});
+      else el.pause();
+    }, { threshold: 0.5 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const sync = () => {
+    const t = video.current?.currentTime ?? 0;
+    setPoint(reel.clip.marks.reduce((at, mark, i) => (t >= mark ? i : at), 0));
+  };
+  return (
+    <li id={reel.id} className="dv-reel reveal dv-link-target">
+      <div className="dv-reel-media">
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload="none" controls={still} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} />
+      </div>
+      <div className="dv-reel-text">
+        <div className="dv-reel-status">
+          <p className="dv-reel-name"><i aria-hidden="true" />{reel.name}<span>{reel.kicker}</span></p>
+          <p key={point} className="dv-reel-point">{reel.points[point]}</p>
+        </div>
+        <h4 className="dv-reel-line">{reel.body}</h4>
+        {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
+      </div>
+    </li>
   );
 }
 
