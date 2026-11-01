@@ -338,7 +338,7 @@ void main() {
 const drawFragment = `#version 300 es
 precision highp float;
 in float vNear; in vec3 vTint; in float vSpec; in float vSpeed; in float vDepth; in float vSeed; in float vStar; in float vLight; in float vSize; in float vFaint; in float vFlake; out vec4 o;
-uniform float cosmic; uniform vec3 calm;  // look 2: each grain keeps its colour (the form's tint, else the state's)
+uniform vec3 calm;  // each grain keeps its colour: the form's tint, else the state's
 void main() {
   // Each grain is a soft sprite (a gaussian plus a small core; the larger
   // flakes mostly gaussian, out of focus). Only its intensity is written:
@@ -350,7 +350,7 @@ void main() {
   float i = cover * vFaint * vLight * (0.4 + 0.6 * vDepth) * mix(1.0, 0.35, vNear);
   vec3 c = mix(calm, vTint, clamp(vSpec * 1.2, 0.0, 1.0));
   c = mix(c, c * c * 1.6, 0.35);
-  o = vec4(mix(vec3(1.0), c, cosmic) * i, i);
+  o = vec4(c * i, i);
 }`;
 
 // A far field of faint stars behind the dust. They live in a box that wraps
@@ -359,7 +359,7 @@ void main() {
 // shift: the depth the move happens in.
 const starVertex = `#version 300 es
 precision highp float;
-uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time; uniform float cosmic;
+uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time;
 out float vA; out vec3 vC;
 ${view}
 float hs(float n) { return fract(sin(n) * 43758.5453); }
@@ -372,11 +372,11 @@ void main() {
   gl_Position = vec4(s, 0.0, 1.0);
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
-  float bright = step(0.97, hs(i * 9.7)) * cosmic;
-  vA *= 1.0 + bright * 2.5 + cosmic * 0.4;
-  // Look 2: blue-white, warm and pale violet stars.
+  float bright = step(0.97, hs(i * 9.7));
+  vA *= 1.4 + bright * 2.5;
+  // Blue-white, warm and pale violet stars, a few of them bright.
   float t = hs(i * 4.3);
-  vC = mix(vec3(1.0), t < 0.45 ? vec3(0.7, 0.82, 1.0) : (t < 0.75 ? vec3(1.0, 0.86, 0.7) : vec3(0.85, 0.72, 1.0)), cosmic);
+  vC = t < 0.45 ? vec3(0.7, 0.82, 1.0) : (t < 0.75 ? vec3(1.0, 0.86, 0.7) : vec3(0.85, 0.72, 1.0));
   gl_PointSize = mix(1.0, 1.8, smoothstep(6.0, 12.0, w.z)) * (1.0 + bright * 1.6) * dpr;
 }`;
 const starFragment = `#version 300 es
@@ -388,13 +388,13 @@ void main() {
 
 // The look (after byotone.com): the summed light of the grains, ordered-
 // dithered on a slightly rotated grid of ~1.5 CSS px cells into a few tone
-// levels, so the field reads as printed stipple in one ink on the ground,
+// levels, so the field reads as printed stipple in colour on the ground,
 // with a faint film grain over the empty ground that steps 8 times a second.
 const ditherFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 uniform sampler2D scene; uniform float dpr; uniform float grainTime;
 uniform vec3 ground; uniform vec3 ink;
-uniform float cosmic; uniform float time; uniform float light;
+uniform float time; uniform float light;
 float hash(vec2 p) {
   vec3 q = fract(vec3(p.xyx) * 0.1031);
   q += dot(q, q.yzx + 33.33);
@@ -416,16 +416,16 @@ float fbm(vec2 p) { float a = 0.5, s = 0.0; for (int k = 0; k < 4; k++) { s += a
 void main() {
   vec3 light3 = texture(scene, v).rgb;
   vec2 css = gl_FragCoord.xy / max(1.0, dpr);
-  // Look 2: faint nebula clouds drifting behind everything (blue, violet,
+  // Faint nebula clouds drifting behind everything (blue, violet,
   // teal, a little magenta), stippled with the rest.
-  if (cosmic > 0.001) {
+  {
     vec2 q = css / 520.0 + vec2(time * 0.006, -time * 0.004);
     float n1 = fbm(q), n2 = fbm(q * 1.7 + 4.2), n3 = fbm(q * 0.8 - 7.1);
     vec3 neb = vec3(0.25, 0.4, 1.0) * smoothstep(0.45, 0.85, n1)
       + vec3(0.6, 0.3, 1.0) * smoothstep(0.5, 0.9, n2)
       + vec3(0.2, 0.85, 0.8) * smoothstep(0.58, 0.95, n3) * 0.7
       + vec3(1.0, 0.35, 0.7) * smoothstep(0.62, 0.95, n1 * n2 * 1.6) * 0.6;
-    light3 += neb * 0.16 * cosmic;
+    light3 += neb * 0.16;
   }
   float lum = max(light3.r, max(light3.g, light3.b));
   float signal = pow(clamp(lum * 1.6, 0.0, 1.0), 0.72);
@@ -437,10 +437,10 @@ void main() {
   float cover = clamp(floor(signal * 5.0 + threshold) / 5.0, 0.0, 1.0);
   float g = hash(cell + vec2(grainTime * 7.0, grainTime * 3.0));
   vec3 base = mix(ground, ink, g * g * 0.05);
-  // Look 1 prints one ink; look 2 prints each dot in the colour of its light
-  // (bright on the dark ground, a deeper shade on the light page).
+  // Each dot is printed in the colour of its light (bright on the dark
+  // ground, a deeper shade on the light page).
   vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05, hue * 0.55, light);
-  o = vec4(mix(base, mix(ink, coloured, cosmic), cover), 1.0);
+  o = vec4(mix(base, coloured, cover), 1.0);
 }`;
 
 // Per state: which form the dust leans to, and its colours (calm, stirred,
@@ -562,7 +562,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0, cosmic: 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -590,8 +590,6 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const k = 1 - Math.exp(-dt / 0.35);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
-      // Look under comparison (LookSwitch writes html[data-hero-look]).
-      colours.cosmic += ((document.documentElement.dataset.heroLook === "2" ? 1 : 0) - colours.cosmic) * (1 - Math.exp(-dt / 0.25));
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
@@ -664,9 +662,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "cosmic"), colours.cosmic);
+      gl.uniform1f(uniform(pStar, "approach"), approach);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
-      gl.drawArrays(gl.POINTS, 0, colours.cosmic > 0.01 ? 4200 : 2400);
+      gl.drawArrays(gl.POINTS, 0, 4200);
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
@@ -681,10 +679,10 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
       gl.uniform1f(uniform(pDraw, "keep"), 0.35);
-      gl.uniform1f(uniform(pDraw, "cosmic"), colours.cosmic); gl.uniform3fv(uniform(pDraw, "calm"), colours.calm);
+      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
-      // 2. Dithered into one ink on the ground, opaque. Dark: byotone's warm
-      // grey on charcoal; light: dark ink on the page. A case tints the ink.
+      // 2. Dithered onto the ground, opaque, each dot in its light's colour.
+      // Dark: a deep blue-black space; light: deeper shades on the page.
       gl.disable(gl.BLEND);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.useProgram(pDither);
@@ -692,15 +690,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       bind(pDither, "scene", 0, scene.texture);
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
-      gl.uniform1f(uniform(pDither, "cosmic"), colours.cosmic); gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
-      const L = colours.light, tint = 1 - colours.galaxy;
+      gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
+      const L = colours.light;
       const mixc = (a: number[], b: number[], t: number) => a.map((x, i) => x + (b[i] - x) * t);
-      // Look 2's ground is a deeper blue-black.
-      const ground = mixc(mixc([25 / 255, 26 / 255, 30 / 255], [10 / 255, 11 / 255, 20 / 255], colours.cosmic), [238 / 255, 240 / 255, 238 / 255], L);
-      const baseInk = mixc([166 / 255, 162 / 255, 152 / 255], [52 / 255, 54 / 255, 58 / 255], L);
-      const caseInk = mixc(colours.calm.map((c) => 0.35 + c * 0.6), colours.calm.map((c) => c * 0.45), L);
+      const ground = mixc([10 / 255, 11 / 255, 20 / 255], [238 / 255, 240 / 255, 238 / 255], L);
+      // The film grain over the ground.
+      const grain = mixc([166 / 255, 162 / 255, 152 / 255], [52 / 255, 54 / 255, 58 / 255], L);
       gl.uniform3fv(uniform(pDither, "ground"), ground);
-      gl.uniform3fv(uniform(pDither, "ink"), mixc(baseInk, caseInk, tint * 0.7));
+      gl.uniform3fv(uniform(pDither, "ink"), grain);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
     frame = requestAnimationFrame(draw);
