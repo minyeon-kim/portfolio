@@ -296,3 +296,61 @@ export function IterationStory({ before, after, changes, labels }: { before: Sho
     </div>
   );
 }
+
+// The real prototype, usable inside the case (portfolio readers can try the
+// product, not just look at it). It loads only when asked: a poster with a
+// Start button stands in, so the page doesn't pull in a whole React app up
+// front. The prototype is laid out at its desktop width (1440) and scaled to
+// the window; clicks map through the scale. Below 64rem it is a link instead
+// (the prototype is a desktop tool). The tasks beside it give a first-time
+// visitor something to do.
+const TRY_WIDTH = 1440;
+export function TryPrototype({ poster, posterAlt, start, open, tasksLabel, tasks }: { poster: string; posterAlt: string; start: string; open: string; tasksLabel: string; tasks: string[] }) {
+  const locale = useLocale();
+  const box = useRef<HTMLDivElement>(null);
+  const [on, setOn] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const fit = () => {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width) return;
+      const scale = rect.width / TRY_WIDTH;
+      el.style.setProperty("--try-scale", String(scale));
+      el.style.setProperty("--try-h", `${rect.height / scale}px`);
+    };
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    fit();
+    return () => observer.disconnect();
+  }, []);
+  const url = devsignUrl(locale);
+  return (
+    <div className="dv-try">
+      <div className="dv-try-window">
+        <div className="devsign-hero-chrome dv-try-chrome">
+          <span /><span /><span />
+          <a href={url} target="_blank" rel="noreferrer">{url.replace(/^https:\/\//, "").replace(/\?.*$/, "")}</a>
+        </div>
+        <div ref={box} className="dv-try-screen" data-ready={ready || undefined}>
+          <Image src={withBase(poster)} alt={posterAlt} width={2880} height={1620} sizes="(max-width: 1023px) 100vw, 1200px" />
+          {on && <iframe src={url} title="Devsign prototype" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" onLoad={() => window.setTimeout(() => setReady(true), 600)} />}
+          {!ready && (
+            <div className="dv-try-cover">
+              <button type="button" className="dv-try-start press" onClick={() => setOn(true)} disabled={on} aria-busy={on || undefined}>
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor" /></svg>
+                {start}
+              </button>
+              <a className="dv-try-open" href={url} target="_blank" rel="noreferrer">{open}</a>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="dv-try-tasks">
+        <p>{tasksLabel}</p>
+        <ol>{tasks.map((t, i) => <li key={t}><b>{pad(i + 1)}</b>{t}</li>)}</ol>
+      </div>
+    </div>
+  );
+}
