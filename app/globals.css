@@ -4002,3 +4002,17 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-learned > li { grid-row: auto; grid-template-rows: none; padding: 24px; }
   .dv-next-card { margin-top: 12px; padding: 24px; }
 }
+
+/* Gemini's Takeaway carries limits and a fuller next step in the same cards.
+   Its section sits on the band, so the cards take the band's card colour. */
+.dv-learned-plain { grid-template-rows: auto auto; }
+.dv-learned-plain > li { grid-row: span 2; background: var(--dv-surface); }
+.dv-next-card[data-after-limits] { margin-top: 40px; }
+.dv-next-card .dv-body { margin-top: 12px; }
+.dv-next-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
+.dv-next-chips li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv > #takeaway:not(.dv:has(> #testing) > *) { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
+@media (max-width: 63.99rem) {
+  .dv-learned-plain > li { grid-row: auto; }
+  .dv-next-card[data-after-limits] { margin-top: 32px; }
+}
