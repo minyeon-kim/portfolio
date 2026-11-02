@@ -19,6 +19,7 @@ export type StageProject = {
   name: string;
   title: string;
   caption?: string; // the home card's caption line
+  hook?: string; // the problem in one sentence, for the hover
   problem: string;
   role?: string;
   timeline?: string;
