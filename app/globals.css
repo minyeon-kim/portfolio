@@ -4124,3 +4124,20 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-scores-row { padding: 32px 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
 .dv-subsection.dv-rule { padding-top: 0; border-top: 0; }
 @media (max-width: 47.99rem) { .dv-scores-row { padding: 24px 16px; } }
+
+/* Case spacing, the stragglers: blocks 120 (72 on phones), text to its content 40. */
+.dv .dv-main-features { margin-top: 120px; }
+.dv .dv-headline-plain + .dv-gap-96 { margin-top: 56px; }
+.dv .dv-block + .dv-figure.dv-board { margin-top: 40px; }
+.dv .dv-answer + .dv-scroll.dv-gap-48 { margin-top: 40px; }
+.dv .dv-block + .dv-journey { margin-top: 40px; }
+.dv .dv-block + .dv-personas { margin-top: 40px; }
+.dv .dv-personas + .dv-journey { margin-top: 40px; }
+.dv .dv-core + .dv-hmw { margin-top: 120px; }
+.dv .dv-block + .dv-gap-72 { margin-top: 120px; }
+.dv > #deliver { padding-block: 120px 160px; }
+@media (max-width: 47.99rem) {
+  .dv .dv-main-features, .dv .dv-core, .dv .dv-core + .dv-hmw, .dv .dv-block + .dv-gap-72 { margin-top: 72px; }
+  .dv .dv-headline-plain + .dv-gap-96, .dv .dv-headline + .dv-glance-block { margin-top: 40px; }
+  .dv > #deliver { padding-block: 72px 96px; }
+}
