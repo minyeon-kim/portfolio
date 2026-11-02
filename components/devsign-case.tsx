@@ -597,6 +597,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="develop" title="Develop">
+        {develop.dropped && <div><Block {...develop.dropped} ff={ff} /></div>}
         {develop.ideation && <div><Block {...develop.ideation} ff={ff} /></div>}
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
         {develop.matrix && <div className="dv-split dv-gap-80">
