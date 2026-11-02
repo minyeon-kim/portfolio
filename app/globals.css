@@ -4028,9 +4028,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Analysis: the four stages as one flow in one panel, a line running through their names. */
 .dv-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: 32px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; }
 .dv-flow > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 12px; min-width: 0; }
-.dv-flow-stage { position: relative; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: var(--dv-alert); font-size: 16px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
+.dv-flow-stage { position: relative; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
 .dv-flow-stage::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.dv-flow > li:not(:last-child) .dv-flow-stage::after { content: ""; flex: 1; height: 1px; margin-right: -32px; background: color-mix(in srgb, var(--dv-alert) 40%, transparent); }
+.dv-flow > li:not(:last-child) .dv-flow-stage::after { content: ""; flex: 1; height: 1px; margin-right: -32px; background: var(--dv-line); }
 .dv-flow h4 { color: var(--dv-ink); font-size: 20px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
 .dv-flow p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
 @media (max-width: 63.99rem) {
@@ -4038,7 +4038,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-flow > li { position: relative; grid-row: auto; grid-template-rows: none; row-gap: 8px; padding-left: 20px; }
   .dv-flow-stage { margin-bottom: 0; }
   .dv-flow-stage::before { position: absolute; left: -20px; top: 7px; }
-  .dv-flow > li:not(:last-child)::before { content: ""; position: absolute; left: 3.5px; top: 18px; bottom: -28px; width: 1px; background: color-mix(in srgb, var(--dv-alert) 40%, transparent); }
+  .dv-flow > li:not(:last-child)::before { content: ""; position: absolute; left: 3.5px; top: 18px; bottom: -28px; width: 1px; background: var(--dv-line); }
   .dv-flow > li:not(:last-child) .dv-flow-stage::after { display: none; }
   .dv-flow h4 { font-size: 18px; }
 }
