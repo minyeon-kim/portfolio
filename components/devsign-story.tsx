@@ -98,8 +98,7 @@ export function IterationPair({ before, after, labels }: { before: Shot; after: 
 }
 
 // One core feature, large: the real prototype clip beside its one sentence. The
-// card above the sentence follows the clip through the feature's points, so the
-// text moves with the screen. Plays only while it is on screen; with reduced
+// list under the sentence follows the clip: the point on screen now is lit. Plays only while it is on screen; with reduced
 // motion nothing autoplays and the video shows its controls.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
 export function FeatureReel({ reel }: { reel: Reel }) {
@@ -130,11 +129,11 @@ export function FeatureReel({ reel }: { reel: Reel }) {
         <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload="none" controls={still} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} />
       </div>
       <div className="dv-reel-text">
-        <div className="dv-reel-status">
-          <p className="dv-reel-name"><i aria-hidden="true" />{reel.name}<span>{reel.kicker}</span></p>
-          <p key={point} className="dv-reel-point">{reel.points[point]}</p>
-        </div>
+        <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
         <h4 className="dv-reel-line">{reel.body}</h4>
+        <ol className="dv-reel-points">
+          {reel.points.map((text, i) => <li key={text} data-on={i === point || undefined}>{text}</li>)}
+        </ol>
         {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
       </div>
     </li>

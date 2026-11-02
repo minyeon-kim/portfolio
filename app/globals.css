@@ -4100,3 +4100,18 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-who span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
 .dv-who strong { display: block; color: var(--dv-ink); font-weight: 600; }
 @media (max-width: 63.99rem) { .dv-interview { grid-template-columns: 1fr; gap: 32px; padding: 24px; } }
+
+/* Feature reel text, no box: a label like the block labels, the sentence, then the
+   three points with the one on screen lit. */
+.dv-reel-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-reel-name b { color: var(--case-accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-reel-name span { margin-left: 0; color: var(--dv-muted); }
+.dv-reel-name span::before { content: "· "; }
+.dv-reel-line { margin-top: 12px; }
+.dv-reel-points { display: flex; flex-direction: column; gap: 8px; margin: 24px 0 0; padding: 0; list-style: none; }
+.dv-reel-points li { display: flex; align-items: baseline; gap: 10px; color: color-mix(in srgb, var(--dv-muted) 75%, transparent); font-size: 16px; font-weight: 500; line-height: 1.45; transition: color 250ms var(--ease); }
+.dv-reel-points li::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: currentColor; translate: 0 -2px; opacity: 0.5; transition: background-color 250ms var(--ease), opacity 250ms var(--ease); }
+.dv-reel-points li[data-on] { color: var(--dv-ink); }
+.dv-reel-points li[data-on]::before { background: var(--case-accent); opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .dv-reel-points li, .dv-reel-points li::before { transition: none; } }
+@media (max-width: 63.99rem) { .dv-reel-line { margin-top: 8px; } }
