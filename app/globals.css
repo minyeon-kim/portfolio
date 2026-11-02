@@ -4118,3 +4118,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 .dv-photo.dv-photo-wide { max-width: 800px; }
 .dv-photo.dv-photo-wide img { aspect-ratio: auto; }
+
+/* Scores sit in one panel instead of between two lines; blocks inside a stage are
+   separated by space alone (the stage title keeps its rule). */
+.dv-scores-row { padding: 32px 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-subsection.dv-rule { padding-top: 0; border-top: 0; }
+@media (max-width: 47.99rem) { .dv-scores-row { padding: 24px 16px; } }
