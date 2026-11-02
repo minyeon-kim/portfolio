@@ -400,9 +400,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {/* Gap only (class feedback): one card per stage with the gap in a
               plain sentence, instead of With AI → Gap rows read across. */}
           {discover.synthesis.rows[0]?.withAi === undefined ? (
-            <ol className="dv-gaps dv-gap-40">
-              {discover.synthesis.rows.map((row: { stage: string; gap: string }) => (
-                <li key={row.stage} className="reveal"><span>{row.stage}</span><p>{row.gap}</p></li>
+            <ol className="dv-flow dv-gap-40 reveal">
+              {discover.synthesis.rows.map((row: { stage: string; title: string; gap: string }) => (
+                <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><h4>{row.title}</h4><p>{row.gap}</p></li>
               ))}
             </ol>
           ) : <div className="dv-stages dv-gap-24">
