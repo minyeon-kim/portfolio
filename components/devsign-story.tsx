@@ -115,7 +115,7 @@ export function CanvasZoom({ art, candidates, keyPairs, reliefLabel, overviewLab
     return () => clearTimeout(timer);
   }, [step, onScreen, held, steps.length]);
   const now = step >= 0 ? steps[step] : null;
-  const [x, y, w, h] = now ? now.area : [0, 0, art.width, Math.min(art.height, 2270)];
+  const [x, y, w, h] = now ? now.area : [0, 0, art.width, art.height];
   const aspect = phone ? STAGE_ASPECT_PHONE : STAGE_ASPECT;
   const shown = now ? Math.max(phone ? 520 : 860, w * (phone ? 1.3 : 2.2)) : Math.max(w, h * aspect);
   const k = art.width / shown;
