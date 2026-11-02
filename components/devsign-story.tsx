@@ -135,38 +135,41 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
-// Affinity as a pinned scene: the page stays and, with native scroll, every quote (one
-// dot) gathers into its theme and then into its problem. Only drawn on wide screens with
-// motion allowed (CSS); otherwise the case shows a plain list instead.
+// Affinity as a pinned scene: the page stays and, with native scroll, what people said
+// (one dot per quote) gathers into themes and then into problems, each closing on its
+// insight. It is a qualitative study, so the clusters show the grouping, not a tally: no
+// counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
 type DotGroup = { name: string; count: number; problem: number; tone?: string };
 const DOT_W = 1200;
-const DOT_H = 460;
-const DOT_BASE = 340;
-const DOT_CELL = 28;
-const PROBLEM_X = [0, 320, 640, 960];
+const DOT_H = 480;
+const DOT_CY = 150;
+const PROBLEM_X = [0, 316, 632, 948];
+const dotRound = (n: number) => Math.round(n * 10) / 10;
+const dotNudge = (i: number, k: number) => {
+  let h = Math.imul(i + 1, k);
+  h ^= h >>> 15;
+  h = Math.imul(h, 0x5bd1e995);
+  h ^= h >>> 13;
+  return (h >>> 0) / 4294967296 - 0.5;
+};
+const dotSpot = (cx: number, n: number) => ({ x: dotRound(cx + 13 * Math.sqrt(n + 0.5) * Math.cos(n * 2.39996)), y: dotRound(DOT_CY + 13 * Math.sqrt(n + 0.5) * Math.sin(n * 2.39996)) });
 function dotLayout(groups: DotGroup[]) {
-  const total = groups.reduce((sum, g) => sum + g.count, 0);
   const inProblem = [0, 0, 0, 0];
   let index = 0;
   return groups.flatMap((g, column) => Array.from({ length: g.count }, (_, n) => {
-    // A fixed shuffle, so the first screen reads as one unsorted crowd.
-    const at = ((index + 1) * 73) % total;
-    const spread = ((index + 1) * 37) % 100 / 100;
     index += 1;
-    const x1 = column * (DOT_W / 7) + 9 + (n % 5) * DOT_CELL;
-    const y1 = DOT_BASE - 9 - Math.floor(n / 5) * DOT_CELL;
-    const p = g.problem >= 0 ? inProblem[g.problem]++ : 0;
+    const first = dotSpot(column * (DOT_W / 7) + DOT_W / 14, n);
+    const last = g.problem >= 0 ? dotSpot(PROBLEM_X[g.problem] + 126, inProblem[g.problem]++) : first;
     return {
-      tone: g.tone, other: g.problem < 0, spread,
-      x0: 17 + (at % 34) * 34.8, y0: 70 + Math.floor(at / 34) * 34.8,
-      x1, y1,
-      x2: g.problem >= 0 ? PROBLEM_X[g.problem] + 9 + (p % 8) * DOT_CELL : x1,
-      y2: g.problem >= 0 ? DOT_BASE - 9 - Math.floor(p / 8) * DOT_CELL : y1,
+      tone: g.tone, other: g.problem < 0, spread: (index * 37) % 100 / 100,
+      // Scattered: a loose grid with a hashed nudge, so nothing clumps or forms lines.
+      x0: dotRound(((index % 34) + 0.5) * (DOT_W / 34) + dotNudge(index, 2654435761) * 44), y0: dotRound((Math.floor(index / 34) + 0.5) * 50 + dotNudge(index, 2246822519) * 62),
+      x1: first.x, y1: first.y, x2: last.x, y2: last.y,
     };
   }));
 }
 const dotEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
-export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGroup[]; problems: { title: string; tone: string }[]; funnel: [string, string][]; note: string }) {
+export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGroup[]; problems: { title: string; tone: string; insight: string }[]; funnel: [string, string][]; note: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const dots = dotLayout(groups);
@@ -220,18 +223,18 @@ export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGr
         </ol>
         <div className="dv-dots-art" aria-hidden="true">
           <svg viewBox={`0 0 ${DOT_W} ${DOT_H}`}>
-            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="9" data-tone={d.tone} />)}
+            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="6" data-tone={d.tone} />)}
           </svg>
           {groups.map((g, i) => (
-            <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%`, top: `${((DOT_BASE + 14) / DOT_H) * 100}%` }}>{g.name} <b>{g.count}</b></p>
+            <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%` }}>{g.name}</p>
           ))}
           {problems.map((item, i) => (
-            <p key={item.title} className="dv-dots-problem" data-tone={item.tone} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%`, top: `${((DOT_BASE + 14) / DOT_H) * 100}%` }}><b>{String(i + 1).padStart(2, "0")}</b>{item.title}</p>
+            <div key={item.title} className="dv-dots-problem" data-tone={item.tone} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%` }}><h4>{item.title}</h4><p>{item.insight}</p></div>
           ))}
         </div>
         <p className="dv-dots-note" data-on={step === 2 || undefined}>{note}</p>
         <ul className="sr-only">
-          {groups.map((g) => <li key={g.name}>{g.name}: {g.count}{g.problem >= 0 ? ` → ${problems[g.problem].title}` : ""}</li>)}
+          {groups.map((g) => <li key={g.name}>{g.name}{g.problem >= 0 ? ` → ${problems[g.problem].title}: ${problems[g.problem].insight}` : ""}</li>)}
         </ul>
       </div>
     </div>

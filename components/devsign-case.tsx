@@ -433,7 +433,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <AffinityDots
               funnel={define.affinity.funnel}
               note={define.affinity.otherNote}
-              problems={define.problems.items.map((item: Study, i: number) => ({ title: item.title, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))}
+              problems={define.problems.items.map((item: Study, i: number) => ({ title: item.title, tone: PROBLEM_TONES[i % PROBLEM_TONES.length], insight: define.affinity.insights[i] }))}
               groups={[
                 ...define.affinity.themes.flatMap((list: [string, number][], i: number) => list.map(([name, count]) => ({ name, count, problem: i, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))),
                 { name: define.affinity.otherTheme[0], count: define.affinity.otherTheme[1], problem: -1 },
@@ -455,16 +455,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 {define.problems.items.map((item: Study, i: number) => (
                   <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[i % PROBLEM_TONES.length]}>
                     <ul>
-                      {define.affinity.themes[i].map(([name, count]: [string, number]) => (
-                        <li key={name}>
-                          <span>{name}</span>
-                          <i aria-hidden="true"><b style={{ width: `${(count / 48) * 100}%` }} /></i>
-                          <em>{count}<span className="sr-only">{define.affinity.cardsWord}</span></em>
-                        </li>
+                      {define.affinity.themes[i].map(([name]: [string, number]) => (
+                        <li key={name}>{name}</li>
                       ))}
                     </ul>
                     <ArrowIcon />
-                    <p><b>{pad(i + 1)}</b>{item.title}</p>
+                    <div><h4>{item.title}</h4><p>{define.affinity.insights[i]}</p></div>
                   </li>
                 ))}
               </ol>
