@@ -4148,3 +4148,17 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-goals li > span { flex: none; color: var(--case-accent); font-variant-numeric: tabular-nums; }
 .dv-goals + .dv-scores-row { margin-top: 16px; }
 .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
+
+/* Stages breathe more than the blocks inside them (blocks are 120 / 72 apart). */
+.dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 180px 200px; }
+.dv > section:has(> .dv-core:last-child):is(#define) { padding-bottom: 0; }
+.dv > section:is(#overview) { padding-top: 120px; }
+.dv > section:is(#takeaway) { padding-bottom: 120px; }
+.dv > section + section { margin-top: 32px; }
+@media (max-width: 47.99rem) {
+  .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 96px 120px; }
+  .dv > section:has(> .dv-core:last-child):is(#define) { padding-bottom: 0; }
+  .dv > section:is(#overview) { padding-top: 72px; }
+  .dv > section:is(#takeaway) { padding-bottom: 72px; }
+  .dv > section + section { margin-top: 16px; }
+}
