@@ -13,9 +13,9 @@ import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
 import * as ko from "@/content/ko/about.mdx";
-import type { Locale } from "@/lib/i18n";
+import { localize, type Locale } from "@/lib/i18n";
 import { getCases } from "@/lib/cases";
-import { site, withBase } from "@/lib/site";
+import { shareMeta, site, withBase } from "@/lib/site";
 
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
 const copy = {
@@ -24,7 +24,7 @@ const copy = {
     facts: [["Background", "Four years of security consulting at SK shieldus"], ["Focus", "Privacy, security and developer tools"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     stages: { approach: "What I bring", experience: "Experience", toolkit: "Toolkit", outside: "Outside work", contact: "Contact" },
     experienceLead: "From cybersecurity to design",
-    columns: ["Research", "Design & build", "Background"],
+    columns: ["Research", "Design & build"],
     photos: ["Photo of Minyeon at work", "Workshop, study group or talk"],
     open: "Open to product designer and design engineer roles, especially in privacy, security and developer tools.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
@@ -34,7 +34,7 @@ const copy = {
     facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["관심 분야", "프라이버시, 보안, 개발자 도구"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     stages: { approach: "강점", experience: "경력", toolkit: "도구", outside: "일 밖에서", contact: "연락" },
     experienceLead: "보안에서 디자인으로",
-    columns: ["리서치", "디자인과 구현", "배경"],
+    columns: ["리서치", "디자인과 구현"],
     photos: ["일하는 모습", "워크숍, 스터디 또는 발표"],
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다. 특히 프라이버시, 보안, 개발자 도구 분야에 관심이 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
@@ -42,7 +42,8 @@ const copy = {
 };
 
 export function aboutMetadata(locale: Locale): Metadata {
-  return { title: copy[locale].label, description: (locale === "ko" ? ko : en).bio[0] ?? site.positioning };
+  const description = (locale === "ko" ? ko : en).bio[0] ?? site.positioning;
+  return { title: copy[locale].label, description, ...shareMeta(localize("/about/", locale), `${copy[locale].label} — ${site.name}`, description) };
 }
 
 // Built like a case page: the panel opener (name as the brand line, headline,
@@ -56,15 +57,21 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   const columns = [
     { title: c.columns[0], items: skills.research },
     { title: c.columns[1], items: skills.build },
-    { title: c.columns[2], items: skills.background },
   ];
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
-  // Labelled photo placeholders until the real photos are in /public/images/about/.
+  // Photo spots show labelled boxes while writing; the live site leaves them out
+  // (and Outside work with them) until the real files are in /public/images/about/.
+  const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
+  const drafting = process.env.NODE_ENV === "development";
   const portrait = "/images/about/portrait.webp";
-  const hasPortrait = fs.existsSync(path.join(process.cwd(), "public", portrait));
+  const hasPortrait = inPublic(portrait);
+  const outsidePhotos = ["/images/about/outside-1.webp", "/images/about/outside-2.webp"];
+  const hasOutside = outsidePhotos.every(inPublic);
   const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
-  const nav = (Object.keys(c.stages) as (keyof typeof c.stages)[]).map((id) => ({ id, label: c.stages[id] }));
+  const nav = (Object.keys(c.stages) as (keyof typeof c.stages)[])
+    .filter((id) => id !== "outside" || hasOutside || drafting)
+    .map((id) => ({ id, label: c.stages[id] }));
 
   return (
     <div data-about-page className="project-detail">
@@ -84,11 +91,13 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
               </p>
             </div>
             {/* TODO: add the portrait at public/images/about/portrait.webp; it replaces this box. */}
-            <div className="about-hero-portrait">
-              {hasPortrait
-                ? <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
-                : <CaseMedia variant="portrait" label={c.portrait} />}
-            </div>
+            {(hasPortrait || drafting) && (
+              <div className="about-hero-portrait">
+                {hasPortrait
+                  ? <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
+                  : <CaseMedia variant="portrait" label={c.portrait} />}
+              </div>
+            )}
           </div>
           <dl className="devsign-hero-details">
             {c.facts.map(([label, value]) => (
@@ -102,7 +111,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
       </header>
       <article className="case-study" data-project="about">
         <div className="case-content">
-          <div className="dv">
+          <div className="dv" style={{ "--dv-stages": `"${nav.length}"` } as React.CSSProperties}>
             <DevsignNav items={nav} />
             <Todo>add a portrait at public/images/about/portrait.webp (it appears in the opener); add where you are based and whether you are open to relocation or remote roles</Todo>
 
@@ -139,14 +148,17 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
               </ul>
             </Section>
 
-            <Section id="outside" title={c.stages.outside}>
-              <Todo>a line or two about what you do outside work, in your own words</Todo>
-              {/* TODO: replace with real photos (public/images/about/), e.g. at work and a workshop or talk. */}
-              <CaseMediaPair>
-                <CaseMedia variant="screen" label={c.photos[0]} />
-                <CaseMedia variant="screen" label={c.photos[1]} />
-              </CaseMediaPair>
-            </Section>
+            {(hasOutside || drafting) && (
+              <Section id="outside" title={c.stages.outside}>
+                <Todo>a line or two about what you do outside work, in your own words</Todo>
+                {/* TODO: add the real photos as public/images/about/outside-1.webp and outside-2.webp, e.g. at work and a workshop or talk. */}
+                <CaseMediaPair>
+                  {outsidePhotos.map((src, i) => (
+                    <CaseMedia key={src} variant="screen" label={c.photos[i]} src={hasOutside ? src : undefined} />
+                  ))}
+                </CaseMediaPair>
+              </Section>
+            )}
 
             <Section id="contact" title={c.stages.contact}>
               <p className="dv-headline reveal">{c.open}</p>

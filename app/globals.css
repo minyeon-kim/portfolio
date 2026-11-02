@@ -1538,8 +1538,6 @@ html, body, main { overflow-anchor: none; }
 .more-work-cover[data-project="workflow-app"] { background: #E9ECEA; }
 .more-work-card:not([data-rank="0"]) .more-work-cover::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 28%, transparent); transition: opacity 250ms ease; }
 .more-work-card:not([data-rank="0"]) .more-work-hit:is(:hover, :focus-visible) .more-work-cover::after { opacity: 0; }
-.more-work-slot .more-work-cover { background: color-mix(in srgb, var(--ink) 4%, var(--bg)); }
-.more-work-slot-label { color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .more-work-caption { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: clamp(16px, 2vw, 28px); }
 .more-work-title { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); animation: more-work-title-in 400ms var(--ease) both; }
 .more-work-name { font-family: var(--font-display), var(--font-sans); font-weight: 500; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.02; letter-spacing: -0.04em; }
@@ -2051,7 +2049,7 @@ header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-11
 html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
 html:lang(ko) :is(h1, h2, h3, .case-statement, .about-hero-title, .intro-headline, .site-footer-headline) { letter-spacing: -0.02em; }
 /* Mono labels are set for Latin; Korean labels read better in the text face. */
-html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-gallery-placeholder small, .case-comparison-label, .more-work-label, .more-work-slot-label, .case-role-label, .intro-explore-cue, .intro-showcase-placeholder, .font-mono) { font-family: var(--font-sans, inherit), system-ui, sans-serif; letter-spacing: 0; text-transform: none; }
+html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-gallery-placeholder small, .case-comparison-label, .more-work-label, .case-role-label, .intro-explore-cue, .intro-showcase-placeholder, .font-mono) { font-family: var(--font-sans, inherit), system-ui, sans-serif; letter-spacing: 0; text-transform: none; }
 
 /* Revamped Double Diamond: edge labels and phase names in the SVG. */
 .case-diamond-phases { display: none; }
@@ -3265,6 +3263,21 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
   .home-note { grid-column: 1; grid-row: 2; align-self: start; }
   .home-picks { top: 104px; translate: none; }
 }
+/* The shown card and its caption open the case. They sit in the backdrop, so the
+   copy layer above lets the pointer through, except on its own visible parts. */
+.intro-surface.home-grid { pointer-events: none; }
+.home-picks, .home-note:not([data-swap]), .home-tagline-wrap:not([data-swap]) { pointer-events: auto; }
+.home-device[data-active], .home-device-caption[data-active] { pointer-events: auto; cursor: var(--cursor-action), pointer; }
+@media (hover: hover) and (min-width: 64rem) {
+  .home-device[data-active]:hover > * { scale: 1.02; transition-duration: 400ms; }
+}
+/* Phones: the stage sits under the header, so the two together fill one screen,
+   and the case pills are full tap targets. */
+@media (max-width: 63.99rem) {
+  .intro-stage.home-stage { min-height: calc(100svh - 64px); }
+  .intro-surface.home-grid { padding-top: 40px; }
+  .home-pick { min-height: 44px; padding: 0 20px; }
+}
 
 /* Prioritization criteria: one criterion per row, read top to bottom. */
 .dv-criteria { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--dv-line); }
@@ -4135,7 +4148,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .devsign-hero[data-project="about"] .devsign-hero-brand span:last-child { font-weight: 600; letter-spacing: -0.02em; }
 .devsign-hero[data-project="about"] .devsign-hero-title { max-width: 26ch; }
 .devsign-hero[data-project="about"] .devsign-hero-panel { background-color: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #171a2b); }
-.case-study[data-project="about"] .dv { --dv-stages: "5"; --case-accent: var(--accent); --dv-tint: light-dark(#eef0fd, color-mix(in srgb, var(--accent) 12%, var(--bg))); --dv-tint-core: light-dark(#eef0fd, #181c38); --dv-band-dark: #171a2b; --dv-band-card-dark: #232740; --dv-surface: light-dark(#ffffff, #171a2b); }
+.case-study[data-project="about"] .dv { --case-accent: var(--accent); --dv-tint: light-dark(#eef0fd, color-mix(in srgb, var(--accent) 12%, var(--bg))); --dv-tint-core: light-dark(#eef0fd, #181c38); --dv-band-dark: #171a2b; --dv-band-card-dark: #232740; --dv-surface: light-dark(#ffffff, #171a2b); }
 .case-study[data-project="about"] .more-work + .site-footer { --ft-glow: #3f55e8; --ft-glow-hot: #b9c4ff; }
 .about-tools { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
 .about-story { max-width: var(--dv-measure); margin-top: 40px; }
@@ -4151,6 +4164,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv > #approach .dv-features { margin-top: 56px; }
 .dv-features .about-tools li { display: block; padding: 0; border-radius: 0; background: none; }
 .about-story ol { padding-left: 32px; }
+.about-contact button { height: auto; padding: 7px 14px; border: 1px solid color-mix(in srgb, var(--case-accent) 55%, transparent); background: transparent; color: var(--case-accent); font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.3; }
+.about-contact button:hover, .about-contact button:focus-visible { background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
 .about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
 

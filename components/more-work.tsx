@@ -14,14 +14,12 @@ import { GeminiPhone } from "./gemini-phone";
 
 export type MoreWorkItem = { slug: string; name: string; description?: string; cover?: string; index?: number };
 
-const MIN_CARDS = 3;
 const MIN_ROTATING = 3;
 const INTERVAL = 4200;
 
 // End of a case: the other projects as a fanned deck. The next project is in
 // front and opens with the shared page transition; the rest peek out behind it
-// and fan out on hover, and a back card comes forward when clicked. Empty spots
-// up to three are "In progress" cards (never links, no invented content). The
+// and fan out on hover, and a back card comes forward when clicked. The
 // deck turns on its own only once there are three or more real cases. On the
 // home stage (items carry an index) a card selects that case; elsewhere it
 // opens its page.
@@ -59,8 +57,7 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
     revealNextProject(() => router.push(href, { scroll: false }), () => Boolean(document.querySelector(`[data-case-slug="${item.slug}"]`)));
   };
   if (!items.length) return null;
-  const slots = Math.max(0, MIN_CARDS - items.length);
-  const total = items.length + slots;
+  const total = items.length;
   // 0 front, 1 right, 2 left, further cards wait hidden behind the front one.
   const rank = (i: number) => (i - front + total) % total;
   const variant = (slug: string) => (slug === "workflow-app" ? "devsign" : slug === "gemini-privacy" ? "gemini" : undefined);
@@ -100,11 +97,6 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
             </li>
           );
         })}
-        {Array.from({ length: slots }, (_, k) => (
-          <li key={`slot-${k}`} className="more-work-card more-work-slot" data-rank={Math.min(rank(items.length + k), 3)} aria-label={t.caseInProgress}>
-            <span className="more-work-cover"><span className="more-work-slot-label">{t.inProgress}</span></span>
-          </li>
-        ))}
       </ul>
       <div className="more-work-caption" aria-live="polite">
         <Link key={current.slug} href={localize(`/work/${current.slug}/`, locale)} className="more-work-title" tabIndex={-1}

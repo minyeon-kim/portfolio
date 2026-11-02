@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 // Single place for identity and contact details used by the header and footer.
 // TODO: add public/resume.pdf before launch.
 export const site = {
@@ -25,3 +27,17 @@ export const devsignUrl = (locale: "en" | "ko") => `${DEVSIGN_URL}?lang=${locale
 // next/image and plain <a> tags don't add it on their own for static export.
 export const withBase = (src: string) =>
   src.startsWith("/") ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${src}` : src;
+
+// Where the site lives, for absolute links in shared previews. Change this one
+// value when the custom domain is connected.
+export const siteUrl = "https://minyeon-kim.github.io/portfolio";
+
+// What LinkedIn, Slack and mail show for a shared link. Images are in /public/og
+// (1200x630, captured from the pages themselves).
+export function shareMeta(pagePath: string, title: string, description: string, image = "home"): Pick<Metadata, "openGraph" | "twitter"> {
+  const url = `${siteUrl}/og/${image}.png`;
+  return {
+    openGraph: { type: "website", siteName: site.name, title, description, url: `${siteUrl}${pagePath}`, images: [{ url, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description, images: [url] },
+  };
+}
