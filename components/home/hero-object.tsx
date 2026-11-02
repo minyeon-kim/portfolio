@@ -79,8 +79,8 @@ vec3 formOf(float n, vec2 uv) {
     }
   } else {
     // The two logos, drawn tight so they read as the logos: one spot top left
-    // (clear of the name below and the card on the right), one size, and only
-    // a tenth of the dust left round them as haze.
+    // (clear of the name below and the card on the right), one size, spreading
+    // softly at the edges, with a fifth of the dust round them as haze.
     vec2 q = vec2(0.0);
     if (symbol > 1.5) {
       if (a < 0.15) {
@@ -107,7 +107,7 @@ vec3 formOf(float n, vec2 uv) {
         }
       }
     }
-    return vec3(q * LOGO_SIZE + LOGO_AT, (hq(n, 17u) - 0.5) * 0.1) + j * (g > 0.9 ? mix(0.3, 1.2, c) : 0.04);
+    return vec3(q * LOGO_SIZE + LOGO_AT, (hq(n, 17u) - 0.5) * 0.2) + j * (g > 0.8 ? mix(0.5, 2.0, c) : mix(0.08, 0.4, g * g));
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -670,7 +670,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), logo ? 14 : 4); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 3.6); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.02 : 0.18 - 0.14 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), logo ? 14 : 4); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 3.6); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.08 : 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {
