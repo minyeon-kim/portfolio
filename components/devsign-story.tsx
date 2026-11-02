@@ -147,7 +147,7 @@ export function FeatureReel({ reel }: { reel: Reel }) {
 // front. The prototype is laid out at its desktop width (1440) and scaled to
 // the window; clicks map through the scale. Below 64rem it is a link instead
 // (the prototype is a desktop tool). One hint on the cover gives a first-time
-// visitor somewhere to start.
+// visitor somewhere to start. The opener's link to #try starts it directly.
 const TRY_WIDTH = 1440;
 export function TryPrototype({ poster, posterAlt, start, open, hint }: { poster: string; posterAlt: string; start: string; open: string; hint: string }) {
   const locale = useLocale();
@@ -168,6 +168,23 @@ export function TryPrototype({ poster, posterAlt, start, open, hint }: { poster:
     observer.observe(el);
     fit();
     return () => observer.disconnect();
+  }, []);
+  // The opener's "Try the prototype" links to #try: arriving there starts it, so
+  // nobody has to press Start as well. Wide screens only, and after the scroll
+  // has mostly landed so loading the frame doesn't stall it.
+  useEffect(() => {
+    let timer = 0;
+    const arrive = () => {
+      if (window.location.hash !== "#try" || !window.matchMedia("(min-width: 64rem)").matches) return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setOn(true), 900);
+    };
+    arrive();
+    window.addEventListener("hashchange", arrive);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("hashchange", arrive);
+    };
   }, []);
   const url = devsignUrl(locale);
   return (
