@@ -4179,3 +4179,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 100% 0 / var(--r) var(--r) no-repeat,
   radial-gradient(circle at 100% 100%, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 0 100% / var(--r) var(--r) no-repeat,
   radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 100% 100% / var(--r) var(--r) no-repeat; }
+
+/* The glow already closes the page; no rule above the bottom row. */
+.case-study .more-work + .site-footer { border-top: 0; }
