@@ -4090,3 +4090,13 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 #try { scroll-margin-top: 24px; }
+
+/* In-depth interview: who we met and what we asked, one panel. */
+.dv-interview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-interview .dv-caps { margin-bottom: 16px; }
+.dv-who { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-who li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; }
+.dv-who b { color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.dv-who span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-who strong { display: block; color: var(--dv-ink); font-weight: 600; }
+@media (max-width: 63.99rem) { .dv-interview { grid-template-columns: 1fr; gap: 32px; padding: 24px; } }

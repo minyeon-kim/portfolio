@@ -926,3 +926,4 @@ Opener actions: 'Read the case study' is gone (scrolling does that; Gemini's ope
 #try is now the prototype block itself (scroll-margin 24px), not the zero-height anchor before Deliver, so the opener action lands with the whole prototype window in view.
 
 Landing entrance is faster: the camera comes forward over 1.1s (was 2.5s) and the dust blooms out on a stronger pull that eases back to normal by 1.4s (gather +3.45, damping +4.1 at load). Headline scramble keeps its 1.2s cap.
+Interview block (findings first): the finding is the heading (the bridge from desk research is the one-line text); who we met and the research questions share one panel (`.dv-interview`, `.dv-who`, `interview.peopleLabel`), replacing the question row and person cards; the session photo is folded (`interview.photoLabel`). Figma not updated.
