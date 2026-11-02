@@ -607,7 +607,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <div className="dv-gap-96">
           <Block {...develop.canvas} ff={ff} />
           <div className="dv-gap-40 reveal">
-            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} keyPairs={develop.canvas.keyPairs} reliefLabel={develop.canvas.reliefLabel} overviewLabel={develop.canvas.candidatesLabel} />
+            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} keyPairs={develop.canvas.keyPairs} painLabel={develop.canvas.painLabel} reliefLabel={develop.canvas.reliefLabel} featureLabel={develop.canvas.featureLabel} overviewLabel={develop.canvas.candidatesLabel} />
           </div>
         </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
@@ -729,22 +729,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </p>
           {testing.usability.verdict ? <>
           {/* Each success goal beside its verdict, then the other scores, then what it meant. */}
-          <div className="dv-verdict dv-gap-40">
-            {define.hmw.success.map((goal: string, i: number) => {
-              const score = i === 0 ? testing.usability.scores.find((s: Study) => s.missed) : null;
-              return (
-                <article key={goal} className="reveal" data-missed={score ? true : undefined}>
-                  <p className="dv-verdict-label">{testing.usability.verdict.goal} {i + 1}</p>
-                  <h4>{goal}</h4>
-                  <div className="dv-verdict-result">
+          <div className="dv-ut-board dv-gap-40">
+            <ul className="dv-verdict reveal">
+              {define.hmw.success.map((goal: string, i: number) => {
+                const score = i === 0 ? testing.usability.scores.find((s: Study) => s.missed) : null;
+                return (
+                  <li key={goal} data-missed={score ? true : undefined}>
+                    <p className="dv-verdict-label">{testing.usability.verdict.goal} {i + 1}</p>
+                    <h4>{goal}</h4>
                     {score
-                      ? <><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span></>
-                      : <span className="dv-verdict-tag">{testing.usability.verdict.pending}</span>}
-                  </div>
-                  {score && <p className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</p>}
-                </article>
-              );
-            })}
+                      ? <p className="dv-verdict-result"><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span><span className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</span></p>
+                      : <p className="dv-verdict-result"><span className="dv-verdict-tag">{testing.usability.verdict.pending}</span></p>}
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="dv-result-box reveal">
+              <p>{testing.usability.resultLabel}</p>
+              <p>{testing.usability.result}</p>
+            </div>
           </div>
           <ul className="dv-metrics reveal">
             {testing.usability.scores.filter((s: Study) => !s.missed).map((s: Study) => (
@@ -754,10 +757,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </li>
             ))}
           </ul>
-          <div className="dv-result-box reveal">
-            <p>{testing.usability.resultLabel}</p>
-            <p>{testing.usability.result}</p>
-          </div>
           </> : <>
           {/* The scores and the next step are judged against these goals. */}
           {ff && (
@@ -842,11 +841,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
-          <Block {...testing.iteration2} ff={ff} />
           {ff ? <>
-            {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-40" />}
+            <div className="dv-iter-head">
+              <Block {...testing.iteration2} ff={ff} />
+              {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 400px" className="dv-photo dv-photo-wide" />}
+            </div>
             <div className="dv-gap-40"><IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
           </> : <>
+            <Block {...testing.iteration2} ff={ff} />
             <div className="dv-two dv-gap-40 dv-center">
               <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
               <div>
