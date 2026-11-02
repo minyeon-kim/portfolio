@@ -429,7 +429,34 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <>
         <div>
           <Block {...define.affinity} ff={ff} />
-          <Figure img={define.affinity.board} className="dv-board dv-gap-72" />
+          {define.affinity.funnel && (
+            <ol className="dv-funnel dv-gap-40 reveal">
+              {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+            </ol>
+          )}
+          <Figure img={define.affinity.board} className="dv-board dv-gap-40" />
+          {define.affinity.funnel && (
+            <div className="dv-aff">
+              <p className="dv-caps reveal">{define.affinity.flowLabel}</p>
+              <ol>
+                {define.problems.items.map((item: Study, i: number) => (
+                  <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[i % PROBLEM_TONES.length]}>
+                    <ul>
+                      {define.affinity.themes[i].map(([name, count]: [string, number]) => (
+                        <li key={name}>
+                          <span>{name}</span>
+                          <i aria-hidden="true"><b style={{ width: `${(count / 55) * 100}%` }} /></i>
+                          <em>{count}<span className="sr-only">{define.affinity.cardsWord}</span></em>
+                        </li>
+                      ))}
+                    </ul>
+                    <ArrowIcon />
+                    <p><b>{pad(i + 1)}</b>{item.title}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
         <div className="dv-subsection">
@@ -692,28 +719,28 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </p>
           {testing.usability.verdict ? <>
           {/* Each success goal beside its verdict, then the other scores, then what it meant. */}
-          <div className="dv-ut-board dv-gap-40">
-            {(() => {
-              const score = testing.usability.scores.find((item: Study) => item.missed);
-              return (
-                <article className="dv-verdict reveal">
-                  <p className="dv-verdict-label">{testing.usability.verdict.goal} 1</p>
-                  <h4>{define.hmw.success[0]}</h4>
-                  <p className="dv-verdict-result"><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span></p>
-                  <p className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</p>
-                  <p className="dv-verdict-next">{testing.usability.verdict.goal} 2 · {define.hmw.success[1]} · {testing.usability.verdict.pending}</p>
-                </article>
-              );
-            })()}
-            <ul className="dv-metrics reveal">
-              {testing.usability.scores.filter((s: Study) => !s.missed).map((s: Study) => (
-                <li key={s.title}>
-                  <strong>{s.value}<small>{s.unit}</small></strong>
-                  <span><b>{s.title}</b>{s.note}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* One chart: each score against its goal or benchmark, then the goals' verdicts. */}
+          <ul className="dv-bars dv-gap-40 reveal">
+            {testing.usability.scores.map((item: Study) => (
+              <li key={item.title} data-bad={item.missed || item.below || undefined}>
+                <div className="dv-bar-label"><strong>{item.title}</strong><span>{item.note}</span></div>
+                <div className="dv-bar-track">
+                  <i style={{ width: `${item.ratio * 100}%` }} />
+                  {item.target && <em style={{ left: `${item.target[0] * 100}%` }}><span>{item.target[1]}</span></em>}
+                </div>
+                <p className="dv-bar-value">{item.value}<small>{item.unit}</small></p>
+              </li>
+            ))}
+          </ul>
+          <ul className="dv-goal-lines reveal">
+            {define.hmw.success.map((goal: string, i: number) => (
+              <li key={goal} data-missed={i === 0 || undefined}>
+                <span>{testing.usability.verdict.goal} {i + 1}</span>
+                <p>{goal}</p>
+                <b>{i === 0 ? testing.usability.verdict.missed : testing.usability.verdict.pending}</b>
+              </li>
+            ))}
+          </ul>
           <div className="dv-ut-result reveal">
             <p>{testing.usability.resultLabel}</p>
             <p>{testing.usability.result}</p>
@@ -796,7 +823,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
-          <Block {...testing.iteration1} ff={ff} />
+          <Block {...testing.iteration1} text={ff ? undefined : testing.iteration1.text} ff={ff} />
+          {ff && <p className="dv-iter-why reveal"><b>{testing.iteration1.whyLabel}</b>{testing.iteration1.text}</p>}
           <div className="dv-gap-40">{ff
             ? <IterationPair before={testing.iteration1.before} after={testing.iteration1.after} labels={labels} />
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
@@ -804,7 +832,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {testing.iteration2 && <div className="dv-subsection-120">
           {ff ? <>
             <div className="dv-iter-head">
-              <Block {...testing.iteration2} ff={ff} />
+              <div>
+                <Block {...testing.iteration2} text={undefined} ff={ff} />
+                <p className="dv-iter-why reveal"><b>{testing.iteration2.whyLabel}</b>{testing.iteration2.text}</p>
+              </div>
               {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 400px" className="dv-photo dv-photo-wide" />}
             </div>
             <div className="dv-gap-40"><IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
