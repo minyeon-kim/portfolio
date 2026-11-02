@@ -924,3 +924,5 @@ Logo dust restored at the owner's preference: hero-object.tsx is back to 1d86550
 Logo dust keeps its restored shape but gathers fast: on the Gemini and Devsign forms, pull 4.6 (×3 at full focus), damping 6.5 and flow 0.6, raised together so the loose shape holds; colour and focus ease 0.2s (for every state). Landing and About motion otherwise unchanged (1.15, 2.4).
 Opener actions: 'Read the case study' is gone (scrolling does that; Gemini's opener has no button now). Devsign's one action, 'Try the prototype', goes to #try and arriving there starts the prototype (TryPrototype, on hashchange or load, 900ms later, ≥64rem); below 64rem it opens the prototype in a new tab (`actions[].phoneHref`). Figma not updated.
 #try is now the prototype block itself (scroll-margin 24px), not the zero-height anchor before Deliver, so the opener action lands with the whole prototype window in view.
+
+Landing entrance is faster: the camera comes forward over 1.1s (was 2.5s) and the dust blooms out on a stronger pull that eases back to normal by 1.4s (gather +3.45, damping +4.1 at load). Headline scramble keeps its 1.2s cap.

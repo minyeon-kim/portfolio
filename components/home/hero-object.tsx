@@ -647,9 +647,11 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // in the last stretch, which read as a late snap, not a move).
       const hold = travelling ? 0.35 + 0.65 * ease(Math.min(1, tu / 0.7)) : 1;
       if (!travelling) tu = 1;
-      // The entrance: the camera comes forward from 1.6 units back over 2.5s,
+      // The entrance: the camera comes forward from 1.6 units back over 1.1s,
       // eased in and out, while the gathered form blooms outward.
-      const wake = Math.min(1, clock / 2.5);
+      const wake = Math.min(1, clock / 1.1);
+      // The dust blooms out as fast, then eases into its usual slow pull.
+      const early = Math.max(0, 1 - clock / 1.4);
       const awake = wake < 0.5 ? 4 * wake ** 3 : 1 - 4 * (1 - wake) ** 3;
       const approach = 1.6 * (1 - awake);
       // A logo gathers fast (settled in about a second); the flow is raised with
@@ -667,7 +669,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), logo ? 4.6 : 1.15); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 2.4); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), logo ? 4.6 : 1.15 + 3.45 * early); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 2.4 + 4.1 * early); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {
