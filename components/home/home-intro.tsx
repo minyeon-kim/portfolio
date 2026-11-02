@@ -38,7 +38,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const [hover, setHover] = useState<string | null>(null);
   const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
   // Only the projects: About is in the header now, so it isn't a pick here.
-  const choices: { slug: string; name: string }[] = projects;
+  const choices: { slug: string; name: string; caption?: string }[] = projects;
   const shown = projects.find((p) => p.slug === hover) ?? null;
   const about = hover === "about";
   // The copy that replaces the positioning: a case's name and problem, or the
@@ -171,6 +171,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   {c.slug !== "about" && <span className="home-pick-index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>}
                   {c.name}
                 </button>
+                {/* What it is, always in view: the first glance shouldn't depend on hovering. */}
+                {c.caption && <p className="home-pick-line">{c.caption}</p>}
               </li>
             ))}
           </ol>

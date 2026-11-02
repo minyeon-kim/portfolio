@@ -12,11 +12,6 @@ import { withBase } from "@/lib/site";
 // Card colour by who the card is about: designers in the case colour, developers
 // in the persona orange, anyone else in blue.
 const toneOf = (role: string) => (/design|디자인/i.test(role) ? "accent" : /develop|개발/i.test(role) ? "second" : "blue");
-// Supporting material a reader can open: the finding stays on the page, the artifact behind it folds away.
-function Fold({ label, children }: { label: string; children: ReactNode }) {
-  return <details className="dv-handoff-spec dv-gap-40"><summary>{label}</summary><div className="dv-fold-body">{children}</div></details>;
-}
-
 const VOICE_TONES = ["accent", "blue", "second"];
 const PROBLEM_TONES = ["accent", "blue", "second", "teal"];
 
@@ -231,7 +226,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         ) : <div className="dv-psi">{children}</div>}
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
-          <p className="dv-body reveal">{overview.process.body}</p>
+          {!ff && <p className="dv-body reveal">{overview.process.body}</p>}
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
         </div>
         {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
@@ -315,9 +310,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <Groups groups={discover.q2.groups} />
             </div>
           ) : (
-          (() => {
-            const table = (
-          <div className={ff ? "dv-scroll" : "dv-scroll dv-gap-48 reveal"}>
+          <>
+          {ff && <p className="dv-caps dv-gap-40 reveal">{discover.q2.auditLabel}</p>}
+          <div className={ff ? "dv-scroll dv-gap-16 reveal" : "dv-scroll dv-gap-48 reveal"}>
             <table className="dv-tool-table">
               <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
@@ -329,7 +324,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </tr>
               </thead>
               <tbody>
-                {discover.q2.columns.map((capability: { name: string; accent?: boolean }, i: number) => (
+                {discover.q2.columns.map((capability: { name: string; accent?: boolean }, i: number) => (!ff || capability.accent) && (
                   <tr key={capability.name} data-accent={capability.accent || undefined}>
                     <th scope="row">{capability.name}</th>
                     {compareTools.map((tool) => (
@@ -343,9 +338,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </tbody>
             </table>
           </div>
-            );
-            return ff ? <Fold label={discover.q2.auditFold}>{table}</Fold> : table;
-          })()
+          </>
 
           )}
         </div>
@@ -484,39 +477,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {/* Where it breaks first (the journey and its two low points), then who. */}
         <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
-        <Journey journey={define.personas.journey} wide />
-        <p className="dv-summary reveal">{define.personas.summary}</p>
-        <Fold label={define.personas.peopleLabel}>
-        <div className="dv-personas dv-personas-short">
+        <ul className="dv-cast dv-gap-40 reveal">
           {define.personas.people.map((person: Study, index: number) => (
-            <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
-              <div className="dv-persona-id">
-                {person.avatar ? <Image src={withBase(person.avatar)} alt="" width={88} height={88} className="dv-avatar" /> : <span className="dv-avatar dv-avatar-blank" aria-hidden="true" />}
-                <p className="dv-caps dv-persona-role">{person.role}</p>
-                <h3 className="dv-persona-name">{person.name}</h3>
-                <p className="dv-persona-bio">{person.bio}</p>
-                <p className="dv-persona-quote">{person.quote}</p>
-              </div>
-              <div className="dv-persona-details">
-                <div>
-                  <p className="dv-caps dv-persona-role">{labels.context}</p>
-                  <p className="dv-persona-context">{person.context}</p>
-                </div>
-                <table className="dv-needs">
-                  <thead>
-                    <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
-                  </thead>
-                  <tbody>
-                    {person.pairs.map(([pain, need]: string[]) => (
-                      <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td>{need}</td></tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </article>
+            <li key={person.name} data-line={index === 0 ? "designer" : "developer"}>
+              <strong>{person.name}<span>{person.role}</span></strong>
+              <p>{person.quote}</p>
+              <p className="dv-cast-low">{index === 0 ? define.personas.journey.designerLow : define.personas.journey.developerLow}</p>
+            </li>
           ))}
-        </div>
-        </Fold>
+        </ul>
+        <Journey journey={define.personas.journey} wide />
         </div>
 
         </> : <>
@@ -597,7 +567,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="develop" title="Develop">
-        {develop.dropped && <div><Block {...develop.dropped} ff={ff} /></div>}
+        {develop.dropped && <div>
+          <Block {...develop.dropped} ff={ff} />
+          <p className="dv-dropped dv-gap-24 reveal"><s>{develop.dropped.from}</s><ArrowIcon /><b>{develop.dropped.to}</b></p>
+        </div>}
         {develop.ideation && <div><Block {...develop.ideation} ff={ff} /></div>}
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
         {develop.matrix && <div className="dv-split dv-gap-80">
@@ -665,14 +638,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
         <div className="dv-subsection">
           {ff ? (
-            <Fold label={develop.artifactsLabel}>
-              <Block {...develop.ia} ff={ff} />
-              <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
-              <div className="dv-gap-64">
-                <Block {...develop.flow} ff={ff} />
-                <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
-              </div>
-            </Fold>
+            <ul className="dv-artifacts">
+              {[develop.ia, develop.flow].map((item: Study) => (
+                <li key={item.title} className="reveal">
+                  <a href={withBase(item.image.src)} target="_blank" rel="noreferrer">
+                    <Image src={withBase(item.image.src)} alt={item.image.alt} width={item.image.width} height={item.image.height} sizes="(max-width: 767px) 100vw, 600px" />
+                    <strong>{item.title}<span aria-hidden="true"> ↗</span></strong>
+                  </a>
+                  <p>{item.lead}</p>
+                </li>
+              ))}
+            </ul>
           ) : <>
             <Block {...develop.ia} ff={ff} />
             <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
@@ -794,36 +770,19 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </ul>
           <p className="dv-body dv-result dv-gap-32 reveal">{testing.usability.result}</p>
           </>}
-          <details className="dv-handoff-spec dv-gap-32">
-            <summary>{testing.usability.methodLabel}</summary>
-            <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />
-            <dl className="dv-facts dv-gap-32">
-              {testing.usability.protocol.map((row: { label: string; value?: string; big?: string; steps?: string[]; chips?: string[] }) => (
-                <div key={row.label}>
-                  <dt>{row.label}</dt>
-                  <dd>
-                    {row.big && <strong>{row.big}</strong>}
-                    {row.value && <span>{row.value}</span>}
-                    {row.steps && <span>{row.steps.join(" → ")}</span>}
-                    {row.chips?.map((chip) => <span key={chip}>{chip}</span>)}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            {testing.usability.scenarios && (
-              <div className="dv-gap-32">
-                <p className="dv-caps">{testing.usability.scenariosLabel}</p>
-                <ol className="dv-scenarios">
-                  {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
-                    <li key={sc.task}>
-                      <strong>{sc.task}</strong>
-                      <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-          </details>
+          {testing.usability.scenarios && (
+            <div className="dv-gap-40 reveal">
+              <p className="dv-caps">{testing.usability.scenariosLabel}</p>
+              <ol className="dv-scenarios">
+                {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
+                  <li key={sc.task}>
+                    <strong>{sc.task}</strong>
+                    <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           </> : <>
           <Block {...testing.usability} ff={ff} />
           <div className={ff ? "dv-media-row dv-gap-40" : testing.usability.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>

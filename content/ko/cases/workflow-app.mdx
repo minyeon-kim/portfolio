@@ -19,10 +19,10 @@ export const meta = {
       { label: "프로토타입 둘러보기", href: "#try", primary: true },
     ],
     details: [
-      { label: "Project", value: "블로썸 UX 스쿨, 10주. 동작하는 프로토타입(출시 안 함)" },
+      { label: "Duration", value: "10주" },
+      { label: "Type", value: "UX 스쿨 프로젝트" },
       { label: "Team", value: "UX 엔지니어 2명" },
-      { label: "Role", value: "UX/UI 디자인, 유저 리서치, 프로토타이핑, 사용성 테스트" },
-      { label: "Tools", value: "Figma, FigJam, Dovetail, Claude Code, Codex" },
+      { label: "Role & tools", value: "UX/UI 디자인, 유저 리서치, 프로토타이핑, 사용성 테스트. Figma, FigJam, Dovetail, Claude Code, Codex" },
     ],
   },
 };
@@ -58,7 +58,7 @@ export const study = {
       items: [
         { tone: "red", label: "Problem", title: "시안과 이유가 흩어진다", text: "버전은 채팅으로 정하고, 차이는 배포 뒤에야 보인다." },
         { tone: "accent", label: "Solution", title: "비교부터 기록까지 한곳에서", text: "시안은 영역별로 합치고, 차이는 결정권자에게 보내고, 결정은 화면과 함께 남긴다." },
-        { tone: "teal", label: "Result", title: "첫 목표에 못 미쳐 화면을 두 번 고쳤다", text: "2명 테스트에서 첫 시도에 목표보다 도움이 더 필요했지만(2.3, 목표 1.5), 둘 다 가치를 알아봤다. 바뀐 화면은 아직 다시 테스트하지 않았다." },
+        { tone: "teal", label: "Result", title: "첫 목표에 못 미쳐 화면을 두 번 고쳤다", text: "2명 테스트에서 첫 시도에 목표보다 도움이 더 필요했지만(2.3, 목표 1.5), 둘 다 가치를 알아봤다. 아직 프로토타입 단계이고, 바뀐 화면은 다시 테스트하지 않았다." },
       ],
     },
     headline: "AI 시대의 가장 큰 과제는",
@@ -115,7 +115,6 @@ export const study = {
       label: "질문 2 · 이미 해결한 도구가 있을까?",
       answer: "지금의 도구는 디자인과 코드의 차이를 찾아 주지만, AI 시안을 합치거나 왜 그렇게 정했는지 남겨 주지는 못한다.",
       auditLabel: "도구 9개, 4가지 유형",
-      auditFold: "도구 9개 비교 보기",
       columns: [
         { name: "개발 전달" },
         { name: "차이 감지" },
@@ -147,7 +146,6 @@ export const study = {
       title: "In-depth interview",
       lead: "네 명 모두 AI 결과를 다시 확인하지만, 결정을 맡은 사람은 분명하지 않았다.",
       text: "데스크 리서치로는 확인하고 합치는 일이 힘들다는 것까지만 알 수 있어서, 이 일을 매일 하는 실무자 4명과 60분씩 이야기했다.",
-      peopleLabel: "만난 사람",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "원격 인터뷰 세션: 참가자 영상 옆에 포스트잇이 붙은 FigJam 보드를 함께 보는 화면" },
       questionsLabel: "리서치 질문",
       questions: [
@@ -166,7 +164,6 @@ export const study = {
   },
   define: {
     personas: {
-      peopleLabel: "페르소나 2명 보기",
       method: "User definition",
       title: "Persona & user journey map",
       lead: "디자이너와 개발자는 서로 다른 단계에서 막히지만, 이유는 같다.",
@@ -254,10 +251,11 @@ export const study = {
   develop: {
     dropped: {
       title: "버린 아이디어",
+      from: "AI 중재자",
+      to: "시안 합치기",
       lead: "처음에는 디자이너와 개발자 사이를 조율하는 AI를 생각했지만, 이 방향을 버렸다.",
       text: "우리가 AI 시안을 합치는 데 만드는 것보다 시간이 더 걸렸다. 그래서 합치는 일에 집중했다.",
     },
-    artifactsLabel: "정보 구조와 사용자 흐름 보기",
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
@@ -481,6 +479,6 @@ export const study = {
 <TLDR>
 - **Problem** 디자이너와 개발자 모두 AI로 일하지만, 시안과 이유는 다른 도구에 흩어진다. 버전은 채팅으로 정하고, 차이는 배포 뒤에야 보인다.
 - **Solution** 시안 비교부터 결정 기록까지 한 워크스페이스에서. 시안은 영역별로 합치고, 차이는 결정권자 한 명에게 보내고, 결정은 화면과 함께 남긴다.
-- **Impact** 2명 테스트에서 첫 시도에 목표보다 도움이 더 필요했지만(2.3, 목표 1.5), 둘 다 가치를 알아봤다. 화면을 두 번 고쳤고, 바뀐 화면은 아직 다시 테스트하지 않았다.
+- **Impact** 2명 테스트에서 첫 시도에 목표보다 도움이 더 필요했지만(2.3, 목표 1.5), 둘 다 가치를 알아봤다. 화면을 두 번 고쳤다. 아직 프로토타입 단계이고, 바뀐 화면은 다시 테스트하지 않았다.
 </TLDR>
 </DevsignCase>
