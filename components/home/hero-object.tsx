@@ -39,11 +39,12 @@ float hq(float n, uint k) {
   v = (v >> 22u) ^ v;
   return float(v) / 4294967295.0;
 }
-// The Devsign bolt, from public/images/devsign/devsign-logo.svg (42×40): an
-// upper slab, a notch each side where it steps over, a lower slab to a point.
-const vec2 BOLT[9] = vec2[9](vec2(31.4, 7.59), vec2(26.0, 16.73), vec2(35.3, 16.73), vec2(21.9, 33.9), vec2(21.31, 25.88), vec2(12.4, 25.88), vec2(18.0, 16.73), vec2(7.2, 16.73), vec2(13.4, 7.59));
-// Centred, y up, half its height = 1, with the logo's own proportions.
-vec2 boltPoint(vec2 v) { return vec2(v.x - 21.25, 20.75 - v.y) / 13.16; }
+// The Devsign bolt, as in its logo: a thick bolt in two slanted slabs.
+// Traced from the Devsign logo (659×625): an upper slab leaning right, a
+// notch each side where it steps over, and a lower slab tapering to a point.
+const vec2 BOLT[9] = vec2[9](vec2(140.0, 0.0), vec2(565.0, 0.0), vec2(460.0, 205.0), vec2(660.0, 225.0), vec2(340.0, 625.0), vec2(325.0, 440.0), vec2(125.0, 415.0), vec2(240.0, 220.0), vec2(0.0, 205.0));
+// Sheared so the bolt leans like a slash (top to the right), not upright.
+vec2 boltPoint(vec2 v) { vec2 q = vec2((v.x - 330.0) * 0.8, 312.0 - v.y) * (1.6 / 625.0); return vec2(q.x + q.y * 0.45, q.y); }
 bool inBolt(vec2 q) {
   bool inside = false;
   for (int i = 0, j = 8; i < 9; j = i++) {
@@ -52,9 +53,6 @@ bool inBolt(vec2 q) {
   }
   return inside;
 }
-// Where the logos sit, in world units: about 24% across and 26% down the stage.
-const vec2 LOGO_AT = vec2(-2.47, 1.53);
-const float LOGO_SIZE = 0.9;
 // Where point n of the form leans: the form, with a wide halo of dust.
 vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
@@ -77,37 +75,37 @@ vec3 formOf(float n, vec2 uv) {
       p = vec3((col / 46.0 - 0.5) * 6.0 + (h1(n * 6.1) - 0.5) * 0.35, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
       loose *= 0.6;
     }
-  } else {
-    // The two logos, drawn tight so they read as the logos: one spot top left
-    // (clear of the name below and the card on the right), one size, spreading
-    // softly at the edges, with a fifth of the dust round them as haze.
-    vec2 q = vec2(0.0);
-    if (symbol > 1.5) {
-      if (a < 0.15) {
-        float e = b * 9.0;
-        int ki = int(floor(e));
-        q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
-      } else {
-        for (int t = 0; t < 16; t++) {
-          vec2 r = vec2(mix(-1.07, 1.07, hq(n, 20u + uint(t) * 2u)), mix(-1.0, 1.0, hq(n, 21u + uint(t) * 2u)));
-          if (inBolt(r)) { q = r; break; }
-        }
-      }
+  } else if (symbol > 1.5) {
+    // The Devsign bolt, loosely: its outline a little denser than its body,
+    // both spreading softly like the Gemini sparkle;
+    // set above the title, clear of the project window on the right.
+    vec2 q;
+    if (a < 0.1) {
+      float e = b * 9.0, k = floor(e);
+      int ki = int(k);
+      q = mix(boltPoint(BOLT[ki]), boltPoint(BOLT[(ki + 1) % 9]), fract(e));
+      loose *= 0.45;
     } else {
-      // The Gemini star: |x|^0.66 + |y|^0.66 = 1, as in its logo. The edge
-      // samples crowd towards the points, which keeps them sharp.
-      if (a < 0.2) {
-        float t = b * 6.2831853;
-        vec2 dir = vec2(cos(t), sin(t));
-        q = dir / pow(pow(abs(dir.x), 0.66) + pow(abs(dir.y), 0.66), 1.0 / 0.66);
-      } else {
-        for (int t = 0; t < 24; t++) {
-          vec2 r = vec2(hq(n, 20u + uint(t) * 2u), hq(n, 21u + uint(t) * 2u)) * 2.0 - 1.0;
-          if (pow(abs(r.x), 0.66) + pow(abs(r.y), 0.66) < 1.0) { q = r; break; }
-        }
+      q = vec2(0.0, 0.1);
+      for (int t = 0; t < 16; t++) {
+        vec2 r = vec2(mix(-0.56, 0.85, hq(n, 20u + uint(t) * 2u)), mix(-0.81, 0.81, hq(n, 21u + uint(t) * 2u)));
+        if (inBolt(r)) { q = r; break; }
       }
+      loose *= 0.3;
     }
-    return vec3(q * LOGO_SIZE + LOGO_AT, (hq(n, 17u) - 0.5) * 0.2) + j * (g > 0.8 ? mix(0.5, 2.0, c) : mix(0.08, 0.4, g * g));
+    // Top left, clear of the title below and the project card on the right.
+    p = vec3(q + vec2(-1.75, 0.75), (hq(n, 17u) - 0.5) * 0.2);
+  } else {
+    // The Gemini sparkle: a four-point star with concave sides, filled with a
+    // thick band of dust inside its edge rather than a thin outline, so its
+    // arms read as solid strokes.
+    float t = b * 6.2831853;
+    vec2 dir = vec2(cos(t), sin(t));
+    float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
+    float fill = a < 0.6 ? mix(0.62, 1.0, sqrt(c)) : sqrt(c);
+    // Top left, above the title, clear of the card and the paragraph.
+    p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
+    loose *= a < 0.6 ? 0.6 : 0.75;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
   // the widest third stays out as haze.
@@ -173,11 +171,11 @@ const velocityFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
-uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float damp; uniform float stir; uniform vec2 cam; uniform float hold;
+uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam; uniform float hold;
 ${view}
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
-  u += (homeOf(v) + arrive - p) * gather * hold * dt;
+  u += (homeOf(v) + arrive - p) * mix(gather, gather * 3.0, focus) * hold * dt;
   u += flow(p * 0.8) * 0.45 * stir * dt;
   u += valley(p * 0.9) * 0.6 * stir * dt;
   // The cursor sweeps nearby dust along its motion and swirls it.
@@ -188,10 +186,10 @@ void main() {
   // motion, and the landscape swells gently under a resting cursor.
   float k = exp(-dot(d, d) / 0.16);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 0.4 + normalize(d + 1e-4) * length(mv) * 0.45) * k * dt * 2.0;
-  u.y += k * mix(0.3, 1.0, step(symbol, 0.5) + step(2.5, symbol)) * dt;
+  u.xy += (mv * 0.3 + normalize(d + 1e-4) * length(mv) * 0.35) * k * dt * 2.0;
+  u.y += k * 0.7 * mix(0.3, 1.0, step(symbol, 0.5) + step(2.5, symbol)) * dt;
   // Damped enough that a change of form flows in and settles without wobbling.
-  u *= exp(-dt * damp);
+  u *= exp(-dt * 2.4);
   o = vec4(u, 1.0);
 }`;
 
@@ -224,17 +222,16 @@ void main() {
   vSpeed = length(u);
   // Gemini: the sparkle takes the logo's colours, blue at its heart and
   // warmer towards its points (coral up, yellow left, green down).
-  // (-2.47, 1.53) and 0.9 are LOGO_AT and LOGO_SIZE.
-  vec2 g = (p.xy - vec2(-2.47, 1.53)) / 0.9;
+  vec2 g = (p.xy - vec2(-2.21, 1.56)) / 0.85;
   float ga = atan(g.y, g.x);
-  vec3 tips = vec3(0.2, 0.5, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.27, 0.27) * max(sin(ga), 0.0)
-    + vec3(1.0, 0.75, 0.1) * max(-cos(ga), 0.0) + vec3(0.1, 0.75, 0.4) * max(-sin(ga), 0.0);
+  vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
+    + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
   tips /= max(abs(cos(ga)) + abs(sin(ga)), 1e-3);
-  vTint = mix(vec3(0.2, 0.5, 1.0), tips, smoothstep(0.0, 0.75, length(g)));
-  vSpec = spectrum * 0.95;
+  vTint = tips;
+  vSpec = spectrum * mix(0.55, 0.95, smoothstep(0.05, 0.7, length(g)));
   // Devsign: the logo's violet, cyan along the lower right, and a soft
   // white sheen across the upper slab.
-  vec2 d = (p.xy - vec2(-2.47, 1.53)) / 1.1;
+  vec2 d = (p.xy - vec2(0.35, 0.12)) / 1.6 - vec2(-1.75, 0.75);
   float cyan = smoothstep(0.25, 0.55, dot(d, normalize(vec2(1.0, -0.7))));
   float sheen = exp(-pow(dot(d - vec2(-0.25, 0.35), normalize(vec2(0.3, 1.0))) / 0.08, 2.0)) * 0.6;
   vec3 boltTint = mix(mix(vec3(0.56, 0.28, 1.0), vec3(0.3, 0.8, 1.0), cyan), vec3(0.95, 0.9, 1.0), sheen);
@@ -319,7 +316,7 @@ void main() {
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
-  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * step(spectrum + bolt, 0.5);
+  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky);
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky);
   px = mix(mix(1.6, 2.4, vDepth), mix(4.0, 6.0, vDepth), flake) * dpr;
@@ -615,14 +612,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (!visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation")) { mouse.px = mouse.x; mouse.py = mouse.y; return; }
       clock += dt;
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-      const k = 1 - Math.exp(-dt / 0.2);
+      const k = 1 - Math.exp(-dt / 0.35);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
-      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.2));
+      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
       // The journey: re-centre the world when a trip ends (or is cut short by
       // the next), then set off towards the new form's place.
       const shift = [0, 0, 0];
@@ -655,12 +652,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const wake = Math.min(1, clock / 2.5);
       const awake = wake < 0.5 ? 4 * wake ** 3 : 1 - 4 * (1 - wake) ** 3;
       const approach = 1.6 * (1 - awake);
-      const logo = target.symbol === 1 || target.symbol === 2;
       const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
       const ck = 1 - Math.exp(-dt / 1.2);
-      // A logo stays square-on: the lean nearly stops while it shows.
-      const lean = inside ? (logo ? 0.2 : 1) : 0;
-      cam.x += (mouse.x * lean - cam.x) * ck; cam.y += (mouse.y * lean - cam.y) * ck;
+      cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
       if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
@@ -670,7 +664,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), logo ? 14 : 4); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 3.6); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.08 : 0.18 - 0.14 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {
@@ -709,7 +703,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (clearTick++ % 10 === 0) readClear();
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
-      gl.uniform1f(uniform(pDraw, "keep"), 0.35 + 0.3 * Math.min(1, colours.spectrum + colours.bolt));
+      gl.uniform1f(uniform(pDraw, "keep"), 0.35);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform1f(uniform(pDraw, "halo"), colours.light);
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
       // 2. Dithered onto the ground, opaque, each dot in its light's colour.
