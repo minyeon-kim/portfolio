@@ -4296,21 +4296,26 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 63.99rem) { .dv-iter-head { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
 @media (prefers-reduced-motion: reduce) { .dv-iter-mark { transition: none; } }
 
-/* Core features stack: each card sticks and the next rises over it with native scroll,
-   while the covered one sinks back a little. Desktop only; otherwise a plain list. */
+/* Core features as whole sections: each fills the screen across the sheet and stays,
+   and the next rises over it with native scroll. The layout inside is unchanged,
+   clip running to the sheet's edge. Desktop only; otherwise a plain list. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-reels { gap: 28svh; timeline-scope: --dv-reel-2, --dv-reel-3, --dv-reel-4; }
-  .dv-reel { position: sticky; top: calc(88px + var(--i) * 12px); padding: clamp(24px, 2.4vw, 32px); border: 1px solid var(--dv-card-line); border-radius: var(--dv-band-radius); background: var(--dv-surface); transform-origin: 50% 0; }
-  .dv-reel:nth-child(1) { --i: 0; animation: dv-reel-sink linear both; animation-timeline: --dv-reel-2; animation-range: entry 0% entry 100%; }
-  .dv-reel:nth-child(2) { --i: 1; view-timeline-name: --dv-reel-2; animation: dv-reel-sink linear both; animation-timeline: --dv-reel-3; animation-range: entry 0% entry 100%; }
-  .dv-reel:nth-child(3) { --i: 2; view-timeline-name: --dv-reel-3; animation: dv-reel-sink linear both; animation-timeline: --dv-reel-4; animation-range: entry 0% entry 100%; }
-  .dv-reel:nth-child(4) { --i: 3; view-timeline-name: --dv-reel-4; }
+  .dv-reels { gap: 20svh; }
   .dv-reels::after { content: ""; height: 1px; }
-  .dv-reel .dv-reel-media, .dv-reel:nth-child(even) .dv-reel-media { align-self: center; margin-inline: 0; border-radius: var(--dv-card-radius); }
+  .dv-reel { position: sticky; top: 0; min-height: 100svh; align-content: center; margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); border-top: 1px solid var(--dv-card-line); border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: var(--dv-bg); }
+  .dv-reel .dv-reel-media { align-self: center; }
 }
-@keyframes dv-reel-sink { to { scale: 0.95; } }
 @media (max-width: 47.99rem) {
   .dv-vpc-pairs { --vpc-cols: minmax(0, 1fr); }
   .dv-vpc-pair > i { rotate: 90deg; }
   .dv-vpc-pair > b { margin-top: 0; }
+}
+
+/* Analysis steps: stage, then one sentence. */
+.dv-flow { grid-template-rows: auto auto; }
+.dv-flow > li { grid-row: span 2; }
+.dv-flow p { color: var(--dv-ink); font-size: 18px; line-height: 1.45; }
+@media (max-width: 63.99rem) {
+  .dv-flow { grid-template-rows: none; }
+  .dv-flow > li { grid-row: auto; }
 }
