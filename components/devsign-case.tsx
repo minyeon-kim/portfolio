@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, GuidedDemo, DemoDialog, CanvasZoom, AffinityDots } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, AffinityDots } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -428,7 +428,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <AffinityDots
               funnel={define.affinity.funnel}
               note={define.affinity.otherNote}
-              problems={define.problems.items.map((item: Study, i: number) => ({ title: item.title, tone: PROBLEM_TONES[i % PROBLEM_TONES.length], insight: define.affinity.insights[i] }))}
+              answeredBy={develop.selection?.answeredBy}
+              problems={define.problems.items.map((item: Study, i: number) => ({
+                title: item.title,
+                tone: PROBLEM_TONES[i % PROBLEM_TONES.length],
+                insight: define.affinity.insights[i],
+                quote: define.affinity.quotes[i][0],
+                who: define.affinity.quotes[i][1],
+                feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
+              }))}
               groups={[
                 ...define.affinity.themes.flatMap((list: [string, number][], i: number) => list.map(([name, count]) => ({ name, count, problem: i, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))),
                 { name: define.affinity.otherTheme[0], count: define.affinity.otherTheme[1], problem: -1 },
@@ -442,39 +450,24 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </ol>
             </div>
           )}
-          <Figure img={define.affinity.board} className="dv-board dv-gap-40" />
           {define.affinity.funnel && (
             <div className="dv-aff dv-dots-static">
-              <p className="dv-caps reveal">{define.affinity.flowLabel}</p>
               <ol>
                 {define.problems.items.map((item: Study, i: number) => (
                   <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[i % PROBLEM_TONES.length]}>
-                    <ul>
-                      {define.affinity.themes[i].map(([name]: [string, number]) => (
-                        <li key={name}>{name}</li>
-                      ))}
-                    </ul>
-                    <ArrowIcon />
-                    <div><h4>{item.title}</h4><p>{define.affinity.insights[i]}</p></div>
+                    <h4>{item.title}</h4>
+                    <blockquote>“{define.affinity.quotes[i][0]}”</blockquote>
+                    <p className="dv-aff-who">{define.affinity.quotes[i][1]}</p>
+                    <p>{define.affinity.insights[i]}</p>
                   </li>
                 ))}
               </ol>
             </div>
           )}
-        </div>
-
-        <div className="dv-subsection">
-          <Block {...define.problems} ff={ff} />
-          <ProblemPanels
-            answeredBy={develop.selection?.answeredBy}
-            items={define.problems.items.map((item: Study, index: number) => ({
-              title: item.title,
-              body: item.body,
-              role: item.role,
-              tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
-              feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
-            }))}
-          />
+          <a className="dv-board-link reveal" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">
+            <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="280px" />
+            <span>{define.affinity.boardLink}</span>
+          </a>
         </div>
 
         {/* Where it breaks first (the journey and its two low points), then who. */}
