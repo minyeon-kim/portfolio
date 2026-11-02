@@ -308,16 +308,19 @@ void main() {
     // bright. An even field of equally bright grains is what read as grain.
   // After byotone.com: fewer, slightly larger grains (2–3px), nearly even
   // in brightness and matte, so the form reads by density alone.
-  float kept = step(fract(vSeed * 97.31), keep);
+  // Landing: the dust thins out with height above the landscape, so the
+  // waves dissolve into the sky instead of a second field sitting on top.
+  float sky = galaxy * smoothstep(-0.2, 0.7, s.y);
+  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
-  // has depth instead of an even texture.
-  float flake = step(0.875, fract(vSeed * 71.9));
+  // has depth instead of an even texture. The sky keeps only the small ones.
+  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky);
   vFlake = flake;
-  vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake);
+  vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky);
   px = mix(mix(1.6, 2.4, vDepth), mix(4.0, 6.0, vDepth), flake) * dpr;
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
-  float tw = step(0.92, fract(vSeed * 37.7)) * step(0.5, light);
+  float tw = step(0.92, fract(vSeed * 37.7)) * step(0.5, light) * (1.0 - sky);
   float glint = tw * pow(0.5 + 0.5 * sin(time * mix(0.6, 1.4, fract(vSeed * 19.3)) + vSeed * 40.0), 14.0);
   vFaint *= 1.0 + glint * 3.0;
   px *= 1.0 + glint * 0.8;
@@ -356,7 +359,7 @@ void main() {
 // shift: the depth the move happens in.
 const starVertex = `#version 300 es
 precision highp float;
-uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time;
+uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time; uniform float galaxy;
 out float vA; out vec3 vC;
 ${view}
 float hs(float n) { return fract(sin(n) * 43758.5453); }
@@ -369,8 +372,11 @@ void main() {
   gl_Position = vec4(s, 0.0, 1.0);
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
-  float bright = step(0.97, hs(i * 9.7));
-  vA *= 1.4 + bright * 2.5;
+  // Landing: fewer and dimmer towards the top, with no bright ones up there.
+  float sky = galaxy * smoothstep(-0.2, 0.7, s.y);
+  if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+  float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
+  vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
   // Blue-white, warm and pale violet stars, a few of them bright.
   float t = hs(i * 4.3);
   vC = t < 0.45 ? vec3(0.7, 0.82, 1.0) : (t < 0.75 ? vec3(1.0, 0.86, 0.7) : vec3(0.85, 0.72, 1.0));
@@ -423,7 +429,8 @@ void main() {
       + vec3(0.6, 0.3, 1.0) * smoothstep(0.5, 0.9, n2)
       + vec3(0.2, 0.85, 0.8) * smoothstep(0.58, 0.95, n3) * 0.7
       + vec3(1.0, 0.35, 0.7) * smoothstep(0.62, 0.95, n1 * n2 * 1.6) * 0.6;
-    light3 += neb * 0.045;
+    // Clear towards the top: patches of it up there read as clumps.
+    light3 += neb * 0.045 * (1.0 - smoothstep(0.35, 0.8, v.y));
   }
   float lum = max(light3.r, max(light3.g, light3.b));
   float signal = pow(clamp(lum * 1.6, 0.0, 1.0), 0.72);
@@ -678,7 +685,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach);
+      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       gl.drawArrays(gl.POINTS, 0, 4200);
       gl.useProgram(pDraw);
