@@ -4026,19 +4026,20 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 47.99rem) { .dv-mini { grid-template-columns: 1fr; gap: 12px; } .dv-mini > li { padding: 20px; } }
 
 /* Analysis: the four stages as one flow in one panel, a line running through their names. */
-.dv-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: 32px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; }
-.dv-flow > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 12px; min-width: 0; }
-.dv-flow-stage { position: relative; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
-.dv-flow-stage::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.dv-flow > li:not(:last-child) .dv-flow-stage::after { content: ""; flex: 1; height: 1px; margin-right: -32px; background: var(--dv-line); }
+.dv-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: 32px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; counter-reset: dv-flow; }
+.dv-flow > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; justify-items: center; row-gap: 12px; min-width: 0; text-align: center; counter-increment: dv-flow; }
+.dv-flow-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; margin-bottom: 8px; color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
+.dv-flow-stage::before { content: counter(dv-flow); flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.dv-flow > li:not(:last-child) .dv-flow-stage::after { content: ""; position: absolute; top: 17px; left: calc(50% + 26px); width: calc(100% + 32px - 52px); height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--case-accent) 45%, transparent); }
 .dv-flow h4 { color: var(--dv-ink); font-size: 20px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
-.dv-flow p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
+.dv-flow p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: balance; }
 @media (max-width: 63.99rem) {
   .dv-flow { grid-template-columns: 1fr; grid-template-rows: none; row-gap: 28px; padding: 24px; }
-  .dv-flow > li { position: relative; grid-row: auto; grid-template-rows: none; row-gap: 8px; padding-left: 20px; }
-  .dv-flow-stage { margin-bottom: 0; }
-  .dv-flow-stage::before { position: absolute; left: -20px; top: 7px; }
-  .dv-flow > li:not(:last-child)::before { content: ""; position: absolute; left: 3.5px; top: 18px; bottom: -28px; width: 1px; background: var(--dv-line); }
+  .dv-flow > li { position: relative; grid-row: auto; grid-template-rows: none; justify-items: start; row-gap: 8px; padding-left: 48px; text-align: left; }
+  .dv-flow-stage { position: static; display: block; margin-bottom: 0; line-height: 32px; }
+  .dv-flow-stage::before { position: absolute; left: 0; top: 0; width: 32px; height: 32px; }
+  .dv-flow > li:not(:last-child)::before { content: ""; position: absolute; left: 15px; top: 40px; bottom: -20px; width: 2px; border-radius: 1px; background: color-mix(in srgb, var(--case-accent) 45%, transparent); }
+  .dv-flow p { text-wrap: pretty; }
   .dv-flow > li:not(:last-child) .dv-flow-stage::after { display: none; }
   .dv-flow h4 { font-size: 18px; }
 }
