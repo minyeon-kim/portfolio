@@ -395,27 +395,27 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
-          {/* What we asked, then who we asked, top to bottom; the session photo follows. */}
+          {/* What we asked, then the session and who was in it, side by side at one height. */}
           <div className="dv-ask dv-gap-40 reveal">
             <p className="dv-caps">{discover.interview.questionsLabel}</p>
             <ol>
               {discover.interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
             </ol>
           </div>
-          <div className="dv-met dv-gap-40 reveal">
-            <p className="dv-caps">{discover.interview.peopleLabel}</p>
-            <ul>
-              {discover.interview.participants.map((p: string[]) => (
-                <li key={p[0]} data-tone={toneOf(p[1])}>
-                  <b>{p[0]}</b>
-                  <strong>{p[1]}</strong>
-                  <span>{discover.interview.participantColumns[2]} {p[2]}</span>
-                  <span>{p[3]}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="dv-met">
+            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 60vw" className="dv-met-photo" />
+            <div className="dv-met-people reveal">
+              <p className="dv-caps">{discover.interview.peopleLabel}</p>
+              <ul>
+                {discover.interview.participants.map((p: string[]) => (
+                  <li key={p[0]} data-tone={toneOf(p[1])}>
+                    <b>{p[0]}</b>
+                    <div><strong>{p[1]}</strong><span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span></div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-40" />
         </div>
         ) : (
         <div className="dv-subsection dv-rule">

@@ -4053,13 +4053,37 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-ask ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 0; list-style: none; }
 .dv-ask li { display: flex; flex-direction: column; gap: 8px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
 .dv-ask b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.dv-met ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 28px 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; }
-.dv-met li { display: flex; flex-direction: column; min-width: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
-.dv-met b { margin-bottom: 8px; color: var(--tone); font-weight: 600; font-variant-numeric: tabular-nums; }
-.dv-met strong { margin-bottom: 4px; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
+/* The session photo and who was in it, one row at one height. */
+.dv-met { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: stretch; margin-top: 56px; }
+.dv .dv-met .dv-met-photo { height: 100%; animation: none; }
+.dv-met-photo img { height: 100%; object-fit: cover; }
+.dv-met-people { display: flex; flex-direction: column; min-width: 0; padding: 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-met-people .dv-caps { margin-bottom: 12px; padding-inline: 12px; }
+.dv-met-people ul { display: grid; flex: 1; grid-auto-rows: 1fr; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.dv-met-people li { display: flex; gap: 14px; align-items: center; min-width: 0; padding: 10px 12px; border-radius: 10px; transition: background-color 250ms var(--ease), opacity 250ms var(--ease); }
+.dv-met-people b { flex: none; color: var(--tone); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-met-people strong { display: block; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
+.dv-met-people span { display: block; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
+@media (hover: hover) {
+  .dv-met-people li:hover { background: color-mix(in srgb, var(--tone) 14%, transparent); }
+  .dv-met-people ul:hover li:not(:hover) { opacity: 0.5; }
+}
+/* Questions and people arrive one after another as the block rises (native scroll). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-ask li, .dv-met-people li:not(:hover) { animation: dv-step-in linear both; animation-timeline: view(); }
+    .dv-ask li:nth-child(1), .dv-met-people li:nth-child(1) { animation-range: cover 4% cover 18%; }
+    .dv-ask li:nth-child(2), .dv-met-people li:nth-child(2) { animation-range: cover 12% cover 26%; }
+    .dv-ask li:nth-child(3), .dv-met-people li:nth-child(3) { animation-range: cover 20% cover 34%; }
+    .dv-met-people li:nth-child(4) { animation-range: cover 28% cover 42%; }
+    @media (hover: hover) { .dv-met-people ul:hover li { animation: none; } }
+  }
+}
+@keyframes dv-step-in { from { opacity: 0.2; translate: 0 14px; } to { opacity: 1; translate: none; } }
 @media (max-width: 63.99rem) {
   .dv-ask ol { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .dv-met ul { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 24px; }
+  .dv-met { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
+  .dv-met-photo img { height: auto; }
 }
 
 /* Feature reel text, no box: a label like the block labels, the sentence, then the
