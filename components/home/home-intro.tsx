@@ -56,7 +56,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
       ? { slug: "about", role: aboutCopy.headline, emphasis: aboutCopy.emphasis, name: site.name, text: aboutCopy.bio }
       : null;
   // The copy changes in two beats (metalab.com): the current world's lines
-  // leave (220ms) before the next world's lines arrive, staggered. `displayed`
+  // leave (120ms) before the next world's lines arrive, staggered. `displayed`
   // trails `world` by that beat; while they differ the lines are hidden.
   const [displayed, setDisplayed] = useState<World | null>(null);
   const worldRef = useRef(world);
@@ -64,7 +64,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const worldSlug = world?.slug ?? null, displayedSlug = displayed?.slug ?? null;
   useEffect(() => {
     if (worldSlug === displayedSlug) return;
-    const timer = setTimeout(() => setDisplayed(worldRef.current), 220);
+    const timer = setTimeout(() => setDisplayed(worldRef.current), 120);
     return () => clearTimeout(timer);
   }, [worldSlug, displayedSlug]);
   const copyOn = world !== null && displayed !== null && world.slug === displayed.slug;
