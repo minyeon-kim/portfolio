@@ -25,8 +25,8 @@ type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: n
 // its surface (Devsign's dark canvas, Gemini's blue night) while the loop
 // fades, its media sits in a large card at the top right (the Devsign browser
 // window with the live prototype, or the Gemini phone on its surface), the
-// role sits top centre, the name large at the left of centre and the problem
-// line bottom right. Each world has its own composition (CSS by data-world):
+// name large at the left of centre and the problem line bottom right; the role
+// is in the card's caption. Each world has its own composition (CSS by data-world):
 // Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
 // cropped at the bottom right), About like Midjourney (name bottom centre, no
 // card: the site's own loop stays as the image, the headline is the statement
@@ -43,7 +43,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const about = hover === "about";
   // The copy that replaces the positioning: a case's name and problem, or the
   // name and the whole positioning line for About me. Kept while it fades out.
-  const next = shown ? { name: shown.name, text: shown.problem } : about ? { name: site.name, text: t.positioning } : null;
+  const next = shown ? { name: shown.name, text: shown.hook ?? shown.problem } : about ? { name: site.name, text: t.positioning } : null;
   if (next && (next.name !== recent?.name)) setRecent(next);
   // The hovered pill's world: the whole stage takes its surface and its media
   // (or, for About, a card of facts) sits in a large card; a role line, the
@@ -51,7 +51,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // composition (metalab.com's per-project layouts). Kept while it fades out.
   type World = { slug: string; role?: string; emphasis?: string; name: string; text: string };
   const world: World | null = shown
-    ? { slug: shown.slug, role: shown.role, name: shown.name, text: shown.problem }
+    ? { slug: shown.slug, name: shown.name, text: shown.hook ?? shown.problem }
     : about && aboutCopy
       ? { slug: "about", role: aboutCopy.headline, emphasis: aboutCopy.emphasis, name: site.name, text: aboutCopy.bio }
       : null;
