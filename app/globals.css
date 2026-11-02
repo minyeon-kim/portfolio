@@ -4023,41 +4023,16 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 /* In-depth interview: who we met and what we asked, one panel. */
 /* Interview: the questions as a plain row, then the people as one strip. */
-.dv-ask .dv-caps, .dv-met .dv-caps { margin-bottom: 16px; }
-.dv-ask ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 0; list-style: none; }
-.dv-ask li { display: flex; flex-direction: column; gap: 8px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
-.dv-ask b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 /* The session photo and who was in it, one row at one height. */
-.dv-met { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: stretch; margin-top: 56px; }
-.dv .dv-met .dv-met-photo { height: 100%; animation: none; }
-.dv-met-photo img { height: 100%; object-fit: cover; }
-.dv-met-people { display: flex; flex-direction: column; min-width: 0; padding: 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
-.dv-met-people .dv-caps { margin-bottom: 12px; padding-inline: 12px; }
-.dv-met-people ul { display: grid; flex: 1; grid-auto-rows: 1fr; gap: 4px; margin: 0; padding: 0; list-style: none; }
-.dv-met-people li { display: flex; gap: 14px; align-items: center; min-width: 0; padding: 10px 12px; border-radius: 10px; transition: background-color 250ms var(--ease), opacity 250ms var(--ease); }
-.dv-met-people b { flex: none; color: var(--tone); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.dv-met-people strong { display: block; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
-.dv-met-people span { display: block; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
 @media (hover: hover) {
-  .dv-met-people li:hover { background: color-mix(in srgb, var(--tone) 14%, transparent); }
-  .dv-met-people ul:hover li:not(:hover) { opacity: 0.5; }
 }
 /* Questions and people arrive one after another as the block rises (native scroll). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .dv-ask li, .dv-met-people li:not(:hover) { animation: dv-step-in linear both; animation-timeline: view(); }
-    .dv-ask li:nth-child(1), .dv-met-people li:nth-child(1) { animation-range: cover 4% cover 18%; }
-    .dv-ask li:nth-child(2), .dv-met-people li:nth-child(2) { animation-range: cover 12% cover 26%; }
-    .dv-ask li:nth-child(3), .dv-met-people li:nth-child(3) { animation-range: cover 20% cover 34%; }
-    .dv-met-people li:nth-child(4) { animation-range: cover 28% cover 42%; }
-    @media (hover: hover) { .dv-met-people ul:hover li { animation: none; } }
   }
 }
 @keyframes dv-step-in { from { opacity: 0.2; translate: 0 14px; } to { opacity: 1; translate: none; } }
 @media (max-width: 63.99rem) {
-  .dv-ask ol { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .dv-met { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
-  .dv-met-photo img { height: auto; }
 }
 
 /* Feature reel text, no box: a label like the block labels, the sentence, then the
@@ -4328,3 +4303,60 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* The wireflow fits the column on desktop and scrolls sideways only when it can't. */
 .dv-wf { overflow-y: hidden; }
 @media (min-width: 72rem) { .dv-wf { overflow: visible; } }
+
+/* Tool table: no label in the corner. */
+.dv-tool-table thead td { padding: 12px; }
+
+/* Interview: questions light up with scroll, then the session wide, people credited under it. */
+.dv-asks .dv-caps { margin-bottom: 12px; }
+.dv-asks ol { margin: 0; padding: 0; list-style: none; }
+.dv-asks li { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: baseline; padding-block: 20px; border-top: 1px solid var(--dv-card-line); color: var(--dv-ink); font-size: clamp(20px, 2vw, 28px); font-weight: 500; line-height: 1.35; text-wrap: pretty; }
+.dv-asks b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-meet { margin: 56px 0 0; }
+.dv-meet-photo { position: relative; aspect-ratio: 2.2; overflow: hidden; border-radius: var(--dv-card-radius); background: #0c0c10; }
+.dv-meet-photo img { position: absolute; left: -14%; top: -18%; width: 128%; max-width: none; height: auto; }
+.dv-meet ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 24px 0 0; padding: 0; list-style: none; }
+.dv-meet li { display: flex; flex-direction: column; gap: 2px; min-width: 0; transition: opacity 250ms var(--ease); }
+.dv-meet li b { color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.dv-meet li strong { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
+.dv-meet li span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
+@media (hover: hover) { .dv-meet ul:hover li:not(:hover) { opacity: 0.4; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+    .dv-asks li { animation: dv-lit linear both; animation-timeline: view(); animation-range: cover 22% cover 46%; }
+    .dv-meet-photo { animation: dv-meet-grow linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+  }
+}
+@keyframes dv-lit { from { color: color-mix(in srgb, var(--dv-ink) 28%, transparent); } }
+@keyframes dv-meet-grow { from { clip-path: inset(0 14% round var(--dv-card-radius)); } to { clip-path: inset(0 round var(--dv-card-radius)); } }
+@media (max-width: 47.99rem) {
+  .dv-asks li { grid-template-columns: 28px minmax(0, 1fr); padding-block: 16px; }
+  .dv-meet { margin-top: 40px; }
+  .dv-meet-photo { aspect-ratio: 1.5; }
+  .dv-meet-photo img { left: -14%; top: -8%; }
+  .dv-meet ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
+}
+
+/* Key problems: a horizontal accordion, one panel open. Stacked and all open below 64rem. */
+.dv-panels { display: flex; gap: 12px; height: 320px; margin-inline: 0; padding: 0; list-style: none; container-type: inline-size; }
+.dv-panels > li { position: relative; display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 70%); transition: flex-grow 450ms var(--ease), border-color 250ms var(--ease); }
+.dv-panels > li[data-on] { flex-grow: 2.6; border-color: color-mix(in srgb, var(--tone) 55%, transparent); }
+.dv-panels button { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 0; padding: 24px 24px 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.dv-panels button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: -4px; border-radius: var(--dv-card-radius); }
+.dv-panel-who { display: flex; flex-wrap: wrap; gap: 2px 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-panel-who b { color: var(--tone); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-panels h4 { color: var(--dv-ink); font-size: clamp(20px, 1.9vw, 26px); font-weight: 500; line-height: 1.25; text-wrap: balance; }
+.dv-panel-more { display: grid; grid-template-rows: 0fr; padding: 0 24px 24px; opacity: 0; transition: grid-template-rows 450ms var(--ease), opacity 250ms var(--ease); }
+.dv-panels > li[data-on] .dv-panel-more { grid-template-rows: 1fr; opacity: 1; transition-delay: 0ms, 150ms; }
+.dv-panel-more > div { width: calc(46cqw - 60px); min-height: 0; overflow: hidden; }
+.dv-panel-more p { margin-top: 12px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
+.dv-panel-more .dv-panel-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: 16px; }
+.dv-panel-answer b { color: var(--case-accent); font-weight: 600; }
+@media (max-width: 63.99rem) {
+  .dv-panels { flex-direction: column; height: auto; }
+  .dv-panels > li { flex: none; }
+  .dv-panels button { cursor: default; gap: 12px; }
+  .dv-panel-more { grid-template-rows: 1fr; opacity: 1; }
+  .dv-panel-more > div { width: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
