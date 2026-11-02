@@ -135,6 +135,109 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
+// Affinity as a pinned scene: the page stays and, with native scroll, every quote (one
+// dot) gathers into its theme and then into its problem. Only drawn on wide screens with
+// motion allowed (CSS); otherwise the case shows a plain list instead.
+type DotGroup = { name: string; count: number; problem: number; tone?: string };
+const DOT_W = 1200;
+const DOT_H = 460;
+const DOT_BASE = 340;
+const DOT_CELL = 28;
+const PROBLEM_X = [0, 320, 640, 960];
+function dotLayout(groups: DotGroup[]) {
+  const total = groups.reduce((sum, g) => sum + g.count, 0);
+  const inProblem = [0, 0, 0, 0];
+  let index = 0;
+  return groups.flatMap((g, column) => Array.from({ length: g.count }, (_, n) => {
+    // A fixed shuffle, so the first screen reads as one unsorted crowd.
+    const at = ((index + 1) * 73) % total;
+    const spread = ((index + 1) * 37) % 100 / 100;
+    index += 1;
+    const x1 = column * (DOT_W / 7) + 9 + (n % 5) * DOT_CELL;
+    const y1 = DOT_BASE - 9 - Math.floor(n / 5) * DOT_CELL;
+    const p = g.problem >= 0 ? inProblem[g.problem]++ : 0;
+    return {
+      tone: g.tone, other: g.problem < 0, spread,
+      x0: 17 + (at % 34) * 34.8, y0: 70 + Math.floor(at / 34) * 34.8,
+      x1, y1,
+      x2: g.problem >= 0 ? PROBLEM_X[g.problem] + 9 + (p % 8) * DOT_CELL : x1,
+      y2: g.problem >= 0 ? DOT_BASE - 9 - Math.floor(p / 8) * DOT_CELL : y1,
+    };
+  }));
+}
+const dotEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
+export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGroup[]; problems: { title: string; tone: string }[]; funnel: [string, string][]; note: string }) {
+  const track = useRef<HTMLDivElement>(null);
+  const [step, setStep] = useState(0);
+  const dots = dotLayout(groups);
+  useEffect(() => {
+    const el = track.current;
+    if (!el || !window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)").matches) return;
+    const circles = el.querySelectorAll("circle");
+    const art = el.querySelector("svg");
+    const layout = dotLayout(groups);
+    let frame = 0;
+    let last = "";
+    const read = () => {
+      frame = 0;
+      const box = el.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, -box.top / (box.height - window.innerHeight)));
+      const a = (p - 0.1) / 0.34;
+      const b = (p - 0.56) / 0.34;
+      const key = `${dotEase(a).toFixed(3)}:${dotEase(b).toFixed(3)}`;
+      setStep(p < 0.27 ? 0 : p < 0.73 ? 1 : 2);
+      if (key === last) return;
+      last = key;
+      circles.forEach((circle, i) => {
+        const d = layout[i];
+        const u = dotEase((a - d.spread * 0.2) / 0.8);
+        const w = dotEase((b - d.spread * 0.2) / 0.8);
+        const x = d.x0 + (d.x1 - d.x0) * u + (d.x2 - d.x1) * w;
+        const y = d.y0 + (d.y1 - d.y0) * u + (d.y2 - d.y1) * w;
+        circle.setAttribute("cx", x.toFixed(1));
+        circle.setAttribute("cy", y.toFixed(1));
+        if (d.other) circle.setAttribute("opacity", Math.max(0, 1 - w * 2.5).toFixed(2));
+      });
+      art?.toggleAttribute("data-colored", a > 0.3);
+      el.style.setProperty("--l1", (dotEase(a * 1.4 - 0.4) * (1 - dotEase(b * 3))).toFixed(2));
+      el.style.setProperty("--l2", dotEase(b * 2 - 1).toFixed(2));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [groups]);
+  return (
+    <div ref={track} className="dv-dots-track">
+      <div className="dv-dots-stage">
+        <ol className="dv-funnel">
+          {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined}><strong>{n}</strong><span>{label}</span></li>)}
+        </ol>
+        <div className="dv-dots-art" aria-hidden="true">
+          <svg viewBox={`0 0 ${DOT_W} ${DOT_H}`}>
+            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="9" data-tone={d.tone} />)}
+          </svg>
+          {groups.map((g, i) => (
+            <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%`, top: `${((DOT_BASE + 14) / DOT_H) * 100}%` }}>{g.name} <b>{g.count}</b></p>
+          ))}
+          {problems.map((item, i) => (
+            <p key={item.title} className="dv-dots-problem" data-tone={item.tone} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%`, top: `${((DOT_BASE + 14) / DOT_H) * 100}%` }}><b>{String(i + 1).padStart(2, "0")}</b>{item.title}</p>
+          ))}
+        </div>
+        <p className="dv-dots-note" data-on={step === 2 || undefined}>{note}</p>
+        <ul className="sr-only">
+          {groups.map((g) => <li key={g.name}>{g.name}: {g.count}{g.problem >= 0 ? ` → ${problems[g.problem].title}` : ""}</li>)}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 // The key problems as a horizontal accordion: four panels in a row, one open. Hover,
 // keyboard focus or a tap opens a panel; on phones (CSS) they are all open and stacked.
 type Problem = { title: string; body: string; role: string; tone: string; feature?: string };

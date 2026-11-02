@@ -210,9 +210,11 @@ export const study = {
       text: "We grouped what people said in the interviews by similarity (affinity mapping) to narrow down the problems.",
       funnel: [["201", "interview quotes"], ["7", "themes"], ["4", "problems"]],
       flowLabel: "Themes that led to a problem",
+      otherTheme: ["AI limits", 21],
+      otherNote: "AI limits (21 cards) didn’t go into the four problems.",
       themesLabel: "Themes",
       cardsWord: " cards",
-      themes: [[["Several drafts are hard to merge into one", 14]], [["Every change is checked by hand", 29], ["No one is sure who should decide", 28]], [["Information is spread across tools", 38], ["There’s no place to comment on AI work", 25]], [["It’s hard to find why something changed", 55]]],
+      themes: [[["Several drafts are hard to merge into one", 14]], [["Every change is checked by hand", 28], ["No one is sure who should decide", 28]], [["Information is spread across tools", 37], ["There’s no place to comment on AI work", 25]], [["It’s hard to find why something changed", 48]]],
       board: { src: "/images/devsign/affinity-board.webp", width: 2400, height: 1044, alt: "Affinity map: interview quotes grouped into seven colored theme columns, from real-time collaboration to AI limits" },
     },
     problems: {
@@ -222,9 +224,9 @@ export const study = {
       lowest: "Lowest point",
       items: [
         { title: "Drafts can’t be combined", body: "There are several AI drafts, but no way to take the best part of each and put them together.", role: "Designer", from: "Versions, options & finals (14)" },
-        { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", role: "Designer · PO", from: "Blurred role lines (28) · Manual review (29)", lowest: true },
-        { title: "Changes are scattered", body: "Where the work stands, and why things changed, is spread across Figma, Slack and GitHub.", role: "Developer", from: "Tool sprawl (38) · Real-time collaboration (25)", lowest: true },
-        { title: "Reasons get lost", body: "Why it changed, who decided, and whether the code was updated all live in different places.", role: "Designer · Developer", from: "Shared context (55)" },
+        { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", role: "Designer · PO", from: "Blurred role lines (28) · Manual review (28)", lowest: true },
+        { title: "Changes are scattered", body: "Where the work stands, and why things changed, is spread across Figma, Slack and GitHub.", role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
+        { title: "Reasons get lost", body: "Why it changed, who decided, and whether the code was updated all live in different places.", role: "Designer · Developer", from: "Shared context (48)" },
       ],
     },
     core: {
