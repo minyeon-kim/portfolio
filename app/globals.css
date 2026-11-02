@@ -3894,8 +3894,6 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 }
 
 /* The opener link lands with the whole Deliver title clear of the stage nav. */
-.dv-try-anchor { display: block; height: 0; scroll-margin-top: -56px; }
-@media (max-width: 47.99rem) { .dv-try-anchor { scroll-margin-top: -14px; } }
 
 /* Tool review: capabilities as rows, tools as columns, Devsign's column first in
    a solid case colour (after pricing comparison tables). The last two rows are
@@ -4090,3 +4088,5 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .devsign-hero-actions a[data-wide] { display: none; }
   .devsign-hero-actions a[data-phone] { display: inline-flex; }
 }
+
+#try { scroll-margin-top: 24px; }

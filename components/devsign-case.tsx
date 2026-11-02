@@ -722,7 +722,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       {/* The opener's link target sits outside the stage: stages and their blocks
           are mid-rise when the link is pressed, which would throw the landing off. */}
-      {deliver.tryIt && <span id="try" className="dv-try-anchor" />}
       <Section id="deliver" title="Deliver" band={!ff}>
         <div>
           <Block {...deliver} ff={ff} />
