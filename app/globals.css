@@ -4206,3 +4206,21 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-vpc-line b { color: var(--case-accent); font-weight: 600; }
 @media (max-width: 47.99rem) { .dv-vpc-view { aspect-ratio: 1.4; } .dv-vpc-line { font-size: 16px; } }
 @media (prefers-reduced-motion: reduce) { .dv-vpc-view img { transition: none; } .dv-vpc-ring, .dv-vpc-line { animation: none; } }
+
+/* The Problem statement sheet grows with scroll: it enters at the column width, level with
+   the persona cards, and opens to the full sheet as it rises. Clip and scale only, so nothing
+   reflows and native scroll stays in charge. Static full sheet on phones, with reduced motion
+   and without scroll timelines. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+    .dv > #define > .dv-core.dv-core:last-child { --dv-sheet-inset: calc(var(--dv-pad) - var(--dv-edge)); animation: dv-sheet-grow linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-kicker { animation: dv-sheet-text linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    /* Keeps the statement's own light-up (dv-fill) alongside the scale. */
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation: dv-fill linear both, dv-sheet-text linear both; animation-timeline: view(), view(); animation-range: entry 0% cover 40%, entry 0% cover 45%; }
+  }
+}
+@keyframes dv-sheet-grow {
+  from { clip-path: inset(0 var(--dv-sheet-inset) 0 var(--dv-sheet-inset) round var(--dv-card-radius)); }
+  to { clip-path: inset(0 0 0 0 round var(--dv-band-radius) var(--dv-band-radius) 0 0); }
+}
+@keyframes dv-sheet-text { from { scale: 0.86; } to { scale: 1; } }
