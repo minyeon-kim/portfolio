@@ -251,27 +251,27 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   );
 }
 
-// The prototype as a guided walk-through: real screenshots, one highlighted control at
-// a time, and a line saying what to do. Pressing the highlight moves on; pressing
-// anywhere else nudges it. The free prototype is one link away for whoever wants it.
-type DemoStep = { src: string; box: Box; text: string };
-export function GuidedDemo({ steps, chapters, alt, back, restart, open }: { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; back: string; restart: string; open: string }) {
+// The prototype as a short guided walk-through: real screenshots with everything but
+// the part that matters dimmed, and one line saying what is happening. Next (or the
+// highlighted control) moves on, so nobody has to hunt for where to press. The free
+// prototype is one link away for whoever wants it.
+type DemoStep = { src: string; box: Box; focus?: Box; tipAt?: Box; text: string };
+export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; next: string; back: string; restart: string; open: string }) {
   const locale = useLocale();
   const [at, setAt] = useState(0);
-  const [nudge, setNudge] = useState(0);
   const step = steps[at];
   const last = at === steps.length - 1;
   const [x, y, w, h] = step.box;
-  const cx = x + w / 2;
-  const cy = y + h / 2;
-  // On the right-hand panel the tip sits left of the control, over the canvas, so it
-  // never covers what the step is about; elsewhere it sits above or below.
-  const beside = cx > 60;
+  const [fx, fy, fw, fh] = step.focus ?? step.box;
+  // The tip sits beside the bright area, on the side with room.
+  const [ax, ay, aw, ah] = step.tipAt ?? [fx, fy, fw, fh];
+  const onLeft = ax + aw / 2 > 50;
   const place = {
-    "--tl": beside ? "auto" : `max(16px, ${x}%)`,
-    "--tr": beside ? `calc(${100 - (cy > 50 ? Math.min(x, 65) : x)}% + 16px)` : "auto",
-    "--tt": cy > 50 ? "auto" : beside ? `${y}%` : `calc(${y + h}% + 16px)`,
-    "--tb": cy > 50 ? (beside ? `max(16px, ${100 - y - h}%)` : `calc(${100 - y}% + 16px)`) : "auto",
+    "--tl": onLeft ? "auto" : `calc(${ax + aw}% + 16px)`,
+    "--tr": onLeft ? `calc(${100 - ax}% + 16px)` : "auto",
+    "--tt": ay + ah / 2 < 50 ? `max(16px, ${ay}%)` : "auto",
+    "--tb": ay + ah / 2 < 50 ? "auto" : `max(16px, ${100 - ay - ah}%)`,
+    "--tw": `calc(${onLeft ? ax : 100 - ax - aw}% - 32px)`,
   } as React.CSSProperties;
   return (
     <div id="try" className="dv-demo">
@@ -290,24 +290,21 @@ export function GuidedDemo({ steps, chapters, alt, back, restart, open }: { step
         })}
       </ol>
       <div className="dv-demo-stage">
-        <div className="dv-demo-screen" onClick={() => setNudge((n) => n + 1)}>
+        <div className="dv-demo-screen">
           {steps.map((s, i) => Math.abs(i - at) <= 1 && (
             <Image key={s.src} src={withBase(s.src)} alt={i === at ? alt : ""} width={1920} height={1200} sizes="(max-width: 767px) 100vw, 1200px" loading="eager" data-on={i === at || undefined} />
           ))}
-          {last
-            ? <span className="dv-demo-spot" data-rest="" style={{ left: `${cx}%`, top: `${cy}%`, width: `${w}%`, height: `${h}%` }} aria-hidden="true" />
-            : <button key={`${at}-${nudge}`} type="button" className="dv-demo-spot" data-nudge={nudge > 0 || undefined} style={{ left: `${cx}%`, top: `${cy}%`, width: `${w}%`, height: `${h}%` }} aria-label={step.text} onClick={(event) => { event.stopPropagation(); setNudge(0); setAt(at + 1); }} />}
+          <span className="dv-demo-focus" style={{ left: `${fx}%`, top: `${fy}%`, width: `${fw}%`, height: `${fh}%` }} aria-hidden="true" />
+          {!last && <button key={at} type="button" className="dv-demo-spot" style={{ left: `${x + w / 2}%`, top: `${y + h / 2}%`, width: `${w}%`, height: `${h}%` }} aria-label={next} onClick={() => setAt(at + 1)} />}
         </div>
-        <div key={at} className="dv-demo-tip" style={place} aria-live="polite">
-          <p className="dv-demo-count">{at + 1} / {steps.length}</p>
-          <p>{step.text}</p>
-          {(at > 0 || last) && (
-            <div className="dv-demo-actions">
-              {at > 0 && !last && <button type="button" onClick={() => setAt(at - 1)}>{back}</button>}
-              {last && <button type="button" onClick={() => setAt(0)}>{restart}</button>}
-              {last && <a href={devsignUrl(locale)} target="_blank" rel="noreferrer" data-primary="">{open}</a>}
-            </div>
-          )}
+        <div className="dv-demo-tip" style={place} aria-live="polite">
+          <p key={at} className="dv-demo-line"><span className="dv-demo-count">{at + 1} / {steps.length}</span>{step.text}</p>
+          <div className="dv-demo-actions">
+            {at > 0 && !last && <button type="button" onClick={() => setAt(at - 1)}>{back}</button>}
+            {!last && <button type="button" data-primary="" onClick={() => setAt(at + 1)}>{next}</button>}
+            {last && <button type="button" onClick={() => setAt(0)}>{restart}</button>}
+            {last && <a href={devsignUrl(locale)} target="_blank" rel="noreferrer" data-primary="">{open}</a>}
+          </div>
         </div>
       </div>
       <a className="dv-demo-open" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{open}</a>
