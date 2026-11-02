@@ -404,28 +404,31 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
-          {/* What we asked comes first, as its own row; then the session photo
-              with the four participants stacked beside it. */}
-          <div className="dv-gap-40">
-            <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
-            <ol className="dv-numbered dv-numbered-row">
-              {discover.interview.questions.map((q: string) => <li key={q} className="reveal">{q}</li>)}
-            </ol>
+          {/* Who we met and what we asked belong together, in one panel; the
+              session photo is folded like the other session photos. */}
+          <div className="dv-interview dv-gap-40 reveal">
+            <div>
+              <p className="dv-caps">{discover.interview.peopleLabel}</p>
+              <ul className="dv-who">
+                {discover.interview.participants.map((p: string[]) => (
+                  <li key={p[0]} data-tone={toneOf(p[1])}>
+                    <b>{p[0]}</b>
+                    <span><strong>{p[1]}</strong>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="dv-caps">{discover.interview.questionsLabel}</p>
+              <ol className="dv-numbered">
+                {discover.interview.questions.map((q: string) => <li key={q}>{q}</li>)}
+              </ol>
+            </div>
           </div>
-          <div className="dv-media-row dv-media-row-stretch dv-gap-48">
-            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />
-            <ul className="dv-people dv-people-stack">
-              {discover.interview.participants.map((p: string[]) => (
-                <li key={p[0]} className="reveal dv-person" data-tone={toneOf(p[1])}>
-                  <span className="dv-avatar" aria-label={p[0]}>{p[0]}</span>
-                  <span className="dv-person-text">
-                    <strong>{p[1]}</strong>
-                    <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <details className="dv-handoff-spec dv-gap-32">
+            <summary>{discover.interview.photoLabel}</summary>
+            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />
+          </details>
         </div>
         ) : (
         <div className="dv-subsection dv-rule">
