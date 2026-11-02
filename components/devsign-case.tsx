@@ -629,9 +629,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       <Section id="develop" title="Develop">
         <div>
           <Block {...develop.ideation} ff={ff} />
-          {develop.ideation.rules && <ol className="dv-mini dv-gap-40" style={{ "--n": develop.ideation.rules.length } as React.CSSProperties}>
-            {develop.ideation.rules.map((rule: string, i: number) => (
-              <li key={rule} className="reveal"><span className="dv-learned-number">{pad(i + 1)}</span><h4>{rule}</h4></li>
+          {develop.ideation.steps && <ol className="dv-mini dv-gap-40" style={{ "--n": develop.ideation.steps.length } as React.CSSProperties}>
+            {develop.ideation.steps.map((step: { title: string; body: string }, i: number) => (
+              <li key={step.title} className="reveal"><span className="dv-learned-number">{pad(i + 1)}</span><h4>{step.title}</h4><p>{step.body}</p></li>
             ))}
           </ol>}
           {ff && <>
@@ -641,16 +641,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </ol>
           </>}
         </div>
-        {/* Prioritization: how 26 ideas were ranked (DVF + team vote), each
-            criterion as its own card. */}
-        {develop.priority && <div className="dv-gap-96">
-          <Block {...develop.priority} ff={ff} />
-          <ol className="dv-mini dv-gap-40" style={{ "--n": develop.priority.criteria.length } as React.CSSProperties}>
-            {develop.priority.criteria.map(([name, question]: [string, string], i: number) => (
-              <li key={name} className="reveal" data-tone={["accent", "blue", "teal"][i % 3]}><h4>{name}</h4><p>{question}</p></li>
-            ))}
-          </ol>
-        </div>}
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
         {develop.matrix && <div className="dv-split dv-gap-80">
           <Figure img={develop.matrix.image} sizes="(max-width: 767px) 100vw, 400px" className="dv-matrix-img" />
