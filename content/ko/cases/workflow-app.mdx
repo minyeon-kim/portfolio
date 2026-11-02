@@ -114,7 +114,7 @@ export const study = {
     q2: {
       label: "질문 2 · 이미 해결한 도구가 있을까?",
       answer: "지금의 도구는 디자인과 코드의 차이를 찾아 주지만, AI 시안을 합치거나 왜 그렇게 정했는지 남겨 주지는 못한다.",
-      auditLabel: "도구 검토 · 도구 9개를 4가지 유형으로",
+      auditLabel: "도구 9개, 4가지 유형",
       columns: [
         { name: "개발 전달" },
         { name: "차이 감지" },
@@ -124,10 +124,10 @@ export const study = {
         { name: "이유 기록", accent: true },
       ],
       rows: [
-        { name: "디자인–코드 전달 도구", marks: [1, 0, 0, 0, 0, 0] },
-        { name: "화면 차이 감지 도구", marks: [0, 1, 0, 0, 0, 0] },
-        { name: "UI 리뷰·승인 도구", marks: [0, 0, 1, 0, 0, 0] },
-        { name: "AI 디자인 생성 도구", marks: [0, 0, 0, 1, 0, 0] },
+        { name: "전달 도구", marks: [1, 0, 0, 0, 0, 0] },
+        { name: "감지 도구", marks: [0, 1, 0, 0, 0, 0] },
+        { name: "승인 도구", marks: [0, 0, 1, 0, 0, 0] },
+        { name: "생성 도구", marks: [0, 0, 0, 1, 0, 0] },
         { name: "Devsign", marks: [1, 1, 1, 1, 1, 1], highlight: true },
       ],
     },
@@ -412,8 +412,8 @@ export const study = {
       label: "Iteration 1 · Conflict Points",
       lead: "리뷰 화면을 디자이너용과 개발자용으로 나눴다.",
       text: "이유: 두 참가자 모두 함께 쓰는 화면을 ‘상대 팀 도구’라고 불렀다.",
-      before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: 디자이너와 개발자가 함께 쓰는 리뷰 화면 하나", text: "둘 다 숫자와 코드 이름을 읽고 골랐다.", box: [25.83, 21.23, 47.5, 46.92] },
-      after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: 개발자의 수정 흐름과 분리된 디자이너의 결정 화면", text: "디자이너는 그림으로 비교하고 하나만 고른다.", box: [26.67, 39.26, 45.83, 39.01] },
+      before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: 디자이너와 개발자가 함께 쓰는 리뷰 화면 하나", text: "둘 다 숫자와 코드 이름을 읽고 골랐다.", box: [25.3, 30.6, 48.55, 38.4] },
+      after: { src: "/images/devsign/iter1-to-be.webp", alt: "To-be: 개발자의 수정 흐름과 분리된 디자이너의 결정 화면", text: "디자이너는 그림으로 비교하고 하나만 고른다.", box: [26.2, 38.6, 46.75, 41] },
     },
     iteration2: {
       method: "Iteration 2",

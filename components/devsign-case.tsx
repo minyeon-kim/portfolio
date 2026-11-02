@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReel, IterationCompare, IterationPair, TryPrototype, CanvasZoom } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, TryPrototype, CanvasZoom } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -608,27 +608,22 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {develop.selection && ff && overview.features ? (
           <div className="dv-main-features">
             <Block title={develop.selection.label} lead={overview.features.title} ff />
-            <ul className="dv-reels dv-gap-40">
-              {overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
+            <FeatureReels
+              reels={overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 const shown = deliver.features?.find((item: Study) => item.title === f.name);
-                return (
-                  <FeatureReel
-                    key={f.name}
-                    reel={{
-                      id: `feature-${slugOf(f.name)}`,
-                      kicker: f.kicker,
-                      name: f.name,
-                      body: f.body,
-                      alt: shown?.alt,
-                      points: shown?.points ?? [],
-                      clip: shown?.clip,
-                      solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
-                    }}
-                  />
-                );
+                return {
+                  id: `feature-${slugOf(f.name)}`,
+                  kicker: f.kicker,
+                  name: f.name,
+                  body: f.body,
+                  alt: shown?.alt,
+                  points: shown?.points ?? [],
+                  clip: shown?.clip,
+                  solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
+                };
               })}
-            </ul>
+            />
           </div>
         ) : develop.selection && (
           <div className="dv-gap-96">

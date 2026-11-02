@@ -3797,17 +3797,12 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-iter-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
 .dv-iter-side { margin: 0; }
 .dv-iter-view { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--dv-card-radius); background: #0c0c10; }
-.dv-iter-view img { position: absolute; max-width: none; height: auto; transition: width 500ms var(--ease), left 500ms var(--ease), top 500ms var(--ease); }
-.dv-iter-mark { position: absolute; border: 2px solid rgb(255 255 255 / 0.7); border-radius: 8px; animation: dv-iter-in 300ms var(--ease) 350ms both; }
-.dv-iter-side[data-side="b"] .dv-iter-mark { border-color: var(--case-accent); }
 .dv-iter-tag { display: inline-block; margin-bottom: 12px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; }
 .dv-iter-side[data-side="b"] .dv-iter-tag { background: var(--case-accent); color: light-dark(#fff, #120f24); }
 .dv-iter-side figcaption { margin-top: 14px; color: var(--dv-muted); font-size: 18px; line-height: 1.45; animation: dv-iter-in 300ms var(--ease) both; }
 .dv-iter-side[data-side="b"] figcaption { color: var(--dv-ink); }
 @keyframes dv-iter-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .dv-iter-view img { transition: none; }
-  .dv-iter-mark, .dv-iter-side figcaption { animation: none; }
 }
 @media (max-width: 47.99rem) {
   .dv-iter-pair { grid-template-columns: 1fr; margin-top: 16px; }
@@ -4213,6 +4208,24 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
 .about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
 
+/* The canvas once, then the key pains in words. */
+.dv-vpc-view { overflow: hidden; border-radius: var(--dv-card-radius); background: #fbfbfb; }
+.dv-vpc-view img { display: block; width: 100%; height: auto; }
+.dv-vpc-title { margin-top: 56px; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; }
+.dv-vpc-pairs { --vpc-cols: minmax(0, 1.3fr) 24px minmax(0, 1fr) 24px minmax(0, 0.7fr); margin-top: 16px; }
+.dv-vpc-head, .dv-vpc-pair { display: grid; grid-template-columns: var(--vpc-cols); gap: 16px; align-items: baseline; }
+.dv-vpc-head { padding-bottom: 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-vpc-pair { padding-block: 16px; border-top: 1px solid var(--dv-card-line); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; }
+.dv-vpc-pair > i { color: var(--dv-muted); font-style: normal; text-align: center; }
+.dv-vpc-pair > b { color: var(--case-accent); font-weight: 600; }
+@media (max-width: 47.99rem) {
+  .dv-vpc-title { margin-top: 40px; }
+  .dv-vpc-head { display: none; }
+  .dv-vpc-pair { display: flex; flex-direction: column; gap: 2px; font-size: 16px; }
+  .dv-vpc-pair > i { display: none; }
+  .dv-vpc-pair > span:first-child { color: var(--dv-muted); }
+}
+
 /* Usability results: the goal and its verdict, the other scores beside it, what it meant under both. */
 .dv-ut-board { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px 64px; }
 .dv-verdict { display: flex; flex-direction: column; padding: 32px; border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
@@ -4241,35 +4254,47 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-ut-result { margin-top: 40px; }
 }
 
-/* Iterations: tags and lines centred on their screen, one change per panel; on desktop
-   each panel stays and the next rises over it with native scroll. */
-.dv-iter { display: grid; gap: 64px; margin: 0; padding: 0; list-style: none; }
+/* Iterations: only what changed, centred tags and lines. Iteration 2 is pinned on desktop:
+   the stage stays and each change crossfades in place as the page scrolls. */
 .dv-iter-side { text-align: center; }
-.dv-iter-view { text-align: left; }
-.dv-iter-name { display: flex; gap: 12px; align-items: baseline; color: var(--dv-ink); font-size: clamp(22px, 2vw, 28px); font-weight: 500; line-height: 1.3; }
+.dv-iter-view { display: grid; place-items: center; background: #171717; }
+.dv-iter-crop { position: relative; display: block; overflow: hidden; }
+.dv-iter-crop img { position: absolute; max-width: none; height: auto; }
+.dv-iter-name { display: flex; gap: 12px; align-items: baseline; margin-bottom: 24px; color: var(--dv-ink); font-size: clamp(22px, 2vw, 28px); font-weight: 500; line-height: 1.3; }
 .dv-iter-name b { color: var(--case-accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-iter-steps { display: grid; gap: 64px; margin: 0; padding: 0; list-style: none; }
+.dv-iter-progress { display: none; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-iter { gap: 20svh; }
-  .dv-iter::after { content: ""; height: 1px; }
-  .dv-iter-step { position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; min-height: 100svh; margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); border-top: 1px solid var(--dv-card-line); border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: light-dark(var(--dv-band-light), var(--dv-surface)); }
+  .dv-iter { height: calc(100svh + (var(--n) - 1) * 70svh); }
+  .dv-iter-stage { position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; gap: 28px; height: 100svh; }
+  .dv-iter-progress { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .dv-iter-progress li { position: relative; display: flex; gap: 10px; align-items: baseline; padding-top: 14px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.3; transition: color 250ms var(--ease); }
+  .dv-iter-progress li::before, .dv-iter-progress li::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--dv-card-line); }
+  .dv-iter-progress li::after { background: var(--case-accent); transform-origin: left; transform: scaleX(clamp(0, calc(var(--p, 0) * var(--n) - var(--i)), 1)); }
+  .dv-iter-progress li[data-on] { color: var(--dv-ink); }
+  .dv-iter-progress b { color: var(--case-accent); font-weight: 600; }
+  .dv-iter-steps { gap: 0; }
+  .dv-iter-steps > li { grid-area: 1 / 1; opacity: 0; transition: opacity 350ms var(--ease); }
+  .dv-iter-steps > li[data-on] { opacity: 1; }
+  .dv-iter-name { display: none; }
 }
 .dv-iter-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 48px; align-items: start; }
 .dv-iter-head .dv-photo.dv-photo-wide { max-width: none; }
 @media (max-width: 63.99rem) { .dv-iter-head { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
 
-/* Core features as whole sections: each fills the screen across the sheet and stays,
-   and the next rises over it with native scroll. The layout inside is unchanged,
-   clip running to the sheet's edge. Desktop only; otherwise a plain list. */
+/* Core features, pinned: the clip stays while the sentences scroll past it. Desktop only;
+   otherwise the list above. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-reels { gap: 20svh; }
-  .dv-reels::after { content: ""; height: 1px; }
-  .dv-reel { position: sticky; top: 0; min-height: 100svh; align-content: center; margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); border-top: 1px solid var(--dv-card-line); border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: var(--dv-bg); }
-  .dv-reel .dv-reel-media { align-self: center; }
-}
-@media (max-width: 47.99rem) {
-  .dv-vpc-pairs { --vpc-cols: minmax(0, 1fr); }
-  .dv-vpc-pair > i { rotate: 90deg; }
-  .dv-vpc-pair > b { margin-top: 0; }
+  .dv-reels { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); column-gap: clamp(32px, 4.4vw, 64px); row-gap: 0; }
+  .dv-reel, .dv-reel:nth-child(even) { display: contents; }
+  .dv-reel-text { grid-column: 1; display: flex; flex-direction: column; justify-content: center; min-height: 80svh; opacity: 0.28; transition: opacity 400ms var(--ease); }
+  .dv-reel[data-on] .dv-reel-text { opacity: 1; }
+  .dv-reel:nth-child(1) .dv-reel-text { grid-row: 1; }
+  .dv-reel:nth-child(2) .dv-reel-text { grid-row: 2; }
+  .dv-reel:nth-child(3) .dv-reel-text { grid-row: 3; }
+  .dv-reel:nth-child(4) .dv-reel-text { grid-row: 4; }
+  .dv-reel .dv-reel-media, .dv-reel:nth-child(even) .dv-reel-media { order: 0; grid-column: 2; grid-row: 1 / 5; position: sticky; top: max(72px, calc(50svh - 17vw)); align-self: start; margin-inline: 0 calc(var(--dv-edge) - var(--dv-pad)); border-radius: var(--dv-band-radius) 0 0 var(--dv-band-radius); opacity: 0; transition: opacity 400ms var(--ease); }
+  .dv-reel[data-shown] .dv-reel-media { opacity: 1; }
 }
 
 /* Analysis steps: stage, then one sentence. */
@@ -4295,3 +4320,11 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-wf-numtext { fill: light-dark(#ffffff, #120f24); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dv-wf-title { fill: var(--dv-ink); font-size: 18px; font-weight: 600; }
 .dv-wf-text { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
+
+/* Tool table: a short header row, level with the Devsign column. */
+.dv-tool-table thead th { padding: 12px; white-space: nowrap; vertical-align: middle; }
+.dv-tool-table thead th[data-highlight] { padding-block: 12px; font-size: 18px; }
+
+/* The wireflow fits the column on desktop and scrolls sideways only when it can't. */
+.dv-wf { overflow-y: hidden; }
+@media (min-width: 72rem) { .dv-wf { overflow: visible; } }
