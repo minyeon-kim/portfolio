@@ -21,22 +21,22 @@ import { shareMeta, site, withBase } from "@/lib/site";
 const copy = {
   en: {
     label: "About", portrait: "Portrait",
-    facts: [["Background", "Four years of security consulting at SK shieldus"], ["Focus", "Privacy, security and developer tools"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
+    facts: [["Background", "Four years of security consulting at SK shieldus"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     stages: { approach: "What I bring", experience: "Experience", toolkit: "Toolkit", outside: "Outside work", contact: "Contact" },
     experienceLead: "From cybersecurity to design",
     columns: ["Research", "Design & build"],
     photos: ["Photo of Minyeon at work", "Workshop, study group or talk"],
-    open: "Open to product designer and design engineer roles, especially in privacy, security and developer tools.",
+    open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
   },
   ko: {
     label: "소개", portrait: "프로필 사진",
-    facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["관심 분야", "프라이버시, 보안, 개발자 도구"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
+    facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
     stages: { approach: "강점", experience: "경력", toolkit: "도구", outside: "일 밖에서", contact: "연락" },
     experienceLead: "보안에서 디자인으로",
     columns: ["리서치", "디자인과 구현"],
     photos: ["일하는 모습", "워크숍, 스터디 또는 발표"],
-    open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다. 특히 프라이버시, 보안, 개발자 도구 분야에 관심이 있습니다.",
+    open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
   },
 };
@@ -47,7 +47,7 @@ export function aboutMetadata(locale: Locale): Metadata {
 }
 
 // Built like a case page: the panel opener (name as the brand line, headline,
-// the short bio, the ways to get in touch, the portrait once it exists) and four
+// the short bio, the ways to get in touch, the portrait once it exists) and three
 // facts, then the case body's stages with the same stage nav, bands and scroll
 // motion, and the projects as the closing deck. Photo spots are labelled
 // placeholders until real photos exist.
