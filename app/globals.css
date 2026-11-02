@@ -1596,7 +1596,7 @@ body:has(.selected-stage[data-gemini]) .project-rail { --picker-canvas: var(--ge
 .site-header-bar { transition: background-color 250ms ease, box-shadow 250ms ease; }
 @media (min-width: 48rem) {
   .header-cta { display: inline-flex; }
-  [data-compact] .site-header-bar { background: color-mix(in srgb, var(--bg) 86%, transparent); box-shadow: inset 0 -1px 0 var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  [data-compact] .site-header-bar { background: color-mix(in srgb, var(--bg) 92%, transparent); box-shadow: inset 0 -1px 0 var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 }
 /* Page links in the bar (md+): plain words, no pills, so the header reads as one quiet line.
    The current page is in ink; the others muted, with the link underline on hover. Phones use the Menu. */
@@ -4059,7 +4059,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
 
 /* Stages breathe more than the blocks inside them (blocks are 120 / 72 apart). */
-.dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 180px 200px; }
+.dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 140px 160px; }
 .dv > section:is(#overview) { padding-top: 120px; }
 .dv > section:is(#takeaway) { padding-bottom: 120px; }
 .dv > section + section { margin-top: 32px; }
@@ -4212,7 +4212,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-reels { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); column-gap: clamp(32px, 4.4vw, 64px); row-gap: 0; }
   .dv-reel, .dv-reel:nth-child(even) { display: contents; }
-  .dv-reel-text { grid-column: 1; display: flex; flex-direction: column; justify-content: center; min-height: 80svh; opacity: 0.28; transition: opacity 400ms var(--ease); }
+  .dv-reel-text { grid-column: 1; display: flex; flex-direction: column; justify-content: center; min-height: 60svh; opacity: 0.28; transition: opacity 400ms var(--ease); }
   .dv-reel[data-on] .dv-reel-text { opacity: 1; }
   .dv-reel:nth-child(1) .dv-reel-text { grid-row: 1; }
   .dv-reel:nth-child(2) .dv-reel-text { grid-row: 2; }
@@ -4514,7 +4514,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-aff > ol > li > div p { margin-top: 6px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 
 /* Affinity and key problems as one scene: clusters on top, one problem's quote at a time below. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-dots-track { height: 500svh; } }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-dots-track { height: 360svh; } }
 .dv-dots-stage { gap: 16px; }
 .dv-dots-art circle { transition: fill 500ms var(--ease), opacity 300ms var(--ease); }
 .dv-dots-under { position: relative; height: 300px; margin-top: 12px; }
