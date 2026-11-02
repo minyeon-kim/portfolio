@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { crop } from "@/components/devsign-compare";
 import { devsignUrl, withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -14,25 +13,12 @@ const PLAYBACK_RATE = 1.15;
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
-// One change of an iteration at a time: the changed area of the As-is and To-be
-// screens as large close-ups side by side. Moving to another change pans both
-// screenshots to it (same image, so nothing reloads). The changes advance by
-// themselves: the bar on the current tab fills (CSS) and its end picks the next
-// one. It runs only on screen and holds on hover or keyboard focus; with reduced
-// motion the bar has no animation, so nothing advances.
+// The two whole screens stay still; one change at a time is boxed on each, and the
+// tabs move the boxes. Nothing advances or pans by itself.
 export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
-  const [onScreen, setOnScreen] = useState(false);
-  const root = useRef<HTMLDivElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const change = changes[active];
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), { threshold: 0.4 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
   const sides = [
     { key: "a", tag: labels.asIs, img: before, box: change.a, line: change.before },
     { key: "b", tag: labels.toBe, img: after, box: change.b, line: change.after },
@@ -46,30 +32,26 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
     tabs.current[next]?.focus();
   };
   return (
-    <div ref={root} className="dv-iter" data-playing={onScreen}>
+    <div className="dv-iter">
       <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
         {changes.map((c, i) => (
           <button key={c.title} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === active ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
-            {i === active && <i className="dv-iter-bar" aria-hidden="true" onAnimationEnd={() => setActive((i + 1) % changes.length)} />}
             <b>{i + 1}</b><span>{c.title}</span>
           </button>
         ))}
       </div>
       <p className="dv-iter-title">{change.title}</p>
-      <div className="dv-iter-pair" role="tabpanel">
-        {sides.map(({ key, tag, img, box, line }) => {
-          const view = crop(box);
-          return (
-            <figure key={key} className="dv-iter-side" data-side={key}>
-              <span className="dv-iter-tag">{tag}</span>
-              <div className="dv-iter-view">
-                <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={view.img} />
-                <span key={active} className="dv-iter-mark" style={view.mark} aria-hidden="true" />
-              </div>
-              <figcaption key={active}>{line}</figcaption>
-            </figure>
-          );
-        })}
+      <div className="dv-iter-pair" role="tabpanel" data-whole="">
+        {sides.map(({ key, tag, img, box, line }) => (
+          <figure key={key} className="dv-iter-side" data-side={key}>
+            <span className="dv-iter-tag">{tag}</span>
+            <div className="dv-iter-view">
+              <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 600px" />
+              <span className="dv-iter-mark" style={{ left: `${box[0]}%`, top: `${box[1]}%`, width: `${box[2]}%`, height: `${box[3]}%` }} aria-hidden="true" />
+            </div>
+            <figcaption key={active}>{line}</figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   );
@@ -78,58 +60,40 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
 type Area = [number, number, number, number];
 type Candidate = { id: string; name: string; kind: string; pain: string; to: string; from: Area; relief: Area };
 type CanvasArt = { src: string; width: number; height: number; painArea: Area; reliefArea: Area; alt: string };
-const STAGE_ASPECT = 2.35;
-const STAGE_ASPECT_PHONE = 1.4;
 
-// The canvas as one picture and one camera: the whole board, then it glides to the
-// key pains and to the exact reliever that answers each, and back. No tabs or bars;
-// it runs only on screen and holds on hover. With reduced motion it stays on the
-// whole board, and the pairs are always there for screen readers.
-export function CanvasZoom({ art, candidates, keyPairs, reliefLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; reliefLabel: string; overviewLabel: string }) {
-  const steps = keyPairs.flatMap((id) => {
-    const c = candidates.find((item) => item.id === id);
-    return c ? [{ key: `${id}-a`, area: c.from, tag: c.kind, text: c.pain, to: null as string | null }, { key: `${id}-b`, area: c.relief, tag: reliefLabel, text: c.name, to: c.to as string | null }] : [];
-  });
-  const [step, setStep] = useState(-1);
-  const [onScreen, setOnScreen] = useState(false);
-  const [held, setHeld] = useState(false);
-  const [phone, setPhone] = useState(false);
-  const root = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const narrow = window.matchMedia("(max-width: 47.99rem)");
-    const sync = () => setPhone(narrow.matches);
-    sync();
-    narrow.addEventListener("change", sync);
-    return () => narrow.removeEventListener("change", sync);
-  }, []);
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), { threshold: 0.4 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  useEffect(() => {
-    if (!onScreen || held || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setTimeout(() => setStep((n) => (n + 1 < steps.length ? n + 1 : -1)), step === -1 ? 2600 : 3200);
-    return () => clearTimeout(timer);
-  }, [step, onScreen, held, steps.length]);
-  const now = step >= 0 ? steps[step] : null;
-  const [x, y, w, h] = now ? now.area : [0, 0, art.width, art.height];
-  const aspect = phone ? STAGE_ASPECT_PHONE : STAGE_ASPECT;
-  const shown = now ? Math.max(phone ? 520 : 860, w * (phone ? 1.3 : 2.2)) : Math.max(w, h * aspect);
-  const k = art.width / shown;
-  const tx = (0.5 - k * ((x + w / 2) / art.width)) * 100;
-  const ty = ((0.5 * (art.width / art.height)) / aspect - k * ((y + h / 2) / art.height)) * 100;
+// One sticky of the board, cut out at its own box.
+function Sticky({ art, area }: { art: CanvasArt; area: Area }) {
+  const [x, y, w, h] = area;
   return (
-    <div ref={root} className="dv-vpc" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)}>
-      <div className="dv-vpc-view">
-        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="100vw" style={{ transform: `translate(${tx}%, ${ty}%) scale(${k})` }} />
-        {now && <span key={now.key} className="dv-vpc-ring" style={{ width: `${(w / shown) * 100}%`, aspectRatio: `${w} / ${h}` }} aria-hidden="true" />}
+    <span className="dv-vpc-sticky" style={{ "--r": w / h } as React.CSSProperties}>
+      <Image src={withBase(art.src)} alt="" width={art.width} height={art.height} sizes="400vw" style={{ width: `${(art.width / w) * 100}%`, left: `${(-x / w) * 100}%`, top: `${(-y / h) * 100}%` }} />
+    </span>
+  );
+}
+
+// The canvas stays still as one picture. Under it, the key pains beside the exact
+// reliever that answers each and the feature it became, all readable at once. The
+// other candidates are there for screen readers.
+export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, featureLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; painLabel: string; reliefLabel: string; featureLabel: string; overviewLabel: string }) {
+  const rows = keyPairs.flatMap((id) => candidates.filter((c) => c.id === id));
+  return (
+    <div className="dv-vpc">
+      <div className="dv-vpc-view reveal">
+        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
       </div>
-      <p key={now?.key ?? "all"} className="dv-vpc-line" aria-hidden="true">
-        {now ? <><span className="dv-iter-tag">{now.tag}</span><span>{now.text}</span>{now.to && <><i>→</i><b>{now.to}</b></>}</> : <span>{overviewLabel}</span>}
-      </p>
+      <p className="dv-vpc-title reveal">{overviewLabel}</p>
+      <div className="dv-vpc-pairs">
+        <p className="dv-vpc-head" aria-hidden="true"><span>{painLabel}</span><i /><span>{reliefLabel}</span><i /><span>{featureLabel}</span></p>
+        {rows.map((c) => (
+          <div key={c.id} className="dv-vpc-pair reveal" aria-hidden="true">
+            <Sticky art={art} area={c.from} />
+            <i>→</i>
+            <Sticky art={art} area={c.relief} />
+            <i>→</i>
+            <b>{c.to}</b>
+          </div>
+        ))}
+      </div>
       <ul className="sr-only">
         {candidates.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>
@@ -173,12 +137,28 @@ export function FeatureReel({ reel }: { reel: Reel }) {
     setStill(motion.matches);
     if (motion.matches) return;
     el.playbackRate = PLAYBACK_RATE;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) el.play().catch(() => {});
+    let visible = false;
+    let covered = false;
+    const update = () => {
+      if (visible && !covered) el.play().catch(() => {});
       else el.pause();
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      update();
     }, { threshold: 0.5 });
     observer.observe(el);
-    return () => observer.disconnect();
+    // A stacked card under the next one stops playing once that card has risen over it.
+    const next = el.closest(".dv-reel")?.nextElementSibling;
+    const cover = new IntersectionObserver(([entry]) => {
+      covered = entry.isIntersecting;
+      update();
+    }, { rootMargin: "0px 0px -75% 0px" });
+    if (next) cover.observe(next);
+    return () => {
+      observer.disconnect();
+      cover.disconnect();
+    };
   }, []);
   const sync = () => {
     const t = video.current?.currentTime ?? 0;
