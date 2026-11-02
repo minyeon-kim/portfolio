@@ -269,7 +269,7 @@ export function GuidedDemo({ steps, chapters, alt, back, restart, open }: { step
   const beside = cx > 60;
   const place = {
     "--tl": beside ? "auto" : `max(16px, ${x}%)`,
-    "--tr": beside ? `calc(${100 - x}% + 16px)` : "auto",
+    "--tr": beside ? `calc(${100 - (cy > 50 ? Math.min(x, 65) : x)}% + 16px)` : "auto",
     "--tt": cy > 50 ? "auto" : beside ? `${y}%` : `calc(${y + h}% + 16px)`,
     "--tb": cy > 50 ? (beside ? `max(16px, ${100 - y - h}%)` : `calc(${100 - y}% + 16px)`) : "auto",
   } as React.CSSProperties;
