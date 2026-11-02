@@ -7,7 +7,7 @@ import { RevealObserver } from "@/components/reveal-observer";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeScript } from "@/components/theme-script";
-import { site } from "@/lib/site";
+import { shareMeta, site } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,8 +28,9 @@ const display = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: { default: site.name, template: `%s — ${site.name}` },
+  title: { default: `${site.name} — Product Designer`, template: `%s — ${site.name}` },
   description: site.positioning,
+  ...shareMeta("/", `${site.name} — Product Designer`, site.positioning),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

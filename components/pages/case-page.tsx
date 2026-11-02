@@ -4,7 +4,8 @@ import { CaseBody } from "@/components/home/case-body";
 import { DevsignHero } from "@/components/devsign-hero";
 import { ProjectHero } from "@/components/project-hero";
 import { getCase, getCaseSlugs, getOtherCases } from "@/lib/cases";
-import type { Locale } from "@/lib/i18n";
+import { localize, type Locale } from "@/lib/i18n";
+import { shareMeta, site } from "@/lib/site";
 
 // A case study page; /work/[slug] and /ko/work/[slug] both render it.
 export function caseParams(locale: Locale = "en") {
@@ -14,7 +15,8 @@ export function caseParams(locale: Locale = "en") {
 export async function caseMetadata(slug: string, locale: Locale): Promise<Metadata> {
   if (!getCaseSlugs(locale).includes(slug)) return {};
   const { meta, tldr } = await getCase(slug, locale);
-  return { title: meta.title, description: tldr.problem };
+  const description = meta.hook ?? tldr.problem;
+  return { title: meta.title, description, ...shareMeta(localize(`/work/${slug}/`, locale), `${meta.title} — ${site.name}`, description, slug) };
 }
 
 export async function CasePage({ slug, locale = "en" }: { slug: string; locale?: Locale }) {

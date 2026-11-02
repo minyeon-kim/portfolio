@@ -68,6 +68,50 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     return () => clearTimeout(timer);
   }, [worldSlug, displayedSlug]);
   const copyOn = world !== null && displayed !== null && world.slug === displayed.slug;
+  // The way from a pill to its card crosses empty stage, so the world stays
+  // while the pointer is inside the box around the pill and the card (and it
+  // never drops under a pill that has keyboard focus). The card is then a way in.
+  useEffect(() => {
+    if (!hover) return;
+    let timer: number | undefined;
+    const release = () => { timer ??= window.setTimeout(() => setHover(null), 160); };
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || document.activeElement?.matches(".home-pick:focus-visible")) return;
+      const parts = [`.home-pick[data-slug="${hover}"]`, `.home-device[data-project="${hover}"]`, `.home-device-caption[data-project="${hover}"]`]
+        .map((selector) => document.querySelector(selector)?.getBoundingClientRect())
+        .filter((box): box is DOMRect => Boolean(box?.width));
+      const inside = event.clientX >= Math.min(...parts.map((b) => b.left)) && event.clientX <= Math.max(...parts.map((b) => b.right))
+        && event.clientY >= Math.min(...parts.map((b) => b.top)) && event.clientY <= Math.max(...parts.map((b) => b.bottom));
+      if (inside) { window.clearTimeout(timer); timer = undefined; } else release();
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", release);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", release);
+    };
+  }, [hover]);
+  // The way to a card can cross the other pill, so a switch between worlds waits
+  // a moment; passing over a pill on the way doesn't swap the card away.
+  const switching = useRef<number>(undefined);
+  useEffect(() => () => window.clearTimeout(switching.current), []);
+  const enterPick = (slug: string) => {
+    window.clearTimeout(switching.current);
+    if (hover) switching.current = window.setTimeout(() => setHover(slug), 140);
+    else setHover(slug);
+  };
+  // Phones have no hover: the first case's card shows from the start, so the
+  // first screen has the work in it. Tapping it opens the case.
+  const [phone, setPhone] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 63.99rem)");
+    const sync = () => setPhone(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+  const previewed = shown ?? (phone ? projects[0] : null);
   const open = (slug: string) => {
     if (slug === "about") {
       revealNextProject(
@@ -92,7 +136,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
 
         {projects.map((p) => (
           <Fragment key={p.slug}>
-            <div className="home-device" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
+            {/* A pointer shortcut only: the backdrop is aria-hidden and the pills are the real controls. */}
+            <div className="home-device" data-project={p.slug} data-active={previewed?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
               {p.slug === "workflow-app"
                 ? <div className="home-device-window"><DevsignLoop alt="" /></div>
                 : p.slug === "gemini-privacy"
@@ -100,7 +145,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   : null}
             </div>
             {/* The card's caption (after lusion.co/work): what it is, the role and when. */}
-            <p className="home-device-caption" data-project={p.slug} data-active={shown?.slug === p.slug || undefined}>
+            <p className="home-device-caption" data-project={p.slug} data-active={shown?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
               <span className="home-device-caption-title">{p.caption ?? p.title}</span>
               <span className="home-device-caption-meta"><span>{[p.role, p.timeline].filter(Boolean).join(" · ")}</span><span aria-hidden="true">↘</span></span>
             </p>
@@ -117,8 +162,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   className="press home-pick"
                   data-slug={c.slug}
                   data-active={hover === c.slug || undefined}
-                  onMouseEnter={() => setHover(c.slug)}
-                  onMouseLeave={() => setHover(null)}
+                  onMouseEnter={() => enterPick(c.slug)}
+                  onMouseLeave={() => window.clearTimeout(switching.current)}
                   onFocus={() => setHover(c.slug)}
                   onBlur={() => setHover(null)}
                   onClick={() => open(c.slug)}
