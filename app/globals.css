@@ -4076,3 +4076,10 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-dd-body:has(li:nth-child(2) a:focus-visible) .dv-dd-half:nth-of-type(2),
 .dv-dd-body:has(li:nth-child(3) a:focus-visible) .dv-dd-half:nth-of-type(3),
 .dv-dd-body:has(li:nth-child(4) a:focus-visible) .dv-dd-half:nth-of-type(4) { fill: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+
+/* With a pointer the methods float as a small card, so the panel keeps no empty space. */
+@media (hover: hover) and (min-width: 48rem) {
+  .dv-dd-stages li { position: relative; }
+  .dv-dd-stages li:has(a:hover), .dv-dd-stages li:has(a:focus-visible) { z-index: 5; }
+  .dv-dd-methods { position: absolute; top: 100%; left: 0; right: 16px; margin: 8px 0 0; padding: 14px 16px; border: 1px solid var(--dv-card-line); border-radius: 12px; background: light-dark(#ffffff, var(--dv-band-card-dark)); pointer-events: none; }
+}
