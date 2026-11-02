@@ -36,7 +36,7 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {
           const others = bodies.map((_, k) => (i + 1 + k) % bodies.length).slice(0, bodies.length - 1)
-            .map((k) => ({ index: k, slug: bodies[k].slug, name: bodies[k].meta.short ?? bodies[k].meta.title, description: bodies[k].tldr.problem, cover: bodies[k].meta.cover }));
+            .map((k) => ({ index: k, slug: bodies[k].slug, name: bodies[k].meta.short ?? bodies[k].meta.title, description: bodies[k].meta.hook ?? bodies[k].tldr.problem, cover: bodies[k].meta.cover }));
           return (
             <CaseBody
               key={slug}
