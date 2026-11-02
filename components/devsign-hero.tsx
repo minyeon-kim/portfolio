@@ -4,6 +4,7 @@ import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiPhone } from "@/components/gemini-phone";
+import { HeroCanvas } from "@/components/hero-canvas";
 import { DEVSIGN_URL, withBase } from "@/lib/site";
 
 // Devsign wordmark face, as in the Figma hero.
@@ -17,13 +18,16 @@ export type DevsignHeroData = { title: string; subtitle?: string; actions?: { la
 // prototype's screens as a loop, the same one the home card shows, so nothing
 // swaps after the page opens; its link is a small chip on the card). Duration /
 // Team / Role / Tools follow under the panel.
-// Gemini uses the same layout with its own sparkle and phone loop.
+// Behind it the product's dot canvas (HeroCanvas, with live cursors on Devsign)
+// and a light from behind the product.
+// Gemini uses the same layout with its own sparkle, phone loop and no cursors.
 // Used on the direct case page and on the home page's selected stage.
 export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroData; name: string; alt: string; project: string }) {
   const gemini = project === "gemini-privacy";
   return (
     <div className="devsign-hero" data-project={project}>
       <div className="devsign-hero-panel">
+      <HeroCanvas cursors={gemini ? undefined : ["Taylor", "Jordan"]} />
       <div className="devsign-hero-intro">
         <p className="devsign-hero-brand">
           {gemini
@@ -45,6 +49,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
           </p>
         )}
       </div>
+      <div className="devsign-hero-glow" aria-hidden="true" />
       <div className="devsign-hero-media">
         {gemini
           ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span>

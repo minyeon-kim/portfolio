@@ -4472,3 +4472,18 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-demo-actions button[data-primary]:hover { background: #3b20ad; }
 @media (prefers-reduced-motion: reduce) { .dv-demo-focus { transition: none; } .dv-demo-line { animation: none; } }
 @media (min-width: 48rem) { .dv-demo-tip { width: min(340px, var(--tw)); } }
+
+/* Case opener backdrop: the product's dot canvas, live cursors (HeroCanvas) and a light rising from behind the product. About keeps its own panel. */
+.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) { --dh-dot: light-dark(color-mix(in srgb, var(--dh-glow) 34%, transparent), color-mix(in srgb, var(--dh-glow-2) 30%, transparent)); }
+.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) .devsign-hero-panel { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(circle at 12px 12px, var(--dh-dot) 1px, transparent 1.5px); background-size: 24px 24px; background-repeat: repeat; }
+.hero-canvas { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; color: light-dark(var(--dh-glow), var(--dh-glow-2)); }
+.hero-cursor { position: absolute; top: 0; left: 0; display: none; align-items: flex-start; will-change: transform; }
+.hero-cursor svg { width: 18px; height: 18px; }
+.hero-cursor b { margin: 13px 0 0 -3px; padding: 2px 8px; border-radius: 999px; background: currentColor; font-size: 13px; font-weight: 500; line-height: 1.4; }
+.hero-cursor b { -webkit-text-fill-color: #fff; }
+@media (min-width: 64rem) and (hover: hover) { .hero-cursor { display: flex; } }
+.devsign-hero-glow { position: relative; z-index: -1; height: 0; pointer-events: none; }
+.devsign-hero-glow::before { content: ""; position: absolute; left: 50%; bottom: calc(-1 * clamp(40px, 6svh, 64px) - 96px); width: min(100%, 1200px); height: 460px; translate: -50% 0; background: radial-gradient(50% 60% at 50% 72%, color-mix(in srgb, var(--dh-glow) light-dark(26%, 62%), transparent), transparent 76%); }
+.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
+@media (max-width: 63.99rem) { .devsign-hero-glow::before { height: 300px; } }
