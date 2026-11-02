@@ -3848,25 +3848,19 @@ td[data-highlight] .dv-tool-mark { width: 24px; height: 24px; color: #fff; }
 
 /* Overview summary: three cards. The large line reads alone, the small line
    backs it up; the score counts up when the cards arrive. */
-@property --dv-count { syntax: "<integer>"; inherits: false; initial-value: 0; }
 .dv [data-tone="red"] { --tone: light-dark(#c7383d, #ff7a7f); }
 .dv-glance-block { margin-top: 56px; }
 .dv-glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto; gap: 0 16px; margin: 0; padding: 0; list-style: none; }
 .dv-glance > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 12px; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), var(--dv-surface)) 0%, var(--dv-surface) 62%); }
 .dv-glance-label { color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.3; }
 .dv-glance-title { align-self: start; color: var(--dv-ink); font-size: clamp(22px, 2vw, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -0.015em; text-wrap: balance; }
-.dv-glance-score { font-size: clamp(36px, 3.4vw, 48px); font-weight: 400; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.dv-glance-count { --dv-count: var(--to); counter-reset: dv-score var(--dv-count); transition: --dv-count 900ms var(--ease-out-soft) 300ms; }
-.dv-glance-count::before { content: counter(dv-score); }
 .dv-glance-text { color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
 @media (prefers-reduced-motion: no-preference) {
   .dv-glance > li { transition: opacity 500ms var(--ease), translate 700ms var(--ease-out-soft); }
   .dv-glance > li:nth-child(2) { transition-delay: 100ms; }
   .dv-glance > li:nth-child(3) { transition-delay: 200ms; }
   .reveal-ready .dv-glance:not([data-shown]) > li { opacity: 0; translate: 0 24px; }
-  .reveal-ready .dv-glance:not([data-shown]) .dv-glance-count { --dv-count: 0; }
 }
-@media (prefers-reduced-motion: reduce) { .dv-glance-count { transition: none; } }
 @media (max-width: 63.99rem) {
   .dv-glance { grid-template-columns: 1fr; grid-template-rows: none; gap: 12px; }
   .dv-glance > li { grid-row: auto; grid-template-rows: none; padding: 24px; }

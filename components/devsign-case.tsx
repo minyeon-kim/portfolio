@@ -214,15 +214,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <section className="dv-glance-block" aria-labelledby="tldr">
             <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
             <ul className="dv-glance reveal">
-              {overview.summary.items.map((item: { tone: string; label: string; title: string; count?: number; text: string }) => (
+              {overview.summary.items.map((item: { tone: string; label: string; title: string; text: string }) => (
                 <li key={item.label} data-tone={item.tone}>
                   <p className="dv-glance-label">{item.label}</p>
-                  {item.count ? (
-                    <p className="dv-glance-title dv-glance-score">
-                      <span className="sr-only">{item.title}</span>
-                      <span className="dv-glance-count" style={{ "--to": item.count } as React.CSSProperties} aria-hidden="true"> / {item.count}</span>
-                    </p>
-                  ) : <p className="dv-glance-title">{item.title}</p>}
+                  <p className="dv-glance-title">{item.title}</p>
                   <p className="dv-glance-text">{item.text}</p>
                 </li>
               ))}
