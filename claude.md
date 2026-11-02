@@ -920,3 +920,5 @@ Landing logos read as the logos and arrive faster (supersedes the loose bolt and
 =======
 Double diamond: each stage's `methods` float under the stage as a small card on hover or keyboard focus (no reserved space, no layout shift) and are always visible on touch screens and below 48rem. Devsign's Develop methods follow the current flow: AI brainstorming, 2x2 matrix, value proposition canvas, sketching · IA. Figma not updated.
 >>>>>>> 43c00e9 (Double diamond methods float as a small card, no reserved space)
+
+Logo dust softened again at the owner's preference (shape and speed kept): jitter 0.08–0.4 by grain, 20% of the dust as haze (0.5–2.0), flow 0.08, z spread 0.2. Replaces "jitter 0.04, a tenth as haze" above. A face form for About (dust gathering into a portrait) is parked until later; it needs a photo.
