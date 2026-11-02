@@ -4021,7 +4021,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-mini h4 { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
 .dv-mini > li[data-tone] h4 { color: var(--tone); }
 .dv-mini p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
-.dv-mini-goals > li { flex-direction: row; align-items: baseline; }
 @media (max-width: 63.99rem) { .dv-mini { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 47.99rem) { .dv-mini { grid-template-columns: 1fr; gap: 12px; } .dv-mini > li { padding: 20px; } }
 
@@ -4143,3 +4142,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Case lines and graph tracks in dark take the ink over whatever surface they sit on,
    so they keep the surface's own hue (page, section and card differ). */
 .dv { --dv-line: light-dark(#d6d6d6, color-mix(in srgb, var(--dv-ink) 16%, transparent)); }
+
+/* The success goals close the Problem statement card: white on its gradient, no boxes. */
+.dv-core-goals { max-width: var(--dv-measure-wide); margin-top: 32px; padding-top: 24px; border-top: 1px solid rgb(255 255 255 / 0.28); }
+.dv-core-goals > p { color: rgb(255 255 255 / 0.78); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-core-goals ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; margin: 12px 0 0; padding: 0; list-style: none; }
+.dv-core-goals li { display: flex; gap: 12px; align-items: baseline; color: #ffffff; font-size: 18px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
+.dv-core-goals li > span { flex: none; color: rgb(255 255 255 / 0.7); font-size: 16px; font-variant-numeric: tabular-nums; }
+@media (max-width: 47.99rem) { .dv-core-goals ol { grid-template-columns: 1fr; } }
+.dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
