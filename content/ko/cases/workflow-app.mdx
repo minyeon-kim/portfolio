@@ -16,7 +16,7 @@ export const meta = {
     title: "AI 시대의 개발팀은 어떤 문제를 겪고 있을까?",
     subtitle: "디자이너와 개발자가 AI 시안을 비교하고, 결정하고, 그 이유를 남기는 하나의 워크스페이스.",
     actions: [
-      { label: "프로토타입 써 보기", href: "#try", phoneHref: "https://minyeon-kim.github.io/devsign/?lang=ko", primary: true },
+      { label: "프로토타입 둘러보기", href: "#try", primary: true },
     ],
     details: [
       { label: "Duration", value: "10주" },
@@ -305,7 +305,7 @@ export const study = {
     method: "Final design",
     title: "Prototype",
     lead: "시안을 비교하고, 결정하고, 그 이유를 남기는 일을 한곳에서 할 수 있게 만들었다.",
-    text: "테스트한 그 프로토타입을 여기서 직접 써 볼 수 있다. 시작을 누르면 열리고, 새 탭으로 열 수도 있다. 데스크톱 화면에 맞춰 만들었다.",
+    text: "실제 프로토타입 화면을 따라 12단계로 둘러본다. 표시된 곳을 누르면 다음으로 넘어간다.",
     features: [
       {
         kicker: "Feature 01 · Designer · Developer",
@@ -364,11 +364,25 @@ export const study = {
       ],
     },
     tryIt: {
-      poster: "/images/devsign/iter2-to-be.webp",
-      posterAlt: "Devsign 워크스페이스: 결제 흐름의 모든 화면이 한 보드에 놓인 모습",
-      start: "프로토타입 시작",
-      open: "새 탭으로 열기 ↗",
-      hint: "Merge에서 결제 화면 시안 두 개를 합쳐 보세요.",
+      alt: "Devsign 프로토타입 화면",
+      back: "이전",
+      restart: "처음부터",
+      open: "직접 써 보기 ↗",
+      chapters: [{ label: "시안 합치기", from: 0 }, { label: "변경 결정", from: 6 }],
+      steps: [
+        { src: "/images/devsign/demo/ko-1.webp", box: [92.08, 5.89, 6.74, 3.56], text: "시안을 합치는 일부터 해 볼게요. 오른쪽 위 Merge를 누르세요." },
+        { src: "/images/devsign/demo/ko-2.webp", box: [65.42, 14.11, 32.43, 4], text: "합칠 시안 묶음을 고르세요." },
+        { src: "/images/devsign/demo/ko-3.webp", box: [93.16, 94.11, 5.11, 3.56], text: "AI 시안 네 개가 나란히 열렸어요. 조합하기를 누르세요." },
+        { src: "/images/devsign/demo/ko-4.webp", box: [66.94, 34.89, 31.6, 10.33], text: "영역마다 더 나은 시안을 고를 수 있어요. 헤더는 두 번째 시안으로 고르세요." },
+        { src: "/images/devsign/demo/ko-5.webp", box: [91.57, 94.11, 6.7, 3.56], text: "네 영역을 모두 골랐어요. 병합 요청을 누르세요." },
+        { src: "/images/devsign/demo/ko-6.webp", box: [79.17, 88.67, 18.19, 3.56], text: "검토자를 정해 요청을 보내세요." },
+        { src: "/images/devsign/demo/ko-7.webp", box: [49.43, 70.67, 1.67, 2.67], text: "이번엔 결정하는 쪽이에요. 보드에서 바뀐 화면의 +4 표시를 누르세요." },
+        { src: "/images/devsign/demo/ko-8.webp", box: [50.91, 79.68, 0.96, 2.02], text: "핀이 바뀐 위치를 보여 줘요. 주문 버튼의 핀을 누르세요." },
+        { src: "/images/devsign/demo/ko-9.webp", box: [76.65, 88.64, 6.19, 3.56], text: "요청 내용과 현재 코드를 보고 판단해요. 원안으로 수정을 누르세요." },
+        { src: "/images/devsign/demo/ko-10.webp", box: [86.18, 79.53, 10.21, 3.56], text: "이유는 필수예요. 적어 뒀으니 결정을 보내세요." },
+        { src: "/images/devsign/demo/ko-11.webp", box: [0.42, 21.56, 2.5, 4], text: "결정을 보냈어요. 왼쪽 메뉴에서 히스토리를 여세요." },
+        { src: "/images/devsign/demo/ko-12.webp", box: [5.14, 16.89, 16.53, 6.22], text: "결정이 기록에 남았어요. 여기까지가 Devsign의 흐름이에요." },
+      ],
     },
   },
   testing: {
