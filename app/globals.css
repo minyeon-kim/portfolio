@@ -3566,7 +3566,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .devsign-hero-actions a[data-primary]:hover { background: color-mix(in srgb, var(--case-accent, var(--dh-glow)) 86%, light-dark(#000, #fff)); }
 .devsign-hero[data-project="workflow-app"] { --case-accent: var(--devsign-title); }
 .devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #8ab4f8); }
-.devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1080px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
+.devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1200px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
 .devsign-hero-panel .devsign-hero-media .devsign-loop { margin-top: 0; }
 .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin: clamp(40px, 5vw, 72px) calc(var(--dh-pad) - 16px) 0; }
 .dv-link-target { scroll-margin-top: 160px; }
@@ -4268,3 +4268,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-verdict, .dv-metrics { grid-template-columns: minmax(0, 1fr); }
   .dv-verdict > article, .dv-metrics, .dv-result-box { padding: 24px; }
 }
+
+/* On tablets and small laptops the opener media keeps the same edges as the facts row and body. */
+@media (min-width: 48rem) { .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, calc(100vw - 112px), 1200px); } }
