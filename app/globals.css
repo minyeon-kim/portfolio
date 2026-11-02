@@ -4542,3 +4542,5 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-board-link:hover img { transform: translateY(-3px); }
 .dv-board-link:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; border-radius: 8px; }
 @media (max-width: 47.99rem) { .dv-board-link img { width: 140px; } }
+/* Folded supporting material in a case. */
+.dv-fold-body { padding-top: 32px; }
