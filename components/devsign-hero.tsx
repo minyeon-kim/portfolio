@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
@@ -8,7 +9,7 @@ import { withBase } from "@/lib/site";
 // Devsign wordmark face, as in the Figma hero.
 const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "swap" });
 
-export type DevsignHeroData = { title: string; subtitle?: string; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
+export type DevsignHeroData = { title: string; subtitle?: string; actions?: { label: string; href: string; phoneHref?: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
 // The case opener, laid out after railway.com's hero: one large framed panel,
 // inset from the screen edges, holding the brand, a centered question, one line
@@ -33,7 +34,13 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         {hero.subtitle && <p className="devsign-hero-subtitle">{hero.subtitle}</p>}
         {hero.actions && (
           <p className="devsign-hero-actions">
-            {hero.actions.map((a) => <a key={a.href} href={a.href} className="press" data-primary={a.primary || undefined}>{a.label}{a.primary && <ArrowIcon />}</a>)}
+            {hero.actions.map((a) => (
+              <Fragment key={a.href}>
+                <a href={a.href} className="press" data-wide={a.phoneHref ? "" : undefined} data-primary={a.primary || undefined}>{a.label}{a.primary && <ArrowIcon />}</a>
+                {/* The prototype is a desktop tool: phones open it in a new tab. */}
+                {a.phoneHref && <a href={a.phoneHref} target="_blank" rel="noreferrer" className="press" data-phone="" data-primary={a.primary || undefined}>{a.label}{a.primary && <ArrowIcon />}</a>}
+              </Fragment>
+            ))}
           </p>
         )}
       </div>
