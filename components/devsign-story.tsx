@@ -16,12 +16,24 @@ type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
 // One change of an iteration at a time: the changed area of the As-is and To-be
-// screens as large close-ups side by side. Picking another change pans both
-// screenshots to it (same image, so nothing reloads).
+// screens as large close-ups side by side. Moving to another change pans both
+// screenshots to it (same image, so nothing reloads). The changes advance by
+// themselves: the bar on the current tab fills (CSS) and its end picks the next
+// one. It runs only on screen and holds on hover or keyboard focus; with reduced
+// motion the bar has no animation, so nothing advances.
 export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
+  const [onScreen, setOnScreen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const change = changes[active];
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), { threshold: 0.4 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   const sides = [
     { key: "a", tag: labels.asIs, img: before, box: change.a, line: change.before },
     { key: "b", tag: labels.toBe, img: after, box: change.b, line: change.after },
@@ -35,10 +47,11 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
     tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-iter">
+    <div ref={root} className="dv-iter" data-playing={onScreen}>
       <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
         {changes.map((c, i) => (
           <button key={c.title} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === active ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
+            {i === active && <i className="dv-iter-bar" aria-hidden="true" onAnimationEnd={() => setActive((i + 1) % changes.length)} />}
             <b>{i + 1}</b><span>{c.title}</span>
           </button>
         ))}
