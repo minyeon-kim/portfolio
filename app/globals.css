@@ -4047,3 +4047,16 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-flow > li:not(:last-child) .dv-flow-stage::after { display: none; }
   .dv-flow h4 { font-size: 18px; }
 }
+
+/* Prototype: one hint on the cover. */
+.dv-try { display: block; }
+.dv-try-hint { margin: 0; color: #fff; font-size: 18px; font-weight: 500; line-height: 1.4; text-align: center; }
+.dv-try-open-below { display: inline-block; margin-top: 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-try-open-below:hover { color: var(--dv-ink); }
+@media (max-width: 63.99rem) { .dv-try-hint { display: none; } }
+
+/* Opener actions answer the pointer: they rise, and the second one fills. */
+.devsign-hero-actions a { transition: background-color 150ms var(--ease), translate 150ms var(--ease); }
+.devsign-hero-actions a:hover { translate: 0 -2px; }
+.devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, var(--dh-ink) 28%); }
+@media (prefers-reduced-motion: reduce) { .devsign-hero-actions a:hover { translate: none; } }
