@@ -160,7 +160,7 @@ vec2 project(vec3 p, vec2 cam, float aspect) {
   p.z += move.z - approach;
   // Dust the camera has flown past is out of view.
   if (5.0 - p.z < 0.35) return vec2(9.0);
-  float ay = cam.x * 0.06, ax = -cam.y * 0.04;
+  float ay = cam.x * 0.12, ax = -cam.y * 0.07;
   p.xz = mat2(cos(ay), -sin(ay), sin(ay), cos(ay)) * p.xz;
   p.yz = mat2(cos(ax), -sin(ax), sin(ax), cos(ax)) * p.yz;
   vec2 s = p.xy * 1.7 / (5.0 - p.z); s.x /= aspect;
@@ -181,11 +181,13 @@ void main() {
   // The cursor sweeps nearby dust along its motion and swirls it.
   vec2 s = project(p, cam, aspect);
   vec2 d = (s - mouse) * vec2(aspect, 1.0);
-  // After byotone.com: only the grains right by the cursor give way a
-  // little, so the form never loses its shape (no wide sweep or swirl).
-  float k = exp(-dot(d, d) / 0.1);
+  // After byotone.com: only the grains near the cursor give way a little,
+  // so the form never loses its shape (no wide swirl). They part along its
+  // motion, and the landscape swells gently under a resting cursor.
+  float k = exp(-dot(d, d) / 0.16);
   vec2 mv = mouseVel / max(dt, 1e-3);
-  u.xy += (mv * 0.15 + normalize(d + 1e-4) * length(mv) * 0.25) * k * dt * 2.0;
+  u.xy += (mv * 0.3 + normalize(d + 1e-4) * length(mv) * 0.35) * k * dt * 2.0;
+  u.y += k * 0.7 * mix(0.3, 1.0, step(symbol, 0.5) + step(2.5, symbol)) * dt;
   // Damped enough that a change of form flows in and settles without wobbling.
   u *= exp(-dt * 2.4);
   o = vec4(u, 1.0);
