@@ -78,37 +78,30 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
 type Area = [number, number, number, number];
 type Candidate = { id: string; name: string; kind: string; pain: string; to: string; from: Area; relief: Area };
 type CanvasArt = { src: string; width: number; height: number; painArea: Area; reliefArea: Area; alt: string };
-const PANE_ASPECT = 16 / 11;
+const STAGE_ASPECT = 2.35;
+const STAGE_ASPECT_PHONE = 1.4;
 
-// One picture in two windows. Each window frames an area of the canvas: scale and
-// shift only, so the zoom runs on the compositor. `spot` also rings that area.
-function CanvasPane({ art, area, spot, tag }: { art: CanvasArt; area: Area; spot: boolean; tag: string }) {
-  const [x, y, w, h] = area;
-  const shown = spot ? Math.max(560, w * 1.7) : Math.max(w, h * PANE_ASPECT);
-  const k = art.width / shown;
-  const cx = (x + w / 2) / art.width, cy = (y + h / 2) / art.height;
-  const tx = (0.5 - k * cx) * 100;
-  const ty = ((0.5 * (art.width / art.height)) / PANE_ASPECT - k * cy) * 100;
-  return (
-    <figure className="dv-vpc-side">
-      <span className="dv-iter-tag">{tag}</span>
-      <div className="dv-vpc-view">
-        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="100vw" style={{ transform: `translate(${tx}%, ${ty}%) scale(${k})` }} />
-        {spot && <span key={`${x}-${y}`} className="dv-vpc-ring" style={{ width: `${(w / shown) * 100}%`, aspectRatio: `${w} / ${h}` }} aria-hidden="true" />}
-      </div>
-    </figure>
-  );
-}
-
-// The canvas, read pair by pair: first the whole circle and square, then each pain
-// and the exact reliever that answers it. Advances like IterationCompare: a bar on
-// the current tab, on screen only, held on hover or focus; with reduced motion it
-// stays on the whole canvas until a tab is pressed.
-export function CanvasZoom({ art, candidates, reliefLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; reliefLabel: string; overviewLabel: string }) {
-  const [active, setActive] = useState(-1);
+// The canvas as one picture and one camera: the whole board, then it glides to the
+// key pains and to the exact reliever that answers each, and back. No tabs or bars;
+// it runs only on screen and holds on hover. With reduced motion it stays on the
+// whole board, and the pairs are always there for screen readers.
+export function CanvasZoom({ art, candidates, keyPairs, reliefLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; reliefLabel: string; overviewLabel: string }) {
+  const steps = keyPairs.flatMap((id) => {
+    const c = candidates.find((item) => item.id === id);
+    return c ? [{ key: `${id}-a`, area: c.from, tag: c.kind, text: c.pain, to: null as string | null }, { key: `${id}-b`, area: c.relief, tag: reliefLabel, text: c.name, to: c.to as string | null }] : [];
+  });
+  const [step, setStep] = useState(-1);
   const [onScreen, setOnScreen] = useState(false);
+  const [held, setHeld] = useState(false);
+  const [phone, setPhone] = useState(false);
   const root = useRef<HTMLDivElement>(null);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  useEffect(() => {
+    const narrow = window.matchMedia("(max-width: 47.99rem)");
+    const sync = () => setPhone(narrow.matches);
+    sync();
+    narrow.addEventListener("change", sync);
+    return () => narrow.removeEventListener("change", sync);
+  }, []);
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -117,37 +110,29 @@ export function CanvasZoom({ art, candidates, reliefLabel, overviewLabel }: { ar
     return () => observer.disconnect();
   }, []);
   useEffect(() => {
-    if (active !== -1 || !onScreen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setTimeout(() => setActive(0), 2400);
+    if (!onScreen || held || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setTimeout(() => setStep((n) => (n + 1 < steps.length ? n + 1 : -1)), step === -1 ? 2600 : 3200);
     return () => clearTimeout(timer);
-  }, [active, onScreen]);
-  const pick = active >= 0 ? candidates[active] : null;
-  const onKey = (event: React.KeyboardEvent) => {
-    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-    if (!step) return;
-    event.preventDefault();
-    const next = (Math.max(active, 0) + step + candidates.length) % candidates.length;
-    setActive(next);
-    tabs.current[next]?.focus();
-  };
+  }, [step, onScreen, held, steps.length]);
+  const now = step >= 0 ? steps[step] : null;
+  const [x, y, w, h] = now ? now.area : [0, 0, art.width, Math.min(art.height, 2270)];
+  const aspect = phone ? STAGE_ASPECT_PHONE : STAGE_ASPECT;
+  const shown = now ? Math.max(phone ? 520 : 860, w * (phone ? 1.3 : 2.2)) : Math.max(w, h * aspect);
+  const k = art.width / shown;
+  const tx = (0.5 - k * ((x + w / 2) / art.width)) * 100;
+  const ty = ((0.5 * (art.width / art.height)) / aspect - k * ((y + h / 2) / art.height)) * 100;
   return (
-    <div ref={root} className="dv-iter dv-vpc" data-playing={onScreen}>
-      <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
-        {candidates.map((c, i) => (
-          <button key={c.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === Math.max(active, 0) ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
-            {i === active && <i className="dv-iter-bar" aria-hidden="true" onAnimationEnd={() => setActive(i + 1 < candidates.length ? i + 1 : -1)} />}
-            <b>{c.id}</b><span>{c.name}</span>
-          </button>
-        ))}
+    <div ref={root} className="dv-vpc" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)}>
+      <div className="dv-vpc-view">
+        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="100vw" style={{ transform: `translate(${tx}%, ${ty}%) scale(${k})` }} />
+        {now && <span key={now.key} className="dv-vpc-ring" style={{ width: `${(w / shown) * 100}%`, aspectRatio: `${w} / ${h}` }} aria-hidden="true" />}
       </div>
-      <div className="dv-vpc-pair" role="tabpanel">
-        <CanvasPane art={art} area={pick ? pick.from : art.painArea} spot={!!pick} tag={pick ? pick.kind : candidates[0].kind} />
-        <span className="dv-vpc-arrow" aria-hidden="true">→</span>
-        <CanvasPane art={art} area={pick ? pick.relief : art.reliefArea} spot={!!pick} tag={reliefLabel} />
-      </div>
-      <p key={active} className="dv-vpc-line">
-        {pick ? <><span>{pick.pain}</span><i aria-hidden="true">→</i><b>{pick.to}</b></> : <span>{overviewLabel}</span>}
+      <p key={now?.key ?? "all"} className="dv-vpc-line" aria-hidden="true">
+        {now ? <><span className="dv-iter-tag">{now.tag}</span><span>{now.text}</span>{now.to && <><i>→</i><b>{now.to}</b></>}</> : <span>{overviewLabel}</span>}
       </p>
+      <ul className="sr-only">
+        {candidates.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
+      </ul>
     </div>
   );
 }
