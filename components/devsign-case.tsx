@@ -628,14 +628,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       <Section id="develop" title="Develop">
         <div>
-          <Block {...develop.ideation} ff={ff} />
-          {develop.ideation.steps && <ol className="dv-mini dv-gap-40" style={{ "--n": develop.ideation.steps.length } as React.CSSProperties}>
-            {develop.ideation.steps.map((step: { title: string; body: string }, i: number) => (
-              <li key={step.title} className="reveal"><span className="dv-learned-number">{pad(i + 1)}</span><h4>{step.title}</h4><p>{step.body}</p></li>
-            ))}
-          </ol>}
+          {develop.ideation && <Block {...develop.ideation} ff={ff} />}
           {ff && <>
-            <p className="dv-caps dv-accent dv-gap-40 reveal">{define.hmw.successLabel}</p>
+            <p className="dv-caps dv-accent reveal">{define.hmw.successLabel}</p>
             <ol className="dv-mini dv-mini-goals" style={{ "--n": define.hmw.success.length } as React.CSSProperties}>
               {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span className="dv-learned-number">{i + 1}</span><h4>{s}</h4></li>)}
             </ol>

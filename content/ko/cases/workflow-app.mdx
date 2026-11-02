@@ -69,7 +69,7 @@ export const study = {
       stages: [
         { name: "Discover", outcome: "모든 단계가 빨라졌고, 단계마다 빈틈이 생겼다.", methods: ["데스크 리서치", "경쟁 서비스 분석", "심층 인터뷰"] },
         { name: "Define", outcome: "문제는 네 가지로 좁혀졌다.", methods: ["어피니티 매핑", "페르소나·저니맵", "HMW"] },
-        { name: "Develop", outcome: "아이디어 13개가 기능 4개가 됐다.", methods: ["가치 제안 캔버스", "아이디에이션·DVF", "스케치·IA"], current: true },
+        { name: "Develop", outcome: "후보 5개가 기능 4개가 됐다.", methods: ["가치 제안 캔버스", "아이디에이션·DVF", "스케치·IA"], current: true },
         { name: "Deliver", outcome: "작동하는 프로토타입을 만들어 한 번 테스트하고 두 번 고쳤다.", methods: ["AI 프로토타입", "사용성 테스트", "코디자인"] },
       ],
       pivot: "AI 중재자 → 시안 합치기",
@@ -241,21 +241,11 @@ export const study = {
     },
   },
   develop: {
-    ideation: {
-      method: "Diverge → converge",
-      title: "Ideation",
-      lead: "문제마다 HMW 질문을 세우고, AI와 아이디어를 넓게 낸 뒤 가치와 노력으로 골랐다.",
-      steps: [
-        { title: "문제마다 HMW 질문", body: "정의한 문제를 ‘어떻게 하면 ~할 수 있을까’ 질문으로 바꿨다." },
-        { title: "AI로 넓게 브레인스토밍", body: "질문마다 AI로 아이디어를 내고, 바람직성·실현 가능성·사업성에 사용성과 차별성까지 함께 따졌다." },
-        { title: "가치와 노력으로 선별", body: "추린 13개를 Value vs Effort 2x2 매트릭스에 놓고, 가치가 높은 5개를 골랐다." },
-      ],
-    },
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "그다음, 남은 아이디어를 인터뷰에서 들은 실제 불편과 하나씩 짝지었고, 같은 불편을 해결하는 아이디어끼리 묶어 기능 후보로 만들었다.",
-      text: "가치 제안 캔버스에서 아이디어마다 없애 주는 불편을 짝지었다. 같은 불편을 없애는 아이디어를 하나로 묶으니 후보 5개(A–E)가 남았다.",
+      lead: "인터뷰에서 들은 불편을 없애는 아이디어만 기능 후보로 남겼다.",
+      text: "AI로 브레인스토밍하고 2x2 매트릭스로 추린 아이디어를 가치 제안 캔버스에서 불편과 하나씩 짝지었다. 같은 불편을 없애는 것끼리 묶으니 후보 5개(A–E)가 남았다.",
       candidatesLabel: "기능 후보와 해결하는 페인 포인트",
       candidates: [
         { id: "A", name: "결정 기록·히스토리", kind: "불편", pain: "결과만 남고 그렇게 정한 이유는 사라진다.", to: "History" },
