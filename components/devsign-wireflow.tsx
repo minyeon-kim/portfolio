@@ -98,12 +98,13 @@ const SCREENS = [
 
 const at = (i: number) => ({ x: COLS[i % 4], y: ROWS[i < 4 ? 0 : 1] });
 
-// Each edge starts on the element you press, in page coordinates.
-const EDGES = [
+// Each edge starts on the element you press, in page coordinates. The long way back
+// runs behind the screens so it doesn't cross the one it leaves.
+const EDGES: { from: number[]; d: string; behind?: boolean }[] = [
   { from: [222, 72 + 8], d: `M222 ${72 + 8}H316` },
   { from: [316 + 236, 72 + 57], d: `M${316 + 236} ${72 + 57}H632` },
   { from: [632 + 236, 72 + 141], d: `M${632 + 236} ${72 + 141}H948` },
-  { from: [948 + 203, 72 + 137], d: `M${948 + 203} ${72 + 137}V16H214V72` },
+  { from: [948 + 203, 72 + 137], d: `M${948 + 203} ${72 + 137}V16H192V72`, behind: true },
   { from: [224, 72 + 108], d: `M224 ${72 + 108}V366` },
   { from: [126, 366 + 124], d: `M126 ${366 + 124}H316` },
   { from: [316 + 236, 366 + 100], d: `M${316 + 236} ${366 + 100}H632` },
@@ -113,12 +114,13 @@ const EDGES = [
 export function Wireflow({ nodes, label }: { nodes: Node[]; label: string }) {
   return (
     <div className="dv-scroll dv-wf dv-gap-40 reveal">
-      <svg viewBox="0 0 1200 592" role="img" aria-label={label}>
+      <svg viewBox="-1 0 1202 592" role="img" aria-label={label}>
         <defs>
           <marker id="dv-wf-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
             <path d="M0 0L8 4L0 8Z" className="dv-wf-head" />
           </marker>
         </defs>
+        {EDGES.filter((edge) => edge.behind).map((edge) => <path key={edge.d} d={edge.d} className="dv-wf-line" markerEnd="url(#dv-wf-arrow)" />)}
         {nodes.map((node, i) => {
           const { x, y } = at(i);
           return (
@@ -133,7 +135,7 @@ export function Wireflow({ nodes, label }: { nodes: Node[]; label: string }) {
         })}
         {EDGES.map((edge) => (
           <g key={edge.d}>
-            <path d={edge.d} className="dv-wf-line" markerEnd="url(#dv-wf-arrow)" />
+            {!edge.behind && <path d={edge.d} className="dv-wf-line" markerEnd="url(#dv-wf-arrow)" />}
             <circle cx={edge.from[0]} cy={edge.from[1]} r={4} className="dv-wf-dot" />
           </g>
         ))}

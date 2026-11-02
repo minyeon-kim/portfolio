@@ -111,7 +111,7 @@ export const study = {
     q2: {
       label: "Question 2 · Does any tool already solve it?",
       answer: "Today’s tools can spot differences between a design and its code, but none can combine AI drafts or record why a decision was made.",
-      auditLabel: "Tool review · 9 tools in 4 groups",
+      auditLabel: "9 tools, 4 types",
       columns: [
         { name: "Handoff" },
         { name: "Spot differences" },
@@ -121,10 +121,10 @@ export const study = {
         { name: "Record reasons", accent: true },
       ],
       rows: [
-        { name: "Design–code handoff", marks: [1, 0, 0, 0, 0, 0] },
-        { name: "Visual difference finders", marks: [0, 1, 0, 0, 0, 0] },
-        { name: "UI review & approval", marks: [0, 0, 1, 0, 0, 0] },
-        { name: "AI design generators", marks: [0, 0, 0, 1, 0, 0] },
+        { name: "Handoff tools", marks: [1, 0, 0, 0, 0, 0] },
+        { name: "Diff tools", marks: [0, 1, 0, 0, 0, 0] },
+        { name: "Review tools", marks: [0, 0, 1, 0, 0, 0] },
+        { name: "AI generators", marks: [0, 0, 0, 1, 0, 0] },
         { name: "Devsign", marks: [1, 1, 1, 1, 1, 1], highlight: true },
       ],
     },
@@ -409,8 +409,8 @@ export const study = {
       label: "Iteration 1 · Conflict Points",
       lead: "We split the review screen: one for designers, one for developers.",
       text: "Why: both participants called the shared screen “the other team’s tool.”",
-      before: { src: "/images/devsign/iter1-as-is-en.webp", alt: "As-is: one review screen shared by the designer and the developer", text: "Both read numbers and code names to choose.", box: [25.83, 21.23, 47.5, 46.92] },
-      after: { src: "/images/devsign/iter1-to-be-en.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", text: "The designer compares pictures and picks one.", box: [26.67, 39.26, 45.83, 39.01] },
+      before: { src: "/images/devsign/iter1-as-is-en.webp", alt: "As-is: one review screen shared by the designer and the developer", text: "Both read numbers and code names to choose.", box: [25.3, 30.6, 48.55, 38.4] },
+      after: { src: "/images/devsign/iter1-to-be-en.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", text: "The designer compares pictures and picks one.", box: [26.2, 38.6, 46.75, 41] },
     },
     iteration2: {
       method: "Iteration 2",
