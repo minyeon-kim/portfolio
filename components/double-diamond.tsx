@@ -7,9 +7,9 @@ const HALVES = ["M0 120L300 0V240Z", "M300 0L600 120L300 240Z", "M600 120L900 0V
 // The Double Diamond, kept simple: two outlined diamonds that draw in on reveal,
 // the stage names inside them and one outcome under each. Only the stage marked
 // `current` and its `pivot` (where the direction changed) carry the case colour.
-// Each stage links to its section. Its methods float as a small card on hover or
-// keyboard focus and are always shown on touch screens. Shared by the Devsign
-// body and CaseDiamond.
+// Each stage links to its section. On hover or keyboard focus its name crossfades
+// to its methods, in the same spot inside the diamond; touch and narrow screens
+// list them under the outcome instead. Shared by the Devsign body and CaseDiamond.
 export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot?: string }) {
   const [from, to] = pivot?.split(" → ") ?? [];
   return (
@@ -24,7 +24,7 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
           {stages.map((stage) => (
             <li key={stage.name} data-current={stage.current || undefined}>
               <a href={`#${stage.name.toLowerCase()}`}>
-                <span className="dv-dd-name">{stage.name}</span>
+                <span className="dv-dd-name"><span>{stage.name}</span></span>
                 {stage.outcome && <span className="dv-dd-outcome">{stage.outcome}</span>}
                 {stage.current && pivot && <span className="dv-dd-pivot">{from}{to && <><ArrowIcon size={14} />{to}</>}</span>}
                 {stage.methods && <span className="dv-dd-methods">{stage.methods.map((m) => <span key={m}>{m}</span>)}</span>}
