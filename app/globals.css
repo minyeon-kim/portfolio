@@ -4181,33 +4181,28 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* The glow already closes the page; no rule above the bottom row. */
 .case-study .more-work + .site-footer { border-top: 0; }
 
-/* Problem statement closes Define inside its column: same width as the cards above, card corners. */
+/* Problem statement closes Define at the size of a whole sheet and runs straight into
+   Develop: the colour falls away into Develop's surface, so there is no gap between them.
+   Gemini's card is followed by its HMW block, so it stays a card in the column. */
 .dv > section > .dv-core.dv-core { max-width: var(--dv-max); margin: 120px 0 0; padding: 96px 48px; border-radius: var(--dv-card-radius); }
-.dv > section > .dv-core-label { margin-top: 120px; }
-.dv > section > .dv-core-label + .dv-core.dv-core { margin-top: 20px; }
-.dv > section:has(> .dv-core:last-child):is(#define), .dv > section:has(> .dv-core:last-child) { padding-bottom: 200px; }
+.dv > section > .dv-core.dv-core:last-child { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; max-width: none; min-height: 72svh; margin: 160px calc(var(--dv-edge) - var(--dv-pad)) 0; padding: 140px calc(var(--dv-pad) - var(--dv-edge)) 240px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #33248f 60%, color-mix(in srgb, #33248f 90%, light-dark(var(--dv-band-light), var(--dv-band-dark))) 68%, color-mix(in srgb, #33248f 68%, light-dark(var(--dv-band-light), var(--dv-band-dark))) 77%, color-mix(in srgb, #33248f 38%, light-dark(var(--dv-band-light), var(--dv-band-dark))) 86%, color-mix(in srgb, #33248f 12%, light-dark(var(--dv-band-light), var(--dv-band-dark))) 94%, light-dark(var(--dv-band-light), var(--dv-band-dark)) 100%); }
+.dv-core-kicker { color: rgb(255 255 255 / 0.8); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv > section > .dv-core.dv-core:last-child .dv-core-text { max-width: 22em; margin: 0; font-size: clamp(32px, 3.8vw, 56px); line-height: 1.25; }
+.dv > #define:has(> .dv-core:last-child) { padding-bottom: 0; }
+.dv > #define:has(> .dv-core:last-child) + #develop { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; animation: none; clip-path: none; translate: none; opacity: 1; }
 @media (max-width: 47.99rem) {
   .dv > section > .dv-core.dv-core { margin-top: 72px; padding: 56px 24px; }
-  .dv > section > .dv-core-label { margin-top: 72px; }
-  .dv > section > .dv-core-label + .dv-core.dv-core { margin-top: 16px; }
-  .dv > section:has(> .dv-core:last-child):is(#define), .dv > section:has(> .dv-core:last-child) { padding-bottom: 120px; }
+  .dv > section > .dv-core.dv-core:last-child { min-height: 64svh; margin: 96px calc(var(--dv-edge) - var(--dv-pad)) 0; padding: 96px 16px 160px; }
+  .dv > #define:has(> .dv-core:last-child) { padding-bottom: 0; }
 }
 
-/* Value proposition canvas, pair by pair (CanvasZoom). */
-.dv-vpc .dv-iter-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.dv-vpc .dv-iter-tab { font-size: 16px; }
-.dv-vpc-pair { display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); gap: 8px; align-items: center; margin-top: 24px; }
-.dv-vpc-side { position: relative; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; margin: 0; min-width: 0; }
-.dv-vpc-view { position: relative; width: 100%; aspect-ratio: 16 / 11; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: #ffffff; }
-.dv-vpc-view img { position: absolute; top: 0; left: 0; display: block; width: 100%; max-width: none; height: auto; transform-origin: 0 0; transition: transform 900ms cubic-bezier(0.45, 0, 0.12, 1); will-change: transform; }
-.dv-vpc-ring { position: absolute; top: 50%; left: 50%; translate: -50% -50%; border: 2px solid var(--case-accent); border-radius: 6px; box-shadow: 0 0 0 100vmax rgb(14 17 17 / 0.42); pointer-events: none; animation: dv-vpc-ring 400ms var(--ease) 600ms both; }
-@keyframes dv-vpc-ring { from { opacity: 0; } to { opacity: 1; } }
-.dv-vpc-arrow { padding-top: 34px; color: var(--case-accent); font-size: 24px; text-align: center; }
-.dv-vpc-line { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: center; min-height: 28px; margin-top: 20px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.45; text-align: center; animation: dv-vpc-ring 400ms var(--ease) both; }
+/* Value proposition canvas: one frame, one camera (CanvasZoom). */
+.dv-vpc-view { position: relative; width: 100%; aspect-ratio: 2.35; overflow: hidden; border-radius: var(--dv-card-radius); background: #fbfbfb; }
+.dv-vpc-view img { position: absolute; top: 0; left: 0; display: block; width: 100%; max-width: none; height: auto; transform-origin: 0 0; transition: transform 1300ms cubic-bezier(0.45, 0, 0.12, 1); will-change: transform; }
+.dv-vpc-ring { position: absolute; top: 50%; left: 50%; translate: -50% -50%; border: 2px solid var(--case-accent); border-radius: 6px; box-shadow: 0 0 0 100vmax rgb(14 17 17 / 0.42); pointer-events: none; animation: dv-vpc-in 400ms var(--ease) 1000ms both; }
+@keyframes dv-vpc-in { from { opacity: 0; } to { opacity: 1; } }
+.dv-vpc-line { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: center; min-height: 34px; margin-top: 20px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; text-align: center; animation: dv-vpc-in 400ms var(--ease) both; }
 .dv-vpc-line i { color: var(--case-accent); font-style: normal; }
-.dv-vpc-line b { color: var(--dv-ink); font-weight: 600; }
-@media (max-width: 47.99rem) {
-  .dv-vpc-pair { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .dv-vpc-arrow { padding-top: 0; rotate: 90deg; }
-}
+.dv-vpc-line b { color: var(--case-accent); font-weight: 600; }
+@media (max-width: 47.99rem) { .dv-vpc-view { aspect-ratio: 1.4; } .dv-vpc-line { font-size: 16px; } }
 @media (prefers-reduced-motion: reduce) { .dv-vpc-view img { transition: none; } .dv-vpc-ring, .dv-vpc-line { animation: none; } }

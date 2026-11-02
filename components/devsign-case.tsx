@@ -579,8 +579,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
         </>}
 
-        {ff && <div className="dv-block dv-core-label"><p className="dv-label reveal">{define.core.title}</p></div>}
         <div className="dv-core">
+          {ff && <p className="dv-core-kicker reveal">{define.core.title}</p>}
           {!ff && <p className="dv-method reveal">{define.core.method}</p>}
           {!ff && <h3 className="dv-block-title reveal">{define.core.title}</h3>}
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
@@ -608,7 +608,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <div className="dv-gap-96">
           <Block {...develop.canvas} ff={ff} />
           <div className="dv-gap-40 reveal">
-            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} reliefLabel={develop.canvas.reliefLabel} overviewLabel={develop.canvas.candidatesLabel} />
+            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} keyPairs={develop.canvas.keyPairs} reliefLabel={develop.canvas.reliefLabel} overviewLabel={develop.canvas.candidatesLabel} />
           </div>
         </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
