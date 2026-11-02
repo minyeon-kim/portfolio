@@ -83,11 +83,12 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 {hasResume && <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>}
               </p>
             </div>
-            {hasPortrait && (
-              <div className="about-hero-portrait">
-                <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
-              </div>
-            )}
+            {/* TODO: add the portrait at public/images/about/portrait.webp; it replaces this box. */}
+            <div className="about-hero-portrait">
+              {hasPortrait
+                ? <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
+                : <CaseMedia variant="portrait" label={c.portrait} />}
+            </div>
           </div>
           <dl className="devsign-hero-details">
             {c.facts.map(([label, value]) => (

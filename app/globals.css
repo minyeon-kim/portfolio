@@ -4216,3 +4216,5 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv > #approach .dv-features { margin-top: 56px; }
 .dv-features .about-tools li { display: block; padding: 0; border-radius: 0; background: none; }
 .about-story ol { padding-left: 32px; }
+.about-hero-portrait .case-media { max-width: none; margin: 0; }
+.about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
