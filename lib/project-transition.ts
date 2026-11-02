@@ -274,10 +274,12 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     cancelAnimationFrame(scrollFrame);
     // Hide the old layers before cancelling: a cancelled fade would snap the
     // old view back to full opacity over the new page for the frames until
-    // they are removed (seen as an afterimage).
-    backdrop.style.visibility = "hidden";
-    floor.style.visibility = "hidden";
-    if (layer) { layer.style.visibility = "hidden"; const gone = layer; requestAnimationFrame(() => requestAnimationFrame(() => gone.remove())); }
+    // they are removed (seen as an afterimage). display, not visibility: a loop
+    // running on the compositor inside a visibility-hidden layer still painted
+    // for one frame (the home card's review panel, over the opener's title).
+    backdrop.style.display = "none";
+    floor.style.display = "none";
+    if (layer) { layer.style.display = "none"; const gone = layer; requestAnimationFrame(() => requestAnimationFrame(() => gone.remove())); }
     animations.forEach((animation) => animation.cancel());
     Object.assign(main.style, mainStyle);
     Object.assign(body.style, bodyStyle);

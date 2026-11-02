@@ -2,9 +2,9 @@ import { Fragment } from "react";
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { DevsignLive, DEVSIGN_URL } from "@/components/devsign-live";
+import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiPhone } from "@/components/gemini-phone";
-import { withBase } from "@/lib/site";
+import { DEVSIGN_URL, withBase } from "@/lib/site";
 
 // Devsign wordmark face, as in the Figma hero.
 const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "swap" });
@@ -14,7 +14,8 @@ export type DevsignHeroData = { title: string; subtitle?: string; actions?: { la
 // The case opener, laid out after railway.com's hero: one large framed panel,
 // inset from the screen edges, holding the brand, a centered question, one line
 // of what it is, the ways in, and the product itself running past the fold (the
-// live prototype, DevsignLive; its link is a small chip on the card). Duration /
+// prototype's screens as a loop, the same one the home card shows, so nothing
+// swaps after the page opens; its link is a small chip on the card). Duration /
 // Team / Role / Tools follow under the panel.
 // Gemini uses the same layout with its own sparkle and phone loop.
 // Used on the direct case page and on the home page's selected stage.
@@ -48,7 +49,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         {gemini
           ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span>
           : <div className="devsign-hero-window">
-              <DevsignLive alt={alt} />
+              <div className="devsign-hero-screen"><DevsignLoop alt={alt} /></div>
               <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
             </div>}
       </div>

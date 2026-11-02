@@ -16,6 +16,11 @@ export const nav = [
   { href: "/#contact", label: "Contact" },
 ];
 
+// The real Devsign prototype (github.com/minyeon-kim/devsign, served from GitHub
+// Pages). It honours ?lang=en|ko for the load (src/i18n/language.js in that repo).
+export const DEVSIGN_URL = "https://minyeon-kim.github.io/devsign/";
+export const devsignUrl = (locale: "en" | "ko") => `${DEVSIGN_URL}?lang=${locale}`;
+
 // Prefixes a /public path with the deploy base path (e.g. /portfolio on GitHub Pages).
 // next/image and plain <a> tags don't add it on their own for static export.
 export const withBase = (src: string) =>
