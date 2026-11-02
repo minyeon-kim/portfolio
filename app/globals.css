@@ -4062,3 +4062,17 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (prefers-reduced-motion: reduce) { .devsign-hero-actions a:hover { translate: none; } }
 
 .dv-wireflow.dv-gap-40 { margin-top: 40px; }
+
+/* Double diamond: each stage's methods, on hover or keyboard focus. */
+.dv-dd-methods { display: flex; flex-direction: column; gap: 4px; margin-top: 16px; padding: 12px 24px 0 0; border-top: 1px solid var(--dv-card-line); margin-right: 24px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-dd-methods span { display: block; }
+@media (hover: hover) and (min-width: 48rem) {
+  .dv-dd-methods { opacity: 0; translate: 0 4px; transition: opacity 250ms var(--ease), translate 250ms var(--ease); }
+  .dv-dd-stages a:hover .dv-dd-methods, .dv-dd-stages a:focus-visible .dv-dd-methods { opacity: 1; translate: none; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-dd-methods { transition: none; translate: none; } }
+.dv-dd-stages a:focus-visible .dv-dd-half { fill: inherit; }
+.dv-dd-body:has(li:nth-child(1) a:focus-visible) .dv-dd-half:nth-of-type(1),
+.dv-dd-body:has(li:nth-child(2) a:focus-visible) .dv-dd-half:nth-of-type(2),
+.dv-dd-body:has(li:nth-child(3) a:focus-visible) .dv-dd-half:nth-of-type(3),
+.dv-dd-body:has(li:nth-child(4) a:focus-visible) .dv-dd-half:nth-of-type(4) { fill: color-mix(in srgb, var(--case-accent) 12%, transparent); }
