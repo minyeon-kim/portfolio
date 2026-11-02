@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, TryPrototype, CanvasZoom } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, TryPrototype, CanvasZoom } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -320,7 +320,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
                 <tr>
-                  <th scope="col">{discover.q2.auditLabel}</th>
+                  <td aria-hidden="true" />
                   {compareTools.map((tool) => (
                     <th key={tool.name} scope="col" data-highlight={tool.highlight || undefined}>{tool.name}</th>
                   ))}
@@ -372,27 +372,28 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
-          {/* What we asked, then the session and who was in it, side by side at one height. */}
-          <div className="dv-ask dv-gap-40 reveal">
-            <p className="dv-caps">{discover.interview.questionsLabel}</p>
+          {/* What we asked (each question lights up as it reaches the eye line), then the
+              session, wide, and who was in it, credited under the picture. */}
+          <div className="dv-asks dv-gap-40">
+            <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
             <ol>
               {discover.interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
             </ol>
           </div>
-          <div className="dv-met">
-            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 60vw" className="dv-met-photo" />
-            <div className="dv-met-people reveal">
-              <p className="dv-caps">{discover.interview.peopleLabel}</p>
-              <ul>
-                {discover.interview.participants.map((p: string[]) => (
-                  <li key={p[0]} data-tone={toneOf(p[1])}>
-                    <b>{p[0]}</b>
-                    <div><strong>{p[1]}</strong><span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span></div>
-                  </li>
-                ))}
-              </ul>
+          <figure className="dv-meet reveal">
+            <div className="dv-meet-photo">
+              <Image src={withBase(discover.interview.photo.src)} alt={discover.interview.photo.alt} width={discover.interview.photo.width} height={discover.interview.photo.height} sizes="(max-width: 767px) 180vw, 1600px" />
             </div>
-          </div>
+            <ul aria-label={discover.interview.peopleLabel}>
+              {discover.interview.participants.map((p: string[]) => (
+                <li key={p[0]} data-tone={toneOf(p[1])}>
+                  <b>{p[0]}</b>
+                  <strong>{p[1]}</strong>
+                  <span>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+                </li>
+              ))}
+            </ul>
+          </figure>
         </div>
         ) : (
         <div className="dv-subsection dv-rule">
@@ -433,31 +434,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
         <div className="dv-subsection">
           <Block {...define.problems} ff={ff} />
-          <ol className="dv-problems dv-gap-40">
-            {define.problems.items.map((item: Study, index: number) => {
-              const answer = develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title);
-              return (
-              <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[index % PROBLEM_TONES.length]}>
-                <div className="dv-problem-top">
-                  <span className="dv-problem-number">{pad(index + 1)}</span>
-                  <span className="dv-problem-role">{item.role}</span>
-                </div>
-                <h4>{item.title}</h4>
-                <p>{item.body}</p>
-                {/* The affinity themes this problem was grouped from. */}
-                {define.affinity.themes?.[index] && (
-                  <p className="dv-problem-themes">
-                    {define.affinity.themesLabel} · {define.affinity.themes[index].map(([name]: [string, number]) => name).join(", ")}
-                  </p>
-                )}
-                {/* Which feature answers this problem. */}
-                {ff && answer && develop.selection.answeredBy && (
-                  <p className="dv-problem-answer"><span>{develop.selection.answeredBy}</span><b>{answer.feature}</b></p>
-                )}
-              </li>
-              );
-            })}
-          </ol>
+          <ProblemPanels
+            answeredBy={develop.selection?.answeredBy}
+            items={define.problems.items.map((item: Study, index: number) => ({
+              title: item.title,
+              body: item.body,
+              role: item.role,
+              tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
+              feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
+            }))}
+          />
         </div>
 
         {/* Where it breaks first (the journey and its two low points), then who. */}

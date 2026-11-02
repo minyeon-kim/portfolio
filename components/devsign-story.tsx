@@ -135,6 +135,31 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
+// The key problems as a horizontal accordion: four panels in a row, one open. Hover,
+// keyboard focus or a tap opens a panel; on phones (CSS) they are all open and stacked.
+type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
+export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answeredBy: string }) {
+  const [open, setOpen] = useState(0);
+  return (
+    <ol className="dv-panels dv-gap-40 reveal">
+      {items.map((item, i) => (
+        <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => setOpen(i)}>
+          <button type="button" aria-expanded={i === open} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
+            <span className="dv-panel-who"><b>{pad(i + 1)}</b>{item.role}</span>
+            <h4>{item.title}</h4>
+          </button>
+          <div className="dv-panel-more">
+            <div>
+              <p>{item.body}</p>
+              {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 // One core feature: the real prototype clip and its one sentence. The list under
 // the sentence follows the clip: the point on screen now is lit. With reduced motion
 // nothing autoplays and the video shows its controls.
