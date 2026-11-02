@@ -585,16 +585,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {!ff && <p className="dv-method reveal">{define.core.method}</p>}
           <h3 className="dv-block-title reveal">{define.core.title}</h3>
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
-          {/* Findings first: the success goals close the problem, so Develop can
-              start on what was done. */}
-          {ff && (
-            <div className="dv-core-goals reveal">
-              <p>{define.hmw.successLabel}</p>
-              <ol>
-                {define.hmw.success.map((s: string, i: number) => <li key={s}><span>{i + 1}</span>{s}</li>)}
-              </ol>
-            </div>
-          )}
         </div>
 
         {!ff && <div className="dv-hmw">
@@ -753,6 +743,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
+          {/* The scores and the next step are judged against these goals. */}
+          {ff && (
+            <div className="dv-goals reveal">
+              <p>{define.hmw.successLabel}</p>
+              <ol>
+                {define.hmw.success.map((s: string, i: number) => <li key={s}><span>{i + 1}</span>{s}</li>)}
+              </ol>
+            </div>
+          )}
           <ul className="dv-scores dv-scores-row dv-gap-40">
             {testing.usability.scores.map((s: Study) => (
               <li key={s.title} className="reveal">

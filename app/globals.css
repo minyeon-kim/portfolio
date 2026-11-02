@@ -4143,11 +4143,14 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
    so they keep the surface's own hue (page, section and card differ). */
 .dv { --dv-line: light-dark(#d6d6d6, color-mix(in srgb, var(--dv-ink) 16%, transparent)); }
 
-/* The success goals close the Problem statement card: white on its gradient, no boxes. */
-.dv-core-goals { max-width: var(--dv-measure-wide); margin-top: 32px; padding-top: 24px; border-top: 1px solid rgb(255 255 255 / 0.28); }
-.dv-core-goals > p { color: rgb(255 255 255 / 0.78); font-size: 16px; font-weight: 500; line-height: 1.4; }
-.dv-core-goals ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; margin: 12px 0 0; padding: 0; list-style: none; }
-.dv-core-goals li { display: flex; gap: 12px; align-items: baseline; color: #ffffff; font-size: 18px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
-.dv-core-goals li > span { flex: none; color: rgb(255 255 255 / 0.7); font-size: 16px; font-variant-numeric: tabular-nums; }
-@media (max-width: 47.99rem) { .dv-core-goals ol { grid-template-columns: 1fr; } }
+/* The one line of the Problem statement card, centred. */
+.dv-core { text-align: center; }
+.dv-core-text { margin-inline: auto; text-wrap: balance; }
+/* Success goals, above the scores that are judged against them. */
+.dv-goals { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: baseline; margin-top: 40px; }
+.dv-goals > p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-goals ol { display: flex; flex-wrap: wrap; gap: 8px 32px; margin: 0; padding: 0; list-style: none; }
+.dv-goals li { display: flex; gap: 10px; align-items: baseline; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-goals li > span { flex: none; color: var(--case-accent); font-variant-numeric: tabular-nums; }
+.dv-goals + .dv-scores-row { margin-top: 16px; }
 .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
