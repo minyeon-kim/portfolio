@@ -975,3 +975,4 @@ Review pass (2026-11-03). Landing: the shown case card and its caption open the 
 Core feature text: the problem answered sits under a hairline as its own label + line, set apart from the step list.
 
 About states no target industry (owner: not true): the Focus fact and "especially in privacy, security and developer tools" are gone, three facts remain. Contact reads "Open to product designer and design engineer roles." / "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다."
+Next project on case pages is its own closing sheet (owner: it read as part of the case): 120-160px below the case, a full-bleed sheet with a rounded top in the next project's colour falling into the footer, a clear "Next project" label, the name at 40-80px with the arrow, one sentence, and its screen large on the right, cropped by the sheet. The whole sheet is the link; on hover the screen rises. About keeps the deck. Figma not updated.
