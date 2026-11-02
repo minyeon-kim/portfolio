@@ -629,20 +629,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       <Section id="develop" title="Develop">
         <div>
           <Block {...develop.ideation} ff={ff} />
+          {develop.ideation.rules && <ol className="dv-mini dv-gap-40" style={{ "--n": develop.ideation.rules.length } as React.CSSProperties}>
+            {develop.ideation.rules.map((rule: string, i: number) => (
+              <li key={rule} className="reveal"><span className="dv-learned-number">{pad(i + 1)}</span><h4>{rule}</h4></li>
+            ))}
+          </ol>}
           {ff && <>
-            <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
-            <ol className="dv-checks">
-              {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
+            <p className="dv-caps dv-accent dv-gap-40 reveal">{define.hmw.successLabel}</p>
+            <ol className="dv-mini dv-mini-goals" style={{ "--n": define.hmw.success.length } as React.CSSProperties}>
+              {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span className="dv-learned-number">{i + 1}</span><h4>{s}</h4></li>)}
             </ol>
           </>}
         </div>
         {/* Prioritization: how 26 ideas were ranked (DVF + team vote), each
-            criterion as its own row so it reads top to bottom. */}
+            criterion as its own card. */}
         {develop.priority && <div className="dv-gap-96">
           <Block {...develop.priority} ff={ff} />
-          <ol className="dv-criteria dv-gap-24">
-            {develop.priority.criteria.map(([name, question]: [string, string]) => (
-              <li key={name} className="reveal"><strong>{name}</strong><span>{question}</span></li>
+          <ol className="dv-mini dv-gap-40" style={{ "--n": develop.priority.criteria.length } as React.CSSProperties}>
+            {develop.priority.criteria.map(([name, question]: [string, string], i: number) => (
+              <li key={name} className="reveal" data-tone={["accent", "blue", "teal"][i % 3]}><h4>{name}</h4><p>{question}</p></li>
             ))}
           </ol>
         </div>}

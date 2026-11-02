@@ -4016,3 +4016,16 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-learned-plain > li { grid-row: auto; }
   .dv-next-card[data-after-limits] { margin-top: 32px; }
 }
+
+/* Small card rows on a banded stage: Ideation's rules and goals, Prioritization's criteria. */
+.dv-mini { --dv-mini-bg: light-dark(#ffffff, var(--dv-band-card-dark)); display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; padding: 0; list-style: none; }
+.dv-mini:not([class*="dv-gap"]) { margin: 16px 0 0; }
+.dv-mini > li { display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-mini-bg); }
+.dv-mini > li[data-tone] { background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), var(--dv-mini-bg)) 0%, var(--dv-mini-bg) 62%); }
+.dv-mini .dv-learned-number { color: var(--case-accent); }
+.dv-mini h4 { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
+.dv-mini > li[data-tone] h4 { color: var(--tone); }
+.dv-mini p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
+.dv-mini-goals > li { flex-direction: row; align-items: baseline; }
+@media (max-width: 63.99rem) { .dv-mini { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 47.99rem) { .dv-mini { grid-template-columns: 1fr; gap: 12px; } .dv-mini > li { padding: 20px; } }
