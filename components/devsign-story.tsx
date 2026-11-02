@@ -188,7 +188,7 @@ export function TryPrototype({ poster, posterAlt, start, open, hint }: { poster:
   }, []);
   const url = devsignUrl(locale);
   return (
-    <div className="dv-try">
+    <div id="try" className="dv-try">
       <div className="dv-try-window">
         <div ref={box} className="dv-try-screen" data-ready={ready || undefined}>
           <Image src={withBase(poster)} alt={posterAlt} width={2880} height={1620} sizes="(max-width: 1023px) 100vw, 1200px" />
