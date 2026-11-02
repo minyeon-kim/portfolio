@@ -889,23 +889,23 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       <Section id="takeaway" title="Takeaway">
         {ff ? <>
-        {/* Findings first: the statement, three review cards, then the next
-            step as a two-column row (what, then why and what it checks). */}
+        {/* Findings first: the statement, three learning cards, then the next
+            step as one wide card. */}
         <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
         <p className="dv-body reveal">{takeaway.text}</p>
         <div className="dv-gap-80">
           <p className="dv-caps reveal">{takeaway.reviewTitle}</p>
-          <ol className="dv-review-lines">
+          <ol className="dv-learned">
             {takeaway.review.map((item: { title: string; body: string }, i: number) => (
-              <li key={item.title} className="reveal">
-                <span>{pad(i + 1)}</span>
-                <strong>{item.title}</strong>
-                <span>{item.body}</span>
+              <li key={item.title} className="reveal" data-tone={["accent", "blue", "teal"][i % 3]}>
+                <span className="dv-learned-number">{pad(i + 1)}</span>
+                <h4>{item.title}</h4>
+                <p>{item.body}</p>
               </li>
             ))}
           </ol>
         </div>
-        <div className="dv-next-row dv-gap-80 reveal">
+        <div className="dv-next-card reveal">
           <p className="dv-caps dv-accent">{takeaway.next.label}</p>
           <p className="dv-finding">{takeaway.next.title}</p>
         </div>

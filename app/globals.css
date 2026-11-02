@@ -3988,3 +3988,17 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-question, .dv-gap-96, .dv-process { margin-top: 72px; }
   .dv-ut-summary + .dv-scores-row, .dv-scores-row + .dv-result { margin-top: 32px; }
 }
+
+/* Takeaway: three learning cards in a row, the next step as one wide card. */
+.dv-learned { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto; gap: 0 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-learned > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 12px; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), var(--dv-surface)) 0%, var(--dv-surface) 62%); }
+.dv-learned-number { color: var(--tone); font-size: 16px; font-weight: 500; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.dv-learned h4 { color: var(--dv-ink); font-size: 20px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+.dv-learned p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
+.dv-next-card { margin-top: 16px; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-surface); }
+.dv-next-card .dv-finding { margin-top: 8px; max-width: var(--dv-measure-wide); }
+@media (max-width: 63.99rem) {
+  .dv-learned { grid-template-columns: 1fr; grid-template-rows: none; gap: 12px; }
+  .dv-learned > li { grid-row: auto; grid-template-rows: none; padding: 24px; }
+  .dv-next-card { margin-top: 12px; padding: 24px; }
+}
