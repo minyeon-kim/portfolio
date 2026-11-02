@@ -171,7 +171,7 @@ const velocityFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 ${common}
 uniform sampler2D pos; uniform sampler2D vel; uniform float dt;
-uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float stir; uniform vec2 cam; uniform float hold;
+uniform vec2 mouse; uniform vec2 mouseVel; uniform float aspect; uniform float gather; uniform float damp; uniform float stir; uniform vec2 cam; uniform float hold;
 ${view}
 void main() {
   vec3 p = texture(pos, v).xyz, u = texture(vel, v).xyz;
@@ -189,7 +189,7 @@ void main() {
   u.xy += (mv * 0.3 + normalize(d + 1e-4) * length(mv) * 0.35) * k * dt * 2.0;
   u.y += k * 0.7 * mix(0.3, 1.0, step(symbol, 0.5) + step(2.5, symbol)) * dt;
   // Damped enough that a change of form flows in and settles without wobbling.
-  u *= exp(-dt * 2.4);
+  u *= exp(-dt * damp);
   o = vec4(u, 1.0);
 }`;
 
@@ -612,14 +612,14 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (!visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation")) { mouse.px = mouse.x; mouse.py = mouse.y; return; }
       clock += dt;
       const target = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-      const k = 1 - Math.exp(-dt / 0.35);
+      const k = 1 - Math.exp(-dt / 0.2);
       (["calm", "fast", "accent"] as const).forEach((key) => { for (let i = 0; i < 3; i++) colours[key][i] += (target[key][i] - colours[key][i]) * k; });
       colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
-      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.4));
+      colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.2));
       // The journey: re-centre the world when a trip ends (or is cut short by
       // the next), then set off towards the new form's place.
       const shift = [0, 0, 0];
@@ -652,6 +652,9 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       const wake = Math.min(1, clock / 2.5);
       const awake = wake < 0.5 ? 4 * wake ** 3 : 1 - 4 * (1 - wake) ** 3;
       const approach = 1.6 * (1 - awake);
+      // A logo gathers fast (settled in about a second); the flow is raised with
+      // the pull so its loose shape stays the same.
+      const logo = target.symbol === 1 || target.symbol === 2;
       const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
       const ck = 1 - Math.exp(-dt / 1.2);
       cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
@@ -664,7 +667,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), 1.15); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), 0.18 - 0.14 * colours.galaxy);
+        gl.uniform1f(uniform(pVel, "gather"), logo ? 4.6 : 1.15); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 2.4); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {

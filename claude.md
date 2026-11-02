@@ -920,3 +920,5 @@ Landing logos read as the logos and arrive faster (supersedes the loose bolt and
 Logo dust softened again at the owner's preference (shape and speed kept): jitter 0.08–0.4 by grain, 20% of the dust as haze (0.5–2.0), flow 0.08, z spread 0.2. Replaces "jitter 0.04, a tenth as haze" above. A face form for About (dust gathering into a portrait) is parked until later; it needs a photo.
 
 Logo dust restored at the owner's preference: hero-object.tsx is back to 1d86550, which undoes the traced bolt, filled star, LOGO_AT, the faster spring and the softer-dust values in the two notes above. Sky thinning and the cursor response stay. The hover card and copy timings in globals.css / home-intro stay at the faster values.
+
+Logo dust keeps its restored shape but gathers fast: on the Gemini and Devsign forms, pull 4.6 (×3 at full focus), damping 6.5 and flow 0.6, raised together so the loose shape holds; colour and focus ease 0.2s (for every state). Landing and About motion otherwise unchanged (1.15, 2.4).
