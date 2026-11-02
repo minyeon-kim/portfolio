@@ -20,7 +20,7 @@ export function SmoothScroll() {
 
     const nested = (node: EventTarget | null) => {
       for (let el = node instanceof Element ? node : null; el && el !== document.body; el = el.parentElement) {
-        if (el.matches('[role="dialog"], input, textarea, select')) return true;
+        if (el.matches('dialog, [role="dialog"], input, textarea, select')) return true;
         const overflow = getComputedStyle(el).overflowY;
         if ((overflow === "auto" || overflow === "scroll") && el.scrollHeight > el.clientHeight + 2) return true;
       }

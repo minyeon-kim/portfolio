@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, GuidedDemo, CanvasZoom, AffinityDots } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, GuidedDemo, DemoDialog, CanvasZoom, AffinityDots } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -688,7 +688,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       <Section id="deliver" title="Deliver" band={!ff}>
         <div>
           <Block {...deliver} ff={ff} />
-          {deliver.tryIt && <div className="dv-gap-40 reveal"><GuidedDemo {...deliver.tryIt} /></div>}
+          {deliver.tryIt && <div id="try" className="dv-gap-40 reveal"><GuidedDemo {...deliver.tryIt} /></div>}
+          {deliver.tryIt && <DemoDialog {...deliver.tryIt} />}
         </div>
         {!ff && (
           <div className="dv-gap-64">
