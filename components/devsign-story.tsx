@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { crop } from "@/components/devsign-compare";
-import { devsignUrl } from "@/components/devsign-live";
-import { withBase } from "@/lib/site";
+import { devsignUrl, withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
 type Box = [number, number, number, number];

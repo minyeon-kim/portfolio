@@ -26,7 +26,7 @@ Colors are CSS variables on :root with a dark override via prefers-color-scheme 
 - --surface #FFFFFF / #151918
 - --ink #0E1111 / #E8ECEA
 - --muted #5B6461 / #8E9895
-- --line #DADFDC / #262C2A
+- --line #DADFDC / #2A2C3C
 - --accent #2440F0 / #7F93FF  (the ONLY accent; links, focus, demo states)
 Type scale: 13 / 15 / 18 / 24 / 36 / 64 px. 64px is only for the landing page: the name
 on the intro, and the selected case name.
@@ -932,3 +932,6 @@ Session photos are shown, not folded (owner: no button for them): the interview 
 Usability scores sit in one panel (no hairlines above and below); blocks inside a stage are separated by space, no rule above In-depth interview (`.dv-rule` is off). The stage title keeps its rule. Figma not updated.
 Co-design photo is codesign-session-blurred.webp: browser chrome cropped off, faces, names and the meeting code blurred (old file deleted; it remains in git history and the Figma frames). interview-session.webp and ut-session.webp are real session photos (confirmed by Minyeon).
 Case spacing aligned: core features 120 / 72, Problem statement 72 on phones, the Testing line to its first block 56 / 40, text to board, tool table, journey and persona cards 40, Overview line to cards 40 on phones. Gemini: Deliver 120/160 (72/96), its test plan and HMW sit one block gap away. Takeaway's own tighter spacing stays on purpose.
+
+Devsign opener shows only the prototype loop (the same one as the home card): the non-interactive live iframe is removed (DevsignLive, setDevsignLanguage), because ~3s after opening it crossfaded over the loop with a different view of the app, which read as a flicker, and it loaded a whole React app for a screen nobody could press. The real prototype is at #try. devsignUrl / DEVSIGN_URL moved to lib/site.ts. Supersedes the 'Live Devsign prototype' notes for the opener.
+Dark --line is #2a2c3c (was the greenish #262c2a, which clashed with the blue-black #0a0b14 page). Inside case bodies --dv-line in dark is ink 16% over the surface, so lines, score ring tracks and progress bars stay visible on page, section and card alike. Project transition cleanup hides its old layers with display: none, not visibility: the home card's review panel, animating on the compositor, still painted for one frame over the opener's title.
