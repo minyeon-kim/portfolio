@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { FeatureReel, IterationCompare, IterationPair, TryPrototype } from "@/components/devsign-story";
+import { FeatureReel, IterationCompare, IterationPair, TryPrototype, CanvasZoom } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -579,9 +579,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
         </>}
 
+        {ff && <div className="dv-block dv-core-label"><p className="dv-label reveal">{define.core.title}</p></div>}
         <div className="dv-core">
           {!ff && <p className="dv-method reveal">{define.core.method}</p>}
-          <h3 className="dv-block-title reveal">{define.core.title}</h3>
+          {!ff && <h3 className="dv-block-title reveal">{define.core.title}</h3>}
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
         </div>
 
@@ -606,20 +607,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {/* Findings first: text on top, the canvas across the whole column. */}
         {ff ? <div className="dv-gap-96">
           <Block {...develop.canvas} ff={ff} />
-          <Figure img={develop.canvas.image} className="dv-canvas-full dv-gap-40" />
-          {develop.canvas.candidates && <div className="dv-gap-40">
-            <p className="dv-caps reveal">{develop.canvas.candidatesLabel}</p>
-            <ol className="dv-candidates">
-              {develop.canvas.candidates.map((c: { id: string; name: string; kind: string; pain: string; to: string }) => (
-                <li key={c.id} className="reveal">
-                  <span className="dv-candidate-id">{c.id}</span>
-                  <strong>{c.name}</strong>
-                  <p className="dv-candidate-pain"><span>{c.kind}</span>{c.pain}</p>
-                  <p className="dv-candidate-to">{c.to}</p>
-                </li>
-              ))}
-            </ol>
-          </div>}
+          <div className="dv-gap-40 reveal">
+            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} reliefLabel={develop.canvas.reliefLabel} overviewLabel={develop.canvas.candidatesLabel} />
+          </div>
         </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
           <Block {...develop.canvas} ff={ff} />

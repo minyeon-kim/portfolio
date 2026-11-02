@@ -4151,13 +4151,11 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 /* Stages breathe more than the blocks inside them (blocks are 120 / 72 apart). */
 .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 180px 200px; }
-.dv > section:has(> .dv-core:last-child):is(#define) { padding-bottom: 0; }
 .dv > section:is(#overview) { padding-top: 120px; }
 .dv > section:is(#takeaway) { padding-bottom: 120px; }
 .dv > section + section { margin-top: 32px; }
 @media (max-width: 47.99rem) {
   .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway), .dv > section { padding-block: 96px 120px; }
-  .dv > section:has(> .dv-core:last-child):is(#define) { padding-bottom: 0; }
   .dv > section:is(#overview) { padding-top: 72px; }
   .dv > section:is(#takeaway) { padding-bottom: 72px; }
   .dv > section + section { margin-top: 16px; }
@@ -4182,3 +4180,34 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 /* The glow already closes the page; no rule above the bottom row. */
 .case-study .more-work + .site-footer { border-top: 0; }
+
+/* Problem statement closes Define inside its column: same width as the cards above, card corners. */
+.dv > section > .dv-core.dv-core { max-width: var(--dv-max); margin: 120px 0 0; padding: 96px 48px; border-radius: var(--dv-card-radius); }
+.dv > section > .dv-core-label { margin-top: 120px; }
+.dv > section > .dv-core-label + .dv-core.dv-core { margin-top: 20px; }
+.dv > section:has(> .dv-core:last-child):is(#define), .dv > section:has(> .dv-core:last-child) { padding-bottom: 200px; }
+@media (max-width: 47.99rem) {
+  .dv > section > .dv-core.dv-core { margin-top: 72px; padding: 56px 24px; }
+  .dv > section > .dv-core-label { margin-top: 72px; }
+  .dv > section > .dv-core-label + .dv-core.dv-core { margin-top: 16px; }
+  .dv > section:has(> .dv-core:last-child):is(#define), .dv > section:has(> .dv-core:last-child) { padding-bottom: 120px; }
+}
+
+/* Value proposition canvas, pair by pair (CanvasZoom). */
+.dv-vpc .dv-iter-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.dv-vpc .dv-iter-tab { font-size: 16px; }
+.dv-vpc-pair { display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); gap: 8px; align-items: center; margin-top: 24px; }
+.dv-vpc-side { position: relative; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; margin: 0; min-width: 0; }
+.dv-vpc-view { position: relative; width: 100%; aspect-ratio: 16 / 11; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: #ffffff; }
+.dv-vpc-view img { position: absolute; top: 0; left: 0; display: block; width: 100%; max-width: none; height: auto; transform-origin: 0 0; transition: transform 900ms cubic-bezier(0.45, 0, 0.12, 1); will-change: transform; }
+.dv-vpc-ring { position: absolute; top: 50%; left: 50%; translate: -50% -50%; border: 2px solid var(--case-accent); border-radius: 6px; box-shadow: 0 0 0 100vmax rgb(14 17 17 / 0.42); pointer-events: none; animation: dv-vpc-ring 400ms var(--ease) 600ms both; }
+@keyframes dv-vpc-ring { from { opacity: 0; } to { opacity: 1; } }
+.dv-vpc-arrow { padding-top: 34px; color: var(--case-accent); font-size: 24px; text-align: center; }
+.dv-vpc-line { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: center; min-height: 28px; margin-top: 20px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.45; text-align: center; animation: dv-vpc-ring 400ms var(--ease) both; }
+.dv-vpc-line i { color: var(--case-accent); font-style: normal; }
+.dv-vpc-line b { color: var(--dv-ink); font-weight: 600; }
+@media (max-width: 47.99rem) {
+  .dv-vpc-pair { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dv-vpc-arrow { padding-top: 0; rotate: 90deg; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-vpc-view img { transition: none; } .dv-vpc-ring, .dv-vpc-line { animation: none; } }
