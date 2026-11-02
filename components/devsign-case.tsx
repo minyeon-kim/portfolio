@@ -585,10 +585,18 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {!ff && <p className="dv-method reveal">{define.core.method}</p>}
           <h3 className="dv-block-title reveal">{define.core.title}</h3>
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
+          {/* Findings first: the success goals close the problem, so Develop can
+              start on what was done. */}
+          {ff && (
+            <div className="dv-core-goals reveal">
+              <p>{define.hmw.successLabel}</p>
+              <ol>
+                {define.hmw.success.map((s: string, i: number) => <li key={s}><span>{i + 1}</span>{s}</li>)}
+              </ol>
+            </div>
+          )}
         </div>
 
-        {/* Findings first (class feedback): no HMW block after the problems;
-            the ideation rules carry the thinking, the success goals move there. */}
         {!ff && <div className="dv-hmw">
           <p className="dv-method reveal">{define.hmw.method}</p>
           {!ff && <h3 className="dv-block-title reveal">{define.hmw.title}</h3>}
@@ -601,15 +609,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="develop" title="Develop">
-        <div>
-          {develop.ideation && <Block {...develop.ideation} ff={ff} />}
-          {ff && <>
-            <p className="dv-caps dv-accent reveal">{define.hmw.successLabel}</p>
-            <ol className="dv-mini dv-mini-goals" style={{ "--n": define.hmw.success.length } as React.CSSProperties}>
-              {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span className="dv-learned-number">{i + 1}</span><h4>{s}</h4></li>)}
-            </ol>
-          </>}
-        </div>
+        {develop.ideation && <div><Block {...develop.ideation} ff={ff} /></div>}
         {develop.blocks ? develop.blocks.map((block: Study) => <DevelopBlock key={block.title} block={block} />) : <>
         {develop.matrix && <div className="dv-split dv-gap-80">
           <Figure img={develop.matrix.image} sizes="(max-width: 767px) 100vw, 400px" className="dv-matrix-img" />
