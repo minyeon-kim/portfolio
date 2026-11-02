@@ -727,6 +727,38 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
+          {testing.usability.verdict ? <>
+          {/* Each success goal beside its verdict, then the other scores, then what it meant. */}
+          <div className="dv-verdict dv-gap-40">
+            {define.hmw.success.map((goal: string, i: number) => {
+              const score = i === 0 ? testing.usability.scores.find((s: Study) => s.missed) : null;
+              return (
+                <article key={goal} className="reveal" data-missed={score ? true : undefined}>
+                  <p className="dv-verdict-label">{testing.usability.verdict.goal} {i + 1}</p>
+                  <h4>{goal}</h4>
+                  <div className="dv-verdict-result">
+                    {score
+                      ? <><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span></>
+                      : <span className="dv-verdict-tag">{testing.usability.verdict.pending}</span>}
+                  </div>
+                  {score && <p className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</p>}
+                </article>
+              );
+            })}
+          </div>
+          <ul className="dv-metrics reveal">
+            {testing.usability.scores.filter((s: Study) => !s.missed).map((s: Study) => (
+              <li key={s.title}>
+                <strong>{s.value}<small>{s.unit}</small></strong>
+                <span><b>{s.title}</b>{s.note}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="dv-result-box reveal">
+            <p>{testing.usability.resultLabel}</p>
+            <p>{testing.usability.result}</p>
+          </div>
+          </> : <>
           {/* The scores and the next step are judged against these goals. */}
           {ff && (
             <div className="dv-goals reveal">
@@ -751,6 +783,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ))}
           </ul>
           <p className="dv-body dv-result dv-gap-32 reveal">{testing.usability.result}</p>
+          </>}
           <details className="dv-handoff-spec dv-gap-32">
             <summary>{testing.usability.methodLabel}</summary>
             <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />

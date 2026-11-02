@@ -4242,3 +4242,29 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .about-story ol { padding-left: 32px; }
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
 .about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
+
+/* Usability results: each goal with its verdict, the other scores, then what it meant. */
+.dv-verdict { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.dv-verdict > article { display: flex; flex-direction: column; min-width: 0; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-verdict-label { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-verdict h4 { margin-top: 8px; color: var(--dv-ink); font-size: 22px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+.dv-verdict-result { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; min-height: 72px; margin-top: auto; padding-top: 28px; }
+.dv-verdict-result strong { color: var(--dv-alert); font-size: 56px; font-weight: 300; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-verdict-result small { margin-left: 4px; font-size: 20px; font-weight: 500; }
+.dv-verdict-tag { padding: 5px 12px; border-radius: 999px; background: var(--dv-alt); color: var(--dv-muted); font-size: 16px; font-weight: 600; line-height: 1.3; }
+.dv-verdict > article[data-missed] .dv-verdict-tag { background: color-mix(in srgb, var(--dv-alert) 16%, transparent); color: var(--dv-alert); }
+.dv-verdict-note { margin-top: 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
+.dv-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 16px 0 0; padding: 24px 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; }
+.dv-metrics li { display: flex; gap: 14px; align-items: center; min-width: 0; }
+.dv-metrics strong { flex: none; color: var(--case-accent); font-size: 36px; font-weight: 400; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-metrics small { margin-left: 3px; font-size: 16px; font-weight: 500; }
+.dv-metrics span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-metrics b { display: block; color: var(--dv-ink); font-weight: 600; }
+.dv-result-box { margin-top: 16px; padding: 28px; border-radius: var(--dv-card-radius); background: color-mix(in srgb, var(--case-accent) 16%, light-dark(#ffffff, var(--dv-band-card-dark))); }
+.dv-result-box p:first-child { color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1.4; }
+.dv-result-box p:last-child { max-width: var(--dv-measure-wide); margin-top: 8px; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.45; text-wrap: pretty; }
+.dv-result-box + .dv-handoff-spec { margin-top: 24px; }
+@media (max-width: 63.99rem) {
+  .dv-verdict, .dv-metrics { grid-template-columns: minmax(0, 1fr); }
+  .dv-verdict > article, .dv-metrics, .dv-result-box { padding: 24px; }
+}
