@@ -64,7 +64,7 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
   const current = items[front];
 
   return (
-    <nav aria-labelledby="more-work-label" className="more-work"
+    <nav aria-labelledby="more-work-label" className="more-work" data-next={current.slug}
       onPointerEnter={(e) => { if (e.pointerType === "mouse") setHeld(true); }}
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
