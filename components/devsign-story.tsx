@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { crop } from "@/components/devsign-compare";
 import { devsignUrl, withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -13,47 +14,43 @@ const PLAYBACK_RATE = 1.15;
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
-// The two whole screens stay still; one change at a time is boxed on each, and the
-// tabs move the boxes. Nothing advances or pans by itself.
-export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
-  const [active, setActive] = useState(0);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const change = changes[active];
+// One As-is / To-be pair, cut down to the part that changed.
+function CropPair({ before, after, a, b, lines, labels }: { before: Shot; after: Shot; a: Box; b: Box; lines: [string, string]; labels: { asIs: string; toBe: string } }) {
   const sides = [
-    { key: "a", tag: labels.asIs, img: before, box: change.a, line: change.before },
-    { key: "b", tag: labels.toBe, img: after, box: change.b, line: change.after },
+    { key: "a", tag: labels.asIs, img: before, box: a, line: lines[0] },
+    { key: "b", tag: labels.toBe, img: after, box: b, line: lines[1] },
   ] as const;
-  const onKey = (event: React.KeyboardEvent) => {
-    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-    if (!step) return;
-    event.preventDefault();
-    const next = (active + step + changes.length) % changes.length;
-    setActive(next);
-    tabs.current[next]?.focus();
-  };
   return (
-    <div className="dv-iter">
-      <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
-        {changes.map((c, i) => (
-          <button key={c.title} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === active ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
-            <b>{i + 1}</b><span>{c.title}</span>
-          </button>
-        ))}
-      </div>
-      <p className="dv-iter-title">{change.title}</p>
-      <div className="dv-iter-pair" role="tabpanel" data-whole="">
-        {sides.map(({ key, tag, img, box, line }) => (
+    <div className="dv-iter-pair">
+      {sides.map(({ key, tag, img, box, line }) => {
+        const view = crop(box);
+        return (
           <figure key={key} className="dv-iter-side" data-side={key}>
             <span className="dv-iter-tag">{tag}</span>
             <div className="dv-iter-view">
-              <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 600px" />
-              <span className="dv-iter-mark" style={{ left: `${box[0]}%`, top: `${box[1]}%`, width: `${box[2]}%`, height: `${box[3]}%` }} aria-hidden="true" />
+              <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={view.img} />
+              <span className="dv-iter-mark" style={view.mark} aria-hidden="true" />
             </div>
-            <figcaption key={active}>{line}</figcaption>
+            <figcaption>{line}</figcaption>
           </figure>
-        ))}
-      </div>
+        );
+      })}
     </div>
+  );
+}
+
+// One change per panel. On desktop (CSS) each panel stays at the top and the next
+// rises over it with native scroll; elsewhere they are a plain list.
+export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
+  return (
+    <ol className="dv-iter">
+      {changes.map((c, i) => (
+        <li key={c.title} className="dv-iter-step">
+          <h4 className="dv-iter-name"><b>{i + 1}</b>{c.title}</h4>
+          <CropPair before={before} after={after} a={c.a} b={c.b} lines={[c.before, c.after]} labels={labels} />
+        </li>
+      ))}
+    </ol>
   );
 }
 
@@ -101,23 +98,11 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
   );
 }
 
-// A smaller iteration: the two whole screens, one line each.
-export function IterationPair({ before, after, labels }: { before: Shot; after: Shot; labels: { asIs: string; toBe: string } }) {
-  const sides = [
-    { key: "a", tag: labels.asIs, img: before },
-    { key: "b", tag: labels.toBe, img: after },
-  ] as const;
+// A smaller iteration: one pair, the changed part only.
+export function IterationPair({ before, after, labels }: { before: Shot & { box: Box }; after: Shot & { box: Box }; labels: { asIs: string; toBe: string } }) {
   return (
-    <div className="dv-iter-pair reveal" data-whole="">
-      {sides.map(({ key, tag, img }) => (
-        <figure key={key} className="dv-iter-side" data-side={key}>
-          <span className="dv-iter-tag">{tag}</span>
-          <div className="dv-iter-view">
-            <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 600px" />
-          </div>
-          <figcaption>{img.text}</figcaption>
-        </figure>
-      ))}
+    <div className="reveal">
+      <CropPair before={before} after={after} a={before.box} b={after.box} lines={[before.text, after.text]} labels={labels} />
     </div>
   );
 }

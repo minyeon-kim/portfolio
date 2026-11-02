@@ -4,6 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
+import { Wireflow } from "@/components/devsign-wireflow";
 import { FeatureReel, IterationCompare, IterationPair, TryPrototype, CanvasZoom } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
@@ -81,30 +82,6 @@ function Block({ method, title, lead, text, id, label, ff }: Lead & { id?: strin
           {text}
         </p>
       )}
-    </div>
-  );
-}
-
-// Developer handoff as a numbered wireflow (class feedback): the screens in
-// flow order, each element numbered "screen-element" (2-3) so a developer can
-// point at it, a note on what moves the user to the next screen, then the
-// annotations screen by screen.
-function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[]; ff?: boolean }) {
-  const screens = handoff.order.map((i: number) => features[i]);
-  return (
-    <div className="dv-gap-96">
-      <Block {...(handoff as Lead)} ff={ff} />
-      <ol className="dv-wireflow dv-gap-40">
-        {screens.map((f: Study, s: number) => (
-          <li key={f.title} className="reveal">
-            <p className="dv-wireflow-name"><b>{s + 1}</b>{f.title}</p>
-            <div className="dv-wireflow-screen">
-              <Image src={withBase(f.src)} alt={f.alt ?? ""} width={f.width ?? 1280} height={f.height ?? 800} sizes="(max-width: 1023px) 100vw, 280px" />
-            </div>
-            {handoff.flows[s] && <p className="dv-wireflow-flow"><span aria-hidden="true">→</span>{handoff.flows[s]}</p>}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }
@@ -707,7 +684,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
           </div>
         )}
-        {deliver.handoff && <Handoff handoff={deliver.handoff} features={deliver.features} ff={ff} />}
+        {deliver.handoff && (
+          <div className="dv-gap-96">
+            <Block {...deliver.handoff} ff={ff} />
+            <Wireflow nodes={deliver.handoff.nodes} label={deliver.handoff.lead} />
+          </div>
+        )}
       </Section>
 
       {/* Findings first: Testing is a stage of its own (title, band, nav item),
@@ -730,33 +712,31 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.verdict ? <>
           {/* Each success goal beside its verdict, then the other scores, then what it meant. */}
           <div className="dv-ut-board dv-gap-40">
-            <ul className="dv-verdict reveal">
-              {define.hmw.success.map((goal: string, i: number) => {
-                const score = i === 0 ? testing.usability.scores.find((s: Study) => s.missed) : null;
-                return (
-                  <li key={goal} data-missed={score ? true : undefined}>
-                    <p className="dv-verdict-label">{testing.usability.verdict.goal} {i + 1}</p>
-                    <h4>{goal}</h4>
-                    {score
-                      ? <p className="dv-verdict-result"><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span><span className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</span></p>
-                      : <p className="dv-verdict-result"><span className="dv-verdict-tag">{testing.usability.verdict.pending}</span></p>}
-                  </li>
-                );
-              })}
+            {(() => {
+              const score = testing.usability.scores.find((item: Study) => item.missed);
+              return (
+                <article className="dv-verdict reveal">
+                  <p className="dv-verdict-label">{testing.usability.verdict.goal} 1</p>
+                  <h4>{define.hmw.success[0]}</h4>
+                  <p className="dv-verdict-result"><strong>{score.value}<small>{score.unit}</small></strong><span className="dv-verdict-tag">{testing.usability.verdict.missed}</span></p>
+                  <p className="dv-verdict-note">{score.title} · {testing.usability.verdict.target}</p>
+                  <p className="dv-verdict-next">{testing.usability.verdict.goal} 2 · {define.hmw.success[1]} · {testing.usability.verdict.pending}</p>
+                </article>
+              );
+            })()}
+            <ul className="dv-metrics reveal">
+              {testing.usability.scores.filter((s: Study) => !s.missed).map((s: Study) => (
+                <li key={s.title}>
+                  <strong>{s.value}<small>{s.unit}</small></strong>
+                  <span><b>{s.title}</b>{s.note}</span>
+                </li>
+              ))}
             </ul>
-            <div className="dv-result-box reveal">
-              <p>{testing.usability.resultLabel}</p>
-              <p>{testing.usability.result}</p>
-            </div>
           </div>
-          <ul className="dv-metrics reveal">
-            {testing.usability.scores.filter((s: Study) => !s.missed).map((s: Study) => (
-              <li key={s.title}>
-                <strong>{s.value}<small>{s.unit}</small></strong>
-                <span><b>{s.title}</b>{s.note}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="dv-ut-result reveal">
+            <p>{testing.usability.resultLabel}</p>
+            <p>{testing.usability.result}</p>
+          </div>
           </> : <>
           {/* The scores and the next step are judged against these goals. */}
           {ff && (
