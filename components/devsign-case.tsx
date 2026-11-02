@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, GuidedDemo, CanvasZoom } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, ProblemPanels, GuidedDemo, CanvasZoom, AffinityDots } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -430,13 +430,26 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div>
           <Block {...define.affinity} ff={ff} />
           {define.affinity.funnel && (
-            <ol className="dv-funnel dv-gap-40 reveal">
-              {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
-            </ol>
+            <AffinityDots
+              funnel={define.affinity.funnel}
+              note={define.affinity.otherNote}
+              problems={define.problems.items.map((item: Study, i: number) => ({ title: item.title, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))}
+              groups={[
+                ...define.affinity.themes.flatMap((list: [string, number][], i: number) => list.map(([name, count]) => ({ name, count, problem: i, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))),
+                { name: define.affinity.otherTheme[0], count: define.affinity.otherTheme[1], problem: -1 },
+              ]}
+            />
+          )}
+          {define.affinity.funnel && (
+            <div className="dv-dots-static">
+              <ol className="dv-funnel dv-gap-40 reveal">
+                {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+              </ol>
+            </div>
           )}
           <Figure img={define.affinity.board} className="dv-board dv-gap-40" />
           {define.affinity.funnel && (
-            <div className="dv-aff">
+            <div className="dv-aff dv-dots-static">
               <p className="dv-caps reveal">{define.affinity.flowLabel}</p>
               <ol>
                 {define.problems.items.map((item: Study, i: number) => (
@@ -445,7 +458,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                       {define.affinity.themes[i].map(([name, count]: [string, number]) => (
                         <li key={name}>
                           <span>{name}</span>
-                          <i aria-hidden="true"><b style={{ width: `${(count / 55) * 100}%` }} /></i>
+                          <i aria-hidden="true"><b style={{ width: `${(count / 48) * 100}%` }} /></i>
                           <em>{count}<span className="sr-only">{define.affinity.cardsWord}</span></em>
                         </li>
                       ))}
