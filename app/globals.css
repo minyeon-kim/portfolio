@@ -4083,14 +4083,19 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 #try { scroll-margin-top: 24px; }
 
 /* In-depth interview: who we met and what we asked, one panel. */
-.dv-interview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
-.dv-interview .dv-caps { margin-bottom: 16px; }
-.dv-who { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
-.dv-who li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; }
-.dv-who b { color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.5; font-variant-numeric: tabular-nums; }
-.dv-who span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
-.dv-who strong { display: block; color: var(--dv-ink); font-weight: 600; }
-@media (max-width: 63.99rem) { .dv-interview { grid-template-columns: 1fr; gap: 32px; padding: 24px; } }
+/* Interview: the questions as a plain row, then the people as one strip. */
+.dv-ask .dv-caps, .dv-met .dv-caps { margin-bottom: 16px; }
+.dv-ask ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 0; list-style: none; }
+.dv-ask li { display: flex; flex-direction: column; gap: 8px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; text-wrap: pretty; }
+.dv-ask b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-met ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 28px 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; }
+.dv-met li { display: flex; flex-direction: column; min-width: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-met b { margin-bottom: 8px; color: var(--tone); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-met strong { margin-bottom: 4px; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
+@media (max-width: 63.99rem) {
+  .dv-ask ol { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .dv-met ul { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 24px; }
+}
 
 /* Feature reel text, no box: a label like the block labels, the sentence, then the
    three points with the one on screen lit. */
@@ -4162,9 +4167,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* Case pages end on light: the case colour rises from the bottom edge of the dark band. */
-.case-study .more-work + .site-footer { --ft-glow: #5b3fd6; --ft-glow-hot: #b8a8ff; --ft-muted: rgb(255 255 255 / 0.72); position: relative; isolation: isolate; padding-bottom: clamp(120px, 13vw, 220px); }
+.case-study .more-work + .site-footer { --ft-glow: #5b3fd6; --ft-glow-hot: #b8a8ff; --ft-muted: rgb(255 255 255 / 0.86); position: relative; isolation: isolate; padding-bottom: clamp(48px, 5vw, 80px); }
 .case-study[data-project="gemini"] .more-work + .site-footer { --ft-glow: #2f6bea; --ft-glow-hot: #b4cdff; }
-.case-study .more-work + .site-footer::before { content: ""; position: absolute; inset: auto 0 0; z-index: -1; height: clamp(320px, 34vw, 620px); background: radial-gradient(62% 100% at 50% 100%, color-mix(in srgb, var(--ft-glow-hot) 90%, transparent) 0%, color-mix(in srgb, var(--ft-glow) 70%, transparent) 26%, color-mix(in srgb, var(--ft-glow) 22%, transparent) 60%, transparent 100%); pointer-events: none; }
+.case-study .more-work + .site-footer::before { content: ""; position: absolute; inset: auto 0 0; z-index: -1; height: clamp(240px, 24vw, 420px); background: radial-gradient(62% 100% at 50% 100%, color-mix(in srgb, var(--ft-glow-hot) 90%, transparent) 0%, color-mix(in srgb, var(--ft-glow) 70%, transparent) 26%, color-mix(in srgb, var(--ft-glow) 22%, transparent) 60%, transparent 100%); pointer-events: none; }
 
 /* Develop is the long stage: the four features sit on the page ground, full width of the
    sheet, so it reads as three parts (deciding, the features, structure and rules). */

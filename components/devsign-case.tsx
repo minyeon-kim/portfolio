@@ -395,26 +395,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? (
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
-          {/* Who we met and what we asked belong together, in one panel; the
-              session photo follows. */}
-          <div className="dv-interview dv-gap-40 reveal">
-            <div>
-              <p className="dv-caps">{discover.interview.peopleLabel}</p>
-              <ul className="dv-who">
-                {discover.interview.participants.map((p: string[]) => (
-                  <li key={p[0]} data-tone={toneOf(p[1])}>
-                    <b>{p[0]}</b>
-                    <span><strong>{p[1]}</strong>{discover.interview.participantColumns[2]} {p[2]} · {p[3]}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="dv-caps">{discover.interview.questionsLabel}</p>
-              <ol className="dv-numbered">
-                {discover.interview.questions.map((q: string) => <li key={q}>{q}</li>)}
-              </ol>
-            </div>
+          {/* What we asked, then who we asked, top to bottom; the session photo follows. */}
+          <div className="dv-ask dv-gap-40 reveal">
+            <p className="dv-caps">{discover.interview.questionsLabel}</p>
+            <ol>
+              {discover.interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
+            </ol>
+          </div>
+          <div className="dv-met dv-gap-40 reveal">
+            <p className="dv-caps">{discover.interview.peopleLabel}</p>
+            <ul>
+              {discover.interview.participants.map((p: string[]) => (
+                <li key={p[0]} data-tone={toneOf(p[1])}>
+                  <b>{p[0]}</b>
+                  <strong>{p[1]}</strong>
+                  <span>{discover.interview.participantColumns[2]} {p[2]}</span>
+                  <span>{p[3]}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-40" />
         </div>
