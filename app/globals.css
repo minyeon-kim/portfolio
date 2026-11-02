@@ -3641,13 +3641,13 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .dv-person-text > span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.35; }
 .dv-people-stack li.dv-person { flex-direction: row; justify-content: flex-start; gap: 14px; padding: 12px 18px; border: 1px solid var(--dv-card-line); }
 .dv-people-stack li.dv-person .dv-person-text > span { font-size: 16px; }
-.dv-voices li { padding: 32px; border: 1px solid var(--dv-card-line); outline: 1px solid var(--dv-card-line); outline-offset: -9px; }
+.dv-voices li { padding: 32px; border: 1px solid var(--dv-card-line); }
 .dv-voices li > div { gap: 0; }
 .dv-voices strong { font-size: 20px; }
-.dv-voices .dv-person-text strong { font-size: 16px; }
 .dv-voices blockquote { margin-top: 12px; color: var(--dv-ink); font-size: 18px; line-height: 1.5; }
-.dv-voice-source { margin-top: auto; padding-top: 28px; }
-.dv-voices cite { margin: 0; padding: 0; color: var(--dv-ink); font-weight: 600; opacity: 1; }
+.dv-voices cite { margin-top: auto; padding-top: 24px; color: var(--dv-muted); font-style: normal; font-weight: 500; line-height: 1.45; opacity: 1; }
+.dv-source-link { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; transition: text-decoration-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease); }
+.dv-source-link:hover, .dv-source-link:focus-visible { color: var(--dv-ink); text-decoration-color: currentColor; }
 .dv-scenarios li { gap: 12px; padding: 28px; border: 1px solid var(--dv-card-line); }
 .dv-scenarios li > .dv-scenario-actions { margin-top: 0; padding-top: 0; border-top: 0; color: var(--dv-muted); }
 .dv-scenario-person { margin-top: auto; padding-top: 24px; }
