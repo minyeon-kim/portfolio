@@ -3967,3 +3967,9 @@ td[data-highlight] .dv-tool-mark { width: 24px; height: 24px; color: #fff; }
 @media (hover: hover) { .dv-iter:hover .dv-iter-bar { animation-play-state: paused; } }
 @keyframes dv-iter-fill { from { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) { .dv-iter-bar { animation: none; } }
+
+/* A smaller iteration: the two whole screens, one line each. */
+.dv-iter-pair[data-whole] { margin-top: 0; }
+.dv-iter-pair[data-whole] .dv-iter-view { aspect-ratio: 16 / 9; }
+.dv-iter-pair[data-whole] .dv-iter-view img { position: static; display: block; width: 100%; max-width: 100%; }
+.dv-iter-pair[data-whole] figcaption { animation: none; }

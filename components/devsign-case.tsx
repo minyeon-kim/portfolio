@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
-import { FeatureReel, IterationCompare, TryPrototype } from "@/components/devsign-story";
+import { FeatureReel, IterationCompare, IterationPair, TryPrototype } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -859,7 +859,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {testing.iteration1 && <div className="dv-subsection-120">
           <Block {...testing.iteration1} ff={ff} />
           <div className="dv-gap-40">{ff
-            ? <IterationCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />
+            ? <IterationPair before={testing.iteration1.before} after={testing.iteration1.after} labels={labels} />
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">

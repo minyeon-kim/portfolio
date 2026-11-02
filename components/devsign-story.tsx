@@ -76,6 +76,27 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
   );
 }
 
+// A smaller iteration: the two whole screens, one line each.
+export function IterationPair({ before, after, labels }: { before: Shot; after: Shot; labels: { asIs: string; toBe: string } }) {
+  const sides = [
+    { key: "a", tag: labels.asIs, img: before },
+    { key: "b", tag: labels.toBe, img: after },
+  ] as const;
+  return (
+    <div className="dv-iter-pair reveal" data-whole="">
+      {sides.map(({ key, tag, img }) => (
+        <figure key={key} className="dv-iter-side" data-side={key}>
+          <span className="dv-iter-tag">{tag}</span>
+          <div className="dv-iter-view">
+            <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 600px" />
+          </div>
+          <figcaption>{img.text}</figcaption>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 // One core feature, large: the real prototype clip beside its one sentence. The
 // card above the sentence follows the clip through the feature's points, so the
 // text moves with the screen. Plays only while it is on screen; with reduced
