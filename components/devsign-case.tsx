@@ -461,7 +461,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {define.problems.items.map((item: Study, index: number) => {
               const answer = develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title);
               return (
-              <li key={item.title} id={`problem-${index + 1}`} className="reveal dv-link-target" data-tone={PROBLEM_TONES[index % PROBLEM_TONES.length]}>
+              <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[index % PROBLEM_TONES.length]}>
                 <div className="dv-problem-top">
                   <span className="dv-problem-number">{pad(index + 1)}</span>
                   <span className="dv-problem-role">{item.role}</span>
@@ -474,11 +474,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                     {define.affinity.themesLabel} · {define.affinity.themes[index].map(([name]: [string, number]) => name).join(", ")}
                   </p>
                 )}
-                {/* Problem → feature: jump to the card of the feature that answers it (and back from there). */}
+                {/* Which feature answers this problem. */}
                 {ff && answer && develop.selection.answeredBy && (
-                  <a className="dv-problem-answer" href={`#feature-${slugOf(answer.feature)}`}>
-                    <span>{develop.selection.answeredBy}</span><b>{answer.feature}</b><i aria-hidden="true">↓</i>
-                  </a>
+                  <p className="dv-problem-answer"><span>{develop.selection.answeredBy}</span><b>{answer.feature}</b></p>
                 )}
               </li>
               );
@@ -648,7 +646,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 const shown = deliver.features?.find((item: Study) => item.title === f.name);
-                const at = pick ? define.problems?.items?.findIndex((item: Study) => item.title === pick.problem) ?? -1 : -1;
                 return (
                   <FeatureReel
                     key={f.name}
@@ -660,9 +657,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                       alt: shown?.alt,
                       points: shown?.points ?? [],
                       clip: shown?.clip,
-                      solves: pick && (at >= 0
-                        ? <a href={`#problem-${at + 1}`}><b>{develop.selection.solves}</b>{pick.problem}<i aria-hidden="true">↑</i></a>
-                        : <span><b>{develop.selection.solves}</b>{pick.problem}</span>),
+                      solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
                     }}
                   />
                 );
