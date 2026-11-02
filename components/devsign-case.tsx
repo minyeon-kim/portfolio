@@ -888,9 +888,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
-        {ff ? <>
-        {/* Findings first: the statement, three learning cards, then the next
-            step as one wide card. */}
+        {/* The statement, three learning cards, limits if any, then the next step
+            as one wide card. */}
         <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
         <p className="dv-body reveal">{takeaway.text}</p>
         <div className="dv-gap-80">
@@ -905,41 +904,27 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ))}
           </ol>
         </div>
-        <div className="dv-next-card reveal">
-          <p className="dv-caps dv-accent">{takeaway.next.label}</p>
-          <p className="dv-finding">{takeaway.next.title}</p>
-        </div>
-        </> : <>
-        <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
-        <p className="dv-body dv-muted reveal">{takeaway.text}</p>
-        <div className="dv-gap-64">
-          <h3 className="dv-review-title reveal">{takeaway.reviewTitle}</h3>
-          <ol className="dv-review">
-            {takeaway.review.map((item: { title: string; body: string }, i: number) => (
-              <li key={item.title} className="reveal">
-                <span>{pad(i + 1)}</span>
-                <div><h4>{item.title}</h4><p>{item.body}</p></div>
-              </li>
-            ))}
-          </ol>
-        </div>
-        {takeaway.limitations && <div className="dv-gap-64">
-          <h3 className="dv-limit-title reveal">{takeaway.limitationsTitle}</h3>
-          <ul className="dv-limits">
+        {takeaway.limitations && <div className="dv-gap-40">
+          <p className="dv-caps reveal">{takeaway.limitationsTitle}</p>
+          <ul className="dv-learned dv-learned-plain">
             {takeaway.limitations.map((l: { lead: string; text: string }) => (
-              <li key={l.lead} className="reveal"><strong>{l.lead}</strong>{l.text}</li>
+              <li key={l.lead} className="reveal">
+                <h4>{l.lead}</h4>
+                <p>{l.text}</p>
+              </li>
             ))}
           </ul>
         </div>}
-        <div className="dv-next dv-gap-80 reveal">
-          <p className="dv-caps">{takeaway.next.label}</p>
-          <p className="dv-next-title">{takeaway.next.title}</p>
-          <p className="dv-body dv-muted">{takeaway.next.text}</p>
-          <ul className="dv-chips">
-            {takeaway.next.chips.map((chip: string) => <li key={chip}><span aria-hidden="true">→</span>{chip}</li>)}
-          </ul>
+        <div className="dv-next-card reveal" data-after-limits={takeaway.limitations ? "" : undefined}>
+          <p className="dv-caps dv-accent">{takeaway.next.label}</p>
+          <p className="dv-finding">{takeaway.next.title}</p>
+          {!ff && <>
+            <p className="dv-body">{takeaway.next.text}</p>
+            <ul className="dv-next-chips">
+              {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
+            </ul>
+          </>}
         </div>
-        </>}
       </Section>
     </div>
   );
