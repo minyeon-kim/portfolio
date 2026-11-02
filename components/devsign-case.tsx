@@ -109,7 +109,7 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
   );
 }
 
-function Section({ id, title, band, children }: { id: string; title: string; band?: boolean; children: ReactNode }) {
+export function Section({ id, title, band, children }: { id: string; title: string; band?: boolean; children: ReactNode }) {
   return (
     <section id={id} className={band ? "dv-section dv-band" : "dv-section"} aria-labelledby={`${id}-title`}>
       <div className="dv-section-head">

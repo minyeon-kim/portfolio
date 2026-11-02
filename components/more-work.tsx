@@ -25,7 +25,7 @@ const INTERVAL = 4200;
 // deck turns on its own only once there are three or more real cases. On the
 // home stage (items carry an index) a card selects that case; elsewhere it
 // opens its page.
-export function MoreWork({ items }: { items: MoreWorkItem[] }) {
+export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: string }) {
   const t = useStrings();
   const locale = useLocale();
   const router = useRouter();
@@ -72,7 +72,7 @@ export function MoreWork({ items }: { items: MoreWorkItem[] }) {
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHeld(false); }}>
-      <h2 id="more-work-label" className="more-work-label">{t.nextProject}</h2>
+      <h2 id="more-work-label" className="more-work-label">{label ?? t.nextProject}</h2>
       <ul className="more-work-deck">
         {items.map((item, i) => {
           const r = rank(i);
