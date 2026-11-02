@@ -4162,3 +4162,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv > section:is(#takeaway) { padding-bottom: 72px; }
   .dv > section + section { margin-top: 16px; }
 }
+
+/* Case pages end on light: the case colour rises from the bottom edge of the dark band. */
+.case-study .more-work + .site-footer { --ft-glow: #5b3fd6; --ft-glow-hot: #b8a8ff; --ft-muted: rgb(255 255 255 / 0.72); position: relative; isolation: isolate; padding-bottom: clamp(120px, 13vw, 220px); }
+.case-study[data-project="gemini"] .more-work + .site-footer { --ft-glow: #2f6bea; --ft-glow-hot: #b4cdff; }
+.case-study .more-work + .site-footer::before { content: ""; position: absolute; inset: auto 0 0; z-index: -1; height: clamp(320px, 34vw, 620px); background: radial-gradient(62% 100% at 50% 100%, color-mix(in srgb, var(--ft-glow-hot) 90%, transparent) 0%, color-mix(in srgb, var(--ft-glow) 70%, transparent) 26%, color-mix(in srgb, var(--ft-glow) 22%, transparent) 60%, transparent 100%); pointer-events: none; }
