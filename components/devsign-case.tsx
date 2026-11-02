@@ -12,6 +12,11 @@ import { withBase } from "@/lib/site";
 // Card colour by who the card is about: designers in the case colour, developers
 // in the persona orange, anyone else in blue.
 const toneOf = (role: string) => (/design|디자인/i.test(role) ? "accent" : /develop|개발/i.test(role) ? "second" : "blue");
+// Supporting material a reader can open: the finding stays on the page, the artifact behind it folds away.
+function Fold({ label, children }: { label: string; children: ReactNode }) {
+  return <details className="dv-handoff-spec dv-gap-40"><summary>{label}</summary><div className="dv-fold-body">{children}</div></details>;
+}
+
 const VOICE_TONES = ["accent", "blue", "second"];
 const PROBLEM_TONES = ["accent", "blue", "second", "teal"];
 
@@ -310,7 +315,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <Groups groups={discover.q2.groups} />
             </div>
           ) : (
-          <div className="dv-scroll dv-gap-48 reveal">
+          (() => {
+            const table = (
+          <div className={ff ? "dv-scroll" : "dv-scroll dv-gap-48 reveal"}>
             <table className="dv-tool-table">
               <caption className="sr-only">{discover.q2.auditLabel}</caption>
               <thead>
@@ -336,6 +343,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </tbody>
             </table>
           </div>
+            );
+            return ff ? <Fold label={discover.q2.auditFold}>{table}</Fold> : table;
+          })()
+
           )}
         </div>
 
@@ -475,7 +486,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <Block {...define.personas} ff={ff} />
         <Journey journey={define.personas.journey} wide />
         <p className="dv-summary reveal">{define.personas.summary}</p>
-        <div className="dv-personas dv-personas-short dv-gap-64">
+        <Fold label={define.personas.peopleLabel}>
+        <div className="dv-personas dv-personas-short">
           {define.personas.people.map((person: Study, index: number) => (
             <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
               <div className="dv-persona-id">
@@ -504,6 +516,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </article>
           ))}
         </div>
+        </Fold>
         </div>
 
         </> : <>
@@ -650,12 +663,23 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         )}
         <div className="dv-subsection">
-          <Block {...develop.ia} ff={ff} />
-          <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
-          <div className="dv-gap-96">
-            <Block {...develop.flow} ff={ff} />
-            <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
-          </div>
+          {ff ? (
+            <Fold label={develop.artifactsLabel}>
+              <Block {...develop.ia} ff={ff} />
+              <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
+              <div className="dv-gap-64">
+                <Block {...develop.flow} ff={ff} />
+                <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
+              </div>
+            </Fold>
+          ) : <>
+            <Block {...develop.ia} ff={ff} />
+            <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
+            <div className="dv-gap-96">
+              <Block {...develop.flow} ff={ff} />
+              <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
+            </div>
+          </>}
           {/* Shown once its capture is added (`develop.system.image`). */}
           {develop.system?.image && (
             <div className="dv-gap-96">
