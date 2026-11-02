@@ -19,10 +19,10 @@ export const meta = {
       { label: "Walk through the prototype", href: "#try", primary: true },
     ],
     details: [
-      { label: "Project", value: "Blossom UX School, 10 weeks. Working prototype, not shipped" },
+      { label: "Duration", value: "10 weeks" },
+      { label: "Type", value: "UX school project" },
       { label: "Team", value: "2 UX engineers" },
-      { label: "Role", value: "UX/UI Design, User Research, Prototyping, Usability Test" },
-      { label: "Tools", value: "Figma, FigJam, Dovetail, Claude Code, Codex" },
+      { label: "Role & tools", value: "UX/UI Design, User Research, Prototyping, Usability Test. Figma, FigJam, Dovetail, Claude Code, Codex" },
     ],
   },
 };
@@ -55,7 +55,7 @@ export const study = {
       items: [
         { tone: "red", label: "Problem", title: "Drafts and their reasons scatter", text: "Teams pick versions in chat, and mismatches show up after release." },
         { tone: "accent", label: "Solution", title: "One place, from comparing to recording", text: "Combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen." },
-        { tone: "teal", label: "Result", title: "Missed the first goal, so we changed the screens twice", text: "With 2 testers, first tries needed more help than planned (2.3, goal 1.5), though both saw the value. The new screens are not retested yet." },
+        { tone: "teal", label: "Result", title: "Missed the first goal, so we changed the screens twice", text: "With 2 testers, first tries needed more help than planned (2.3, goal 1.5), though both saw the value. It’s still a prototype; the new screens are not retested yet." },
       ],
     },
     headline: "In the AI era, the hard part is",
@@ -112,7 +112,6 @@ export const study = {
       label: "Question 2 · Does any tool already solve it?",
       answer: "Today’s tools can spot differences between a design and its code, but none can combine AI drafts or record why a decision was made.",
       auditLabel: "9 tools, 4 types",
-      auditFold: "Compare the 9 tools",
       columns: [
         { name: "Handoff" },
         { name: "Spot differences" },
@@ -144,7 +143,6 @@ export const study = {
       title: "In-depth interview",
       lead: "Everyone double-checks AI work, but no one is clearly in charge.",
       text: "Desk research showed that checking and combining is painful, but not how teams handle it, so we spent 60 minutes each with four people who do this work every day.",
-      peopleLabel: "Who we met",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "A remote interview session: a shared FigJam board with sticky notes next to participant video tiles" },
       questionsLabel: "Research questions",
       questions: [
@@ -163,7 +161,6 @@ export const study = {
   },
   define: {
     personas: {
-      peopleLabel: "See the two personas",
       method: "User definition",
       title: "Persona & user journey map",
       lead: "Designers and developers get stuck at different moments, but for the same reason.",
@@ -251,10 +248,11 @@ export const study = {
   develop: {
     dropped: {
       title: "The idea we dropped",
+      from: "AI go-between",
+      to: "Combining drafts",
       lead: "We started with an AI go-between for designers and developers, then dropped it.",
       text: "Combining our own AI drafts took longer than making them. So we focused on combining instead.",
     },
-    artifactsLabel: "See the information architecture and user flow",
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
@@ -478,6 +476,6 @@ export const study = {
 <TLDR>
 - **Problem** Designers and developers both use AI, but drafts and their reasons end up in different tools. Teams pick versions in chat, and mismatches show up after release.
 - **Solution** One workspace from comparing drafts to a recorded decision: combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen.
-- **Impact** With 2 testers, first tries needed more help than planned (2.3, goal 1.5), though both saw the value. We changed the screens twice; the new screens are not retested yet.
+- **Impact** With 2 testers, first tries needed more help than planned (2.3, goal 1.5), though both saw the value. We changed the screens twice. It’s still a prototype, and the new screens are not retested yet.
 </TLDR>
 </DevsignCase>

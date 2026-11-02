@@ -22,9 +22,9 @@ const copy = {
   en: {
     label: "About", portrait: "Portrait",
     facts: [["Background", "Four years of security consulting at SK shieldus"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
-    stages: { approach: "What I bring", experience: "Experience", toolkit: "Toolkit", outside: "Outside work", contact: "Contact" },
+    stages: { approach: "What I bring", experience: "Experience", outside: "Outside work", contact: "Contact" },
     experienceLead: "From cybersecurity to design",
-    columns: ["Research", "Design & build"],
+    skills: "Skills",
     photos: ["Photo of Minyeon at work", "Workshop, study group or talk"],
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
@@ -32,9 +32,9 @@ const copy = {
   ko: {
     label: "소개", portrait: "프로필 사진",
     facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
-    stages: { approach: "강점", experience: "경력", toolkit: "도구", outside: "일 밖에서", contact: "연락" },
+    stages: { approach: "강점", experience: "경력", outside: "일 밖에서", contact: "연락" },
     experienceLead: "보안에서 디자인으로",
-    columns: ["리서치", "디자인과 구현"],
+    skills: "역량",
     photos: ["일하는 모습", "워크숍, 스터디 또는 발표"],
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
@@ -54,10 +54,6 @@ export function aboutMetadata(locale: Locale): Metadata {
 export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   const { default: Story, bio, headline, headlineEmphasis, principles, skills } = locale === "ko" ? ko : en;
   const c = copy[locale];
-  const columns = [
-    { title: c.columns[0], items: skills.research },
-    { title: c.columns[1], items: skills.build },
-  ];
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
   // Photo spots show labelled boxes while writing; the live site leaves them out
@@ -133,19 +129,10 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 <h3 className="dv-finding reveal">{c.experienceLead}</h3>
               </div>
               <div className="about-story"><Story /></div>
-            </Section>
-
-            <Section id="toolkit" title={c.stages.toolkit}>
-              <ul className="dv-features reveal" style={{ "--n": columns.length } as React.CSSProperties}>
-                {columns.map((col) => (
-                  <li key={col.title}>
-                    <strong>{col.title}</strong>
-                    <ul className="about-tools">
-                      {col.items.map((item) => <li key={item}>{item}</li>)}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
+              <dl className="about-skills reveal">
+                <dt>{c.skills}</dt>
+                <dd>{[...skills.research, ...skills.build].join(" · ")}</dd>
+              </dl>
             </Section>
 
             {(hasOutside || drafting) && (
