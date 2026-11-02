@@ -4510,3 +4510,25 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-dots-problem b { display: block; margin-bottom: 2px; color: var(--tone); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .dv-dots-note { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; opacity: 0; transition: opacity 300ms var(--ease); }
 .dv-dots-note[data-on] { opacity: 1; }
+
+/* The guided demo over the page, opened from the case opener. */
+.dv-demo-dialog { width: min(1200px, calc(100vw - 48px), calc((100dvh - 162px) * 1.6 + 48px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; overflow: visible auto; border: 1px solid var(--dv-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-surface, #1a1826)); color: var(--dv-ink); }
+.dv-demo-dialog::backdrop { background: rgb(5 5 12 / 0.78); backdrop-filter: blur(6px); }
+.dv-demo-dialog-body { position: relative; padding: 16px 24px 16px; }
+.dv-demo-dialog .dv-demo-chapters { margin-right: 44px; }
+.dv-demo-close { position: absolute; top: 10px; right: 16px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); cursor: pointer; transition: background-color 150ms var(--ease); }
+.dv-demo-close:hover { background: color-mix(in srgb, var(--dv-ink) 16%, transparent); }
+.dv-demo-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dv-demo-close svg { width: 16px; height: 16px; }
+html:has(.dv-demo-dialog[open]) { overflow: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  .dv-demo-dialog[open] { animation: dv-dialog-in 250ms var(--ease); }
+  .dv-demo-dialog[open]::backdrop { animation: dv-dialog-fade 250ms ease; }
+}
+@keyframes dv-dialog-in { from { opacity: 0; translate: 0 12px; scale: 0.985; } }
+@keyframes dv-dialog-fade { from { opacity: 0; } }
+@media (max-width: 47.99rem) {
+  .dv-demo-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
+  .dv-demo-dialog-body { padding: 12px 12px 16px; }
+  .dv-demo-close { top: 6px; right: 8px; }
+}

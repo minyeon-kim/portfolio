@@ -354,12 +354,45 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   );
 }
 
+// The opener's "walk through the prototype" link opens the same demo over the page,
+// so nobody is thrown 18,000px down a case they haven't read: a native modal (Esc,
+// focus kept inside and returned to the link), and closing leaves them where they
+// were. Without JavaScript, or before the case has mounted, the link still scrolls to #try.
+export function DemoDialog({ close, ...demo }: DemoProps & { close: string }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [label, setLabel] = useState<string | null>(null);
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const link = (event.target as Element).closest?.('a[href="#try"]');
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      setLabel(link.textContent);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+  useEffect(() => {
+    if (label !== null && !dialog.current?.open) dialog.current?.showModal();
+  }, [label]);
+  return (
+    <dialog ref={dialog} className="dv-demo-dialog" aria-label={label ?? undefined} onClose={() => setLabel(null)} onClick={(event) => { if (event.target === dialog.current) dialog.current.close(); }}>
+      {label !== null && (
+        <div className="dv-demo-dialog-body">
+          <form method="dialog"><button type="submit" className="dv-demo-close" aria-label={close}><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg></button></form>
+          <GuidedDemo {...demo} />
+        </div>
+      )}
+    </dialog>
+  );
+}
+
 // The prototype as a short guided walk-through: real screenshots with everything but
 // the part that matters dimmed, and one line saying what is happening. Next (or the
 // highlighted control) moves on, so nobody has to hunt for where to press. The free
 // prototype is one link away for whoever wants it.
 type DemoStep = { src: string; box: Box; focus?: Box; tipAt?: Box; text: string };
-export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; next: string; back: string; restart: string; open: string }) {
+type DemoProps = { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; next: string; back: string; restart: string; open: string };
+export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: DemoProps) {
   const locale = useLocale();
   const [at, setAt] = useState(0);
   const step = steps[at];
@@ -377,7 +410,7 @@ export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: 
     "--tw": `calc(${onLeft ? ax : 100 - ax - aw}% - 32px)`,
   } as React.CSSProperties;
   return (
-    <div id="try" className="dv-demo">
+    <div className="dv-demo">
       <ol className="dv-demo-chapters">
         {chapters.map((chapter, i) => {
           const end = chapters[i + 1]?.from ?? steps.length;

@@ -26,7 +26,7 @@ export function ReturnToIntro() {
     let touchY: number | null = null;
     const nested = (target: EventTarget | null) => {
       if (!(target instanceof Element)) return true;
-      if (target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return true;
+      if (target.closest('input, textarea, select, [contenteditable="true"], dialog, [role="dialog"]')) return true;
       for (let node: Element | null = target; node && node !== document.body; node = node.parentElement) {
         const overflow = getComputedStyle(node).overflowY;
         if ((overflow === "auto" || overflow === "scroll") && node.scrollHeight > node.clientHeight + 2) return true;
