@@ -405,7 +405,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-subsection dv-rule">
           <Block {...discover.interview} ff={ff} />
           {/* Who we met and what we asked belong together, in one panel; the
-              session photo is folded like the other session photos. */}
+              session photo follows. */}
           <div className="dv-interview dv-gap-40 reveal">
             <div>
               <p className="dv-caps">{discover.interview.peopleLabel}</p>
@@ -425,10 +425,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </ol>
             </div>
           </div>
-          <details className="dv-handoff-spec dv-gap-32">
-            <summary>{discover.interview.photoLabel}</summary>
-            <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />
-          </details>
+          <Figure img={discover.interview.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-40" />
         </div>
         ) : (
         <div className="dv-subsection dv-rule">
@@ -840,13 +837,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {testing.iteration2 && <div className="dv-subsection-120">
           <Block {...testing.iteration2} ff={ff} />
           {ff ? <>
+            {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-40" />}
             <div className="dv-gap-40"><IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
-            {testing.iteration2.photo && (
-              <details className="dv-handoff-spec dv-gap-32">
-                <summary>{testing.iteration2.photoLabel}</summary>
-                <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-photo dv-photo-wide dv-gap-24" />
-              </details>
-            )}
           </> : <>
             <div className="dv-two dv-gap-40 dv-center">
               <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo" />

@@ -4115,3 +4115,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-reel-points li[data-on]::before { background: var(--case-accent); opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .dv-reel-points li, .dv-reel-points li::before { transition: none; } }
 @media (max-width: 63.99rem) { .dv-reel-line { margin-top: 8px; } }
+
+.dv-photo.dv-photo-wide { max-width: 800px; }
+.dv-photo.dv-photo-wide img { aspect-ratio: auto; }
