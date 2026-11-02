@@ -25,7 +25,7 @@
 /* Dark: follow the system unless the user picked light in the header toggle. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #050506;
+    --bg: #0a0b14;
     --surface: #151918;
     --ink: #e8ecea;
     --muted: #8e9895;
@@ -37,7 +37,7 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #050506;
+  --bg: #0a0b14;
   --surface: #151918;
   --ink: #e8ecea;
   --muted: #8e9895;
@@ -198,7 +198,7 @@ details[open]::details-content {
  * either theme, so light text reads on a darkened image.
  */
 :root {
-  --media-bg: #050506;
+  --media-bg: #0a0b14;
 }
 @utility on-media {
   --bg: var(--media-bg);
@@ -3049,7 +3049,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
    so the deck and the footer read as one closing zone. The deck keeps its
    cards; tokens are switched to the dark band locally. */
 .case-study .more-work {
-  --bg: light-dark(#0e1111, #050506); --ink: #e8ecea; --muted: #8e9895;
+  --bg: light-dark(#0e1111, #0a0b14); --ink: #e8ecea; --muted: #8e9895;
   --devsign-title: #a594ff;
   --gemini-title: linear-gradient(90deg, #d6e2ff, #9dbeff 55%, #d5c5ff);
   margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0;
@@ -3622,7 +3622,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .devsign-hero-visit { white-space: nowrap; }
 @media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
 
-/* Dark surfaces as steps: page #050506, surface #1a1826 (banded stages, opener panel), card #262433 on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
+/* Dark surfaces as steps: page #0a0b14, surface #1a1826 (banded stages, opener panel), card #262433 on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
 .dv { --dv-band-dark: #1a1826; --dv-band-card-dark: #262433; --dv-tint-core: light-dark(#f4edff, #1f1a38); }
 .case-study[data-project="gemini"] .dv { --dv-band-dark: #161b27; --dv-band-card-dark: #222836; --dv-tint-core: light-dark(#eef3fd, #16203a); }
 .devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #1a1826); }
