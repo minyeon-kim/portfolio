@@ -251,71 +251,66 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   );
 }
 
-// The real prototype, usable inside the case (portfolio readers can try the
-// product, not just look at it). It loads only when asked: a poster with a
-// Start button stands in, so the page doesn't pull in a whole React app up
-// front. The prototype is laid out at its desktop width (1440) and scaled to
-// the window; clicks map through the scale. Below 64rem it is a link instead
-// (the prototype is a desktop tool). One hint on the cover gives a first-time
-// visitor somewhere to start. The opener's link to #try starts it directly.
-const TRY_WIDTH = 1440;
-export function TryPrototype({ poster, posterAlt, start, open, hint }: { poster: string; posterAlt: string; start: string; open: string; hint: string }) {
+// The prototype as a guided walk-through: real screenshots, one highlighted control at
+// a time, and a line saying what to do. Pressing the highlight moves on; pressing
+// anywhere else nudges it. The free prototype is one link away for whoever wants it.
+type DemoStep = { src: string; box: Box; text: string };
+export function GuidedDemo({ steps, chapters, alt, back, restart, open }: { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; back: string; restart: string; open: string }) {
   const locale = useLocale();
-  const box = useRef<HTMLDivElement>(null);
-  const [on, setOn] = useState(false);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const el = box.current;
-    if (!el) return;
-    const fit = () => {
-      const rect = el.getBoundingClientRect();
-      if (!rect.width) return;
-      const scale = rect.width / TRY_WIDTH;
-      el.style.setProperty("--try-scale", String(scale));
-      el.style.setProperty("--try-h", `${rect.height / scale}px`);
-    };
-    const observer = new ResizeObserver(fit);
-    observer.observe(el);
-    fit();
-    return () => observer.disconnect();
-  }, []);
-  // The opener's "Try the prototype" links to #try: arriving there starts it, so
-  // nobody has to press Start as well. Wide screens only, and after the scroll
-  // has mostly landed so loading the frame doesn't stall it.
-  useEffect(() => {
-    let timer = 0;
-    const arrive = () => {
-      if (window.location.hash !== "#try" || !window.matchMedia("(min-width: 64rem)").matches) return;
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => setOn(true), 900);
-    };
-    arrive();
-    window.addEventListener("hashchange", arrive);
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("hashchange", arrive);
-    };
-  }, []);
-  const url = devsignUrl(locale);
+  const [at, setAt] = useState(0);
+  const [nudge, setNudge] = useState(0);
+  const step = steps[at];
+  const last = at === steps.length - 1;
+  const [x, y, w, h] = step.box;
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  // On the right-hand panel the tip sits left of the control, over the canvas, so it
+  // never covers what the step is about; elsewhere it sits above or below.
+  const beside = cx > 60;
+  const place = {
+    "--tl": beside ? "auto" : `max(16px, ${x}%)`,
+    "--tr": beside ? `calc(${100 - x}% + 16px)` : "auto",
+    "--tt": cy > 50 ? "auto" : beside ? `${y}%` : `calc(${y + h}% + 16px)`,
+    "--tb": cy > 50 ? (beside ? `max(16px, ${100 - y - h}%)` : `calc(${100 - y}% + 16px)`) : "auto",
+  } as React.CSSProperties;
   return (
-    <div id="try" className="dv-try">
-      <div className="dv-try-window">
-        <div ref={box} className="dv-try-screen" data-ready={ready || undefined}>
-          <Image src={withBase(poster)} alt={posterAlt} width={2880} height={1620} sizes="(max-width: 1023px) 100vw, 1200px" />
-          {on && <iframe src={url} title="Devsign prototype" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" onLoad={() => window.setTimeout(() => setReady(true), 600)} />}
-          {!ready && (
-            <div className="dv-try-cover">
-              <button type="button" className="dv-try-start press" onClick={() => setOn(true)} disabled={on} aria-busy={on || undefined}>
-                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor" /></svg>
-                {start}
+    <div id="try" className="dv-demo">
+      <ol className="dv-demo-chapters">
+        {chapters.map((chapter, i) => {
+          const end = chapters[i + 1]?.from ?? steps.length;
+          const fill = Math.max(0, Math.min(1, (at + 1 - chapter.from) / (end - chapter.from)));
+          return (
+            <li key={chapter.label}>
+              <button type="button" aria-current={at >= chapter.from && at < end ? "step" : undefined} onClick={() => setAt(chapter.from)}>
+                <i aria-hidden="true"><b style={{ transform: `scaleX(${fill})` }} /></i>
+                {chapter.label}
               </button>
-              <p className="dv-try-hint">{hint}</p>
-              <a className="dv-try-open" href={url} target="_blank" rel="noreferrer">{open}</a>
+            </li>
+          );
+        })}
+      </ol>
+      <div className="dv-demo-stage">
+        <div className="dv-demo-screen" onClick={() => setNudge((n) => n + 1)}>
+          {steps.map((s, i) => Math.abs(i - at) <= 1 && (
+            <Image key={s.src} src={withBase(s.src)} alt={i === at ? alt : ""} width={1920} height={1200} sizes="(max-width: 767px) 100vw, 1200px" loading="eager" data-on={i === at || undefined} />
+          ))}
+          {last
+            ? <span className="dv-demo-spot" data-rest="" style={{ left: `${cx}%`, top: `${cy}%`, width: `${w}%`, height: `${h}%` }} aria-hidden="true" />
+            : <button key={`${at}-${nudge}`} type="button" className="dv-demo-spot" data-nudge={nudge > 0 || undefined} style={{ left: `${cx}%`, top: `${cy}%`, width: `${w}%`, height: `${h}%` }} aria-label={step.text} onClick={(event) => { event.stopPropagation(); setNudge(0); setAt(at + 1); }} />}
+        </div>
+        <div key={at} className="dv-demo-tip" style={place} aria-live="polite">
+          <p className="dv-demo-count">{at + 1} / {steps.length}</p>
+          <p>{step.text}</p>
+          {(at > 0 || last) && (
+            <div className="dv-demo-actions">
+              {at > 0 && !last && <button type="button" onClick={() => setAt(at - 1)}>{back}</button>}
+              {last && <button type="button" onClick={() => setAt(0)}>{restart}</button>}
+              {last && <a href={devsignUrl(locale)} target="_blank" rel="noreferrer" data-primary="">{open}</a>}
             </div>
           )}
         </div>
       </div>
-      {ready && <a className="dv-try-open-below" href={url} target="_blank" rel="noreferrer">{open}</a>}
+      <a className="dv-demo-open" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{open}</a>
     </div>
   );
 }
