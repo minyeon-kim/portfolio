@@ -137,11 +137,11 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 
 // Affinity as a pinned scene: the page stays and, with native scroll, what people said
 // (one dot per quote) gathers into themes and then into problems, each closing on its
-// insight. It is a qualitative study, so the clusters show the grouping, not a tally: no
-// counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
+// insight and a real quote, one problem at a time. It is a qualitative study, so the
+// clusters show the grouping, not a tally: no counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
 type DotGroup = { name: string; count: number; problem: number; tone?: string };
 const DOT_W = 1200;
-const DOT_H = 480;
+const DOT_H = 300;
 const DOT_CY = 150;
 const PROBLEM_X = [0, 316, 632, 948];
 const dotRound = (n: number) => Math.round(n * 10) / 10;
@@ -161,15 +161,16 @@ function dotLayout(groups: DotGroup[]) {
     const first = dotSpot(column * (DOT_W / 7) + DOT_W / 14, n);
     const last = g.problem >= 0 ? dotSpot(PROBLEM_X[g.problem] + 126, inProblem[g.problem]++) : first;
     return {
-      tone: g.tone, other: g.problem < 0, spread: (index * 37) % 100 / 100,
+      tone: g.tone, problem: g.problem, other: g.problem < 0, spread: (index * 37) % 100 / 100,
       // Scattered: a loose grid with a hashed nudge, so nothing clumps or forms lines.
-      x0: dotRound(((index % 34) + 0.5) * (DOT_W / 34) + dotNudge(index, 2654435761) * 44), y0: dotRound((Math.floor(index / 34) + 0.5) * 50 + dotNudge(index, 2246822519) * 62),
+      x0: dotRound(((index % 34) + 0.5) * (DOT_W / 34) + dotNudge(index, 2654435761) * 44), y0: dotRound((Math.floor(index / 34) + 0.5) * 46 + dotNudge(index, 2246822519) * 56),
       x1: first.x, y1: first.y, x2: last.x, y2: last.y,
     };
   }));
 }
 const dotEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
-export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGroup[]; problems: { title: string; tone: string; insight: string }[]; funnel: [string, string][]; note: string }) {
+type DotProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
+export function AffinityDots({ groups, problems, funnel, note, answeredBy }: { groups: DotGroup[]; problems: DotProblem[]; funnel: [string, string][]; note: string; answeredBy: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const dots = dotLayout(groups);
@@ -185,10 +186,10 @@ export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGr
       frame = 0;
       const box = el.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, -box.top / (box.height - window.innerHeight)));
-      const a = (p - 0.1) / 0.34;
-      const b = (p - 0.56) / 0.34;
+      const a = (p - 0.04) / 0.13;
+      const b = (p - 0.22) / 0.13;
       const key = `${dotEase(a).toFixed(3)}:${dotEase(b).toFixed(3)}`;
-      setStep(p < 0.27 ? 0 : p < 0.73 ? 1 : 2);
+      setStep(p < 0.1 ? 0 : p < 0.29 ? 1 : p < 0.42 ? 2 : 3 + Math.min(3, Math.floor((p - 0.42) / 0.145)));
       if (key === last) return;
       last = key;
       circles.forEach((circle, i) => {
@@ -219,50 +220,39 @@ export function AffinityDots({ groups, problems, funnel, note }: { groups: DotGr
     <div ref={track} className="dv-dots-track">
       <div className="dv-dots-stage">
         <ol className="dv-funnel">
-          {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined}><strong>{n}</strong><span>{label}</span></li>)}
+          {funnel.map(([n, label], i) => <li key={label} data-on={i === Math.min(step, 2) || undefined}><strong>{n}</strong><span>{label}</span></li>)}
         </ol>
-        <div className="dv-dots-art" aria-hidden="true">
+        <div className="dv-dots-art" aria-hidden="true" data-focus={step > 2 ? step - 3 : undefined}>
           <svg viewBox={`0 0 ${DOT_W} ${DOT_H}`}>
-            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="6" data-tone={d.tone} />)}
+            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="6" data-tone={d.tone} data-p={d.problem} />)}
           </svg>
-          {groups.map((g, i) => (
-            <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%` }}>{g.name}</p>
-          ))}
-          {problems.map((item, i) => (
-            <div key={item.title} className="dv-dots-problem" data-tone={item.tone} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%` }}><h4>{item.title}</h4><p>{item.insight}</p></div>
-          ))}
+          <div className="dv-dots-under">
+            {groups.map((g, i) => (
+              <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%` }}>{g.name}</p>
+            ))}
+            {problems.map((item, i) => (
+              <h4 key={item.title} className="dv-dots-problem" data-tone={item.tone} data-p={i} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%` }}>{item.title}</h4>
+            ))}
+            <p className="dv-dots-note" data-on={step === 2 || undefined}>{note}</p>
+            {problems.map((item, i) => (
+              <div key={item.title} className="dv-dots-detail" data-tone={item.tone} data-on={step - 3 === i || undefined}>
+                <figure>
+                  <blockquote>“{item.quote}”</blockquote>
+                  <figcaption>{item.who}</figcaption>
+                </figure>
+                <div>
+                  <p>{item.insight}</p>
+                  {item.feature && <p className="dv-dots-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="dv-dots-note" data-on={step === 2 || undefined}>{note}</p>
         <ul className="sr-only">
-          {groups.map((g) => <li key={g.name}>{g.name}{g.problem >= 0 ? ` → ${problems[g.problem].title}: ${problems[g.problem].insight}` : ""}</li>)}
+          {problems.map((item) => <li key={item.title}>{item.title}: “{item.quote}” {item.who}. {item.insight}</li>)}
         </ul>
       </div>
     </div>
-  );
-}
-
-// The key problems as a horizontal accordion: four panels in a row, one open. Hover,
-// keyboard focus or a tap opens a panel; on phones (CSS) they are all open and stacked.
-type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
-export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answeredBy: string }) {
-  const [open, setOpen] = useState(0);
-  return (
-    <ol className="dv-panels dv-gap-40 reveal">
-      {items.map((item, i) => (
-        <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => setOpen(i)}>
-          <button type="button" aria-expanded={i === open} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
-            <span className="dv-panel-who"><b>{pad(i + 1)}</b>{item.role}</span>
-            <h4>{item.title}</h4>
-          </button>
-          <div className="dv-panel-more">
-            <div>
-              <p>{item.body}</p>
-              {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
-            </div>
-          </div>
-        </li>
-      ))}
-    </ol>
   );
 }
 
