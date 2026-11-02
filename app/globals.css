@@ -4380,3 +4380,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-demo-spot { min-width: 28px; min-height: 28px; border-radius: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-demo-spot, .dv-demo-tip { animation: none; } .dv-demo-screen img, .dv-demo-chapters b { transition: none; } }
+
+/* Core features: the problem answered is its own block under a hairline, not another list line. */
+.dv-reel-solves { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--dv-card-line); }
+.dv-reel-solves span { display: block; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-reel-solves b { display: block; margin: 0 0 4px; color: var(--dv-muted); font-size: 16px; font-weight: 500; }
