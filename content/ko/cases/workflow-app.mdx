@@ -69,7 +69,7 @@ export const study = {
       stages: [
         { name: "Discover", outcome: "모든 단계가 빨라졌고, 단계마다 빈틈이 생겼다.", methods: ["데스크 리서치", "경쟁 서비스 분석", "심층 인터뷰"] },
         { name: "Define", outcome: "문제는 네 가지로 좁혀졌다.", methods: ["어피니티 매핑", "페르소나·저니맵", "HMW"] },
-        { name: "Develop", outcome: "아이디어 26개가 기능 4개가 됐다.", methods: ["가치 제안 캔버스", "아이디에이션·DVF", "스케치·IA"], current: true },
+        { name: "Develop", outcome: "아이디어 13개가 기능 4개가 됐다.", methods: ["가치 제안 캔버스", "아이디에이션·DVF", "스케치·IA"], current: true },
         { name: "Deliver", outcome: "작동하는 프로토타입을 만들어 한 번 테스트하고 두 번 고쳤다.", methods: ["AI 프로토타입", "사용성 테스트", "코디자인"] },
       ],
       pivot: "AI 중재자 → 시안 합치기",
@@ -244,19 +244,11 @@ export const study = {
     ideation: {
       method: "Diverge → converge",
       title: "Ideation",
-      lead: "아이디어를 내기 전에 기준 네 가지를 정했다.",
-      rules: ["가장 효율적으로", "가장 적은 단계로", "차이는 읽지 않아도 보이게", "개발자에게 익숙한 배치로, 새로 배울 것은 적게"],
-      text: "기준은 모두 리서치에서 나왔다. 이 기준으로 아이디어 26개를 평가 없이 적은 뒤, 아이디어마다 페인 포인트를 짝지었다.",
-    },
-    priority: {
-      method: "Prioritization",
-      title: "Prioritization",
-      lead: "아이디어 26개를 세 가지로 평가한 뒤, 팀 투표로 순위를 매겼다.",
-      text: "점수가 높아도 네 가지 문제 중 어느 것도 해결하지 못하는 아이디어는 뺐다.",
-      criteria: [
-        ["Desirability", "사용자가 진짜 원하는가, 어떤 니즈와 페인포인트를 해결하는가"],
-        ["Viability", "제품으로 지속될 수 있는가, 오래 가치를 주는가"],
-        ["Feasibility", "지금의 기술, 인원, 일정 안에서 만들 수 있는가"],
+      lead: "문제마다 HMW 질문을 세우고, AI와 아이디어를 넓게 낸 뒤 가치와 노력으로 골랐다.",
+      steps: [
+        { title: "문제마다 HMW 질문", body: "정의한 문제를 ‘어떻게 하면 ~할 수 있을까’ 질문으로 바꿨다." },
+        { title: "AI로 넓게 브레인스토밍", body: "질문마다 AI로 아이디어를 내고, 바람직성·실현 가능성·사업성에 사용성과 차별성까지 함께 따졌다." },
+        { title: "가치와 노력으로 선별", body: "추린 13개를 Value vs Effort 2x2 매트릭스에 놓고, 가치가 높은 5개를 골랐다." },
       ],
     },
     canvas: {

@@ -66,7 +66,7 @@ export const study = {
       stages: [
         { name: "Discover", outcome: "Every stage got faster, and every stage left a gap.", methods: ["Desk research", "Competitive analysis", "In-depth interview"] },
         { name: "Define", outcome: "It narrowed to four key problems.", methods: ["Affinity mapping", "Persona & journey map", "How might we"] },
-        { name: "Develop", outcome: "26 ideas became 4 features.", methods: ["Value proposition", "Ideation · DVF", "Sketching · IA"], current: true },
+        { name: "Develop", outcome: "13 ideas became 4 features.", methods: ["Value proposition", "Ideation · DVF", "Sketching · IA"], current: true },
         { name: "Deliver", outcome: "A working prototype, tested once and changed twice.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
       pivot: "AI go-between → Combining drafts",
@@ -241,19 +241,11 @@ export const study = {
     ideation: {
       method: "Diverge → converge",
       title: "Ideation",
-      lead: "Before coming up with ideas, we set four rules.",
-      rules: ["The most efficient path", "As few steps as possible", "Differences you can see, not read", "A layout developers already know, so there’s little to learn"],
-      text: "Each rule came from the research. With them, we wrote down 26 ideas without judging any yet, then matched each idea to a pain point.",
-    },
-    priority: {
-      method: "Prioritization",
-      title: "Prioritization",
-      lead: "We scored the 26 ideas on three things, then the team voted to rank them.",
-      text: "Any idea that didn’t solve one of the four problems was dropped, no matter how well it scored.",
-      criteria: [
-        ["Desirability", "Do users really want it? Which need or pain does it solve?"],
-        ["Viability", "Can it last as a product and keep giving value?"],
-        ["Feasibility", "Can we build it with today’s technology, people and schedule?"],
+      lead: "We turned each problem into a How Might We question, explored ideas with AI, then chose by value and effort.",
+      steps: [
+        { title: "A question for each problem", body: "Each problem we defined became a How Might We question." },
+        { title: "Wide brainstorming with AI", body: "We brainstormed each question with AI, weighing desirability, feasibility and viability, plus usability and differentiation." },
+        { title: "Chosen by value and effort", body: "We placed 13 shortlisted ideas on a value-effort 2x2 matrix and kept the 5 high-value ones." },
       ],
     },
     canvas: {
