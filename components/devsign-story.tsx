@@ -75,6 +75,83 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
   );
 }
 
+type Area = [number, number, number, number];
+type Candidate = { id: string; name: string; kind: string; pain: string; to: string; from: Area; relief: Area };
+type CanvasArt = { src: string; width: number; height: number; painArea: Area; reliefArea: Area; alt: string };
+const PANE_ASPECT = 16 / 11;
+
+// One picture in two windows. Each window frames an area of the canvas: scale and
+// shift only, so the zoom runs on the compositor. `spot` also rings that area.
+function CanvasPane({ art, area, spot, tag }: { art: CanvasArt; area: Area; spot: boolean; tag: string }) {
+  const [x, y, w, h] = area;
+  const shown = spot ? Math.max(560, w * 1.7) : Math.max(w, h * PANE_ASPECT);
+  const k = art.width / shown;
+  const cx = (x + w / 2) / art.width, cy = (y + h / 2) / art.height;
+  const tx = (0.5 - k * cx) * 100;
+  const ty = ((0.5 * (art.width / art.height)) / PANE_ASPECT - k * cy) * 100;
+  return (
+    <figure className="dv-vpc-side">
+      <span className="dv-iter-tag">{tag}</span>
+      <div className="dv-vpc-view">
+        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="100vw" style={{ transform: `translate(${tx}%, ${ty}%) scale(${k})` }} />
+        {spot && <span key={`${x}-${y}`} className="dv-vpc-ring" style={{ width: `${(w / shown) * 100}%`, aspectRatio: `${w} / ${h}` }} aria-hidden="true" />}
+      </div>
+    </figure>
+  );
+}
+
+// The canvas, read pair by pair: first the whole circle and square, then each pain
+// and the exact reliever that answers it. Advances like IterationCompare: a bar on
+// the current tab, on screen only, held on hover or focus; with reduced motion it
+// stays on the whole canvas until a tab is pressed.
+export function CanvasZoom({ art, candidates, reliefLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; reliefLabel: string; overviewLabel: string }) {
+  const [active, setActive] = useState(-1);
+  const [onScreen, setOnScreen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), { threshold: 0.4 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (active !== -1 || !onScreen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setTimeout(() => setActive(0), 2400);
+    return () => clearTimeout(timer);
+  }, [active, onScreen]);
+  const pick = active >= 0 ? candidates[active] : null;
+  const onKey = (event: React.KeyboardEvent) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    event.preventDefault();
+    const next = (Math.max(active, 0) + step + candidates.length) % candidates.length;
+    setActive(next);
+    tabs.current[next]?.focus();
+  };
+  return (
+    <div ref={root} className="dv-iter dv-vpc" data-playing={onScreen}>
+      <div className="dv-iter-tabs" role="tablist" onKeyDown={onKey}>
+        {candidates.map((c, i) => (
+          <button key={c.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" aria-selected={i === active} tabIndex={i === Math.max(active, 0) ? 0 : -1} className="dv-iter-tab" onClick={() => setActive(i)}>
+            {i === active && <i className="dv-iter-bar" aria-hidden="true" onAnimationEnd={() => setActive(i + 1 < candidates.length ? i + 1 : -1)} />}
+            <b>{c.id}</b><span>{c.name}</span>
+          </button>
+        ))}
+      </div>
+      <div className="dv-vpc-pair" role="tabpanel">
+        <CanvasPane art={art} area={pick ? pick.from : art.painArea} spot={!!pick} tag={pick ? pick.kind : candidates[0].kind} />
+        <span className="dv-vpc-arrow" aria-hidden="true">→</span>
+        <CanvasPane art={art} area={pick ? pick.relief : art.reliefArea} spot={!!pick} tag={reliefLabel} />
+      </div>
+      <p key={active} className="dv-vpc-line">
+        {pick ? <><span>{pick.pain}</span><i aria-hidden="true">→</i><b>{pick.to}</b></> : <span>{overviewLabel}</span>}
+      </p>
+    </div>
+  );
+}
+
 // A smaller iteration: the two whole screens, one line each.
 export function IterationPair({ before, after, labels }: { before: Shot; after: Shot; labels: { asIs: string; toBe: string } }) {
   const sides = [
