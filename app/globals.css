@@ -2023,7 +2023,7 @@ header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-11
 /* Closing footer after metalab.com: a dark full-bleed band — a big question, large ways onward, a quiet bottom row. */
 .site-footer { --ft-bg: light-dark(#0e1111, var(--bg)); --ft-ink: #e8ecea; --ft-muted: #8e9895; --ft-line: rgb(255 255 255 / 0.14); margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0; padding: clamp(64px, 7vw, 112px) var(--project-text-inset) 32px; background: var(--ft-bg); color: var(--ft-ink); }
 /* Devsign-skinned cases: the footer's text lines up with the case column (--dv-pad) and its band runs edge to edge. */
-.case-study:has(.dv) { --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); }
+.case-study:has(.dv) { --dv-pad: max(max(var(--project-text-inset), 56px), calc((100vw - 1200px) / 2)); }
 .case-study[data-skin="dv"] .site-footer, .case-study:has(.dv) .site-footer { padding-inline: var(--dv-pad); }
 .case-study[data-skin="dv"] .site-footer { margin-inline: calc(-1 * var(--dv-pad)); }
 .site-footer-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
@@ -2098,7 +2098,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-diamond-current: light-dark(#e9e4fc, color-mix(in srgb, #a594ff 16%, var(--bg)));
   --dv-max: 1200px;
   /* A 1200px column at most; at least 12.5% sides (240px at 1920 would leave 1440, too wide to read). */
-  --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - var(--dv-max)) / 2));
+  --dv-pad: max(max(var(--project-text-inset), 56px), calc((100vw - var(--dv-max)) / 2));
   margin-inline: calc(-1 * var(--project-text-inset));
   padding-inline: var(--dv-pad);
   background: var(--dv-bg);
@@ -2444,7 +2444,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dh-ink: light-dark(#1d1d1f, var(--ink));
   --dh-muted: light-dark(#5e5e63, var(--muted));
   --dh-line: light-dark(#d6d6d6, var(--line));
-  --dh-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2));
+  --dh-pad: max(max(var(--project-text-inset), 56px), calc((100vw - 1200px) / 2));
   --dh-glow: #5b3fd6;
   --dh-glow-2: #a594ff;
   /* Fits one screen: the opener (brand, question, media, facts) sizes to the viewport height. */
@@ -2648,7 +2648,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Gemini body in the Devsign body language (no Figma frame yet): the generic
    MDX blocks take the Devsign margins, stage titles, labels, cards and tables. */
-.case-study[data-skin="dv"] { --dv-bg: var(--bg); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(clamp(var(--project-text-inset), 12.5vw, 240px), calc((100vw - 1200px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
+.case-study[data-skin="dv"] { --dv-bg: var(--bg); --dv-line: var(--line); --dv-ink: var(--ink); --dv-muted: var(--muted); --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg))); --dv-diamond-1: light-dark(#ececef, color-mix(in srgb, var(--ink) 6%, var(--bg))); --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg))); --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg))); --dv-diamond-current: light-dark(color-mix(in srgb, var(--case-accent) 12%, white), color-mix(in srgb, var(--case-accent) 16%, var(--bg))); --dv-pad: max(max(var(--project-text-inset), 56px), calc((100vw - 1200px) / 2)); --dv-alt: color-mix(in srgb, var(--ink) 7%, transparent); --dv-tint: color-mix(in srgb, var(--case-accent) 12%, var(--bg)); padding: 0 var(--dv-pad) 96px; }
 .case-study[data-skin="dv"] .case-content > :not(.dv-nav) { max-width: 1200px; margin-left: 0; margin-right: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] { margin: 80px 0 0; padding: 0; border: 0; }
 .case-study[data-skin="dv"] .case-content > section[aria-labelledby="tldr"] #tldr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -2735,7 +2735,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
 @media (min-width: 75rem) {
-  .dv, .case-study[data-skin="dv"], .case-study:has(.dv) { --dv-pad: max(224px, 12.5vw, calc((100vw - 1200px) / 2)); }
+  .dv, .case-study[data-skin="dv"], .case-study:has(.dv) { --dv-pad: max(56px, calc((100vw - 1200px) / 2)); }
 }
 
 /* The footer closes the page: whatever wraps it drops its bottom padding, so no strip of page shows under it. */
