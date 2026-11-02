@@ -94,34 +94,17 @@ function Handoff({ handoff, features, ff }: { handoff: Study; features: Study[];
   return (
     <div className="dv-gap-96">
       <Block {...(handoff as Lead)} ff={ff} />
-      {/* The full numbered spec stays for anyone who wants it, folded by default. */}
-      <details className="dv-handoff-spec dv-gap-32">
-        <summary>{handoff.specLabel}</summary>
-      <ol className="dv-wireflow dv-gap-24">
+      <ol className="dv-wireflow dv-gap-40">
         {screens.map((f: Study, s: number) => (
-          <li key={f.title}>
+          <li key={f.title} className="reveal">
             <p className="dv-wireflow-name"><b>{s + 1}</b>{f.title}</p>
             <div className="dv-wireflow-screen">
               <Image src={withBase(f.src)} alt={f.alt ?? ""} width={f.width ?? 1280} height={f.height ?? 800} sizes="(max-width: 1023px) 100vw, 280px" />
-              {f.areas.map((b: number[], e: number) => (
-                <span key={e} className="dv-wireflow-area" style={{ left: `${b[0]}%`, top: `${b[1]}%`, width: `${b[2]}%`, height: `${b[3]}%` }}><b>{s + 1}-{e + 1}</b></span>
-              ))}
             </div>
             {handoff.flows[s] && <p className="dv-wireflow-flow"><span aria-hidden="true">→</span>{handoff.flows[s]}</p>}
           </li>
         ))}
       </ol>
-      <div className="dv-annotations dv-gap-40">
-        {screens.map((f: Study, s: number) => (
-          <section key={f.title}>
-            <h4><b>{s + 1}</b>{f.title}</h4>
-            <ol>
-              {f.points.map((p: string, e: number) => <li key={p}><b>{s + 1}-{e + 1}</b>{p}</li>)}
-            </ol>
-          </section>
-        ))}
-      </div>
-      </details>
     </div>
   );
 }

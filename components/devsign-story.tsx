@@ -146,10 +146,10 @@ export function FeatureReel({ reel }: { reel: Reel }) {
 // Start button stands in, so the page doesn't pull in a whole React app up
 // front. The prototype is laid out at its desktop width (1440) and scaled to
 // the window; clicks map through the scale. Below 64rem it is a link instead
-// (the prototype is a desktop tool). The tasks beside it give a first-time
-// visitor something to do.
+// (the prototype is a desktop tool). One hint on the cover gives a first-time
+// visitor somewhere to start.
 const TRY_WIDTH = 1440;
-export function TryPrototype({ poster, posterAlt, start, open, tasksLabel, tasks }: { poster: string; posterAlt: string; start: string; open: string; tasksLabel: string; tasks: string[] }) {
+export function TryPrototype({ poster, posterAlt, start, open, hint }: { poster: string; posterAlt: string; start: string; open: string; hint: string }) {
   const locale = useLocale();
   const box = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
@@ -173,10 +173,6 @@ export function TryPrototype({ poster, posterAlt, start, open, tasksLabel, tasks
   return (
     <div className="dv-try">
       <div className="dv-try-window">
-        <div className="devsign-hero-chrome dv-try-chrome">
-          <span /><span /><span />
-          <a href={url} target="_blank" rel="noreferrer">{url.replace(/^https:\/\//, "").replace(/\?.*$/, "")}</a>
-        </div>
         <div ref={box} className="dv-try-screen" data-ready={ready || undefined}>
           <Image src={withBase(poster)} alt={posterAlt} width={2880} height={1620} sizes="(max-width: 1023px) 100vw, 1200px" />
           {on && <iframe src={url} title="Devsign prototype" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" onLoad={() => window.setTimeout(() => setReady(true), 600)} />}
@@ -186,15 +182,13 @@ export function TryPrototype({ poster, posterAlt, start, open, tasksLabel, tasks
                 <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor" /></svg>
                 {start}
               </button>
+              <p className="dv-try-hint">{hint}</p>
               <a className="dv-try-open" href={url} target="_blank" rel="noreferrer">{open}</a>
             </div>
           )}
         </div>
       </div>
-      <div className="dv-try-tasks">
-        <p>{tasksLabel}</p>
-        <ol>{tasks.map((t, i) => <li key={t}><b>{pad(i + 1)}</b>{t}</li>)}</ol>
-      </div>
+      {ready && <a className="dv-try-open-below" href={url} target="_blank" rel="noreferrer">{open}</a>}
     </div>
   );
 }
