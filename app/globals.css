@@ -1455,37 +1455,12 @@ html, body, main { overflow-anchor: none; }
 
 /* About reuses the project frame; each skill group is a labelled row. */
 .case-study[data-project="about"] { --case-accent: var(--accent); }
-/* About reads as one flow: sections are separated by space, not rules. */
-.case-study[data-project="about"] .case-section { border-top: 0; }
-/* The intro line matches project section titles, not the oversized pull statement. */
-.case-study[data-project="about"] .case-key { max-width: var(--case-media); margin: 8px auto clamp(40px, 5vw, 72px); padding: 4px 0 4px clamp(20px, 2.5vw, 32px); border-left: 3px solid var(--case-accent); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.3; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance; }
 .case-key strong { color: var(--case-accent); font-weight: 500; }
 .case-statement { max-width: var(--case-media); text-wrap: balance; padding-block: 0 clamp(48px, 5vw, 96px); font-size: clamp(32px, 3.5vw, 64px); line-height: 1.12; font-weight: 400; }
 /* About: numbered rows for principles and work. */
-.about-rows { display: grid; margin: 0; padding: 0; list-style: none; }
-.about-rows > li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding-block: 16px; }
-.about-rows-index { padding-top: 4px; color: var(--muted); font: 12px/1.5 var(--font-mono); letter-spacing: 0.04em; }
-.about-rows-title { margin: 0 0 8px; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.3; font-weight: 500; letter-spacing: -0.01em; }
-.about-rows p { color: var(--muted); font-size: 16px; line-height: 1.55; }
-.about-rows-meta { margin-top: 8px; font-size: 16px; line-height: 1.5; }
-.about-rows-plain > li { grid-template-columns: 1fr; }
-.case-section-copy :is(.about-rows-title, .about-skills-title) { margin: 0 0 8px; }
-.case-section-copy .about-rows p { margin-bottom: 0; }
 .case-section-copy .story-label { margin: 0 0 6px; font-size: 16px; line-height: 1.5; }
 .case-section-copy .story-title { margin: 0 0 8px; font-size: clamp(18px, 1.5vw, 22px); }
 .case-section-copy li:has(> .story-title) p:not(.story-label) { margin-bottom: 8px; }
-.about-rows-index { line-height: 1.6; }
-@media (max-width: 47.99rem) {
-  .about-rows > li { grid-template-columns: 1fr; gap: 8px; }
-}
-.about-skills { display: grid; gap: 0; }
-.about-skills > div { display: grid; grid-template-columns: 160px 1fr; align-items: start; gap: 24px; padding-block: 16px; }
-.about-skills-title { margin: 0; padding-top: 2px; color: var(--case-accent); font-size: 16px; line-height: 1.5; font-weight: 500; }
-.about-skills li { font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; }
-.about-skills li + li { margin-top: 8px; }
-@media (max-width: 47.99rem) {
-  .about-skills > div { grid-template-columns: 1fr; gap: 12px; }
-}
 
 /* Gemini phone mockup: held sharply turned (right side and button showing),
    then it swings to face you as native scroll grows the stage (home) or moves
@@ -1873,11 +1848,6 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 
 /* About has no cover image, so its opener sits in the same column as the body
    instead of spanning the page and then narrowing. */
-[data-about-page] .project-hero-heading { max-width: 880px; margin-inline: auto; padding-inline: 0; box-sizing: content-box; }
-@media (max-width: 60rem) { [data-about-page] .project-hero-heading { padding-inline: var(--project-text-inset); } }
-[data-about-page] .project-hero-title { font-size: clamp(56px, 7vw, 120px); }
-[data-about-page] .project-hero-details { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 47.99rem) { [data-about-page] .project-hero-details { grid-template-columns: 1fr 1fr; } }
 
 /* The question types in on its own; no half-blurred orb flashing before it. */
 .project-chat-welcome .project-ai-orb:not([data-active]) .project-ai-expansion { opacity: 0; animation: none; }
@@ -2757,15 +2727,10 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* About opens like a case page (the Devsign hero): name, headline, bio, facts. */
 .devsign-hero[data-project="about"] { --dh-glow: #6b7cff; --dh-glow-2: #a594ff; }
-.about-opener .devsign-hero-brand span:last-child { font-weight: 600; letter-spacing: -0.02em; }
-.about-hero-mark { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: var(--bg); font: 600 15px/1 var(--font-mono); letter-spacing: 0.02em; }
+.about-hero-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--ink); color: var(--bg); font: 600 11px/1 var(--font-mono); letter-spacing: 0.02em; }
 .about-hero-line { display: block; }
-.about-hero-bio { display: flex; flex-direction: column; gap: 12px; max-width: 680px; color: var(--dh-muted); font-size: 18px; line-height: 1.6; }
-.about-hero-bio p { margin: 0; }
-.about-hero-bio p:first-child { color: var(--dh-ink); }
-.about-hero-portrait { width: min(100%, 320px); margin: clamp(32px, 4svh, 56px) auto 0; overflow: hidden; border-radius: 24px; }
+.about-hero-portrait { width: min(100%, 320px); margin: clamp(40px, 6svh, 64px) auto 0; overflow: hidden; border-radius: 24px; }
 .about-hero-portrait img { display: block; width: 100%; height: auto; }
-.about-opener .devsign-hero-details { margin-top: clamp(40px, 6svh, 72px); }
 
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
@@ -3107,9 +3072,9 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 .more-work + .site-footer .site-footer-bottom { padding-top: 0; border-top: 0; }
 /* Stages alternate between the page and a soft band so each one reads as its own chapter: Overview, Define, Deliver and Takeaway on the page; Discover, Develop and Testing on the band (Gemini, without a Testing stage, keeps Takeaway on the band). Dark: a clearly lighter charcoal (ink 13% with a touch of the case colour) so each banded stage reads as its own sheet; cards on it a step lighter again. */
 .dv { --dv-band-dark: color-mix(in srgb, var(--case-accent) 10%, color-mix(in srgb, var(--ink) 11%, var(--bg))); --dv-band-card-dark: color-mix(in srgb, var(--ink) 8%, var(--dv-band-dark)); --dv-band-light: color-mix(in srgb, var(--case-accent) 4%, #f6f6f8); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) > * { max-width: var(--dv-max); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(-1 * var(--dv-pad)); padding-inline: var(--dv-pad); background: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) > * { max-width: var(--dv-max); }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: light-dark(#ffffff, var(--dv-band-card-dark)); }
 /* Blocks inside a stage are numbered (01 Desk research, 02 …), so a long stage reads as steps, not one stream. Every block label in the stage counts (they are all steps). */
 .dv > section { counter-reset: dv-step; }
 .dv > section .dv-block > .dv-label { counter-increment: dv-step; }
@@ -3435,7 +3400,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
       animation-range: cover 0px cover 75vh, exit 35% exit 100%;
       transform-origin: 50% 100%;
     }
-    .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { animation-name: dv-open, dv-close-band; }
+    .dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { animation-name: dv-open, dv-close-band; }
     @keyframes dv-in { from { translate: 0 96px; } to { translate: none; } }
     @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round 48px); translate: 0 96px; } to { clip-path: inset(0 0 0 0 round 0); translate: none; } }
     @keyframes dv-close { from { scale: 1; opacity: 1; } to { scale: 0.94; opacity: 0.45; } }
@@ -3475,7 +3440,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 
 /* Gemini has six stages (no Testing). */
-.dv:not(:has(> #testing)) { --dv-stages: "6"; }
+.dv:not(:has(> #testing, > #contact)) { --dv-stages: "6"; }
 /* Define ends on the Problem statement band (no HMW block in findings-first
    cases): no page-colour strip between it and Develop. */
 .dv > section:has(> .dv-core:last-child) { padding-bottom: 0; }
@@ -3577,7 +3542,7 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 
 /* Rounder chapters: banded stages keep their corners at rest instead of squaring off to full bleed, and the Problem statement band rounds its top, so sections read as stacked soft sheets. The band's colour shows in the corners of the stage after it; elsewhere the page does. */
 .dv { --dv-band-radius: clamp(24px, 3.4vw, 48px); }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { border-radius: var(--dv-band-radius); }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { border-radius: var(--dv-band-radius); }
 .dv-core { border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; }
 @supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
   @keyframes dv-open { from { clip-path: inset(0 4% 0 4% round calc(var(--dv-band-radius) * 1.5)); translate: 0 96px; } to { clip-path: inset(0 0 0 0 round var(--dv-band-radius)); translate: none; } }
@@ -3672,13 +3637,13 @@ header[data-home] .header-menu-trigger, header[data-home] .lang-toggle, header[d
 /* Every section card shares one edge: 16px from the screen (8px on phones), like the opener panel and Problem statement, so the page black reads as the ground they sit on. Cards rise less (40px) and open from close to their final edge, so little of it shows mid-scroll. */
 .dv { --dv-edge: 16px; }
 @media (max-width: 47.99rem) { .dv { --dv-edge: 8px; } }
-.dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); }
 .dv-core { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - var(--dv-edge)); margin-bottom: var(--dv-edge); }
 @supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
   @keyframes dv-in { from { translate: 0 40px; } to { translate: none; } }
   @keyframes dv-open { from { clip-path: inset(0 1.5% 0 1.5% round calc(var(--dv-band-radius) * 1.25)); translate: 0 40px; } to { clip-path: inset(0 0 0 0 round var(--dv-band-radius)); translate: none; } }
 } }
-@media (max-width: 47.99rem) { .dv > :is(#discover, #develop, #testing, #takeaway:not(.dv:has(> #testing) > *)), .dv-core { padding-inline: 16px; } }
+@media (max-width: 47.99rem) { .dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)), .dv-core { padding-inline: 16px; } }
 
 /* Stage nav floats as a glass pill under the header pill instead of a full-width black band, so it no longer cuts across the section cards and nothing shows in a strip between two bars. */
 .dv-nav { top: 12px; width: fit-content; max-width: calc(100vw - 16px); margin: 16px auto 0; padding: 6px; gap: 0; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
@@ -4229,3 +4194,25 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   to { clip-path: inset(0 0 0 0 round var(--dv-band-radius) var(--dv-band-radius) 0 0); }
 }
 @keyframes dv-sheet-text { from { scale: 0.86; } to { scale: 1; } }
+
+/* About in the case layout: the case colour is the site accent, the stage counter counts five. */
+.devsign-hero[data-project="about"] { --case-accent: var(--accent); }
+.devsign-hero[data-project="about"] .devsign-hero-brand span:last-child { font-weight: 600; letter-spacing: -0.02em; }
+.devsign-hero[data-project="about"] .devsign-hero-title { max-width: 26ch; }
+.devsign-hero[data-project="about"] .devsign-hero-panel { background-color: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #171a2b); }
+.case-study[data-project="about"] .dv { --dv-stages: "5"; --case-accent: var(--accent); --dv-tint: light-dark(#eef0fd, color-mix(in srgb, var(--accent) 12%, var(--bg))); --dv-tint-core: light-dark(#eef0fd, #181c38); --dv-band-dark: #171a2b; --dv-band-card-dark: #232740; --dv-surface: light-dark(#ffffff, #171a2b); }
+.case-study[data-project="about"] .more-work + .site-footer { --ft-glow: #3f55e8; --ft-glow-hot: #b9c4ff; }
+.about-tools { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.about-story { max-width: var(--dv-measure); margin-top: 40px; }
+.about-story p { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
+.about-story p + p { margin-top: 12px; }
+.about-story .story-label { margin: 0 0 8px; font-family: inherit; font-size: 16px; }
+.about-story .story-title { margin: 0 0 8px; font-size: 20px; font-weight: 600; line-height: 1.3; }
+.about-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+.devsign-hero[data-project="about"] .has-emphasis { color: color-mix(in srgb, var(--dh-ink) 70%, transparent); }
+.devsign-hero[data-project="about"] .has-emphasis strong { color: var(--dh-ink); }
+.devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, var(--dh-ink) 10%, transparent); }
+.devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, var(--dh-ink) 16%, transparent); }
+.dv > #approach .dv-features { margin-top: 56px; }
+.dv-features .about-tools li { display: block; padding: 0; border-radius: 0; background: none; }
+.about-story ol { padding-left: 32px; }
