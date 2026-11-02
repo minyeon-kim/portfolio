@@ -161,7 +161,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             </Section>
           </div>
         </div>
-        <MoreWork label={c.work} items={work.map((entry) => ({ slug: entry.slug, name: entry.meta.short ?? entry.meta.title, description: entry.tldr.problem, cover: entry.meta.cover }))} />
+        <MoreWork label={c.work} items={work.map((entry) => ({ slug: entry.slug, name: entry.meta.short ?? entry.meta.title, description: entry.meta.hook ?? entry.tldr.problem, cover: entry.meta.cover }))} />
         <SiteFooter />
       </article>
     </div>
