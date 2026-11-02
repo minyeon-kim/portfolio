@@ -285,7 +285,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {discover.q1.groups[0]?.quote ? (
             <div className="dv-evidence dv-gap-40">
               <div>
-                <p className="dv-caps reveal">{discover.q1.surveyLabel}</p>
+                <p className="dv-caps reveal">{discover.q1.surveyUrl ? <a className="dv-source-link" href={discover.q1.surveyUrl} target="_blank" rel="noreferrer">{discover.q1.surveyLabel}</a> : discover.q1.surveyLabel}</p>
                 <div className="dv-evidence-stats">
                   {discover.q1.stats.map((stat: { value: string; text: string }) => (
                     <div key={stat.value} className="dv-meter reveal">
@@ -299,21 +299,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <div>
                 <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
                 <ol className="dv-voices">
-                  {discover.q1.groups.map((g: { name: string; quote: string; source: string }, i: number) => (
+                  {discover.q1.groups.map((g: { name: string; quote: string; source: string; sourceUrl?: string }, i: number) => (
                     <li key={g.name} className="reveal" data-tone={VOICE_TONES[i % VOICE_TONES.length]}>
                       <div>
                         <strong>{g.name}</strong>
                         <blockquote>“{g.quote}”</blockquote>
-                        {(() => {
-                          const reddit = g.source.startsWith("r/");
-                          const [platform, title] = reddit ? ["Reddit", g.source] : g.source.split(" · ");
-                          return (
-                            <p className="dv-person dv-voice-source">
-                              <span className="dv-avatar" aria-hidden="true">{reddit ? "r/" : platform[0]}</span>
-                              <span className="dv-person-text"><cite>{title ?? platform}</cite>{title && <span>{platform}</span>}</span>
-                            </p>
-                          );
-                        })()}
+                        <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
                       </div>
                     </li>
                   ))}
