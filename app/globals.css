@@ -4461,3 +4461,14 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-iter-pair { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .dv-iter-side[data-side="b"]::before { display: none; }
 }
+
+/* Guided demo: everything but the part that matters is dimmed; the box glides between steps. */
+.dv-demo-focus { position: absolute; min-width: 36px; min-height: 36px; border-radius: 10px; box-shadow: 0 0 0 200vmax rgb(8 8 14 / 0.66); pointer-events: none; transition: left 350ms var(--ease), top 350ms var(--ease), width 350ms var(--ease), height 350ms var(--ease); }
+.dv-demo-line { animation: dv-demo-tip 250ms var(--ease) both; }
+.dv-demo-tip { animation: none; }
+.dv-demo-tip .dv-demo-count { display: block; margin-bottom: 4px; color: #5b6461; font-variant-numeric: tabular-nums; }
+.dv-demo-actions { justify-content: flex-end; }
+.dv-demo-actions button[data-primary] { background: #4a2bd0; color: #fff; }
+.dv-demo-actions button[data-primary]:hover { background: #3b20ad; }
+@media (prefers-reduced-motion: reduce) { .dv-demo-focus { transition: none; } .dv-demo-line { animation: none; } }
+@media (min-width: 48rem) { .dv-demo-tip { width: min(340px, var(--tw)); } }
