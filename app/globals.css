@@ -4167,3 +4167,15 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .more-work + .site-footer { --ft-glow: #5b3fd6; --ft-glow-hot: #b8a8ff; --ft-muted: rgb(255 255 255 / 0.72); position: relative; isolation: isolate; padding-bottom: clamp(120px, 13vw, 220px); }
 .case-study[data-project="gemini"] .more-work + .site-footer { --ft-glow: #2f6bea; --ft-glow-hot: #b4cdff; }
 .case-study .more-work + .site-footer::before { content: ""; position: absolute; inset: auto 0 0; z-index: -1; height: clamp(320px, 34vw, 620px); background: radial-gradient(62% 100% at 50% 100%, color-mix(in srgb, var(--ft-glow-hot) 90%, transparent) 0%, color-mix(in srgb, var(--ft-glow) 70%, transparent) 26%, color-mix(in srgb, var(--ft-glow) 22%, transparent) 60%, transparent 100%); pointer-events: none; }
+
+/* Develop is the long stage: the four features sit on the page ground, full width of the
+   sheet, so it reads as three parts (deciding, the features, structure and rules). */
+.dv > #develop .dv-main-features { max-width: none !important; margin: 120px calc(var(--dv-edge) - var(--dv-pad)) 0; padding: 120px calc(var(--dv-pad) - var(--dv-edge)); background: var(--dv-bg); }
+@media (max-width: 47.99rem) { .dv > #develop .dv-main-features { margin: 72px -16px 0; padding: 72px 16px; } }
+/* The band meets the two parts of the sheet with their usual round corners. */
+.dv > #develop .dv-main-features { position: relative; --r: var(--dv-band-radius); }
+.dv > #develop .dv-main-features::before { content: ""; position: absolute; inset: calc(-1 * var(--r)) 0; pointer-events: none; background:
+  radial-gradient(circle at 100% 0, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 0 0 / var(--r) var(--r) no-repeat,
+  radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 100% 0 / var(--r) var(--r) no-repeat,
+  radial-gradient(circle at 100% 100%, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 0 100% / var(--r) var(--r) no-repeat,
+  radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), var(--dv-bg) var(--r)) 100% 100% / var(--r) var(--r) no-repeat; }
