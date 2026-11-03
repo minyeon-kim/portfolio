@@ -4605,12 +4605,20 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .about-entrance[data-photo] { background: var(--bg); }
 .about-entrance[data-photo] img { opacity: 1; }
 .about-entrance[data-reveal] { background: transparent; transition-duration: 380ms; }
-/* Affinity rows arrive one at a time with native scroll: finding, then quote, then feature. */
-@keyframes dv-found-in { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: none; } }
+/* Affinity builds up with native scroll, in the middle of the screen where it can be seen:
+   the counts one by one, the board growing into place, then each row rising and lighting up. */
+@keyframes dv-found-in { from { opacity: 0; translate: 0 64px; color: var(--dv-muted); } to { opacity: 1; translate: none; } }
+@keyframes dv-count-in { from { opacity: 0; translate: 0 32px; scale: 0.8; } to { opacity: 1; translate: none; scale: 1; } }
+@keyframes dv-board-in { from { opacity: 0.3; scale: 0.82; } to { opacity: 1; scale: 1; } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .dv-found tbody th, .dv-found td { animation: dv-found-in linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
-    .dv-found tbody td:nth-of-type(1) { animation-range: entry 10% cover 25%; }
-    .dv-found tbody td:nth-of-type(2) { animation-range: entry 20% cover 30%; }
+    .dv-funnel li { animation: dv-count-in linear both; animation-timeline: view(); transform-origin: left bottom; }
+    .dv-funnel li:nth-child(1) { animation-range: cover 4% cover 24%; }
+    .dv-funnel li:nth-child(2) { animation-range: cover 12% cover 32%; }
+    .dv-funnel li:nth-child(3) { animation-range: cover 20% cover 40%; }
+    .dv-board img { animation: dv-board-in linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; transform-origin: center bottom; }
+    .dv-found tbody th, .dv-found td { animation: dv-found-in linear both; animation-timeline: view(); animation-range: cover 6% cover 30%; }
+    .dv-found tbody td:nth-of-type(1) { animation-range: cover 10% cover 34%; }
+    .dv-found tbody td:nth-of-type(2) { animation-range: cover 14% cover 38%; }
   }
 }
