@@ -1103,3 +1103,5 @@ Key problems are the horizontal accordion again under the affinity board (owner 
 Key problem panels have no quote (owner): role, problem, one sentence, feature, 320px tall. The `affinity.found` rows are gone from Devsign's data; the quotes remain in git history and the FigJam.
 Devsign research questions are three columns (`.dv-keyq`, `interview.questionKeys`; owner chose it): a short keyword (Where it gets stuck / Who decides / Where the reason goes; 어디서 막히나 / 누가 정하나 / 이유는 어디 남나) with the full question under it. No hairlines, numbers or scroll dimming. One column on phones. Gemini keeps `.dv-asks`. Figma not updated.
 Devsign Overview Result card is short (owner: too complicated): "First test missed its goal" / "첫 테스트는 목표 미달", one line on the two rounds of changes and no retest. The 2.3 vs 1.5 numbers live in Testing. Figma not updated.
+
+Co-design photo (codesign-session-blurred.webp, rebuilt from the original at 9ddf49d^, same crop): only Harbor Kim's face and name are blurred, plus the top bar name and the meeting code; Minyeon and 김다연 are shown (owner's call; supersedes "faces, names and the meeting code blurred"). Figma not updated.
