@@ -4566,23 +4566,36 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 }
 
 
-/* Discover, by insight: a line of scale, then numbered statements with one piece of evidence each. */
+/* Discover: the scale in one line, a block per method, each leading with its finding, large. */
 .dv-insights-scale { color: var(--dv-muted); font-size: 18px; line-height: 1.5; }
-.dv-insights ol { margin: 48px 0 0; padding: 0; list-style: none; counter-reset: dv-insight; }
-.dv-insights ol > li { position: relative; padding-block: clamp(48px, 5vw, 72px) 0; counter-increment: dv-insight; }
-.dv-insights ol > li + li { margin-top: clamp(64px, 7vw, 96px); }
-.dv-insights ol > li::before { content: counter(dv-insight); display: block; margin-bottom: 16px; color: var(--case-accent); font-size: 18px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
-.dv-insights ol > li { border-top: 1px solid var(--dv-line); }
-.dv-insights h3 { max-width: 22em; color: var(--dv-ink); font-size: clamp(28px, 3vw, 40px); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; word-break: keep-all; }
-.dv-insight-stat { display: flex; align-items: center; gap: 24px; margin-top: 32px; }
+.dv-insights .dv-block > .dv-finding, .dv-interview-result .dv-finding { max-width: 22em; font-size: clamp(26px, 2.8vw, 36px); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; word-break: keep-all; }
+.dv-insight-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px clamp(32px, 5vw, 72px); margin-top: 40px; }
+.dv-insight-stat { display: flex; align-items: center; gap: 24px; }
 .dv-insight-stat strong { flex: none; color: var(--case-accent); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1; }
-.dv-insight-stat span { max-width: 18em; color: var(--dv-ink); font-size: 18px; line-height: 1.45; word-break: keep-all; }
-.dv-insight-quote { margin: 32px 0 0; }
-.dv-insight-quote blockquote { max-width: 38em; color: var(--dv-ink); font-size: 18px; line-height: 1.55; word-break: keep-all; }
-.dv-insight-quote figcaption { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-insights .dv-meet { margin-top: 40px; }
-.dv-insights .dv-meet-photo { max-width: 800px; }
-.dv-insights .dv-meet ul { max-width: 800px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.dv-insights .dv-tool-gaps { margin-top: 32px; }
-.dv-insight-tag { margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-insight-stat span { color: var(--dv-ink); font-size: 18px; line-height: 1.45; word-break: keep-all; }
+.dv-insight-tag { margin-top: 16px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-insight-voices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 40px); margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-insight-voices li { display: flex; flex-direction: column; padding-top: 20px; border-top: 1px solid var(--dv-line); }
+.dv-insight-voices strong { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-insight-voices blockquote { margin-top: 12px; color: var(--dv-ink); font-size: 16px; line-height: 1.55; word-break: keep-all; }
+.dv-insight-voices p, .dv-insight-voices cite { margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-style: normal; line-height: 1.5; }
+.dv-insight-voices cite { margin-top: auto; padding-top: 12px; }
+.dv-interview-result { margin-top: clamp(48px, 5vw, 72px); }
+.dv-interview-result .dv-finding { margin-top: 8px; }
+@media (max-width: 63.99rem) {
+  .dv-insight-stats, .dv-insight-voices { grid-template-columns: 1fr; }
+}
 @media (max-width: 47.99rem) { .dv-insight-stat { align-items: flex-start; flex-direction: column; gap: 12px; } }
+.dv-asks .dv-caps { margin-bottom: 12px; }
+.dv-asks ol { margin: 0; padding: 0; list-style: none; }
+.dv-asks li { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: baseline; padding-block: 20px; border-top: 1px solid var(--dv-card-line); color: var(--dv-ink); font-size: clamp(20px, 2vw, 28px); font-weight: 500; line-height: 1.35; text-wrap: pretty; }
+.dv-asks b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .dv-asks li { animation: dv-lit linear both; animation-timeline: view(); animation-range: cover 22% cover 46%; }
+  }
+}
+@media (max-width: 47.99rem) {
+  .dv-asks li { grid-template-columns: 28px minmax(0, 1fr); padding-block: 16px; }
+}
