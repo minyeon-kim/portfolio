@@ -2722,9 +2722,12 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero[data-project="about"] { --dh-glow: #6b7cff; --dh-glow-2: #a594ff; }
 .about-hero-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--ink); color: var(--bg); font: 600 11px/1 var(--font-mono); letter-spacing: 0.02em; }
 .about-hero-line { display: block; }
-.about-hero-portrait { width: min(100%, 1200px); margin: clamp(40px, 6svh, 64px) auto 0; overflow: hidden; border-radius: var(--dv-card-radius, 16px); }
-.about-hero-portrait img { display: block; width: 100%; height: auto; }
-@media (max-width: 47.99rem) { .about-hero-portrait img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 44% center; } }
+/* The portrait fills the panel to its sides and bottom; the panel clips the corners. */
+.devsign-hero-panel:has(.about-hero-portrait) { overflow: hidden; }
+.devsign-hero[data-project="about"] .devsign-hero-panel:has(.about-hero-portrait) { padding-bottom: 0; }
+.about-hero-portrait { margin: clamp(40px, 6svh, 64px) -24px 0; overflow: hidden; }
+.about-hero-portrait img { display: block; width: 100%; height: auto; max-height: 100svh; object-fit: cover; object-position: 44% 40%; }
+@media (max-width: 47.99rem) { .about-hero-portrait { margin: 32px -16px 0; } .about-hero-portrait img { aspect-ratio: 4 / 5; object-position: 44% center; } }
 
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */

@@ -89,7 +89,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             {(hasPortrait || drafting) && (
               <div className="about-hero-portrait">
                 {hasPortrait
-                  ? <Image src={withBase(portrait)} alt={c.portrait} width={2400} height={1500} sizes="(max-width: 1232px) 100vw, 1200px" priority />
+                  ? <Image src={withBase(portrait)} alt={c.portrait} width={2400} height={1500} sizes="100vw" priority />
                   : <CaseMedia variant="portrait" label={c.portrait} />}
               </div>
             )}
