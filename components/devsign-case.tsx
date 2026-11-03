@@ -454,6 +454,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {define.affinity.funnel && (
             <AffinityNotes
               funnel={define.affinity.funnel}
+              lead={define.affinity.wallLead}
               note={define.affinity.otherNote}
               types={define.affinity.noteTypes}
               answeredBy={develop.selection?.answeredBy}
@@ -463,6 +464,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 insight: define.affinity.insights[i],
                 quote: define.affinity.quotes[i][0],
                 who: define.affinity.quotes[i][1],
+                quoteType: define.affinity.quotes[i][2],
                 feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
               }))}
               groups={[

@@ -3101,7 +3101,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .more-work + .site-footer .site-footer-top-link { margin-left: auto; padding-left: 0; border-left: 0; }
 }
 
-/* Affinity result: which themes (with card counts) fed each key problem. */
 .dv-themes ol { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
 .dv-themes li { display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); align-items: center; gap: 16px; }
 .dv-themes-from { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -4355,7 +4354,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 @media (prefers-reduced-motion: reduce) { .reveal-ready .dv-bars:not([data-shown]) .dv-bar-track i { transform: none; } }
 
-/* Affinity: how much narrowed to what, the board as evidence, then each theme to its problem. */
 .dv-funnel { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px clamp(24px, 4vw, 56px); margin: 40px 0 0; padding: 0; list-style: none; }
 .dv-funnel li { display: flex; align-items: baseline; gap: 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; }
 .dv-funnel li + li::before { content: "→"; margin-right: clamp(14px, 3vw, 46px); color: var(--dv-muted); font-size: 24px; }
@@ -4419,7 +4417,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .devsign-hero-glow::before { content: ""; position: absolute; left: 50%; bottom: calc(-1 * clamp(40px, 6svh, 64px) - 96px); width: min(100%, 1200px); height: 460px; translate: -50% 0; background: radial-gradient(50% 60% at 50% 72%, color-mix(in srgb, var(--dh-glow) light-dark(26%, 62%), transparent), transparent 76%); }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
 @media (max-width: 63.99rem) { .devsign-hero-glow::before { height: 300px; } }
-/* Affinity as a pinned scene: the track gives the scroll length, the stage stays on screen. */
 .dv-notes-track { display: none; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-notes-track { display: block; height: 300svh; }
@@ -4447,13 +4444,11 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-demo-dialog-body { padding: 12px 12px 16px; }
   .dv-demo-close { top: 6px; right: 8px; }
 }
-/* Affinity is qualitative: quiet step numbers, even clusters, each problem closing on its insight. */
 .dv-aff ul { gap: 4px; }
 .dv-aff ul li { display: block; color: var(--dv-muted); }
 .dv-aff > ol > li > div h4 { color: var(--tone); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; }
 .dv-aff > ol > li > div p { margin-top: 6px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 
-/* Affinity and key problems as one scene: clusters on top, one problem's quote at a time below. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-notes-track { height: 460svh; } }
 .dv-aff { margin-top: 40px; }
 .dv-aff > ol > li { display: block; padding-block: 24px; }
@@ -4581,47 +4576,43 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); font-weight: 400; line-height: 1.3; }
 .case-study .more-work .more-work-label { font-weight: 500; }
 
-/* Affinity: stickies first, then one screen per problem with the insight largest. */
 .dv-notes-stage { position: sticky; top: 0; height: 100svh; }
-.dv-notes-intro { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 24px; padding-block: 88px 96px; }
-.dv-notes-intro .dv-funnel { margin: 0; }
-.dv-notes-board { position: relative; flex: 1; min-height: 0; }
 .dv-notes-aside { margin: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
 .dv-note { padding: 14px 16px; border: 1px solid var(--dv-line); border-radius: 6px; background: var(--dv-surface); color: var(--dv-ink); font-size: 16px; font-weight: 400; line-height: 1.4; text-wrap: pretty; word-break: keep-all; }
 .dv-note span { color: var(--dv-muted); font-weight: 500; white-space: nowrap; }
-.dv-notes-board .dv-note { position: absolute; width: min(180px, 15.5%); min-width: 150px; will-change: transform; }
-.dv-pscreen { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 24px; padding-block: 72px 96px; opacity: 0; translate: 0 16px; pointer-events: none; transition: opacity 400ms var(--ease), translate 400ms var(--ease); }
-.dv-pscreen[data-on] { opacity: 1; translate: none; pointer-events: auto; }
-.case-study .dv .dv-pscreen h4 { margin: 0; color: var(--tone); }
-.dv-pscreen h4 span { margin-right: 12px; font-variant-numeric: tabular-nums; }
-.case-study .dv .dv-pscreen-insight { max-width: 24em; margin: 0; color: var(--dv-ink); font-size: clamp(32px, 3.4vw, 48px); font-weight: 400; line-height: 1.25; text-wrap: balance; word-break: keep-all; }
-.dv-pscreen-notes { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 16px; }
-.dv-pscreen .dv-note { margin: 0; background: color-mix(in srgb, var(--tone) 10%, var(--dv-bg, var(--bg))); border-color: color-mix(in srgb, var(--tone) 26%, transparent); opacity: 0; translate: 0 12px; transition: opacity 400ms var(--ease), translate 400ms var(--ease); }
-.dv-pscreen .dv-note:nth-child(1) { rotate: -0.6deg; }
-.dv-pscreen .dv-note:nth-child(2) { rotate: 0.8deg; }
-.dv-pscreen .dv-note:nth-child(3) { rotate: -0.5deg; }
-.dv-pscreen[data-on] .dv-note { opacity: 1; translate: none; }
-.dv-pscreen[data-on] .dv-note:nth-child(1) { transition-delay: 100ms; }
-.dv-pscreen[data-on] .dv-note:nth-child(2) { transition-delay: 160ms; }
-.dv-pscreen[data-on] .dv-note:nth-child(3) { transition-delay: 220ms; }
-.case-study .dv .dv-note-quote { background: color-mix(in srgb, var(--tone) 18%, var(--dv-bg, var(--bg))); font-size: 18px; line-height: 1.45; }
-.dv-note-quote span { display: block; margin-top: 8px; color: var(--tone); }
-.dv-pscreen-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; color: var(--dv-muted); font-size: 18px; line-height: 1.4; }
-.dv-pscreen-answer b { color: var(--case-accent); font-weight: 500; }
-.dv-notes-intro .dv-funnel { gap: 8px 24px; }
-.case-study .dv .dv-notes-intro .dv-funnel strong { font-size: 28px; font-weight: 400; }
-.dv-notes-intro .dv-funnel li + li::before { margin-right: 24px; font-size: 18px; }
-.case-study .dv .dv-pscreen-notes { width: 100%; max-width: none; }
 
-/* Affinity first screen: the board's own colours, by type of statement. Dark text in both themes. */
 [data-type="pain"] { --note: #ffafa3; }
 [data-type="need"] { --note: #a8daff; }
 [data-type="act"] { --note: #b3efbd; }
 [data-type="think"] { --note: #ffe299; }
 [data-type="feel"] { --note: #d3bdff; }
-.dv-notes-board .dv-note { background: var(--note); border-color: transparent; color: #1b1b1f; }
-.dv-notes-board .dv-note span { color: #4a4a50; }
-.dv-notes-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px; }
 .dv-notes-types { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; padding: 0; list-style: none; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
 .dv-notes-types li { display: flex; align-items: center; gap: 8px; }
 .dv-notes-types li::before { content: ""; width: 12px; height: 12px; border-radius: 3px; background: var(--note); }
+
+/* Affinity: the sticky wall, then one screen per problem, conclusion left, evidence right. */
+.dv-notes-intro { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding-block: 88px 96px; transition: opacity 300ms var(--ease); }
+.dv-notes-track:not([data-step="0"]) .dv-notes-intro { opacity: 0; }
+.dv-notes-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px; }
+.dv-notes-head p { margin: 0; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.case-study .dv .dv-notes-intro .dv-funnel { gap: 8px 24px; margin: 0; }
+.case-study .dv .dv-notes-intro .dv-funnel strong { font-size: 28px; font-weight: 400; }
+.dv-notes-intro .dv-funnel li + li::before { margin-right: 24px; font-size: 18px; }
+.dv-notes-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px; }
+.dv-notes-board { position: absolute; inset: 150px 0 136px; pointer-events: none; }
+.dv-notes-board .dv-note { position: absolute; width: min(180px, 15.5%); min-width: 150px; transition: transform 600ms var(--ease), width 600ms var(--ease), opacity 300ms var(--ease); }
+.dv-notes-board .dv-note[data-state="out"] { opacity: 0; transition: opacity 200ms var(--ease), transform 0s linear 200ms, width 0s linear 200ms; }
+.dv-pscreen { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 400ms var(--ease); }
+.dv-pscreen[data-on] { opacity: 1; }
+.dv-pscreen-claim { position: absolute; top: 72px; bottom: 96px; left: 0; width: 48%; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
+.case-study .dv .dv-pscreen h4 { margin: 0; color: var(--tone); }
+.dv-pscreen h4 span { margin-right: 12px; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-pscreen-insight { margin: 0; color: var(--dv-ink); font-size: clamp(30px, 3vw, 44px); font-weight: 400; line-height: 1.25; text-wrap: balance; word-break: keep-all; }
+.dv-pscreen-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; color: var(--dv-muted); font-size: 18px; line-height: 1.4; }
+.dv-pscreen-answer b { color: var(--case-accent); font-weight: 500; }
+.dv-pscreen-evidence { position: absolute; left: 54%; right: 0; margin: 0; rotate: -0.4deg; translate: 0 12px; transition: translate 500ms var(--ease); }
+.dv-pscreen[data-on] .dv-pscreen-evidence { translate: none; }
+.case-study .dv .dv-pscreen-evidence { padding: 20px 22px; background: var(--note); border-color: transparent; color: #1b1b1f; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.4; }
+.dv-pscreen-evidence span { display: block; margin-top: 10px; color: #4a4a50; font-size: 16px; }
+.dv-notes-board .dv-note { background: var(--note); border-color: transparent; color: #1b1b1f; }
+.dv-notes-board .dv-note span { color: #4a4a50; }

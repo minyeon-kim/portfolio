@@ -135,12 +135,14 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
-// Affinity as a pinned scene: first the real stickies from the board, mixed, which gather
-// and clear with native scroll; then one screen per problem, with its insight as the
-// largest thing on screen and the quote and two stickies under it as evidence. It is a
-// qualitative study, so nothing counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
+// Affinity as a pinned scene: first the real stickies from the board, mixed, in the board's
+// colours by type of statement. Then one screen per problem: the conclusion on the left,
+// and on the right the evidence, a real quote and two of those same stickies, which fly
+// over from the wall. Scroll only picks the step. It is a qualitative study, so nothing
+// counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
 type NoteGroup = { name: string; problem: number; tone?: string; notes: [string, string, string][] };
 const NOTE_COLUMNS = 6;
+const EVIDENCE_LEFT = 0.54;
 const noteHash = (i: number, k: number) => {
   let h = Math.imul(i + 1, k);
   h ^= h >>> 15;
@@ -149,57 +151,74 @@ const noteHash = (i: number, k: number) => {
   return (h >>> 0) / 4294967296 - 0.5;
 };
 const noteRound = (n: number) => Math.round(n * 1000) / 1000;
-function noteLayout(groups: NoteGroup[]) {
-  const flat = groups.flatMap((g) => g.notes.map((note) => ({ text: note[0], who: note[1], type: note[2] })));
-  const rows = Math.ceil(flat.length / NOTE_COLUMNS);
-  // Slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
-  const slots = flat.map((_, i) => i).sort((x, y) => noteHash(x, 2654435761) - noteHash(y, 2654435761));
-  return flat.map((note, i) => ({
-    ...note,
-    x: noteRound(Math.max(0.08, Math.min(0.92, ((slots[i] % NOTE_COLUMNS) + 0.5) / NOTE_COLUMNS + (Math.floor(slots[i] / NOTE_COLUMNS) % 2 ? 0.012 : -0.012) + noteHash(i, 2246822519) * 0.03))),
-    y: noteRound((Math.floor(slots[i] / NOTE_COLUMNS) + 0.5) / rows + noteHash(i, 3266489917) * 0.08),
-    r: noteRound(noteHash(i, 668265263) * 5),
-  }));
-}
 // A problem's evidence: one sticky from each of its themes, or the first two of its only theme.
 function noteEvidence(groups: NoteGroup[], problem: number) {
   const lists = groups.filter((g) => g.problem === problem).map((g) => g.notes);
   return (lists.length > 1 ? lists.map((list) => list[0]) : lists[0] ?? []).slice(0, 2);
 }
-const noteEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
-type NoteProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
-export function AffinityNotes({ groups, problems, funnel, note, types, answeredBy }: { groups: NoteGroup[]; problems: NoteProblem[]; funnel: [string, string][]; note: string; types: [string, string][]; answeredBy: string }) {
+function noteLayout(groups: NoteGroup[]) {
+  const flat = groups.flatMap((g) => g.notes.map((note) => ({ text: note[0], who: note[1], type: note[2], problem: g.problem })));
+  const rows = Math.ceil(flat.length / NOTE_COLUMNS);
+  // Slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
+  const slots = flat.map((_, i) => i).sort((x, y) => noteHash(x, 2654435761) - noteHash(y, 2654435761));
+  return flat.map((note, i) => ({
+    ...note,
+    slot: noteEvidence(groups, note.problem).findIndex((n) => n[0] === note.text),
+    x: noteRound(Math.max(0.08, Math.min(0.92, ((slots[i] % NOTE_COLUMNS) + 0.5) / NOTE_COLUMNS + (Math.floor(slots[i] / NOTE_COLUMNS) % 2 ? 0.012 : -0.012) + noteHash(i, 2246822519) * 0.03))),
+    y: noteRound((Math.floor(slots[i] / NOTE_COLUMNS) + 0.5) / rows + noteHash(i, 3266489917) * 0.08),
+    r: noteRound(noteHash(i, 668265263) * 5),
+  }));
+}
+type NoteProblem = { title: string; tone: string; insight: string; quote: string; who: string; quoteType: string; feature?: string };
+export function AffinityNotes({ groups, problems, funnel, lead, note, types, answeredBy }: { groups: NoteGroup[]; problems: NoteProblem[]; funnel: [string, string][]; lead: string; note: string; types: [string, string][]; answeredBy: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const notes = noteLayout(groups);
   useEffect(() => {
     const el = track.current;
     if (!el || !window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)").matches) return;
+    const stage = el.querySelector<HTMLElement>(".dv-notes-stage");
     const board = el.querySelector<HTMLElement>(".dv-notes-board");
-    const intro = el.querySelector<HTMLElement>(".dv-notes-intro");
     const cards = el.querySelectorAll<HTMLElement>(".dv-notes-board .dv-note");
-    if (!board || !intro) return;
+    const quotes = el.querySelectorAll<HTMLElement>(".dv-pscreen-evidence");
+    if (!stage || !board) return;
     const layout = noteLayout(groups);
     let frame = 0;
     let last = "";
+    const place = (current: number) => {
+      const W = board.clientWidth;
+      const H = board.clientHeight;
+      const quote = quotes[current - 1];
+      // Quote on top, the two stickies under it, centred together above the stage nav.
+      const noteW = (W * (1 - EVIDENCE_LEFT) - 12) / 2;
+      const quoteH = quote ? quote.offsetHeight : 0;
+      const top = Math.max(72, (stage.clientHeight - 24 - (quoteH + 14 + 130)) / 2);
+      if (quote) quote.style.top = `${top}px`;
+      cards.forEach((card, i) => {
+        const d = layout[i];
+        const shown = current > 0 && d.problem === current - 1 && d.slot >= 0;
+        card.dataset.state = current === 0 ? "wall" : shown ? "evidence" : "out";
+        if (shown) {
+          const x = W * EVIDENCE_LEFT + d.slot * (noteW + 12) - d.x * W;
+          const y = top + quoteH + 14 - board.offsetTop - d.y * H;
+          card.style.width = `${noteW.toFixed(1)}px`;
+          card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(0%, 0%) rotate(${(d.r * 0.2).toFixed(2)}deg)`;
+        } else {
+          card.style.width = "";
+          card.style.transform = `translate(0px, 0px) translate(-50%, -50%) rotate(${d.r}deg)`;
+        }
+      });
+    };
     const read = () => {
       frame = 0;
       const box = el.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, -box.top / (box.height - window.innerHeight)));
-      setStep(p < 0.14 ? 0 : 1 + Math.min(3, Math.floor((p - 0.14) / 0.215)));
-      const u = noteEase((p - 0.04) / 0.1);
-      const W = board.clientWidth;
-      const H = board.clientHeight;
-      const key = `${u.toFixed(3)}:${W}:${H}`;
+      const current = p < 0.14 ? 0 : 1 + Math.min(3, Math.floor((p - 0.14) / 0.215));
+      const key = `${current}:${board.clientWidth}:${board.clientHeight}`;
       if (key === last) return;
       last = key;
-      intro.style.opacity = (1 - u).toFixed(3);
-      cards.forEach((card, i) => {
-        const d = layout[i];
-        const x = (W / 2 - d.x * W) * u * 0.6;
-        const y = (H * 0.8 - d.y * H) * u * 0.6;
-        card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${d.r}deg)`;
-      });
+      setStep(current);
+      place(current);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -212,18 +231,14 @@ export function AffinityNotes({ groups, problems, funnel, note, types, answeredB
     };
   }, [groups]);
   return (
-    <div ref={track} className="dv-notes-track">
+    <div ref={track} className="dv-notes-track" data-step={step}>
       <div className="dv-notes-stage">
         <div className="dv-notes-intro">
-          <ol className="dv-funnel">
-            {funnel.map(([n, label]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
-          </ol>
-          <div className="dv-notes-board" aria-hidden="true">
-            {notes.map((d, i) => (
-              <div key={i} className="dv-note" data-type={d.type} style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
-                {d.text} <span>{d.who}</span>
-              </div>
-            ))}
+          <div className="dv-notes-head">
+            <ol className="dv-funnel">
+              {funnel.map(([n, label]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+            </ol>
+            <p>{lead}</p>
           </div>
           <div className="dv-notes-foot">
             <ul className="dv-notes-types">
@@ -234,15 +249,21 @@ export function AffinityNotes({ groups, problems, funnel, note, types, answeredB
         </div>
         {problems.map((item, i) => (
           <div key={item.title} className="dv-pscreen" data-tone={item.tone} data-on={step === i + 1 || undefined}>
-            <h4><span>{i + 1} / {problems.length}</span>{item.title}</h4>
-            <p className="dv-pscreen-insight">{item.insight}</p>
-            <div className="dv-pscreen-notes">
-              <blockquote className="dv-note dv-note-quote">“{item.quote}” <span>{item.who}</span></blockquote>
-              {noteEvidence(groups, i).map(([text, who]) => <div key={text} className="dv-note">{text} <span>{who}</span></div>)}
+            <div className="dv-pscreen-claim">
+              <h4><span>{i + 1} / {problems.length}</span>{item.title}</h4>
+              <p className="dv-pscreen-insight">{item.insight}</p>
+              {item.feature && <p className="dv-pscreen-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
             </div>
-            {item.feature && <p className="dv-pscreen-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+            <blockquote className="dv-note dv-pscreen-evidence" data-type={item.quoteType}>“{item.quote}” <span>{item.who}</span></blockquote>
           </div>
         ))}
+        <div className="dv-notes-board" aria-hidden="true">
+          {notes.map((d, i) => (
+            <div key={i} className="dv-note" data-type={d.type} data-state="wall" style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(0px, 0px) translate(-50%, -50%) rotate(${d.r}deg)` }}>
+              {d.text} <span>{d.who}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
