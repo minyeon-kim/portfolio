@@ -1137,7 +1137,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-section-copy p:last-child { margin-bottom: 0; }
 .case-content > section[aria-labelledby="tldr"] { max-width: var(--case-media); margin: 0 auto 48px; padding: 32px 0; background: transparent; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; }
 .case-content > section[aria-labelledby="tldr"] > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
-.case-content > section[aria-labelledby="tldr"] li { font-size: 17px; line-height: 1.6; }
+.case-content > section[aria-labelledby="tldr"] li { font-size: 18px; line-height: 1.6; }
 .case-content > section[aria-labelledby="tldr"] strong { color: var(--case-accent); }
 .case-content > h2 { margin-top: 112px; font-size: clamp(32px, 3vw, 56px); line-height: 1.15; letter-spacing: -0.035em; font-weight: 400; }
 .case-content > :is(p, ul, ol, h3, details) { width: min(100%, var(--case-media)); margin-inline: auto; }
@@ -1191,7 +1191,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .case-diamond-spaces { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 12px; color: var(--muted); font-size: 16px; text-align: center; }
 .case-diamond-notes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 2vw, 24px); margin: 20px 0 0; padding: 0; list-style: none; }
 .case-diamond-notes > li { min-width: 0; overflow-wrap: anywhere; padding-top: 16px; border-top: 1px solid var(--line); }
-.case-diamond-notes strong { display: block; margin-bottom: 8px; font-size: 17px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
+.case-diamond-notes strong { display: block; margin-bottom: 8px; font-size: 18px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
 .case-diamond-notes p { color: var(--muted); font-size: 16px; line-height: 1.55; }
 .case-diamond-notes span { display: block; margin-bottom: 6px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
 @media (max-width: 47.99rem) {
@@ -1712,7 +1712,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 @keyframes ai-light-warp { 0% { transform: scale(1.05, 0.85) rotate(-12deg); } 50% { transform: scale(0.88, 1.12) rotate(8deg); } 100% { transform: scale(1.12, 0.94) rotate(22deg); } }
 .intro-project-picker .project-prompt { min-height: 58px; padding: 7px 7px 7px 24px; }
 .intro-project-picker .project-prompt-submit { width: 42px; height: 42px; }
-.intro-project-picker .project-prompt input { min-height: 42px; font-size: 17px; }
+.intro-project-picker .project-prompt input { min-height: 42px; font-size: 18px; }
 .intro-project-picker .prompt-send-icon { width: 21px; height: 21px; }
 @media (max-width: 47.99rem) {
   .project-ai-orb { width: 104px; height: 84px; }
@@ -1763,7 +1763,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .intro-surface .project-chat-welcome h2 { bottom: 0; }
 .intro-surface[data-scroll-ready] .intro-project-picker { height: auto; min-height: 0; }
 .intro-project-picker .project-suggestions { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 4px; margin-top: 16px; padding-left: 8px; }
-.intro-project-picker .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 14px; gap: 12px; font-size: 17px; font-weight: 400; color: color-mix(in srgb, var(--ink) 78%, transparent); background: transparent; box-shadow: none; }
+.intro-project-picker .project-suggestion[data-suggestion] { min-height: 44px; padding-inline: 14px; gap: 12px; font-size: 18px; font-weight: 400; color: color-mix(in srgb, var(--ink) 78%, transparent); background: transparent; box-shadow: none; }
 .intro-project-picker .project-suggestion[data-suggestion] span { color: inherit; transition: color 150ms ease; }
 .intro-project-picker .project-suggestion[data-suggestion]:is(:hover, :focus-visible) { color: var(--ink); background: var(--color-fill); box-shadow: none; }
 .intro-project-picker .project-suggestion .pill-border-light { display: none; }
@@ -1939,7 +1939,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .case-prototype-phone[data-steps-below] .case-prototype-steps li[data-change] .case-prototype-thumb img { width: min(100%, 200px); border-radius: 18px 18px 0 0; border-bottom: 0; }
 .case-prototype-step-title { display: flex; align-items: flex-start; gap: 10px; }
 .case-prototype-step-title b { display: grid; flex-shrink: 0; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: var(--case-accent, var(--accent)); color: #fff; font-size: 16px; font-weight: 700; }
-.case-prototype-steps .case-prototype-step-title strong { margin: 0; font-size: 17px; font-weight: 700; }
+.case-prototype-steps .case-prototype-step-title strong { margin: 0; font-size: 18px; font-weight: 700; }
 .case-prototype-change { display: flex; flex-direction: column; gap: 4px; margin: 10px 0 0 32px !important; font-size: 16px !important; line-height: 1.5; }
 .case-prototype-change [data-side="before"] { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent); }
 .case-prototype-change [data-side="after"] { color: var(--ink); }
@@ -2049,7 +2049,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 /* Revamped Double Diamond: edge labels and phase names in the SVG. */
 .case-diamond-phases { display: none; }
 .case-diamond-figure svg text { font-family: var(--font-sans); fill: var(--muted); font-size: 16px; }
-.case-diamond-figure svg .case-diamond-phase { fill: var(--case-accent); font-size: 17px; font-weight: 500; }
+.case-diamond-figure svg .case-diamond-phase { fill: var(--case-accent); font-size: 18px; font-weight: 500; }
 .case-diamond-notes .case-diamond-output { margin-top: 10px; color: var(--ink); font-size: 16px; line-height: 1.5; }
 .case-diamond-notes .case-diamond-output span { display: inline; margin: 0; color: var(--case-accent); }
 @media (max-width: 47.99rem) {
@@ -2178,9 +2178,9 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 16px; }
 .dv-stat { display: flex; align-items: center; gap: 16px; padding-block: 4px; }
 .dv-stat strong { flex-shrink: 0; font-size: 44px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
-.dv-stat span { max-width: 500px; color: var(--dv-muted); font-size: 17px; font-weight: 500; line-height: 1.5; }
+.dv-stat span { max-width: 500px; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .dv-groups { margin-top: 16px; }
-.dv-groups > div { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding-block: 18px; border-top: 1px solid var(--dv-line); font-size: 17px; line-height: 1.5; }
+.dv-groups > div { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding-block: 18px; border-top: 1px solid var(--dv-line); font-size: 18px; line-height: 1.5; }
 .dv-groups dt { font-weight: 700; }
 .dv-groups dd { margin: 0; color: var(--dv-muted); font-weight: 500; }
 .dv-boards { padding-top: 0; }
@@ -2203,7 +2203,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-stages-head, .dv-stage-row { display: grid; grid-template-columns: 120px minmax(0, 1fr) 56px minmax(0, 1fr); align-items: center; }
 .dv-stages-head span { padding-left: 28px; color: var(--dv-muted); font-size: 16px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .dv-stage-row strong { font-size: 16px; font-weight: 700; line-height: 1.45; }
-.dv-stage-box { display: flex; align-items: center; min-height: 73px; padding: 20px 28px; border-radius: 14px; background: var(--dv-alt); font-size: 17px; font-weight: 500; line-height: 1.45; }
+.dv-stage-box { display: flex; align-items: center; min-height: 73px; padding: 20px 28px; border-radius: 14px; background: var(--dv-alt); font-size: 18px; font-weight: 500; line-height: 1.45; }
 .dv-stage-gap { background: var(--dv-tint-alert); color: var(--dv-alert); font-weight: 600; }
 .dv-stage-arrow { color: var(--dv-arrow); font-size: 22px; font-weight: 700; text-align: center; }
 .dv-photo img { aspect-ratio: 700 / 421; object-fit: cover; }
@@ -2313,7 +2313,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 24px; }
 .dv-scores li { display: flex; align-items: center; gap: 20px; }
 .dv-scores li > div:last-child { display: flex; flex-direction: column; gap: 4px; font-size: 16px; font-weight: 500; line-height: 1.4; color: var(--dv-muted); }
-.dv-scores strong { color: var(--dv-ink); font-size: 17px; font-weight: 700; }
+.dv-scores strong { color: var(--dv-ink); font-size: 18px; font-weight: 700; }
 .dv-scores [data-missed] { color: var(--dv-alert); }
 .dv-donut { position: relative; flex-shrink: 0; width: 120px; height: 120px; }
 .dv-donut-ring { display: block; width: 100%; height: 100%; }
@@ -2673,7 +2673,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .case-study[data-skin="dv"] .case-findings-card { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 28px 28px 32px; border: 0; border-radius: 12px; background: var(--dv-alt); }
 .case-study[data-skin="dv"] .case-content .case-findings-card .case-findings-label { margin: 0 0 4px; color: var(--case-accent); font-family: inherit; font-size: 16px; font-weight: 700; line-height: 1.35; letter-spacing: 0.03em; text-transform: uppercase; }
 .case-study[data-skin="dv"] .case-content .case-findings-card h3 { margin: 0; font-size: clamp(20px, 1.8vw, 24px); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
-.case-study[data-skin="dv"] .case-content .case-findings-card :is(p, li) { margin: 0; color: var(--muted); font-size: 17px; font-weight: 500; line-height: 1.5; }
+.case-study[data-skin="dv"] .case-content .case-findings-card :is(p, li) { margin: 0; color: var(--muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .case-study[data-skin="dv"] .case-findings-card ul { margin: 0; padding-left: 18px; list-style: disc; }
 .case-study[data-skin="dv"] .case-key { max-width: 960px; margin: 56px 0 0; font-size: clamp(24px, 2.4vw, 32px); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; }
 .case-study[data-skin="dv"] .case-key strong { color: var(--case-accent); font-weight: 700; }
@@ -2681,11 +2681,11 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .case-study[data-skin="dv"] .case-stats dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin: 0; }
 .case-study[data-skin="dv"] .case-stats dl > div { display: flex; flex-direction: column; gap: 6px; padding: 0; border: 0; background: none; }
 .case-study[data-skin="dv"] .case-stats dd { order: -1; margin: 0; font-size: 44px; font-weight: 700; line-height: 1.2; }
-.case-study[data-skin="dv"] .case-stats dt { max-width: 500px; color: var(--muted); font-size: 17px; font-weight: 500; line-height: 1.5; }
+.case-study[data-skin="dv"] .case-stats dt { max-width: 500px; color: var(--muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 .case-study[data-skin="dv"] .case-stats cite, .case-study[data-skin="dv"] .case-stats figcaption { color: var(--muted); font-style: normal; font-size: 16px; line-height: 1.4; }
 .case-study[data-skin="dv"] .case-compare { margin: 40px 0 0; }
 .case-study[data-skin="dv"] .case-compare-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 10px; border: 0; }
-.case-study[data-skin="dv"] .case-compare-row span { display: block; padding: 20px 28px; border-radius: 14px; background: var(--dv-alt); color: var(--ink); font-size: 17px; font-weight: 500; line-height: 1.45; }
+.case-study[data-skin="dv"] .case-compare-row span { display: block; padding: 20px 28px; border-radius: 14px; background: var(--dv-alt); color: var(--ink); font-size: 18px; font-weight: 500; line-height: 1.45; }
 .case-study[data-skin="dv"] .case-compare-row span:last-child { background: var(--dv-tint); color: var(--case-accent); font-weight: 600; }
 .case-study[data-skin="dv"] .case-compare-head span, .case-study[data-skin="dv"] .case-compare-head span:last-child { padding: 0 28px 4px; background: none; color: var(--muted); font-size: 16px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .case-study[data-skin="dv"] .case-compare-row em { display: block; margin-bottom: 6px; color: var(--muted); font-size: 16px; font-style: normal; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
@@ -4568,10 +4568,9 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 
 /* Discover: the scale in one line, a block per method, each leading with its finding, large. */
 .dv-insights-scale { color: var(--dv-muted); font-size: 18px; line-height: 1.5; }
-.dv-insights .dv-block > .dv-finding, .dv-interview-result .dv-finding { max-width: 22em; font-size: clamp(26px, 2.8vw, 36px); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; word-break: keep-all; }
 .dv-insight-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px clamp(32px, 5vw, 72px); margin-top: 40px; }
 .dv-insight-stat { display: flex; align-items: center; gap: 24px; }
-.dv-insight-stat strong { flex: none; color: var(--case-accent); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1; }
+.dv-insight-stat strong { flex: none; color: var(--case-accent); line-height: 1; }
 .dv-insight-stat span { color: var(--dv-ink); font-size: 18px; line-height: 1.45; word-break: keep-all; }
 .dv-insight-tag { margin-top: 16px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
 .dv-insight-voices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 40px); margin: 16px 0 0; padding: 0; list-style: none; }
@@ -4599,3 +4598,23 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 @media (max-width: 47.99rem) {
   .dv-asks li { grid-template-columns: 28px minmax(0, 1fr); padding-block: 16px; }
 }
+
+/* One type scale for the case body (loaded last on purpose). Display 64 Light for stage
+   titles and key numbers; statement 36 Regular; heading 28 Medium for what a block found;
+   item 20 Medium; body 18 Regular; meta 16. Weights: 300, 400, 500 only. */
+.case-study .dv { --t-display: clamp(40px, 4.5vw, 64px); --t-statement: clamp(26px, 2.6vw, 36px); --t-heading: clamp(22px, 2vw, 28px); --t-item: clamp(18px, 1.5vw, 20px); }
+.case-study .dv :is(strong, b, dt, th) { font-weight: 500; }
+.case-study .dv .dv-funnel strong { font-weight: 300; }
+.case-study .dv :is(.dv-section-title, .dv-insight-stat strong, .dv-stat strong) { font-size: var(--t-display); font-weight: 300; }
+.case-study .dv :is(.dv-headline, .dv-hmw-question, .dv-bar-value) { font-size: var(--t-statement); font-weight: 400; line-height: 1.3; }
+.case-study .dv :is(.dv-finding, .dv-block-title, .dv-answer, .dv-glance-title, .dv-ut-result p:last-child, .dv-dropped b, .dv-dropped s) { font-size: var(--t-heading); font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; word-break: keep-all; }
+.case-study .dv :is(.dv-dots-detail blockquote) { font-size: var(--t-heading); font-weight: 400; line-height: 1.35; }
+.case-study .dv :is(h4, .dv-insight-voices strong, .dv-asks li, .dv-dots-problem, .dv-cast-quote, .dv-iter-name, .dv-scenarios strong, .dv-meet li strong, .dv-vpc-title, .dv-bar-label strong, .dv-point-title, .dv-persona-name, .dv-summary) { font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
+.case-study .dv :is(.dv-body, .dv-lead, .dv-flow p, .dv-insights-scale, .dv-insight-stat span, .dv-iter-why, .dv-iter-side figcaption, .dv-vpc-pair span, .dv-reel-solves span, .dv-aff blockquote, .dv-dots-detail figcaption ~ *) { font-size: 18px; font-weight: 400; line-height: 1.55; }
+.case-study .dv :is(.dv-lead strong) { font-weight: 500; }
+.case-study .dv :is(.dv-glance-label, .dv-flow-stage, .dv-reel-name b, .dv-aff-who, .dv-goal-lines b, .dv-meet li b, .dv-dots-answer b, .dv-dots-detail figcaption, .dv-ut-result p:first-child, .dv-vpc-pair b, .dv-tool-gaps thead th, .dv-caps, .dv-method) { font-size: 16px; font-weight: 500; }
+.devsign-hero-details dt, .devsign-hero-details dd { font-weight: 500; }
+.devsign-hero-details dd { font-size: 18px; font-weight: 400; }
+.case-study .dv .dv-tool-gaps td[data-gap] { font-size: 18px; font-weight: 500; }
+.case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); font-weight: 400; line-height: 1.3; }
+.case-study .more-work .more-work-label { font-weight: 500; }
