@@ -138,7 +138,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <Fragment key={p.slug}>
             {/* A pointer shortcut only: the backdrop is aria-hidden and the pills are the real controls. */}
             <div className="home-device" data-project={p.slug} data-active={previewed?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
-              {p.slug === "workflow-app"
+              {p.slug === "devsign"
                 ? <div className="home-device-window"><DevsignLoop alt="" /></div>
                 : p.slug === "gemini-privacy"
                   ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>

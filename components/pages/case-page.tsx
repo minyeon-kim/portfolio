@@ -30,7 +30,7 @@ export async function CasePage({ slug, locale = "en" }: { slug: string; locale?:
         <header className="project-hero devsign-hero-page">
           <DevsignHero hero={meta.hero} name={meta.short ?? meta.title} project={slug} alt={slug === "gemini-privacy" ? `${meta.short ?? meta.title}: the Source badge opens a sheet where Gmail is switched off, and the line about Jeongmin leaves the answer` : `${meta.short ?? meta.title}: a drifted Place order button is flagged, the review panel opens, and the designer approves the fix`} />
         </header>
-      ) : <ProjectHero locale={locale} gemini={slug === "gemini-privacy"} canvas={slug === "workflow-app"} name={meta.short ?? meta.title} role={meta.role} timeline={meta.timeline} cover={meta.cover} concept={meta.concept} keywords={meta.keywords} />}
+      ) : <ProjectHero locale={locale} gemini={slug === "gemini-privacy"} canvas={slug === "devsign"} name={meta.short ?? meta.title} role={meta.role} timeline={meta.timeline} cover={meta.cover} concept={meta.concept} keywords={meta.keywords} />}
       <div id="case-body">
         <CaseBody meta={meta} Content={Content} others={others.map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title, description: c.meta.hook ?? c.tldr.problem, cover: c.meta.cover }))} />
       </div>

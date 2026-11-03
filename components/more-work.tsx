@@ -60,7 +60,7 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
   const total = items.length;
   // 0 front, 1 right, 2 left, further cards wait hidden behind the front one.
   const rank = (i: number) => (i - front + total) % total;
-  const variant = (slug: string) => (slug === "workflow-app" ? "devsign" : slug === "gemini-privacy" ? "gemini" : undefined);
+  const variant = (slug: string) => (slug === "devsign" ? "devsign" : slug === "gemini-privacy" ? "gemini" : undefined);
   const current = items[front];
 
   return (
@@ -77,7 +77,7 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
             <span className="more-work-cover" data-project={item.slug}>
               {item.slug === "gemini-privacy"
                 ? <span className="more-work-phone"><GeminiPhone alt="" /></span>
-                : item.slug === "workflow-app"
+                : item.slug === "devsign"
                   ? <span className="more-work-app"><DevsignLoop alt="" /></span>
                   : item.cover && <Image src={withBase(item.cover)} alt="" fill sizes="(min-width: 48rem) 400px, 70vw" className="object-contain" />}
             </span>

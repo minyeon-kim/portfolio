@@ -79,7 +79,7 @@ export const ui = {
     askAnother: "Ask another",
     questions: "Questions",
     homeQuestions: [
-      { q: "Which project went deepest on research?", slug: "workflow-app", answer: "Devsign. Four 60-minute interviews, 201 quotes sorted into four problems, then a usability test and a co-design session." },
+      { q: "Which project went deepest on research?", slug: "devsign", answer: "Devsign. Four 60-minute interviews, 201 quotes sorted into four problems, then a usability test and a co-design session." },
       { q: "How do you handle privacy in AI products?", slug: "gemini-privacy", answer: "Gemini privacy revamp. Gemini pulls Gmail, Calendar and Photos into answers; the concept shows where each detail came from and lets you switch a source off from the answer itself." },
       { q: "Why move from security to design?", slug: "about", answer: "Four years as a security consultant at SK shieldus, then design. The About page tells that story." },
     ],
@@ -159,7 +159,7 @@ export const ui = {
     askAnother: "다른 질문",
     questions: "질문",
     homeQuestions: [
-      { q: "리서치를 가장 깊게 한 프로젝트는?", slug: "workflow-app", answer: "Devsign. 60분 인터뷰 4회, 발화 201개를 네 가지 문제로 묶고, 사용성 테스트와 코디자인 세션까지 진행했습니다." },
+      { q: "리서치를 가장 깊게 한 프로젝트는?", slug: "devsign", answer: "Devsign. 60분 인터뷰 4회, 발화 201개를 네 가지 문제로 묶고, 사용성 테스트와 코디자인 세션까지 진행했습니다." },
       { q: "AI 제품에서 프라이버시는 어떻게 다뤘나요?", slug: "gemini-privacy", answer: "Gemini privacy revamp. Gemini는 Gmail·캘린더·사진을 답변에 끌어오는데, 각 정보의 출처를 보여 주고 답변에서 바로 끌 수 있게 한 콘셉트입니다." },
       { q: "보안에서 디자인으로 옮긴 이유는?", slug: "about", answer: "SK shieldus에서 보안 컨설턴트로 4년, 그다음 디자인. 그 이야기는 소개 페이지에 있습니다." },
     ],

@@ -1398,7 +1398,7 @@ html, body, main { overflow-anchor: none; }
   transition: background-color 200ms ease, box-shadow 200ms ease;
 }
 .project-suggestion[data-suggestion="gemini-privacy"] { --suggestion-accent: var(--accent); }
-.project-suggestion[data-suggestion="workflow-app"] { --suggestion-accent: var(--devsign-title); }
+.project-suggestion[data-suggestion="devsign"] { --suggestion-accent: var(--devsign-title); }
 .project-suggestion[data-suggestion] {
   background: color-mix(in srgb, var(--suggestion-accent) 3%, transparent);
   font-weight: 500;
@@ -1532,7 +1532,7 @@ html, body, main { overflow-anchor: none; }
 .more-work-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .more-work-cover { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; border-radius: 24px; background: color-mix(in srgb, var(--ink) 7%, var(--bg)); }
 .more-work-cover[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 30%, rgb(66 133 244 / 0.28), transparent 70%), radial-gradient(55% 45% at 75% 75%, rgb(167 139 250 / 0.24), transparent 70%), #0C0F16; }
-.more-work-cover[data-project="workflow-app"] { background: #E9ECEA; }
+.more-work-cover[data-project="devsign"] { background: #E9ECEA; }
 .more-work-card:not([data-rank="0"]) .more-work-cover::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 28%, transparent); transition: opacity 250ms ease; }
 .more-work-card:not([data-rank="0"]) .more-work-hit:is(:hover, :focus-visible) .more-work-cover::after { opacity: 0; }
 .more-work-caption { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: clamp(16px, 2vw, 28px); }
@@ -1819,7 +1819,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .intro-showcase-card { position: relative; aspect-ratio: 20 / 21; overflow: hidden; border-radius: 24px; background: color-mix(in srgb, var(--ink) 6%, transparent); isolation: isolate; }
 .intro-showcase-slide { position: absolute; inset: 0; transition: transform 900ms var(--ease), opacity 700ms ease, filter 700ms ease; }
 .intro-showcase-slide[data-project="gemini-privacy"] { background: radial-gradient(60% 50% at 30% 30%, rgb(66 133 244 / 0.28), transparent 70%), radial-gradient(55% 45% at 75% 75%, rgb(167 139 250 / 0.24), transparent 70%), #0C0F16; }
-.intro-showcase-slide[data-project="workflow-app"] { background: #E9ECEA; }
+.intro-showcase-slide[data-project="devsign"] { background: #E9ECEA; }
 .intro-showcase-slide[data-project="profile"] { background: color-mix(in srgb, var(--ink) 8%, var(--intro-canvas, var(--bg))); }
 .intro-showcase-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; text-align: center; color: var(--ink); font: 13px/1.4 var(--font-mono); }
 .intro-showcase-placeholder span { max-width: 24ch; color: var(--muted); font-family: var(--font-geist-sans), sans-serif; }
@@ -1993,7 +1993,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .more-work-app { position: absolute; top: 0; bottom: 0; left: -66%; aspect-ratio: 16 / 10; pointer-events: none; }
 .more-work-app .devsign-loop { height: 100%; width: auto; aspect-ratio: 16 / 10; border-radius: 0; border: 0; box-shadow: none; }
 .more-work-app .devsign-loop > img { height: 100%; width: 100%; object-fit: cover; }
-.more-work-cover[data-project="workflow-app"] { background: #141414; }
+.more-work-cover[data-project="devsign"] { background: #141414; }
 .more-work-cover[data-project="gemini-privacy"] { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); }
 
 /* Smart header: sticky at every width, slides away while scrolling down and
@@ -2510,7 +2510,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .home-world { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
 .home-world[data-active] { opacity: 1; }
 /* The worlds keep only their glows: the points take each case's form underneath (HeroObject). */
-.home-world[data-project="workflow-app"] { background: radial-gradient(60% 55% at 70% 30%, rgb(91 63 214 / 0.22), transparent 70%); }
+.home-world[data-project="devsign"] { background: radial-gradient(60% 55% at 70% 30%, rgb(91 63 214 / 0.22), transparent 70%); }
 .home-world[data-project="gemini-privacy"] { background: radial-gradient(60% 55% at 72% 24%, rgb(66 133 244 / 0.24), transparent 70%), radial-gradient(55% 50% at 28% 82%, rgb(167 139 250 / 0.18), transparent 70%); }
 .home-world[data-project="about"] { background: radial-gradient(60% 55% at 70% 28%, rgb(202 215 228 / 0.1), transparent 70%), radial-gradient(50% 50% at 24% 82%, rgb(128 112 183 / 0.14), transparent 70%); }
 .home-backdrop .home-object { transition: opacity 700ms ease; }
@@ -2525,8 +2525,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-world-role { --stagger: 60ms; left: 50%; top: 23%; translate: -50% 16px; font-size: 16px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
 .home-world-role[data-on] { translate: -50% 0; }
 /* Devsign: the role sits just above the name, clear of the card at the top right. */
-.home-stage[data-world="workflow-app"] .home-world-role { left: 26%; top: auto; bottom: calc(40% + 16px); translate: 0 16px; }
-.home-stage[data-world="workflow-app"] .home-world-role[data-on] { translate: 0 0; }
+.home-stage[data-world="devsign"] .home-world-role { left: 26%; top: auto; bottom: calc(40% + 16px); translate: 0 16px; }
+.home-stage[data-world="devsign"] .home-world-role[data-on] { translate: 0 0; }
 .home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-display), var(--font-sans); font-size: clamp(56px, 7vw, 128px); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; text-wrap: balance; }
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 16px; font-weight: 500; line-height: 1.55; }
 /* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
@@ -2555,13 +2555,13 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 22px); transition: opacity 300ms ease, translate 800ms var(--ease-out-soft), clip-path 800ms var(--ease-out-soft); }
 /* The cards sit above the backdrop's vignette, so the light theme's pale edge never washes over them. */
 .home-backdrop .home-device, .home-backdrop .home-device-caption { z-index: 1; }
-.home-device[data-project="workflow-app"] { translate: 0 0; clip-path: inset(0 0 0 100% round 22px); }
-.home-device[data-project="workflow-app"][data-active] { clip-path: inset(0 0 0 0 round 22px); }
+.home-device[data-project="devsign"] { translate: 0 0; clip-path: inset(0 0 0 100% round 22px); }
+.home-device[data-project="devsign"][data-active] { clip-path: inset(0 0 0 0 round 22px); }
 .home-device > * { scale: 1.12; transition: scale 500ms var(--ease-out-soft); }
 .home-device[data-active] > * { scale: 1; transition: scale 1000ms var(--ease-out-soft); }
 /* The cards sit on the case's own colour plate, the screen set into it (after lusion.co/work). */
-.home-device[data-project="workflow-app"] { background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
-.home-device[data-project="workflow-app"] .home-device-window { inset: 9% 7% -6% 7%; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
+.home-device[data-project="devsign"] { background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
+.home-device[data-project="devsign"] .home-device-window { inset: 9% 7% -6% 7%; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
 .home-device[data-project="gemini-privacy"] { background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
 .home-device[data-project="gemini-privacy"] .home-device-phone { background: none; }
 /* Its caption: a black block overlapping a corner of the card. */
@@ -2572,7 +2572,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-device-caption-meta > span:last-child { color: #fff; font-size: 20px; line-height: 1; }
 @media (min-width: 64rem) {
   .home-device-caption { display: block; }
-  .home-device-caption[data-project="workflow-app"] { right: calc(var(--project-text-inset) + var(--picks-gutter)); top: calc(14% + min(40vw, 620px) * 0.625 - 72px); }
+  .home-device-caption[data-project="devsign"] { right: calc(var(--project-text-inset) + var(--picks-gutter)); top: calc(14% + min(40vw, 620px) * 0.625 - 72px); }
   .home-device-caption[data-project="gemini-privacy"] { right: calc(min(34vw, 520px) - 2vw - 110px); bottom: 12vh; }
 }
 .home-device-window { position: absolute; inset: 0; display: flex; flex-direction: column; }
@@ -3540,7 +3540,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero-actions a:hover { background: color-mix(in srgb, var(--dh-ink) 14%, transparent); }
 .devsign-hero-actions a[data-primary] { background: var(--case-accent, var(--dh-glow)); color: light-dark(#ffffff, #120f24); }
 .devsign-hero-actions a[data-primary]:hover { background: color-mix(in srgb, var(--case-accent, var(--dh-glow)) 86%, light-dark(#000, #fff)); }
-.devsign-hero[data-project="workflow-app"] { --case-accent: var(--devsign-title); }
+.devsign-hero[data-project="devsign"] { --case-accent: var(--devsign-title); }
 .devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #8ab4f8); }
 .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1200px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
 .devsign-hero-panel .devsign-hero-media .devsign-loop { margin-top: 0; }
@@ -4411,8 +4411,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (min-width: 48rem) { .dv-demo-tip { width: min(340px, var(--tw)); } }
 
 /* Case opener backdrop: the product's dot canvas, live cursors (HeroCanvas) and a light rising from behind the product. About keeps its own panel. */
-.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) { --dh-dot: light-dark(color-mix(in srgb, var(--dh-glow) 34%, transparent), color-mix(in srgb, var(--dh-glow-2) 30%, transparent)); }
-.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) .devsign-hero-panel { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(circle at 12px 12px, var(--dh-dot) 1px, transparent 1.5px); background-size: 24px 24px; background-repeat: repeat; }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) { --dh-dot: light-dark(color-mix(in srgb, var(--dh-glow) 34%, transparent), color-mix(in srgb, var(--dh-glow-2) 30%, transparent)); }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(circle at 12px 12px, var(--dh-dot) 1px, transparent 1.5px); background-size: 24px 24px; background-repeat: repeat; }
 .hero-canvas { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; color: light-dark(var(--dh-glow), var(--dh-glow-2)); }
 .hero-cursor { position: absolute; top: 0; left: 0; display: none; align-items: flex-start; will-change: transform; }
@@ -4422,7 +4422,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (min-width: 64rem) and (hover: hover) { .hero-cursor { display: flex; } }
 .devsign-hero-glow { position: relative; z-index: -1; height: 0; pointer-events: none; }
 .devsign-hero-glow::before { content: ""; position: absolute; left: 50%; bottom: calc(-1 * clamp(40px, 6svh, 64px) - 96px); width: min(100%, 1200px); height: 460px; translate: -50% 0; background: radial-gradient(50% 60% at 50% 72%, color-mix(in srgb, var(--dh-glow) light-dark(26%, 62%), transparent), transparent 76%); }
-.devsign-hero:is([data-project="workflow-app"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
 @media (max-width: 63.99rem) { .devsign-hero-glow::before { height: 300px; } }
 /* Affinity as a pinned scene: the track gives the scroll length, the stage stays on screen. */
 .dv-dots-track { display: none; }
@@ -4572,3 +4572,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-tool-gaps tbody tr td[data-gap], .dv-tool-gaps tbody tr:last-child td[data-gap] { margin-top: 12px; padding: 16px; border-radius: var(--dv-card-radius); }
   .dv-tool-gaps td[data-gap]::before { content: attr(data-label); display: block; margin-bottom: 4px; color: #fff; font-size: 16px; font-weight: 600; }
 }
+
+/* The interview ends on what it found, after why it ran, what was asked and who was in it. */
+.dv-interview-result { margin-top: clamp(40px, 5vw, 64px); }
+.dv-interview-result .dv-finding { margin-top: 8px; }

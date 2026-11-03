@@ -7,7 +7,7 @@ import { withBase } from "@/lib/site";
 // Fix · Verify with the before and after side by side. Positions are
 // percentages of the 1440x900 capture (hero-base.webp).
 export function DevsignLoop({ alt }: { alt: string }) {
-  const dir = "/images/cases/workflow-app";
+  const dir = "/images/cases/devsign";
   return (
     <div className="devsign-loop" role="img" aria-label={alt}>
       <Image src={withBase(`${dir}/hero-base.webp`)} alt="" width={1920} height={1200} sizes="(max-width: 767px) 100vw, 1280px" preload />
