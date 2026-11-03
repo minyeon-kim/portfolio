@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame, UsabilityResults } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -417,21 +417,22 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </ZoomFrame>
             <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
           </figure>
-          {/* One sentence per problem and one thing someone said, in one view. */}
-          <table className="dv-found dv-gap-40 reveal">
-            <thead>
-              <tr>{define.affinity.foundLabels.map((label: string) => <th key={label} scope="col">{label}</th>)}</tr>
-            </thead>
-            <tbody>
-              {define.affinity.found.map(([finding, quote, who]: [string, string, string], i: number) => (
-                <tr key={finding}>
-                  <th scope="row">{finding}</th>
-                  <td><blockquote>“{quote}”</blockquote><p>{who}</p></td>
-                  <td data-label={define.affinity.foundLabels[2]}>{develop.selection?.items.find((pick: { problem: string }) => pick.problem === define.problems.items[i].title)?.feature}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        </div>
+
+        <div className="dv-subsection">
+          <Block {...define.problems} ff={ff} />
+          <ProblemPanels
+            answeredBy={develop.selection?.answeredBy}
+            items={define.problems.items.map((item: Study, index: number) => ({
+              title: item.title,
+              body: item.body,
+              role: item.role,
+              tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
+              quote: define.affinity.found[index][1],
+              who: define.affinity.found[index][2],
+              feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
+            }))}
+          />
         </div>
 
         {/* Where it breaks first (the journey and its two low points), then who. */}

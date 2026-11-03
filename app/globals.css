@@ -4814,3 +4814,29 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
     .dv-flow > li:nth-child(4) p { animation-range: cover 46% cover 64%; }
   }
 }
+
+/* Key problems: a horizontal accordion, one panel open. Stacked and all open below 64rem. */
+.dv-panels { display: flex; gap: 12px; height: 440px; margin-inline: 0; padding: 0; list-style: none; container-type: inline-size; }
+.dv-panels > li { position: relative; display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 70%); transition: flex-grow 450ms var(--ease), border-color 250ms var(--ease); }
+.dv-panels > li[data-on] { flex-grow: 2.6; border-color: color-mix(in srgb, var(--tone) 55%, transparent); }
+.dv-panels button { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 0; padding: 24px 24px 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.dv-panels button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: -4px; border-radius: var(--dv-card-radius); }
+.dv-panel-who { display: flex; flex-wrap: wrap; gap: 2px 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-panel-who b { color: var(--tone); font-weight: 500; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-panels h4 { color: var(--dv-ink); font-size: clamp(20px, 1.9vw, 28px); font-weight: 500; line-height: 1.25; word-break: keep-all; text-wrap: balance; }
+.dv-panel-more { display: grid; grid-template-rows: 0fr; padding: 0 24px 24px; opacity: 0; transition: grid-template-rows 450ms var(--ease), opacity 250ms var(--ease); }
+.dv-panels > li[data-on] .dv-panel-more { grid-template-rows: 1fr; opacity: 1; transition-delay: 0ms, 150ms; }
+.dv-panel-more > div { width: calc(46cqw - 60px); min-height: 0; overflow: hidden; }
+.dv-panel-more p { margin: 12px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
+.dv-panel-more blockquote { margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
+.dv-panel-more cite { display: block; margin-top: 6px; color: var(--dv-muted); font-size: 16px; font-style: normal; font-weight: 500; }
+.dv-panel-more .dv-panel-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 16px; font-size: 16px; font-weight: 500; }
+.dv-panel-answer b { color: var(--case-accent); font-weight: 500; }
+@media (max-width: 63.99rem) {
+  .dv-panels { flex-direction: column; height: auto; }
+  .dv-panels > li { flex: none; }
+  .dv-panels button { cursor: default; gap: 12px; }
+  .dv-panel-more { grid-template-rows: 1fr; opacity: 1; }
+  .dv-panel-more > div { width: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
