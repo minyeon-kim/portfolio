@@ -4622,17 +4622,11 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-found-pair td:last-child::before { display: none; }
 
 /* Magnifier on dense boards: overflow clip, not hidden, so the scroll-driven motion inside keeps the page as its scroller. */
-.dv-zoom-frame { position: relative; display: block; overflow: clip; border-radius: var(--dv-card-radius); color: inherit; }
-@media (hover: hover) and (pointer: fine) { .dv-zoom-frame { cursor: zoom-in; } }
-.dv-zoom-inner { transform-origin: var(--zx, 50%) var(--zy, 50%); transition: transform 250ms var(--ease); }
-.dv-zoom-frame[data-on] .dv-zoom-inner { transform: scale(var(--zs, 3)); }
-.dv-zoom-frame:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; }
-.dv-zoom-hint { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 999px; background: rgb(14 17 17 / 0.72); color: #fff; font-size: 16px; font-weight: 500; line-height: 1.3; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: opacity 250ms var(--ease); pointer-events: none; }
-.dv-zoom-frame[data-on] .dv-zoom-hint { opacity: 0; }
-@media (hover: none) { .dv-zoom-hint { display: none; } }
-@media (prefers-reduced-motion: reduce) { .dv-zoom-inner, .dv-zoom-hint { transition: none; } }
-/* A scroll-driven animation keeps the image on its own layer at 1x, which blurs it under the magnifier. */
-.dv-zoom-frame[data-on] img { animation: none !important; }
+.dv-open-frame { position: relative; display: block; overflow: clip; border-radius: var(--dv-card-radius); color: inherit; }
+.dv-open-frame:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; }
+.dv-open-hint { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 999px; background: rgb(14 17 17 / 0.72); color: #fff; font-size: 16px; font-weight: 500; line-height: 1.3; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color 150ms var(--ease); }
+.dv-open-frame:hover .dv-open-hint, .dv-open-frame:focus-visible .dv-open-hint { background: rgb(14 17 17 / 0.92); }
+@media (prefers-reduced-motion: reduce) { .dv-open-hint { transition: none; } }
 
 /* Room inside a block: what a block found sits further from what proves it. */
 .dv-ut-scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 40px; margin: 72px 0 0; padding: 0; list-style: none; }
@@ -4823,4 +4817,39 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-panels-track::after { content: ""; display: block; height: calc((var(--n) - 1) * 60svh); }
   .dv-panels-stage { position: sticky; top: var(--stage-top, 80px); }
+}
+
+/* Affinity board as a map: pick a theme, its column lights, its words appear below. Nothing scales. */
+.dv-aff-tabs { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-bottom: 12px; padding-inline: 0.8%; }
+.dv-aff-tabs button { position: relative; padding: 8px 0 10px; border: 0; background: none; color: var(--dv-muted); font: inherit; font-size: 16px; font-weight: 500; line-height: 1.3; text-align: left; transition: color 150ms var(--ease); }
+.dv-aff-tabs button:hover { color: var(--dv-ink); }
+.dv-aff-tabs button[aria-selected="true"] { color: var(--dv-ink); }
+.dv-aff-tabs button::after { content: ""; position: absolute; left: 0; right: 16px; bottom: 0; height: 2px; background: var(--case-accent); opacity: 0; transition: opacity 250ms var(--ease); }
+.dv-aff-tabs button[aria-selected="true"]::after { opacity: 1; }
+.dv-aff-tabs button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; border-radius: 4px; }
+.dv-aff-frame { position: relative; overflow: hidden; border-radius: var(--dv-card-radius); line-height: 0; }
+.dv-board .dv-aff-frame img { display: block; width: 100%; height: auto; border-radius: 0; animation: none; }
+.dv-aff-spot { position: absolute; top: 0; bottom: 0; border-radius: 8px; box-shadow: inset 0 0 0 2px var(--case-accent), 0 0 0 100vmax color-mix(in srgb, var(--dv-bg, var(--bg)) 70%, transparent); pointer-events: none; transition: left 250ms var(--ease); }
+.dv-aff-reader { display: grid; margin-top: 32px; }
+.dv-aff-panel { grid-area: 1 / 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: clamp(32px, 4vw, 48px); align-items: start; opacity: 0; visibility: hidden; transition: opacity 250ms var(--ease), visibility 0s linear 250ms; }
+.dv-aff-panel[data-on] { opacity: 1; visibility: visible; transition: opacity 250ms var(--ease); }
+.case-study .dv .dv-aff-panel h4 { margin: 0; color: var(--case-accent); font-size: var(--t-item); font-weight: 500; line-height: 1.3; }
+.case-study .dv .dv-aff-panel p { margin: 8px 0 0; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.35; word-break: keep-all; }
+.dv-aff-panel ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.dv-aff-panel li { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 152px; padding: 16px; border-radius: 8px; background: var(--note); color: #10131a; font-size: 16px; line-height: 1.45; word-break: keep-all; }
+.dv-aff-panel li b { color: rgb(16 19 26 / 0.72); font-weight: 500; }
+@supports (animation-timeline: view()) {
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    .dv-aff-frame { animation: dv-board-in linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; transform-origin: center bottom; }
+  }
+}
+@media (prefers-reduced-motion: reduce) { .dv-aff-tabs button, .dv-aff-tabs button::after, .dv-aff-spot, .dv-aff-panel, .dv-aff-panel[data-on] { transition: none; } }
+/* Phones: no picking, every theme in a list under the plain board. */
+@media (max-width: 63.99rem) {
+  .dv-aff-tabs, .dv-aff-spot { display: none; }
+  .dv-aff-reader { gap: 40px; }
+  .dv-aff-panel { grid-area: auto; grid-template-columns: 1fr; gap: 16px; opacity: 1; visibility: visible; }
+  .dv-aff-panel ul { grid-template-columns: 1fr; gap: 8px; }
+  .dv-aff-panel li { min-height: 0; }
+  .case-study .dv .dv-aff-panel p { font-size: var(--t-item); }
 }
