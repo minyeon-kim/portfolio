@@ -3246,14 +3246,15 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    the statement, note and case pills sit together at the bottom right, so Work is
    one click from the first glance. */
 @media (min-width: 64rem) {
-  /* One block at the bottom right, flush to the page edge: statement, what to press
-     right under it, and the note as a quiet last line. */
-  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
+  /* Statement and what to press at the bottom right, flush to the page edge; the note
+     at the bottom left, in the spot a case's sentence takes on hover, sharing the
+     pills' bottom line. */
+  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr) auto auto; padding-bottom: 48px; }
   .home-tagline-wrap { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; justify-items: end; }
   .home-tagline { text-align: right; }
-  .home-note { grid-column: 2; grid-row: 4; justify-self: end; align-self: start; width: 36ch; max-width: 100%; text-align: right; }
+  .home-note { grid-column: 1; grid-row: 3; justify-self: start; align-self: end; width: 36ch; max-width: 100%; text-align: left; }
   .home-note:lang(ko) { width: 460px; }
-  .home-picks { position: static; translate: none; grid-column: 2; grid-row: 3; justify-self: end; align-self: start; }
+  .home-picks { position: static; translate: none; grid-column: 2; grid-row: 3; justify-self: end; align-self: end; }
   .home-picks ol { flex-direction: row; justify-content: flex-end; align-items: flex-start; }
   .home-pick { min-height: 52px; padding: 0 24px; font-size: 20px; }
   /* The pills hold the bottom right now, so a world's sentence takes the bottom left. */
