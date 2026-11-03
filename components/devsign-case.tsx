@@ -665,27 +665,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
         <div className="dv-gap-96">
           {/* With a `protocol`: the result first (finding, who and how much, the
-              scores, what they meant), then the scenarios. */}
+              scores, what they meant). */}
           {testing.usability.protocol ? <>
           <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          {/* Numbers and what they meant are one panel. Red only on the goal that was missed. */}
+          {/* Red only on the goal that was missed. */}
           <UsabilityResults scores={testing.usability.scores} meaning={testing.usability.result} />
-          {testing.usability.scenarios && (
-            <div className="dv-ut-scenarios reveal">
-              <p className="dv-caps">{testing.usability.scenariosLabel}</p>
-              <ol className="dv-ut-cards">
-                {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
-                  <li key={sc.task}>
-                    <strong>{sc.task}</strong>
-                    <span>{sc.role} · {sc.feature}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
           </> : <>
           <Block {...testing.usability} ff={ff} />
           <ul className="dv-plan dv-gap-40 reveal">
