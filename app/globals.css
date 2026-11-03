@@ -3410,7 +3410,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
     /* Statements light up top to bottom as they rise (Apple-style fill),
        full ink once they reach the middle of the screen; accent and muted
        spans keep their own colour. */
-    :is(.dv-headline, .dv-core-text, .dv-big-quote) {
+    :is(.dv-headline, .dv-core-text) {
       -webkit-text-fill-color: transparent;
       background: linear-gradient(to bottom, currentColor 35%, color-mix(in srgb, currentColor 22%, transparent) 65%) no-repeat 0 100% / 100% 300%;
       -webkit-background-clip: text; background-clip: text;
@@ -4227,10 +4227,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Tool table: no label in the corner. */
 
 /* Interview: questions light up with scroll, then the session wide, people credited under it. */
-.dv-asks .dv-caps { margin-bottom: 12px; }
-.dv-asks ol { margin: 0; padding: 0; list-style: none; }
-.dv-asks li { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: baseline; padding-block: 20px; border-top: 1px solid var(--dv-card-line); color: var(--dv-ink); font-size: clamp(20px, 2vw, 28px); font-weight: 500; line-height: 1.35; text-wrap: pretty; }
-.dv-asks b { color: var(--case-accent); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .dv-meet { margin: 56px 0 0; }
 .dv-meet-photo { position: relative; aspect-ratio: 2.2; overflow: hidden; border-radius: var(--dv-card-radius); background: #0c0c10; }
 .dv-meet-photo img { position: absolute; left: -14%; top: -18%; width: 128%; max-width: none; height: auto; }
@@ -4242,14 +4238,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (hover: hover) { .dv-meet ul:hover li:not(:hover) { opacity: 0.4; } }
 @supports (animation-timeline: view()) {
   @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-    .dv-asks li { animation: dv-lit linear both; animation-timeline: view(); animation-range: cover 22% cover 46%; }
     .dv-meet-photo { animation: dv-meet-grow linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
   }
 }
 @keyframes dv-lit { from { color: color-mix(in srgb, var(--dv-ink) 28%, transparent); } }
 @keyframes dv-meet-grow { from { clip-path: inset(0 14% round var(--dv-card-radius)); } to { clip-path: inset(0 round var(--dv-card-radius)); } }
 @media (max-width: 47.99rem) {
-  .dv-asks li { grid-template-columns: 28px minmax(0, 1fr); padding-block: 16px; }
   .dv-meet { margin-top: 40px; }
   .dv-meet-photo { aspect-ratio: 1.5; }
   .dv-meet-photo img { left: -14%; top: -8%; }
@@ -4571,28 +4565,24 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-tool-gaps td[data-gap]::before { content: attr(data-label); display: block; margin-bottom: 4px; color: #fff; font-size: 16px; font-weight: 600; }
 }
 
-/* The interview ends on what it found, after why it ran, what was asked and who was in it. */
-.dv-interview-result { margin-top: clamp(40px, 5vw, 64px); }
-.dv-interview-result .dv-finding { margin-top: 8px; }
 
-/* Secondary research, three sizes (Metalab's number rows, Figma's report quote, Linear's one board). */
-.dv-numbers > p:not(.dv-numbers-source) { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: center; padding-block: clamp(20px, 2vw, 28px); border-top: 1px solid var(--dv-line); }
-.dv-numbers strong { color: var(--dv-ink); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1; text-align: right; }
-.dv-numbers span { color: var(--dv-ink); font-size: 18px; line-height: 1.4; word-break: keep-all; }
-.dv-numbers-source { padding-top: 16px; border-top: 1px solid var(--dv-line); color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-big-quote-block { margin: clamp(64px, 7vw, 96px) 0 0; }
-.dv-big-quote { color: var(--dv-ink); font-size: clamp(28px, 3.2vw, 44px); font-weight: 400; letter-spacing: -0.02em; line-height: 1.25; word-break: keep-all; }
-.dv-big-quote-block figcaption { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-repeated { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: start; margin-top: clamp(64px, 7vw, 96px); }
-.dv-repeated-label { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
-.dv-repeated-label + .dv-caps { margin-top: 4px; }
-.dv-repeated ul { margin: 16px 0 0; padding: 0; list-style: none; }
-.dv-repeated li { padding-block: 16px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
-.dv-repeated-board { display: block; color: var(--case-accent); font-size: 16px; line-height: 1.5; }
-.dv-repeated-board img { display: block; width: 100%; height: auto; margin-bottom: 12px; border-radius: var(--dv-card-radius); transition: opacity 150ms var(--ease); }
-.dv-repeated-board:is(:hover, :focus-visible) img { opacity: 0.85; }
-@media (max-width: 63.99rem) {
-  .dv-numbers > p:not(.dv-numbers-source), .dv-repeated { grid-template-columns: 1fr; }
-  .dv-numbers > p:not(.dv-numbers-source) { gap: 12px; padding-block: 24px; }
-  .dv-numbers strong { text-align: left; }
-}
+/* Discover, by insight: a line of scale, then numbered statements with one piece of evidence each. */
+.dv-insights-scale { color: var(--dv-muted); font-size: 18px; line-height: 1.5; }
+.dv-insights ol { margin: 48px 0 0; padding: 0; list-style: none; counter-reset: dv-insight; }
+.dv-insights ol > li { position: relative; padding-block: clamp(48px, 5vw, 72px) 0; counter-increment: dv-insight; }
+.dv-insights ol > li + li { margin-top: clamp(64px, 7vw, 96px); }
+.dv-insights ol > li::before { content: counter(dv-insight); display: block; margin-bottom: 16px; color: var(--case-accent); font-size: 18px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-insights ol > li { border-top: 1px solid var(--dv-line); }
+.dv-insights h3 { max-width: 22em; color: var(--dv-ink); font-size: clamp(28px, 3vw, 40px); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; word-break: keep-all; }
+.dv-insight-stat { display: flex; align-items: center; gap: 24px; margin-top: 32px; }
+.dv-insight-stat strong { flex: none; color: var(--case-accent); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1; }
+.dv-insight-stat span { max-width: 18em; color: var(--dv-ink); font-size: 18px; line-height: 1.45; word-break: keep-all; }
+.dv-insight-quote { margin: 32px 0 0; }
+.dv-insight-quote blockquote { max-width: 38em; color: var(--dv-ink); font-size: 18px; line-height: 1.55; word-break: keep-all; }
+.dv-insight-quote figcaption { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-insights .dv-meet { margin-top: 40px; }
+.dv-insights .dv-meet-photo { max-width: 800px; }
+.dv-insights .dv-meet ul { max-width: 800px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dv-insights .dv-tool-gaps { margin-top: 32px; }
+.dv-insight-tag { margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (max-width: 47.99rem) { .dv-insight-stat { align-items: flex-start; flex-direction: column; gap: 12px; } }
