@@ -1106,4 +1106,7 @@ Devsign Overview Result card is short (owner: too complicated): "First test miss
 
 Co-design photo (codesign-session-blurred.webp, rebuilt from the original at 9ddf49d^, same crop): only Harbor Kim's face and name are blurred, plus the top bar name and the meeting code; Minyeon and 김다연 are shown (owner's call; supersedes "faces, names and the meeting code blurred"). Figma not updated.
 
+Iteration 2 pinned stage hugs its content (no 100svh box, no space above or below it): it pins centred on the screen (`--stage-top` from JS), and the scroll travel is a block after the stage (`.dv-iter::after`), since sticky cannot move into padding. The co-design photo sits 48px above it and has no parallax, so that gap stays put.
+
+
 Devsign interview block has surfaces (owner: too much plain text): research questions as three cards and participants as four cards in their role colour, 16px under the photo (`.dv-keyq li`, `.dv-meet li`; white in light, band card colour in dark). Still no numbers or rules. Figma not updated.
