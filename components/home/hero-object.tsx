@@ -12,6 +12,8 @@ import { useEffect, useRef } from "react";
 // - Gemini privacy revamp, blue: the Gemini sparkle
 // - Devsign, purple: the Devsign bolt, purple with a cyan edge
 // - About me, teal: a rolling landscape of dots under falling data
+// - portrait (on the way to About): the owner's photo, each grain sent to a spot
+//   sampled from it, exactly where the photo sits on the About page
 // A GPU simulation (WebGL 2, positions and velocities in float textures);
 // drawn at the screen's own resolution (DPR up to 2) so the finest dust is a
 // device pixel; 46,656 points simulated on desktop, 22,500 on phones, 45%
@@ -30,6 +32,7 @@ uniform float symbol;
 uniform float SIZE;
 uniform float lightTheme;  // 1 in the light theme
 uniform float focus;  // 0.85 on the landing galaxy, 1 while a case is hovered: the form gathers tighter
+uniform sampler2D portrait;  // per grain: its spot in the portrait (xyz) and how bright it is there (w)
 float h1(float n) { return fract(sin(n) * 43758.5453); }
 // An integer hash (PCG): sin() above loses precision for large n, which
 // leaves visible spokes when many points share an angle.
@@ -115,6 +118,7 @@ vec3 formOf(float n, vec2 uv) {
 }
 // Where each particle leans.
 vec3 homeOf(vec2 uv) {
+  if (symbol > 3.5) return texture(portrait, uv).xyz;
   return formOf(floor(uv.x * SIZE) + floor(uv.y * SIZE) * SIZE, uv);
 }
 // A swirling, divergence-free flow (ABC flow, two octaves).
@@ -197,12 +201,15 @@ const positionFragment = `#version 300 es
 precision highp float; in vec2 v; out vec4 o;
 ${common}
 ${view}
-uniform sampler2D pos; uniform sampler2D vel; uniform float dt; uniform vec3 shift; uniform float travelling;
+uniform sampler2D pos; uniform sampler2D vel; uniform float dt; uniform vec3 shift; uniform float travelling; uniform float catchUp;
 void main() {
   vec3 p = texture(pos, v).xyz + texture(vel, v).xyz * dt + shift;
   // Dust the camera flies past reappears at its place in the new form ahead,
   // so the form is waiting there when the camera arrives.
   if (travelling > 0.5 && 5.0 - (p.z + move.z) < 0.5) p = homeOf(v) + arrive;
+  // The portrait is timed by the clock, not the simulation, so it has formed by
+  // the time the photo arrives whatever the frame rate.
+  if (symbol > 3.5) p = mix(p, homeOf(v), catchUp);
   o = vec4(p, 1.0);
 }`;
 
@@ -210,6 +217,7 @@ const drawVertex = `#version 300 es
 precision highp float;
 uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
 uniform float keep;  // the share of the simulation drawn
+uniform float portraitMix; uniform sampler2D portrait;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
 out float vNear; out vec3 vTint; out float vSpec; out float vSpeed; out float vDepth; out float vSeed; out float vStar; out float vLight; out float vSize; out float vFaint; out float vFlake;
 ${view}
@@ -254,6 +262,9 @@ void main() {
   galaxyTint = mix(galaxyTint, lightArms, step(0.5, light));
   vTint = mix(vTint, galaxyTint, galaxy);
   vSpec = mix(vSpec, 0.8, galaxy);
+  // The portrait in one tone, so the face reads instead of colour bands.
+  vTint = mix(vTint, mix(vec3(0.8, 0.82, 1.0), vec3(0.22, 0.28, 0.95), step(0.5, light)), portraitMix);
+  vSpec = mix(vSpec, 0.85, portraitMix);
   vDepth = clamp((p.z + 2.0) / 4.0, 0.0, 1.0);
   vSeed = fract(sin(i * 12.9898) * 43758.5453);
   // Depth of field: dust nearer than the form's plane grows large, soft and
@@ -316,12 +327,14 @@ void main() {
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
-  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky);
+  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix);
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky);
   px = mix(mix(1.6, 2.4, vDepth), mix(4.0, 6.0, vDepth), flake) * dpr;
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
+  // The portrait: grains are brighter where the photo is.
+  vFaint *= mix(1.0, texture(portrait, uv).w, portraitMix);
   float tw = step(0.92, fract(vSeed * 37.7)) * step(0.5, light) * (1.0 - sky);
   float glint = tw * pow(0.5 + 0.5 * sin(time * mix(0.6, 1.4, fract(vSeed * 19.3)) + vSeed * 40.0), 14.0);
   vFaint *= 1.0 + glint * 3.0;
@@ -475,16 +488,20 @@ export const OBJECT_STATES: Record<string, { symbol: number; calm: number[]; fas
   "gemini-privacy": { symbol: 1, calm: [0.25, 0.45, 1.0], fast: [0.85, 0.92, 1.0], accent: [0.42, 0.72, 1.0] },
   "devsign": { symbol: 2, calm: [0.5, 0.3, 0.95], fast: [1.0, 0.75, 0.95], accent: [0.85, 0.45, 0.95] },
   about: { symbol: 3, calm: [0.15, 0.72, 0.64], fast: [0.75, 1.0, 0.9], accent: [0.3, 0.9, 0.8] },
+  portrait: { symbol: 4, calm: [0.62, 0.66, 1.0], fast: [0.9, 0.9, 1.0], accent: [0.7, 0.75, 1.0] },
 };
 
 // `active` false stops drawing after a short fade.
-export function HeroObject({ variant = "default", active = true, className }: { variant?: string; active?: boolean; className?: string }) {
+type Portrait = { image: HTMLImageElement; box: { left: number; top: number; width: number; height: number } };
+export function HeroObject({ variant = "default", active = true, portrait, className }: { variant?: string; active?: boolean; portrait?: Portrait | null; className?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const state = useRef(variant);
   useEffect(() => { state.current = variant; }, [variant]);
   const running = useRef(active);
   const idleSince = useRef<number | null>(null);
   useEffect(() => { running.current = active; idleSince.current = active ? null : performance.now(); }, [active]);
+  const buildPortrait = useRef<((next: Portrait) => void) | null>(null);
+  useEffect(() => { if (portrait) buildPortrait.current?.(portrait); }, [portrait]);
 
   useEffect(() => {
     const el = canvas.current;
@@ -525,6 +542,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       return { texture, framebuffer };
     };
     const P = [target(), target()], V = [target(), target()];
+    const portraitTarget = target();
+    el.dataset.live = "";
     const uniform = (p: WebGLProgram, name: string) => gl.getUniformLocation(p, name);
     const pass = (p: WebGLProgram, to: { framebuffer: WebGLFramebuffer }, setup: () => void) => {
       gl.useProgram(p);
@@ -603,10 +622,62 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       clear[0] = ((r.left - c.left) / c.width) * 2 - 1; clear[2] = ((r.right - c.left) / c.width) * 2 - 1;
       clear[1] = 1 - ((r.bottom - c.top) / c.height) * 2; clear[3] = 1 - ((r.top - c.top) / c.height) * 2;
     };
+    // Each grain's spot in the portrait: sampled from the photo (in the 4:5 crop
+    // the About page shows) so the dust is densest where it is bright on the dark
+    // page, or where it is dark on the light one; a few stay out as stars.
+    buildPortrait.current = ({ image, box }) => {
+      const W = 160, H = 200;
+      const c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      const ctx = c.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return;
+      const sw = image.naturalHeight * 0.8;
+      ctx.drawImage(image, (image.naturalWidth - sw) * 0.44, 0, sw, image.naturalHeight, 0, 0, W, H);
+      const pixels = ctx.getImageData(0, 0, W, H).data;
+      const dark = lightTarget === 0;
+      const shade = new Float32Array(W * H), weight = new Float32Array(W * H);
+      for (let i = 0; i < W * H; i++) {
+        const l = (pixels[i * 4] * 0.3 + pixels[i * 4 + 1] * 0.59 + pixels[i * 4 + 2] * 0.11) / 255;
+        const x = (i % W) / W, y = Math.floor(i / W) / H;
+        // Most of the dust goes to the face, then the person; the room stays a
+        // trace and fades out before the photo's edge, so there is no box.
+        const face = Math.exp(-((x - 0.48) ** 2) / 0.022 - ((y - 0.39) ** 2) / 0.022);
+        const person = Math.exp(-((x - 0.48) ** 2) / 0.09 - ((y - 0.6) ** 2) / 0.14);
+        const edge = Math.min(1, Math.min(x, 1 - x, y, 1 - y) / 0.12);
+        shade[i] = dark ? l : 1 - l;
+        weight[i] = Math.pow(shade[i], dark ? 3 : 1.6) * (0.1 * edge + 0.45 * person + 2.2 * face);
+      }
+      const peak = Math.max(...weight);
+      for (let i = 0; i < W * H; i++) weight[i] /= peak;
+      const rect = el.getBoundingClientRect();
+      const aspect = rect.width / rect.height, depth = 5 / 1.7;
+      const data = new Float32Array(SIZE * SIZE * 4);
+      for (let n = 0; n < SIZE * SIZE; n++) {
+        let u = Math.random(), v = Math.random(), bright = 0.5;
+        if (n % 8 === 0) {
+          // Stars round the photo.
+          u = 0.5 + (u - 0.5) * 2.6; v = 0.5 + (v - 0.5) * 1.5;
+        } else {
+          for (let t = 0; t < 80; t++) {
+            const i = Math.floor(v * H) * W + Math.floor(u * W);
+            bright = 0.35 + shade[i] * 1.1;
+            if (Math.random() < weight[i]) break;
+            u = Math.random(); v = Math.random();
+          }
+        }
+        const sx = ((box.left + u * box.width - rect.left) / rect.width) * 2 - 1;
+        const sy = 1 - ((box.top + v * box.height - rect.top) / rect.height) * 2;
+        data.set([sx * aspect * depth, sy * depth, (Math.random() - 0.5) * 0.03, bright], n * 4);
+      }
+      gl.bindTexture(gl.TEXTURE_2D, portraitTarget.texture);
+      gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, SIZE, SIZE, gl.RGBA, gl.FLOAT, data);
+    };
+    let portraitMix = 0;
     let frame = 0, last = performance.now(), clock = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       const dt = Math.min(1 / 30, (now - last) / 1000);
+      const elapsed = Math.min(0.25, (now - last) / 1000);
       last = now;
       const covered = !running.current && idleSince.current !== null && now - idleSince.current > 800;
       if (!visible || document.hidden || covered || document.documentElement.hasAttribute("data-project-navigation")) { mouse.px = mouse.x; mouse.py = mouse.y; return; }
@@ -618,6 +689,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
+      const toPortrait = target.symbol === 4;
+      portraitMix += ((toPortrait ? 1 : 0) - portraitMix) * k;
       // The landing galaxy gathers nearly as tightly as a case's form, so it reads as a spiral.
       colours.focus += ((target.symbol > 0 ? 1 : 0.85) - colours.focus) * (1 - Math.exp(-dt / 0.2));
       // The journey: re-centre the world when a trip ends (or is cut short by
@@ -657,24 +730,24 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       // A logo gathers fast (settled in about a second); the flow is raised with
       // the pull so its loose shape stays the same.
       const logo = target.symbol === 1 || target.symbol === 2;
-      const inside = Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
-      const ck = 1 - Math.exp(-dt / 1.2);
+      const inside = !toPortrait && Math.abs(mouse.x) <= 1 && Math.abs(mouse.y) <= 1;
+      const ck = 1 - Math.exp(-dt / (toPortrait ? 0.2 : 1.2));
       cam.x += ((inside ? mouse.x : 0) - cam.x) * ck; cam.y += ((inside ? mouse.y : 0) - cam.y) * ck;
       // A jump (the mouse entering the stage) is not a sweep.
       let vx = mouse.x - mouse.px, vy = mouse.y - mouse.py;
-      if (Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
+      if (toPortrait || Math.hypot(vx, vy) > 0.3) { vx = 0; vy = 0; }
       mouse.px = mouse.x; mouse.py = mouse.y;
       pass(pVel, V[1], () => {
-        bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture);
+        bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture); bind(pVel, "portrait", 2, portraitTarget.texture);
         gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
-        gl.uniform2f(uniform(pVel, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
-        gl.uniform1f(uniform(pVel, "gather"), logo ? 4.6 : 1.15 + 3.45 * early); gl.uniform1f(uniform(pVel, "damp"), logo ? 6.5 : 2.4 + 4.1 * early); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
+        gl.uniform2f(uniform(pVel, "mouse"), toPortrait ? 9 : mouse.x, toPortrait ? 9 : mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
+        gl.uniform1f(uniform(pVel, "gather"), toPortrait ? 0 : logo ? 4.6 : 1.15 + 3.45 * early); gl.uniform1f(uniform(pVel, "damp"), toPortrait ? 10 : logo ? 6.5 : 2.4 + 4.1 * early); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), toPortrait ? 0 : logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
       });
       V.reverse();
       pass(pPos, P[1], () => {
-        bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); gl.uniform1f(uniform(pPos, "dt"), dt);
-        gl.uniform3f(uniform(pPos, "shift"), shift[0], shift[1], shift[2]); gl.uniform1f(uniform(pPos, "travelling"), travelling ? 1 : 0);
+        bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); bind(pPos, "portrait", 2, portraitTarget.texture); gl.uniform1f(uniform(pPos, "dt"), dt);
+        gl.uniform1f(uniform(pPos, "catchUp"), 1 - Math.exp(-elapsed * 6)); gl.uniform3f(uniform(pPos, "shift"), shift[0], shift[1], shift[2]); gl.uniform1f(uniform(pPos, "travelling"), travelling ? 1 : 0);
         gl.uniform3f(uniform(pPos, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pPos, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
         gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
       });
@@ -697,7 +770,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.drawArrays(gl.POINTS, 0, 4200);
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
-      bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture);
+      bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture);
+      gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
@@ -708,8 +782,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       if (clearTick++ % 10 === 0) readClear();
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4f(uniform(pDraw, "clearRect"), clear[0], clear[1], clear[2], clear[3]);
-      gl.uniform1f(uniform(pDraw, "keep"), 0.35);
-      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform1f(uniform(pDraw, "halo"), colours.light);
+      gl.uniform1f(uniform(pDraw, "keep"), 0.35 + 0.65 * portraitMix);
+      gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform1f(uniform(pDraw, "halo"), colours.light * (1 - portraitMix));
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
       // 2. Dithered onto the ground, opaque, each dot in its light's colour.
       // Dark: a deep blue-black space; light: deeper shades on the page.
@@ -721,7 +795,7 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
-      gl.uniform1f(uniform(pDither, "halo"), colours.light);
+      gl.uniform1f(uniform(pDither, "halo"), colours.light * (1 - portraitMix));
       const L = colours.light;
       const mixc = (a: number[], b: number[], t: number) => a.map((x, i) => x + (b[i] - x) * t);
       const ground = mixc([10 / 255, 11 / 255, 20 / 255], [238 / 255, 240 / 255, 238 / 255], L);
@@ -741,7 +815,8 @@ export function HeroObject({ variant = "default", active = true, className }: { 
       themeObserver.disconnect();
       // Not loseContext(): React's dev StrictMode re-runs the effect on the same
       // canvas, and a lost context cannot compile shaders again.
-      [...P, ...V].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
+      buildPortrait.current = null;
+      [...P, ...V, portraitTarget].forEach(({ texture, framebuffer }) => { gl.deleteTexture(texture); gl.deleteFramebuffer(framebuffer); });
       [pInit, pVel, pPos, pDraw, pStar, pDither].forEach((p) => gl.deleteProgram(p));
       gl.deleteTexture(scene.texture); gl.deleteFramebuffer(scene.framebuffer);
       gl.deleteBuffer(quad);
