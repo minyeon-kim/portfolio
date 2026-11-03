@@ -139,7 +139,7 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // and clear with native scroll; then one screen per problem, with its insight as the
 // largest thing on screen and the quote and two stickies under it as evidence. It is a
 // qualitative study, so nothing counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
-type NoteGroup = { name: string; problem: number; tone?: string; notes: [string, string][] };
+type NoteGroup = { name: string; problem: number; tone?: string; notes: [string, string, string][] };
 const NOTE_COLUMNS = 6;
 const noteHash = (i: number, k: number) => {
   let h = Math.imul(i + 1, k);
@@ -150,7 +150,7 @@ const noteHash = (i: number, k: number) => {
 };
 const noteRound = (n: number) => Math.round(n * 1000) / 1000;
 function noteLayout(groups: NoteGroup[]) {
-  const flat = groups.flatMap((g) => g.notes.map((note) => ({ text: note[0], who: note[1] })));
+  const flat = groups.flatMap((g) => g.notes.map((note) => ({ text: note[0], who: note[1], type: note[2] })));
   const rows = Math.ceil(flat.length / NOTE_COLUMNS);
   // Slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
   const slots = flat.map((_, i) => i).sort((x, y) => noteHash(x, 2654435761) - noteHash(y, 2654435761));
@@ -168,7 +168,7 @@ function noteEvidence(groups: NoteGroup[], problem: number) {
 }
 const noteEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
 type NoteProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
-export function AffinityNotes({ groups, problems, funnel, note, answeredBy }: { groups: NoteGroup[]; problems: NoteProblem[]; funnel: [string, string][]; note: string; answeredBy: string }) {
+export function AffinityNotes({ groups, problems, funnel, note, types, answeredBy }: { groups: NoteGroup[]; problems: NoteProblem[]; funnel: [string, string][]; note: string; types: [string, string][]; answeredBy: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const notes = noteLayout(groups);
@@ -220,12 +220,17 @@ export function AffinityNotes({ groups, problems, funnel, note, answeredBy }: { 
           </ol>
           <div className="dv-notes-board" aria-hidden="true">
             {notes.map((d, i) => (
-              <div key={i} className="dv-note" style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
+              <div key={i} className="dv-note" data-type={d.type} style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
                 {d.text} <span>{d.who}</span>
               </div>
             ))}
           </div>
-          <p className="dv-notes-aside">{note}</p>
+          <div className="dv-notes-foot">
+            <ul className="dv-notes-types">
+              {types.map(([type, label]) => <li key={type} data-type={type}>{label}</li>)}
+            </ul>
+            <p className="dv-notes-aside">{note}</p>
+          </div>
         </div>
         {problems.map((item, i) => (
           <div key={item.title} className="dv-pscreen" data-tone={item.tone} data-on={step === i + 1 || undefined}>

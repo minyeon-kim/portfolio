@@ -455,6 +455,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <AffinityNotes
               funnel={define.affinity.funnel}
               note={define.affinity.otherNote}
+              types={define.affinity.noteTypes}
               answeredBy={develop.selection?.answeredBy}
               problems={define.problems.items.map((item: Study, i: number) => ({
                 title: item.title,
