@@ -240,9 +240,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       <Section id="discover" title="Discover">
         <Block {...discover.desk} ff={ff} />
 
-        <div className="dv-question">
-          <p className="dv-caps dv-question-label reveal">{discover.q1.label}</p>
-          <p className="dv-answer reveal">{discover.q1.answer}</p>
+        <div className={ff ? undefined : "dv-question"}>
+          {!ff && <>
+            <p className="dv-caps dv-question-label reveal">{discover.q1.label}</p>
+            <p className="dv-answer reveal">{discover.q1.answer}</p>
+          </>}
           {/* With quotes: the two kinds of evidence side by side, survey numbers
               (scale) | the problems people kept posting, each with one real quote. */}
           {discover.q1.groups[0]?.quote ? (
@@ -292,9 +294,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </>}
         </div>
 
-        <div className="dv-question">
-          <p className="dv-caps dv-question-label reveal">{discover.q2.label}</p>
-          <p className="dv-answer reveal">{discover.q2.answer}</p>
+        <div className={ff ? "dv-subsection" : "dv-question"}>
+          {ff ? <Block title={discover.q2.title} lead={discover.q2.answer} ff /> : <>
+            <p className="dv-caps dv-question-label reveal">{discover.q2.label}</p>
+            <p className="dv-answer reveal">{discover.q2.answer}</p>
+          </>}
           {discover.q2.groups ? (
             <div className="dv-gap-48">
               <p className="dv-caps reveal">{discover.q2.auditLabel}</p>
@@ -324,10 +328,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           )}
         </div>
 
-        <div className="dv-question">
-          <p className="dv-caps reveal">{discover.synthesis.label}</p>
-          <p className="dv-answer reveal">{discover.synthesis.title}</p>
-          {discover.synthesis.text && <p className="dv-body reveal">{discover.synthesis.text}</p>}
+        <div className={ff ? "dv-subsection" : "dv-question"}>
+          {ff ? <Block title={discover.synthesis.label} lead={discover.synthesis.title} text={discover.synthesis.text} ff /> : <>
+            <p className="dv-caps reveal">{discover.synthesis.label}</p>
+            <p className="dv-answer reveal">{discover.synthesis.title}</p>
+            {discover.synthesis.text && <p className="dv-body reveal">{discover.synthesis.text}</p>}
+          </>}
           {/* Gap only (class feedback): one card per stage with the gap in a
               plain sentence, instead of With AI → Gap rows read across. */}
           {discover.synthesis.rows[0]?.withAi === undefined ? (
