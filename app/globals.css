@@ -4268,6 +4268,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-iter-photo { margin-top: 40px; }
 }
 
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) { --dh-dot: light-dark(color-mix(in srgb, var(--dh-glow) 34%, transparent), color-mix(in srgb, var(--dh-glow-2) 30%, transparent)); }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(circle at 12px 12px, var(--dh-dot) 1px, transparent 1.5px); background-size: 24px 24px; background-repeat: repeat; }
 .hero-canvas { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; color: light-dark(var(--dh-glow), var(--dh-glow-2)); }
