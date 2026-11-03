@@ -262,7 +262,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               </figure>
               <div className="dv-repeated">
                 <div>
-                  <p className="dv-caps reveal">{discover.q1.problemsLabel}</p>
+                  <p className="dv-repeated-label reveal">{discover.q1.problemsLabel}</p>
+                  <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
                   <ul>{discover.q1.groups.map((g: { name: string }) => <li key={g.name} className="reveal">{g.name}</li>)}</ul>
                 </div>
                 <a className="dv-repeated-board reveal" href={withBase(discover.q1.boards.src)} target="_blank" rel="noreferrer">

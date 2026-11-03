@@ -4586,6 +4586,8 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-big-quote { color: var(--dv-ink); font-size: clamp(36px, 5.4vw, 80px); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; word-break: keep-all; }
 .dv-big-quote-block figcaption { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
 .dv-repeated { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: start; margin-top: clamp(96px, 11vw, 160px); }
+.dv-repeated-label { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-repeated-label + .dv-caps { margin-top: 4px; }
 .dv-repeated ul { margin: 16px 0 0; padding: 0; list-style: none; }
 .dv-repeated li { padding-block: 16px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
 .dv-repeated-board { display: block; color: var(--case-accent); font-size: 16px; line-height: 1.5; }
