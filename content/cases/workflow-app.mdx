@@ -65,7 +65,7 @@ export const study = {
       title: "Process · Double Diamond",
       body: "We started broad and changed direction once. The first idea was an AI go-between for designers and developers. But combining our AI drafts took longer than making them, so we focused on combining.",
       stages: [
-        { name: "Discover", outcome: "As AI sped up the work, the reasons behind decisions stopped being kept.", methods: ["Desk research", "Competitors", "Interviews"] },
+        { name: "Discover", outcome: "As AI sped up the work, the reasons behind decisions stopped being kept.", methods: ["Secondary research", "Comparative", "Interviews"] },
         { name: "Define", outcome: "It narrowed to four key problems.", methods: ["Affinity map", "Personas", "Journey map", "HMW"] },
         { name: "Develop", outcome: "5 candidates became 4 features.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"], current: true },
         { name: "Deliver", outcome: "A working prototype, changed twice after a test and a co-design.", methods: ["AI prototype", "Usability test", "Co-design"] },
@@ -87,13 +87,11 @@ export const study = {
   discover: {
     desk: {
       method: "Secondary research",
-      title: "Desk research",
+      title: "Secondary research",
       lead: "The slow part is no longer making things. It’s checking them.",
-      text: "Combining our own AI drafts took longer than making them. So we asked two questions, read community posts and surveys, and reviewed more than 10 tools.",
+      text: "Combining our own AI drafts took longer than making them. Surveys and community posts showed the same pattern: AI made the making faster, and teams now get stuck checking what it made and deciding what to keep.",
     },
     q1: {
-      label: "Question 1 · Where do teams that use AI get stuck?",
-      answer: "AI made the making faster. Teams now get stuck checking what AI made and deciding what to keep.",
       surveyLabel: "Survey · 2025 Stack Overflow Developer Survey",
       surveyUrl: "https://survey.stackoverflow.co/2025/ai",
       stats: [
@@ -110,7 +108,7 @@ export const study = {
       boards: { src: "/images/devsign/research-boards.webp", width: 4096, height: 1310, caption: "Research boards · Reddit, Hacker News and Medium posts sorted by pattern" },
     },
     q2: {
-      label: "Question 2 · Does any tool already solve it?",
+      title: "Comparative analysis",
       answer: "Tools can spot differences and approve changes, but we didn’t find one that combines AI drafts area by area and keeps the decision and its reason on that screen.",
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
@@ -135,7 +133,7 @@ export const study = {
       method: "Primary research",
       title: "In-depth interview",
       lead: "Everyone double-checks AI work, but no one is clearly in charge.",
-      text: "Desk research showed that checking and combining is painful, but not how teams handle it, so we spent 60 minutes each with four people who do this work every day.",
+      text: "Secondary research showed that checking and combining is painful, but not how teams handle it, so we spent 60 minutes each with four people who do this work every day.",
       photo: { src: "/images/devsign/interview-session.webp", width: 1600, height: 963, alt: "A remote interview session: a shared FigJam board with sticky notes next to participant video tiles" },
       questionsLabel: "Research questions",
       questions: [
