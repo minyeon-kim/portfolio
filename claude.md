@@ -1129,3 +1129,5 @@ Reveal fix: a `.reveal` that is its own unit (a figure directly under a stage or
 Case spacing, one scale at the end of globals.css (`--sp-*` on `.case-study .dv`; owner: everything sat too close vertically; supersedes the 120 / 64 rhythm and the 140 / 160 stage padding): stage padding 200 / 224, blocks 176, stage title to content 96, heading or part to content 80, small label to content 32, evidence boxes 24. Phones 96 / 96 / 56 / 48 / 24. The Devsign page grew about 8%. About keeps its own 112. Figma not updated.
 
 Landing (≥64rem) block order is statement, case pills, note (supersedes statement, note, pills): the pills read as the next step of the headline, and the note is a quiet last line. Phones keep statement, note, pills, because the card those pills control sits right under them.
+
+Key problem panels drop the role tag (owner; number, problem, one sentence, feature), and the heading no longer claims each problem hurts a different person or spells out PO: "The interviews narrowed down to four problems." / "인터뷰 내용은 네 가지 문제로 좁혀졌다." `role` stays in the data for the tone colour. Figma not updated.
