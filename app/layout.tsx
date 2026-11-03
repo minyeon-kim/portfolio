@@ -1,3 +1,4 @@
+import { StyleRetry } from "@/components/style-retry";
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}
     >
       <head>
+        <StyleRetry />
         <ThemeScript />
       </head>
       <body className="flex min-h-full flex-col text-sm">
