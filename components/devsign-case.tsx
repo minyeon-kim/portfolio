@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, AffinityNotes } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -451,49 +451,21 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <>
         <div>
           <Block {...define.affinity} ff={ff} />
-          {define.affinity.funnel && (
-            <AffinityNotes
-              funnel={define.affinity.funnel}
-              lead={define.affinity.wallLead}
-              note={define.affinity.otherNote}
-              types={define.affinity.noteTypes}
-              answeredBy={develop.selection?.answeredBy}
-              problems={define.problems.items.map((item: Study, i: number) => ({
-                title: item.title,
-                tone: PROBLEM_TONES[i % PROBLEM_TONES.length],
-                insight: define.affinity.insights[i],
-                quote: define.affinity.quotes[i][0],
-                who: define.affinity.quotes[i][1],
-                quoteType: define.affinity.quotes[i][2],
-                feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
-              }))}
-              groups={[
-                ...define.affinity.themes.flatMap((list: [string, number][], i: number) => list.map(([name]) => ({ name, problem: i, tone: PROBLEM_TONES[i % PROBLEM_TONES.length] }))),
-                { name: define.affinity.otherTheme[0], problem: -1 },
-              ].map((group: { name: string; problem: number; tone?: string }, i: number) => ({ ...group, notes: define.affinity.notes[i] }))}
-            />
-          )}
-          {define.affinity.funnel && (
-            <div className="dv-notes-static">
-              <ol className="dv-funnel dv-gap-40 reveal">
-                {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
-              </ol>
-            </div>
-          )}
-          {define.affinity.funnel && (
-            <div className="dv-aff dv-notes-static">
-              <ol>
-                {define.problems.items.map((item: Study, i: number) => (
-                  <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[i % PROBLEM_TONES.length]}>
-                    <h4>{item.title}</h4>
-                    <p className="dv-aff-insight">{define.affinity.insights[i]}</p>
-                    <blockquote>“{define.affinity.quotes[i][0]}”</blockquote>
-                    <p className="dv-aff-who">{define.affinity.quotes[i][1]}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
+          {/* One sentence per problem and one thing someone said, in one view. */}
+          <table className="dv-found dv-gap-40 reveal">
+            <thead>
+              <tr>{define.affinity.foundLabels.map((label: string) => <th key={label} scope="col">{label}</th>)}</tr>
+            </thead>
+            <tbody>
+              {define.affinity.found.map(([finding, quote, who]: [string, string, string], i: number) => (
+                <tr key={finding}>
+                  <th scope="row">{finding}</th>
+                  <td><blockquote>“{quote}”</blockquote><p>{who}</p></td>
+                  <td data-label={define.affinity.foundLabels[2]}>{develop.selection?.items.find((pick: { problem: string }) => pick.problem === define.problems.items[i].title)?.feature}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <a className="dv-board-link reveal" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">
             <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="280px" />
             <span>{define.affinity.boardLink}</span>
