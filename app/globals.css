@@ -4546,10 +4546,6 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-fold-body { padding-top: 32px; }
 
 /* Home: each project's one line stays in view under its pill. */
-.home-picks li { display: flex; flex-direction: column; align-items: flex-end; }
-@media (max-width: 63.99rem) { .home-picks li { align-items: flex-start; } }
-.home-pick-line { display: none; }
-@media (min-width: 64rem) { .home-pick-line { display: block; width: 220px; margin: 6px 0 8px; color: var(--muted); font-size: 16px; line-height: 1.35; text-align: right; } }
 
 /* Devsign: the two people on the journey, the idea we dropped, the two structure boards. */
 .dv-cast { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 40px 0 16px; padding: 0; list-style: none; }
