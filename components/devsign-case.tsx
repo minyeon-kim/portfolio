@@ -876,6 +876,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             as one wide card. */}
         <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
         <p className="dv-body reveal">{takeaway.text}</p>
+        {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 767px) 100vw, 1200px" className="dv-gap-40" />}
         <div className="dv-gap-80">
           <p className="dv-caps reveal">{takeaway.reviewTitle}</p>
           <ol className="dv-learned">
