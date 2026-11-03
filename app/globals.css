@@ -4673,3 +4673,15 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .case-study .dv .dv-flow p { padding: 24px clamp(20px, 2.4vw, 36px) 0 0; }
 }
 .dv-flow p b { display: block; margin-top: 8px; font-size: var(--t-heading); line-height: 1.3; text-wrap: balance; }
+
+/* Review fixes: the stage nav no longer shows text through it; a stage leaving the top stays readable; boards arrive quickly and clear. */
+.dv-nav { background: color-mix(in srgb, var(--bg) 96%, transparent); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes dv-close { from { scale: 1; } to { scale: 0.98; } }
+    @keyframes dv-close-band { from { scale: 1; clip-path: inset(0 0 0 0 round var(--dv-band-radius)); } to { scale: 0.98; clip-path: inset(0 0 0 0 round calc(var(--dv-band-radius) * 1.5)); } }
+    @keyframes dv-board-in { from { opacity: 0.6; scale: 0.94; } to { opacity: 1; scale: 1; } }
+    .dv > section { animation-range: cover 0px cover 75vh, exit 60% exit 100%; }
+    .dv-board img { animation-range: entry 0% entry 55%; }
+  }
+}
