@@ -1105,3 +1105,5 @@ Devsign research questions are three columns (`.dv-keyq`, `interview.questionKey
 Devsign Overview Result card is short (owner: too complicated): "First test missed its goal" / "첫 테스트는 목표 미달", one line on the two rounds of changes and no retest. The 2.3 vs 1.5 numbers live in Testing. Figma not updated.
 
 Co-design photo (codesign-session-blurred.webp, rebuilt from the original at 9ddf49d^, same crop): only Harbor Kim's face and name are blurred, plus the top bar name and the meeting code; Minyeon and 김다연 are shown (owner's call; supersedes "faces, names and the meeting code blurred"). Figma not updated.
+
+Devsign interview block has surfaces (owner: too much plain text): research questions as three cards and participants as four cards in their role colour, 16px under the photo (`.dv-keyq li`, `.dv-meet li`; white in light, band card colour in dark). Still no numbers or rules. Figma not updated.
