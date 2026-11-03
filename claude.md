@@ -1144,3 +1144,4 @@ Opener dot canvas restored: 14e3d33 had dropped the `--dh-dot` colour with the g
 
 ScrambleHeadline locks glyph widths in em, not px: the headline size follows the window, so px widths from load split the letters apart after a resize without reload.
 Problem statement text sits at the top of its full-screen sheet instead of centred (owner: too much space above it): top padding clamp(112px, 16svh, 176px), desktop with motion only. The empty lower part is what Develop rises into. Figma not updated.
+Problem statement is a card that holds centred on screen, not a full-screen sheet (owner: empty space above and below; supersedes "fills the screen" and "text at the top of its sheet"): 56svh tall, sticky at 22svh, text centred, round on all corners, 64px minimum padding; Develop still rises over it after about 25svh of hold. Desktop with motion only. Figma not updated.
