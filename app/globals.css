@@ -4846,8 +4846,6 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv .dv-keyq h4 { margin: 0; color: var(--dv-ink); }
 .case-study .dv .dv-keyq p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.55; word-break: keep-all; text-wrap: pretty; }
 @media (max-width: 47.99rem) { .dv-keyq ul { grid-template-columns: 1fr; gap: 20px; } }
-.case-study .dv .dv-keyq p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.55; word-break: keep-all; text-wrap: pretty; }
-@media (max-width: 47.99rem) { .dv-keyq ul { grid-template-columns: 1fr; gap: 20px; } }
 
 /* Interview: research questions and participants as cards on the band, so the block isn't all plain text. Participants carry their role's colour and sit tight under the photo. */
 .dv-keyq ul { gap: 16px; }
