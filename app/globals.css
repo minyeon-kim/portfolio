@@ -4622,3 +4622,39 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
     .dv-found tbody td:nth-of-type(2) { animation-range: cover 14% cover 38%; }
   }
 }
+
+/* Desk research: one box per source. The bars show each share and fill with native scroll; the community columns rise one by one. */
+.dv-evbox { padding: clamp(24px, 2.8vw, 40px); border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-evbox-voices { margin-top: 16px; }
+.dv-evbox-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin: 0 0 clamp(20px, 2.4vw, 32px); color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-evbox-head p { margin: 0; color: var(--dv-ink); }
+.dv-evbox .dv-insight-stats { gap: 32px clamp(32px, 5vw, 72px); margin: 0; }
+.dv-evbox .dv-insight-stat { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+.dv-evbox .dv-insight-stat p { flex: 1; }
+.dv-insight-stat p { display: flex; align-items: center; gap: 24px; margin: 0; }
+.dv-insight-stat i { display: block; height: 8px; margin-top: 20px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
+.dv-insight-stat b { display: block; width: calc(var(--share) * 100%); height: 100%; border-radius: inherit; background: var(--case-accent); transform-origin: left; }
+.dv-evbox .dv-insight-voices { gap: 0; margin: 0; }
+.dv-evbox .dv-insight-voices li { padding: 0 clamp(20px, 2.4vw, 32px); border-top: 0; }
+.dv-evbox .dv-insight-voices li:first-child { padding-left: 0; }
+.dv-evbox .dv-insight-voices li:last-child { padding-right: 0; }
+.dv-evbox .dv-insight-voices li + li { border-left: 1px solid var(--dv-card-line); }
+.dv-evbox .dv-insight-voices strong { color: var(--case-accent); }
+.dv-evbox .dv-insight-voices blockquote { margin-top: 12px; font-size: 18px; line-height: 1.5; }
+.dv-evbox .dv-insight-voices cite { padding-top: 16px; }
+@media (max-width: 63.99rem) {
+  .dv-evbox .dv-insight-voices li, .dv-evbox .dv-insight-voices li:first-child, .dv-evbox .dv-insight-voices li:last-child { padding: 20px 0; }
+  .dv-evbox .dv-insight-voices li:first-child { padding-top: 0; }
+  .dv-evbox .dv-insight-voices li:last-child { padding-bottom: 0; }
+  .dv-evbox .dv-insight-voices li + li { border-top: 1px solid var(--dv-card-line); border-left: 0; }
+}
+@media (max-width: 47.99rem) { .dv-insight-stat p { align-items: flex-start; flex-direction: column; gap: 12px; } }
+@keyframes dv-share-fill { from { transform: scaleX(0); } to { transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-insight-stat b { animation: dv-share-fill linear both; animation-timeline: view(); animation-range: cover 10% cover 42%; }
+    .dv-evbox .dv-insight-voices li { animation: dv-found-in linear both; animation-timeline: view(); animation-range: cover 4% cover 26%; }
+    .dv-evbox .dv-insight-voices li:nth-child(2) { animation-range: cover 8% cover 30%; }
+    .dv-evbox .dv-insight-voices li:nth-child(3) { animation-range: cover 12% cover 34%; }
+  }
+}

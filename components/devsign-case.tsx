@@ -73,24 +73,33 @@ function Insights({ discover }: { discover: Study }) {
       <p className="dv-insights-scale reveal">{discover.scale}</p>
       <div className="dv-gap-48">
         <Block {...discover.desk} ff />
-        <div className="dv-insight-stats">
-          {q1.stats.map((stat: { value: string; text: string }) => (
-            <p key={stat.value} className="dv-insight-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
-          ))}
-        </div>
-        <p className="dv-insight-tag reveal"><a className="dv-source-link" href={q1.surveyUrl} target="_blank" rel="noreferrer">{q1.surveyLabel}</a></p>
-        <p className="dv-caps dv-gap-56 reveal">{q1.communityLabel}</p>
-        <ul className="dv-insight-voices">
-          {q1.groups.map((g: { name: string; quote: string; original?: string; source: string; sourceUrl?: string }) => (
-            <li key={g.name} className="reveal">
-              <strong>{g.name}</strong>
-              <blockquote>“{g.quote}”</blockquote>
-              {g.original && <p lang="en">{g.original}</p>}
-              <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
-            </li>
-          ))}
-        </ul>
-        <p className="dv-boards-link reveal"><a href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a></p>
+        {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
+        <section className="dv-evbox dv-gap-40">
+          <p className="dv-evbox-head reveal"><a className="dv-source-link" href={q1.surveyUrl} target="_blank" rel="noreferrer">{q1.surveyLabel}</a></p>
+          <div className="dv-insight-stats">
+            {q1.stats.map((stat: { value: string; text: string }) => (
+              <div key={stat.value} className="dv-insight-stat reveal" style={{ "--share": parseFloat(stat.value) / 100 } as React.CSSProperties}>
+                <p><strong>{stat.value}</strong><span>{stat.text}</span></p>
+                <i aria-hidden="true"><b /></i>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="dv-evbox dv-evbox-voices">
+          <div className="dv-evbox-head reveal">
+            <p>{q1.communityLabel}</p>
+            <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
+          </div>
+          <ul className="dv-insight-voices">
+            {q1.groups.map((g: { name: string; quote: string; source: string; sourceUrl?: string }) => (
+              <li key={g.name} className="reveal">
+                <strong>{g.name}</strong>
+                <blockquote>“{g.quote}”</blockquote>
+                <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
 
       <div className="dv-subsection">
