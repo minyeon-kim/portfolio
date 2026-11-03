@@ -1,5 +1,5 @@
-// The product flow as a wireflow: low-fidelity screens of the real prototype, a dot
-// on the element you press and a line to the screen it opens. The workspace is the
+// The product flow as a wireflow: low-fidelity screens of the real prototype, the
+// element you press in the accent colour and an arrow to the screen it opens. The workspace is the
 // hub: one path combines drafts and returns to it, the other decides a change and
 // ends in History.
 
@@ -9,6 +9,7 @@ const W = 252;
 const H = 158;
 const COLS = [0, 316, 632, 948];
 const ROWS = [72, 366];
+const BRANCH = 224;
 
 function R({ x, y, w, h, r = 2, on }: { x: number; y: number; w: number; h: number; r?: number; on?: boolean }) {
   return <rect x={x} y={y} width={w} height={h} rx={r} className={on ? "dv-wf-on" : "dv-wf-b"} />;
@@ -50,6 +51,7 @@ const SCREENS = [
     <R x={166} y={5} w={30} h={7} r={3.5} />
     <R x={204} y={5} w={36} h={7} r={3.5} on />
     <Board />
+    <circle cx={BRANCH} cy={120} r={5} className="dv-wf-alert" />
   </Frame>,
   <Frame key="2" panel={156}>
     <Board width={3} />
@@ -98,17 +100,15 @@ const SCREENS = [
 
 const at = (i: number) => ({ x: COLS[i % 4], y: ROWS[i < 4 ? 0 : 1] });
 
-// Each edge starts on the element you press, in page coordinates. The long way back
-// runs behind the screens so it doesn't cross the one it leaves.
-const EDGES: { from: number[]; d: string; behind?: boolean }[] = [
-  { from: [222, 72 + 8], d: `M222 ${72 + 8}H316` },
-  { from: [316 + 236, 72 + 57], d: `M${316 + 236} ${72 + 57}H632` },
-  { from: [632 + 236, 72 + 141], d: `M${632 + 236} ${72 + 141}H948` },
-  { from: [948 + 203, 72 + 137], d: `M${948 + 203} ${72 + 137}V16H192V72`, behind: true },
-  { from: [224, 72 + 108], d: `M224 ${72 + 108}V366` },
-  { from: [126, 366 + 124], d: `M126 ${366 + 124}H316` },
-  { from: [316 + 236, 366 + 100], d: `M${316 + 236} ${366 + 100}H632` },
-  { from: [632 + 236, 366 + 139], d: `M${632 + 236} ${366 + 139}H916V${366 + 45}H948` },
+// Arrows stay out of the screens: straight across the gutter at mid-height within a row,
+// and on one vertical line (x = BRANCH) for the branch down and the dashed way back.
+const GAP = 6;
+const MID = H / 2;
+const across = (y: number, col: number) => `M${COLS[col] + W + GAP} ${y + MID}H${COLS[col + 1] - GAP}`;
+const EDGES: { d: string; back?: boolean }[] = [
+  ...[0, 1, 2].flatMap((col) => [{ d: across(ROWS[0], col) }, { d: across(ROWS[1], col) }]),
+  { d: `M${BRANCH} ${ROWS[0] + H + GAP}V${ROWS[1] - GAP}` },
+  { d: `M${COLS[3] + BRANCH} ${ROWS[0] - GAP}V24Q${COLS[3] + BRANCH} 16 ${COLS[3] + BRANCH - 8} 16H${BRANCH + 8}Q${BRANCH} 16 ${BRANCH} 24V${ROWS[0] - GAP}`, back: true },
 ];
 
 export function Wireflow({ nodes, label }: { nodes: Node[]; label: string }) {
@@ -116,11 +116,10 @@ export function Wireflow({ nodes, label }: { nodes: Node[]; label: string }) {
     <div className="dv-scroll dv-wf dv-gap-40 reveal">
       <svg viewBox="-1 0 1202 592" role="img" aria-label={label}>
         <defs>
-          <marker id="dv-wf-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+          <marker id="dv-wf-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
             <path d="M0 0L8 4L0 8Z" className="dv-wf-head" />
           </marker>
         </defs>
-        {EDGES.filter((edge) => edge.behind).map((edge) => <path key={edge.d} d={edge.d} className="dv-wf-line" markerEnd="url(#dv-wf-arrow)" />)}
         {nodes.map((node, i) => {
           const { x, y } = at(i);
           return (
@@ -133,12 +132,7 @@ export function Wireflow({ nodes, label }: { nodes: Node[]; label: string }) {
             </g>
           );
         })}
-        {EDGES.map((edge) => (
-          <g key={edge.d}>
-            {!edge.behind && <path d={edge.d} className="dv-wf-line" markerEnd="url(#dv-wf-arrow)" />}
-            <circle cx={edge.from[0]} cy={edge.from[1]} r={4} className="dv-wf-dot" />
-          </g>
-        ))}
+        {EDGES.map((edge) => <path key={edge.d} d={edge.d} className={edge.back ? "dv-wf-line dv-wf-back" : "dv-wf-line"} markerEnd="url(#dv-wf-arrow)" />)}
       </svg>
       <ol className="sr-only">
         {nodes.map((node) => <li key={node.title}>{node.title}: {node.action.join(" ")}</li>)}
