@@ -418,7 +418,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
 
         <div className="dv-subsection">
-          <Block {...define.problems} ff={ff} />
           <ProblemPanels
             answeredBy={develop.selection?.answeredBy}
             items={define.problems.items.map((item: Study, index: number) => ({
@@ -428,7 +427,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
               feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
             }))}
-          />
+          >
+            <Block {...define.problems} ff={ff} />
+          </ProblemPanels>
         </div>
 
         {/* Where it breaks first (the journey and its two low points), then who. */}

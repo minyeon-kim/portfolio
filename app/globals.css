@@ -4818,3 +4818,10 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
     .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation-timeline: --dv-sheet, --dv-sheet; animation-range: entry 20% entry 90%, entry 0% entry 100%; }
   }
 }
+
+/* Key problems, pinned: heading and panels stay while scrolling opens each panel in turn.
+   The travel is a block after the stage, since sticky can't move into padding. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-panels-track::after { content: ""; display: block; height: calc((var(--n) - 1) * 60svh); }
+  .dv-panels-stage { position: sticky; top: var(--stage-top, 80px); }
+}

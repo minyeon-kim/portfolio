@@ -1160,3 +1160,5 @@ HMW card removed for now (owner: the wording read awkwardly; supersedes the two 
 Devsign no longer tells the dropped AI go-between idea (owner; supersedes the dropped-idea block and its diamond pivot): the Develop block, the Double Diamond note and the unused process body are gone. Develop opens on the value proposition canvas. Figma not updated.
 
 Analysis band type steps down under the block heading (owner: too large, no hierarchy; supersedes the gap clause at heading size): block heading 28 > gap clause 20 Medium ink > the lead-in 16 muted.
+
+Key problems advance with scroll (owner): on desktop with motion allowed the heading and panels pin centred on the screen (`.dv-panels-track` with 60svh of travel per extra panel) and native scroll opens each panel in turn; click and keyboard focus scroll to that panel's step. Hover only opens panels where there is no pin. Phones stay stacked and all open. Figma not updated.
