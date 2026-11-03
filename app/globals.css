@@ -1833,8 +1833,6 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .intro-showcase-dot::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 25%, transparent); transition: width 400ms var(--ease), background-color 250ms ease; }
 .intro-showcase-dot[aria-current]::before { width: 18px; background: var(--ink); }
 .intro-showcase-dot:hover::before { background: color-mix(in srgb, var(--ink) 55%, transparent); }
-@media (max-width: 74.99rem) {
-}
 
 /* TL;DR already closes with a rule; the first section after it shouldn't add a second one. */
 .case-content > section[aria-labelledby="tldr"] + .case-section { border-top: 0; }
@@ -3771,8 +3769,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-iter-side figcaption { margin-top: 14px; color: var(--dv-muted); font-size: 18px; line-height: 1.45; animation: dv-iter-in 300ms var(--ease) both; }
 .dv-iter-side[data-side="b"] figcaption { color: var(--dv-ink); }
 @keyframes dv-iter-in { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-}
 @media (max-width: 47.99rem) {
   .dv-iter-pair { grid-template-columns: 1fr; margin-top: 16px; }
 }
@@ -3898,23 +3894,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 47.99rem) { .dv-mini { grid-template-columns: 1fr; gap: 12px; } .dv-mini > li { padding: 20px; } }
 
 /* Analysis: the four stages as one flow in one panel, a line running through their names. */
-.dv-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: 32px; padding: 32px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); list-style: none; counter-reset: dv-flow; }
-.dv-flow > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; justify-items: center; row-gap: 12px; min-width: 0; text-align: center; counter-increment: dv-flow; }
-.dv-flow-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; margin-bottom: 8px; color: var(--case-accent); font-size: 16px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
-.dv-flow-stage::before { content: counter(dv-flow); flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
-.dv-flow > li:not(:last-child) .dv-flow-stage::after { content: ""; position: absolute; top: 17px; left: calc(50% + 26px); width: calc(100% + 32px - 52px); height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--case-accent) 45%, transparent); }
-.dv-flow h4 { color: var(--dv-ink); font-size: 20px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
-.dv-flow p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: balance; }
-@media (max-width: 63.99rem) {
-  .dv-flow { grid-template-columns: 1fr; grid-template-rows: none; row-gap: 28px; padding: 24px; }
-  .dv-flow > li { position: relative; grid-row: auto; grid-template-rows: none; justify-items: start; row-gap: 8px; padding-left: 48px; text-align: left; }
-  .dv-flow-stage { position: static; display: block; margin-bottom: 0; line-height: 32px; }
-  .dv-flow-stage::before { position: absolute; left: 0; top: 0; width: 32px; height: 32px; }
-  .dv-flow > li:not(:last-child)::before { content: ""; position: absolute; left: 15px; top: 40px; bottom: -20px; width: 2px; border-radius: 1px; background: color-mix(in srgb, var(--case-accent) 45%, transparent); }
-  .dv-flow p { text-wrap: pretty; }
-  .dv-flow > li:not(:last-child) .dv-flow-stage::after { display: none; }
-  .dv-flow h4 { font-size: 18px; }
-}
 
 /* Prototype: one hint on the cover. */
 
@@ -3959,13 +3938,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* In-depth interview: who we met and what we asked, one panel. */
 /* Interview: the questions as a plain row, then the people as one strip. */
 /* The session photo and who was in it, one row at one height. */
-@media (hover: hover) {
-}
 /* Questions and people arrive one after another as the block rises (native scroll). */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
   }
-}
 @keyframes dv-step-in { from { opacity: 0.2; translate: 0 14px; } to { opacity: 1; translate: none; } }
 
 /* Feature reel text, no box: a label like the block labels, the sentence, then the
@@ -4188,13 +4163,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* Analysis steps: stage, then one sentence. */
-.dv-flow { grid-template-rows: auto auto; }
-.dv-flow > li { grid-row: span 2; }
-.dv-flow p { color: var(--dv-ink); font-size: 18px; line-height: 1.45; }
-@media (max-width: 63.99rem) {
-  .dv-flow { grid-template-rows: none; }
-  .dv-flow > li { grid-row: auto; }
-}
 
 /* Wireflow: low-fidelity screens, a dot on what you press, a line to what it opens. */
 .dv-wf svg { display: block; width: 100%; min-width: 1080px; height: auto; }
@@ -4656,5 +4624,38 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
     .dv-evbox .dv-insight-voices li { animation: dv-found-in linear both; animation-timeline: view(); animation-range: cover 4% cover 26%; }
     .dv-evbox .dv-insight-voices li:nth-child(2) { animation-range: cover 8% cover 30%; }
     .dv-evbox .dv-insight-voices li:nth-child(3) { animation-range: cover 12% cover 34%; }
+  }
+}
+
+/* Analysis: four stages as one joined band with no numbers; it fills left to right with native scroll. Each sentence ends on what gets lost. */
+.dv-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 3px; margin-inline: 0; padding: 0; list-style: none; }
+.dv-flow > li { min-width: 0; }
+.case-study .dv .dv-flow-stage { position: relative; display: block; padding: 14px clamp(16px, 2vw, 28px); background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.3; overflow: clip; isolation: isolate; }
+.dv-flow > li:first-child .dv-flow-stage { border-radius: 999px 0 0 999px; }
+.dv-flow > li:last-child .dv-flow-stage { border-radius: 0 999px 999px 0; }
+.dv-flow-stage::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--case-accent) 38%, transparent); transform-origin: left; }
+.case-study .dv .dv-flow p { margin: 0; padding: 20px clamp(16px, 2vw, 28px) 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; text-wrap: pretty; }
+.dv-flow p b { color: var(--dv-ink); font-weight: 500; }
+@keyframes dv-band-fill { from { transform: scaleX(0); } to { transform: none; } }
+@media (max-width: 63.99rem) {
+  .dv-flow { grid-template-columns: 1fr; row-gap: 0; }
+  .dv-flow > li { padding: 0 0 24px 20px; border-left: 4px solid color-mix(in srgb, var(--case-accent) 38%, transparent); }
+  .dv-flow > li:last-child { padding-bottom: 0; }
+  .case-study .dv .dv-flow-stage, .dv-flow > li:first-child .dv-flow-stage, .dv-flow > li:last-child .dv-flow-stage { padding: 0; background: none; border-radius: 0; color: var(--case-accent); }
+  .dv-flow-stage::before { display: none; }
+  .case-study .dv .dv-flow p { padding: 8px 0 0; }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    .dv-flow-stage::before { animation: dv-band-fill linear both; animation-timeline: view(); }
+    .dv-flow > li:nth-child(1) .dv-flow-stage::before { animation-range: cover 10% cover 22%; }
+    .dv-flow > li:nth-child(2) .dv-flow-stage::before { animation-range: cover 22% cover 34%; }
+    .dv-flow > li:nth-child(3) .dv-flow-stage::before { animation-range: cover 34% cover 46%; }
+    .dv-flow > li:nth-child(4) .dv-flow-stage::before { animation-range: cover 46% cover 58%; }
+    .dv-flow p { animation: dv-found-in linear both; animation-timeline: view(); }
+    .dv-flow > li:nth-child(1) p { animation-range: cover 10% cover 26%; }
+    .dv-flow > li:nth-child(2) p { animation-range: cover 18% cover 34%; }
+    .dv-flow > li:nth-child(3) p { animation-range: cover 26% cover 42%; }
+    .dv-flow > li:nth-child(4) p { animation-range: cover 34% cover 50%; }
   }
 }
