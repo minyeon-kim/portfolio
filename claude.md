@@ -1143,3 +1143,4 @@ Devsign Problem statement holds and is covered (owner): on desktop with motion a
 Opener dot canvas restored: 14e3d33 had dropped the `--dh-dot` colour with the guided-demo CSS, so the grid drew nothing and only the dots near the cursors showed.
 
 ScrambleHeadline locks glyph widths in em, not px: the headline size follows the window, so px widths from load split the letters apart after a resize without reload.
+Problem statement text sits at the top of its full-screen sheet instead of centred (owner: too much space above it): top padding clamp(112px, 16svh, 176px), desktop with motion only. The empty lower part is what Develop rises into. Figma not updated.
