@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { devsignUrl, withBase } from "@/lib/site";
+import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
 type Box = [number, number, number, number];
@@ -257,100 +257,6 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
     <ul ref={root} className="dv-reels dv-gap-40">
       {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} on={i === current} shown={i <= current} pinned={pinned} playing={onScreen && i === current} />)}
     </ul>
-  );
-}
-
-// The opener's "walk through the prototype" link opens the same demo over the page,
-// so nobody is thrown 18,000px down a case they haven't read: a native modal (Esc,
-// focus kept inside and returned to the link), and closing leaves them where they
-// were. Without JavaScript, or before the case has mounted, the link still scrolls to #try.
-export function DemoDialog({ close, ...demo }: DemoProps & { close: string }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [label, setLabel] = useState<string | null>(null);
-  useEffect(() => {
-    const onClick = (event: MouseEvent) => {
-      const link = (event.target as Element).closest?.('a[href="#try"]');
-      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      setLabel(link.textContent);
-    };
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
-  }, []);
-  useEffect(() => {
-    if (label !== null && !dialog.current?.open) dialog.current?.showModal();
-  }, [label]);
-  return (
-    <dialog ref={dialog} className="dv-demo-dialog" aria-label={label ?? undefined} onClose={() => setLabel(null)} onClick={(event) => { if (event.target === dialog.current) dialog.current.close(); }}>
-      {label !== null && (
-        <div className="dv-demo-dialog-body">
-          <form method="dialog"><button type="submit" className="dv-demo-close" aria-label={close}><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg></button></form>
-          <GuidedDemo {...demo} />
-        </div>
-      )}
-    </dialog>
-  );
-}
-
-// The prototype as a short guided walk-through: real screenshots with everything but
-// the part that matters dimmed, and one line saying what is happening. Next (or the
-// highlighted control) moves on, so nobody has to hunt for where to press. The free
-// prototype is one link away for whoever wants it.
-type DemoStep = { src: string; box: Box; focus?: Box; tipAt?: Box; text: string };
-type DemoProps = { steps: DemoStep[]; chapters: { label: string; from: number }[]; alt: string; next: string; back: string; restart: string; open: string };
-export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: DemoProps) {
-  const locale = useLocale();
-  const [at, setAt] = useState(0);
-  const step = steps[at];
-  const last = at === steps.length - 1;
-  const [x, y, w, h] = step.box;
-  const [fx, fy, fw, fh] = step.focus ?? step.box;
-  // The tip sits beside the bright area, on the side with room.
-  const [ax, ay, aw, ah] = step.tipAt ?? [fx, fy, fw, fh];
-  const onLeft = ax + aw / 2 > 50;
-  const place = {
-    "--tl": onLeft ? "auto" : `calc(${ax + aw}% + 16px)`,
-    "--tr": onLeft ? `calc(${100 - ax}% + 16px)` : "auto",
-    "--tt": ay + ah / 2 < 50 ? `max(16px, ${ay}%)` : "auto",
-    "--tb": ay + ah / 2 < 50 ? "auto" : `max(16px, ${100 - ay - ah}%)`,
-    "--tw": `calc(${onLeft ? ax : 100 - ax - aw}% - 32px)`,
-  } as React.CSSProperties;
-  return (
-    <div className="dv-demo">
-      <ol className="dv-demo-chapters">
-        {chapters.map((chapter, i) => {
-          const end = chapters[i + 1]?.from ?? steps.length;
-          const fill = Math.max(0, Math.min(1, (at + 1 - chapter.from) / (end - chapter.from)));
-          return (
-            <li key={chapter.label}>
-              <button type="button" aria-current={at >= chapter.from && at < end ? "step" : undefined} onClick={() => setAt(chapter.from)}>
-                <i aria-hidden="true"><b style={{ transform: `scaleX(${fill})` }} /></i>
-                {chapter.label}
-              </button>
-            </li>
-          );
-        })}
-      </ol>
-      <div className="dv-demo-stage">
-        <div className="dv-demo-screen">
-          {steps.map((s, i) => Math.abs(i - at) <= 1 && (
-            <Image key={s.src} src={withBase(s.src)} alt={i === at ? alt : ""} width={1920} height={1200} sizes="(max-width: 767px) 100vw, 1200px" loading="eager" data-on={i === at || undefined} />
-          ))}
-          <span className="dv-demo-focus" style={{ left: `${fx}%`, top: `${fy}%`, width: `${fw}%`, height: `${fh}%` }} aria-hidden="true" />
-          {!last && <button key={at} type="button" className="dv-demo-spot" style={{ left: `${x + w / 2}%`, top: `${y + h / 2}%`, width: `${w}%`, height: `${h}%` }} aria-label={next} onClick={() => setAt(at + 1)} />}
-        </div>
-        <div className="dv-demo-tip" style={place} aria-live="polite">
-          <p key={at} className="dv-demo-line"><span className="dv-demo-count">{at + 1} / {steps.length}</span>{step.text}</p>
-          <div className="dv-demo-actions">
-            {at > 0 && !last && <button type="button" onClick={() => setAt(at - 1)}>{back}</button>}
-            {!last && <button type="button" data-primary="" onClick={() => setAt(at + 1)}>{next}</button>}
-            {last && <button type="button" onClick={() => setAt(0)}>{restart}</button>}
-            {last && <a href={devsignUrl(locale)} target="_blank" rel="noreferrer" data-primary="">{open}</a>}
-          </div>
-        </div>
-      </div>
-      <a className="dv-demo-open" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{open}</a>
-    </div>
   );
 }
 

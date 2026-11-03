@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, ZoomFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -625,13 +625,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </>}
       </Section>
 
-      {/* The opener's link target sits outside the stage: stages and their blocks
-          are mid-rise when the link is pressed, which would throw the landing off. */}
       <Section id="deliver" title="Deliver">
         <div>
           <Block {...deliver} ff={ff} />
-          {deliver.tryIt && <div id="try" className="dv-gap-40 reveal"><GuidedDemo {...deliver.tryIt} /></div>}
-          {deliver.tryIt && <DemoDialog {...deliver.tryIt} />}
+          {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
         </div>
         {!ff && (
           <div className="dv-gap-64">
