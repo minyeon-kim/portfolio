@@ -1158,3 +1158,5 @@ HMW card shortened (owner: too long, five too many, not the meeting one): three 
 HMW card removed for now (owner: the wording read awkwardly; supersedes the two HMW card notes; last version in 6f701ff, the five FigJam questions in 3d99fa9). The statement holds and Develop covers it again.
 
 Devsign no longer tells the dropped AI go-between idea (owner; supersedes the dropped-idea block and its diamond pivot): the Develop block, the Double Diamond note and the unused process body are gone. Develop opens on the value proposition canvas. Figma not updated.
+
+Analysis band type steps down under the block heading (owner: too large, no hierarchy; supersedes the gap clause at heading size): block heading 28 > gap clause 20 Medium ink > the lead-in 16 muted.
