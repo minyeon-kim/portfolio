@@ -2587,7 +2587,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* The case pills sit at the right edge, mid-height; the raised case devices
    keep clear of them by --picks-gutter. */
 .home-stage { --picks-gutter: 0px; }
-@media (min-width: 64rem) { .home-stage { --picks-gutter: 288px; } }
 .home-picks { position: absolute; z-index: 3; top: 50%; right: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin: 0; padding: 0; list-style: none; }
 /* After metalab.com's case list: compact frosted grey pills, the name alone. */
@@ -3243,13 +3242,16 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
 /* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement and note open at the top left under the header, and the case
-   pills sit at the top right, so Work is one click from the first glance. */
+   the statement, the note and the case pills read down one column at the top
+   left under the header, so Work is one click from the first glance. */
 @media (min-width: 64rem) {
   .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
   .home-tagline { text-align: left; }
   .home-note { grid-column: 1; grid-row: 2; align-self: start; }
-  .home-picks { top: 104px; translate: none; }
+  /* Headline, note, then the projects: one column to read down, ending on what to press. */
+  .intro-surface.home-grid { grid-template-rows: auto auto minmax(0, 1fr); }
+  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 3; align-self: start; margin-top: 8px; }
+  .home-picks ol { align-items: flex-start; }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */
