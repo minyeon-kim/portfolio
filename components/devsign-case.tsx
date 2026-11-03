@@ -477,15 +477,26 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {/* Where it breaks first (the journey and its two low points), then who. */}
         <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
-        <ul className="dv-cast dv-gap-40 reveal">
+        <div className="dv-cast dv-gap-40">
           {define.personas.people.map((person: Study, index: number) => (
-            <li key={person.name} data-line={index === 0 ? "designer" : "developer"}>
-              <strong>{person.name}<span>{person.role}</span></strong>
-              <p>{person.quote}</p>
-              <p className="dv-cast-low">{index === 0 ? define.personas.journey.designerLow : define.personas.journey.developerLow}</p>
-            </li>
+            <article key={person.name} className="reveal" data-line={index === 0 ? "designer" : "developer"}>
+              <h4>{person.name}</h4>
+              <p className="dv-cast-bio">{person.bio}</p>
+              <p className="dv-cast-quote">{person.quote}</p>
+              <p className="dv-cast-context">{person.context}</p>
+              <table className="dv-needs">
+                <thead>
+                  <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
+                </thead>
+                <tbody>
+                  {person.pairs.map(([pain, need]: string[]) => (
+                    <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td><strong>{need}</strong></td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </article>
           ))}
-        </ul>
+        </div>
         <Journey journey={define.personas.journey} wide />
         </div>
 

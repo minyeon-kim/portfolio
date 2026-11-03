@@ -1005,3 +1005,5 @@ Home picks are the pills alone again: the always-visible line under each pill is
 Devsign facts are five again, on one row from 64rem: Duration, Type, Team, Role, Tools (owner: the merged Role & tools cell was too long). Role is shorter: research, UX/UI design, prototyping, usability testing.
 
 The tool table shows all six capability rows again (supersedes "only the two rows"): two rows of nothing but X read as a straw man, while the full table shows what existing tools do cover.
+
+Devsign personas are Taylor (designer) and Jordan (developer), the names the prototype and its cursors already use (EN/KO; replaces Priya and Marcus). Findings-first cards: name, bio, quote, one situation sentence, the two pain → need rows; the low points stay on the journey. Tool table columns are the real tools from the FigJam (Empathise "프로덕트 조사" 1:190, Define and Prototype & Test notes), not type names: Figma Dev Mode + Zeplin, OverlayQA + Uiprobe + vrdiff, Chromatic + GitHub required reviewers, Magic Patterns + Stitch. A mark means at least one tool in the column does it (vrdiff also hands off; Chromatic also compares screenshots). Figma not updated.
