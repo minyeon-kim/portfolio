@@ -4612,3 +4612,16 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv .dv-notes-intro .dv-funnel strong { font-size: 28px; font-weight: 400; }
 .dv-notes-intro .dv-funnel li + li::before { margin-right: 24px; font-size: 18px; }
 .case-study .dv .dv-pscreen-notes { width: 100%; max-width: none; }
+
+/* Affinity first screen: the board's own colours, by type of statement. Dark text in both themes. */
+[data-type="pain"] { --note: #ffafa3; }
+[data-type="need"] { --note: #a8daff; }
+[data-type="act"] { --note: #b3efbd; }
+[data-type="think"] { --note: #ffe299; }
+[data-type="feel"] { --note: #d3bdff; }
+.dv-notes-board .dv-note { background: var(--note); border-color: transparent; color: #1b1b1f; }
+.dv-notes-board .dv-note span { color: #4a4a50; }
+.dv-notes-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px; }
+.dv-notes-types { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; padding: 0; list-style: none; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-notes-types li { display: flex; align-items: center; gap: 8px; }
+.dv-notes-types li::before { content: ""; width: 12px; height: 12px; border-radius: 3px; background: var(--note); }
