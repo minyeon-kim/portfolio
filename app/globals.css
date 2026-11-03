@@ -4604,3 +4604,12 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .about-entrance[data-photo] { background: var(--bg); }
 .about-entrance[data-photo] img { opacity: 1; }
 .about-entrance[data-reveal] { background: transparent; transition-duration: 380ms; }
+/* Affinity rows arrive one at a time with native scroll: finding, then quote, then feature. */
+@keyframes dv-found-in { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-found tbody th, .dv-found td { animation: dv-found-in linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    .dv-found tbody td:nth-of-type(1) { animation-range: entry 10% cover 25%; }
+    .dv-found tbody td:nth-of-type(2) { animation-range: entry 20% cover 30%; }
+  }
+}
