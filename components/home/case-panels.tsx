@@ -59,7 +59,8 @@ export function HomeLink({ className, children }: { className?: string; children
       href={home}
       className={className}
       onClick={(e) => {
-        if (window.location.pathname !== withBase(home)) return;
+        // A case open on the landing has its own URL but is still this page.
+        if (window.location.pathname !== withBase(home) && !document.querySelector("[data-stage-index]")) return;
         e.preventDefault();
         setUi({ activeCase: null, menuOpen: false });
         window.scrollTo({ top: 0, behavior: "smooth" });

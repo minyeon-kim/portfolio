@@ -1,7 +1,7 @@
 "use client";
 
-import { useStrings } from "@/lib/use-locale";
-import { useEffect, useLayoutEffect } from "react";
+import { useLocale, useStrings } from "@/lib/use-locale";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import { ProjectTitle } from "@/components/project-title";
 import { HomeIntro } from "./home-intro";
@@ -12,7 +12,8 @@ import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { DevsignHero, type DevsignHeroData } from "@/components/devsign-hero";
-import { withBase } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
+import { localize } from "@/lib/i18n";
 
 export type StageProject = {
   slug: string;
@@ -35,6 +36,7 @@ type Props = { projects: StageProject[]; about?: AboutWorld };
 // Project selection opens an editorial heading and full-width cover.
 export function ProjectStage({ projects, about }: Props) {
   const t = useStrings();
+  const locale = useLocale();
   const active = useUi((s) => s.activeCase);
   // Reset after React commits the new stage, rather than before its old body
   // unmounts (browser scroll anchoring can otherwise restore the reading offset).
@@ -47,9 +49,10 @@ export function ProjectStage({ projects, about }: Props) {
   // From a case pill, the hovered device grows to the screen and settles into
   // the opener's media frame; from elsewhere (segmented control, More work)
   // the page just rises in.
-  // Opening a case from the landing adds a history entry (same URL), so the
-  // browser's Back returns to the landing instead of leaving the site; switching
-  // between cases only replaces it. Back/Forward then follow that entry.
+  // Opening a case from the landing adds a history entry at the case's own URL,
+  // so a refresh or a shared link lands on that case (its direct page) and Back
+  // returns to the landing; switching between cases only replaces it. Back and
+  // Forward then follow that entry.
   useEffect(() => {
     const pop = () => {
       const slug = (window.history.state as { homeCase?: string } | null)?.homeCase;
@@ -63,16 +66,38 @@ export function ProjectStage({ projects, about }: Props) {
     window.addEventListener("popstate", pop);
     return () => window.removeEventListener("popstate", pop);
   }, [projects]);
-  // Leaving the case another way (the name in the header, overscroll at the
-  // top) steps back over its entry too, so one Back press never does nothing.
+  // The history entry follows the open case. Internal router fields are left out
+  // of the entry on purpose: without them Next.js syncs usePathname with the URL.
+  // Leaving the case another way (the name in the header, overscroll at the top)
+  // steps back over its entry too, so one Back press never does nothing.
+  const previous = useRef<number | null | undefined>(undefined);
   useEffect(() => {
-    if (active === null && (window.history.state as { homeCase?: string } | null)?.homeCase) window.history.back();
-  }, [active]);
+    const entry = (window.history.state as { homeCase?: string } | null)?.homeCase;
+    const was = previous.current;
+    previous.current = active;
+    // Arriving here (Back from another page, or a stale pick): the entry decides.
+    if (was === undefined) {
+      const index = entry ? projects.findIndex((x) => x.slug === entry) : -1;
+      const wanted = index >= 0 ? index : null;
+      previous.current = wanted;
+      if (wanted !== active) setUi({ activeCase: wanted });
+      return;
+    }
+    if (active === null) {
+      if (was !== null && entry) window.history.back();
+      return;
+    }
+    const slug = projects[active].slug;
+    const url = withBase(localize(`/work/${slug}/`, locale));
+    if (was === null && entry !== slug) window.history.pushState({ homeCase: slug }, "", url);
+    else if (window.location.pathname !== url) window.history.replaceState({ homeCase: slug }, "", url);
+  }, [active, locale, projects]);
+  // Next.js doesn't retitle the tab for these entries (other pages set their own).
+  useEffect(() => {
+    document.title = active === null ? `${site.name} — Product Designer` : `${projects[active].title} — ${site.name}`;
+  }, [active, projects]);
   const select = (index: number, from?: HTMLElement | null) => {
     const project = projects[index];
-    const entry = { ...window.history.state, homeCase: project.slug };
-    if (active === null) window.history.pushState(entry, "");
-    else window.history.replaceState(entry, "");
     revealNextProject(
       () => setUi({ activeCase: index }),
       () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)),

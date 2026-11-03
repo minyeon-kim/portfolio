@@ -13,11 +13,12 @@ export function HeaderShell({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
   // On the landing page the header floats over the full-screen cover.
   const pathname = stripLocale(usePathname());
-  const overStage = pathname === "/";
+  const activeCase = useUi((state) => state.activeCase);
+  // A case open on the landing has its own URL but is still the landing's stage.
+  const overStage = pathname === "/" || (pathname.startsWith("/work/") && activeCase !== null);
   // Project and About pages open on their own full-bleed hero, so the header
   // floats over it instead of laying a bar across the top.
   const overHero = pathname.startsWith("/work/") || pathname.startsWith("/about");
-  const activeCase = useUi((state) => state.activeCase);
   const canCompact = pathname.startsWith("/work/") || pathname.startsWith("/about") || (overStage && activeCase !== null);
 
   useEffect(() => {
