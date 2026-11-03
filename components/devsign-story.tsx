@@ -171,12 +171,15 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 
 // One core feature: the real prototype clip and its one sentence. The list under
 // the sentence follows the clip: the point on screen now is lit. With reduced motion
-// nothing autoplays and the video shows its controls.
+// nothing autoplays and the video shows its controls. If the browser refuses to
+// autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
+// controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, on, shown, pinned, playing }: { reel: Reel; on: boolean; shown: boolean; pinned: boolean; playing: boolean }) {
+function FeatureReel({ reel, on, shown, pinned, playing, ready }: { reel: Reel; on: boolean; shown: boolean; pinned: boolean; playing: boolean; ready: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [point, setPoint] = useState(0);
   const [still, setStill] = useState(false);
+  const [refused, setRefused] = useState(false);
   useEffect(() => {
     const el = video.current;
     if (!el) return;
@@ -184,17 +187,35 @@ function FeatureReel({ reel, on, shown, pinned, playing }: { reel: Reel; on: boo
     setStill(motion.matches);
     if (motion.matches) return;
     el.playbackRate = PLAYBACK_RATE;
-    if (pinned) {
-      if (playing) el.play().catch(() => {});
+    let wanted = false;
+    const start = () => {
+      if (!wanted) return;
+      el.muted = true;
+      el.play().catch((error: Error) => { if (error.name === "NotAllowedError") setRefused(true); });
+    };
+    const want = (next: boolean) => {
+      wanted = next;
+      if (next) start();
       else el.pause();
-      return;
+    };
+    // Coming back to the tab, or the first press, gets another try.
+    const retry = () => { if (el.paused) start(); };
+    const onVisible = () => { if (document.visibilityState === "visible") retry(); };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pointerdown", retry, { passive: true });
+    window.addEventListener("keydown", retry);
+    let observer: IntersectionObserver | undefined;
+    if (pinned) want(playing);
+    else {
+      observer = new IntersectionObserver(([entry]) => want(entry.isIntersecting), { threshold: 0.5 });
+      observer.observe(el);
     }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) el.play().catch(() => {});
-      else el.pause();
-    }, { threshold: 0.5 });
-    observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pointerdown", retry);
+      window.removeEventListener("keydown", retry);
+    };
   }, [pinned, playing]);
   const sync = () => {
     const t = video.current?.currentTime ?? 0;
@@ -203,7 +224,7 @@ function FeatureReel({ reel, on, shown, pinned, playing }: { reel: Reel; on: boo
   return (
     <li id={reel.id} className="dv-reel dv-link-target" data-on={on || undefined} data-shown={shown || undefined}>
       <div className="dv-reel-media">
-        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload="none" controls={still} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} />
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={ready ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} onPlaying={() => setRefused(false)} />
       </div>
       <div className="dv-reel-text">
         <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
@@ -224,6 +245,16 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   const [current, setCurrent] = useState(0);
   const [pinned, setPinned] = useState(false);
   const [onScreen, setOnScreen] = useState(false);
+  const [near, setNear] = useState(false);
+  // Start fetching the clips a screen or two early, so a slow network doesn't show a
+  // still poster when the block arrives.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setNear(true); observer.disconnect(); } }, { rootMargin: "150% 0px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)");
     const sync = () => setPinned(wide.matches);
@@ -255,7 +286,7 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   }, [pinned]);
   return (
     <ul ref={root} className="dv-reels dv-gap-40">
-      {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} on={i === current} shown={i <= current} pinned={pinned} playing={onScreen && i === current} />)}
+      {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} on={i === current} shown={i <= current} pinned={pinned} playing={onScreen && i === current} ready={near && pinned && (i === current || i === current + 1)} />)}
     </ul>
   );
 }
