@@ -4595,3 +4595,12 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   [data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > .dv-section-head { margin-bottom: 24px; }
   .about-principles li { grid-template-columns: 1fr; gap: 8px; }
 }
+
+/* Entering About from the landing (lib/about-entrance.ts). */
+.home-stage[data-entering] .intro-surface.home-grid { opacity: 0; transition: opacity 250ms ease; }
+.home-stage[data-entering] .home-pick { pointer-events: none; }
+.about-entrance { position: fixed; z-index: 15; inset: 0; background: transparent; pointer-events: none; transition: background-color 260ms ease; }
+.about-entrance img { position: absolute; border-radius: 16px; object-fit: cover; object-position: 44% center; opacity: 0; transition: opacity 260ms ease; }
+.about-entrance[data-photo] { background: var(--bg); }
+.about-entrance[data-photo] img { opacity: 1; }
+.about-entrance[data-reveal] { background: transparent; transition-duration: 380ms; }

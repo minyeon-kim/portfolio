@@ -3,9 +3,10 @@
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { site } from "@/lib/site";
+import { site, withBase } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
+import { enterAbout, portraitBox, type Box } from "@/lib/about-entrance";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiDevice } from "@/components/gemini-device";
@@ -112,6 +113,34 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     return () => media.removeEventListener("change", sync);
   }, []);
   const previewed = shown ?? (phone ? projects[0] : null);
+  // The header's About link, from here: the dust gathers into the portrait
+  // before the page opens (lib/about-entrance.ts). Desktop only, with motion
+  // allowed and the dust running; otherwise it is an ordinary link.
+  const photo = useRef<HTMLImageElement | null>(null);
+  const [portrait, setPortrait] = useState<{ image: HTMLImageElement; box: Box } | null>(null);
+  useEffect(() => {
+    if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
+    const src = withBase("/images/about/portrait.webp");
+    const image = new Image();
+    image.src = src;
+    photo.current = image;
+    const onClick = (event: MouseEvent) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest?.<HTMLAnchorElement>("header a[href]");
+      if (!link || !link.pathname.endsWith(localize("/about/", locale))) return;
+      const live = document.querySelector<HTMLElement>(".home-object")?.dataset.live !== undefined;
+      if (!live || !image.naturalWidth || document.documentElement.hasAttribute("data-project-navigation")) return;
+      event.preventDefault();
+      event.stopPropagation();
+      link.blur();
+      const box = portraitBox();
+      setHover(null);
+      setPortrait({ image, box });
+      enterAbout(box, src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")));
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [locale, router]);
   const open = (slug: string) => {
     if (slug === "about") {
       revealNextProject(
@@ -128,10 +157,10 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   };
 
   return (
-    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug}>
+    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug} data-entering={portrait ? "" : undefined}>
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={hover === "about" ? "about" : shown?.slug ?? "default"} />
+        <HeroObject className="home-object" variant={portrait ? "portrait" : hover === "about" ? "about" : shown?.slug ?? "default"} portrait={portrait} />
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
 
         {projects.map((p) => (
