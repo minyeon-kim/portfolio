@@ -1141,3 +1141,5 @@ The guided demo and its dialog are gone (owner: pressing small targets in a scal
 Devsign Problem statement holds and is covered (owner): on desktop with motion allowed the sheet fills the screen, sticks at the top for 30svh of reading, then Develop rises over it with its own round top corners (native scroll; the travel is `#define::after`, 130svh, and Develop pulls up by 100svh). Solid purple instead of fading into Develop. Phones and reduced motion keep the fade. Figma not updated.
 
 Opener dot canvas restored: 14e3d33 had dropped the `--dh-dot` colour with the guided-demo CSS, so the grid drew nothing and only the dots near the cursors showed.
+
+ScrambleHeadline locks glyph widths in em, not px: the headline size follows the window, so px widths from load split the letters apart after a resize without reload.
