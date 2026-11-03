@@ -111,7 +111,7 @@ export function ProjectStage({ projects, about }: Props) {
       {active === null && <HomeIntro projects={projects} about={about} onSelect={select} />}
       {p && (
       <section id="work" aria-label={`${p.name}, selected case`} className={p.hero ? "project-selected full-bleed md:-mt-[64px]" : "project-selected stage-pin full-bleed md:-mt-[64px]"}>
-        <div key={p.slug} id="stage-panel" data-stage-index={active} className={p.hero ? "selected-stage selected-stage-hero" : "selected-stage"} data-canvas={(p.slug === "workflow-app" && !p.hero) || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
+        <div key={p.slug} id="stage-panel" data-stage-index={active} className={p.hero ? "selected-stage selected-stage-hero" : "selected-stage"} data-canvas={(p.slug === "devsign" && !p.hero) || undefined} data-gemini={p.slug === "gemini-privacy" || undefined}>
           {p.hero ? <DevsignHero hero={p.hero} name={p.name} project={p.slug} alt={p.slug === "gemini-privacy" ? `${p.name}: the source sheet opens and Gmail is switched off` : `${p.name}: a drifted button is flagged, reviewed and approved`} /> : <>
           <div className="stage-content selected-stage-copy">
             <p className="selected-stage-index">{t.project} {(active ?? 0) + 1}</p>
@@ -125,7 +125,7 @@ export function ProjectStage({ projects, about }: Props) {
           <div className="stage-grow selected-stage-object">
             <div className="generated-frame"><div className="generated-preview">{p.slug === "gemini-privacy"
               ? <GeminiDevice><GeminiPhone alt={`${p.name}: the source sheet opens and Gmail is switched off`} /></GeminiDevice>
-              : p.slug === "workflow-app"
+              : p.slug === "devsign"
                 ? <DevsignLoop alt={`${p.name}: a drifted button is flagged, reviewed and approved`} />
                 : p.cover && <Image src={withBase(p.cover)} alt={`${p.name} project overview`} fill sizes="100vw" preload className="object-cover" />}</div></div>
           </div>

@@ -380,6 +380,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               ))}
             </ul>
           </figure>
+          <div className="dv-interview-result reveal">
+            <p className="dv-caps">{discover.interview.resultLabel}</p>
+            <p className="dv-finding">{discover.interview.result}</p>
+          </div>
         </div>
         ) : (
         <div className="dv-subsection dv-rule">
