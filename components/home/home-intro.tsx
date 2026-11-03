@@ -171,8 +171,6 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   {c.slug !== "about" && <span className="home-pick-index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>}
                   {c.name}
                 </button>
-                {/* What it is, always in view: the first glance shouldn't depend on hovering. */}
-                {c.caption && <p className="home-pick-line">{c.caption}</p>}
               </li>
             ))}
           </ol>
