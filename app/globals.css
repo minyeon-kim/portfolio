@@ -4179,8 +4179,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-wf-on { fill: color-mix(in srgb, var(--case-accent) 55%, transparent); }
 .dv-wf-alert { fill: var(--dv-alert); }
 .dv-wf-line { fill: none; stroke: var(--case-accent); stroke-width: 1.75; }
-.dv-wf-head, .dv-wf-dot, .dv-wf-num { fill: var(--case-accent); }
-.dv-wf-dot { stroke: light-dark(#ffffff, #120f24); stroke-width: 1.5; }
+.dv-wf-head, .dv-wf-num { fill: var(--case-accent); }
 .dv-wf-numtext { fill: light-dark(#ffffff, #120f24); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dv-wf-title { fill: var(--dv-ink); font-size: 18px; font-weight: 600; }
 .dv-wf-text { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
@@ -4863,3 +4862,6 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-meet ul { gap: 12px; margin-top: 12px; }
   .dv-meet li { padding: 16px; }
 }
+
+/* Wireflow: the way back to the workspace is dashed. */
+.dv-wf-back { stroke-dasharray: 5 5; }
