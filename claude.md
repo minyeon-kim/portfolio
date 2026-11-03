@@ -1083,3 +1083,5 @@ The 7000px affinity board is a fresh FigJam export with the top crop and the flo
 Landing (≥64rem), one block at the bottom left (owner: the click must sit where the emphasis is; supersedes the diagonal): statement, note, then the case pills in one row under them, 48px off the bottom. The dot landscape stays raised above. --picks-gutter is 0 again, so the Devsign card reaches the page inset.
 
 Case opener: the purple glow rising behind the title and button (`.devsign-hero-glow`) is removed at the owner's request; only the screen's own shadow (`.devsign-hero-media` box-shadow) remains. Supersedes "a light rises from behind the product". Figma not updated.
+
+Case opener primary pill is white in dark and ink in light with page-coloured text, like the header's Get in touch (no case colour), and the opener screen has no border, only its shadow. Figma not updated.
