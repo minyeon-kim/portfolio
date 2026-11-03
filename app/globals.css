@@ -18,6 +18,7 @@
   --dur-slow: 400ms;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   color-scheme: light;
 }
@@ -299,13 +300,13 @@ details[open]::details-content {
 @media (prefers-reduced-motion: no-preference) {
   .reveal-ready .reveal {
     transition:
-      opacity var(--dur-slow) var(--ease),
-      translate var(--dur-slow) var(--ease),
+      opacity 600ms ease,
+      translate 800ms var(--ease-reveal),
       border-color var(--dur-fast) var(--ease);
   }
   .reveal-ready .reveal:not([data-shown]) {
     opacity: 0;
-    translate: 0 16px;
+    translate: 0 24px;
   }
 }
 
@@ -313,7 +314,7 @@ details[open]::details-content {
    window, then settles to its own size as the window opens to full. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal-ready .dv-figure > :is(img, .dv-crop, .dv-fit), .reveal-ready .dv-point-media {
-    transition: scale 600ms var(--ease-out-soft), clip-path 600ms var(--ease-out-soft);
+    transition: scale 1100ms var(--ease-reveal), clip-path 1100ms var(--ease-reveal);
     clip-path: inset(0 round 16px);
   }
   .reveal-ready .reveal:not([data-shown]) :is(.dv-figure > :is(img, .dv-crop, .dv-fit), .dv-point-media),
@@ -3362,9 +3363,9 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    each line): a stage's block fades and rises 40px as one piece; the text and
    cards inside don't move on their own, images still settle inside it. */
 @media (prefers-reduced-motion: no-preference) {
-  .reveal-ready .dv > section > :has(.reveal) { transition: opacity 500ms var(--ease), translate 700ms var(--ease-out-soft); }
-  .reveal-ready .dv > section > :has(.reveal):not([data-shown]) { opacity: 0; translate: 0 40px; }
   .reveal-ready .dv .reveal, .reveal-ready .dv .reveal:not([data-shown]) { opacity: 1; translate: none; transition: none; }
+  .reveal-ready .dv [data-reveal-unit] { transition: opacity 800ms ease, translate 1000ms var(--ease-reveal); }
+  .reveal-ready .dv [data-reveal-unit]:not([data-shown]) { opacity: 0; translate: 0 48px; }
 }
 
 /* Scroll depth, the usual case-study pair (replaces the elastic lean):
@@ -4739,4 +4740,77 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-ut-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; margin-top: 48px; }
   .case-study .dv .dv-ut-meaning { margin-top: 48px; }
   .dv-ut-scenarios { margin-top: 72px; }
+}
+
+/* Usability results: scores and what they meant in one panel, the scenarios as cards right under it. */
+.dv-ut-panel, .dv-ut-cards li { --ut-card: light-dark(#ffffff, var(--dv-band-card-dark)); background: var(--ut-card); border-radius: var(--dv-card-radius); }
+.dv .dv-ut-panel { margin-top: 48px; overflow: clip; }
+.dv-ut-panel .dv-ut-scores { gap: 1px; margin: 0; background: var(--dv-line); }
+.dv-ut-panel .dv-ut-scores li { padding: 32px clamp(20px, 2.4vw, 32px); background: var(--ut-card); transition: background-color 250ms var(--ease); }
+.dv-ut-panel .dv-ut-scores li > * { transition: opacity 250ms var(--ease); }
+.dv-ut-panel .dv-ut-value { margin-bottom: 20px; }
+.dv-ut-scores .dv-ut-value span { margin: 0; color: inherit; font: inherit; line-height: inherit; }
+.dv-ut-scores .dv-ut-gauge { margin-top: 0; }
+.dv-ut-gauge { position: relative; display: block; flex: none; height: 4px; margin-bottom: 24px; border-radius: 2px; background: color-mix(in srgb, var(--dv-ink) 12%, transparent); }
+.dv-ut-gauge i { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--case-accent); transform-origin: left; }
+.dv-ut-gauge b { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--dv-ink); }
+.dv-ut-scores li[data-missed] .dv-ut-gauge i { background: var(--dv-alert); }
+.case-study .dv .dv-ut-panel .dv-ut-meaning { max-width: none; margin: 0; padding: 28px clamp(20px, 2.4vw, 32px) 32px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: clamp(18px, 1.5vw, 20px); font-weight: 400; line-height: 1.55; word-break: keep-all; text-wrap: pretty; }
+.dv-ut-panel[data-armed]:not([data-played]) .dv-ut-gauge i { transform: scaleX(0); }
+.dv-ut-panel[data-armed]:not([data-played]) .dv-ut-gauge b { opacity: 0; }
+.dv-ut-panel[data-armed]:not([data-played]) .dv-ut-meaning { opacity: 0.2; }
+.dv-ut-panel[data-played] .dv-ut-gauge i { transition: transform 1400ms var(--ease-reveal) calc(var(--i) * 160ms); }
+.dv-ut-panel[data-played] .dv-ut-gauge b { transition: opacity 500ms ease calc(var(--i) * 160ms + 900ms); }
+.dv-ut-panel[data-played] .dv-ut-meaning { transition: opacity 800ms ease 1300ms; }
+@media (hover: hover) {
+  .dv-ut-panel .dv-ut-scores li:hover { background: color-mix(in srgb, var(--dv-ink) 5%, var(--ut-card)); }
+  .dv-ut-panel .dv-ut-scores:hover li:not(:hover) > * { opacity: 0.45; }
+}
+.dv .dv-ut-scenarios { margin-top: 56px; }
+.dv-ut-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 20px 0 0; padding: 0; list-style: none; counter-reset: dv-ut; }
+.dv-ut-cards li { counter-increment: dv-ut; display: flex; flex-direction: column; min-width: 0; padding: 24px clamp(20px, 2.4vw, 32px) 28px; transition: background-color 250ms var(--ease); }
+.dv-ut-cards li::before { content: counter(dv-ut); margin-bottom: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-ut-cards strong { margin-bottom: 16px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-ut-cards span { margin-top: auto; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (hover: hover) { .dv-ut-cards li:hover { background: color-mix(in srgb, var(--dv-ink) 5%, var(--ut-card)); } }
+@media (max-width: 63.99rem) {
+  .dv-ut-panel .dv-ut-scores { gap: 1px; margin: 0; }
+  .dv-ut-cards { grid-template-columns: 1fr; gap: 12px; }
+  .dv .dv-ut-panel { margin-top: 32px; }
+  .dv .dv-ut-scenarios { margin-top: 40px; }
+}
+
+/* Pace (owner: everything felt too fast). Reveals use a gentler curve over a longer time; scroll-linked motion finishes
+   nearer the middle of the screen, where people are looking, instead of at the bottom edge. Control feedback stays quick. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li) { transition: opacity 700ms ease, translate 900ms var(--ease-reveal); }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(2) { transition-delay: 100ms; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(3) { transition-delay: 200ms; }
+  .reveal-ready :is(.case-findings-card, .case-prototype-steps > li):nth-child(n+4) { transition-delay: 300ms; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-section-title { animation-range: entry 40% cover 40%; }
+    .dv-section-head::after { animation-range: entry 60% cover 48%; }
+    .dv-funnel li:nth-child(1) { animation-range: cover 12% cover 38%; }
+    .dv-funnel li:nth-child(2) { animation-range: cover 20% cover 46%; }
+    .dv-funnel li:nth-child(3) { animation-range: cover 28% cover 54%; }
+    .dv-found tbody th, .dv-found td { animation-range: cover 14% cover 42%; }
+    .dv-found tbody td:nth-of-type(1) { animation-range: cover 18% cover 46%; }
+    .dv-found tbody td:nth-of-type(2) { animation-range: cover 22% cover 50%; }
+    .dv-insight-stat b { animation-range: cover 18% cover 52%; }
+    .dv-evbox .dv-insight-voices li { animation-range: cover 12% cover 40%; }
+    .dv-evbox .dv-insight-voices li:nth-child(2) { animation-range: cover 16% cover 44%; }
+    .dv-evbox .dv-insight-voices li:nth-child(3) { animation-range: cover 20% cover 48%; }
+  }
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    .dv-flow > li:nth-child(1) .dv-flow-stage::before { animation-range: cover 16% cover 30%; }
+    .dv-flow > li:nth-child(2) .dv-flow-stage::before { animation-range: cover 30% cover 44%; }
+    .dv-flow > li:nth-child(3) .dv-flow-stage::before { animation-range: cover 44% cover 58%; }
+    .dv-flow > li:nth-child(4) .dv-flow-stage::before { animation-range: cover 58% cover 72%; }
+    .dv-flow > li:nth-child(1) p { animation-range: cover 16% cover 34%; }
+    .dv-flow > li:nth-child(2) p { animation-range: cover 26% cover 44%; }
+    .dv-flow > li:nth-child(3) p { animation-range: cover 36% cover 54%; }
+    .dv-flow > li:nth-child(4) p { animation-range: cover 46% cover 64%; }
+  }
 }

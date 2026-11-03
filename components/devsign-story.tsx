@@ -8,7 +8,7 @@ import { useLocale } from "@/lib/use-locale";
 type Box = [number, number, number, number];
 const pad = (n: number) => String(n).padStart(2, "0");
 
-const PLAYBACK_RATE = 1.15;
+const PLAYBACK_RATE = 1;
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
@@ -346,6 +346,81 @@ export function GuidedDemo({ steps, chapters, alt, next, back, restart, open }: 
         </div>
       </div>
       <a className="dv-demo-open" href={devsignUrl(locale)} target="_blank" rel="noreferrer">{open}</a>
+    </div>
+  );
+}
+
+type UsabilityScore = { value: string; unit: string; ratio: number; target?: number; title: string; note: string; missed?: boolean };
+
+const COUNT_MS = 1400;
+const COUNT_STAGGER_MS = 160;
+
+// Usability results as one panel: when it is on screen the numbers count up and
+// their gauges fill one after another, then the line saying what they meant
+// lights up. The final values are in the markup, so no JS or reduced motion
+// simply shows them.
+export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]; meaning: string }) {
+  const panel = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = panel.current;
+    if (!el || !("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const numbers = [...el.querySelectorAll<HTMLElement>("[data-count]")].map((node) => {
+      const text = node.dataset.count ?? "0";
+      return { node, target: Number(text), decimals: text.split(".")[1]?.length ?? 0 };
+    });
+    let frame = 0;
+    const paint = (progress: (i: number) => number) => numbers.forEach(({ node, target, decimals }, i) => {
+      node.textContent = (target * progress(i)).toFixed(decimals);
+    });
+    paint(() => 0);
+    el.dataset.armed = "";
+    const play = () => {
+      el.dataset.played = "";
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = (i: number) => Math.min(1, Math.max(0, (now - start - i * COUNT_STAGGER_MS) / COUNT_MS));
+        paint((i) => 1 - (1 - t(i)) ** 3);
+        if (t(numbers.length - 1) < 1) frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        observer.disconnect();
+        play();
+      } else if (entry.boundingClientRect.bottom < 0) {
+        observer.disconnect();
+        paint(() => 1);
+        el.dataset.played = "";
+      }
+    }, { threshold: 0.3 });
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      paint(() => 1);
+      delete el.dataset.armed;
+      delete el.dataset.played;
+    };
+  }, []);
+
+  return (
+    <div ref={panel} className="dv-ut-panel reveal">
+      <ul className="dv-ut-scores">
+        {scores.map((item, i) => (
+          <li key={item.title} data-missed={item.missed || undefined} style={{ "--i": i } as React.CSSProperties}>
+            <p className="dv-ut-value"><span data-count={item.value}>{item.value}</span><small>{item.unit}</small></p>
+            <span className="dv-ut-gauge" aria-hidden="true">
+              <i style={{ width: `${item.ratio * 100}%` }} />
+              {item.target !== undefined && <b style={{ left: `${item.target * 100}%` }} />}
+            </span>
+            <strong>{item.title}</strong>
+            <span>{item.note}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="dv-ut-meaning">{meaning}</p>
     </div>
   );
 }
