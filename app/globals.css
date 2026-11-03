@@ -2589,11 +2589,11 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* The case pills sit at the right edge, mid-height; the raised case devices
    keep clear of them by --picks-gutter. */
 .home-stage { --picks-gutter: 0px; }
-@media (min-width: 64rem) { .home-stage { --picks-gutter: 236px; } }
+@media (min-width: 64rem) { .home-stage { --picks-gutter: 288px; } }
 .home-picks { position: absolute; z-index: 3; top: 50%; right: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin: 0; padding: 0; list-style: none; }
 /* After metalab.com's case list: compact frosted grey pills, the name alone. */
-.home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 16px; border: 0; border-radius: 999px; background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8); color: var(--ink); font-size: 16px; font-weight: 400; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
+.home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8); color: var(--ink); font-size: 18px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
 /* Hovered or active: see-through, just the line (metalab.com). */
 .home-pick:hover, .home-pick:focus-visible, .home-pick[data-active] { background: transparent; backdrop-filter: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
 .home-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -3271,7 +3271,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 @media (max-width: 63.99rem) {
   .intro-stage.home-stage { min-height: calc(100svh - 64px); }
   .intro-surface.home-grid { padding-top: 40px; }
-  .home-pick { min-height: 44px; padding: 0 20px; }
 }
 
 /* Prioritization criteria: one criterion per row, read top to bottom. */
