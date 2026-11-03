@@ -4574,3 +4574,5 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .about-skills dt { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; }
 .about-skills dd { margin: 8px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 
+/* Five facts stay on one row on desktop. */
+@media (min-width: 64rem) { .devsign-hero-details:has(> :nth-child(5)) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; } }
