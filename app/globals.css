@@ -4616,3 +4616,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-pscreen-evidence span { display: block; margin-top: 10px; color: #4a4a50; font-size: 16px; }
 .dv-notes-board .dv-note { background: var(--note); border-color: transparent; color: #1b1b1f; }
 .dv-notes-board .dv-note span { color: #4a4a50; }
+/* One sticky size on the wall; on a problem screen one quote size and one note size. */
+.dv-notes-board .dv-note { width: 180px; min-width: 0; height: 148px; overflow: hidden; transition: transform 600ms var(--ease), width 600ms var(--ease), height 600ms var(--ease), opacity 300ms var(--ease); }
+.dv-notes-board .dv-note[data-state="out"] { transition: opacity 200ms var(--ease), transform 0s linear 200ms, width 0s linear 200ms, height 0s linear 200ms; }
+.case-study .dv .dv-pscreen-evidence { display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; }

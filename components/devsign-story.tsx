@@ -192,7 +192,7 @@ export function AffinityNotes({ groups, problems, funnel, lead, note, types, ans
       // Quote on top, the two stickies under it, centred together above the stage nav.
       const noteW = (W * (1 - EVIDENCE_LEFT) - 12) / 2;
       const quoteH = quote ? quote.offsetHeight : 0;
-      const top = Math.max(72, (stage.clientHeight - 24 - (quoteH + 14 + 130)) / 2);
+      const top = Math.max(72, (stage.clientHeight - 24 - (quoteH + 14 + 124)) / 2);
       if (quote) quote.style.top = `${top}px`;
       cards.forEach((card, i) => {
         const d = layout[i];
@@ -202,9 +202,11 @@ export function AffinityNotes({ groups, problems, funnel, lead, note, types, ans
           const x = W * EVIDENCE_LEFT + d.slot * (noteW + 12) - d.x * W;
           const y = top + quoteH + 14 - board.offsetTop - d.y * H;
           card.style.width = `${noteW.toFixed(1)}px`;
+          card.style.height = "124px";
           card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(0%, 0%) rotate(${(d.r * 0.2).toFixed(2)}deg)`;
         } else {
           card.style.width = "";
+          card.style.height = "";
           card.style.transform = `translate(0px, 0px) translate(-50%, -50%) rotate(${d.r}deg)`;
         }
       });
