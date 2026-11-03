@@ -4858,7 +4858,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv :is(.dv-subsection, .dv-subsection-120, .dv-question, .dv-gap-96, .dv-process, .dv-main-features, .dv-block + .dv-gap-72, .dv-core + .dv-hmw) { margin-top: var(--sp-block); }
 .dv > section > .dv-core.dv-core { margin-top: var(--sp-block); }
 .case-study .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
-.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-dropped, .dv-gap-72), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-ut-panel + , .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
+.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-dropped, .dv-gap-72), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
 .case-study .dv .dv-cast { margin-bottom: 0; }
 .case-study .dv .dv-ut-summary + .dv-ut-panel { margin-top: 64px; }
 .case-study .dv .dv-funnel + .dv-board { margin-top: 48px; }
