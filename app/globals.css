@@ -4833,7 +4833,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-hmw-label { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.4; }
 .dv-hmw-lead { max-width: var(--dv-measure-wide); margin-top: 16px; color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; line-height: 1.25; word-break: keep-all; text-wrap: balance; }
 .dv-hmw-list { max-width: var(--dv-max); margin: 48px 0 0; padding: 0; list-style: none; }
-.dv-hmw-list li { display: grid; grid-template-columns: 48px minmax(0, 1fr); padding: 20px 0; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.45; word-break: keep-all; }
+.dv-hmw-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr); padding: 28px 0; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.45; word-break: keep-all; }
 .dv-hmw-list b { color: var(--case-accent); font-weight: 500; font-variant-numeric: tabular-nums; }
 .dv > .dv-hmw-stage + #develop { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; animation: none; clip-path: none; translate: none; opacity: 1; }
 @media (max-width: 47.99rem) {
