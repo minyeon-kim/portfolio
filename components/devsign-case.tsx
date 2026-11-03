@@ -428,8 +428,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               body: item.body,
               role: item.role,
               tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
-              quote: define.affinity.found[index][1],
-              who: define.affinity.found[index][2],
               feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
             }))}
           />
