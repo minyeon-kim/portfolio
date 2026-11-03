@@ -425,7 +425,7 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
   );
 }
 
-type Problem = { title: string; body: string; role: string; tone: string; quote?: string; who?: string; feature?: string };
+type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
 
 // Key problems as a horizontal accordion: one panel open (hover, focus or tap),
 // the others keep their role and name. Stacked and all open below 64rem.
@@ -442,7 +442,6 @@ export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answere
           <div className="dv-panel-more">
             <div>
               <p>{item.body}</p>
-              {item.quote && <blockquote>“{item.quote}”<cite>{item.who}</cite></blockquote>}
               {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
             </div>
           </div>
