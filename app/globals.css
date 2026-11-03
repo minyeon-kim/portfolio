@@ -4150,9 +4150,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-iter-steps > li[data-on] { opacity: 1; }
   .dv-iter-name { display: none; }
 }
-.dv-iter-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 48px; align-items: start; }
-.dv-iter-head .dv-photo.dv-photo-wide { max-width: none; }
-@media (max-width: 63.99rem) { .dv-iter-head { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
 
 /* Core features, pinned: the clip stays while the sentences scroll past it. Desktop only;
    otherwise the list above. */
@@ -4294,16 +4291,19 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 
 
-/* Iterations: why first, then As-is small to To-be large. */
-.dv-iter-why { display: flex; flex-direction: column; gap: 4px; max-width: var(--dv-measure); margin-top: 20px; padding-left: 16px; border-left: 2px solid var(--case-accent); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; }
-.dv-iter-why b { color: var(--dv-muted); font-size: 16px; font-weight: 500; }
-.dv-iter-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 56px; align-items: center; }
-.dv-iter-side { position: relative; }
-.dv-iter-side[data-side="b"]::before { content: "→"; position: absolute; top: 50%; left: -40px; width: 24px; color: var(--dv-muted); font-size: 24px; line-height: 1; text-align: center; }
-.dv-iter-side[data-side="b"] .dv-iter-view { box-shadow: 0 0 0 1px var(--case-accent); }
+/* Iterations: one plain line of why, then two frames of one size on one line. To-be is
+   told apart by its label only. */
+.dv-iter-why { max-width: var(--dv-measure); margin-top: 16px; color: var(--dv-muted); }
+.dv-iter-photo { margin-top: 64px; }
+.dv-iter-photo img { width: 100%; aspect-ratio: 2.2; border-radius: var(--dv-card-radius); object-fit: cover; object-position: 50% 30%; }
+.dv-iter-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start; margin-top: 0; }
+.dv-iter-side { text-align: left; }
+.dv-iter-tag { display: block; margin-bottom: 12px; padding: 0; border-radius: 0; background: none; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-iter-side[data-side="b"] .dv-iter-tag { background: none; color: var(--case-accent); }
+.dv-iter-side figcaption { margin-top: 16px; }
 @media (max-width: 63.99rem) {
   .dv-iter-pair { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .dv-iter-side[data-side="b"]::before { display: none; }
+  .dv-iter-photo { margin-top: 40px; }
 }
 
 /* Guided demo: everything but the part that matters is dimmed; the box glides between steps. */
