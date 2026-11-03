@@ -1081,3 +1081,5 @@ Dense boards magnify with the mouse (`ZoomFrame` in components/devsign-story.tsx
 The 7000px affinity board is a fresh FigJam export with the top crop and the floating avatar stamps painted out (small stamps on some Blurred role lines stickies remain). Gemini's affinity and sketch images are low resolution (about 1100px wide), so their text stays soft under the magnifier until a larger export exists.
 
 Landing (≥64rem), one block at the bottom left (owner: the click must sit where the emphasis is; supersedes the diagonal): statement, note, then the case pills in one row under them, 48px off the bottom. The dot landscape stays raised above. --picks-gutter is 0 again, so the Devsign card reaches the page inset.
+
+Case opener: the purple glow rising behind the title and button (`.devsign-hero-glow`) is removed at the owner's request; only the screen's own shadow (`.devsign-hero-media` box-shadow) remains. Supersedes "a light rises from behind the product". Figma not updated.
