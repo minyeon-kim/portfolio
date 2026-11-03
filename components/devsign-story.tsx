@@ -13,6 +13,34 @@ const PLAYBACK_RATE = 1.15;
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
+// Boards too dense to read at column width: with a mouse the frame stays put and the
+// image magnifies around the cursor, following it. Touch and keyboard open the full image.
+export function ZoomFrame({ children, href, scale = 3 }: { children: React.ReactNode; href: string; scale?: number }) {
+  const locale = useLocale();
+  const follow = (event: React.PointerEvent<HTMLAnchorElement>) => {
+    if (event.pointerType !== "mouse") return;
+    const box = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty("--zx", `${((event.clientX - box.left) / box.width) * 100}%`);
+    event.currentTarget.style.setProperty("--zy", `${((event.clientY - box.top) / box.height) * 100}%`);
+    event.currentTarget.dataset.on = "";
+  };
+  return (
+    <a
+      className="dv-zoom-frame"
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      style={{ "--zs": scale } as React.CSSProperties}
+      onPointerEnter={follow}
+      onPointerMove={follow}
+      onPointerLeave={(event) => { delete event.currentTarget.dataset.on; }}
+    >
+      <div className="dv-zoom-inner">{children}</div>
+      <span className="dv-zoom-hint" aria-hidden="true">{locale === "ko" ? "마우스를 올려 확대" : "Hover to magnify"}</span>
+    </a>
+  );
+}
+
 // Only what is inside the box, fitted into a tile of one shape: no outline, no
 // surrounding screen, and never blown up past 1.6x (the shots are 2x).
 function Crop({ img, box, tile }: { img: Shot; box: Box; tile: number }) {
@@ -104,7 +132,9 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
   return (
     <div className="dv-vpc">
       <div className="dv-vpc-view reveal">
-        <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
+        <ZoomFrame href={withBase(art.src)} scale={3}>
+          <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
+        </ZoomFrame>
       </div>
       <p className="dv-vpc-title reveal">{overviewLabel}</p>
       <div className="dv-vpc-pairs reveal">
