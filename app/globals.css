@@ -3410,7 +3410,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
     /* Statements light up top to bottom as they rise (Apple-style fill),
        full ink once they reach the middle of the screen; accent and muted
        spans keep their own colour. */
-    :is(.dv-headline, .dv-core-text) {
+    :is(.dv-headline, .dv-core-text, .dv-big-quote) {
       -webkit-text-fill-color: transparent;
       background: linear-gradient(to bottom, currentColor 35%, color-mix(in srgb, currentColor 22%, transparent) 65%) no-repeat 0 100% / 100% 300%;
       -webkit-background-clip: text; background-clip: text;
@@ -4577,20 +4577,22 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-interview-result { margin-top: clamp(40px, 5vw, 64px); }
 .dv-interview-result .dv-finding { margin-top: 8px; }
 
-/* Secondary research: each problem beside its evidence, as rows rather than equal cards. */
-.dv-claims { margin: 16px 0 0; padding: 0; list-style: none; }
-.dv-claims > li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; padding-block: 32px; border-top: 1px solid var(--dv-line); }
-.dv-claims > li:last-child { border-bottom: 1px solid var(--dv-line); }
-.dv-claims h4 { color: var(--dv-ink); font-size: clamp(20px, 2vw, 24px); font-weight: 500; line-height: 1.35; word-break: keep-all; }
-.dv-claims blockquote { color: var(--dv-ink); font-size: 18px; line-height: 1.5; word-break: keep-all; }
-.dv-claims cite { display: block; margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-style: normal; line-height: 1.5; }
-.dv-claim-original { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-claim-original + cite { margin-top: 0; }
-.dv-claim-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; margin-bottom: 32px; }
-.dv-claim-stats strong { display: block; color: var(--case-accent); font-size: clamp(44px, 5vw, 64px); font-weight: 300; line-height: 1; }
-.dv-claim-stats p > span { display: block; margin-top: 12px; color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
-.dv-claim-source { grid-column: 1 / -1; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+/* Secondary research, three sizes (Metalab's number rows, Figma's report quote, Linear's one board). */
+.dv-numbers > p:not(.dv-numbers-source) { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: center; padding-block: clamp(28px, 3vw, 44px); border-top: 1px solid var(--dv-line); }
+.dv-numbers strong { color: var(--dv-ink); font-size: clamp(64px, 8vw, 120px); font-weight: 300; line-height: 1; text-align: right; }
+.dv-numbers span { color: var(--dv-ink); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.4; word-break: keep-all; }
+.dv-numbers-source { padding-top: 16px; border-top: 1px solid var(--dv-line); color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-big-quote-block { margin: clamp(96px, 11vw, 160px) 0 0; }
+.dv-big-quote { color: var(--dv-ink); font-size: clamp(36px, 5.4vw, 80px); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; word-break: keep-all; }
+.dv-big-quote-block figcaption { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-repeated { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: start; margin-top: clamp(96px, 11vw, 160px); }
+.dv-repeated ul { margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-repeated li { padding-block: 16px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-repeated-board { display: block; color: var(--case-accent); font-size: 16px; line-height: 1.5; }
+.dv-repeated-board img { display: block; width: 100%; height: auto; margin-bottom: 12px; border-radius: var(--dv-card-radius); transition: opacity 150ms var(--ease); }
+.dv-repeated-board:is(:hover, :focus-visible) img { opacity: 0.85; }
 @media (max-width: 63.99rem) {
-  .dv-claims > li { grid-template-columns: 1fr; gap: 16px; padding-block: 24px; }
-  .dv-claim-stats { margin-bottom: 24px; }
+  .dv-numbers > p:not(.dv-numbers-source), .dv-repeated { grid-template-columns: 1fr; }
+  .dv-numbers > p:not(.dv-numbers-source) { gap: 12px; padding-block: 24px; }
+  .dv-numbers strong { text-align: left; }
 }
