@@ -1,7 +1,7 @@
-// Entering About from the landing: the dust gathers into the portrait (HeroObject,
-// variant "portrait"), then the real photo fades in over it at the exact spot it
-// takes on the About page, the page swaps in underneath, and everything round
-// the photo clears. About 1.4s; a click or key press skips the gathering.
+// Entering About from the landing: hovering the header's About link gathers the
+// dust into the portrait (HeroObject, variant "portrait"); clicking it fades the
+// real photo in at the exact spot it takes on the About page, the page swaps in
+// underneath, and everything round the photo clears. No wait after the click.
 
 export type Box = { left: number; top: number; width: number; height: number };
 
@@ -13,7 +13,7 @@ export function portraitBox(): Box {
   return { left: vw - Math.max(56, (vw - 1200) / 2) - width, top: 88, width, height };
 }
 
-const GATHER = 850, FADE = 260, REVEAL = 380;
+const FADE = 260, REVEAL = 380;
 
 export function enterAbout(box: Box, src: string, go: () => void, ready: () => boolean) {
   const root = document.documentElement;
@@ -46,15 +46,9 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
     };
     wait();
   };
-  let timer = 0;
-  const showPhoto = () => {
-    window.clearTimeout(timer);
-    window.removeEventListener("pointerdown", showPhoto, true);
-    window.removeEventListener("keydown", showPhoto, true);
+  // On the next frame, so the photo's fade runs from 0.
+  requestAnimationFrame(() => {
     layer.dataset.photo = "";
     window.setTimeout(swap, FADE);
-  };
-  timer = window.setTimeout(showPhoto, GATHER);
-  window.addEventListener("pointerdown", showPhoto, true);
-  window.addEventListener("keydown", showPhoto, true);
+  });
 }
