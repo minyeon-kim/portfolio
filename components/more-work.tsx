@@ -106,9 +106,6 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
             open(current);
           }}>
           <span className="more-work-name" data-variant={variant(current.slug)}>{current.name}</span>
-          <svg className="more-work-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
         </Link>
         {current.description && <p className="more-work-description">{current.description}</p>}
       </div>

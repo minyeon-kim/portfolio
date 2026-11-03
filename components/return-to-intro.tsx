@@ -103,8 +103,10 @@ export function ReturnToIntro() {
         };
         observer.observe(document.body, { childList: true, subtree: true });
       }
+      // A case open on the landing has its own URL, but going home is a step back there.
+      const onStage = Boolean(document.querySelector("[data-stage-index]"));
       setUi({ activeCase: null, menuOpen: false, railVisible: true });
-      if (pathname !== "/") router.push(home, { scroll: true });
+      if (pathname !== "/" && !onStage) router.push(home, { scroll: true });
       else {
         window.scrollTo({ top: 0, behavior: "instant" });
         if (!layer) requestAnimationFrame(focusInput);
