@@ -4838,3 +4838,11 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-panel-more > div { width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
+
+/* Research questions as three keywords you can scan, each with its full question. No rules or scroll dimming. */
+.case-study .dv .dv-keyq .dv-caps { margin: 0 0 24px; }
+.dv-keyq ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 48px); margin: 0; padding: 0; list-style: none; }
+.dv-keyq li { min-width: 0; }
+.case-study .dv .dv-keyq h4 { margin: 0; color: var(--dv-ink); }
+.case-study .dv .dv-keyq p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.55; word-break: keep-all; text-wrap: pretty; }
+@media (max-width: 47.99rem) { .dv-keyq ul { grid-template-columns: 1fr; gap: 20px; } }

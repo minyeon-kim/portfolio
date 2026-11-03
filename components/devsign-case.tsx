@@ -135,11 +135,11 @@ function Insights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block {...interview} ff />
-        <div className="dv-asks dv-gap-40">
+        <div className="dv-keyq dv-gap-40">
           <p className="dv-caps reveal">{interview.questionsLabel}</p>
-          <ol>
-            {interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
-          </ol>
+          <ul>
+            {interview.questions.map((q: string, i: number) => <li key={q}><h4>{interview.questionKeys[i]}</h4><p>{q}</p></li>)}
+          </ul>
         </div>
         <figure className="dv-meet reveal">
           <div className="dv-meet-photo">
