@@ -63,63 +63,93 @@ function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" 
 // Findings first (`ff`, the Devsign case): the method's name as a small label,
 // the finding or decision as the heading, then the text; `label` overrides the
 // label (Iteration 1 · Split by role) and `feature` tags the feature it changed.
-// Discover, findings first: organised by what was learned, not by method. The
-// scale of the research is one line; each insight is one large sentence with one
-// piece of evidence, and the method it came from is only a small label.
+// Discover, findings first: the scale of the research in one line, then a block per
+// method. Each block leads with what it found, large; primary research comes last,
+// and runs from why it was done to what it found.
 function Insights({ discover }: { discover: Study }) {
-  const [first, second, third] = discover.insights;
+  const { q1, q2, synthesis, interview } = discover;
   return (
     <div className="dv-insights">
       <p className="dv-insights-scale reveal">{discover.scale}</p>
-      <ol>
-        <li>
-          <h3 className="reveal">{first.title}</h3>
-          <p className="dv-insight-stat reveal"><strong>{first.stat.value}</strong><span>{first.stat.text}</span></p>
-          <p className="dv-insight-tag reveal">{first.method} · <a className="dv-source-link" href={first.sourceUrl} target="_blank" rel="noreferrer">{first.source}</a> · <a className="dv-source-link" href={withBase(first.board)} target="_blank" rel="noreferrer">{first.boardLabel}</a></p>
-        </li>
-        <li>
-          <h3 className="reveal">{second.title}</h3>
-          <figure className="dv-insight-quote reveal">
-            <blockquote>“{second.quote}”</blockquote>
-            <figcaption>{second.who}</figcaption>
-          </figure>
-          <figure className="dv-meet reveal">
-            <div className="dv-meet-photo">
-              <Image src={withBase(second.photo.src)} alt={second.photo.alt} width={second.photo.width} height={second.photo.height} sizes="(max-width: 767px) 100vw, 1200px" />
-            </div>
-            <ul aria-label={second.peopleLabel}>
-              {second.participants.map((p: string[]) => (
-                <li key={p[0]} data-tone={toneOf(p[1])}>
-                  <b>{p[0]}</b>
-                  <strong>{p[1]}</strong>
-                  <span>{second.teamLabel} {p[2]} · {p[3]}</span>
-                </li>
-              ))}
-            </ul>
-          </figure>
-          <p className="dv-insight-tag reveal">{second.method}</p>
-        </li>
-        <li>
-          <h3 className="reveal">{third.title}</h3>
-          <table className="dv-tool-gaps reveal">
-            <caption className="sr-only">{third.method}</caption>
-            <thead>
-              <tr>{third.headers.map((header: string) => <th key={header} scope="col">{header}</th>)}</tr>
-            </thead>
-            <tbody>
-              {third.rows.map((row: Study) => (
-                <tr key={row.type}>
-                  <th scope="row">{row.type}</th>
-                  <td>{row.tools}</td>
-                  <td>{row.solves}</td>
-                  <td data-gap="" data-label={third.headers[3]}>{row.gap}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="dv-insight-tag reveal">{third.method}</p>
-        </li>
-      </ol>
+      <div className="dv-gap-48">
+        <Block {...discover.desk} ff />
+        <div className="dv-insight-stats">
+          {q1.stats.map((stat: { value: string; text: string }) => (
+            <p key={stat.value} className="dv-insight-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
+          ))}
+        </div>
+        <p className="dv-insight-tag reveal"><a className="dv-source-link" href={q1.surveyUrl} target="_blank" rel="noreferrer">{q1.surveyLabel}</a></p>
+        <p className="dv-caps dv-gap-56 reveal">{q1.communityLabel}</p>
+        <ul className="dv-insight-voices">
+          {q1.groups.map((g: { name: string; quote: string; original?: string; source: string; sourceUrl?: string }) => (
+            <li key={g.name} className="reveal">
+              <strong>{g.name}</strong>
+              <blockquote>“{g.quote}”</blockquote>
+              {g.original && <p lang="en">{g.original}</p>}
+              <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
+            </li>
+          ))}
+        </ul>
+        <p className="dv-boards-link reveal"><a href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a></p>
+      </div>
+
+      <div className="dv-subsection">
+        <Block title={q2.title} lead={q2.answer} ff />
+        <p className="dv-caps dv-gap-40 reveal">{q2.auditLabel}</p>
+        <table className="dv-tool-gaps dv-gap-16 reveal">
+          <caption className="sr-only">{q2.auditLabel}</caption>
+          <thead>
+            <tr>{q2.headers.map((header: string) => <th key={header} scope="col">{header}</th>)}</tr>
+          </thead>
+          <tbody>
+            {q2.rows.map((row: Study) => (
+              <tr key={row.type}>
+                <th scope="row">{row.type}</th>
+                <td>{row.tools}</td>
+                <td>{row.solves}</td>
+                <td data-gap="" data-label={q2.headers[3]}>{row.gap}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="dv-subsection">
+        <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
+        <ol className="dv-flow dv-gap-40 reveal">
+          {synthesis.rows.map((row: { stage: string; gap: string }) => (
+            <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><p>{row.gap}</p></li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="dv-subsection">
+        <Block {...interview} ff />
+        <div className="dv-asks dv-gap-40">
+          <p className="dv-caps reveal">{interview.questionsLabel}</p>
+          <ol>
+            {interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
+          </ol>
+        </div>
+        <figure className="dv-meet reveal">
+          <div className="dv-meet-photo">
+            <Image src={withBase(interview.photo.src)} alt={interview.photo.alt} width={interview.photo.width} height={interview.photo.height} sizes="(max-width: 767px) 100vw, 1200px" />
+          </div>
+          <ul aria-label={interview.peopleLabel}>
+            {interview.participants.map((p: string[]) => (
+              <li key={p[0]} data-tone={toneOf(p[1])}>
+                <b>{p[0]}</b>
+                <strong>{p[1]}</strong>
+                <span>{interview.participantColumns[2]} {p[2]} · {p[3]}</span>
+              </li>
+            ))}
+          </ul>
+        </figure>
+        <div className="dv-interview-result reveal">
+          <p className="dv-caps">{interview.resultLabel}</p>
+          <p className="dv-finding">{interview.result}</p>
+        </div>
+      </div>
     </div>
   );
 }
