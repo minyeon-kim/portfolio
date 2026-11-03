@@ -71,7 +71,7 @@ vec3 formOf(float n, vec2 uv) {
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.16 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.08 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 0.75;
-      p = vec3(x, y - 0.8, z);
+      p = vec3(x, y - 0.3, z);
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
@@ -323,7 +323,7 @@ void main() {
   // in brightness and matte, so the form reads by density alone.
   // Landing: the dust thins out with height above the landscape, so the
   // waves dissolve into the sky instead of a second field sitting on top.
-  float sky = galaxy * smoothstep(-0.2, 0.7, s.y);
+  float sky = galaxy * smoothstep(0.1, 0.9, s.y);
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
@@ -390,7 +390,7 @@ void main() {
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
   // Landing: fewer and dimmer towards the top, with no bright ones up there.
-  float sky = galaxy * smoothstep(-0.2, 0.7, s.y);
+  float sky = galaxy * smoothstep(0.1, 0.9, s.y);
   if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
   vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
@@ -640,11 +640,14 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     const clear = [9, 9, 9, 9];
     let clearTick = 0;
     const readClear = () => {
-      const p = document.querySelector<HTMLElement>(".home-world-problem[data-on]");
-      if (!p) { clear.fill(9); return; }
-      const c = el.getBoundingClientRect(), r = p.getBoundingClientRect();
-      clear[0] = ((r.left - c.left) / c.width) * 2 - 1; clear[2] = ((r.right - c.left) / c.width) * 2 - 1;
-      clear[1] = 1 - ((r.bottom - c.top) / c.height) * 2; clear[3] = 1 - ((r.top - c.top) / c.height) * 2;
+      // A case's paragraph, or on the landing the statement and note together.
+      const shown = [...document.querySelectorAll<HTMLElement>(".home-world-problem[data-on]")];
+      const parts = shown.length ? shown : [...document.querySelectorAll<HTMLElement>(".home-tagline-wrap:not([data-swap]) .home-tagline-default, .home-note:not([data-swap]) .home-note-default")];
+      const boxes = parts.map((part) => part.getBoundingClientRect()).filter((box) => box.width > 0);
+      if (!boxes.length) { clear.fill(9); return; }
+      const c = el.getBoundingClientRect();
+      clear[0] = ((Math.min(...boxes.map((r) => r.left)) - c.left) / c.width) * 2 - 1; clear[2] = ((Math.max(...boxes.map((r) => r.right)) - c.left) / c.width) * 2 - 1;
+      clear[1] = 1 - ((Math.max(...boxes.map((r) => r.bottom)) - c.top) / c.height) * 2; clear[3] = 1 - ((Math.min(...boxes.map((r) => r.top)) - c.top) / c.height) * 2;
     };
     const photoTexture = gl.createTexture()!;
     const photoScale = [1, 1], photoCentre = [0.5, 0.5];

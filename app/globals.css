@@ -3242,16 +3242,18 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
 /* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement, the note and the case pills read down one column at the top
-   left under the header, so Work is one click from the first glance. */
+   the statement and note sit at the bottom left and the case pills at the top
+   right, so Work is one click from the first glance. */
 @media (min-width: 64rem) {
-  .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
+  /* Diagonal: statement and note at the bottom left, the case pills at the top
+     right, with the dust free between them. */
+  .intro-surface.home-grid { grid-template-rows: minmax(0, 1fr) auto auto; padding-bottom: 48px; }
+  .home-tagline-wrap { grid-column: 1 / -1; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
   .home-tagline { text-align: left; }
-  .home-note { grid-column: 1; grid-row: 2; align-self: start; }
-  /* Headline, note, then the projects: one column to read down, ending on what to press. */
-  .intro-surface.home-grid { grid-template-rows: auto auto minmax(0, 1fr); }
-  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 3; align-self: start; margin-top: 8px; }
-  .home-picks ol { align-items: flex-start; }
+  .home-note { grid-column: 1; grid-row: 3; align-self: start; }
+  .home-picks { top: 104px; right: var(--edge-inset); translate: none; }
+  .home-stage { --picks-gutter: 288px; }
+  .home-stage[data-world="gemini-privacy"] .home-world-problem { left: min(52%, calc(100% - 28ch - 280px)); }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */
