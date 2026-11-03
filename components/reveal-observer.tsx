@@ -72,7 +72,8 @@ export function RevealObserver() {
           const el = e.target as HTMLElement;
           if (el.dataset.shown !== undefined) continue;
           const group = unitOf(el) ?? el.closest<HTMLElement>(GROUP);
-          const members = group ? [...group.querySelectorAll<HTMLElement>(".reveal:not([data-shown])")] : [el];
+          // `el` itself too: querySelectorAll skips the group, and a figure can be its own unit.
+          const members = group ? [...new Set([el, ...group.querySelectorAll<HTMLElement>(".reveal:not([data-shown])")])] : [el];
           const delay = Math.min(step++, MAX_STEPS) * STEP_MS;
           for (const m of members) {
             show(m, delay);

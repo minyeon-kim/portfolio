@@ -1123,3 +1123,5 @@ Devsign Overview third card is Impact again (owner; supersedes Result): "Differe
 Devsign IA and user flow are stacked (owner: too small side by side; supersedes the two thumbnails): each its own block across the 1200 column, label and finding above, magnifier kept. The images are re-cut to the diagram (source label, frame and the flow's repeated title removed), and their stale Figma CROPS entries are gone. Figure no longer distorts them. Figma not updated.
 
 Landing note (KO): "AI와 함께 리서치부터 프로토타입까지 직접 하는 프로덕트 디자이너입니다. 그전에는 보안 컨설턴트로 4년간 일했습니다." ("리서치를 만든다" did not read; "그전에는" orders the career).
+
+Reveal fix: a `.reveal` that is its own unit (a figure directly under a stage or block; 20 on Devsign, 11 on Gemini) never showed from the observer, because `querySelectorAll` on the group skips the group itself; it only appeared once scrolling stopped or it had left the top. The observer now includes the element, so these images start to appear when 12% into view.
