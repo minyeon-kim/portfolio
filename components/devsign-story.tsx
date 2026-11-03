@@ -359,10 +359,11 @@ type UsabilityScore = { value: string; unit: string; ratio: number; target?: num
 const COUNT_MS = 1400;
 const COUNT_STAGGER_MS = 160;
 
-// Usability results as one panel: when it is on screen the numbers count up and
-// their gauges fill one after another, then the line saying what they meant
-// lights up. The final values are in the markup, so no JS or reduced motion
-// simply shows them.
+// Usability results as stacked rows, so the bars share one axis and the two SUS
+// scores read against the same average: when on screen the numbers count up and
+// the bars fill one after another, then the line saying what they meant lights
+// up. The final values are in the markup, so no JS or reduced motion simply
+// shows them.
 export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]; meaning: string }) {
   const panel = useRef<HTMLDivElement>(null);
 

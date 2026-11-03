@@ -395,15 +395,9 @@ export const study = {
       protocol: [
         { label: "Participants", big: "2", value: "1 designer, 1 developer" },
         { label: "Tasks", big: "7 × 2", value: "7 tasks, each done twice" },
+        { label: "Scenarios", value: "Combine two drafts, decide a change request, fix a mobile screen" },
         { label: "Session", steps: ["Brief", "First try", "Retry without help", "Survey", "Interview"] },
         { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "“Differences got easier to find” (1–5)"] },
-      ],
-      scenariosLabel: "Scenarios",
-      scenarioWord: "Scenario",
-      scenarios: [
-        { role: "Designer", feature: "Merge Studio", task: "Merge two AI dashboard drafts into one.", actions: "Compare → pick → save" },
-        { role: "Designer", feature: "Conflict Points", task: "Approve or reject a developer’s layout change.", actions: "Compare → check the reason → decide" },
-        { role: "Developer", feature: "Conflict Points", task: "Fix a mobile screen that drifts from the design.", actions: "Find the cause → fix → request approval" },
       ],
       resultLead: "Both the designer and the developer saw the value, but neither could finish the tasks without help.",
       result: "It wasn’t clear whose turn it was, and the designer felt the screens were made for developers. That was layout and wording, not the idea, so we kept the features.",
