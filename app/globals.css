@@ -2725,9 +2725,12 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* The portrait fills the panel to its sides and bottom; the panel clips the corners. */
 .devsign-hero-panel:has(.about-hero-portrait) { overflow: hidden; }
 .devsign-hero[data-project="about"] .devsign-hero-panel:has(.about-hero-portrait) { padding-bottom: 0; }
-.about-hero-portrait { margin: clamp(40px, 6svh, 64px) -24px 0; overflow: hidden; }
+.about-hero-portrait { position: relative; margin: clamp(8px, 2svh, 24px) -24px 0; overflow: hidden; }
+/* The photo rises out of the panel and settles back into it, tinted a little with the panel colour, so it has no hard edge. */
+.about-hero-portrait:has(img) { -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.45) 8%, #000 16%, #000 90%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.45) 8%, #000 16%, #000 90%, transparent 100%); }
+.about-hero-portrait:has(img)::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--dh-glow) light-dark(10%, 22%), transparent); mix-blend-mode: soft-light; pointer-events: none; }
 .about-hero-portrait img { display: block; width: 100%; height: auto; max-height: 100svh; object-fit: cover; object-position: 44% 40%; }
-@media (max-width: 47.99rem) { .about-hero-portrait { margin: 32px -16px 0; } .about-hero-portrait img { aspect-ratio: 4 / 5; object-position: 44% center; } }
+@media (max-width: 47.99rem) { .about-hero-portrait { margin: 8px -16px 0; } .about-hero-portrait img { aspect-ratio: 4 / 5; object-position: 44% center; } }
 
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
