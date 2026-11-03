@@ -4810,11 +4810,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv > #define:has(> .dv-core:last-child)::after { content: ""; position: static; display: block; height: 130svh; background: none; }
   .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; min-height: 100svh; padding-block: 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
   .dv > #define:has(> .dv-core:last-child) + #develop { position: relative; z-index: 1; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
-  /* With HMW the card takes that place: the statement holds, the card covers it and holds, Develop covers the card. */
-  .dv > .dv-hmw-stage { position: relative; z-index: 1; margin-top: -100svh; }
-  .dv-hmw-stage::after { content: ""; display: block; height: 130svh; }
-  .dv-hmw-sheet { position: sticky; top: 0; min-height: 100svh; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; }
-  .dv > .dv-hmw-stage + #develop { position: relative; z-index: 2; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
 }
 /* A sticky subject's cover range includes its stuck time, so the grow and the light-up are
    timed on the sheet's entry: finished by the moment it fills the screen. */
@@ -4824,24 +4819,4 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
     .dv > #define > .dv-core.dv-core:last-child > .dv-core-kicker { animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
     .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation-timeline: --dv-sheet, --dv-sheet; animation-range: entry 20% entry 90%, entry 0% entry 100%; }
   }
-}
-
-/* How might we: the Problem statement as five questions. Elsewhere than desktop with motion it
-   simply follows the statement, on Develop's colour so the statement still falls into it. */
-.dv-hmw-stage { margin-inline: calc(var(--dv-edge) - var(--dv-pad)); }
-.dv-hmw-sheet { display: flex; flex-direction: column; justify-content: center; padding: 96px calc(var(--dv-pad) - var(--dv-edge)); background: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
-.dv-hmw-label { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.4; }
-.dv-hmw-lead { max-width: var(--dv-measure-wide); margin-top: 16px; color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; line-height: 1.25; word-break: keep-all; text-wrap: balance; }
-.dv-hmw-list { max-width: var(--dv-max); margin: 48px 0 0; padding: 0; list-style: none; }
-.dv-hmw-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr); padding: 28px 0; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.45; word-break: keep-all; }
-.dv-hmw-list b { color: var(--case-accent); font-weight: 500; font-variant-numeric: tabular-nums; }
-.dv > .dv-hmw-stage + #develop { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; animation: none; clip-path: none; translate: none; opacity: 1; }
-@media (max-width: 47.99rem) {
-  .dv-hmw-sheet { padding: 56px 16px; }
-  .dv-hmw-list { margin-top: 32px; }
-  .dv-hmw-list li { grid-template-columns: 36px minmax(0, 1fr); padding: 16px 0; }
-}
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv > .dv-hmw-stage + #develop { position: relative; z-index: 2; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
-  .dv-hmw-sheet { padding-block: 72px; background: light-dark(#ffffff, var(--dv-band-card-dark)); }
 }
