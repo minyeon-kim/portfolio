@@ -1148,3 +1148,5 @@ Problem statement is a card that holds centred on screen, not a full-screen shee
 Problem statement is back to the full-screen sheet with centred text (owner tried top-aligned text and a 56svh centred card, and found the card felt less filled; supersedes both notes above). Figma not updated.
 
 Define opens from the interview: the affinity heading says what grouping showed ("Grouping the interviews showed the real problem: what teams agreed on in chat never stayed with the work." / "인터뷰 내용을 묶어 보니, 대화로 정한 내용이 작업물에 남지 않는 문제가 드러났다."), the text gives the method, and Key problems continues from the themes. Figma not updated.
+
+Core features moved from Develop to Deliver (owner; Deliver: the prototype line and link, the four features playing their clips, the wireflow; Develop: dropped idea, value canvas, sketching, IA, user flow, all on the band). Sketching names the four features. `FeatureReels` keeps the "solves" line, so it still pairs with the Key problem panels. Figma not updated.

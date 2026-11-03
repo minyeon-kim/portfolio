@@ -571,29 +571,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...develop.sketching} ff={ff} />
           <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />
         </div>
-        {/* Findings first: the four features one at a time, large, each playing
-            its prototype clip and closing on the problem it answers. */}
-        {develop.selection && ff && overview.features ? (
-          <div className="dv-main-features">
-            <Block title={develop.selection.label} lead={overview.features.title} ff />
-            <FeatureReels
-              reels={overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
-                const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
-                const shown = deliver.features?.find((item: Study) => item.title === f.name);
-                return {
-                  id: `feature-${slugOf(f.name)}`,
-                  kicker: f.kicker,
-                  name: f.name,
-                  body: f.body,
-                  alt: shown?.alt,
-                  points: shown?.points ?? [],
-                  clip: shown?.clip,
-                  solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
-                };
-              })}
-            />
-          </div>
-        ) : develop.selection && (
+        {develop.selection && !ff && (
           <div className="dv-gap-96">
             <p className="dv-caps dv-accent reveal">{develop.selection.label}</p>
             <ol className="dv-selection">
@@ -630,6 +608,29 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...deliver} ff={ff} />
           {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
         </div>
+        {/* Findings first: the four features one at a time, large, each playing
+            its prototype clip and closing on the problem it answers. */}
+        {ff && develop.selection && overview.features && (
+          <div className="dv-main-features">
+            <Block title={develop.selection.label} lead={overview.features.title} ff />
+            <FeatureReels
+              reels={overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
+                const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
+                const shown = deliver.features?.find((item: Study) => item.title === f.name);
+                return {
+                  id: `feature-${slugOf(f.name)}`,
+                  kicker: f.kicker,
+                  name: f.name,
+                  body: f.body,
+                  alt: shown?.alt,
+                  points: shown?.points ?? [],
+                  clip: shown?.clip,
+                  solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
+                };
+              })}
+            />
+          </div>
+        )}
         {!ff && (
           <div className="dv-gap-64">
             {deliver.changes ? (
