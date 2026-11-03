@@ -2,14 +2,29 @@
 
 import { useLayoutEffect } from "react";
 
-const STEP_MS = 60; // stagger between groups that come into view together
-const MAX_STEPS = 3; // so nothing waits more than ~0.2s
+const STEP_MS = 100; // stagger between groups that come into view together
+const MAX_STEPS = 4; // so nothing waits more than ~0.4s
 // A text block (label, heading, body) rises as one piece instead of line by
 // line (class feedback: sections should come up together, at one pace).
 const GROUP = ".dv-block, [data-reveal-group]";
 // In a case body the unit is a whole block of a stage (a direct child of the
 // stage section): it rises as one piece and everything inside shows with it.
 const UNIT = ".dv > section > *";
+
+// A block taller than most of the screen would play out while only its first
+// line shows, so nobody saw it rise. Its own parts rise instead.
+const unitOf = (el: HTMLElement): HTMLElement | null => {
+  const top = el.closest<HTMLElement>(UNIT);
+  if (!top) return null;
+  let unit: HTMLElement = top;
+  while (unit.dataset.revealUnit === undefined && unit.tagName === "DIV" && unit.offsetHeight > window.innerHeight * 0.8) {
+    const part: HTMLElement | undefined = ([...unit.children] as HTMLElement[]).find((child) => child.contains(el));
+    if (!part) break;
+    unit = part;
+  }
+  unit.dataset.revealUnit = "";
+  return unit;
+};
 
 // Fades `.reveal` elements in as they scroll into view. Elements that enter
 // in the same moment appear one after another. Everything stays visible until
@@ -26,9 +41,12 @@ export function RevealObserver() {
         el.addEventListener("transitionend", () => (el.style.transitionDelay = ""), { once: true });
       }
       el.dataset.shown = "";
-      const unit = el.closest<HTMLElement>(UNIT);
+      const unit = unitOf(el);
       if (unit && unit.dataset.shown === undefined) {
-        if (delay) unit.style.transitionDelay = `${delay}ms`;
+        if (delay) {
+          unit.style.transitionDelay = `${delay}ms`;
+          unit.addEventListener("transitionend", () => (unit.style.transitionDelay = ""), { once: true });
+        }
         unit.dataset.shown = "";
       }
     };
@@ -53,7 +71,7 @@ export function RevealObserver() {
         for (const e of entering) {
           const el = e.target as HTMLElement;
           if (el.dataset.shown !== undefined) continue;
-          const group = el.closest<HTMLElement>(UNIT) ?? el.closest<HTMLElement>(GROUP);
+          const group = unitOf(el) ?? el.closest<HTMLElement>(GROUP);
           const members = group ? [...group.querySelectorAll<HTMLElement>(".reveal:not([data-shown])")] : [el];
           const delay = Math.min(step++, MAX_STEPS) * STEP_MS;
           for (const m of members) {
@@ -62,11 +80,12 @@ export function RevealObserver() {
           }
         }
       },
-      { rootMargin: "0px 0px -4% 0px" },
+      { rootMargin: "0px 0px -12% 0px" },
     );
 
     const watch = (scope: ParentNode) => {
       scope.querySelectorAll<HTMLElement>(".reveal:not([data-shown])").forEach((el) => {
+        unitOf(el);
         // Already on screen: show now, before the first paint.
         if (el.getBoundingClientRect().top < window.innerHeight) show(el);
         else observer.observe(el);
@@ -99,7 +118,7 @@ export function RevealObserver() {
     const replay = (event: Event) => {
       const scope = (event as CustomEvent<Element>).detail;
       const els = [...scope.querySelectorAll<HTMLElement>(".reveal")];
-      const units = [...scope.querySelectorAll<HTMLElement>(UNIT)];
+      const units = [...scope.querySelectorAll<HTMLElement>("[data-reveal-unit]")];
       for (const el of [...els, ...units]) {
         el.style.transition = "none"; // hide instantly, don't fade out
         delete el.dataset.shown;
@@ -112,7 +131,7 @@ export function RevealObserver() {
         for (const el of els) {
           const box = el.getBoundingClientRect();
           if (box.top < window.innerHeight && box.bottom > 0) {
-            const key = el.closest(UNIT) ?? el.closest(GROUP) ?? el;
+            const key = unitOf(el) ?? el.closest(GROUP) ?? el;
             if (!delays.has(key)) delays.set(key, Math.min(step++, MAX_STEPS) * STEP_MS);
             show(el, delays.get(key));
           } else {

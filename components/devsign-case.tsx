@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame, UsabilityResults } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -688,25 +688,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          {/* Four numbers, then what they meant. Red only on the goal that was missed. */}
-          <ul className="dv-ut-scores reveal">
-            {testing.usability.scores.map((item: Study) => (
-              <li key={item.title} data-missed={item.missed || undefined}>
-                <p className="dv-ut-value">{item.value}<small>{item.unit}</small></p>
-                <strong>{item.title}</strong>
-                <span>{item.note}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="dv-body dv-ut-meaning reveal">{testing.usability.result}</p>
+          {/* Numbers and what they meant are one panel. Red only on the goal that was missed. */}
+          <UsabilityResults scores={testing.usability.scores} meaning={testing.usability.result} />
           {testing.usability.scenarios && (
             <div className="dv-ut-scenarios reveal">
               <p className="dv-caps">{testing.usability.scenariosLabel}</p>
-              <ol className="dv-scenarios">
+              <ol className="dv-ut-cards">
                 {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
                   <li key={sc.task}>
                     <strong>{sc.task}</strong>
-                    <span className="dv-scenario-who">{sc.role} · {sc.feature}</span>
+                    <span>{sc.role} · {sc.feature}</span>
                   </li>
                 ))}
               </ol>
