@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, ZoomFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, AffinityBoard, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -42,7 +42,7 @@ const CROPS: Record<string, [number, number, number, number, number]> = {
   "/images/devsign/codesign-session.webp": [720 / 472, 108.84, 118.47, -4.38, -13.12],
 };
 
-function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "", zoom }: { img: Img; sizes?: string; className?: string; zoom?: number }) {
+function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "", open }: { img: Img; sizes?: string; className?: string; open?: boolean }) {
   const crop = CROPS[img.src];
   // Eager: a lazy image fetched only once its row scrolls in arrived after the
   // reveal had already played, and popped in late.
@@ -52,7 +52,7 @@ function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "",
   ) : img.fit ? <div className="dv-fit" style={{ aspectRatio: img.fit }}>{image}</div> : image;
   return (
     <figure className={`dv-figure reveal ${className}`}>
-      {zoom ? <ZoomFrame href={withBase(img.src)} scale={zoom}>{frame}</ZoomFrame> : frame}
+      {open ? <OpenFrame href={withBase(img.src)}>{frame}</OpenFrame> : frame}
       {img.caption && <figcaption>{img.caption}</figcaption>}
     </figure>
   );
@@ -317,7 +317,7 @@ function DevelopBlock({ block }: { block: Study }) {
   return (
     <div className={block.rule ? "dv-subsection" : "dv-gap-96"}>
       <Block {...(block as Lead)} />
-      {block.image && <Figure img={block.image} className="dv-cover dv-gap-40" zoom={block.image.fit ? 2.5 : undefined} />}
+      {block.image && <Figure img={block.image} className="dv-cover dv-gap-40" open={Boolean(block.image.fit)} />}
       {block.images && (
         <div className={block.images.length > 2 ? "dv-screens dv-gap-40" : "dv-two dv-gap-40"} style={{ "--n": block.images.length } as React.CSSProperties}>
           {block.images.map((img: Img) => <Figure key={img.src} img={img} sizes="(max-width: 767px) 100vw, 40vw" className={block.images.length > 2 ? "dv-screen" : "dv-photo"} />)}
@@ -410,9 +410,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>
           <figure className="dv-board reveal">
-            <ZoomFrame href={withBase(define.affinity.board.src)} scale={4}>
-              <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
-            </ZoomFrame>
+            <AffinityBoard board={define.affinity.board} themes={define.affinity.boardThemes} label={define.affinity.themesLabel} />
             <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
           </figure>
         </div>
@@ -466,7 +464,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
             </ol>
           )}
-          <Figure img={define.affinity.board} className="dv-board dv-gap-24" zoom={2.5} />
+          <Figure img={define.affinity.board} className="dv-board dv-gap-24" open />
         </div>
 
         <div className="dv-subsection">
@@ -584,10 +582,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
         <div className="dv-subsection">
           <Block {...develop.ia} text={ff ? undefined : develop.ia.text} ff={ff} />
-          <Figure img={develop.ia.image} className="dv-board dv-gap-40" zoom={2.5} />
+          <Figure img={develop.ia.image} className="dv-board dv-gap-40" open />
           <div className="dv-gap-96">
             <Block {...develop.flow} text={ff ? undefined : develop.flow.text} ff={ff} />
-            <Figure img={develop.flow.image} className="dv-board dv-gap-40" zoom={2.5} />
+            <Figure img={develop.flow.image} className="dv-board dv-gap-40" open />
           </div>
           {/* Shown once its capture is added (`develop.system.image`). */}
           {develop.system?.image && (

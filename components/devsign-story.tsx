@@ -13,31 +13,74 @@ const PLAYBACK_RATE = 1;
 type Shot = { src: string; alt?: string; text: string; lead?: string };
 type Change = { title: string; before: string; after: string; a: Box; b: Box };
 
-// Boards too dense to read at column width: with a mouse the frame stays put and the
-// image magnifies around the cursor, following it. Touch and keyboard open the full image.
-export function ZoomFrame({ children, href, scale = 3 }: { children: React.ReactNode; href: string; scale?: number }) {
+// Boards too dense to read at column width stay still; the frame opens the full image.
+export function OpenFrame({ children, href }: { children: React.ReactNode; href: string }) {
   const locale = useLocale();
-  const follow = (event: React.PointerEvent<HTMLAnchorElement>) => {
-    if (event.pointerType !== "mouse") return;
+  return (
+    <a className="dv-open-frame" href={href} target="_blank" rel="noreferrer">
+      {children}
+      <span className="dv-open-hint" aria-hidden="true">{locale === "ko" ? "크게 보기 ↗" : "View full size ↗"}</span>
+    </a>
+  );
+}
+
+// The affinity board as a map: nothing on it moves or scales. Picking a theme lights
+// its column, and what it says appears under the board as readable text.
+type BoardTheme = { tab: string; name: string; color: string; insight: string; notes: [string, string][] };
+const THEME_EDGE = 0.8; // % of the board left and right of the seven columns
+export function AffinityBoard({ board, themes, label, first = 2 }: { board: { src: string; width: number; height: number; alt: string }; themes: BoardTheme[]; label: string; first?: number }) {
+  const [current, setCurrent] = useState(first);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const width = (100 - THEME_EDGE * 2) / themes.length;
+  const at = (event: React.PointerEvent<HTMLDivElement>) => {
     const box = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--zx", `${((event.clientX - box.left) / box.width) * 100}%`);
-    event.currentTarget.style.setProperty("--zy", `${((event.clientY - box.top) / box.height) * 100}%`);
-    event.currentTarget.dataset.on = "";
+    const x = ((event.clientX - box.left) / box.width) * 100;
+    setCurrent(Math.max(0, Math.min(themes.length - 1, Math.floor((x - THEME_EDGE) / width))));
+  };
+  const onKey = (event: React.KeyboardEvent) => {
+    const last = themes.length - 1;
+    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    setCurrent(next);
+    tabs.current[next]?.focus();
   };
   return (
-    <a
-      className="dv-zoom-frame"
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      style={{ "--zs": scale } as React.CSSProperties}
-      onPointerEnter={follow}
-      onPointerMove={follow}
-      onPointerLeave={(event) => { delete event.currentTarget.dataset.on; }}
-    >
-      <div className="dv-zoom-inner">{children}</div>
-      <span className="dv-zoom-hint" aria-hidden="true">{locale === "ko" ? "마우스를 올려 확대" : "Hover to magnify"}</span>
-    </a>
+    <div className="dv-aff-map">
+      <div className="dv-aff-tabs" role="tablist" aria-label={label} onKeyDown={onKey}>
+        {themes.map((theme, i) => (
+          <button
+            key={theme.tab}
+            ref={(el) => { tabs.current[i] = el; }}
+            id={`aff-tab-${i}`}
+            type="button"
+            role="tab"
+            aria-selected={i === current}
+            aria-controls={`aff-panel-${i}`}
+            tabIndex={i === current ? 0 : -1}
+            onClick={() => setCurrent(i)}
+            onPointerEnter={(event) => { if (event.pointerType === "mouse") setCurrent(i); }}
+          >{theme.tab}</button>
+        ))}
+      </div>
+      <div className="dv-aff-frame" onPointerMove={(event) => { if (event.pointerType === "mouse") at(event); }} onClick={at}>
+        <Image src={withBase(board.src)} alt={board.alt} width={board.width} height={board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
+        <span className="dv-aff-spot" aria-hidden="true" style={{ left: `${THEME_EDGE + current * width}%`, width: `${width}%` }} />
+      </div>
+      <div className="dv-aff-reader">
+        {themes.map((theme, i) => (
+          <div key={theme.tab} id={`aff-panel-${i}`} className="dv-aff-panel" role="tabpanel" aria-labelledby={`aff-tab-${i}`} data-on={i === current || undefined}>
+            <div>
+              <h4>{theme.name}</h4>
+              <p>{theme.insight}</p>
+            </div>
+            <ul style={{ "--note": theme.color } as React.CSSProperties}>
+              {theme.notes.map(([text, who]) => <li key={text}>{text}<b>{who}</b></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -136,9 +179,9 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
   return (
     <div className="dv-vpc">
       <div className="dv-vpc-view reveal">
-        <ZoomFrame href={withBase(art.src)} scale={3}>
+        <OpenFrame href={withBase(art.src)}>
           <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
-        </ZoomFrame>
+        </OpenFrame>
       </div>
       <p className="dv-vpc-title reveal">{overviewLabel}</p>
       <div className="dv-vpc-pairs reveal">
