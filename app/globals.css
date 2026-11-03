@@ -4685,3 +4685,19 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
     .dv-board img { animation-range: entry 0% entry 55%; }
   }
 }
+
+/* Survey numbers: number, its bar, then the sentence under it, so each reads as
+   one column; a hairline and real space keep the two apart. */
+.case-study .dv .dv-insight-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.case-study .dv .dv-insight-stat { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.case-study .dv .dv-insight-stat:first-child { padding-right: clamp(32px, 5vw, 72px); }
+.case-study .dv .dv-insight-stat + .dv-insight-stat { padding-left: clamp(32px, 5vw, 72px); border-left: 1px solid var(--dv-line); }
+.case-study .dv .dv-insight-stat > p { display: contents; }
+.case-study .dv .dv-insight-stat strong { order: 1; line-height: 1; }
+.case-study .dv .dv-insight-stat > i { order: 2; margin: 0; }
+.case-study .dv .dv-insight-stat span { order: 3; display: block; max-width: 34ch; margin: 8px 0 0; color: var(--dv-ink); font-size: 18px; line-height: 1.55; }
+@media (max-width: 47.99rem) {
+  .case-study .dv .dv-insight-stats { grid-template-columns: 1fr; gap: 32px; }
+  .case-study .dv .dv-insight-stat:first-child { padding-right: 0; }
+  .case-study .dv .dv-insight-stat + .dv-insight-stat { padding: 32px 0 0; border-left: 0; border-top: 1px solid var(--dv-line); }
+}
