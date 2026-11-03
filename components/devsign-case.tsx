@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, GuidedDemo, DemoDialog, CanvasZoom, ZoomFrame } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -44,16 +44,17 @@ const CROPS: Record<string, [number, number, number, number, number]> = {
   "/images/devsign/codesign-session.webp": [720 / 472, 108.84, 118.47, -4.38, -13.12],
 };
 
-function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "" }: { img: Img; sizes?: string; className?: string }) {
+function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "", zoom }: { img: Img; sizes?: string; className?: string; zoom?: number }) {
   const crop = CROPS[img.src];
   // Eager: a lazy image fetched only once its row scrolls in arrived after the
   // reveal had already played, and popped in late.
   const image = <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} loading="eager" />;
+  const frame = crop ? (
+    <div className="dv-crop" style={{ aspectRatio: crop[0], "--w": `${crop[1]}%`, "--h": `${crop[2]}%`, "--l": `${crop[3]}%`, "--t": `${crop[4]}%` } as React.CSSProperties}>{image}</div>
+  ) : img.fit ? <div className="dv-fit" style={{ aspectRatio: img.fit }}>{image}</div> : image;
   return (
     <figure className={`dv-figure reveal ${className}`}>
-      {crop ? (
-        <div className="dv-crop" style={{ aspectRatio: crop[0], "--w": `${crop[1]}%`, "--h": `${crop[2]}%`, "--l": `${crop[3]}%`, "--t": `${crop[4]}%` } as React.CSSProperties}>{image}</div>
-      ) : img.fit ? <div className="dv-fit" style={{ aspectRatio: img.fit }}>{image}</div> : image}
+      {zoom ? <ZoomFrame href={withBase(img.src)} scale={zoom}>{frame}</ZoomFrame> : frame}
       {img.caption && <figcaption>{img.caption}</figcaption>}
     </figure>
   );
@@ -329,7 +330,7 @@ function DevelopBlock({ block }: { block: Study }) {
   return (
     <div className={block.rule ? "dv-subsection" : "dv-gap-96"}>
       <Block {...(block as Lead)} />
-      {block.image && <Figure img={block.image} className="dv-cover dv-gap-40" />}
+      {block.image && <Figure img={block.image} className="dv-cover dv-gap-40" zoom={block.image.fit ? 2.5 : undefined} />}
       {block.images && (
         <div className={block.images.length > 2 ? "dv-screens dv-gap-40" : "dv-two dv-gap-40"} style={{ "--n": block.images.length } as React.CSSProperties}>
           {block.images.map((img: Img) => <Figure key={img.src} img={img} sizes="(max-width: 767px) 100vw, 40vw" className={block.images.length > 2 ? "dv-screen" : "dv-photo"} />)}
@@ -422,9 +423,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>
           <figure className="dv-board reveal">
-            <a href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">
+            <ZoomFrame href={withBase(define.affinity.board.src)} scale={4}>
               <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
-            </a>
+            </ZoomFrame>
             <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
           </figure>
           {/* One sentence per problem and one thing someone said, in one view. */}
@@ -478,7 +479,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
             </ol>
           )}
-          <Figure img={define.affinity.board} className="dv-board dv-gap-24" />
+          <Figure img={define.affinity.board} className="dv-board dv-gap-24" zoom={2.5} />
         </div>
 
         <div className="dv-subsection">
@@ -625,20 +626,20 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <ul className="dv-artifacts">
               {[develop.ia, develop.flow].map((item: Study) => (
                 <li key={item.title} className="reveal">
-                  <a href={withBase(item.image.src)} target="_blank" rel="noreferrer">
+                  <ZoomFrame href={withBase(item.image.src)} scale={3}>
                     <Image src={withBase(item.image.src)} alt={item.image.alt} width={item.image.width} height={item.image.height} sizes="(max-width: 767px) 100vw, 600px" />
-                    <strong>{item.title}<span aria-hidden="true"> ↗</span></strong>
-                  </a>
+                  </ZoomFrame>
+                  <strong>{item.title}</strong>
                   <p>{item.lead}</p>
                 </li>
               ))}
             </ul>
           ) : <>
             <Block {...develop.ia} ff={ff} />
-            <Figure img={develop.ia.image} className="dv-board dv-gap-40" />
+            <Figure img={develop.ia.image} className="dv-board dv-gap-40" zoom={2.5} />
             <div className="dv-gap-96">
               <Block {...develop.flow} ff={ff} />
-              <Figure img={develop.flow.image} className="dv-board dv-gap-40" />
+              <Figure img={develop.flow.image} className="dv-board dv-gap-40" zoom={2.5} />
             </div>
           </>}
           {/* Shown once its capture is added (`develop.system.image`). */}
