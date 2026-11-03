@@ -4561,3 +4561,9 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-board-open { color: var(--dv-muted); font-size: 16px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
 .dv-board-open:hover { color: var(--dv-ink); text-decoration-color: currentColor; }
 .case-study .dv .dv-found { margin-top: clamp(56px, 6vw, 80px); }
+.case-study .dv .dv-funnel { margin-top: 40px; }
+@media (max-width: 47.99rem) {
+  .case-study .dv .dv-funnel { flex-wrap: nowrap; gap: 6px; margin-top: 32px; }
+  .dv-funnel li { gap: 5px; white-space: nowrap; }
+  .dv-funnel li + li::before { margin-right: 2px; }
+}
