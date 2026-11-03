@@ -4264,16 +4264,16 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study:not([data-project="about"]) .more-work { --next: #5b3fd6; --sheet-radius: clamp(24px, 2.4vw, 32px); position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-rows: auto 1fr; column-gap: clamp(32px, 5vw, 80px); margin-top: clamp(96px, 10vw, 160px); margin-inline: calc(-1 * var(--project-text-inset)); padding: clamp(48px, 5vw, 80px) var(--dv-pad) 0; overflow: hidden; border-radius: var(--sheet-radius) var(--sheet-radius) 0 0; background: linear-gradient(180deg, color-mix(in srgb, var(--next) 46%, var(--bg)) 0%, color-mix(in srgb, var(--next) 16%, var(--bg)) 55%, var(--bg) 100%); text-align: left; }
 .case-study:not([data-project="about"]) .more-work[data-next="gemini-privacy"] { --next: #2f6bea; }
 .case-study:not([data-project="about"]) .more-work-label { grid-column: 1; margin: 0 0 clamp(20px, 2vw, 32px); color: #fff; font-size: 18px; font-weight: 600; line-height: 1.4; }
-.case-study:not([data-project="about"]) .more-work-caption { grid-column: 1; align-items: flex-start; gap: 16px; margin: 0; padding-bottom: clamp(48px, 5vw, 80px); }
+.case-study:not([data-project="about"]) .more-work-caption { grid-column: 1; align-items: flex-start; gap: 16px; margin: 0; }
 .case-study:not([data-project="about"]) .more-work-title { align-items: center; gap: clamp(12px, 1.4vw, 20px); color: #fff; animation: none; }
 .case-study:not([data-project="about"]) .more-work-title::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .case-study:not([data-project="about"]) .more-work .more-work-name { font-size: clamp(40px, 4.6vw, 80px); line-height: 1.04; text-wrap: balance; }
 .case-study:not([data-project="about"]) .more-work-description { max-width: 34ch; color: rgb(255 255 255 / 0.78); font-size: clamp(18px, 1.5vw, 20px); line-height: 1.5; }
-.case-study:not([data-project="about"]) .more-work-deck { grid-column: 2; grid-row: 1 / 3; align-self: end; display: block; height: clamp(300px, 30vw, 440px); }
+.case-study:not([data-project="about"]) .more-work-deck { grid-column: 2; grid-row: 1 / 3; align-self: center; display: block; height: clamp(300px, 30vw, 440px); }
 .case-study:not([data-project="about"]) .more-work-card { position: absolute; inset: 0; width: 100%; aspect-ratio: auto; translate: none; transition: transform 400ms var(--ease); }
 .case-study:not([data-project="about"]) .more-work-card:not([data-rank="0"]) { display: none; }
 .case-study:not([data-project="about"]) .more-work:is(:hover, :focus-within) .more-work-card[data-rank="0"] { transform: translateY(-10px); }
-.case-study:not([data-project="about"]) :is(.more-work-hit, .more-work-cover) { border-radius: 16px 16px 0 0; }
+.case-study:not([data-project="about"]) :is(.more-work-hit, .more-work-cover) { border-radius: 16px; }
 .case-study:not([data-project="about"]) .more-work-cover { background: rgb(0 0 0 / 0.32); }
 .case-study:not([data-project="about"]) .more-work-phone { top: 8%; width: 86%; }
 .case-study:not([data-project="about"]) .more-work-app { left: 0; right: 0; aspect-ratio: auto; }
@@ -4281,10 +4281,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study:not([data-project="about"]) .more-work-title:focus-visible::after { outline: 2px solid #fff; outline-offset: -6px; border-radius: var(--sheet-radius) var(--sheet-radius) 0 0; }
 @media (max-width: 47.99rem) {
   .case-study:not([data-project="about"]) .more-work { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; padding-inline: var(--project-text-inset); }
-  .case-study:not([data-project="about"]) .more-work-caption { margin-top: 24px; padding-bottom: 32px; }
-  .case-study:not([data-project="about"]) :is(.more-work-hit, .more-work-cover) { border-radius: 16px; }
+  .case-study:not([data-project="about"]) .more-work-caption { margin-top: 24px; }
   .case-study:not([data-project="about"]) .more-work-deck { grid-column: 1; grid-row: auto; height: 240px; }
 }
+/* The screen is a whole card now, with room before the footer row, which sits low on the glow. */
+.case-study:not([data-project="about"]) .more-work { padding-bottom: clamp(32px, 4vw, 64px); }
+.case-study:not([data-project="about"]) .more-work + .site-footer { padding-bottom: clamp(24px, 2.4vw, 32px); }
 @media (prefers-reduced-motion: reduce) {
   .case-study:not([data-project="about"]) .more-work:is(:hover, :focus-within) .more-work-card[data-rank="0"] { transform: none; }
 }

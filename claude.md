@@ -1091,3 +1091,5 @@ Figma (2026-11-03): Devsign current frames regenerated from the live site in sec
 Case opener first fact: label Project / 프로젝트, value "Case study, 10 weeks" / "케이스 스터디, 10주" (owner); Gemini keeps its not-affiliated wording after "Case study." Supersedes the Case study label. Devsign Figma frames match.
 
 Landing (≥64rem), one block at the bottom right (owner; supersedes the bottom left): statement, note and case pills share one left edge in a column as wide as the statement, its right edge on the page inset. Case pills are 52px, 0 24px, 20px. On hover the Devsign sentence moves to the bottom left, and the Gemini card goes to the top right (top 14%, min(26vw, 400px)) instead of cropping past the bottom right, where it ran under the pills. Figma Main not updated.
+
+Next project sheet: the screen is a whole card (16px on all corners, centred beside the copy, no longer cut flat at the sheet), with 32-64px + the footer's 24px before the bottom row, and the row sits 24-32px off the page bottom on the glow. Figma not updated.
