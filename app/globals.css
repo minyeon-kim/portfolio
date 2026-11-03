@@ -4415,11 +4415,6 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-demo-close { top: 6px; right: 8px; }
 }
 
-.dv-board-link { display: inline-flex; align-items: center; gap: 16px; margin-top: 32px; color: var(--dv-ink); font-size: 16px; font-weight: 500; text-decoration: none; }
-.dv-board-link img { display: block; width: 200px; height: auto; border-radius: 8px; transition: transform 250ms var(--ease); }
-.dv-board-link:hover img { transform: translateY(-3px); }
-.dv-board-link:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; border-radius: 8px; }
-@media (max-width: 47.99rem) { .dv-board-link img { width: 140px; } }
 /* Folded supporting material in a case. */
 .dv-fold-body { padding-top: 32px; }
 
@@ -4552,3 +4547,17 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-found td { margin-top: 12px; }
   .dv-found td:last-child::before { content: attr(data-label); margin-right: 8px; color: var(--dv-muted); font-size: 16px; }
 }
+
+/* Affinity process before the findings: the count line, then the board itself. */
+.dv-funnel { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px clamp(16px, 2vw, 24px); margin: 0; padding: 0; list-style: none; }
+.dv-funnel li { display: flex; align-items: baseline; gap: 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-funnel li + li::before { content: "→"; margin-right: clamp(6px, 1vw, 14px); }
+.case-study .dv .dv-funnel strong { color: var(--case-accent); font-size: var(--t-statement); font-weight: 400; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.dv-board { margin: 24px 0 0; }
+.dv-board img { display: block; width: 100%; height: auto; border-radius: var(--dv-card-radius, 16px); transition: opacity 250ms var(--ease); }
+.dv-board > a:hover img { opacity: 0.9; }
+.dv-board > a:focus-visible, .dv-board-open:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; border-radius: 8px; }
+.dv-board figcaption { margin-top: 12px; }
+.dv-board-open { color: var(--dv-muted); font-size: 16px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.dv-board-open:hover { color: var(--dv-ink); text-decoration-color: currentColor; }
+.case-study .dv .dv-found { margin-top: clamp(56px, 6vw, 80px); }
