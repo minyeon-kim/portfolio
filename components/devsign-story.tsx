@@ -160,7 +160,7 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
 export function IterationPair({ before, after, labels }: { before: Shot & { box: Box }; after: Shot & { box: Box }; labels: { asIs: string; toBe: string } }) {
   return (
     <div className="reveal">
-      <CropPair before={before} after={after} a={before.box} b={after.box} lines={[before.text, after.text]} labels={labels} tile={2.15} />
+      <CropPair before={before} after={after} a={before.box} b={after.box} lines={[before.text, after.text]} labels={labels} tile={2.1} />
     </div>
   );
 }

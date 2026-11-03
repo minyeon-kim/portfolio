@@ -718,20 +718,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
           <Block {...testing.iteration1} text={ff ? undefined : testing.iteration1.text} ff={ff} />
-          {ff && <p className="dv-iter-why reveal"><b>{testing.iteration1.whyLabel}</b>{testing.iteration1.text}</p>}
+          {ff && <p className="dv-iter-why reveal">{testing.iteration1.text}</p>}
           <div className="dv-gap-40">{ff
             ? <IterationPair before={testing.iteration1.before} after={testing.iteration1.after} labels={labels} />
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
           {ff ? <>
-            <div className="dv-iter-head">
-              <div>
-                <Block {...testing.iteration2} text={undefined} ff={ff} />
-                <p className="dv-iter-why reveal"><b>{testing.iteration2.whyLabel}</b>{testing.iteration2.text}</p>
-              </div>
-              {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 400px" className="dv-photo dv-photo-wide" />}
-            </div>
+            <Block {...testing.iteration2} text={undefined} ff={ff} />
+            <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
+            {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-iter-photo" />}
             <div className="dv-gap-40"><IterationCompare before={testing.iteration2.before} after={testing.iteration2.after} changes={testing.iteration2.changes} labels={labels} /></div>
           </> : <>
             <Block {...testing.iteration2} ff={ff} />
