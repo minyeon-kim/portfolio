@@ -89,7 +89,7 @@ export const study = {
       method: "Secondary research",
       title: "Desk research",
       lead: "The slow part is no longer making things. It’s checking them.",
-      text: "Combining our own AI drafts took longer than making them. So we asked two questions, read community posts and surveys, and reviewed 9 tools.",
+      text: "Combining our own AI drafts took longer than making them. So we asked two questions, read community posts and surveys, and reviewed more than 10 tools.",
     },
     q1: {
       label: "Question 1 · Where do teams that use AI get stuck?",
@@ -111,22 +111,14 @@ export const study = {
     },
     q2: {
       label: "Question 2 · Does any tool already solve it?",
-      answer: "Today’s tools can spot differences between a design and its code, but none can combine AI drafts or record why a decision was made.",
-      auditLabel: "9 tools, 4 types",
-      columns: [
-        { name: "Handoff" },
-        { name: "Spot differences" },
-        { name: "Approve" },
-        { name: "Generate" },
-        { name: "Combine drafts", accent: true },
-        { name: "Record reasons", accent: true },
-      ],
+      answer: "Tools can spot differences and approve changes, but we didn’t find one that combines AI drafts area by area and keeps the decision and its reason on that screen.",
+      auditLabel: "10+ tools, by type",
+      headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
       rows: [
-        { name: "Figma Dev Mode, Zeplin", marks: [1, 0, 0, 0, 0, 0] },
-        { name: "OverlayQA, Uiprobe, vrdiff", marks: [1, 1, 0, 0, 0, 0] },
-        { name: "Chromatic, GitHub required reviewers", marks: [0, 1, 1, 0, 0, 0] },
-        { name: "Magic Patterns, Stitch", marks: [0, 0, 0, 1, 0, 0] },
-        { name: "Devsign", marks: [1, 1, 1, 1, 1, 1], highlight: true },
+        { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs" },
+        { type: "Design vs build", tools: "OverlayQA, Uiprobe", solves: "Finding where they differ", gap: "The decision after finding it" },
+        { type: "Review and approval", tools: "Chromatic, GitHub", solves: "Approving changes, checks before merge", gap: "Judging against design intent" },
+        { type: "AI generation and shared work", tools: "Magic Patterns, Framer", solves: "Making drafts, merging branches", gap: "Combining drafts area by area, with the reason kept on the screen" },
       ],
     },
     synthesis: {

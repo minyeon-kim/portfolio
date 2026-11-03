@@ -3817,29 +3817,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Tool review: capabilities as rows, tools as columns, Devsign's column first in
    a solid case colour (after pricing comparison tables). The last two rows are
    what no other tool does, so their missing marks are red. */
-.dv-tool-table { --compare-colour: #4a2bd0; width: 100%; min-width: 720px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
-.dv-tool-table :is(th, td) { padding: 18px 12px; text-align: center; vertical-align: middle; transition: background-color 150ms var(--ease); }
-.dv-tool-table thead th { padding: 0 12px 20px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.35; vertical-align: bottom; }
-.dv-tool-table :is(thead, tbody) th:first-child { width: 26%; padding-left: 20px; text-align: left; }
-.dv-tool-table thead th[data-highlight] { width: 18%; padding-block: 24px 20px; border-radius: var(--dv-card-radius) var(--dv-card-radius) 0 0; background: var(--compare-colour); color: #fff; font-size: 20px; font-weight: 600; }
-.dv-tool-table tbody th { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.35; }
-.dv-tool-table tbody tr:nth-child(odd) > * { background: color-mix(in srgb, var(--dv-ink) 5%, transparent); }
-.dv-tool-table tbody tr:hover > * { background: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
-.dv-tool-table tbody tr > :first-child { border-radius: 12px 0 0 12px; }
-.dv-tool-table tbody tr > :last-child { border-radius: 0 12px 12px 0; }
-.dv-tool-table tbody tr > td[data-highlight], .dv-tool-table tbody tr:hover > td[data-highlight] { background: var(--compare-colour); color: #fff; }
-.dv-tool-table tbody tr:nth-child(odd) > td[data-highlight] { background: color-mix(in srgb, #000 14%, var(--compare-colour)); }
-.dv-tool-table tbody tr:last-child > td[data-highlight] { border-radius: 0 0 var(--dv-card-radius) var(--dv-card-radius); padding-bottom: 24px; }
-.dv-tool-table tr[data-accent] th { font-weight: 600; }
-.dv-tool-mark { display: inline-block; vertical-align: middle; color: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
-.dv-tool-mark[data-on] { color: var(--dv-ink); }
-td[data-highlight] .dv-tool-mark { width: 24px; height: 24px; color: #fff; }
-.dv-tool-table tr[data-accent] td:not([data-highlight]) .dv-tool-mark:not([data-on]) { color: light-dark(#c7383d, #ff7a7f); }
-@media (max-width: 47.99rem) {
-  .dv-tool-table { min-width: 640px; }
-  .dv-tool-table tbody th { font-size: 16px; }
-  .dv-tool-table :is(thead, tbody) th:first-child { padding-left: 12px; }
-}
 
 /* The co-design fold keeps its distance from the close-up captions. */
 .dv-subsection-120 > details.dv-handoff-spec { margin-top: 32px; }
@@ -4247,15 +4224,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-wf-text { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
 
 /* Tool table: a short header row, level with the Devsign column. */
-.dv-tool-table thead th { padding: 12px; white-space: nowrap; vertical-align: middle; }
-.dv-tool-table thead th[data-highlight] { padding-block: 12px; font-size: 18px; }
 
 /* The wireflow fits the column on desktop and scrolls sideways only when it can't. */
 .dv-wf { overflow-y: hidden; }
 @media (min-width: 72rem) { .dv-wf { overflow: visible; } }
 
 /* Tool table: no label in the corner. */
-.dv-tool-table thead td { padding: 12px; }
 
 /* Interview: questions light up with scroll, then the session wide, people credited under it. */
 .dv-asks .dv-caps { margin-bottom: 12px; }
@@ -4582,5 +4556,24 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-cast .dv-needs :is(td, strong) { font-weight: 500; }
 @media (max-width: 63.99rem) { .dv-cast { grid-template-columns: 1fr; } .dv-cast article { padding: 24px; } }
 
-/* Tool table heads hold real tool names, which wrap by whole words. */
-.dv-tool-table thead th:not([data-highlight]) { white-space: normal; word-break: keep-all; }
+/* Tool review: reads left to right and ends on the gap, the one tinted column. */
+.dv-tool-gaps { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.dv-tool-gaps :is(th, td) { padding: 20px 24px 20px 0; border-bottom: 1px solid var(--dv-line); color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; text-align: left; vertical-align: top; word-break: keep-all; }
+.dv-tool-gaps thead th { padding-block: 16px; font-weight: 500; }
+.dv-tool-gaps tbody th { color: var(--dv-ink); font-weight: 500; }
+.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { padding-inline: 24px; background: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+.dv-tool-gaps thead th:last-child { border-radius: var(--dv-card-radius) var(--dv-card-radius) 0 0; color: var(--case-accent); font-weight: 600; }
+.dv-tool-gaps td[data-gap] { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-tool-gaps tbody tr:last-child > * { border-bottom: 0; }
+.dv-tool-gaps tbody tr:last-child td[data-gap] { border-radius: 0 0 var(--dv-card-radius) var(--dv-card-radius); }
+@media (max-width: 63.99rem) {
+  .dv-tool-gaps, .dv-tool-gaps :is(tbody, tr, th, td) { display: block; }
+  .dv-tool-gaps thead { display: none; }
+  .dv-tool-gaps tbody tr { padding-block: 24px; border-bottom: 1px solid var(--dv-line); }
+  .dv-tool-gaps tbody tr:first-child { padding-top: 0; }
+  .dv-tool-gaps tbody tr:last-child { border-bottom: 0; padding-bottom: 0; }
+  .dv-tool-gaps :is(th, td) { padding: 0; border: 0; }
+  .dv-tool-gaps td { margin-top: 4px; }
+  .dv-tool-gaps tbody tr td[data-gap], .dv-tool-gaps tbody tr:last-child td[data-gap] { margin-top: 12px; padding: 16px; border-radius: var(--dv-card-radius); }
+  .dv-tool-gaps td[data-gap]::before { content: attr(data-label); display: block; margin-bottom: 4px; color: var(--case-accent); font-size: 16px; font-weight: 600; }
+}

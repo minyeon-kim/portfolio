@@ -92,7 +92,7 @@ export const study = {
       method: "Secondary research",
       title: "Desk research",
       lead: "이제 오래 걸리는 건 만드는 일이 아니라 확인하는 일이다.",
-      text: "직접 만든 AI 시안을 합치는 데 만드는 것보다 시간이 더 걸렸다. 그래서 두 가지를 묻고, 커뮤니티 글과 설문을 읽고, 도구 9개를 살펴봤다.",
+      text: "직접 만든 AI 시안을 합치는 데 만드는 것보다 시간이 더 걸렸다. 그래서 두 가지를 묻고, 커뮤니티 글과 설문을 읽고, 도구 10여 개를 살펴봤다.",
     },
     q1: {
       label: "질문 1 · AI와 일하는 팀은 어디서 막힐까?",
@@ -114,22 +114,14 @@ export const study = {
     },
     q2: {
       label: "질문 2 · 이미 해결한 도구가 있을까?",
-      answer: "지금의 도구는 디자인과 코드의 차이를 찾아 주지만, AI 시안을 합치거나 왜 그렇게 정했는지 남겨 주지는 못한다.",
-      auditLabel: "도구 9개, 4가지 유형",
-      columns: [
-        { name: "개발 전달" },
-        { name: "차이 감지" },
-        { name: "변경 승인" },
-        { name: "시안 생성" },
-        { name: "시안 합치기", accent: true },
-        { name: "이유 기록", accent: true },
-      ],
+      answer: "차이를 찾고 승인하는 도구는 있지만, 여러 AI 시안을 영역별로 합치고 그 결정과 이유를 해당 화면에 함께 남기는 도구는 찾지 못했다.",
+      auditLabel: "도구 10여 개, 유형별",
+      headers: ["유형", "대표 도구", "해결하는 것", "찾지 못한 것"],
       rows: [
-        { name: "Figma Dev Mode, Zeplin", marks: [1, 0, 0, 0, 0, 0] },
-        { name: "OverlayQA, Uiprobe, vrdiff", marks: [1, 1, 0, 0, 0, 0] },
-        { name: "Chromatic, GitHub 필수 리뷰어", marks: [0, 1, 1, 0, 0, 0] },
-        { name: "Magic Patterns, Stitch", marks: [0, 0, 0, 1, 0, 0] },
-        { name: "Devsign", marks: [1, 1, 1, 1, 1, 1], highlight: true },
+        { type: "핸드오프", tools: "Figma Dev Mode, Zeplin", solves: "스펙 전달, 버전 비교", gap: "구현이 달라졌을 때 누가 정할지" },
+        { type: "디자인·구현 비교", tools: "OverlayQA, Uiprobe", solves: "어긋난 곳 찾기", gap: "찾은 뒤의 결정" },
+        { type: "리뷰·승인", tools: "Chromatic, GitHub", solves: "변경 승인, 머지 전 확인", gap: "디자인 의도 기준의 판단" },
+        { type: "AI 생성·통합 작업", tools: "Magic Patterns, Framer", solves: "시안 생성, 브랜치 병합", gap: "시안을 영역별로 골라 합치고 이유를 화면에 남기기" },
       ],
     },
     synthesis: {
