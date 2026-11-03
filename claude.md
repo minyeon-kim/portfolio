@@ -1085,3 +1085,5 @@ Landing (≥64rem), one block at the bottom left (owner: the click must sit wher
 Case opener: the purple glow rising behind the title and button (`.devsign-hero-glow`) is removed at the owner's request; only the screen's own shadow (`.devsign-hero-media` box-shadow) remains. Supersedes "a light rises from behind the product". Figma not updated.
 
 Case opener primary pill is white in dark and ink in light with page-coloured text, like the header's Get in touch (no case colour), and the opener screen has no border, only its shadow. Figma not updated.
+
+Devsign usability results, calmer (owner: too clumped; supersedes the one-chart bars and goal lines): four large numbers in a row (`.dv-ut-scores`, display Light, ink; red only on the missed goal, whose note says so), no panel, bars or markers; the meaning is body text below (72px away, no label); scenarios 120px further. Success goal 2 stays in the Takeaway next step. Across cases, content under a block's heading sits 64px away on desktop (was 40) and label, heading and text 16px apart. Figma not updated.

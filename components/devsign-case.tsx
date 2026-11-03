@@ -304,17 +304,6 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
   );
 }
 
-function Donut({ ratio, missed }: { ratio: number; missed?: boolean }) {
-  const r = 55.2;
-  const c = 2 * Math.PI * r;
-  return (
-    <svg className="dv-donut-ring" viewBox="0 0 120 120" aria-hidden="true">
-      <circle cx="60" cy="60" r={r} className="dv-donut-track" />
-      <circle cx="60" cy="60" r={r} className={missed ? "dv-donut-value dv-donut-missed" : "dv-donut-value"} strokeDasharray={`${c * ratio} ${c}`} transform="rotate(-90 60 60)" />
-    </svg>
-  );
-}
-
 // Findings as rows: a bold name, then its detail.
 function Groups({ groups, numbered }: { groups: { name: string; detail: string }[]; numbered?: boolean }) {
   return (
@@ -693,68 +682,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
         <div className="dv-gap-96">
           {/* With a `protocol`: the result first (finding, who and how much, the
-              scores, what they meant); how the test ran is folded underneath. */}
+              scores, what they meant), then the scenarios. */}
           {testing.usability.protocol ? <>
           <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          {testing.usability.verdict ? <>
-          {/* Each success goal beside its verdict, then the other scores, then what it meant. */}
-          {/* One chart: each score against its goal or benchmark, then the goals' verdicts. */}
-          <ul className="dv-bars dv-gap-40 reveal">
+          {/* Four numbers, then what they meant. Red only on the goal that was missed. */}
+          <ul className="dv-ut-scores reveal">
             {testing.usability.scores.map((item: Study) => (
-              <li key={item.title} data-bad={item.missed || item.below || undefined}>
-                <div className="dv-bar-label"><strong>{item.title}</strong><span>{item.note}</span></div>
-                <div className="dv-bar-track">
-                  <i style={{ width: `${item.ratio * 100}%` }} />
-                  {item.target && <em style={{ left: `${item.target[0] * 100}%` }}><span>{item.target[1]}</span></em>}
-                </div>
-                <p className="dv-bar-value">{item.value}<small>{item.unit}</small></p>
+              <li key={item.title} data-missed={item.missed || undefined}>
+                <p className="dv-ut-value">{item.value}<small>{item.unit}</small></p>
+                <strong>{item.title}</strong>
+                <span>{item.note}</span>
               </li>
             ))}
           </ul>
-          <ul className="dv-goal-lines reveal">
-            {define.hmw.success.map((goal: string, i: number) => (
-              <li key={goal} data-missed={i === 0 || undefined}>
-                <span>{testing.usability.verdict.goal} {i + 1}</span>
-                <p>{goal}</p>
-                <b>{i === 0 ? testing.usability.verdict.missed : testing.usability.verdict.pending}</b>
-              </li>
-            ))}
-          </ul>
-          <div className="dv-ut-result reveal">
-            <p>{testing.usability.resultLabel}</p>
-            <p>{testing.usability.result}</p>
-          </div>
-          </> : <>
-          {/* The scores and the next step are judged against these goals. */}
-          {ff && (
-            <div className="dv-goals reveal">
-              <p>{define.hmw.successLabel}</p>
-              <ol>
-                {define.hmw.success.map((s: string, i: number) => <li key={s}><span>{i + 1}</span>{s}</li>)}
-              </ol>
-            </div>
-          )}
-          <ul className="dv-scores dv-scores-row dv-gap-40">
-            {testing.usability.scores.map((s: Study) => (
-              <li key={s.title} className="reveal">
-                <div className="dv-donut">
-                  <Donut ratio={s.ratio} missed={s.missed} />
-                  <span className="dv-donut-value-text" data-missed={s.missed || undefined}>{s.value}<small>{s.unit}</small></span>
-                </div>
-                <div>
-                  <strong>{s.title}</strong>
-                  <span data-missed={s.missed || undefined}>{s.note}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <p className="dv-body dv-result dv-gap-32 reveal">{testing.usability.result}</p>
-          </>}
+          <p className="dv-body dv-ut-meaning reveal">{testing.usability.result}</p>
           {testing.usability.scenarios && (
-            <div className="dv-gap-40 reveal">
+            <div className="dv-ut-scenarios reveal">
               <p className="dv-caps">{testing.usability.scenariosLabel}</p>
               <ol className="dv-scenarios">
                 {testing.usability.scenarios.map((sc: { role: string; feature: string; task: string }) => (
