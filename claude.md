@@ -1154,3 +1154,5 @@ Core features moved from Develop to Deliver (owner; Deliver: the prototype line 
 HMW is back on Devsign after the Problem statement (owner; `define.hmwList`, `.dv-hmw-stage` / `.dv-hmw-sheet`): the five questions from the FigJam table (Define page, 아이디어, 495:13684) with no problem numbers, since FigJam has five problems and the site four. English is translated. Desktop with motion: statement holds, the card rises over it and holds, Develop rises over the card. Elsewhere the card simply follows on Develop's colour. Figma not updated.
 
 HMW card shortened (owner: too long, five too many, not the meeting one): three short questions under "어떻게 하면" / "How might we" (connect the conversation to the work; keep why it was decided; let other roles weigh in before it is final), trimmed from FigJam HMW 01, 02 and 04. Set at heading size. Figma not updated.
+
+HMW card removed for now (owner: the wording read awkwardly; supersedes the two HMW card notes; last version in 6f701ff, the five FigJam questions in 3d99fa9). The statement holds and Develop covers it again.
