@@ -1127,3 +1127,5 @@ Landing note (KO): "보안 컨설턴트 출신으로, AI와 함께 리서치부�
 Reveal fix: a `.reveal` that is its own unit (a figure directly under a stage or block; 20 on Devsign, 11 on Gemini) never showed from the observer, because `querySelectorAll` on the group skips the group itself; it only appeared once scrolling stopped or it had left the top. The observer now includes the element, so these images start to appear when 12% into view.
 
 Case spacing, one scale at the end of globals.css (`--sp-*` on `.case-study .dv`; owner: everything sat too close vertically; supersedes the 120 / 64 rhythm and the 140 / 160 stage padding): stage padding 200 / 224, blocks 176, stage title to content 96, heading or part to content 80, small label to content 32, evidence boxes 24. Phones 96 / 96 / 56 / 48 / 24. The Devsign page grew about 8%. About keeps its own 112. Figma not updated.
+
+Landing (≥64rem) block order is statement, case pills, note (supersedes statement, note, pills): the pills read as the next step of the headline, and the note is a quiet last line. Phones keep statement, note, pills, because the card those pills control sits right under them.
