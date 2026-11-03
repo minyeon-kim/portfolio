@@ -4808,7 +4808,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv > #define:has(> .dv-core:last-child) { animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
   .dv > #define:has(> .dv-core:last-child)::after { content: ""; position: static; display: block; height: 130svh; background: none; }
-  .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; min-height: 100svh; padding-block: 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
+  .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; justify-content: flex-start; min-height: 100svh; padding-block: clamp(112px, 16svh, 176px) 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
   .dv > #define:has(> .dv-core:last-child) + #develop { position: relative; z-index: 1; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
 }
 /* A sticky subject's cover range includes its stuck time, so the grow and the light-up are
