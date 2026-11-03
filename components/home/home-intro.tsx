@@ -145,8 +145,10 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
       if (!link || !ready() || document.documentElement.hasAttribute("data-project-navigation")) return;
       event.preventDefault();
       event.stopPropagation();
-      link.blur();
+      // Before the blur, which would otherwise bring the home copy back.
       opening = true;
+      setPortrait({ image });
+      link.blur();
       enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")));
     };
     document.addEventListener("pointerover", onOver);
