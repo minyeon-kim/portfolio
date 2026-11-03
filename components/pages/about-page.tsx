@@ -20,22 +20,22 @@ import { shareMeta, site, withBase } from "@/lib/site";
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
 const copy = {
   en: {
-    label: "About", portrait: "Portrait",
+    label: "About", portrait: "Minyeon Kim working on a laptop",
     facts: [["Background", "Four years of security consulting at SK shieldus"], ["Role", "User research, UX/UI design, working prototypes"], ["Tools", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
-    stages: { approach: "What I bring", experience: "Experience", outside: "Outside work", contact: "Contact" },
+    stages: { approach: "What I bring", experience: "Experience", outside: "At work", contact: "Contact" },
     experienceLead: "From cybersecurity to design",
     skills: "Skills",
-    photos: ["Photo of Minyeon at work", "Workshop, study group or talk"],
+    photos: ["Minyeon talking at a table with printed screens and sticky notes", "Hands around a table covered in printed screens, sketches and sticky notes"],
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
   },
   ko: {
-    label: "소개", portrait: "프로필 사진",
+    label: "소개", portrait: "노트북으로 작업하는 김민연",
     facts: [["배경", "SK쉴더스 보안 컨설팅 4년"], ["역할", "사용자 리서치, UX/UI 디자인, 동작하는 프로토타입"], ["도구", "Figma, FigJam, Dovetail, Claude Code, Codex"]],
-    stages: { approach: "강점", experience: "경력", outside: "일 밖에서", contact: "연락" },
+    stages: { approach: "강점", experience: "경력", outside: "일하는 모습", contact: "연락" },
     experienceLead: "보안에서 디자인으로",
     skills: "역량",
-    photos: ["일하는 모습", "워크숍, 스터디 또는 발표"],
+    photos: ["출력한 화면과 포스트잇이 놓인 테이블에서 이야기하는 김민연", "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손"],
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
   },
@@ -86,11 +86,10 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 {hasResume && <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>}
               </p>
             </div>
-            {/* TODO: add the portrait at public/images/about/portrait.webp; it replaces this box. */}
             {(hasPortrait || drafting) && (
               <div className="about-hero-portrait">
                 {hasPortrait
-                  ? <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1500} />
+                  ? <Image src={withBase(portrait)} alt={c.portrait} width={1200} height={1501} />
                   : <CaseMedia variant="portrait" label={c.portrait} />}
               </div>
             )}
@@ -109,7 +108,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         <div className="case-content">
           <div className="dv" style={{ "--dv-stages": `"${nav.length}"` } as React.CSSProperties}>
             <DevsignNav items={nav} />
-            <Todo>add a portrait at public/images/about/portrait.webp (it appears in the opener); add where you are based and whether you are open to relocation or remote roles</Todo>
+            <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
 
             <Section id="approach" title={c.stages.approach}>
               <p className="dv-headline reveal">{bio[1]}</p>
@@ -137,11 +136,9 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
             {(hasOutside || drafting) && (
               <Section id="outside" title={c.stages.outside}>
-                <Todo>a line or two about what you do outside work, in your own words</Todo>
-                {/* TODO: add the real photos as public/images/about/outside-1.webp and outside-2.webp, e.g. at work and a workshop or talk. */}
                 <CaseMediaPair>
                   {outsidePhotos.map((src, i) => (
-                    <CaseMedia key={src} variant="screen" label={c.photos[i]} src={hasOutside ? src : undefined} />
+                    <CaseMedia key={src} variant="screen" label={c.photos[i]} src={hasOutside ? src : undefined} width={1600} height={1067} />
                   ))}
                 </CaseMediaPair>
               </Section>
