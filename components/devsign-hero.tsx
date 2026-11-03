@@ -49,7 +49,6 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
           </p>
         )}
       </div>
-      <div className="devsign-hero-glow" aria-hidden="true" />
       <div className="devsign-hero-media">
         {gemini
           ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span>

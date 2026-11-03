@@ -4350,10 +4350,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .hero-cursor b { margin: 13px 0 0 -3px; padding: 2px 8px; border-radius: 999px; background: currentColor; font-size: 13px; font-weight: 500; line-height: 1.4; }
 .hero-cursor b { -webkit-text-fill-color: #fff; }
 @media (min-width: 64rem) and (hover: hover) { .hero-cursor { display: flex; } }
-.devsign-hero-glow { position: relative; z-index: -1; height: 0; pointer-events: none; }
-.devsign-hero-glow::before { content: ""; position: absolute; left: 50%; bottom: calc(-1 * clamp(40px, 6svh, 64px) - 96px); width: min(100%, 1200px); height: 460px; translate: -50% 0; background: radial-gradient(50% 60% at 50% 72%, color-mix(in srgb, var(--dh-glow) light-dark(26%, 62%), transparent), transparent 76%); }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
-@media (max-width: 63.99rem) { .devsign-hero-glow::before { height: 300px; } }
 
 /* The guided demo over the page, opened from the case opener. */
 .dv-demo-dialog { width: min(1200px, calc(100vw - 48px), calc((100dvh - 162px) * 1.6 + 48px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; overflow: visible auto; border: 1px solid var(--dv-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-surface, #1a1826)); color: var(--dv-ink); }
