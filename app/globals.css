@@ -4364,15 +4364,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .dv-dropped { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; }
 .dv-dropped s { color: var(--dv-muted); }
 .dv-dropped b { color: var(--case-accent); font-weight: 500; }
-.dv-artifacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 0; list-style: none; }
-.dv-artifacts a { display: block; color: var(--dv-ink); text-decoration: none; }
-.dv-artifacts img { display: block; width: 100%; height: 200px; object-fit: contain; padding: 12px; border-radius: var(--dv-card-radius); background: #ffffff; transition: transform 250ms var(--ease); }
-.dv-artifacts a:hover img { transform: translateY(-3px); }
-.dv-artifacts a:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 4px; border-radius: var(--dv-card-radius); }
-.dv-artifacts strong { display: block; margin-top: 12px; font-size: 18px; font-weight: 600; line-height: 1.4; }
-.dv-artifacts p { margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
 .dv .dv-gap-16 { margin-top: 16px; }
-@media (prefers-reduced-motion: reduce) { .dv-artifacts img { transition: none; } }
 
 .about-skills { margin: 48px 0 0; max-width: var(--dv-measure); }
 .about-skills dt { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; }
@@ -4721,8 +4713,6 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .dv-zoom-inner, .dv-zoom-hint { transition: none; } }
 /* A scroll-driven animation keeps the image on its own layer at 1x, which blurs it under the magnifier. */
 .dv-zoom-frame[data-on] img { animation: none !important; }
-.dv-artifacts .dv-zoom-hint { right: 8px; bottom: 8px; }
-.dv-artifacts li > strong { display: block; margin-top: 12px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
 
 /* Room inside a block: what a block found sits further from what proves it. */
 .dv-ut-scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 40px; margin: 72px 0 0; padding: 0; list-style: none; }
