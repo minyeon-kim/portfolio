@@ -3242,17 +3242,27 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
 /* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement, note and case pills sit together at the bottom left, so Work is
+   the statement, note and case pills sit together at the bottom right, so Work is
    one click from the first glance. */
 @media (min-width: 64rem) {
-  /* One block at the bottom left: statement, note, and right under them what to
-     press, so the click sits where the emphasis is. The dust has the space above. */
-  .intro-surface.home-grid { grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
-  .home-tagline-wrap { grid-column: 1 / -1; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
+  /* One block at the bottom right on one left edge: statement, note, and right
+     under them what to press. The column is as wide as the statement. */
+  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
+  .home-tagline-wrap { grid-column: 2; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
   .home-tagline { text-align: left; }
-  .home-note { grid-column: 1; grid-row: 3; align-self: start; }
-  .home-picks { position: static; translate: none; grid-column: 1 / -1; grid-row: 4; align-self: start; }
+  .home-note { grid-column: 2; grid-row: 3; align-self: start; width: 36ch; max-width: 100%; }
+  .home-picks { position: static; translate: none; grid-column: 2; grid-row: 4; align-self: start; }
   .home-picks ol { flex-direction: row; align-items: flex-start; }
+  .home-pick { min-height: 52px; padding: 0 24px; font-size: 20px; }
+  /* The pills hold the bottom right now, so a world's sentence takes the bottom left. */
+  .home-world-problem { right: auto; left: var(--project-text-inset); }
+  /* And the Gemini card moves up to the top right, clear of them. */
+  .home-device[data-project="gemini-privacy"] { top: 14%; bottom: auto; right: var(--project-text-inset); width: min(26vw, 400px); }
+  /* The name stops short of the card's caption. */
+  .home-stage[data-world="gemini-privacy"] { --gx: 18%; }
+  .home-stage[data-world="gemini-privacy"] .home-world-name { max-width: calc(100vw - var(--project-text-inset) - min(26vw, 400px) - 190px - 18vw - 32px); }
+  .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 48%; width: min(26ch, calc(52% - var(--project-text-inset) - min(26vw, 400px) - 32px)); }
+  .home-device-caption[data-project="gemini-privacy"] { top: calc(14% + min(26vw, 400px) * 1.25 - 96px); right: calc(var(--project-text-inset) + min(26vw, 400px) - 110px); bottom: auto; }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */
