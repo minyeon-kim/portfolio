@@ -3942,15 +3942,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-dd-body:has(li:nth-child(3) a:focus-visible) .dv-dd-half:nth-of-type(3),
 .dv-dd-body:has(li:nth-child(4) a:focus-visible) .dv-dd-half:nth-of-type(4) { fill: color-mix(in srgb, var(--case-accent) 12%, transparent); }
 
-/* The opener's prototype action: in-page on wide screens, a new tab on phones. */
-.devsign-hero-actions a[data-phone] { display: none; }
-@media (max-width: 63.99rem) {
-  .devsign-hero-actions a[data-wide] { display: none; }
-  .devsign-hero-actions a[data-phone] { display: inline-flex; }
-}
-
-#try { scroll-margin-top: 24px; }
-
 /* In-depth interview: who we met and what we asked, one panel. */
 /* Interview: the questions as a plain row, then the people as one strip. */
 /* The session photo and who was in it, one row at one height. */
@@ -4219,40 +4210,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 @media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
 
-/* Guided demo: real screens, one highlighted control, one line of what to do. */
-#try { scroll-margin-top: 24px; }
-.dv-demo-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; padding: 0; list-style: none; }
-.dv-demo-chapters button { display: block; width: 100%; padding: 0 0 2px; border: 0; background: none; color: var(--dv-muted); font: inherit; font-size: 16px; font-weight: 500; line-height: 1.4; text-align: left; cursor: pointer; transition: color 150ms var(--ease); }
-.dv-demo-chapters button:hover, .dv-demo-chapters button[aria-current] { color: var(--dv-ink); }
-.dv-demo-chapters i { display: block; height: 3px; margin-bottom: 10px; overflow: hidden; border-radius: 2px; background: var(--dv-card-line); }
-.dv-demo-chapters b { display: block; height: 100%; background: var(--case-accent); transform-origin: left; transition: transform 300ms var(--ease); }
-.dv-demo-stage { position: relative; }
-.dv-demo-screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--dv-card-radius); background: #111; box-shadow: 0 0 0 1px var(--dv-card-line); }
-.dv-demo-screen img { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 200ms var(--ease); }
-.dv-demo-screen img[data-on] { opacity: 1; }
-.dv-demo-spot { position: absolute; min-width: 36px; min-height: 36px; padding: 0; border: 2px solid #a594ff; border-radius: 10px; background: rgb(165 148 255 / 0.14); transform: translate(-50%, -50%); cursor: pointer; animation: dv-demo-pulse 1600ms var(--ease) infinite; }
-.dv-demo-spot:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.dv-demo-spot[data-nudge] { animation: dv-demo-nudge 400ms var(--ease), dv-demo-pulse 1600ms var(--ease) 400ms infinite; }
-.dv-demo-spot[data-rest] { animation: none; cursor: default; }
-@keyframes dv-demo-pulse { 0% { box-shadow: 0 0 0 0 rgb(165 148 255 / 0.55); } 70%, 100% { box-shadow: 0 0 0 14px rgb(165 148 255 / 0); } }
-@keyframes dv-demo-nudge { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 40% { transform: translate(-50%, -50%) scale(1.25); } }
-.dv-demo-tip { position: absolute; left: var(--tl); right: var(--tr); top: var(--tt); bottom: var(--tb); z-index: 1; width: min(340px, 42%); padding: 16px 18px; border-radius: 12px; background: #fff; color: #0e1111; box-shadow: 0 12px 32px rgb(0 0 0 / 0.35); animation: dv-demo-tip 250ms var(--ease) both; }
-.dv-demo-tip p { font-size: 16px; font-weight: 500; line-height: 1.45; }
-.dv-demo-tip .dv-demo-count { margin-bottom: 4px; color: #5b6461; font-variant-numeric: tabular-nums; }
-.dv-demo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.dv-demo-actions :is(button, a) { padding: 6px 14px; border: 0; border-radius: 999px; background: rgb(14 17 17 / 0.08); color: #0e1111; font: inherit; font-size: 16px; font-weight: 500; line-height: 1.4; text-decoration: none; cursor: pointer; transition: background-color 150ms var(--ease); }
-.dv-demo-actions :is(button, a):hover { background: rgb(14 17 17 / 0.14); }
-.dv-demo-actions a[data-primary] { background: #4a2bd0; color: #fff; }
-.dv-demo-actions a[data-primary]:hover { background: #3b20ad; }
-.dv-demo-open { display: inline-block; margin-top: 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; }
-.dv-demo-open:hover { color: var(--dv-ink); }
-@keyframes dv-demo-tip { from { opacity: 0; translate: 0 6px; } }
-@media (max-width: 47.99rem) {
-  .dv-demo-tip { position: static; width: auto; margin-top: 12px; box-shadow: none; }
-  .dv-demo-spot { min-width: 28px; min-height: 28px; border-radius: 6px; }
-}
-@media (prefers-reduced-motion: reduce) { .dv-demo-spot, .dv-demo-tip { animation: none; } .dv-demo-screen img, .dv-demo-chapters b { transition: none; } }
-
 /* Core features: the problem answered is its own block under a hairline, not another list line. */
 .dv-reel-solves { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--dv-card-line); }
 .dv-reel-solves span { display: block; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
@@ -4311,19 +4268,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-iter-photo { margin-top: 40px; }
 }
 
-/* Guided demo: everything but the part that matters is dimmed; the box glides between steps. */
-.dv-demo-focus { position: absolute; min-width: 36px; min-height: 36px; border-radius: 10px; box-shadow: 0 0 0 200vmax rgb(8 8 14 / 0.66); pointer-events: none; transition: left 350ms var(--ease), top 350ms var(--ease), width 350ms var(--ease), height 350ms var(--ease); }
-.dv-demo-line { animation: dv-demo-tip 250ms var(--ease) both; }
-.dv-demo-tip { animation: none; }
-.dv-demo-tip .dv-demo-count { display: block; margin-bottom: 4px; color: #5b6461; font-variant-numeric: tabular-nums; }
-.dv-demo-actions { justify-content: flex-end; }
-.dv-demo-actions button[data-primary] { background: #4a2bd0; color: #fff; }
-.dv-demo-actions button[data-primary]:hover { background: #3b20ad; }
-@media (prefers-reduced-motion: reduce) { .dv-demo-focus { transition: none; } .dv-demo-line { animation: none; } }
-@media (min-width: 48rem) { .dv-demo-tip { width: min(340px, var(--tw)); } }
-
-/* Case opener backdrop: the product's dot canvas, live cursors (HeroCanvas) and a light rising from behind the product. About keeps its own panel. */
-.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) { --dh-dot: light-dark(color-mix(in srgb, var(--dh-glow) 34%, transparent), color-mix(in srgb, var(--dh-glow-2) 30%, transparent)); }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(circle at 12px 12px, var(--dh-dot) 1px, transparent 1.5px); background-size: 24px 24px; background-repeat: repeat; }
 .hero-canvas { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; color: light-dark(var(--dh-glow), var(--dh-glow-2)); }
@@ -4333,28 +4277,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .hero-cursor b { -webkit-text-fill-color: #fff; }
 @media (min-width: 64rem) and (hover: hover) { .hero-cursor { display: flex; } }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border: 0; box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
-
-/* The guided demo over the page, opened from the case opener. */
-.dv-demo-dialog { width: min(1200px, calc(100vw - 48px), calc((100dvh - 162px) * 1.6 + 48px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; overflow: visible auto; border: 1px solid var(--dv-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-surface, #1a1826)); color: var(--dv-ink); }
-.dv-demo-dialog::backdrop { background: rgb(5 5 12 / 0.78); backdrop-filter: blur(6px); }
-.dv-demo-dialog-body { position: relative; padding: 16px 24px 16px; }
-.dv-demo-dialog .dv-demo-chapters { margin-right: 44px; }
-.dv-demo-close { position: absolute; top: 10px; right: 16px; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); cursor: pointer; transition: background-color 150ms var(--ease); }
-.dv-demo-close:hover { background: color-mix(in srgb, var(--dv-ink) 16%, transparent); }
-.dv-demo-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.dv-demo-close svg { width: 16px; height: 16px; }
-html:has(.dv-demo-dialog[open]) { overflow: hidden; }
-@media (prefers-reduced-motion: no-preference) {
-  .dv-demo-dialog[open] { animation: dv-dialog-in 250ms var(--ease); }
-  .dv-demo-dialog[open]::backdrop { animation: dv-dialog-fade 250ms ease; }
-}
-@keyframes dv-dialog-in { from { opacity: 0; translate: 0 12px; scale: 0.985; } }
-@keyframes dv-dialog-fade { from { opacity: 0; } }
-@media (max-width: 47.99rem) {
-  .dv-demo-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
-  .dv-demo-dialog-body { padding: 12px 12px 16px; }
-  .dv-demo-close { top: 6px; right: 8px; }
-}
 
 /* Folded supporting material in a case. */
 .dv-fold-body { padding-top: 32px; }
@@ -4859,7 +4781,7 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv :is(.dv-subsection, .dv-subsection-120, .dv-question, .dv-gap-96, .dv-process, .dv-main-features, .dv-block + .dv-gap-72, .dv-core + .dv-hmw) { margin-top: var(--sp-block); }
 .dv > section > .dv-core.dv-core { margin-top: var(--sp-block); }
 .case-study .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
-.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-dropped, .dv-gap-72), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
+.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-dropped, .dv-gap-72, .dv-try-link), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
 .case-study .dv .dv-cast { margin-bottom: 0; }
 .case-study .dv .dv-ut-summary + .dv-ut-panel { margin-top: 64px; }
 .case-study .dv .dv-funnel + .dv-board { margin-top: 48px; }
@@ -4870,3 +4792,10 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .case-study .dv .dv-ut-summary + .dv-ut-panel, .case-study .dv .dv-funnel + .dv-board { margin-top: 32px; }
   .case-study .dv .dv-evbox + .dv-evbox { margin-top: 16px; }
 }
+
+/* Deliver: the real prototype, one link away, right under its line. */
+#try { scroll-margin-top: 96px; }
+.case-study .dv .dv-block + p.dv-try-link { margin-top: 32px; }
+.dv-try-link a { display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; background: light-dark(var(--ink), #ffffff); color: var(--bg); font-size: 16px; font-weight: 500; text-decoration: none; transition: background-color 150ms var(--ease), translate 150ms var(--ease); }
+.dv-try-link a:hover { background: color-mix(in srgb, light-dark(var(--ink), #ffffff) 84%, var(--bg)); translate: 0 -2px; }
+@media (prefers-reduced-motion: reduce) { .dv-try-link a:hover { translate: none; } }

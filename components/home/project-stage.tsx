@@ -56,7 +56,7 @@ export function ProjectStage({ projects, about }: Props) {
   useEffect(() => {
     const pop = () => {
       const slug = (window.history.state as { homeCase?: string } | null)?.homeCase;
-      // In-page links (#try, stage nav) fire popstate too, on an entry with no
+      // In-page links (stage nav) fire popstate too, on an entry with no
       // state: that is scrolling inside the case, not leaving it.
       if (!slug && window.location.hash) return;
       const index = slug ? projects.findIndex((x) => x.slug === slug) : -1;
