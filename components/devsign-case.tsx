@@ -324,7 +324,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </tr>
               </thead>
               <tbody>
-                {discover.q2.columns.map((capability: { name: string; accent?: boolean }, i: number) => (!ff || capability.accent) && (
+                {discover.q2.columns.map((capability: { name: string; accent?: boolean }, i: number) => (
                   <tr key={capability.name} data-accent={capability.accent || undefined}>
                     <th scope="row">{capability.name}</th>
                     {compareTools.map((tool) => (

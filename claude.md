@@ -1003,3 +1003,5 @@ Section pass (2026-11-03, supersedes the Fold note and the Project fact): no fol
 Home picks are the pills alone again: the always-visible line under each pill is removed (owner disliked it, and it repeated the card caption on hover). The phone first-card preview stays.
 
 Devsign facts are five again, on one row from 64rem: Duration, Type, Team, Role, Tools (owner: the merged Role & tools cell was too long). Role is shorter: research, UX/UI design, prototyping, usability testing.
+
+The tool table shows all six capability rows again (supersedes "only the two rows"): two rows of nothing but X read as a straw man, while the full table shows what existing tools do cover.
