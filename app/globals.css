@@ -2720,17 +2720,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 
 /* About opens like a case page (the Devsign hero): name, headline, bio, facts. */
 .devsign-hero[data-project="about"] { --dh-glow: #6b7cff; --dh-glow-2: #a594ff; }
-.about-hero-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--ink); color: var(--bg); font: 600 11px/1 var(--font-mono); letter-spacing: 0.02em; }
 .about-hero-line { display: block; }
-/* The portrait fills the panel to its sides and bottom; the panel clips the corners. */
-.devsign-hero-panel:has(.about-hero-portrait) { overflow: hidden; }
-.devsign-hero[data-project="about"] .devsign-hero-panel:has(.about-hero-portrait) { padding-bottom: 0; }
-.about-hero-portrait { position: relative; margin: clamp(8px, 2svh, 24px) -24px 0; overflow: hidden; }
-/* The photo rises out of the panel and settles back into it, tinted a little with the panel colour, so it has no hard edge. */
-.about-hero-portrait:has(img) { -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.45) 8%, #000 16%, #000 90%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.45) 8%, #000 16%, #000 90%, transparent 100%); }
-.about-hero-portrait:has(img)::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--dh-glow) light-dark(10%, 22%), transparent); mix-blend-mode: soft-light; pointer-events: none; }
-.about-hero-portrait img { display: block; width: 100%; height: auto; max-height: 100svh; object-fit: cover; object-position: 44% 40%; }
-@media (max-width: 47.99rem) { .about-hero-portrait { margin: 8px -16px 0; } .about-hero-portrait img { aspect-ratio: 4 / 5; object-position: 44% center; } }
 
 
 /* Wide screens with the side stage nav: keep at least ~100px between the list and the column. */
@@ -4120,14 +4110,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .devsign-hero[data-project="about"] .has-emphasis strong { color: var(--dh-ink); }
 .devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, var(--dh-ink) 10%, transparent); }
 .devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, var(--dh-ink) 16%, transparent); }
-.dv > #approach .dv-features { margin-top: 56px; }
 .dv-features .about-tools li { display: block; padding: 0; border-radius: 0; background: none; }
 .about-story ol { padding-left: 32px; }
 @media (min-width: 64rem) { .devsign-hero[data-project="about"] .devsign-hero-details { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .about-contact button { height: auto; padding: 7px 14px; border: 1px solid color-mix(in srgb, var(--case-accent) 55%, transparent); background: transparent; color: var(--case-accent); font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.3; }
 .about-contact button:hover, .about-contact button:focus-visible { background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
-.about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 16 / 10; }
 
 /* The canvas once, then the key pains in words. */
 .dv-vpc-view { overflow: hidden; border-radius: var(--dv-card-radius); background: #fbfbfb; }
@@ -4569,4 +4557,41 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .case-study .dv .dv-funnel { flex-wrap: nowrap; gap: 6px; margin-top: 32px; }
   .dv-funnel li { gap: 5px; white-space: nowrap; }
   .dv-funnel li + li::before { margin-right: 2px; }
+}
+
+/* About, after linear.app/about: the photo whole on the first screen beside the
+   short intro, on the plain page, then each stage as title | content with a
+   hairline between stages. No panel, bands, cards or fades. */
+.devsign-hero[data-project="about"] .devsign-hero-panel { display: block; padding: 8px 16px 0; border: 0; border-radius: 0; background: none; }
+.devsign-hero[data-project="about"] .devsign-hero-intro { align-items: flex-start; text-align: left; }
+.devsign-hero[data-project="about"] .devsign-hero-title { max-width: none; margin-inline: 0; font-size: clamp(32px, 3.2vw, 44px); line-height: 1.25; text-align: left; }
+.devsign-hero[data-project="about"] .devsign-hero-subtitle { max-width: 44ch; margin-inline: 0; text-align: left; }
+.devsign-hero[data-project="about"] .devsign-hero-actions { justify-content: flex-start; }
+.about-hero-portrait { order: -1; margin: 0 0 32px; overflow: hidden; border-radius: 16px; }
+.about-hero-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 72svh; object-fit: cover; object-position: 44% center; }
+.about-hero-portrait .case-media { max-width: none; margin: 0; }
+.about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
+.devsign-hero[data-project="about"] .devsign-hero-panel { display: flex; flex-direction: column; }
+@media (min-width: 64rem) {
+  .devsign-hero[data-project="about"] .devsign-hero-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(48px, 5vw, 80px); align-items: center; padding: 16px calc(max(56px, (100vw - 1200px) / 2) - 16px) 0; }
+  .about-hero-portrait { order: 0; margin: 0; }
+  .about-hero-portrait img, .about-hero-portrait .case-media-space { width: auto; height: min(calc(100svh - 112px), 760px); max-height: none; }
+}
+[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: clamp(32px, 5vw, 80px); max-width: var(--dv-max); margin-inline: auto; padding: clamp(72px, 8vw, 112px) 0; border-top: 1px solid var(--line); border-radius: 0; background: none; clip-path: none; opacity: 1; translate: none; scale: none; animation: none; }
+/* The shared band rule on these two carries a very high specificity (its :is() argument with :not(:has())). */
+[data-about-page] .dv > :is(#experience, #outside) { margin-inline: auto !important; padding-inline: 0 !important; border-radius: 0 !important; background: none !important; clip-path: none !important; animation: none !important; }
+[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > * { grid-column: 2; min-width: 0; }
+[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > .dv-section-head { grid-column: 1; grid-row: 1 / span 20; align-self: start; margin: 0; }
+[data-about-page] .dv-section-head::after { content: none; }
+[data-about-page] .case-study .dv .dv-section-title { font-size: var(--t-statement); font-weight: 400; line-height: 1.25; }
+[data-about-page] .case-study .dv .dv-headline { font-size: var(--t-heading); line-height: 1.4; }
+[data-about-page] .dv > #contact .about-contact { margin-top: 32px; }
+.about-principles { margin: 48px 0 0; padding: 0; list-style: none; }
+.about-principles li { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 16px 32px; padding: 24px 0; border-top: 1px solid var(--line); }
+.about-principles h3 { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
+.about-principles p { margin: 0; color: var(--dv-muted); font-size: 18px; line-height: 1.55; }
+@media (max-width: 63.99rem) {
+  [data-about-page] .dv > :is(#approach, #experience, #outside, #contact) { display: block; padding: 64px 0; }
+  [data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > .dv-section-head { margin-bottom: 24px; }
+  .about-principles li { grid-template-columns: 1fr; gap: 8px; }
 }

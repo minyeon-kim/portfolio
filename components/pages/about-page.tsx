@@ -75,7 +75,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         <div className="devsign-hero" data-project="about">
           <div className="devsign-hero-panel">
             <div className="devsign-hero-intro">
-              <p className="devsign-hero-brand"><span className="about-hero-mark" aria-hidden="true">{site.name.split(" ").map((w) => w[0]).join("")}</span><span>{site.name}</span></p>
               <h1 tabIndex={-1} className="devsign-hero-title has-emphasis">
                 {headline.map((line) => <span key={line} className="about-hero-line"><Emphasis text={line} phrase={headlineEmphasis} /> </span>)}
               </h1>
@@ -89,7 +88,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             {(hasPortrait || drafting) && (
               <div className="about-hero-portrait">
                 {hasPortrait
-                  ? <Image src={withBase(portrait)} alt={c.portrait} width={2400} height={1500} sizes="100vw" priority />
+                  ? <Image src={withBase(portrait)} alt={c.portrait} width={2400} height={1500} sizes="(min-width: 1024px) 620px, 100vw" priority />
                   : <CaseMedia variant="portrait" label={c.portrait} />}
               </div>
             )}
@@ -112,15 +111,14 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
             <Section id="approach" title={c.stages.approach}>
               <p className="dv-headline reveal">{bio[1]}</p>
-              <ul className="dv-features dv-gap-40 reveal" style={{ "--n": principles.length } as React.CSSProperties}>
-                {principles.map((item, i) => (
-                  <li key={item.title}>
-                    <span className="dv-caps">{String(i + 1).padStart(2, "0")}</span>
-                    <strong>{item.title}</strong>
-                    <span>{item.body}</span>
+              <ol className="about-principles">
+                {principles.map((item) => (
+                  <li key={item.title} className="reveal">
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </Section>
 
             <Section id="experience" title={c.stages.experience}>
