@@ -483,9 +483,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 {define.problems.items.map((item: Study, i: number) => (
                   <li key={item.title} className="reveal" data-tone={PROBLEM_TONES[i % PROBLEM_TONES.length]}>
                     <h4>{item.title}</h4>
+                    <p className="dv-aff-insight">{define.affinity.insights[i]}</p>
                     <blockquote>“{define.affinity.quotes[i][0]}”</blockquote>
                     <p className="dv-aff-who">{define.affinity.quotes[i][1]}</p>
-                    <p>{define.affinity.insights[i]}</p>
                   </li>
                 ))}
               </ol>
