@@ -432,7 +432,7 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
 type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
 
 // Key problems as a horizontal accordion: one panel open (hover, focus or tap),
-// the others keep their role and name. Stacked and all open below 64rem.
+// the others keep their number and name. Stacked and all open below 64rem.
 export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answeredBy: string }) {
   const [open, setOpen] = useState(0);
   return (
@@ -440,7 +440,7 @@ export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answere
       {items.map((item, i) => (
         <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => setOpen(i)}>
           <button type="button" aria-expanded={i === open} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
-            <span className="dv-panel-who"><b>{pad(i + 1)}</b>{item.role}</span>
+            <span className="dv-panel-who"><b>{pad(i + 1)}</b></span>
             <h4>{item.title}</h4>
           </button>
           <div className="dv-panel-more">
