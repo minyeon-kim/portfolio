@@ -38,8 +38,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
 // frame aspect ratio, then the image's width, height, left and top in % of the frame.
 const CROPS: Record<string, [number, number, number, number, number]> = {
   "/images/devsign/affinity-board.webp": [1440 / 487, 100.04, 100.97, -0.02, -0.97],
-  "/images/devsign/information-architecture.webp": [1440 / 279, 102.77, 115.63, -1.23, -10.74],
-  "/images/devsign/user-flow.webp": [1440 / 351, 104.71, 126.42, -2.27, -18.71],
   "/images/devsign/value-effort-matrix.webp": [376 / 440, 103.73, 107.53, -1.87, -5.91],
   "/images/devsign/codesign-session.webp": [720 / 472, 108.84, 118.47, -4.38, -13.12],
 };
@@ -610,26 +608,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </div>
         )}
         <div className="dv-subsection">
-          {ff ? (
-            <ul className="dv-artifacts">
-              {[develop.ia, develop.flow].map((item: Study) => (
-                <li key={item.title} className="reveal">
-                  <ZoomFrame href={withBase(item.image.src)} scale={3}>
-                    <Image src={withBase(item.image.src)} alt={item.image.alt} width={item.image.width} height={item.image.height} sizes="(max-width: 767px) 100vw, 600px" />
-                  </ZoomFrame>
-                  <strong>{item.title}</strong>
-                  <p>{item.lead}</p>
-                </li>
-              ))}
-            </ul>
-          ) : <>
-            <Block {...develop.ia} ff={ff} />
-            <Figure img={develop.ia.image} className="dv-board dv-gap-40" zoom={2.5} />
-            <div className="dv-gap-96">
-              <Block {...develop.flow} ff={ff} />
-              <Figure img={develop.flow.image} className="dv-board dv-gap-40" zoom={2.5} />
-            </div>
-          </>}
+          <Block {...develop.ia} text={ff ? undefined : develop.ia.text} ff={ff} />
+          <Figure img={develop.ia.image} className="dv-board dv-gap-40" zoom={2.5} />
+          <div className="dv-gap-96">
+            <Block {...develop.flow} text={ff ? undefined : develop.flow.text} ff={ff} />
+            <Figure img={develop.flow.image} className="dv-board dv-gap-40" zoom={2.5} />
+          </div>
           {/* Shown once its capture is added (`develop.system.image`). */}
           {develop.system?.image && (
             <div className="dv-gap-96">
