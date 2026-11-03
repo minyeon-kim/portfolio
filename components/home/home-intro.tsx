@@ -6,7 +6,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { site, withBase } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
-import { enterAbout, portraitBox, type Box } from "@/lib/about-entrance";
+import { enterAbout, portraitBox } from "@/lib/about-entrance";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiDevice } from "@/components/gemini-device";
@@ -117,7 +117,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // into the portrait, and clicking opens the page from the photo at once
   // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
   // running; otherwise it is an ordinary link.
-  const [portrait, setPortrait] = useState<{ image: HTMLImageElement; box: Box } | null>(null);
+  const [portrait, setPortrait] = useState<{ image: HTMLImageElement } | null>(null);
   useEffect(() => {
     if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
     const src = withBase("/images/about/portrait.webp");
@@ -132,7 +132,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     const show = (event: Event) => {
       if (!aboutLink(event.target) || !ready()) return;
       setHover(null);
-      setPortrait({ image, box: portraitBox() });
+      setPortrait({ image });
     };
     const hide = (event: Event) => {
       if (!opening && aboutLink(event.target)) setPortrait(null);
