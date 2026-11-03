@@ -113,33 +113,54 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     return () => media.removeEventListener("change", sync);
   }, []);
   const previewed = shown ?? (phone ? projects[0] : null);
-  // The header's About link, from here: the dust gathers into the portrait
-  // before the page opens (lib/about-entrance.ts). Desktop only, with motion
-  // allowed and the dust running; otherwise it is an ordinary link.
-  const photo = useRef<HTMLImageElement | null>(null);
+  // The header's About link, from here: hovering or focusing it gathers the dust
+  // into the portrait, and clicking opens the page from the photo at once
+  // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
+  // running; otherwise it is an ordinary link.
   const [portrait, setPortrait] = useState<{ image: HTMLImageElement; box: Box } | null>(null);
   useEffect(() => {
     if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
     const src = withBase("/images/about/portrait.webp");
     const image = new Image();
     image.src = src;
-    photo.current = image;
+    let opening = false;
+    const aboutLink = (target: EventTarget | null) => {
+      const link = (target as Element | null)?.closest?.<HTMLAnchorElement>("header a[href]");
+      return link && link.pathname.endsWith(localize("/about/", locale)) ? link : null;
+    };
+    const ready = () => document.querySelector<HTMLElement>(".home-object")?.dataset.live !== undefined && image.naturalWidth > 0;
+    const show = (event: Event) => {
+      if (!aboutLink(event.target) || !ready()) return;
+      setHover(null);
+      setPortrait({ image, box: portraitBox() });
+    };
+    const hide = (event: Event) => {
+      if (!opening && aboutLink(event.target)) setPortrait(null);
+    };
+    const onOver = (event: PointerEvent) => { if (event.pointerType === "mouse") show(event); };
+    const onOut = (event: PointerEvent) => { if (event.pointerType === "mouse" && document.activeElement !== aboutLink(event.target)) hide(event); };
     const onClick = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = (event.target as Element).closest?.<HTMLAnchorElement>("header a[href]");
-      if (!link || !link.pathname.endsWith(localize("/about/", locale))) return;
-      const live = document.querySelector<HTMLElement>(".home-object")?.dataset.live !== undefined;
-      if (!live || !image.naturalWidth || document.documentElement.hasAttribute("data-project-navigation")) return;
+      const link = aboutLink(event.target);
+      if (!link || !ready() || document.documentElement.hasAttribute("data-project-navigation")) return;
       event.preventDefault();
       event.stopPropagation();
       link.blur();
-      const box = portraitBox();
-      setHover(null);
-      setPortrait({ image, box });
-      enterAbout(box, src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")));
+      opening = true;
+      enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")));
     };
+    document.addEventListener("pointerover", onOver);
+    document.addEventListener("pointerout", onOut);
+    document.addEventListener("focusin", show);
+    document.addEventListener("focusout", hide);
     document.addEventListener("click", onClick, true);
-    return () => document.removeEventListener("click", onClick, true);
+    return () => {
+      document.removeEventListener("pointerover", onOver);
+      document.removeEventListener("pointerout", onOut);
+      document.removeEventListener("focusin", show);
+      document.removeEventListener("focusout", hide);
+      document.removeEventListener("click", onClick, true);
+    };
   }, [locale, router]);
   const open = (slug: string) => {
     if (slug === "about") {

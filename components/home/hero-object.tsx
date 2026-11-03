@@ -645,7 +645,9 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         const person = Math.exp(-((x - 0.48) ** 2) / 0.09 - ((y - 0.6) ** 2) / 0.14);
         const edge = Math.min(1, Math.min(x, 1 - x, y, 1 - y) / 0.12);
         shade[i] = dark ? l : 1 - l;
-        weight[i] = Math.pow(shade[i], dark ? 3 : 1.6) * (0.1 * edge + 0.45 * person + 2.2 * face);
+        // A floor inside the person, so hair and clothes hold dust too and the
+        // face isn't left floating alone.
+        weight[i] = Math.pow(shade[i], dark ? 2.2 : 1.6) * (0.1 * edge + 0.45 * person + 0.8 * face) + (dark ? 0.1 : 0.02) * person;
       }
       const peak = Math.max(...weight);
       for (let i = 0; i < W * H; i++) weight[i] /= peak;
@@ -654,13 +656,13 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       const data = new Float32Array(SIZE * SIZE * 4);
       for (let n = 0; n < SIZE * SIZE; n++) {
         let u = Math.random(), v = Math.random(), bright = 0.5;
-        if (n % 8 === 0) {
-          // Stars round the photo.
-          u = 0.5 + (u - 0.5) * 2.6; v = 0.5 + (v - 0.5) * 1.5;
+        if (n % 24 === 0) {
+          // A few stars just round the photo.
+          u = 0.5 + (u - 0.5) * 1.3; v = 0.5 + (v - 0.5) * 1.15;
         } else {
           for (let t = 0; t < 80; t++) {
             const i = Math.floor(v * H) * W + Math.floor(u * W);
-            bright = 0.35 + shade[i] * 1.1;
+            bright = 0.3 + shade[i] * 0.7;
             if (Math.random() < weight[i]) break;
             u = Math.random(); v = Math.random();
           }
@@ -767,7 +769,8 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
       gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
-      gl.drawArrays(gl.POINTS, 0, 4200);
+      // The portrait keeps only a few of the far stars.
+      gl.drawArrays(gl.POINTS, 0, Math.round(4200 * (1 - 0.8 * portraitMix)));
       gl.useProgram(pDraw);
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture);
