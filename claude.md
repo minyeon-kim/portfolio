@@ -1136,3 +1136,6 @@ Usability results are four stacked rows, no panel or cell lines (owner: needless
 
 Landing (≥64rem): the note sits at the bottom left, left-aligned, sharing the pills' bottom line (the spot a case sentence takes on hover); statement and pills stay at the bottom right (supersedes statement, pills, note in one block).
 The guided demo and its dialog are gone (owner: pressing small targets in a scaled screen was uncomfortable; supersedes GuidedDemo, DemoDialog and the 6-step notes). The opener's action and a pill in Deliver (`deliver.link`) open the real prototype in a new tab at every width (?lang follows the page; the URL is written in each case MDX). Showing the product is the feature clips' job. `#try` stays on the Deliver pill so old links land there. Demo screenshots are deleted. Figma not updated.
+
+
+Devsign Problem statement holds and is covered (owner): on desktop with motion allowed the sheet fills the screen, sticks at the top for 30svh of reading, then Develop rises over it with its own round top corners (native scroll; the travel is `#define::after`, 130svh, and Develop pulls up by 100svh). Solid purple instead of fading into Develop. Phones and reduced motion keep the fade. Figma not updated.

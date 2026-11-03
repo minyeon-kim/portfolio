@@ -4799,3 +4799,23 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-try-link a { display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; background: light-dark(var(--ink), #ffffff); color: var(--bg); font-size: 16px; font-weight: 500; text-decoration: none; transition: background-color 150ms var(--ease), translate 150ms var(--ease); }
 .dv-try-link a:hover { background: color-mix(in srgb, light-dark(var(--ink), #ffffff) 84%, var(--bg)); translate: 0 -2px; }
 @media (prefers-reduced-motion: reduce) { .dv-try-link a:hover { translate: none; } }
+
+/* The Problem statement sheet rises, fills the screen and holds (sticky), then Develop rises
+   over it with native scroll. The travel is a block after the sheet, since sticky can't move
+   into padding: one screen for Develop to cover it plus 30svh to read it first. Desktop with
+   motion allowed; elsewhere the sheet falls into Develop as before. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv > #define:has(> .dv-core:last-child) { animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
+  .dv > #define:has(> .dv-core:last-child)::after { content: ""; position: static; display: block; height: 130svh; background: none; }
+  .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; min-height: 100svh; padding-block: 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
+  .dv > #define:has(> .dv-core:last-child) + #develop { position: relative; z-index: 1; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
+}
+/* A sticky subject's cover range includes its stuck time, so the grow and the light-up are
+   timed on the sheet's entry: finished by the moment it fills the screen. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .dv > #define > .dv-core.dv-core:last-child { view-timeline-name: --dv-sheet; animation-range: entry 0% entry 100%; }
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-kicker { animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation-timeline: --dv-sheet, --dv-sheet; animation-range: entry 20% entry 90%, entry 0% entry 100%; }
+  }
+}
