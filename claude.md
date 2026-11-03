@@ -1156,3 +1156,5 @@ HMW is back on Devsign after the Problem statement (owner; `define.hmwList`, `.d
 HMW card shortened (owner: too long, five too many, not the meeting one): three short questions under "어떻게 하면" / "How might we" (connect the conversation to the work; keep why it was decided; let other roles weigh in before it is final), trimmed from FigJam HMW 01, 02 and 04. Set at heading size. Figma not updated.
 
 HMW card removed for now (owner: the wording read awkwardly; supersedes the two HMW card notes; last version in 6f701ff, the five FigJam questions in 3d99fa9). The statement holds and Develop covers it again.
+
+Devsign no longer tells the dropped AI go-between idea (owner; supersedes the dropped-idea block and its diamond pivot): the Develop block, the Double Diamond note and the unused process body are gone. Develop opens on the value proposition canvas. Figma not updated.
