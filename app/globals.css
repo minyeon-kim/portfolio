@@ -4855,3 +4855,29 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 
 /* Wireflow: the way back to the workspace is dashed. */
 .dv-wf-back { stroke-dasharray: 5 5; }
+
+/* Case spacing, one scale (owner: everything sat too close vertically; supersedes the 120 / 64 rhythm).
+   Stage 200 > block 176 > stage title to content 96 > heading or part to content 80 > small label to content 32. */
+.case-study .dv { --sp-stage: 200px; --sp-block: 176px; --sp-head: 96px; --sp-part: 80px; --sp-label: 32px; }
+@media (max-width: 47.99rem) {
+  .case-study .dv { --sp-stage: 96px; --sp-block: 96px; --sp-head: 56px; --sp-part: 48px; --sp-label: 24px; }
+}
+.dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway) { padding-block: var(--sp-stage) calc(var(--sp-stage) + 24px); }
+.dv > section:is(#overview) { padding-top: calc(var(--sp-stage) - 40px); }
+.dv > section:is(#takeaway) { padding-bottom: calc(var(--sp-stage) - 40px); }
+.dv > section:is(#define):has(> .dv-core:last-child) { padding-bottom: 0; }
+.case-study .dv .dv-section-head { margin-bottom: var(--sp-head); }
+.case-study .dv :is(.dv-subsection, .dv-subsection-120, .dv-question, .dv-gap-96, .dv-process, .dv-main-features, .dv-block + .dv-gap-72, .dv-core + .dv-hmw) { margin-top: var(--sp-block); }
+.dv > section > .dv-core.dv-core { margin-top: var(--sp-block); }
+.case-study .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
+.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-dropped, .dv-gap-72), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-ut-panel + .dv-ut-scenarios, .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
+.case-study .dv .dv-cast { margin-bottom: 0; }
+.case-study .dv .dv-ut-summary + .dv-ut-panel { margin-top: 64px; }
+.case-study .dv .dv-funnel + .dv-board { margin-top: 48px; }
+.case-study .dv .dv-evbox + .dv-evbox { margin-top: 24px; }
+.case-study .dv .dv-keyq .dv-caps { margin-bottom: var(--sp-label); }
+.case-study .dv .dv-caps + :is(.dv-scroll, table, .dv-learned, ul, ol) { margin-top: var(--sp-label); }
+@media (max-width: 47.99rem) {
+  .case-study .dv .dv-ut-summary + .dv-ut-panel, .case-study .dv .dv-funnel + .dv-board { margin-top: 32px; }
+  .case-study .dv .dv-evbox + .dv-evbox { margin-top: 16px; }
+}
