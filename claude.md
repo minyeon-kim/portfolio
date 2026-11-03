@@ -1114,3 +1114,5 @@ Devsign interview block has surfaces (owner: too much plain text): research ques
 Devsign Overview Result card reads "테스트 후 화면을 두 번 고쳤다" / "Testing led to two rounds of changes" (owner: "first test missed its goal" read oddly as a headline; supersedes it). The small text still says the first test showed people could not finish alone and that the new version is not retested; the 2.3 vs 1.5 numbers stay in Testing.
 
 Landing Korean copy (owner: the old lines read as a translation): headline "복잡한 제품을 이해하기 쉽게 디자인합니다" in three lines ("복잡한 제품을 / 이해하기 쉽게 / 디자인합니다", width 6.2em), emphasis "쉽게"; note "AI를 활용해 리서치부터 프로토타입까지 직접 만드는 프로덕트 디자이너입니다. 보안 컨설턴트로 4년간 일했습니다." (460px on 64rem and up, no-break spaces hold "프로덕트 디자이너입니다." and the second sentence together). English is unchanged. Figma Main not updated.
+
+Korean value proposition canvas re-exported from FigJam (630:17611, vpc-zoom-ko.webp, 5660x2320): the earlier crop cut the bottom of the square. The unrelated stickies under it are painted out. The English image was already whole.
