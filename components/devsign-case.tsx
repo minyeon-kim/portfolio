@@ -164,7 +164,7 @@ function Insights({ discover }: { discover: Study }) {
 }
 
 function Block({ method, title, lead, text, id, label, ff }: Lead & { id?: string; label?: string; ff?: boolean }) {
-  if (ff) return (
+  if (ff || lead) return (
     <div className="dv-block">
       <p className="dv-label reveal">{label ?? title}</p>
       <h3 id={id} className="dv-finding reveal">{lead}</h3>
@@ -182,6 +182,77 @@ function Block({ method, title, lead, text, id, label, ff }: Lead & { id?: strin
           {text}
         </p>
       )}
+    </div>
+  );
+}
+
+// Discover for a case whose evidence is papers and a service audit rather than posts
+// and a tool table: same order and same boxes as `Insights`.
+function EvidenceColumns({ label, link, groups }: { label: string; link?: ReactNode; groups: { name: string; detail: string }[] }) {
+  return (
+    <section className="dv-evbox dv-evbox-voices">
+      <div className="dv-evbox-head reveal"><p>{label}</p>{link}</div>
+      <ul className="dv-insight-voices">
+        {groups.map((g) => (
+          <li key={g.name} className="reveal">
+            <strong>{g.name}</strong>
+            {g.detail.split(" · ").map((line) => <p key={line}>{line}</p>)}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function SourceInsights({ discover }: { discover: Study }) {
+  const { q1, q2, synthesis, interview, desk } = discover;
+  return (
+    <div className="dv-insights">
+      <p className="dv-insights-scale reveal">{discover.scale}</p>
+      <div className="dv-gap-48">
+        <Block title={desk.title} lead={q1.answer} text={desk.text} ff />
+        <section className="dv-evbox dv-gap-40">
+          <p className="dv-evbox-head reveal">{q1.surveyLabel}</p>
+          <div className="dv-insight-stats">
+            {q1.stats.map((stat: { value: string; text: string }) => (
+              <div key={stat.value} className="dv-insight-stat reveal" style={{ "--share": parseFloat(stat.value) / 100 } as React.CSSProperties}>
+                <p><strong>{stat.value}</strong><span>{stat.text}</span></p>
+                <i aria-hidden="true"><b /></i>
+              </div>
+            ))}
+          </div>
+        </section>
+        <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
+      </div>
+
+      <div className="dv-subsection">
+        <Block title={q2.title} lead={q2.answer} ff />
+        <div className="dv-gap-40"><EvidenceColumns label={q2.auditLabel} groups={q2.groups} /></div>
+      </div>
+
+      <div className="dv-subsection">
+        <Block title={synthesis.label} lead={synthesis.title} ff />
+        <ol className="dv-flow dv-gap-40 reveal">
+          {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }) => (
+            <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="dv-subsection">
+        <Block {...interview} ff />
+        <div className="dv-asks dv-gap-40">
+          <p className="dv-caps reveal">{interview.questionsLabel}</p>
+          <ol>
+            {interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
+          </ol>
+        </div>
+        <ul className="dv-people-strip reveal" aria-label={interview.peopleLabel}>
+          {interview.participants.map((row: string[]) => (
+            <li key={row[0]}><b>{row[0]} · {row[3]}</b><strong>{row[1]}</strong><span>{row[2]}</span></li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -287,7 +358,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
     { id: "define", label: "Define" },
     { id: "develop", label: "Develop" },
     { id: "deliver", label: "Deliver" },
-    ...(ff ? [{ id: "testing", label: "Testing" }] : []),
+    { id: "testing", label: "Testing" },
     { id: "takeaway", label: "Takeaway" },
   ];
 
@@ -317,13 +388,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         ) : <div className="dv-psi">{children}</div>}
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
-          {!ff && <p className="dv-body reveal">{overview.process.body}</p>}
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
         </div>
         {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
         {overview.features && !(ff && develop.selection) && (
           <div className="dv-main-features">
-            {ff ? <Block title={overview.features.method} lead={overview.features.title} ff={ff} /> : <Block method={overview.features.method} title={overview.features.title} />}
+            <Block title={overview.features.method} lead={overview.features.title} ff />
             <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as React.CSSProperties}>
               {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => (
                 <li key={f.name} className="reveal">
@@ -338,120 +408,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="discover" title="Discover">
-        {ff ? <Insights discover={discover} /> : <>
-        <Block {...discover.desk} />
-
-        <div className="dv-question">
-          <p className="dv-caps dv-question-label reveal">{discover.q1.label}</p>
-          <p className="dv-answer reveal">{discover.q1.answer}</p>
-          {/* With quotes: the two kinds of evidence side by side, survey numbers
-              (scale) | the problems people kept posting, each with one real quote. */}
-          {discover.q1.groups[0]?.quote ? (
-            <div className="dv-evidence dv-gap-40">
-              <div>
-                <p className="dv-caps reveal">{discover.q1.surveyUrl ? <a className="dv-source-link" href={discover.q1.surveyUrl} target="_blank" rel="noreferrer">{discover.q1.surveyLabel}</a> : discover.q1.surveyLabel}</p>
-                <div className="dv-evidence-stats">
-                  {discover.q1.stats.map((stat: { value: string; text: string }) => (
-                    <div key={stat.value} className="dv-meter reveal">
-                      <strong>{stat.value}</strong>
-                      <span className="dv-meter-bar" aria-hidden="true"><i style={{ width: stat.value }} /></span>
-                      <span>{stat.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
-                <ol className="dv-voices">
-                  {discover.q1.groups.map((g: { name: string; quote: string; source: string; sourceUrl?: string }, i: number) => (
-                    <li key={g.name} className="reveal" data-tone={VOICE_TONES[i % VOICE_TONES.length]}>
-                      <div>
-                        <strong>{g.name}</strong>
-                        <blockquote>“{g.quote}”</blockquote>
-                        <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-                {discover.q1.boards && <p className="dv-boards-link reveal"><a href={withBase(discover.q1.boards.src)} target="_blank" rel="noreferrer">{discover.q1.boardsLink}</a></p>}
-              </div>
-            </div>
-          ) : <>
-          <p className="dv-caps dv-gap-40 reveal">{discover.q1.surveyLabel}</p>
-          <div className="dv-stats">
-            {discover.q1.stats.map((stat: { value: string; text: string }) => (
-              <p key={stat.value} className="dv-stat reveal"><strong>{stat.value}</strong><span>{stat.text}</span></p>
-            ))}
-          </div>
-          {/* Each finding as a row with its detail; with boards, numbered and
-              followed by a strip of the boards they came from. */}
-          <div className="dv-gap-56">
-            <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
-            <Groups groups={discover.q1.groups} numbered={Boolean(discover.q1.boards)} />
-            {discover.q1.boards && <Figure img={{ ...discover.q1.boards, alt: "Research boards with community posts grouped by pattern" }} sizes="(max-width: 767px) 100vw, 1200px" className="dv-boards dv-strip dv-gap-24" />}
-          </div>
-          </>}
-        </div>
-
-        <div className="dv-question">
-          <p className="dv-caps dv-question-label reveal">{discover.q2.label}</p>
-          <p className="dv-answer reveal">{discover.q2.answer}</p>
-          <div className="dv-gap-48">
-            <p className="dv-caps reveal">{discover.q2.auditLabel}</p>
-            <Groups groups={discover.q2.groups} />
-          </div>
-        </div>
-
-        <div className="dv-question">
-          <p className="dv-caps reveal">{discover.synthesis.label}</p>
-          <p className="dv-answer reveal">{discover.synthesis.title}</p>
-          {discover.synthesis.text && <p className="dv-body reveal">{discover.synthesis.text}</p>}
-          {/* Gap only (class feedback): one card per stage with the gap in a
-              plain sentence, instead of With AI → Gap rows read across. */}
-          {discover.synthesis.rows[0]?.withAi === undefined ? (
-            <ol className="dv-flow dv-gap-40 reveal">
-              {discover.synthesis.rows.map((row: { stage: string; before?: string; gap: string }) => (
-                <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
-              ))}
-            </ol>
-          ) : <div className="dv-stages dv-gap-24">
-            <div className="dv-stages-head" aria-hidden="true"><span /><span>{discover.synthesis.withAi}</span><span /><span>{discover.synthesis.gap}</span></div>
-            {discover.synthesis.rows.map((row: { stage: string; withAi: string; gap: string }) => (
-              <div key={row.stage} className="dv-stage-row reveal">
-                <strong>{row.stage}</strong>
-                <p className="dv-stage-box"><span className="sr-only">{discover.synthesis.withAi}: </span>{row.withAi}</p>
-                <span className="dv-stage-arrow" aria-hidden="true">→</span>
-                <p className="dv-stage-box dv-stage-gap"><span className="sr-only">{discover.synthesis.gap}: </span>{row.gap}</p>
-              </div>
-            ))}
-          </div>}
-        </div>
-
-        <div className="dv-subsection dv-rule">
-          <Block {...discover.interview} />
-          <div className={discover.interview.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
-            {discover.interview.photo && <Figure img={discover.interview.photo} sizes="(max-width: 767px) 100vw, 50vw" className="dv-photo" />}
-            <div className="dv-stack-32">
-              <div>
-                <p className="dv-caps reveal">{discover.interview.questionsLabel}</p>
-                <ol className="dv-numbered">
-                  {discover.interview.questions.map((q: string) => <li key={q} className="reveal">{q}</li>)}
-                </ol>
-              </div>
-              <table className="dv-participants reveal">
-                <thead>
-                  <tr>{discover.interview.participantColumns.map((c: string) => <th key={c} scope="col">{c}</th>)}</tr>
-                </thead>
-                <tbody>
-                  {discover.interview.participants.map((p: string[]) => (
-                    <tr key={p[0]}>{p.map((cell, i) => (i === 0 ? <th key={i} scope="row">{cell}</th> : <td key={i}>{cell}</td>))}</tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        </>}
+        {ff ? <Insights discover={discover} /> : <SourceInsights discover={discover} />}
       </Section>
 
       <Section id="define" title="Define">
@@ -514,6 +471,34 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
 
         </> : <>
+        <div>
+          <Block {...define.affinity} ff />
+          {define.affinity.funnel && (
+            <ol className="dv-funnel dv-gap-40 reveal">
+              {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+            </ol>
+          )}
+          <Figure img={define.affinity.board} className="dv-board dv-gap-24" />
+        </div>
+
+        <div className="dv-subsection">
+          <Block {...define.problems} ff />
+          <table className="dv-found dv-found-pair dv-gap-40 reveal">
+            <thead>
+              <tr>{define.problems.columns.map((label: string) => <th key={label} scope="col">{label}</th>)}</tr>
+            </thead>
+            <tbody>
+              {define.problems.items.map((item: Study) => (
+                <tr key={item.title} data-key={item.lowest || undefined}>
+                  <th scope="row">{item.title}{item.lowest && <span className="dv-pill dv-pill-accent">{define.problems.lowest}</span>}</th>
+                  <td>{item.body}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
         <div className="dv-personas dv-gap-64">
           {define.personas.people.map((person: Study, index: number) => (
@@ -546,42 +531,17 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
         <Journey journey={define.personas.journey} />
         <p className="dv-summary reveal">{define.personas.summary}</p>
-
-        <div className="dv-subsection">
-          <Block {...define.affinity} ff={ff} />
-          <Figure img={define.affinity.board} className="dv-board dv-gap-72" />
-        </div>
-
-        <div className="dv-subsection">
-          <Block {...define.problems} ff={ff} />
-          <ol className="dv-problems dv-gap-40">
-            {define.problems.items.map((item: Study, index: number) => (
-              <li key={item.title} className="reveal">
-                <div className="dv-problem-top">
-                  <span className="dv-problem-number">{pad(index + 1)}</span>
-                  <span className="dv-pill">{item.role}</span>
-                  {item.lowest && <span className="dv-pill dv-pill-accent">{define.problems.lowest}</span>}
-                </div>
-                <h4>{item.title}</h4>
-                <p>{item.body}</p>
-                <p className="dv-from"><strong>{labels.from} · </strong>{item.from}</p>
-              </li>
-            ))}
-          </ol>
         </div>
 
         </>}
 
         <div className="dv-core">
-          {ff && <p className="dv-core-kicker reveal">{define.core.title}</p>}
-          {!ff && <p className="dv-method reveal">{define.core.method}</p>}
-          {!ff && <h3 className="dv-block-title reveal">{define.core.title}</h3>}
+          <p className="dv-core-kicker reveal">{define.core.title}</p>
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
         </div>
 
         {!ff && <div className="dv-hmw">
-          <p className="dv-method reveal">{define.hmw.method}</p>
-          {!ff && <h3 className="dv-block-title reveal">{define.hmw.title}</h3>}
+          <p className="dv-label reveal">{define.hmw.title}</p>
           <p className="dv-hmw-question reveal">{define.hmw.question}</p>
           <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
           <ol className="dv-checks">
@@ -694,7 +654,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       {/* The opener's link target sits outside the stage: stages and their blocks
           are mid-rise when the link is pressed, which would throw the landing off. */}
-      <Section id="deliver" title="Deliver" band={!ff}>
+      <Section id="deliver" title="Deliver">
         <div>
           <Block {...deliver} ff={ff} />
           {deliver.tryIt && <div id="try" className="dv-gap-40 reveal"><GuidedDemo {...deliver.tryIt} /></div>}
@@ -725,14 +685,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       {/* Findings first: Testing is a stage of its own (title, band, nav item),
           so it no longer reads as the tail of Deliver. */}
-      <section id={ff ? "testing" : undefined} className="dv-section dv-testing" aria-labelledby="testing-title">
-        {ff ? <>
-          <div className="dv-section-head">
-            <h2 id="testing-title" className="dv-section-title reveal">Testing</h2>
-          </div>
-          <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
-        </> : <Block {...testing} id="testing-title" />}
-        <div className={ff ? "dv-gap-96" : "dv-gap-72"}>
+      <section id="testing" className="dv-section dv-testing" aria-labelledby="testing-title">
+        <div className="dv-section-head">
+          <h2 id="testing-title" className="dv-section-title reveal">Testing</h2>
+        </div>
+        <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
+        <div className="dv-gap-96">
           {/* With a `protocol`: the result first (finding, who and how much, the
               scores, what they meant); how the test ran is folded underneath. */}
           {testing.usability.protocol ? <>
@@ -809,23 +767,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           )}
           </> : <>
           <Block {...testing.usability} ff={ff} />
-          <div className={ff ? "dv-media-row dv-gap-40" : testing.usability.photo ? "dv-two dv-gap-40 dv-center" : "dv-gap-40"}>
-            {testing.usability.photo && <Figure img={testing.usability.photo} sizes="(max-width: 1023px) 100vw, 720px" className="dv-photo dv-photo-ut" />}
-            <ul className="dv-scores">
-              {testing.usability.scores.map((s: Study) => (
-                <li key={s.title} className="reveal">
-                  <div className="dv-donut">
-                    <Donut ratio={s.ratio} missed={s.missed} />
-                    <span className="dv-donut-value-text" data-missed={s.missed || undefined}>{s.value}<small>{s.unit}</small></span>
-                  </div>
-                  <div>
-                    <strong>{s.title}</strong>
-                    <span data-missed={s.missed || undefined}>{s.note}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="dv-plan dv-gap-40 reveal">
+            {testing.usability.scores.map((item: Study) => (
+              <li key={item.title}>
+                <strong>{item.value}<small>{item.unit}</small></strong>
+                <b>{item.title}</b>
+                <span>{item.note}</span>
+              </li>
+            ))}
+          </ul>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
