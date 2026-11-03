@@ -537,6 +537,19 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>}
       </Section>
 
+      {/* Findings first: the statement's questions, a card that rises over it (CSS sticky). */}
+      {ff && define.hmwList && (
+        <div className="dv-hmw-stage">
+          <section className="dv-hmw-sheet" aria-labelledby="hmw-title">
+            <p className="dv-hmw-label">{define.hmwList.label}</p>
+            <h3 id="hmw-title" className="dv-hmw-lead">{define.hmwList.lead}</h3>
+            <ol className="dv-hmw-list">
+              {define.hmwList.items.map((q: string, i: number) => <li key={q}><b>{pad(i + 1)}</b>{q}</li>)}
+            </ol>
+          </section>
+        </div>
+      )}
+
       <Section id="develop" title="Develop">
         {develop.dropped && <div>
           <Block {...develop.dropped} ff={ff} />
