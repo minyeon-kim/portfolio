@@ -4576,3 +4576,21 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 /* The interview ends on what it found, after why it ran, what was asked and who was in it. */
 .dv-interview-result { margin-top: clamp(40px, 5vw, 64px); }
 .dv-interview-result .dv-finding { margin-top: 8px; }
+
+/* Secondary research: each problem beside its evidence, as rows rather than equal cards. */
+.dv-claims { margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-claims > li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; padding-block: 32px; border-top: 1px solid var(--dv-line); }
+.dv-claims > li:last-child { border-bottom: 1px solid var(--dv-line); }
+.dv-claims h4 { color: var(--dv-ink); font-size: clamp(20px, 2vw, 24px); font-weight: 500; line-height: 1.35; word-break: keep-all; }
+.dv-claims blockquote { color: var(--dv-ink); font-size: 18px; line-height: 1.5; word-break: keep-all; }
+.dv-claims cite { display: block; margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-style: normal; line-height: 1.5; }
+.dv-claim-original { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-claim-original + cite { margin-top: 0; }
+.dv-claim-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; margin-bottom: 32px; }
+.dv-claim-stats strong { display: block; color: var(--case-accent); font-size: clamp(44px, 5vw, 64px); font-weight: 300; line-height: 1; }
+.dv-claim-stats p > span { display: block; margin-top: 12px; color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-claim-source { grid-column: 1 / -1; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (max-width: 63.99rem) {
+  .dv-claims > li { grid-template-columns: 1fr; gap: 16px; padding-block: 24px; }
+  .dv-claim-stats { margin-bottom: 24px; }
+}

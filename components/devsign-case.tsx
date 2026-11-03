@@ -245,9 +245,37 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <p className="dv-caps dv-question-label reveal">{discover.q1.label}</p>
             <p className="dv-answer reveal">{discover.q1.answer}</p>
           </>}
+          {/* Findings first: each problem beside its evidence, so a number or a quote
+              always says what it proves. The survey numbers back the last problem. */}
+          {ff ? (
+            <div className="dv-gap-40">
+              <p className="dv-caps reveal">{discover.q1.communityLabel}</p>
+              <ul className="dv-claims">
+                {discover.q1.groups.map((g: { name: string; quote: string; original?: string; source: string; sourceUrl?: string; stats?: boolean }) => (
+                  <li key={g.name} className="reveal">
+                    <h4>{g.name}</h4>
+                    <div>
+                      {g.stats && (
+                        <div className="dv-claim-stats">
+                          {discover.q1.stats.map((stat: { value: string; text: string }) => (
+                            <p key={stat.value}><strong>{stat.value}</strong><span>{stat.text}</span></p>
+                          ))}
+                          <p className="dv-claim-source"><a className="dv-source-link" href={discover.q1.surveyUrl} target="_blank" rel="noreferrer">{discover.q1.surveyLabel}</a></p>
+                        </div>
+                      )}
+                      <blockquote>“{g.quote}”</blockquote>
+                      {g.original && <p className="dv-claim-original" lang="en">{g.original}</p>}
+                      <cite>{g.sourceUrl ? <a className="dv-source-link" href={g.sourceUrl} target="_blank" rel="noreferrer">{g.source}</a> : g.source}</cite>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {discover.q1.boards && <p className="dv-boards-link reveal"><a href={withBase(discover.q1.boards.src)} target="_blank" rel="noreferrer">{discover.q1.boardsLink}</a></p>}
+            </div>
+          ) : null}
           {/* With quotes: the two kinds of evidence side by side, survey numbers
               (scale) | the problems people kept posting, each with one real quote. */}
-          {discover.q1.groups[0]?.quote ? (
+          {ff ? null : discover.q1.groups[0]?.quote ? (
             <div className="dv-evidence dv-gap-40">
               <div>
                 <p className="dv-caps reveal">{discover.q1.surveyUrl ? <a className="dv-source-link" href={discover.q1.surveyUrl} target="_blank" rel="noreferrer">{discover.q1.surveyLabel}</a> : discover.q1.surveyLabel}</p>
