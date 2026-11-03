@@ -1071,3 +1071,5 @@ Analysis emphasis corrected (owner: the band didn't stand out; it was the loudes
 
 Landing (≥64rem): headline, note and case pills read down one column at the top left (grid rows auto auto 1fr; pills stacked, 24px under the note), supersedes "pills at the top right". --picks-gutter is gone at this width, so the Devsign card reaches the page inset. Checked overlaps at 1024, 1280, 1440 and 1920 on default and both hovers. Figma Main not updated.
 Review fixes: iteration 2's 'tabs' crops are wide 16:10 regions that fill their tile and the 'AI' change compares the whole screens (the small controls alone left an empty black box; change boxes are `a`/`b` in the MDX). Stage nav background 96%, so text no longer reads through it. Stages leaving the top only scale to 0.98 from exit 60% and no longer dim (supersedes 0.94 / opacity 0.45). Boards rise from opacity 0.6, scale 0.94 over entry 0-55% (was 0.3 / 0.82 up to cover 40%). Figma not updated.
+
+Survey numbers (`.dv-insight-stat`) read as two columns of number, bar, then sentence, split by a hairline with real space (owner: number and sentence side by side were cramped). Phones stack them.
