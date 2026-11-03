@@ -4805,6 +4805,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv > #define:has(> .dv-core:last-child) { animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
   .dv > #define:has(> .dv-core:last-child)::after { content: ""; position: static; display: block; height: 130svh; background: none; }
   .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; min-height: 100svh; padding-block: 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
+  .dv > section > .dv-core.dv-core:last-child .dv-core-text { max-width: min(20em, 100%); font-size: clamp(44px, min(5.4vw, 9svh), 80px); line-height: 1.2; letter-spacing: -0.015em; }
   .dv > #define:has(> .dv-core:last-child) + #develop { position: relative; z-index: 1; margin-top: -100svh; border-top-left-radius: var(--dv-band-radius); border-top-right-radius: var(--dv-band-radius); }
 }
 /* A sticky subject's cover range includes its stuck time, so the grow and the light-up are
