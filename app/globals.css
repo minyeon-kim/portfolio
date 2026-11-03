@@ -4418,28 +4418,25 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-media { border-color: color-mix(in srgb, var(--dh-glow-2) light-dark(55%, 70%), transparent); box-shadow: 0 -6px 56px -8px color-mix(in srgb, var(--dh-glow) light-dark(34%, 70%), transparent); overflow: hidden; }
 @media (max-width: 63.99rem) { .devsign-hero-glow::before { height: 300px; } }
 /* Affinity as a pinned scene: the track gives the scroll length, the stage stays on screen. */
-.dv-dots-track { display: none; }
+.dv-notes-track { display: none; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-dots-track { display: block; height: 300svh; }
-  .dv-dots-static { display: none; }
+  .dv-notes-track { display: block; height: 300svh; }
+  .dv-notes-static { display: none; }
 }
-.dv-dots-stage { position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 100svh; }
-.dv-dots-stage .dv-funnel { margin: 0; }
-.dv-dots-stage .dv-funnel strong { color: var(--dv-muted); transition: color 300ms var(--ease); }
-.dv-dots-stage .dv-funnel li { opacity: 0.55; transition: opacity 300ms var(--ease); }
-.dv-dots-stage .dv-funnel li[data-on] { opacity: 1; color: var(--dv-ink); }
-.dv-dots-stage .dv-funnel li[data-on] strong { color: var(--case-accent); }
-.dv-dots-art { position: relative; }
-.dv-dots-art svg { display: block; width: 100%; height: auto; overflow: visible; }
-.dv-dots-art circle { fill: color-mix(in srgb, var(--dv-ink) 34%, transparent); transition: fill 500ms var(--ease); }
-.dv-dots-art svg[data-colored] circle[data-tone] { fill: var(--tone); }
-.dv-dots-theme, .dv-dots-problem { position: absolute; margin: 0; }
-.dv-dots-theme { width: 12.5%; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.3; opacity: var(--l1, 0); }
-.dv-dots-theme b { color: var(--dv-muted); font-weight: 500; font-variant-numeric: tabular-nums; }
-.dv-dots-problem { width: 22%; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; opacity: var(--l2, 0); }
-.dv-dots-problem b { display: block; margin-bottom: 2px; color: var(--tone); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.dv-dots-note { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; opacity: 0; transition: opacity 300ms var(--ease); }
-.dv-dots-note[data-on] { opacity: 1; }
+.dv-notes-stage { position: sticky; top: 0; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 100svh; }
+.dv-notes-stage .dv-funnel { margin: 0; }
+.dv-notes-stage .dv-funnel strong { color: var(--dv-muted); transition: color 300ms var(--ease); }
+.dv-notes-stage .dv-funnel li { opacity: 0.55; transition: opacity 300ms var(--ease); }
+.dv-notes-stage .dv-funnel li[data-on] { opacity: 1; color: var(--dv-ink); }
+.dv-notes-stage .dv-funnel li[data-on] strong { color: var(--case-accent); }
+.dv-notes-art { position: relative; }
+.dv-notes-theme, .dv-notes-problem { position: absolute; margin: 0; }
+.dv-notes-theme { width: 12.5%; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.3; opacity: var(--l1, 0); }
+.dv-notes-theme b { color: var(--dv-muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-notes-problem { width: 22%; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; opacity: var(--l2, 0); }
+.dv-notes-problem b { display: block; margin-bottom: 2px; color: var(--tone); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-notes-note { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; opacity: 0; transition: opacity 300ms var(--ease); }
+.dv-notes-note[data-on] { opacity: 1; }
 
 /* The guided demo over the page, opened from the case opener. */
 .dv-demo-dialog { width: min(1200px, calc(100vw - 48px), calc((100dvh - 162px) * 1.6 + 48px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; overflow: visible auto; border: 1px solid var(--dv-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-surface, #1a1826)); color: var(--dv-ink); }
@@ -4463,36 +4460,35 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .dv-demo-close { top: 6px; right: 8px; }
 }
 /* Affinity is qualitative: quiet step numbers, even clusters, each problem closing on its insight. */
-.dv-dots-stage .dv-funnel strong { font-size: 28px; font-weight: 400; }
-.dv-dots-stage .dv-funnel li + li::before { font-size: 18px; margin-right: 24px; }
-.dv-dots-stage .dv-funnel { gap: 8px 24px; }
-.dv-dots-theme { top: 58%; width: 13.2%; padding-inline: 4px; text-align: center; text-wrap: balance; }
-.dv-dots-problem { top: 58%; width: 21%; font-size: 16px; opacity: var(--l2, 0); }
-.dv-dots-problem h4 { color: var(--tone); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; }
-.dv-dots-problem p { margin-top: 8px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
+.dv-notes-stage .dv-funnel strong { font-size: 28px; font-weight: 400; }
+.dv-notes-stage .dv-funnel li + li::before { font-size: 18px; margin-right: 24px; }
+.dv-notes-stage .dv-funnel { gap: 8px 24px; }
+.dv-notes-theme { top: 58%; width: 13.2%; padding-inline: 4px; text-align: center; text-wrap: balance; }
+.dv-notes-problem { top: 58%; width: 21%; font-size: 16px; opacity: var(--l2, 0); }
+.dv-notes-problem h4 { color: var(--tone); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; }
+.dv-notes-problem p { margin-top: 8px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
 .dv-aff ul { gap: 4px; }
 .dv-aff ul li { display: block; color: var(--dv-muted); }
 .dv-aff > ol > li > div h4 { color: var(--tone); font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; line-height: 1.3; }
 .dv-aff > ol > li > div p { margin-top: 6px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 
 /* Affinity and key problems as one scene: clusters on top, one problem's quote at a time below. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-dots-track { height: 360svh; } }
-.dv-dots-stage { gap: 16px; }
-.dv-dots-art circle { transition: fill 500ms var(--ease), opacity 300ms var(--ease); }
-.dv-dots-under { position: relative; height: 300px; margin-top: 12px; }
-.dv-dots-theme { top: 0; }
-.dv-dots-problem { position: absolute; top: 0; width: 21%; margin: 0; color: var(--tone); font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.3; opacity: var(--l2, 0); transition: filter 300ms var(--ease); }
-.dv-dots-art[data-focus="0"] circle[data-tone]:not([data-p="0"]), .dv-dots-art[data-focus="1"] circle[data-tone]:not([data-p="1"]), .dv-dots-art[data-focus="2"] circle[data-tone]:not([data-p="2"]), .dv-dots-art[data-focus="3"] circle[data-tone]:not([data-p="3"]) { opacity: 0.16; }
-.dv-dots-art[data-focus="0"] .dv-dots-problem:not([data-p="0"]), .dv-dots-art[data-focus="1"] .dv-dots-problem:not([data-p="1"]), .dv-dots-art[data-focus="2"] .dv-dots-problem:not([data-p="2"]), .dv-dots-art[data-focus="3"] .dv-dots-problem:not([data-p="3"]) { color: var(--dv-muted); opacity: 0.5; }
-.dv-dots-note { position: absolute; top: 76px; left: 0; margin: 0; }
-.dv-dots-detail { position: absolute; top: 76px; left: 0; right: 0; display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); opacity: 0; transition: opacity 300ms var(--ease); }
-.dv-dots-detail[data-on] { opacity: 1; }
-.dv-dots-detail figure { margin: 0; }
-.dv-dots-detail blockquote { margin: 0; color: var(--dv-ink); font-size: clamp(22px, 2.3vw, 32px); font-weight: 400; line-height: 1.35; text-wrap: pretty; }
-.dv-dots-detail figcaption { margin-top: 12px; color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.4; }
-.dv-dots-detail > div p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
-.dv-dots-detail .dv-dots-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px; }
-.dv-dots-answer b { color: var(--case-accent); font-weight: 600; }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-notes-track { height: 360svh; } }
+.dv-notes-stage { gap: 16px; }
+.dv-notes-under { position: relative; height: 300px; margin-top: 12px; }
+.dv-notes-theme { top: 0; }
+.dv-notes-problem { position: absolute; top: 0; width: 21%; margin: 0; color: var(--tone); font-size: clamp(18px, 1.6vw, 22px); font-weight: 500; line-height: 1.3; opacity: var(--l2, 0); transition: filter 300ms var(--ease); }
+.dv-notes-art[data-focus="0"] .dv-note[data-tone]:not([data-p="0"]), .dv-notes-art[data-focus="1"] .dv-note[data-tone]:not([data-p="1"]), .dv-notes-art[data-focus="2"] .dv-note[data-tone]:not([data-p="2"]), .dv-notes-art[data-focus="3"] .dv-note[data-tone]:not([data-p="3"]) { --dim: 1; }
+.dv-notes-art[data-focus="0"] .dv-notes-problem:not([data-p="0"]), .dv-notes-art[data-focus="1"] .dv-notes-problem:not([data-p="1"]), .dv-notes-art[data-focus="2"] .dv-notes-problem:not([data-p="2"]), .dv-notes-art[data-focus="3"] .dv-notes-problem:not([data-p="3"]) { color: var(--dv-muted); opacity: 0.5; }
+.dv-notes-note { position: absolute; top: 76px; left: 0; margin: 0; }
+.dv-notes-detail { position: absolute; top: 76px; left: 0; right: 0; display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); opacity: 0; transition: opacity 300ms var(--ease); }
+.dv-notes-detail[data-on] { opacity: 1; }
+.dv-notes-detail figure { margin: 0; }
+.dv-notes-detail blockquote { margin: 0; color: var(--dv-ink); font-size: clamp(22px, 2.3vw, 32px); font-weight: 400; line-height: 1.35; text-wrap: pretty; }
+.dv-notes-detail figcaption { margin-top: 12px; color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.4; }
+.dv-notes-detail > div p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
+.dv-notes-detail .dv-notes-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px; }
+.dv-notes-answer b { color: var(--case-accent); font-weight: 600; }
 .dv-aff { margin-top: 40px; }
 .dv-aff > ol > li { display: block; padding-block: 24px; }
 .dv-aff > ol > li > h4 { color: var(--tone); font-size: 20px; font-weight: 500; line-height: 1.3; }
@@ -4609,13 +4605,24 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
 .case-study .dv :is(.dv-section-title, .dv-insight-stat strong, .dv-stat strong) { font-size: var(--t-display); font-weight: 300; }
 .case-study .dv :is(.dv-headline, .dv-hmw-question, .dv-bar-value) { font-size: var(--t-statement); font-weight: 400; line-height: 1.3; }
 .case-study .dv :is(.dv-finding, .dv-block-title, .dv-answer, .dv-glance-title, .dv-ut-result p:last-child, .dv-dropped b, .dv-dropped s) { font-size: var(--t-heading); font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; word-break: keep-all; }
-.case-study .dv :is(.dv-dots-detail blockquote) { font-size: var(--t-heading); font-weight: 400; line-height: 1.35; }
-.case-study .dv :is(h4, .dv-insight-voices strong, .dv-asks li, .dv-dots-problem, .dv-cast-quote, .dv-iter-name, .dv-scenarios strong, .dv-meet li strong, .dv-vpc-title, .dv-bar-label strong, .dv-point-title, .dv-persona-name, .dv-summary) { font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
-.case-study .dv :is(.dv-body, .dv-lead, .dv-flow p, .dv-insights-scale, .dv-insight-stat span, .dv-iter-why, .dv-iter-side figcaption, .dv-vpc-pair span, .dv-reel-solves span, .dv-aff blockquote, .dv-dots-detail figcaption ~ *) { font-size: 18px; font-weight: 400; line-height: 1.55; }
+.case-study .dv :is(.dv-notes-detail blockquote) { font-size: var(--t-heading); font-weight: 400; line-height: 1.35; }
+.case-study .dv :is(h4, .dv-insight-voices strong, .dv-asks li, .dv-notes-problem, .dv-cast-quote, .dv-iter-name, .dv-scenarios strong, .dv-meet li strong, .dv-vpc-title, .dv-bar-label strong, .dv-point-title, .dv-persona-name, .dv-summary) { font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
+.case-study .dv :is(.dv-body, .dv-lead, .dv-flow p, .dv-insights-scale, .dv-insight-stat span, .dv-iter-why, .dv-iter-side figcaption, .dv-vpc-pair span, .dv-reel-solves span, .dv-aff blockquote, .dv-notes-detail figcaption ~ *) { font-size: 18px; font-weight: 400; line-height: 1.55; }
 .case-study .dv :is(.dv-lead strong) { font-weight: 500; }
-.case-study .dv :is(.dv-glance-label, .dv-flow-stage, .dv-reel-name b, .dv-aff-who, .dv-goal-lines b, .dv-meet li b, .dv-dots-answer b, .dv-dots-detail figcaption, .dv-ut-result p:first-child, .dv-vpc-pair b, .dv-tool-gaps thead th, .dv-caps, .dv-method) { font-size: 16px; font-weight: 500; }
+.case-study .dv :is(.dv-glance-label, .dv-flow-stage, .dv-reel-name b, .dv-aff-who, .dv-goal-lines b, .dv-meet li b, .dv-notes-answer b, .dv-notes-detail figcaption, .dv-ut-result p:first-child, .dv-vpc-pair b, .dv-tool-gaps thead th, .dv-caps, .dv-method) { font-size: 16px; font-weight: 500; }
 .devsign-hero-details dt, .devsign-hero-details dd { font-weight: 500; }
 .devsign-hero-details dd { font-size: 18px; font-weight: 400; }
 .case-study .dv .dv-tool-gaps td[data-gap] { font-size: 18px; font-weight: 500; }
 .case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); font-weight: 400; line-height: 1.3; }
 .case-study .more-work .more-work-label { font-weight: 500; }
+
+/* Affinity: real stickies from the board instead of dots. */
+.dv-notes-board { position: relative; height: clamp(220px, calc(100svh - 600px), 340px); }
+.dv-note { position: absolute; width: min(180px, 15.5%); min-width: 150px; padding: 12px 14px; border: 1px solid var(--dv-line); border-radius: 6px; background: var(--dv-surface); color: var(--dv-ink); font-size: 16px; font-weight: 400; line-height: 1.35; text-wrap: pretty; word-break: keep-all; will-change: transform; transition: background-color 500ms var(--ease), opacity 300ms var(--ease); }
+.dv-note span { color: var(--dv-muted); font-weight: 500; white-space: nowrap; }
+.dv-notes-art[data-colored] .dv-note[data-tone] { background: color-mix(in srgb, var(--tone) 16%, var(--dv-bg, var(--bg))); border-color: color-mix(in srgb, var(--tone) 34%, transparent); }
+.dv-notes-under { height: 260px; }
+/* Dimmed piles stay opaque: see-through notes would show the text underneath. */
+.dv-notes-art[data-focus] .dv-note[data-tone] { transition: background-color 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease); }
+.dv-notes-art[data-focus="0"] .dv-note[data-tone]:not([data-p="0"]), .dv-notes-art[data-focus="1"] .dv-note[data-tone]:not([data-p="1"]), .dv-notes-art[data-focus="2"] .dv-note[data-tone]:not([data-p="2"]), .dv-notes-art[data-focus="3"] .dv-note[data-tone]:not([data-p="3"]) { background: color-mix(in srgb, var(--dv-ink) 5%, var(--dv-bg, var(--bg))); border-color: color-mix(in srgb, var(--dv-ink) 8%, var(--dv-bg, var(--bg))); color: color-mix(in srgb, var(--dv-ink) 26%, var(--dv-bg, var(--bg))); }
+.dv-notes-art[data-focus] .dv-note[data-tone] span { color: inherit; }

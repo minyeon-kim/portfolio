@@ -135,51 +135,58 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
-// Affinity as a pinned scene: the page stays and, with native scroll, what people said
-// (one dot per quote) gathers into themes and then into problems, each closing on its
-// insight and a real quote, one problem at a time. It is a qualitative study, so the
-// clusters show the grouping, not a tally: no counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
-type DotGroup = { name: string; count: number; problem: number; tone?: string };
-const DOT_W = 1200;
-const DOT_H = 300;
-const DOT_CY = 150;
-const PROBLEM_X = [0, 316, 632, 948];
-const dotRound = (n: number) => Math.round(n * 10) / 10;
-const dotNudge = (i: number, k: number) => {
+// Affinity as a pinned scene: the page stays and, with native scroll, real sentences from
+// the board (a handful of its 201 stickies) gather into themes and then into problems,
+// each closing on its insight and a real quote, one problem at a time. It is a qualitative
+// study, so the piles show the grouping, not a tally. Wide screens with motion only (CSS); otherwise a plain list.
+type NoteGroup = { name: string; problem: number; tone?: string; notes: [string, string][] };
+const PROBLEM_LEFT = [0, 0.2633, 0.5267, 0.79];
+const NOTE_COLUMNS = 6;
+const NOTE_SPREAD = 1.85;
+const noteHash = (i: number, k: number) => {
   let h = Math.imul(i + 1, k);
   h ^= h >>> 15;
   h = Math.imul(h, 0x5bd1e995);
   h ^= h >>> 13;
   return (h >>> 0) / 4294967296 - 0.5;
 };
-const dotSpot = (cx: number, n: number) => ({ x: dotRound(cx + 13 * Math.sqrt(n + 0.5) * Math.cos(n * 2.39996)), y: dotRound(DOT_CY + 13 * Math.sqrt(n + 0.5) * Math.sin(n * 2.39996)) });
-function dotLayout(groups: DotGroup[]) {
+const noteRound = (n: number) => Math.round(n * 1000) / 1000;
+function noteLayout(groups: NoteGroup[]) {
+  const flat = groups.flatMap((g, column) => g.notes.map((note, k) => ({ g, column, k, count: g.notes.length, text: note[0], who: note[1] })));
+  const rows = Math.ceil(flat.length / NOTE_COLUMNS);
+  // Scattered: slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
+  const slots = flat.map((_, i) => i).sort((x, y) => noteHash(x, 2654435761) - noteHash(y, 2654435761));
   const inProblem = [0, 0, 0, 0];
-  let index = 0;
-  return groups.flatMap((g, column) => Array.from({ length: g.count }, (_, n) => {
-    index += 1;
-    const first = dotSpot(column * (DOT_W / 7) + DOT_W / 14, n);
-    const last = g.problem >= 0 ? dotSpot(PROBLEM_X[g.problem] + 126, inProblem[g.problem]++) : first;
+  const problemCount = [0, 0, 0, 0];
+  groups.forEach((g) => { if (g.problem >= 0) problemCount[g.problem] += g.notes.length; });
+  return flat.map((note, i) => {
+    const slot = slots[i];
     return {
-      tone: g.tone, problem: g.problem, other: g.problem < 0, spread: (index * 37) % 100 / 100,
-      // Scattered: a loose grid with a hashed nudge, so nothing clumps or forms lines.
-      x0: dotRound(((index % 34) + 0.5) * (DOT_W / 34) + dotNudge(index, 2654435761) * 44), y0: dotRound((Math.floor(index / 34) + 0.5) * 46 + dotNudge(index, 2246822519) * 56),
-      x1: first.x, y1: first.y, x2: last.x, y2: last.y,
+      ...note, tone: note.g.tone, problem: note.g.problem, other: note.g.problem < 0, spread: (i * 37) % 100 / 100,
+      x: noteRound(Math.max(0.08, Math.min(0.92, ((slot % NOTE_COLUMNS) + 0.5) / NOTE_COLUMNS + (Math.floor(slot / NOTE_COLUMNS) % 2 ? 0.012 : -0.012) + noteHash(i, 2246822519) * 0.03))),
+      // Scattered over the board and the empty space under it; the piles then sit on the board alone.
+      y: noteRound(((Math.floor(slot / NOTE_COLUMNS) + 0.5) / rows + noteHash(i, 3266489917) * 0.12) * NOTE_SPREAD),
+      r: noteRound(noteHash(i, 668265263) * 5),
+      n: note.g.problem >= 0 ? inProblem[note.g.problem]++ : 0,
+      total: note.g.problem >= 0 ? problemCount[note.g.problem] : 0,
     };
-  }));
+  });
 }
-const dotEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
-type DotProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
-export function AffinityDots({ groups, problems, funnel, note, answeredBy }: { groups: DotGroup[]; problems: DotProblem[]; funnel: [string, string][]; note: string; answeredBy: string }) {
+const noteEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
+type NoteProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
+export function AffinityNotes({ groups, problems, funnel, note, answeredBy }: { groups: NoteGroup[]; problems: NoteProblem[]; funnel: [string, string][]; note: string; answeredBy: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
-  const dots = dotLayout(groups);
+  const notes = noteLayout(groups);
   useEffect(() => {
     const el = track.current;
     if (!el || !window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)").matches) return;
-    const circles = el.querySelectorAll("circle");
-    const art = el.querySelector("svg");
-    const layout = dotLayout(groups);
+    const board = el.querySelector<HTMLElement>(".dv-notes-board");
+    const cards = el.querySelectorAll<HTMLElement>(".dv-note");
+    const art = el.querySelector(".dv-notes-art");
+    if (!board || !cards.length) return;
+    const layout = noteLayout(groups);
+    const columns = groups.length;
     let frame = 0;
     let last = "";
     const read = () => {
@@ -188,23 +195,35 @@ export function AffinityDots({ groups, problems, funnel, note, answeredBy }: { g
       const p = Math.max(0, Math.min(1, -box.top / (box.height - window.innerHeight)));
       const a = (p - 0.04) / 0.13;
       const b = (p - 0.22) / 0.13;
-      const key = `${dotEase(a).toFixed(3)}:${dotEase(b).toFixed(3)}`;
+      const W = board.clientWidth;
+      const H = board.clientHeight;
+      const key = `${noteEase(a).toFixed(3)}:${noteEase(b).toFixed(3)}:${W}:${H}`;
       setStep(p < 0.1 ? 0 : p < 0.29 ? 1 : p < 0.42 ? 2 : 3 + Math.min(3, Math.floor((p - 0.42) / 0.145)));
       if (key === last) return;
       last = key;
-      circles.forEach((circle, i) => {
+      const noteW = cards[0].offsetWidth;
+      const pileScale = Math.min(1, (W / columns - 10) / noteW);
+      cards.forEach((card, i) => {
         const d = layout[i];
-        const u = dotEase((a - d.spread * 0.2) / 0.8);
-        const w = dotEase((b - d.spread * 0.2) / 0.8);
-        const x = d.x0 + (d.x1 - d.x0) * u + (d.x2 - d.x1) * w;
-        const y = d.y0 + (d.y1 - d.y0) * u + (d.y2 - d.y1) * w;
-        circle.setAttribute("cx", x.toFixed(1));
-        circle.setAttribute("cy", y.toFixed(1));
-        if (d.other) circle.setAttribute("opacity", Math.max(0, 1 - w * 2.5).toFixed(2));
+        const u = noteEase((a - d.spread * 0.2) / 0.8);
+        const w = noteEase((b - d.spread * 0.2) / 0.8);
+        const x0 = d.x * W;
+        const y0 = d.y * H;
+        const x1 = ((d.column + 0.5) / columns) * W + noteHash(i, 1540483477) * 8;
+        const y1 = H - 72 - (d.count - 1 - d.k) * 30;
+        const x2 = d.other ? x1 : PROBLEM_LEFT[d.problem] * W + noteW / 2 + d.n * 10;
+        const y2 = d.other ? y1 + 24 : H - 76 - (d.total - 1 - d.n) * 34;
+        const x = (x1 - x0) * u + (x2 - x1) * w;
+        const y = (y1 - y0) * u + (y2 - y1) * w;
+        const scale = 1 + (pileScale - 1) * u + (1 - pileScale) * (d.other ? 0 : w);
+        const turn = d.r * (1 - 0.6 * u);
+        card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${turn.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        if (d.other) card.style.opacity = Math.max(0, 1 - w * 2.5).toFixed(2);
       });
       art?.toggleAttribute("data-colored", a > 0.3);
-      el.style.setProperty("--l1", (dotEase(a * 1.4 - 0.4) * (1 - dotEase(b * 3))).toFixed(2));
-      el.style.setProperty("--l2", dotEase(b * 2 - 1).toFixed(2));
+      // Theme names wait until the notes have landed, so nothing travels over them.
+      el.style.setProperty("--l1", (noteEase((a - 0.8) * 5) * (1 - noteEase(b * 3))).toFixed(2));
+      el.style.setProperty("--l2", noteEase(b * 2 - 1).toFixed(2));
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -217,32 +236,36 @@ export function AffinityDots({ groups, problems, funnel, note, answeredBy }: { g
     };
   }, [groups]);
   return (
-    <div ref={track} className="dv-dots-track">
-      <div className="dv-dots-stage">
+    <div ref={track} className="dv-notes-track">
+      <div className="dv-notes-stage">
         <ol className="dv-funnel">
           {funnel.map(([n, label], i) => <li key={label} data-on={i === Math.min(step, 2) || undefined}><strong>{n}</strong><span>{label}</span></li>)}
         </ol>
-        <div className="dv-dots-art" aria-hidden="true" data-focus={step > 2 ? step - 3 : undefined}>
-          <svg viewBox={`0 0 ${DOT_W} ${DOT_H}`}>
-            {dots.map((d, i) => <circle key={i} cx={d.x0} cy={d.y0} r="6" data-tone={d.tone} data-p={d.problem} />)}
-          </svg>
-          <div className="dv-dots-under">
+        <div className="dv-notes-art" aria-hidden="true" data-focus={step > 2 ? step - 3 : undefined}>
+          <div className="dv-notes-board">
+            {notes.map((d, i) => (
+              <div key={i} className="dv-note" data-tone={d.tone} data-p={d.problem} style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
+                {d.text} <span>{d.who}</span>
+              </div>
+            ))}
+          </div>
+          <div className="dv-notes-under">
             {groups.map((g, i) => (
-              <p key={g.name} className="dv-dots-theme" style={{ left: `${(i / 7) * 100}%` }}>{g.name}</p>
+              <p key={g.name} className="dv-notes-theme" style={{ left: `${(i / groups.length) * 100}%` }}>{g.name}</p>
             ))}
             {problems.map((item, i) => (
-              <h4 key={item.title} className="dv-dots-problem" data-tone={item.tone} data-p={i} style={{ left: `${(PROBLEM_X[i] / DOT_W) * 100}%` }}>{item.title}</h4>
+              <h4 key={item.title} className="dv-notes-problem" data-tone={item.tone} data-p={i} style={{ left: `${PROBLEM_LEFT[i] * 100}%` }}>{item.title}</h4>
             ))}
-            <p className="dv-dots-note" data-on={step === 2 || undefined}>{note}</p>
+            <p className="dv-notes-note" data-on={step === 2 || undefined}>{note}</p>
             {problems.map((item, i) => (
-              <div key={item.title} className="dv-dots-detail" data-tone={item.tone} data-on={step - 3 === i || undefined}>
+              <div key={item.title} className="dv-notes-detail" data-tone={item.tone} data-on={step - 3 === i || undefined}>
                 <figure>
                   <blockquote>“{item.quote}”</blockquote>
                   <figcaption>{item.who}</figcaption>
                 </figure>
                 <div>
                   <p>{item.insight}</p>
-                  {item.feature && <p className="dv-dots-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+                  {item.feature && <p className="dv-notes-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
                 </div>
               </div>
             ))}
