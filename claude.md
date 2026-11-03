@@ -1110,3 +1110,5 @@ Iteration 2 pinned stage hugs its content (no 100svh box, no space above or belo
 
 
 Devsign interview block has surfaces (owner: too much plain text): research questions as three cards and participants as four cards in their role colour, 16px under the photo (`.dv-keyq li`, `.dv-meet li`; white in light, band card colour in dark). Still no numbers or rules. Figma not updated.
+
+Devsign Overview Result card reads "테스트 후 화면을 두 번 고쳤다" / "Testing led to two rounds of changes" (owner: "first test missed its goal" read oddly as a headline; supersedes it). The small text still says the first test showed people could not finish alone and that the new version is not retested; the 2.3 vs 1.5 numbers stay in Testing.
