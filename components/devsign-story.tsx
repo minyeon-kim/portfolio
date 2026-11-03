@@ -84,8 +84,12 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
     const read = () => {
       frame = 0;
       const box = el.getBoundingClientRect();
-      const travel = box.height - window.innerHeight;
-      const progress = travel > 0 ? Math.min(1, Math.max(0, -box.top / travel)) : 0;
+      const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+      // The stage is only as tall as its content and pins centred on the screen.
+      const top = Math.max(24, (window.innerHeight - stage) / 2);
+      const travel = box.height - stage;
+      const progress = travel > 0 ? Math.min(1, Math.max(0, (top - box.top) / travel)) : 0;
+      el.style.setProperty("--stage-top", `${top}px`);
       el.style.setProperty("--p", String(progress));
       setActive(Math.min(changes.length - 1, Math.floor(progress * changes.length)));
     };
