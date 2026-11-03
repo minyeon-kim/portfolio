@@ -451,6 +451,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <>
         <div>
           <Block {...define.affinity} ff={ff} />
+          {/* The process first: how many statements became how many problems, and the board itself. */}
+          <ol className="dv-funnel dv-gap-40 reveal">
+            {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+          </ol>
+          <figure className="dv-board reveal">
+            <a href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">
+              <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
+            </a>
+            <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
+          </figure>
           {/* One sentence per problem and one thing someone said, in one view. */}
           <table className="dv-found dv-gap-40 reveal">
             <thead>
@@ -466,10 +476,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               ))}
             </tbody>
           </table>
-          <a className="dv-board-link reveal" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">
-            <Image src={withBase(define.affinity.board.src)} alt={define.affinity.board.alt} width={define.affinity.board.width} height={define.affinity.board.height} sizes="280px" />
-            <span>{define.affinity.boardLink}</span>
-          </a>
         </div>
 
         {/* Where it breaks first (the journey and its two low points), then who. */}
