@@ -90,7 +90,8 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
             for (const char of chars) {
               char.dataset.char = char.textContent ?? "";
               // Lock each glyph's width so a scrambled glyph never reflows the line.
-              char.style.width = `${char.getBoundingClientRect().width}px`;
+              // In em, because the headline's size follows the window.
+              char.style.width = `${char.getBoundingClientRect().width / parseFloat(getComputedStyle(char).fontSize)}em`;
               char.style.textAlign = "center";
             }
           },
