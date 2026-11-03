@@ -4701,3 +4701,32 @@ html:has(.dv-demo-dialog[open]) { overflow: hidden; }
   .case-study .dv .dv-insight-stat:first-child { padding-right: 0; }
   .case-study .dv .dv-insight-stat + .dv-insight-stat { padding: 32px 0 0; border-left: 0; border-top: 1px solid var(--dv-line); }
 }
+
+/* Gemini on the newer patterns: people as a plain strip, insights as a two-column table, a test plan without empty rings. */
+.dv-evbox .dv-insight-voices li > p { margin-top: 8px; color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-evbox .dv-insight-voices li > p + p { color: var(--dv-muted); }
+.dv-people-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 40px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--dv-card-line); }
+.dv-people-strip li { display: flex; flex-direction: column; gap: 4px; padding: 20px 24px 0 0; }
+.dv-people-strip b { color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-people-strip strong { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-people-strip span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-found-pair thead th:nth-child(1) { width: 44%; }
+.dv-found-pair thead th:nth-child(2) { width: 56%; }
+.dv-found-pair td:last-child { color: var(--dv-ink); font-weight: 400; word-break: keep-all; }
+.dv-found-pair .dv-pill { display: table; margin-top: 12px; font-size: 16px; font-weight: 500; }
+.dv-found-pair tr[data-key] th { color: var(--case-accent); }
+.dv-plan { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-inline: 0; padding: clamp(24px, 2.8vw, 40px); list-style: none; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-plan li { display: flex; flex-direction: column; gap: 6px; padding-inline: clamp(16px, 2vw, 28px); }
+.dv-plan li:first-child { padding-left: 0; }
+.dv-plan li + li { border-left: 1px solid var(--dv-card-line); }
+.dv-plan strong { color: var(--case-accent); font-size: var(--t-statement); font-weight: 400; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.dv-plan small { margin-left: 6px; font-size: 16px; font-weight: 500; }
+.dv-plan b { margin-top: 6px; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-plan span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+@media (max-width: 63.99rem) {
+  .dv-people-strip, .dv-plan { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dv-plan { row-gap: 28px; }
+  .dv-plan li:nth-child(odd) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 47.99rem) { .dv-people-strip { grid-template-columns: 1fr; } .dv-people-strip li { padding-right: 0; } }
+.dv-found-pair td:last-child::before { display: none; }

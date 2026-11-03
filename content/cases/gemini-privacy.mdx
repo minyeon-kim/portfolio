@@ -92,15 +92,15 @@ export const study = {
     },
   },
   discover: {
+    scale: "5 AI services · 6 papers · survey data · 2 interviews + 2 guide tests",
     desk: {
       method: "Secondary research",
       title: "Desk research",
-      lead: "There's an off switch, but no one knows what's left after.",
       text: "We compared the privacy controls of five AI services, read data-protection law (GDPR) and six papers on AI memory UX, and looked at 2025–2026 survey data.",
     },
     q1: {
       label: "Question 1 · Do people want control?",
-      answer: "Yes, but most don't feel they have it.",
+      answer: "People want control, but most don't feel they have it.",
       surveyLabel: "Survey · Pew Research Center 2025–2026",
       stats: [
         { value: "61%", text: "of U.S. adults want more control over how AI is used in their lives; only 17% are comfortable with what they have" },
@@ -114,8 +114,9 @@ export const study = {
       ],
     },
     q2: {
+      title: "Service audit",
       label: "Question 2 · Do today's controls solve it?",
-      answer: "Not yet. Controls exist in two places, and none shows what's left after.",
+      answer: "Controls sit in two places, and none shows what's left after.",
       auditLabel: "5 AI services · What the controls miss",
       groups: [
         { name: "Off switches, but no result", detail: "Every service lets you turn memory or history off · None shows what remains after you do" },
@@ -125,7 +126,7 @@ export const study = {
     },
     synthesis: {
       label: "Synthesis",
-      title: "Where control breaks",
+      title: "Control breaks at four points.",
       withAi: "Today",
       gap: "Gap",
       rows: [
@@ -141,6 +142,7 @@ export const study = {
       lead: "Worried, but still using it.",
       text: "Research showed controls are unpredictable, not how that feels. So we talked to people on both sides of personal data: someone who asks for it every day, and someone who gives it to AI.",
       questionsLabel: "Research questions",
+      peopleLabel: "Participants",
       questions: [
         "What do people worry about when AI uses their personal data?",
         "When does the worry start: typing data in, or seeing it come back?",
@@ -186,8 +188,9 @@ export const study = {
     affinity: {
       method: "Research analysis",
       title: "Affinity mapping",
-      lead: "79 quotes, color-coded, then re-clustered without labels into six themes.",
-      text: "Anxiety peaked not when people typed data in, but when it came back out in an answer.",
+      lead: "Anxiety peaked not when people typed data in, but when it came back out in an answer.",
+      text: "79 quotes, color-coded, then re-clustered without labels into six themes.",
+      funnel: [["79", "interview quotes"], ["6", "themes"], ["4", "insights"]],
       board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "Affinity map of 79 interview quotes regrouped into six themes" },
     },
     problems: {
@@ -195,6 +198,7 @@ export const study = {
       title: "Key insights",
       lead: "Four insights from the six themes, and the one that moved the problem.",
       lowest: "Reframed the problem",
+      columns: ["Insight", "What it means"],
       items: [
         { title: "Disclosure is decided every time", body: "Sharing data isn't one consent. People weigh risk and benefit with every question.", role: "Insight", from: "Theme I01" },
         { title: "Using it isn't trusting it", body: "People keep using AI by checking things themselves, not because they trust it.", role: "Insight", from: "Theme I02" },
@@ -217,22 +221,23 @@ export const study = {
     },
   },
   develop: {
-    ideation: {
-      method: "Diverge → converge",
-      title: "Ideation",
-      text: "Six directions (24 features) narrowed to three once the problem moved: memory control, processing transparency and sources. Then 11 hand sketches and feedback on 4 concepts left two that never send you to settings.",
-    },
     blocks: [
       {
         method: "Ideation",
         title: "Improvement directions",
-        lead: "6 directions, 24 features:",
-        text: "input protection, memory control, processing transparency, sources, purpose-based requests and work rules. Reframing the problem kept memory control, transparency and sources.",
+        lead: "Six directions (24 features) narrowed to three once the problem moved.",
+        text: "Of input protection, memory control, processing transparency, sources, purpose-based requests and work rules, memory control, transparency and sources stayed.",
+      },
+      {
+        method: "Ideation",
+        title: "Sketching",
+        lead: "11 hand sketches, one row per How-Might-We question, before building anything.",
+        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "Hand-drawn solution sketches mapped to How-Might-We questions" },
       },
       {
         method: "Ideation",
         title: "Concept feedback",
-        lead: "4 concepts, team feedback.",
+        lead: "Of four concepts, the two that never send you to settings stayed.",
         text: "Kept: inline controls (“Easy, I can just toggle it on and off”) and deleting from chat (“I don't have to go anywhere”). Dropped: per-file retention (more to manage) and a category dashboard (focus on sensitive items).",
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "Inline data-control concept with team feedback notes" },
@@ -251,29 +256,17 @@ export const study = {
         ],
       },
       {
-        method: "Ideation",
-        title: "Sketching",
-        lead: "11 hand sketches, one row per How-Might-We question, before building anything.",
-        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "Hand-drawn solution sketches mapped to How-Might-We questions" },
-      },
-      {
         rule: true,
         method: "Structure",
         title: "Two rules behind the screens",
-        lead: "1. Show what each source allows:",
-        text: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay. 2. Reveal sources one step at a time: only a badge on the answer, the full panel on tap.",
+        lead: "Show what each source allows, and reveal it one step at a time.",
+        text: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay. The answer carries only a badge; the full panel opens on tap.",
       },
       {
         method: "Structure",
         title: "User flow",
         lead: "Two scenarios from Yuna's day.",
         text: "A: a name she never mentioned appears in a restaurant suggestion; she taps the Source badge and switches Gmail off. B: she asks Gemini to forget, sees what will be deleted and what is only blocked, then checks.",
-        images: [
-          { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "Scenario A: the answer with a Source badge under it" },
-          { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "Scenario A: the source panel with Gmail switched off" },
-          { src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "Scenario B: what will be deleted and what is only blocked" },
-          { src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "Scenario B: the line-by-line result with Check now" },
-        ],
       },
     ],
   },
@@ -296,7 +289,8 @@ export const study = {
     usability: {
       method: "Test plan",
       title: "Moderated think-aloud",
-      text: "Up to 5 people, mixed across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking), with a fictional persona's data, so no participant shares their own.",
+      lead: "Up to five people run two scenarios on a fictional persona's data.",
+      text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking); no participant shares their own data.",
       scores: [
         { value: "10", unit: "sec", ratio: 0, title: "Find the switch", note: "Goal · no hints, within 10 seconds" },
         { value: "68+", unit: "SUS", ratio: 0, title: "SUS target", note: "Goal · above the average" },

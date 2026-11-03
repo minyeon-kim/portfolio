@@ -91,15 +91,15 @@ export const study = {
     },
   },
   discover: {
+    scale: "AI 서비스 5곳 · 논문 6편 · 설문 · 인터뷰 2명 + 가이드 테스트 2명",
     desk: {
       method: "Secondary research",
-      title: "Desk research",
-      lead: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모른다.",
+      title: "데스크 리서치",
       text: "AI 서비스 5곳의 프라이버시 컨트롤을 비교하고, 개인정보 보호법(GDPR)과 AI 메모리 UX 논문 6편을 읽고, 2025–2026년 설문 데이터를 살폈다.",
     },
     q1: {
       label: "질문 1 · 사람들은 통제를 원할까?",
-      answer: "원한다. 하지만 대부분은 통제하고 있다고 느끼지 못한다.",
+      answer: "사람들은 통제를 원하지만, 대부분은 통제하고 있다고 느끼지 못한다.",
       surveyLabel: "설문 · Pew Research Center 2025–2026",
       stats: [
         { value: "61%", text: "AI가 삶에 쓰이는 방식을 더 통제하고 싶은 미국 성인 비율. 지금 수준에 만족하는 사람은 17%뿐이다" },
@@ -113,8 +113,9 @@ export const study = {
       ],
     },
     q2: {
+      title: "서비스 비교",
       label: "질문 2 · 지금의 컨트롤로 해결될까?",
-      answer: "아직이다. 컨트롤은 두 곳에 있고, 어디에서도 끈 뒤에 무엇이 남는지 보여 주지 않는다.",
+      answer: "컨트롤은 두 곳에 나뉘어 있고, 어디에서도 끈 뒤에 무엇이 남는지 보여 주지 않는다.",
       auditLabel: "AI 서비스 5곳 · 컨트롤이 놓친 것",
       groups: [
         { name: "끄는 스위치는 있지만 결과는 없다", detail: "모든 서비스가 메모리나 기록을 끌 수 있게 한다 · 끈 뒤에 무엇이 남는지는 어디에도 없다" },
@@ -124,7 +125,7 @@ export const study = {
     },
     synthesis: {
       label: "종합",
-      title: "통제가 끊기는 지점",
+      title: "통제는 네 지점에서 끊긴다.",
       withAi: "현재",
       gap: "공백",
       rows: [
@@ -136,10 +137,11 @@ export const study = {
     },
     interview: {
       method: "Primary research",
-      title: "In-depth interview",
+      title: "심층 인터뷰",
       lead: "걱정하지만 계속 쓴다.",
       text: "리서치는 컨트롤이 예측하기 어렵다는 건 보여 줬지만, 그게 어떻게 느껴지는지는 보여 주지 않았다. 그래서 개인 정보의 양쪽에 있는 사람들과 이야기했다. 매일 개인 정보를 요청하는 사람과, AI에 개인 정보를 주는 사람.",
       questionsLabel: "리서치 질문",
+      peopleLabel: "참여자",
       questions: [
         "AI가 내 개인 정보를 쓸 때 사람들은 무엇을 걱정할까?",
         "걱정은 언제 시작될까? 정보를 입력할 때일까, 답변에서 다시 볼 때일까?",
@@ -157,7 +159,7 @@ export const study = {
   define: {
     personas: {
       method: "사용자 정의",
-      title: "Persona & user journey map",
+      title: "페르소나 · 저니맵",
       lead: "페르소나 한 명, 중요한 순간 하나. 개인 정보가 나타나는 그 답변.",
       people: [
         {
@@ -184,9 +186,10 @@ export const study = {
     },
     affinity: {
       method: "리서치 분석",
-      title: "Affinity mapping",
-      lead: "인용 79개를 색으로 분류한 뒤, 라벨 없이 다시 묶어 테마 6개로 정리했다.",
-      text: "불안이 가장 커진 순간은 정보를 입력할 때가 아니라, 답변에서 다시 나올 때였다.",
+      title: "어피니티 매핑",
+      lead: "불안이 가장 커진 순간은 정보를 입력할 때가 아니라, 답변에서 다시 나올 때였다.",
+      text: "인용 79개를 색으로 분류한 뒤, 라벨 없이 다시 묶어 테마 6개로 정리했다.",
+      funnel: [["79", "인터뷰 인용"], ["6", "테마"], ["4", "인사이트"]],
       board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "인터뷰 인용 79개를 테마 6개로 다시 묶은 어피니티 맵" },
     },
     problems: {
@@ -194,6 +197,7 @@ export const study = {
       title: "핵심 인사이트",
       lead: "테마 6개에서 나온 인사이트 4개, 그리고 문제를 옮긴 하나.",
       lowest: "문제를 재정의함",
+      columns: ["인사이트", "의미"],
       items: [
         { title: "공개는 매번 결정된다", body: "정보 공유는 한 번의 동의가 아니다. 질문할 때마다 위험과 이득을 따진다.", role: "인사이트", from: "테마 I01" },
         { title: "쓴다고 믿는 건 아니다", body: "사람들은 AI를 믿어서가 아니라, 직접 확인하면서 계속 쓴다.", role: "인사이트", from: "테마 I02" },
@@ -216,22 +220,23 @@ export const study = {
     },
   },
   develop: {
-    ideation: {
-      method: "발산 → 수렴",
-      title: "아이디에이션",
-      text: "방향 6개(기능 24개)가 문제를 옮긴 뒤 3개로 좁혀졌다. 메모리 통제, 처리 투명성, 출처. 이어서 손 스케치 11개와 콘셉트 4개 피드백을 거쳐, 설정 화면으로 보내지 않는 두 가지가 남았다.",
-    },
     blocks: [
       {
         method: "아이디에이션",
         title: "개선 방향",
-        lead: "방향 6개, 기능 24개.",
-        text: "입력 보호, 메모리 통제, 처리 투명성, 출처, 목적 기반 요청, 작업 규칙. 문제를 재정의하면서 메모리 통제, 투명성, 출처가 남았다.",
+        lead: "방향 6개(기능 24개)가 문제를 옮긴 뒤 3개로 좁혀졌다.",
+        text: "입력 보호, 메모리 통제, 처리 투명성, 출처, 목적 기반 요청, 작업 규칙 중 메모리 통제, 투명성, 출처가 남았다.",
+      },
+      {
+        method: "아이디에이션",
+        title: "스케치",
+        lead: "무엇이든 만들기 전에, HMW 질문마다 한 줄씩 손 스케치 11개.",
+        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "HMW 질문별 손 스케치" },
       },
       {
         method: "아이디에이션",
         title: "콘셉트 피드백",
-        lead: "콘셉트 4개, 팀 피드백.",
+        lead: "콘셉트 4개 중, 설정 화면으로 보내지 않는 두 가지가 남았다.",
         text: "남긴 것: 인라인 컨트롤(“그냥 켰다 껐다 하면 돼서 쉬워요”)과 채팅에서 삭제(“어디 갈 필요가 없어요”). 뺀 것: 파일별 보관 기간(관리할 게 더 많아짐)과 카테고리 대시보드(민감한 항목에 집중).",
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "팀 피드백이 달린 인라인 데이터 관리 콘셉트" },
@@ -250,35 +255,23 @@ export const study = {
         ],
       },
       {
-        method: "아이디에이션",
-        title: "스케치",
-        lead: "무엇이든 만들기 전에, HMW 질문마다 한 줄씩 손 스케치 11개.",
-        image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "HMW 질문별 손 스케치" },
-      },
-      {
         rule: true,
         method: "구조",
         title: "화면 뒤의 두 가지 규칙",
-        lead: "1. 출처마다 할 수 있는 일을 보여 준다.",
-        text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 되며 원본은 남는다. 2. 출처는 한 단계씩 보여 준다. 답변에는 배지만, 전체 패널은 탭했을 때.",
+        lead: "출처마다 할 수 있는 일을 보여 주고, 한 단계씩 펼친다.",
+        text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 되며 원본은 남는다. 답변에는 배지만 두고, 전체 패널은 탭했을 때 연다.",
       },
       {
         method: "구조",
         title: "사용자 흐름",
         lead: "유나의 하루에서 나온 두 시나리오.",
         text: "A: 말한 적 없는 이름이 맛집 추천에 나타나고, 출처 배지를 탭해 Gmail을 끈다. B: Gemini에게 잊어 달라고 하고, 무엇이 삭제되고 무엇이 차단만 되는지 본 뒤 확인한다.",
-        images: [
-          { src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "시나리오 A: 답변 아래 출처 배지" },
-          { src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "시나리오 A: Gmail을 끈 출처 패널" },
-          { src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "시나리오 B: 삭제되는 것과 차단만 되는 것" },
-          { src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "시나리오 B: 한 줄씩 보여 주는 결과와 지금 확인하기" },
-        ],
       },
     ],
   },
   deliver: {
     method: "최종 디자인",
-    title: "Prototype",
+    title: "프로토타입",
     lead: "답변 안에서 보고, 끄고, 확인한다.",
     text: "진행자 모드와 참여자 모드가 있어 모든 클릭을 기록하는 HTML/JS 프로토타입으로 만들었다.",
     changes: [
@@ -294,8 +287,9 @@ export const study = {
     lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",
     usability: {
       method: "테스트 계획",
-      title: "Moderated think-aloud",
-      text: "최대 5명, AI 사용량(많음/적음)과 프라이버시 민감도(높음/낮음)를 섞어 모집. 시나리오 A(인라인 컨트롤) 다음 B(요청해서 삭제), 가상 페르소나의 데이터를 써서 참여자는 자기 정보를 공유하지 않는다.",
+      title: "진행자 동석 사용성 테스트",
+      lead: "최대 5명이 가상 페르소나의 데이터로 두 시나리오를 수행한다.",
+      text: "AI 사용량(많음/적음)과 프라이버시 민감도(높음/낮음)를 섞어 모집한다. 시나리오 A(인라인 컨트롤) 다음 B(요청해서 삭제)이고, 참여자는 자기 정보를 공유하지 않는다.",
       scores: [
         { value: "10", unit: "초", ratio: 0, title: "스위치 찾기", note: "목표 · 힌트 없이 10초 안에" },
         { value: "68+", unit: "SUS", ratio: 0, title: "SUS 목표", note: "목표 · 평균 이상" },
