@@ -3242,18 +3242,17 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
 /* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement and note sit at the bottom left and the case pills at the top
-   right, so Work is one click from the first glance. */
+   the statement, note and case pills sit together at the bottom left, so Work is
+   one click from the first glance. */
 @media (min-width: 64rem) {
-  /* Diagonal: statement and note at the bottom left, the case pills at the top
-     right, with the dust free between them. */
-  .intro-surface.home-grid { grid-template-rows: minmax(0, 1fr) auto auto; padding-bottom: 48px; }
+  /* One block at the bottom left: statement, note, and right under them what to
+     press, so the click sits where the emphasis is. The dust has the space above. */
+  .intro-surface.home-grid { grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
   .home-tagline-wrap { grid-column: 1 / -1; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
   .home-tagline { text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
-  .home-picks { top: 104px; right: var(--edge-inset); translate: none; }
-  .home-stage { --picks-gutter: 288px; }
-  .home-stage[data-world="gemini-privacy"] .home-world-problem { left: min(52%, calc(100% - 28ch - 280px)); }
+  .home-picks { position: static; translate: none; grid-column: 1 / -1; grid-row: 4; align-self: start; }
+  .home-picks ol { flex-direction: row; align-items: flex-start; }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */
