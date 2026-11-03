@@ -135,14 +135,12 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
-// Affinity as a pinned scene: the page stays and, with native scroll, real sentences from
-// the board (a handful of its 201 stickies) gather into themes and then into problems,
-// each closing on its insight and a real quote, one problem at a time. It is a qualitative
-// study, so the piles show the grouping, not a tally. Wide screens with motion only (CSS); otherwise a plain list.
+// Affinity as a pinned scene: first the real stickies from the board, mixed, which gather
+// and clear with native scroll; then one screen per problem, with its insight as the
+// largest thing on screen and the quote and two stickies under it as evidence. It is a
+// qualitative study, so nothing counts per theme. Wide screens with motion only (CSS); otherwise a plain list.
 type NoteGroup = { name: string; problem: number; tone?: string; notes: [string, string][] };
-const PROBLEM_LEFT = [0, 0.2633, 0.5267, 0.79];
 const NOTE_COLUMNS = 6;
-const NOTE_SPREAD = 1.85;
 const noteHash = (i: number, k: number) => {
   let h = Math.imul(i + 1, k);
   h ^= h >>> 15;
@@ -152,25 +150,21 @@ const noteHash = (i: number, k: number) => {
 };
 const noteRound = (n: number) => Math.round(n * 1000) / 1000;
 function noteLayout(groups: NoteGroup[]) {
-  const flat = groups.flatMap((g, column) => g.notes.map((note, k) => ({ g, column, k, count: g.notes.length, text: note[0], who: note[1] })));
+  const flat = groups.flatMap((g) => g.notes.map((note) => ({ text: note[0], who: note[1] })));
   const rows = Math.ceil(flat.length / NOTE_COLUMNS);
-  // Scattered: slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
+  // Slots are dealt by a hash, so the themes start mixed, as on a wall before sorting.
   const slots = flat.map((_, i) => i).sort((x, y) => noteHash(x, 2654435761) - noteHash(y, 2654435761));
-  const inProblem = [0, 0, 0, 0];
-  const problemCount = [0, 0, 0, 0];
-  groups.forEach((g) => { if (g.problem >= 0) problemCount[g.problem] += g.notes.length; });
-  return flat.map((note, i) => {
-    const slot = slots[i];
-    return {
-      ...note, tone: note.g.tone, problem: note.g.problem, other: note.g.problem < 0, spread: (i * 37) % 100 / 100,
-      x: noteRound(Math.max(0.08, Math.min(0.92, ((slot % NOTE_COLUMNS) + 0.5) / NOTE_COLUMNS + (Math.floor(slot / NOTE_COLUMNS) % 2 ? 0.012 : -0.012) + noteHash(i, 2246822519) * 0.03))),
-      // Scattered over the board and the empty space under it; the piles then sit on the board alone.
-      y: noteRound(((Math.floor(slot / NOTE_COLUMNS) + 0.5) / rows + noteHash(i, 3266489917) * 0.12) * NOTE_SPREAD),
-      r: noteRound(noteHash(i, 668265263) * 5),
-      n: note.g.problem >= 0 ? inProblem[note.g.problem]++ : 0,
-      total: note.g.problem >= 0 ? problemCount[note.g.problem] : 0,
-    };
-  });
+  return flat.map((note, i) => ({
+    ...note,
+    x: noteRound(Math.max(0.08, Math.min(0.92, ((slots[i] % NOTE_COLUMNS) + 0.5) / NOTE_COLUMNS + (Math.floor(slots[i] / NOTE_COLUMNS) % 2 ? 0.012 : -0.012) + noteHash(i, 2246822519) * 0.03))),
+    y: noteRound((Math.floor(slots[i] / NOTE_COLUMNS) + 0.5) / rows + noteHash(i, 3266489917) * 0.08),
+    r: noteRound(noteHash(i, 668265263) * 5),
+  }));
+}
+// A problem's evidence: one sticky from each of its themes, or the first two of its only theme.
+function noteEvidence(groups: NoteGroup[], problem: number) {
+  const lists = groups.filter((g) => g.problem === problem).map((g) => g.notes);
+  return (lists.length > 1 ? lists.map((list) => list[0]) : lists[0] ?? []).slice(0, 2);
 }
 const noteEase = (t: number) => { const v = Math.max(0, Math.min(1, t)); return v * v * (3 - 2 * v); };
 type NoteProblem = { title: string; tone: string; insight: string; quote: string; who: string; feature?: string };
@@ -182,48 +176,30 @@ export function AffinityNotes({ groups, problems, funnel, note, answeredBy }: { 
     const el = track.current;
     if (!el || !window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)").matches) return;
     const board = el.querySelector<HTMLElement>(".dv-notes-board");
-    const cards = el.querySelectorAll<HTMLElement>(".dv-note");
-    const art = el.querySelector(".dv-notes-art");
-    if (!board || !cards.length) return;
+    const intro = el.querySelector<HTMLElement>(".dv-notes-intro");
+    const cards = el.querySelectorAll<HTMLElement>(".dv-notes-board .dv-note");
+    if (!board || !intro) return;
     const layout = noteLayout(groups);
-    const columns = groups.length;
     let frame = 0;
     let last = "";
     const read = () => {
       frame = 0;
       const box = el.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, -box.top / (box.height - window.innerHeight)));
-      const a = (p - 0.04) / 0.13;
-      const b = (p - 0.22) / 0.13;
+      setStep(p < 0.14 ? 0 : 1 + Math.min(3, Math.floor((p - 0.14) / 0.215)));
+      const u = noteEase((p - 0.04) / 0.1);
       const W = board.clientWidth;
       const H = board.clientHeight;
-      const key = `${noteEase(a).toFixed(3)}:${noteEase(b).toFixed(3)}:${W}:${H}`;
-      setStep(p < 0.1 ? 0 : p < 0.29 ? 1 : p < 0.42 ? 2 : 3 + Math.min(3, Math.floor((p - 0.42) / 0.145)));
+      const key = `${u.toFixed(3)}:${W}:${H}`;
       if (key === last) return;
       last = key;
-      const noteW = cards[0].offsetWidth;
-      const pileScale = Math.min(1, (W / columns - 10) / noteW);
+      intro.style.opacity = (1 - u).toFixed(3);
       cards.forEach((card, i) => {
         const d = layout[i];
-        const u = noteEase((a - d.spread * 0.2) / 0.8);
-        const w = noteEase((b - d.spread * 0.2) / 0.8);
-        const x0 = d.x * W;
-        const y0 = d.y * H;
-        const x1 = ((d.column + 0.5) / columns) * W + noteHash(i, 1540483477) * 8;
-        const y1 = H - 72 - (d.count - 1 - d.k) * 30;
-        const x2 = d.other ? x1 : PROBLEM_LEFT[d.problem] * W + noteW / 2 + d.n * 10;
-        const y2 = d.other ? y1 + 24 : H - 76 - (d.total - 1 - d.n) * 34;
-        const x = (x1 - x0) * u + (x2 - x1) * w;
-        const y = (y1 - y0) * u + (y2 - y1) * w;
-        const scale = 1 + (pileScale - 1) * u + (1 - pileScale) * (d.other ? 0 : w);
-        const turn = d.r * (1 - 0.6 * u);
-        card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${turn.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-        if (d.other) card.style.opacity = Math.max(0, 1 - w * 2.5).toFixed(2);
+        const x = (W / 2 - d.x * W) * u * 0.6;
+        const y = (H * 0.8 - d.y * H) * u * 0.6;
+        card.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) rotate(${d.r}deg)`;
       });
-      art?.toggleAttribute("data-colored", a > 0.3);
-      // Theme names wait until the notes have landed, so nothing travels over them.
-      el.style.setProperty("--l1", (noteEase((a - 0.8) * 5) * (1 - noteEase(b * 3))).toFixed(2));
-      el.style.setProperty("--l2", noteEase(b * 2 - 1).toFixed(2));
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -238,42 +214,30 @@ export function AffinityNotes({ groups, problems, funnel, note, answeredBy }: { 
   return (
     <div ref={track} className="dv-notes-track">
       <div className="dv-notes-stage">
-        <ol className="dv-funnel">
-          {funnel.map(([n, label], i) => <li key={label} data-on={i === Math.min(step, 2) || undefined}><strong>{n}</strong><span>{label}</span></li>)}
-        </ol>
-        <div className="dv-notes-art" aria-hidden="true" data-focus={step > 2 ? step - 3 : undefined}>
-          <div className="dv-notes-board">
+        <div className="dv-notes-intro">
+          <ol className="dv-funnel">
+            {funnel.map(([n, label]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
+          </ol>
+          <div className="dv-notes-board" aria-hidden="true">
             {notes.map((d, i) => (
-              <div key={i} className="dv-note" data-tone={d.tone} data-p={d.problem} style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
+              <div key={i} className="dv-note" style={{ left: `${d.x * 100}%`, top: `${d.y * 100}%`, transform: `translate(-50%, -50%) rotate(${d.r}deg)` }}>
                 {d.text} <span>{d.who}</span>
               </div>
             ))}
           </div>
-          <div className="dv-notes-under">
-            {groups.map((g, i) => (
-              <p key={g.name} className="dv-notes-theme" style={{ left: `${(i / groups.length) * 100}%` }}>{g.name}</p>
-            ))}
-            {problems.map((item, i) => (
-              <h4 key={item.title} className="dv-notes-problem" data-tone={item.tone} data-p={i} style={{ left: `${PROBLEM_LEFT[i] * 100}%` }}>{item.title}</h4>
-            ))}
-            <p className="dv-notes-note" data-on={step === 2 || undefined}>{note}</p>
-            {problems.map((item, i) => (
-              <div key={item.title} className="dv-notes-detail" data-tone={item.tone} data-on={step - 3 === i || undefined}>
-                <figure>
-                  <blockquote>“{item.quote}”</blockquote>
-                  <figcaption>{item.who}</figcaption>
-                </figure>
-                <div>
-                  <p>{item.insight}</p>
-                  {item.feature && <p className="dv-notes-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
-                </div>
-              </div>
-            ))}
-          </div>
+          <p className="dv-notes-aside">{note}</p>
         </div>
-        <ul className="sr-only">
-          {problems.map((item) => <li key={item.title}>{item.title}: “{item.quote}” {item.who}. {item.insight}</li>)}
-        </ul>
+        {problems.map((item, i) => (
+          <div key={item.title} className="dv-pscreen" data-tone={item.tone} data-on={step === i + 1 || undefined}>
+            <h4><span>{i + 1} / {problems.length}</span>{item.title}</h4>
+            <p className="dv-pscreen-insight">{item.insight}</p>
+            <div className="dv-pscreen-notes">
+              <blockquote className="dv-note dv-note-quote">“{item.quote}” <span>{item.who}</span></blockquote>
+              {noteEvidence(groups, i).map(([text, who]) => <div key={text} className="dv-note">{text} <span>{who}</span></div>)}
+            </div>
+            {item.feature && <p className="dv-pscreen-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+          </div>
+        ))}
       </div>
     </div>
   );
