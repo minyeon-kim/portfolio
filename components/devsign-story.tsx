@@ -338,27 +338,70 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
 
 type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
 
-// Key problems as a horizontal accordion: one panel open (hover, focus or tap),
-// the others keep their number and name. Stacked and all open below 64rem.
-export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answeredBy: string }) {
+// Key problems as a horizontal accordion, one panel open. On desktop the heading and
+// panels stay on screen (CSS sticky) and native scroll opens each panel in turn; a click or
+// keyboard focus scrolls to that panel's step. Without the pin (reduced motion) hover, focus
+// or a tap opens a panel. Stacked and all open below 64rem.
+export function ProblemPanels({ items, answeredBy, children }: { items: Problem[]; answeredBy: string; children?: React.ReactNode }) {
   const [open, setOpen] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
+  const pinned = useRef(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      const box = el.getBoundingClientRect();
+      const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+      const top = Math.max(80, (window.innerHeight - stage) / 2);
+      const travel = box.height - stage;
+      pinned.current = travel > 1;
+      el.style.setProperty("--stage-top", `${top}px`);
+      if (!pinned.current) return;
+      const progress = Math.min(1, Math.max(0, (top - box.top) / travel));
+      setOpen(Math.min(items.length - 1, Math.floor(progress * items.length)));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [items.length]);
+  const go = (i: number) => {
+    const el = root.current;
+    if (!pinned.current || !el) return setOpen(i);
+    const box = el.getBoundingClientRect();
+    const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+    const top = Math.max(80, (window.innerHeight - stage) / 2);
+    window.scrollTo({ top: window.scrollY + box.top - top + (box.height - stage) * ((i + 0.5) / items.length), behavior: "smooth" });
+  };
   return (
-    <ol className="dv-panels dv-gap-40 reveal">
-      {items.map((item, i) => (
-        <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => setOpen(i)}>
-          <button type="button" aria-expanded={i === open} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
-            <span className="dv-panel-who"><b>{pad(i + 1)}</b></span>
-            <h4>{item.title}</h4>
-          </button>
-          <div className="dv-panel-more">
-            <div>
-              <p>{item.body}</p>
-              {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
-            </div>
-          </div>
-        </li>
-      ))}
-    </ol>
+    <div ref={root} className="dv-panels-track" style={{ "--n": items.length } as React.CSSProperties}>
+      <div className="dv-panels-stage">
+        {children}
+        <ol className="dv-panels dv-gap-40 reveal">
+          {items.map((item, i) => (
+            <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => { if (!pinned.current) setOpen(i); }}>
+              <button type="button" aria-expanded={i === open} onFocus={() => go(i)} onClick={() => go(i)}>
+                <span className="dv-panel-who"><b>{pad(i + 1)}</b></span>
+                <h4>{item.title}</h4>
+              </button>
+              <div className="dv-panel-more">
+                <div>
+                  <p>{item.body}</p>
+                  {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
   );
 }
 
