@@ -424,3 +424,31 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
     </div>
   );
 }
+
+type Problem = { title: string; body: string; role: string; tone: string; quote?: string; who?: string; feature?: string };
+
+// Key problems as a horizontal accordion: one panel open (hover, focus or tap),
+// the others keep their role and name. Stacked and all open below 64rem.
+export function ProblemPanels({ items, answeredBy }: { items: Problem[]; answeredBy: string }) {
+  const [open, setOpen] = useState(0);
+  return (
+    <ol className="dv-panels dv-gap-40 reveal">
+      {items.map((item, i) => (
+        <li key={item.title} data-tone={item.tone} data-on={i === open || undefined} onMouseEnter={() => setOpen(i)}>
+          <button type="button" aria-expanded={i === open} onFocus={() => setOpen(i)} onClick={() => setOpen(i)}>
+            <span className="dv-panel-who"><b>{pad(i + 1)}</b>{item.role}</span>
+            <h4>{item.title}</h4>
+          </button>
+          <div className="dv-panel-more">
+            <div>
+              <p>{item.body}</p>
+              {item.quote && <blockquote>“{item.quote}”<cite>{item.who}</cite></blockquote>}
+              {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
