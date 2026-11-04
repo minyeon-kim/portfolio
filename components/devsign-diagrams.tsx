@@ -22,7 +22,7 @@ export function IaTree({ tree }: { tree: IaTreeData }) {
                   <ul className="dv-ia-items">
                     {column.items.map(([name, ...children]) => (
                       <li key={name}>
-                        {name}
+                        <span className="dv-ia-node">{name}</span>
                         {children.length > 0 && <ul>{children.map((child) => <li key={child}>{child}</li>)}</ul>}
                       </li>
                     ))}
