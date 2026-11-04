@@ -159,7 +159,7 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, on, shown, pinned, playing, ready }: { reel: Reel; on: boolean; shown: boolean; pinned: boolean; playing: boolean; ready: boolean }) {
+function FeatureReel({ reel, index, total, on, shown, card, pinned, playing, ready }: { reel: Reel; index: number; total: number; on: boolean; shown: boolean; card: boolean; pinned: boolean; playing: boolean; ready: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [point, setPoint] = useState(0);
   const [still, setStill] = useState(false);
@@ -201,17 +201,29 @@ function FeatureReel({ reel, on, shown, pinned, playing, ready }: { reel: Reel; 
       window.removeEventListener("keydown", retry);
     };
   }, [pinned, playing]);
+  // Pinned, each feature starts its clip from the top when it takes over.
+  useEffect(() => {
+    if (!pinned || !on || !video.current) return;
+    video.current.currentTime = 0;
+    setPoint(0);
+  }, [pinned, on]);
   const sync = () => {
     const t = video.current?.currentTime ?? 0;
     setPoint(reel.clip.marks.reduce((at, mark, i) => (t >= mark ? i : at), 0));
   };
+  const number = reel.kicker.split(" ")[0];
   return (
     <li id={reel.id} className="dv-reel dv-link-target" data-on={on || undefined} data-shown={shown || undefined}>
       <div className="dv-reel-media">
+        <p className="dv-reel-tag" aria-hidden="true">
+          <b>{number}</b>{reel.name}
+          <span className="dv-reel-steps">{Array.from({ length: total }, (_, i) => <i key={i} data-on={i === index || undefined} />)}</span>
+        </p>
+        <div className="dv-reel-card" data-on={card || undefined} aria-hidden="true"><b>{number}</b><span>{reel.name}</span></div>
         <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={ready ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} onPlaying={() => setRefused(false)} />
       </div>
       <div className="dv-reel-text">
-        <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
+        <p className="dv-reel-name"><b>{number}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
         <h4 className="dv-reel-line">{reel.body}</h4>
         <ol className="dv-reel-points">
           {reel.points.map((text, i) => <li key={text} data-on={i === point || undefined}>{text}</li>)}
@@ -222,14 +234,34 @@ function FeatureReel({ reel, on, shown, pinned, playing, ready }: { reel: Reel; 
   );
 }
 
+// How long a feature's title card covers its clip when it takes over.
+const CARD_MS = 750;
+// A second change this soon after the last one is a fast scroll: no card, straight to the clip.
+const FAST_SCROLL_MS = 350;
+
 // On desktop the clip stays pinned while the sentences scroll past it, and the clip
-// changes as each sentence reaches the middle of the screen. Elsewhere: a plain list.
+// changes as each sentence reaches the middle of the screen, behind a short title
+// card so the change reads. Elsewhere: a plain list.
 export function FeatureReels({ reels }: { reels: Reel[] }) {
   const root = useRef<HTMLUListElement>(null);
   const [current, setCurrent] = useState(0);
   const [pinned, setPinned] = useState(false);
   const [onScreen, setOnScreen] = useState(false);
   const [near, setNear] = useState(false);
+  const [card, setCard] = useState<number | null>(null);
+  const shownBefore = useRef(current);
+  const changedAt = useRef(0);
+  useEffect(() => {
+    if (current === shownBefore.current) return;
+    shownBefore.current = current;
+    const now = performance.now();
+    const fast = now - changedAt.current < FAST_SCROLL_MS;
+    changedAt.current = now;
+    setCard(fast ? null : current);
+    if (fast) return;
+    const timer = window.setTimeout(() => setCard(null), CARD_MS);
+    return () => window.clearTimeout(timer);
+  }, [current]);
   // Start fetching the clips a screen or two early, so a slow network doesn't show a
   // still poster when the block arrives.
   useEffect(() => {
@@ -270,7 +302,7 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   }, [pinned]);
   return (
     <ul ref={root} className="dv-reels dv-gap-40">
-      {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} on={i === current} shown={i <= current} pinned={pinned} playing={onScreen && i === current} ready={near && pinned && (i === current || i === current + 1)} />)}
+      {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} index={i} total={reels.length} on={i === current} shown={i <= current} card={pinned && card === i} pinned={pinned} playing={onScreen && i === current && card !== i} ready={near && pinned && (i === current || i === current + 1)} />)}
     </ul>
   );
 }
