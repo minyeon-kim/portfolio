@@ -32,6 +32,7 @@ export function SiteFooter() {
         <ul className="site-footer-meta">
           <li><Link href={localize("/", locale)}>{t.work}</Link></li>
           <li><Link href={localize("/about/", locale)}>{t.about}</Link></li>
+          <li><Link href={localize("/playground/", locale)}>{t.playground}</Link></li>
           {site.email && <li><a href={`mailto:${site.email}`}>{t.email}</a></li>}
           {site.linkedinUrl && <li><a href={site.linkedinUrl}>LinkedIn</a></li>}
         </ul>

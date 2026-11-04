@@ -64,7 +64,7 @@ export const study = {
       title: "Process · Double Diamond",
       stages: [
         { name: "Discover", outcome: "AI sped up the work, but the reasons behind decisions weren’t kept.", methods: ["Secondary research", "Comparative", "Interviews"] },
-        { name: "Define", outcome: "We narrowed it to four key problems.", methods: ["Affinity map", "Personas", "Journey map", "HMW"] },
+        { name: "Define", outcome: "We narrowed it to four key problems.", methods: ["Affinity map", "Personas", "Journey map"] },
         { name: "Develop", outcome: "We cut 5 feature candidates to 4.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
         { name: "Deliver", outcome: "A prototype, changed twice after a test and a co-design.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
@@ -293,19 +293,19 @@ export const study = {
       lead: "We mapped who does what in two situations: combining drafts, and when the build differs from the design.",
       text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
       chart: {
-        label: "User flow. When the designer combines AI drafts: compare the drafts and pick each area; if it fits the design rules it is saved, if not it goes to the developer's change review. When the build differs from the design: the developer writes a fix; if it isn't a design decision they fix it directly; if it is, the decision-maker compares and decides on the same screen, the developer applies and verifies it, and it stays in History. The steps are in the list below.",
+        label: "User flow. When the designer combines AI drafts: compare the drafts and pick each area; if it fits the design rules it is saved or sent for review, if not it goes to the developer's change review. When the build differs from the design: the developer writes a fix; if it isn't a design decision they fix it directly; if it is, the decision-maker compares and decides on the same screen, the developer applies and verifies it, and it stays in History. The steps are in the list below.",
         a: "A. When the designer combines AI drafts",
         b: "B. When build differs from design",
         example: "e.g. a button: 44px design, 40px code",
         yes: "Yes", no: "No",
         nodes: {
-          compare: ["Compare", "AI drafts"], pick: ["Pick each", "area"], rule: ["Fits the", "design rules?"], save: ["Save", "→ History"],
+          compare: ["Compare", "AI drafts"], pick: ["Pick each", "area"], rule: ["Fits the", "design rules?"], save: ["Save or review", "→ History"],
           review: ["Change review", "write a fix"], decision: ["Design", "decision?"], direct: ["Fix directly", "→ verify"],
           decide: ["Change review", "compare, decide"], apply: ["Apply, then", "verify on screen"], history: ["History", "decision + why"],
         },
         who: { developer: "Developer", decider: "Decision-maker · same screen" },
         list: [
-          { title: "A. When the designer combines AI drafts", items: ["Compare the AI drafts and pick each area", "If it fits the design rules, save it to History", "If not, it goes to the developer’s change review (B)"] },
+          { title: "A. When the designer combines AI drafts", items: ["Compare the AI drafts and pick each area", "If it fits the design rules, save it or request a review; it stays in History", "If not, it goes to the developer’s change review (B)"] },
           { title: "B. When the build differs from the design", items: ["For example, a button is 44px in design, 40px in code", "The developer writes a fix in change review", "If it isn’t a design decision, the developer fixes it directly and verifies it on screen", "If it is, the decision-maker compares and decides on the same screen", "The developer applies and verifies it, and the decision and its reason stay in History"] },
         ],
         full: { src: "/images/devsign/user-flow.webp", label: "See the full flow ↗" },
