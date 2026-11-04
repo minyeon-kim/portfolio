@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { withBase } from "@/lib/site";
@@ -411,17 +412,18 @@ export function ProblemPanels({ items, answeredBy, children }: { items: Problem[
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][] };
-type SpecData = { cols: { does: string; state: string }; shared: string; open: string; screens: SpecScreen[] };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; only?: string; more?: string; moreHref?: string };
 
 // The handoff spec: one key screen at a time, numbered pins on the real screen and the same
 // numbers in the list beside it. Pointing at either lights the other. Phones list all four.
-export function HandoffSpec({ spec }: { spec: SpecData }) {
+export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boolean }) {
+  const screens = one ? spec.screens.filter((screen) => screen.id === spec.only) : spec.screens;
   const [current, setCurrent] = useState(0);
   const [lit, setLit] = useState<number | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const pick = (i: number) => { setCurrent(i); setLit(null); };
   const onKey = (event: React.KeyboardEvent) => {
-    const last = spec.screens.length - 1;
+    const last = screens.length - 1;
     const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
     if (next === undefined) return;
     event.preventDefault();
@@ -430,14 +432,14 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
   };
   return (
     <div className="dv-spec dv-gap-40 reveal">
-      <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
-        {spec.screens.map((screen, i) => (
+      {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
+        {screens.map((screen, i) => (
           <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
         ))}
-      </div>
+      </div>}
       <div className="dv-spec-panels">
-      {spec.screens.map((screen, i) => (
-        <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role="tabpanel" aria-labelledby={`spec-tab-${screen.id}`} data-on={i === current || undefined}>
+      {screens.map((screen, i) => (
+        <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role={screens.length > 1 ? "tabpanel" : undefined} aria-labelledby={screens.length > 1 ? `spec-tab-${screen.id}` : undefined} data-on={i === current || undefined}>
           <div className="dv-spec-shot">
             <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 60vw, 100vw" />
             {screen.pins.map(([x, y], n) => (
@@ -461,6 +463,7 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
       </div>
       <p className="dv-spec-note">{spec.shared}</p>
       <p className="dv-spec-note">{spec.open}</p>
+      {one && spec.more && spec.moreHref && <p className="dv-spec-more"><Link className="link" href={spec.moreHref}>{spec.more} →</Link></p>}
     </div>
   );
 }
