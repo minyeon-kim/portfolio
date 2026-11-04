@@ -8,17 +8,17 @@ import { withBase } from "@/lib/site";
 // (screen-a2-badge.webp); the frame is phone-frame.svg (1000x1100).
 // Light and dark screens are both in the page; CSS shows the one that matches
 // the site theme ([data-theme-show] in globals.css).
-export function GeminiPhone({ alt }: { alt: string }) {
+export function GeminiPhone({ alt, preload = false }: { alt: string; preload?: boolean }) {
   const dir = "/images/cases/gemini-privacy";
   return (
-    <div className="gemini-phone" role="img" aria-label={alt}>
-      <Image className="gemini-phone-frame" src={withBase(`${dir}/phone-frame.svg`)} alt="" width={1000} height={1100} preload />
+    <div className="gemini-phone" role={alt ? "img" : undefined} aria-label={alt || undefined}>
+      <Image className="gemini-phone-frame" src={withBase(`${dir}/phone-frame.svg`)} alt="" width={1000} height={1100} preload={preload} />
       <div className="gemini-phone-display">
         {(["light", "dark"] as const).map((theme) => {
           const v = theme === "dark" ? "-dark" : "";
           return (
             <div key={theme} className="gemini-phone-stage" data-theme-show={theme}>
-              <Image src={withBase(`${dir}/screen-a2-badge${v}.webp`)} alt="" width={750} height={1624} sizes="400px" preload />
+              <Image src={withBase(`${dir}/screen-a2-badge${v}.webp`)} alt="" width={750} height={1624} sizes="400px" preload={preload} />
               <Image className="gemini-phone-after" src={withBase(`${dir}/hero-after${v}.webp`)} alt="" width={750} height={1624} sizes="400px" />
               <span className="gemini-phone-badge" />
               <span className="gemini-phone-dim" />

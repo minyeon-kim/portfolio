@@ -48,9 +48,9 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
       </div>
       <div className="devsign-hero-media">
         {gemini
-          ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} /></span>
+          ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} preload /></span>
           : <div className="devsign-hero-window">
-              <div className="devsign-hero-screen"><DevsignLoop alt={alt} /></div>
+              <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>
               <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
             </div>}
       </div>

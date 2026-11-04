@@ -102,22 +102,14 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     if (hover) switching.current = window.setTimeout(() => setHover(slug), 140);
     else setHover(slug);
   };
-  // Phones have no hover: the first case's card shows from the start, so the
-  // first screen has the work in it. Tapping it opens the case.
-  const [phone, setPhone] = useState(false);
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 63.99rem)");
-    const sync = () => setPhone(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-  const previewed = shown ?? (phone ? projects[0] : null);
   // The header's About link, from here: hovering or focusing it gathers the dust
   // into the portrait, and clicking opens the page from the photo at once
   // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
   // running; otherwise it is an ordinary link.
   const [portrait, setPortrait] = useState<{ image: HTMLImageElement } | null>(null);
+  // The first case's card shows from the start, so the first screen has the
+  // work in it without a hover. Clicking or tapping it opens the case.
+  const previewed = shown ?? (hover === "about" || portrait ? null : projects[0]);
   useEffect(() => {
     if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
     const src = withBase("/images/about/portrait.webp");
