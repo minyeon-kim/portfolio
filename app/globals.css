@@ -4988,3 +4988,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv .dv-caps { color: light-dark(#4f5754, var(--dv-muted)); }
 .case-study .dv .dv-cast article[data-line="developer"] h4 { color: light-dark(#a64a14, var(--dv-role)); }
 
+/* The interview capture is already cropped (Meet tiles beside the question guide), so it shows whole. */
+.dv-meet-photo, .dv-meet-photo img { aspect-ratio: 2400 / 1072; }
+.dv-meet-photo img { position: static; width: 100%; height: auto; max-width: 100%; }
+
