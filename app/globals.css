@@ -4808,40 +4808,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-panels > li[data-on] > *, .dv-panels > li:hover > * { opacity: 1; }
 }
 
-/* Affinity board as a map: pick a theme, its column lights, its words appear below. Nothing scales. */
-.dv-aff-tabs { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-bottom: 12px; padding-inline: 0.8%; }
-.dv-aff-tabs button { position: relative; padding: 8px 0 10px; border: 0; background: none; color: var(--dv-muted); font: inherit; font-size: 16px; font-weight: 500; line-height: 1.3; text-align: left; transition: color 150ms var(--ease); }
-.dv-aff-tabs button:hover { color: var(--dv-ink); }
-.dv-aff-tabs button[aria-selected="true"] { color: var(--dv-ink); }
-.dv-aff-tabs button::after { content: ""; position: absolute; left: 0; right: 16px; bottom: 0; height: 2px; background: var(--case-accent); opacity: 0; transition: opacity 250ms var(--ease); }
-.dv-aff-tabs button[aria-selected="true"]::after { opacity: 1; }
-.dv-aff-tabs button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; border-radius: 4px; }
-.dv-aff-frame { position: relative; overflow: hidden; border-radius: var(--dv-card-radius); line-height: 0; }
-.dv-board .dv-aff-frame img { display: block; width: 100%; height: auto; border-radius: 0; animation: none; }
-.dv-aff-spot { position: absolute; top: 0; bottom: 0; border-radius: 8px; box-shadow: inset 0 0 0 2px var(--case-accent), 0 0 0 100vmax color-mix(in srgb, var(--dv-bg, var(--bg)) 70%, transparent); pointer-events: none; transition: left 250ms var(--ease); }
-.dv-aff-reader { display: grid; margin-top: 32px; }
-.dv-aff-panel { grid-area: 1 / 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: clamp(32px, 4vw, 48px); align-items: start; opacity: 0; visibility: hidden; transition: opacity 250ms var(--ease), visibility 0s linear 250ms; }
-.dv-aff-panel[data-on] { opacity: 1; visibility: visible; transition: opacity 250ms var(--ease); }
-.case-study .dv .dv-aff-panel h4 { margin: 0; color: var(--case-accent); font-size: var(--t-item); font-weight: 500; line-height: 1.3; }
-.case-study .dv .dv-aff-panel p { margin: 8px 0 0; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.35; word-break: keep-all; }
-.dv-aff-panel ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-.dv-aff-panel li { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 152px; padding: 16px; border-radius: 8px; background: var(--note); color: #10131a; font-size: 16px; line-height: 1.45; word-break: keep-all; }
-.dv-aff-panel li b { color: rgb(16 19 26 / 0.72); font-weight: 500; }
-@supports (animation-timeline: view()) {
-  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-    .dv-aff-frame { animation: dv-board-in linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; transform-origin: center bottom; }
-  }
-}
-@media (prefers-reduced-motion: reduce) { .dv-aff-tabs button, .dv-aff-tabs button::after, .dv-aff-spot, .dv-aff-panel, .dv-aff-panel[data-on] { transition: none; } }
-/* Phones: no picking, every theme in a list under the plain board. */
-@media (max-width: 63.99rem) {
-  .dv-aff-tabs, .dv-aff-spot { display: none; }
-  .dv-aff-reader { gap: 40px; }
-  .dv-aff-panel { grid-area: auto; grid-template-columns: 1fr; gap: 16px; opacity: 1; visibility: visible; }
-  .dv-aff-panel ul { display: none; }
-  .case-study .dv .dv-aff-panel p { font-size: var(--t-item); }
-}
-
 /* Information architecture and user flow, drawn in code. */
 .dv-ia-root { width: fit-content; margin: 0 auto; padding: 8px 20px; border-radius: 999px; background: var(--dv-ink); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 600; line-height: 1.5; }
 .dv-ia-groups { position: relative; display: grid; grid-template-columns: 1.2fr 2.05fr 1.2fr .85fr 1.1fr; align-items: start; gap: 24px; margin: 24px 0 0; padding: 24px 0 0; list-style: none; }
@@ -4890,15 +4856,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-ia-columns > div:only-child .dv-ia-items > li:only-child::before { height: 34px; }
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:only-child::before { height: 24px; }
 
-/* The affinity board plays by itself: the bar on the current tab is its timer. */
-@keyframes dv-aff-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.dv-aff-tabs[data-auto] button[aria-selected="true"]::after { transform-origin: left; animation: dv-aff-fill 6s linear both; animation-play-state: paused; }
-.dv-aff-tabs[data-auto][data-run] button[aria-selected="true"]::after { animation-play-state: running; }
-.dv-aff-stop { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 999px; background: rgb(14 17 17 / 0.72); color: #fff; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color 150ms var(--ease); }
-.dv-aff-stop:hover { background: rgb(14 17 17 / 0.92); }
-.dv-aff-stop:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
-@media (max-width: 63.99rem) { .dv-aff-stop { display: none; } }
-
 /* User flow as plain steps. The only colour is the accent on the screen two people share. */
 .dv-fc { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 24px; --fc-card: light-dark(#ffffff, var(--dv-band-card-dark)); }
 .case-study .dv .dv-fc-meet { grid-row: 1; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--case-accent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; }
@@ -4919,4 +4876,74 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 47.99rem) {
   .dv-fc-steps { grid-template-columns: 1fr; }
   .case-study .dv .dv-fc-steps p { margin-top: 8px; }
+}
+
+/* Review pass. Text never depends on scroll position: a reader who stops sees it all. Blocks arrive
+   once through the reveal units; only bars, the section titles (done once fully on screen) and the
+   stage openings stay tied to scroll. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-funnel li, .dv-found tbody th, .dv-found td, .dv-evbox .dv-insight-voices li, .dv-flow p, .dv-asks li,
+    .dv-board img, .dv-meet-photo, .dv .dv-figure, .dv-section-head::after { animation: none; }
+    :is(.dv-headline, .dv-core-text) { -webkit-text-fill-color: currentColor; background: none; animation: none; }
+    .dv-section-title { animation-range: entry 0% entry 100%; }
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation: dv-sheet-text linear both; animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
+  }
+}
+
+/* Stage nav steps aside while scrolling down; keyboard focus keeps it. */
+.dv-nav[data-away="true"]:not(:focus-within) { opacity: 0; translate: -50% 12px; pointer-events: none; }
+
+/* What isn't current stays readable (AA): it drops to the muted colour, never to low opacity. */
+.dv-reel-points li { color: var(--dv-muted); }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-reel-text { opacity: 1; }
+  .dv-reel-line { transition: color 400ms var(--ease); }
+  .dv-reel:not([data-on]) .dv-reel-line { color: var(--dv-muted); }
+}
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .dv-panels > li > * { opacity: 1; }
+  .dv-panels > li :is(h4, b) { transition: color 400ms var(--ease); }
+  .case-study .dv .dv-panels > li:not([data-on], :hover) h4 { color: var(--dv-muted); }
+  .dv-panels > li:not([data-on], :hover) :is(.dv-panel-num, .dv-panel-answer b) { color: var(--dv-muted); }
+}
+
+/* The product carries the page: process boards step back in the dark theme, the tool table's
+   conclusion is the one solid fill, and the Takeaway photo is an aside. */
+.dv { --dv-accent-fill: #5b3fd6; }
+.case-study[data-project="gemini"] .dv { --dv-accent-fill: #245cc0; }
+.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: rgb(255 255 255 / 0.2); background: var(--dv-accent-fill); color: #fff; }
+.case-study .dv #takeaway .dv-figure { max-width: 640px; }
+:root[data-theme="dark"] .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); } }
+
+/* Fewer empty screens between stages. */
+.case-study .dv { --sp-stage: 160px; }
+@media (max-width: 47.99rem) { .case-study .dv { --sp-stage: 96px; } }
+
+/* Phones: the IA as its nodes only; pills stay readable over the dust. */
+@media (max-width: 47.99rem) { .dv-ia-items ul { display: none; } }
+@media (max-width: 63.99rem) { .home-pick { background: color-mix(in srgb, var(--bg) 84%, var(--ink)); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* About's closing deck reads at the size of the work it shows. */
+.case-study[data-project="about"] .more-work-deck { --deck-card: clamp(220px, 20vw, 300px); height: calc(var(--deck-card) * 1.25 + 24px); }
+
+/* AA in the light theme: small labels on the bands and the developer's name. */
+.case-study .dv .dv-caps { color: light-dark(#4f5754, var(--dv-muted)); }
+.case-study .dv .dv-cast article[data-line="developer"] h4 { color: light-dark(#a64a14, var(--dv-role)); }
+
+/* The interview capture is already cropped (Meet tiles beside the question guide), so it shows whole. */
+.dv-meet-photo, .dv-meet-photo img { aspect-ratio: 2400 / 1072; }
+.dv-meet-photo img { position: static; width: 100%; height: auto; max-width: 100%; }
+
+/* Key problem rows: themes they came from, one real quote, the feature that answers them. */
+.dv-panels > li .dv-panel-quote { margin-top: 16px; padding-left: 14px; border-left: 2px solid var(--tone); color: var(--dv-ink); }
+.dv-panel-quote span { margin-left: 8px; color: var(--dv-muted); font-size: 16px; }
+.dv-panel-meta { display: flex; flex-wrap: wrap; gap: 4px clamp(16px, 2vw, 32px); margin-top: 16px; }
+.dv-panels > li .dv-panel-meta p { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-panels > li .dv-panel-meta p:not(.dv-panel-answer) { color: var(--dv-ink); }
+.dv-panels > li .dv-panel-meta p > span { color: var(--dv-muted); }
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .dv-panels > li .dv-panel-quote, .dv-panels > li .dv-panel-meta p:not(.dv-panel-answer) { transition: color 400ms var(--ease); }
+  .dv-panels > li:not([data-on], :hover) .dv-panel-quote, .dv-panels > li:not([data-on], :hover) .dv-panel-meta p:not(.dv-panel-answer) { color: var(--dv-muted); }
 }

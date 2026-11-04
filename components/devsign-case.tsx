@@ -6,7 +6,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaTree } from "@/components/devsign-diagrams";
-import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, AffinityBoard, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -38,7 +38,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
 // Frames where the Figma file shows an image at a fixed size with its own crop:
 // frame aspect ratio, then the image's width, height, left and top in % of the frame.
 const CROPS: Record<string, [number, number, number, number, number]> = {
-  "/images/devsign/affinity-board.webp": [1440 / 487, 100.04, 100.97, -0.02, -0.97],
   "/images/devsign/value-effort-matrix.webp": [376 / 440, 103.73, 107.53, -1.87, -5.91],
   "/images/devsign/codesign-session.webp": [720 / 472, 108.84, 118.47, -4.38, -13.12],
 };
@@ -410,21 +409,21 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <ol className="dv-funnel dv-gap-40 reveal">
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>
-          <figure className="dv-board reveal">
-            <AffinityBoard board={define.affinity.board} themes={define.affinity.boardThemes} label={define.affinity.themesLabel} autoLabels={define.affinity.autoLabels} />
-            <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
-          </figure>
+          <Figure img={define.affinity.board} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board" open />
         </div>
 
         <div className="dv-subsection">
           <ProblemPanels
             answeredBy={develop.selection?.answeredBy}
+            themesLabel={define.affinity.themesLabel}
             items={define.problems.items.map((item: Study, index: number) => ({
               title: item.title,
               body: item.body,
               role: item.role,
               tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
               feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
+              themes: item.themes,
+              quote: item.quote,
             }))}
           >
             <Block {...define.problems} ff={ff} />
