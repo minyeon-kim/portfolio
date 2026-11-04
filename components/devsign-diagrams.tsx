@@ -55,6 +55,8 @@ const STEP = 148;
 const WIDTH = 1200;
 const HEIGHT = 612;
 const LANES = [{ y: 0, h: 244 }, { y: 256, h: 192 }, { y: 460, h: 152 }];
+// One colour per person, the same ones the personas and participants use.
+const LANE_TONES = ["accent", "second", "blue"];
 const ROW = { a: 72, b: 164, c: 276, d: 368, e: 488 };
 
 const left = (col: number) => LANE_PAD + STEP * col;
@@ -140,11 +142,11 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
               <path d="M0 0L8 4L0 8Z" className="dv-fc-head" />
             </marker>
           </defs>
-          {LANES.map((lane) => <rect key={lane.y} x={0} y={lane.y} width={WIDTH} height={lane.h} rx={16} className="dv-fc-lane" />)}
+          {LANES.map((lane, i) => <rect key={lane.y} x={0} y={lane.y} width={WIDTH} height={lane.h} rx={16} className="dv-fc-lane" data-tone={LANE_TONES[i]} />)}
           <rect x={BAND.x} y={BAND.y} width={BAND.w} height={HEIGHT - 8 - BAND.y} rx={16} className="dv-fc-band" />
           {chart.lanes.map((lane, i) => (
             <g key={lane.name}>
-              <text x={LANE_PAD} y={LANES[i].y + 32} className="dv-fc-lanename">{lane.name}</text>
+              <text x={LANE_PAD} y={LANES[i].y + 32} className="dv-fc-lanename" data-tone={LANE_TONES[i]}>{lane.name}</text>
               {lane.job.map((line, l) => <text key={line} x={LANE_PAD} y={LANES[i].y + 56 + l * 22} className="dv-fc-job">{line}</text>)}
             </g>
           ))}
@@ -170,7 +172,7 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
       {/* Phones read it as one list per person; screen readers always get this list. */}
       <div className="dv-fc-list">
         {chart.lanes.map((lane, i) => (
-          <div key={lane.name}>
+          <div key={lane.name} data-tone={LANE_TONES[i]}>
             <h4>{lane.name}</h4>
             <p>{lane.job.join(" ")}</p>
             <ol>
