@@ -932,7 +932,7 @@ details[open]::details-content {
     --ambient-pearl-motion: ambient-edge-pearl;
     --intro-canvas: #080909;
     --devsign-canvas: #1c1c1c;
-    --devsign-title: #a594ff;
+    --devsign-title: #9480ff;
     --canvas-dot: rgb(255 255 255 / 0.09);
     --gemini-canvas: #0c0f16;
     --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
@@ -953,7 +953,7 @@ details[open]::details-content {
     --ambient-pearl-motion: ambient-edge-pearl;
     --intro-canvas: #080909;
   --devsign-canvas: #1c1c1c;
-  --devsign-title: #a594ff;
+  --devsign-title: #9480ff;
   --canvas-dot: rgb(255 255 255 / 0.09);
   --gemini-canvas: #0c0f16;
   --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
@@ -2077,8 +2077,8 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-band: light-dark(#f3f3f5, color-mix(in srgb, var(--ink) 4%, var(--bg)));
   --dv-arrow: light-dark(#9e9ea6, var(--muted));
   --case-accent: var(--devsign-title);
-  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #a594ff 12%, var(--bg)));
-  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #a594ff 10%, var(--bg)));
+  --dv-tint: light-dark(#f1eefc, color-mix(in srgb, #9480ff 24%, var(--bg)));
+  --dv-tint-core: light-dark(#f4edff, color-mix(in srgb, #9480ff 20%, var(--bg)));
   --dv-second: light-dark(#e8742c, #f0965a);
   --dv-tint-second: light-dark(#fdf0e7, color-mix(in srgb, #f0965a 12%, var(--bg)));
   --dv-alert: light-dark(#c7383d, #ff8a80);
@@ -2087,7 +2087,7 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
   --dv-diamond-2: light-dark(#dedee3, color-mix(in srgb, var(--ink) 10%, var(--bg)));
   --dv-diamond-3: light-dark(#d6d6dc, color-mix(in srgb, var(--ink) 12%, var(--bg)));
   --dv-diamond-4: light-dark(#cfcfd6, color-mix(in srgb, var(--ink) 14%, var(--bg)));
-  --dv-diamond-current: light-dark(#e9e4fc, color-mix(in srgb, #a594ff 16%, var(--bg)));
+  --dv-diamond-current: light-dark(#e9e4fc, color-mix(in srgb, #9480ff 28%, var(--bg)));
   --dv-max: 1200px;
   /* A 1200px column at most; at least 12.5% sides (240px at 1920 would leave 1440, too wide to read). */
   --dv-pad: max(max(var(--project-text-inset), 56px), calc((100vw - var(--dv-max)) / 2));
@@ -2996,7 +2996,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    cards; tokens are switched to the dark band locally. */
 .case-study .more-work {
   --bg: light-dark(#0e1111, #0a0b14); --ink: #e8ecea; --muted: #8e9895;
-  --devsign-title: #a594ff;
+  --devsign-title: #9480ff;
   --gemini-title: linear-gradient(90deg, #d6e2ff, #9dbeff 55%, #d5c5ff);
   margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0;
   padding: clamp(64px, 7vw, 112px) var(--project-text-inset) clamp(56px, 6vw, 88px);
@@ -3159,10 +3159,10 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Gemini in the Devsign layout keeps its own colour (Figma 657:254 blue)
    instead of the Devsign purple: accent, tints and the current diamond. */
 .case-study[data-project="gemini"] .dv {
-  --case-accent: light-dark(#245cc0, #8ab4f8);
-  --dv-tint: light-dark(#edf2fc, color-mix(in srgb, #8ab4f8 12%, var(--bg)));
-  --dv-tint-core: light-dark(#eef3fd, color-mix(in srgb, #8ab4f8 10%, var(--bg)));
-  --dv-diamond-current: light-dark(#e3ebfa, color-mix(in srgb, #8ab4f8 16%, var(--bg)));
+  --case-accent: light-dark(#245cc0, #6ea2ff);
+  --dv-tint: light-dark(#edf2fc, color-mix(in srgb, #6ea2ff 24%, var(--bg)));
+  --dv-tint-core: light-dark(#eef3fd, color-mix(in srgb, #6ea2ff 20%, var(--bg)));
+  --dv-diamond-current: light-dark(#e3ebfa, color-mix(in srgb, #6ea2ff 28%, var(--bg)));
 }
 
 /* Numbered lists: the number never shrinks onto its own line. */
@@ -3545,7 +3545,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero-actions a[data-primary] { background: light-dark(var(--ink), #ffffff); color: var(--bg); }
 .devsign-hero-actions a[data-primary]:hover { background: color-mix(in srgb, light-dark(var(--ink), #ffffff) 84%, var(--bg)); }
 .devsign-hero[data-project="devsign"] { --case-accent: var(--devsign-title); }
-.devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #8ab4f8); }
+.devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #6ea2ff); }
 .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1200px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
 .devsign-hero-panel .devsign-hero-media .devsign-loop { margin-top: 0; }
 .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin: clamp(40px, 5vw, 72px) calc(var(--dh-pad) - 16px) 0; }
@@ -3560,11 +3560,11 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero-visit { white-space: nowrap; }
 @media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
 
-/* Dark surfaces as steps: page #0a0b14, surface #1a1826 (banded stages, opener panel), card #262433 on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
-.dv { --dv-band-dark: #1a1826; --dv-band-card-dark: #262433; --dv-tint-core: light-dark(#f4edff, #1f1a38); }
-.case-study[data-project="gemini"] .dv { --dv-band-dark: #161b27; --dv-band-card-dark: #222836; --dv-tint-core: light-dark(#eef3fd, #16203a); }
-.devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #1a1826); }
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #161b27); }
+/* Dark surfaces as steps: page #0a0b14, surface #17181d (banded stages, opener panel), card #25262c on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
+.dv { --dv-band-dark: #17181d; --dv-band-card-dark: #25262c; --dv-tint-core: light-dark(#f4edff, #1f1a38); }
+.case-study[data-project="gemini"] .dv { --dv-band-dark: #17181d; --dv-band-card-dark: #25262c; --dv-tint-core: light-dark(#eef3fd, #16203a); }
+.devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #17181d); }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #17181d); }
 
 /* One radius scale: sections and the opener panel 32px (24px on small screens), cards, tables, screens and media inside them 16px. Controls stay full pills; annotation boxes on screenshots stay small. */
 .dv, .devsign-hero { --dv-band-radius: clamp(24px, 2.4vw, 32px); --dv-card-radius: 16px; }
@@ -3611,7 +3611,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 @media (max-width: 47.99rem) { .dv-core { margin-inline: calc(8px - var(--dv-pad)); padding-inline: calc(var(--dv-pad) - 8px); margin-bottom: 8px; } }
 
 /* Secondary action stays readable over the opener artwork; the highlighted tool row's gap takes the band colour, not the page's. */
-.devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, light-dark(#ffffff, #17181d) 72%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .dv > #discover .dv-matrix tr[data-highlight] > * { border-top-color: light-dark(var(--dv-band-light), var(--dv-band-dark)); }
 
 /* Every section card shares one edge: 16px from the screen (8px on phones), like the opener panel and Problem statement, so the page black reads as the ground they sit on. Cards rise less (40px) and open from close to their final edge, so little of it shows mid-scroll. */
@@ -3671,12 +3671,12 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Key problems as cards, one colour each (a soft corner gradient on the section surface), like the other card groups. The number takes the card's colour. */
 .dv [data-tone="teal"] { --tone: light-dark(#0f7f73, #5fd0c0); }
 .dv-problems { gap: 16px; }
-.dv-problems > li[data-tone] { padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 62%); }
+.dv-problems > li[data-tone] { padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #17181d)) 0%, light-dark(#f6f6f8, #17181d) 62%); }
 .dv-problems > li[data-tone] .dv-problem-number { color: var(--tone); }
 
 /* Persona cards and journey on the same surfaces as the other card groups: section surface with a soft corner gradient of the role's colour, hairline, no inner tint or divider. Small labels are quiet sentence case; the role alone carries colour. */
-.dv { --dv-surface: light-dark(#ffffff, #1a1826); }
-.case-study[data-project="gemini"] .dv { --dv-surface: light-dark(#ffffff, #161b27); }
+.dv { --dv-surface: light-dark(#ffffff, #17181d); }
+.case-study[data-project="gemini"] .dv { --dv-surface: light-dark(#ffffff, #17181d); }
 .dv-persona { border-color: var(--dv-card-line); background: linear-gradient(115deg, color-mix(in srgb, var(--dv-role) light-dark(9%, 15%), light-dark(#f6f6f8, var(--dv-surface))) 0%, light-dark(#f6f6f8, var(--dv-surface)) 55%); }
 .dv-persona .dv-persona-id, .dv-persona[data-variant="developer"] .dv-persona-id { border: 0; background: none; }
 .dv-persona-details .dv-caps.dv-persona-role { color: var(--dv-muted); }
@@ -3722,8 +3722,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Demo reel: the current point is a caption on the screen itself; below the tabs only one sentence stays. The list of points returns where there is no caption to read (phones, reduced motion). */
 .dv-show-caption { position: absolute; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 12px; max-width: calc(100% - 84px); margin: 0; padding: 12px 20px 12px 14px; border-radius: 16px; background: rgb(17 17 20 / 0.82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: #ffffff; font-size: clamp(18px, 1.7vw, 24px); font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; animation: dv-caption-in 400ms var(--ease) both; }
 .dv-show-caption[data-top] { top: 16px; bottom: auto; }
-.dv-show-caption b { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #a594ff; color: #120f24; font-size: 16px; font-weight: 700; line-height: 1; }
-.case-study[data-project="gemini"] .dv-show-caption b { background: #8ab4f8; }
+.dv-show-caption b { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #9480ff; color: #120f24; font-size: 16px; font-weight: 700; line-height: 1; }
+.case-study[data-project="gemini"] .dv-show-caption b { background: #6ea2ff; }
 @keyframes dv-caption-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: none; } }
 .dv-show-tab-role { flex: 0 0 100%; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.35; }
 .dv-show-text { max-width: 900px; }
@@ -3911,7 +3911,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Opener actions answer the pointer: they rise, and the second one fills. */
 .devsign-hero-actions a { transition: background-color 150ms var(--ease), translate 150ms var(--ease); }
 .devsign-hero-actions a:hover { translate: 0 -2px; }
-.devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, light-dark(#ffffff, #1a1826) 72%, var(--dh-ink) 28%); }
+.devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, light-dark(#ffffff, #17181d) 72%, var(--dh-ink) 28%); }
 @media (prefers-reduced-motion: reduce) { .devsign-hero-actions a:hover { translate: none; } }
 
 .dv-wireflow.dv-gap-40 { margin-top: 40px; }
@@ -4966,9 +4966,10 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* The product carries the page: process boards step back in the dark theme, the tool table's
-   conclusion is a tint, and the Takeaway photo is an aside. */
-.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: color-mix(in srgb, var(--case-accent) 24%, transparent); background: color-mix(in srgb, var(--case-accent) 14%, transparent); color: var(--dv-ink); }
-.dv-tool-gaps thead th:last-child { color: var(--case-accent); }
+   conclusion is the one solid fill, and the Takeaway photo is an aside. */
+.dv { --dv-accent-fill: #5b3fd6; }
+.case-study[data-project="gemini"] .dv { --dv-accent-fill: #245cc0; }
+.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: rgb(255 255 255 / 0.2); background: var(--dv-accent-fill); color: #fff; }
 .case-study .dv #takeaway .dv-figure { max-width: 640px; }
 :root[data-theme="dark"] :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); } }
