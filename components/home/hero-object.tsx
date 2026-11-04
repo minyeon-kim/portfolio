@@ -145,9 +145,9 @@ ${common}
 uniform float which;
 void main() {
   vec3 jitter = vec3(h1(v.x * 91.0 + v.y * 17.0), h1(v.y * 53.0 + v.x * 7.0), h1(v.x * v.y * 31.0)) - 0.5;
-  // Start drawn in tight at the centre: on load the form blooms outward
-  // while the camera comes forward (after byotone.com's orb entry).
-  o = which < 0.5 ? vec4(homeOf(v) * 0.12 + jitter * 0.25, 1.0) : vec4(0.0);
+  // Start almost in place: on load the form opens out the last bit
+  // while the camera comes forward, so it reads from the first frame.
+  o = which < 0.5 ? vec4(homeOf(v) * 0.9 + jitter * 0.1, 1.0) : vec4(0.0);
 }`;
 
 // The view: the camera turns a little towards the mouse (cam, -1..1), so
@@ -528,7 +528,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
   const buildPortrait = useRef<((next: Portrait) => void) | null>(null);
   useEffect(() => { if (portrait) buildPortrait.current?.(portrait); }, [portrait]);
 
-  // Compiling the shaders blocks the page, so it waits until the page is idle; phones also
+  // Compiling the shaders blocks the page, so it waits for a free moment, briefly; phones also
   // wait for the load to finish and a moment more, since it costs them about half a second.
   const [started, setStarted] = useState(false);
   useEffect(() => {
@@ -536,9 +536,9 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     let timer = 0, idle = 0;
     const go = () => { setStarted(true); };
     const schedule = () => {
-      if (phone) { timer = window.setTimeout(go, 1200); return; }
+      if (phone) { timer = window.setTimeout(go, 500); return; }
       // Safari has no requestIdleCallback, whatever the types say.
-      if (typeof window.requestIdleCallback === "function") idle = window.requestIdleCallback(go, { timeout: 600 });
+      if (typeof window.requestIdleCallback === "function") idle = window.requestIdleCallback(go, { timeout: 150 });
       else timer = setTimeout(go, 100) as unknown as number;
     };
     if (!phone || document.readyState === "complete") schedule();
@@ -607,7 +607,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     };
     const bind = (p: WebGLProgram, name: string, unit: number, texture: WebGLTexture) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, texture); gl.uniform1i(uniform(p, name), unit); };
     const start = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); gl.uniform1f(uniform(pInit, "ground"), landHeight()); }));
+    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); gl.uniform1f(uniform(pInit, "ground"), landHeight()); gl.uniform1f(uniform(pInit, "focus"), start.symbol > 0 ? 1 : 0.85); }));
 
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -657,7 +657,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: 0, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: start.symbol > 0 ? 1 : 0.85, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -783,13 +783,13 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       // in the last stretch, which read as a late snap, not a move).
       const hold = travelling ? 0.35 + 0.65 * ease(Math.min(1, tu / 0.7)) : 1;
       if (!travelling) tu = 1;
-      // The entrance: the camera comes forward from 1.6 units back over 1.1s,
-      // eased in and out, while the gathered form blooms outward.
-      const wake = Math.min(1, clock / 1.1);
-      // The dust blooms out as fast, then eases into its usual slow pull.
-      const early = Math.max(0, 1 - clock / 1.4);
+      // The entrance: the camera comes forward from 0.5 units back over 0.6s,
+      // eased in and out, while the form opens out.
+      const wake = Math.min(1, clock / 0.6);
+      // The dust settles as fast, then eases into its usual slow pull.
+      const early = Math.max(0, 1 - clock / 0.8);
       const awake = wake < 0.5 ? 4 * wake ** 3 : 1 - 4 * (1 - wake) ** 3;
-      const approach = 1.6 * (1 - awake);
+      const approach = 0.5 * (1 - awake);
       // A logo gathers fast (settled in about a second); the flow is raised with
       // the pull so its loose shape stays the same.
       const logo = target.symbol === 1 || target.symbol === 2;
