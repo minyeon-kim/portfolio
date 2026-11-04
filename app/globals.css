@@ -3242,16 +3242,14 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom[data-zoomed] .dv-story-area:not([data-on]) { opacity: 0; }
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
-/* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement, note and case pills sit together at the bottom left, so Work is
-   one click from the first glance. */
+/* Landing, text and dust each get their own part of the stage: the statement and
+   note at the top left, the dot landscape across the lower half (HeroObject's
+   `ground`), and the case pills at the bottom left, on the waves. */
 @media (min-width: 64rem) {
-  /* One column at the bottom left, read down from one edge: statement, note, then
-     what to press. */
-  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
-  .home-tagline-wrap { grid-column: 1; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
+  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; padding-bottom: 48px; }
+  .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
   .home-tagline { text-align: left; }
-  .home-note { grid-column: 1; grid-row: 3; justify-self: start; align-self: end; width: 36ch; max-width: 100%; text-align: left; }
+  .home-note { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; width: 36ch; max-width: 100%; text-align: left; }
   .home-note:lang(ko) { width: 460px; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; justify-self: start; align-self: end; margin-top: 16px; }
   .home-picks ol { flex-direction: row; justify-content: flex-start; align-items: flex-start; }
