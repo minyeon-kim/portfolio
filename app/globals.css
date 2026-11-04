@@ -4858,8 +4858,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-fc svg { display: block; width: 100%; min-width: 1080px; height: auto; }
 .dv-fc-scroll { overflow-y: hidden; }
 @media (min-width: 72rem) { .dv-fc-scroll { overflow: visible; } }
-.dv-fc-group { fill: var(--dv-ink); font-size: 16px; font-weight: 600; }
-.dv-fc-groupline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 30%, transparent); stroke-width: 1; }
+.dv-fc-situation { fill: var(--dv-ink); font-size: 18px; font-weight: 600; }
+.dv-fc-who { fill: var(--fc-soft); font-size: 16px; }
 .dv-fc-step, .dv-fc-store { fill: var(--fc-card); stroke: color-mix(in srgb, var(--dv-ink) 28%, transparent); stroke-width: 1; }
 .dv-fc-store { stroke: var(--dv-ink); stroke-width: 1.5; }
 .dv-fc-ask { fill: var(--fc-card); stroke: color-mix(in srgb, var(--dv-ink) 60%, transparent); stroke-width: 1.5; }
