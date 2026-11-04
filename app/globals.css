@@ -4947,6 +4947,15 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv .dv-spec-back { margin: 0 0 32px; font-size: 16px; }
 .case-study .dv .dv-spec-lead { margin: 16px 0 0; max-width: var(--dv-measure); color: var(--dv-ink); font-size: var(--t-body); line-height: 1.55; word-break: keep-all; }
 .dv-spec-page .dv-section { padding-top: 48px; }
+.case-study .dv .dv-spec-part { margin: var(--sp-block, 120px) 0 0; font-size: var(--t-heading); font-weight: 500; line-height: 1.3; }
+.case-study .dv .dv-spec-part + .dv-spec-lead { margin-bottom: 48px; }
+.case-study .dv .dv-spec-lead + .dv-spec-part { margin-top: 96px; }
+.case-study .dv .dv-spec-part + .dv-spec { margin-top: 32px; }
+/* The case page's short form: fewer rules, so each can be larger. */
+.dv-spec[data-short] .dv-spec-panel { align-items: center; }
+.dv-spec[data-short] .dv-spec-rows { gap: 24px; }
+.case-study .dv .dv-spec[data-short] .dv-spec-rows h4 { font-size: var(--t-item); font-weight: 500; }
+.case-study .dv .dv-spec[data-short] .dv-spec-rows p { color: var(--dv-muted); font-size: var(--t-body); line-height: 1.55; }
 
 /* Core feature text reads in one order: the sentence, the problem it answers, then
    the points, all at one brightness. */

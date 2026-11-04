@@ -1243,3 +1243,5 @@ Core feature text holds beside the clip (owner, after a review: the clip changed
 Case opener facts are four equal columns from 64rem (276px at a 1200 column, 32px gap; supersedes the weighted 1 / 0.8 / 1.3 / 1.15), so each column starts on a steady line (owner). Figma not updated.
 
 Core feature text already read fades out in 250ms as the clip changes (owner: the grey text left above the clip competed with it; `data-past`), and returns on scrolling back up. The next text below stays visible in muted. Figma not updated.
+
+Devsign Deliver is shorter (owner: the wireflow and six-row spec were too much for the case; hiring managers read for judgment; supersedes the wireflow block and six rows on the case): the case keeps the decision screen with three key rules (`deliver.spec.rules`, each pointing at a pin of that screen: current and design values, reason, send button), the open line and a link. The wireflow moved to the spec page (/work/devsign/handoff/, /ko) above the four screens. Earlier class feedback asked to see the handoff and wireflow; they are now one link away. Figma not updated.
