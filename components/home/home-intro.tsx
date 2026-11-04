@@ -46,7 +46,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const router = useRouter();
   const [hover, setHover] = useState<string | null>(null);
   const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
-  // Only the projects: About is a link beside them, not a pick with a world.
+  // Only the projects: About is a text link above them, not a pick with a world.
   const choices: { slug: string; name: string; caption?: string }[] = projects;
   const shown = projects.find((p) => p.slug === hover) ?? null;
   const about = hover === "about";
@@ -110,7 +110,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     if (hover) switching.current = window.setTimeout(() => setHover(slug), 140);
     else setHover(slug);
   };
-  // The About pill beside the projects: hovering or focusing it gathers the dust
+  // The About link above the projects: hovering or focusing it gathers the dust
   // into the portrait, and clicking opens the page from the photo at once
   // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
   // running; otherwise it is an ordinary link.
@@ -203,9 +203,13 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         ))}
       </div>
       <div className="intro-surface home-grid">
-        <nav className="home-picks" aria-labelledby="home-picks-label">
-          <p id="home-picks-label" className="home-picks-label">{t.projects}</p>
-          <div className="home-picks-row">
+        <nav className="home-picks" aria-label={t.siteNav}>
+          {/* Wide screens only; on phones the Menu holds these. */}
+          <ul className="home-links">
+            <li><Link href={localize("/about/", locale)} className="home-about" data-active={portrait ? "" : undefined}>{t.about}</Link></li>
+            <li><a href={`mailto:${site.email}`}>{t.getInTouch}</a></li>
+          </ul>
+          <p className="home-picks-label">{t.caseStudiesLabel}</p>
           <ol>
             {choices.map((c, i) => (
               <li key={c.slug}>
@@ -226,8 +230,6 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
               </li>
             ))}
           </ol>
-          <Link href={localize("/about/", locale)} className="press home-pick home-about" data-active={portrait ? "" : undefined}>{t.about}</Link>
-          </div>
         </nav>
         <div className="home-note" data-swap={next ? "" : undefined}>
           <p className="home-note-default">{t.heroParagraph}</p>
