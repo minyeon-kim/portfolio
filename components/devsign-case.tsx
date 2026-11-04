@@ -703,44 +703,34 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
-        {/* Two columns: the conclusion on the left, what it rests on and what comes next on the right. */}
+        {/* One column. Where scroll timelines run on desktop, the conclusion shrinks and stays on
+            top while what it rests on rises beneath it; elsewhere it is a plain list. */}
         <div className="dv-tk">
-          <div className="dv-tk-lead">
+          <div className="dv-tk-head">
             <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
-            <p className="dv-body reveal">{takeaway.text}</p>
-            {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 1023px) 100vw, 480px" />}
           </div>
           <div className="dv-tk-list">
-            <div>
-              <h3 className="dv-caps reveal">{takeaway.reviewTitle}</h3>
-              <ol className="dv-tk-rows reveal">
-                {takeaway.review.map((item: { title: string; body: string }, i: number) => (
-                  <li key={item.title}>
-                    <span className="dv-tk-number">{pad(i + 1)}</span>
-                    <div>
-                      <h4>{item.title}</h4>
-                      <p>{item.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            {takeaway.limitations && <div>
-              <h3 className="dv-caps reveal">{takeaway.limitationsTitle}</h3>
-              <ul className="dv-tk-rows reveal">
+            {takeaway.review.map((item: { title: string; body: string }, i: number) => (
+              <div key={item.title} className="dv-tk-row reveal">
+                <p className="dv-caps dv-accent">{takeaway.reviewItem ?? takeaway.reviewTitle} {pad(i + 1)}</p>
+                <h3 className="dv-tk-title">{item.title}</h3>
+                <p className="dv-body">{item.body}</p>
+              </div>
+            ))}
+            {takeaway.limitations && <div className="dv-tk-row reveal">
+              <h3 className="dv-caps dv-accent">{takeaway.limitationsTitle}</h3>
+              <ul className="dv-tk-limits">
                 {takeaway.limitations.map((l: { lead: string; text: string }) => (
                   <li key={l.lead}>
-                    <div>
-                      <h4>{l.lead}</h4>
-                      <p>{l.text}</p>
-                    </div>
+                    <h4>{l.lead}</h4>
+                    <p>{l.text}</p>
                   </li>
                 ))}
               </ul>
             </div>}
-            <div className="dv-tk-next reveal">
-              <p className="dv-caps">{takeaway.next.label}</p>
-              <p className="dv-finding">{takeaway.next.title}</p>
+            <div className="dv-tk-row reveal">
+              <p className="dv-caps dv-accent">{takeaway.next.label}</p>
+              <h3 className="dv-tk-title">{takeaway.next.title}</h3>
               {!ff && <>
                 <p className="dv-body">{takeaway.next.text}</p>
                 <ul className="dv-tk-chips">

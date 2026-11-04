@@ -3867,29 +3867,37 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-ut-summary + .dv-scores-row, .dv-scores-row + .dv-result { margin-top: 32px; }
 }
 
-/* Takeaway: the conclusion on the left stays beside what it rests on, as hairline rows on the
-   right, ending on the next step. After Metalab's Outcomes and this site's About: no boxes. */
-.dv-tk { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(56px, 6.7vw, 96px); align-items: start; }
-.dv-tk-lead { position: sticky; top: 96px; }
-.case-study .dv .dv-tk-lead .dv-body { margin-top: 16px; }
-.case-study .dv .dv-tk-lead .dv-figure { margin-top: 40px; }
-.dv-tk-list { display: grid; gap: 64px; min-width: 0; }
-.case-study .dv .dv-tk-list .dv-caps + .dv-tk-rows { margin: 16px 0 0; padding: 0; border-bottom: 1px solid var(--dv-line); list-style: none; }
-.dv-tk-rows > li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 0 16px; padding-block: 28px; border-top: 1px solid var(--dv-line); }
-.dv-tk-rows > li > div:only-child { grid-column: 1 / -1; }
-.dv-tk-number { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.75; font-variant-numeric: tabular-nums; }
-.dv-tk-rows h4 { color: var(--dv-ink); }
-.dv-tk-rows p { margin-top: 8px; color: var(--dv-muted); font-size: 18px; line-height: 1.55; text-wrap: pretty; }
-.case-study .dv .dv-tk-next .dv-finding { margin-top: 16px; text-wrap: pretty; }
-.case-study .dv .dv-tk-next .dv-body { margin-top: 16px; }
+/* Takeaway reads down one column: the conclusion, what it rests on, what comes next. */
+.case-study .dv .dv-tk-head .dv-headline { max-width: 900px; font-size: clamp(30px, 3.4vw, 48px); line-height: 1.25; }
+.case-study .dv .dv-tk-row .dv-caps { color: var(--case-accent); }
+.dv-tk-list { margin-top: 96px; }
+.dv-tk-row { padding-bottom: 96px; }
+.dv-tk-row:last-child { padding-bottom: 0; }
+.case-study .dv .dv-tk-title { margin-top: 12px; max-width: 900px; color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; line-height: 1.3; word-break: keep-all; text-wrap: balance; }
+.case-study .dv .dv-tk-row .dv-body { margin-top: 12px; max-width: 640px; }
+.case-study .dv .dv-tk-limits { display: grid; gap: 24px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-tk-limits h4 { color: var(--dv-ink); }
+.dv-tk-limits p { margin-top: 4px; color: var(--dv-muted); font-size: 18px; line-height: 1.55; text-wrap: pretty; }
 .dv-tk-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
 .dv-tk-chips li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 @media (max-width: 63.99rem) {
-  .dv-tk { grid-template-columns: minmax(0, 1fr); gap: 56px; }
-  .dv-tk-lead { position: static; }
-  .dv-tk-list { gap: 48px; }
-  .dv-tk-rows > li { grid-template-columns: 32px minmax(0, 1fr); gap: 0 12px; padding-block: 24px; }
+  .dv-tk-list { margin-top: 56px; }
+  .dv-tk-row { padding-bottom: 56px; }
 }
+/* The conclusion shrinks with native scroll as it sticks under the header and stays on top. It is
+   set at its small size and scaled up, so nothing below it reflows. */
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (timeline-scope: --x) {
+    .dv-tk { timeline-scope: --dv-tk-list; }
+    .dv-tk-head { position: sticky; z-index: 2; top: 0; height: 168px; margin-top: -64px; padding-top: 80px; isolation: isolate; }
+    .dv-tk-head::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--dv-bg); mask-image: linear-gradient(#000 84%, transparent); }
+    .case-study .dv .dv-tk-head .dv-headline { max-width: min(700px, 58.3%); font-size: clamp(22px, 1.95vw, 28px); line-height: 1.3; transform-origin: 0 0; animation: dv-tk-shrink linear both; animation-timeline: --dv-tk-list; animation-range: cover calc(100svh - 168px) cover calc(140svh - 168px); }
+    .dv-tk-list { margin-top: 0; padding-top: 22svh; view-timeline: --dv-tk-list block; }
+    .dv-tk-row { min-height: 62svh; padding-bottom: 0; }
+    .dv-tk-row:last-child { min-height: 0; }
+  }
+}
+@keyframes dv-tk-shrink { from { scale: 1.714; } to { scale: 1; } }
 
 /* Small card rows on a banded stage: Ideation's rules and goals, Prioritization's criteria. */
 .dv-mini { --dv-mini-bg: light-dark(#ffffff, var(--dv-band-card-dark)); display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; padding: 0; list-style: none; }
