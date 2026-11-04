@@ -160,17 +160,21 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, index, total, on, shown, card, pinned, playing, ready }: { reel: Reel; index: number; total: number; on: boolean; shown: boolean; card: boolean; pinned: boolean; playing: boolean; ready: boolean }) {
+function FeatureReel({ reel }: { reel: Reel }) {
   const video = useRef<HTMLVideoElement>(null);
   const [point, setPoint] = useState(0);
   const [still, setStill] = useState(false);
   const [refused, setRefused] = useState(false);
+  const [near, setNear] = useState(false);
   useEffect(() => {
     const el = video.current;
     if (!el) return;
+    // Start fetching a screen early, so a slow network doesn't show a still poster.
+    const nearby = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setNear(true); nearby.disconnect(); } }, { rootMargin: "100% 0px" });
+    nearby.observe(el);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     setStill(motion.matches);
-    if (motion.matches) return;
+    if (motion.matches) return () => nearby.disconnect();
     el.playbackRate = PLAYBACK_RATE;
     let wanted = false;
     const start = () => {
@@ -178,132 +182,57 @@ function FeatureReel({ reel, index, total, on, shown, card, pinned, playing, rea
       el.muted = true;
       el.play().catch((error: Error) => { if (error.name === "NotAllowedError") setRefused(true); });
     };
-    const want = (next: boolean) => {
-      wanted = next;
-      if (next) start();
-      else el.pause();
-    };
     // Coming back to the tab, or the first press, gets another try.
     const retry = () => { if (el.paused) start(); };
     const onVisible = () => { if (document.visibilityState === "visible") retry(); };
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pointerdown", retry, { passive: true });
     window.addEventListener("keydown", retry);
-    let observer: IntersectionObserver | undefined;
-    if (pinned) want(playing);
-    else {
-      observer = new IntersectionObserver(([entry]) => want(entry.isIntersecting), { threshold: 0.5 });
-      observer.observe(el);
-    }
+    const onScreen = new IntersectionObserver(([entry]) => {
+      wanted = entry.isIntersecting;
+      if (wanted) start();
+      else el.pause();
+    }, { threshold: 0.5 });
+    onScreen.observe(el);
     return () => {
-      observer?.disconnect();
+      nearby.disconnect();
+      onScreen.disconnect();
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("pointerdown", retry);
       window.removeEventListener("keydown", retry);
     };
-  }, [pinned, playing]);
-  // Pinned, each feature starts its clip from the top when it takes over.
-  useEffect(() => {
-    if (!pinned || !on || !video.current) return;
-    video.current.currentTime = 0;
-    setPoint(0);
-  }, [pinned, on]);
+  }, []);
   const sync = () => {
     const t = video.current?.currentTime ?? 0;
     setPoint(reel.clip.marks.reduce((at, mark, i) => (t >= mark ? i : at), 0));
   };
-  const number = reel.kicker.split(" ")[0];
   return (
-    <li id={reel.id} className="dv-reel dv-link-target" data-on={on || undefined} data-shown={shown || undefined}>
-      <div className="dv-reel-media">
-        <p className="dv-reel-tag" aria-hidden="true">
-          <b>{number}</b>{reel.name}
-          <span className="dv-reel-steps">{Array.from({ length: total }, (_, i) => <i key={i} data-on={i === index || undefined} />)}</span>
-        </p>
-        <div className="dv-reel-card" data-on={card || undefined} aria-hidden="true"><b>{number}</b><span>{reel.name}</span></div>
-        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={ready ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} onPlaying={() => setRefused(false)} />
-      </div>
+    <li id={reel.id} className="dv-reel dv-link-target">
       <div className="dv-reel-text">
-        <p className="dv-reel-name"><b>{number}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
-        <h4 className="dv-reel-line">{reel.body}</h4>
-        <ol className="dv-reel-points">
-          {reel.points.map((text, i) => <li key={text} data-on={i === point || undefined}>{text}</li>)}
-        </ol>
-        {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
+        <div>
+          <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
+          <h4 className="dv-reel-line">{reel.body}</h4>
+        </div>
+        <div>
+          <ol className="dv-reel-points">
+            {reel.points.map((text, i) => <li key={text} data-on={i === point || undefined}>{text}</li>)}
+          </ol>
+          {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
+        </div>
+      </div>
+      <div className="dv-reel-media">
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} onPlaying={() => setRefused(false)} />
       </div>
     </li>
   );
 }
 
-// How long a feature's title card covers its clip when it takes over.
-const CARD_MS = 750;
-// A second change this soon after the last one is a fast scroll: no card, straight to the clip.
-const FAST_SCROLL_MS = 350;
-
-// On desktop the clip stays pinned while the sentences scroll past it, and the clip
-// changes as each sentence reaches the middle of the screen, behind a short title
-// card so the change reads. Elsewhere: a plain list.
+// Each feature is its own section: what it does, then its clip across the column,
+// which plays while it is on screen.
 export function FeatureReels({ reels }: { reels: Reel[] }) {
-  const root = useRef<HTMLUListElement>(null);
-  const [current, setCurrent] = useState(0);
-  const [pinned, setPinned] = useState(false);
-  const [onScreen, setOnScreen] = useState(false);
-  const [near, setNear] = useState(false);
-  const [card, setCard] = useState<number | null>(null);
-  const shownBefore = useRef(current);
-  const changedAt = useRef(0);
-  useEffect(() => {
-    if (current === shownBefore.current) return;
-    shownBefore.current = current;
-    const now = performance.now();
-    const fast = now - changedAt.current < FAST_SCROLL_MS;
-    changedAt.current = now;
-    setCard(fast ? null : current);
-    if (fast) return;
-    const timer = window.setTimeout(() => setCard(null), CARD_MS);
-    return () => window.clearTimeout(timer);
-  }, [current]);
-  // Start fetching the clips a screen or two early, so a slow network doesn't show a
-  // still poster when the block arrives.
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setNear(true); observer.disconnect(); } }, { rootMargin: "150% 0px" });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  useEffect(() => {
-    const wide = window.matchMedia("(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)");
-    const sync = () => setPinned(wide.matches);
-    sync();
-    wide.addEventListener("change", sync);
-    return () => wide.removeEventListener("change", sync);
-  }, []);
-  useEffect(() => {
-    const el = root.current;
-    if (!el || !pinned) return;
-    let frame = 0;
-    const read = () => {
-      frame = 0;
-      const mid = window.innerHeight / 2;
-      let next = 0;
-      el.querySelectorAll(".dv-reel-text").forEach((text, i) => { if (text.getBoundingClientRect().top < mid) next = i; });
-      setCurrent(next);
-    };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
-    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting));
-    observer.observe(el);
-    read();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [pinned]);
   return (
-    <ul ref={root} className="dv-reels dv-gap-40">
-      {reels.map((reel, i) => <FeatureReel key={reel.id} reel={reel} index={i} total={reels.length} on={i === current} shown={i <= current} card={pinned && card === i} pinned={pinned} playing={onScreen && i === current && card !== i} ready={near && pinned && (i === current || i === current + 1)} />)}
+    <ul className="dv-reels dv-gap-40">
+      {reels.map((reel) => <FeatureReel key={reel.id} reel={reel} />)}
     </ul>
   );
 }
