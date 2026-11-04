@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
-import { HomeLink } from "@/components/home/case-panels";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
 // Site-wide navigation only. Projects are picked on the landing page and
@@ -81,7 +80,6 @@ function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
       {open && (
         <nav ref={panel} id="site-menu" aria-label={t.siteNav} className="header-menu-panel">
           <ul className="header-menu-pages">
-            <li onClick={close}><HomeLink>{t.work}</HomeLink></li>
             <li><Link href={localize("/about/", locale)} onClick={close} aria-current={stripLocale(pathname) === "/about/" ? "page" : undefined}>{t.about}</Link></li>
             <li><Link href={localize("/playground/", locale)} onClick={close} aria-current={stripLocale(pathname) === "/playground/" ? "page" : undefined}>{t.playground}</Link></li>
           </ul>

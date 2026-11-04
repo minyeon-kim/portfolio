@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { withBase } from "@/lib/site";
-import { HomeLink } from "@/components/home/case-panels";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
 // The page links, always in view at the top (md+): there are only a few, so
@@ -17,7 +16,6 @@ export function SiteNav({ resumeUrl }: { resumeUrl?: string }) {
   return (
     <nav aria-label={t.siteNav} className="site-nav">
       <ul>
-        <li aria-current={current(page === "/" || page.startsWith("/work/"))}><HomeLink>{t.work}</HomeLink></li>
         <li><Link href={localize("/about/", locale)} aria-current={current(page.startsWith("/about"))}>{t.about}</Link></li>
         {resumeUrl && <li><a href={withBase(resumeUrl)}>{t.resume}</a></li>}
       </ul>
