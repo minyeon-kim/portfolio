@@ -4856,17 +4856,34 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-ia-columns > div:only-child .dv-ia-items > li:only-child::before { height: 34px; }
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:only-child::before { height: 24px; }
 
-/* User flow: an image exported from Figma; phones read it as a list. */
-.dv-fc { --fc-card: light-dark(#ffffff, var(--dv-band-card-dark)); }
-.dv-fc-scroll img { display: block; width: 100%; min-width: 1280px; height: auto; border-radius: var(--dv-card-radius); }
+/* User flow: one row. Ink carries it; the accent only marks the shared change review screen. */
+.dv-fc { --fc-card: light-dark(#ffffff, var(--dv-band-card-dark)); --fc-soft: color-mix(in srgb, var(--dv-ink) 80%, var(--fc-card)); position: relative; }
+.dv-fc svg { display: block; width: 100%; min-width: 1080px; height: auto; }
 .dv-fc-scroll { overflow-y: hidden; }
-@media (min-width: 72rem) { .dv-fc-scroll { overflow: visible; } .dv-fc-scroll img { min-width: 0; } }
-.dv-fc-list { display: none; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 72rem) { .dv-fc-scroll { overflow: visible; } }
+.dv-fc-group { fill: var(--dv-ink); font-size: 16px; font-weight: 600; }
+.dv-fc-groupline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 30%, transparent); stroke-width: 1; }
+.dv-fc-step, .dv-fc-store { fill: var(--fc-card); stroke: color-mix(in srgb, var(--dv-ink) 28%, transparent); stroke-width: 1; }
+.dv-fc-store { stroke: var(--dv-ink); stroke-width: 1.5; }
+.dv-fc-ask { fill: var(--fc-card); stroke: color-mix(in srgb, var(--dv-ink) 60%, transparent); stroke-width: 1.5; }
+.dv-fc-key { fill: color-mix(in srgb, var(--case-accent) 18%, var(--fc-card)); stroke: var(--case-accent); stroke-width: 1.5; }
+.dv-fc-branchnode { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 28%, transparent); stroke-width: 1; stroke-dasharray: 4 4; }
+.dv-fc-text { fill: var(--dv-ink); font-size: 16px; }
+.dv-fc-text-store { font-weight: 500; }
+.dv-fc-text-branch { fill: var(--fc-soft); }
+.dv-fc-line { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.5; }
+.dv-fc-head { fill: color-mix(in srgb, var(--dv-ink) 45%, transparent); }
+.dv-fc-handoff { fill: none; stroke: var(--dv-ink); stroke-width: 2.5; }
+.dv-fc-head-strong { fill: var(--dv-ink); }
+.dv-fc-link { fill: var(--dv-ink); font-size: 16px; font-weight: 500; }
+.dv-fc-when { fill: var(--fc-soft); font-size: 16px; }
+.dv-fc-meet { fill: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-fc-list { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; list-style: none; }
 .dv-fc-list ul { margin: 0; padding: 0; list-style: none; }
 .dv-fc-full { display: inline-block; margin-top: 24px; font-size: 16px; }
 @media (max-width: 47.99rem) {
   .dv-fc-scroll { display: none; }
-  .dv-fc-list { display: grid; gap: 12px; }
+  .dv-fc-list { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; display: grid; gap: 12px; }
   .dv-fc-list > li { padding: 20px; border-radius: 16px; background: var(--fc-card); }
   .dv-fc-list h4 { margin: 0 0 8px; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
   .dv-fc-list ul li { padding: 4px 0; color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
@@ -4908,8 +4925,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study[data-project="gemini"] .dv { --dv-accent-fill: #245cc0; }
 .dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: rgb(255 255 255 / 0.2); background: var(--dv-accent-fill); color: #fff; }
 .case-study .dv #takeaway .dv-figure { max-width: 640px; }
-:root[data-theme="dark"] :is(.dv-canvas-full, .dv-fc-scroll) img { filter: brightness(0.8) saturate(0.85); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.dv-canvas-full, .dv-fc-scroll) img { filter: brightness(0.8) saturate(0.85); } }
+:root[data-theme="dark"] .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); } }
 
 /* Fewer empty screens between stages. */
 .case-study .dv { --sp-stage: 160px; }
