@@ -4921,3 +4921,17 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:first-child::before { top: -6px; }
 .dv-ia-columns > div:only-child .dv-ia-items > li:only-child::before { height: 34px; }
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:only-child::before { height: 24px; }
+
+/* User flow as one main path: the arrows that cross lanes carry the weight, branches stay quiet. */
+.dv-fc-phase { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-fc-phase[data-key] { fill: var(--dv-ink); font-weight: 600; }
+.dv-fc-phaseline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 25%, transparent); stroke-width: 1; }
+.dv-fc-handoff { fill: none; stroke: var(--dv-ink); stroke-width: 2.5; }
+.dv-fc-head-strong { fill: var(--dv-ink); }
+.dv-fc-handofftext { fill: var(--dv-ink); font-size: 16px; font-weight: 600; }
+.dv-fc-branchline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.25; stroke-dasharray: 4 4; }
+.dv-fc-note { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; }
+.dv-fc-text-storesub { fill: light-dark(rgb(255 255 255 / 0.82), rgb(18 15 36 / 0.82)); }
+.dv-fc-list li[data-handoff] { font-weight: 600; }
+.dv-fc-list .dv-fc-listnote { margin: 12px 0 0; }
+.dv-fc-list .dv-fc-listnote + .dv-fc-listnote { margin-top: 4px; }
