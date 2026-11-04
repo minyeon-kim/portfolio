@@ -4891,21 +4891,21 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-ia-columns { grid-auto-flow: row; }
 }
 .dv-fc svg { display: block; width: 100%; min-width: 1080px; height: auto; }
-.dv-fc-lane { fill: var(--dv-surface); }
-.dv-fc-band { fill: color-mix(in srgb, var(--case-accent) 14%, transparent); }
+.dv-fc-lane { fill: color-mix(in srgb, var(--tone) 14%, var(--dv-surface)); }
+.dv-fc-band { fill: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
 .dv-fc-line { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.5; }
 .dv-fc-head { fill: color-mix(in srgb, var(--dv-ink) 45%, transparent); }
 .dv-fc-step, .dv-fc-ask, .dv-fc-start, .dv-fc-end { fill: var(--dv-surface); stroke: color-mix(in srgb, var(--dv-ink) 30%, transparent); stroke-width: 1; }
 .dv-fc-ask { stroke-width: 1.5; stroke: color-mix(in srgb, var(--dv-ink) 55%, transparent); }
-.dv-fc-key { fill: var(--case-accent); }
+.dv-fc-key { fill: var(--dv-ink); }
 .dv-fc-store { fill: var(--dv-ink); }
 .dv-fc-text { fill: var(--dv-ink); font-size: 16px; }
 .dv-fc-text-key { fill: light-dark(#ffffff, #120f24); font-weight: 500; }
 .dv-fc-text-store { fill: light-dark(#ffffff, #120f24); font-weight: 600; }
-.dv-fc-lanename { fill: var(--dv-ink); font-size: 18px; font-weight: 600; }
-.dv-fc-job { fill: var(--dv-muted); font-size: 16px; }
-.dv-fc-branch { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
-.dv-fc-meet { fill: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-fc-lanename { fill: color-mix(in srgb, var(--tone) 60%, var(--dv-ink)); font-size: 18px; font-weight: 600; }
+.dv-fc-job { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; }
+.dv-fc-branch { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; font-weight: 500; }
+.dv-fc-meet { fill: var(--dv-ink); font-size: 16px; font-weight: 500; }
 .dv-fc-list { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dv-fc { position: relative; }
 .dv-fc-scroll { overflow-y: hidden; }
@@ -4913,12 +4913,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 47.99rem) {
   .dv-fc-scroll { display: none; }
   .dv-fc-list { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; display: grid; gap: 12px; }
-  .dv-fc-list > div { padding: 20px; border-radius: 16px; background: var(--dv-surface); }
-  .dv-fc-list h4 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.35; color: var(--dv-ink); }
-  .dv-fc-list p { margin: 4px 0 16px; font-size: 16px; line-height: 1.5; color: var(--dv-muted); }
+  .dv-fc-list > div { padding: 20px; border-radius: 16px; background: color-mix(in srgb, var(--tone) 14%, var(--dv-surface)); }
+  .dv-fc-list h4 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.35; color: color-mix(in srgb, var(--tone) 60%, var(--dv-ink)); }
+  .dv-fc-list p { margin: 4px 0 16px; font-size: 16px; line-height: 1.5; color: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); }
   .dv-fc-list ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--dv-line); }
   .dv-fc-list li { padding: 4px 0 4px 12px; font-size: 16px; line-height: 1.5; color: var(--dv-ink); }
-  .dv-fc-list li[data-key] { color: var(--case-accent); font-weight: 600; }
+  .dv-fc-list li[data-key] { font-weight: 600; }
 }
 .dv-fc { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
 /* The branch reaches up to the group's head (or its label, inside Workspace). */
