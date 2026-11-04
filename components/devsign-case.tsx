@@ -666,6 +666,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </p>
           {/* Red only on the goal that was missed. */}
           <UsabilityResults scores={testing.usability.scores} meaning={testing.usability.result} />
+          {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
           </> : <>
           <Block {...testing.usability} ff={ff} />
           <ul className="dv-plan dv-gap-40 reveal">
