@@ -5,7 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
-import { FlowChart, IaMap } from "@/components/devsign-diagrams";
+import { FlowChart, IaTree } from "@/components/devsign-diagrams";
 import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
@@ -569,7 +569,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
         <div className="dv-subsection">
           <Block {...develop.ia} text={ff ? undefined : develop.ia.text} ff={ff} />
-          <IaMap tree={develop.ia.tree} more={develop.ia.more} moreHref={develop.ia.moreHref} />
+          <IaTree tree={develop.ia.tree} focus more={develop.ia.more} moreHref={develop.ia.moreHref} />
           <div className="dv-gap-96">
             <Block {...develop.flow} text={ff ? undefined : develop.flow.text} ff={ff} />
             <FlowChart chart={develop.flow.chart} />
