@@ -2596,7 +2596,13 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-stage { --picks-gutter: 0px; }
 .home-picks { position: absolute; z-index: 3; top: 50%; right: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-picks-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px 24px; }
+.home-links { display: none; }
+/* Tablets have no Menu, and their header keeps the button: just About, in a line. */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .home-links { display: block; margin: 0 0 16px; padding: 0; list-style: none; }
+  .home-links li:last-child { display: none; }
+  .home-links a { color: var(--ink); font-size: 18px; font-weight: 500; }
+}
 .home-picks-label { margin: 0 0 12px; color: var(--muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
 /* After metalab.com's case list: compact frosted grey pills, the name alone. */
 .home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8); color: var(--ink); font-size: 18px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
@@ -3260,8 +3266,14 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-tagline * { text-indent: 0; }
   .home-note { position: absolute; left: 59.5%; top: 25%; width: 30ch; text-align: left; }
   .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
+  /* After metalab.com's menu: the pages as large text, then the cases as pills. */
+  .home-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
+  .home-links a { color: var(--ink); font-family: var(--font-display), var(--font-sans); font-size: 24px; font-weight: 400; line-height: 1.35; letter-spacing: -0.01em; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+  .home-links a:hover, .home-links a:focus-visible, .home-links a[data-active] { text-decoration-color: currentColor; text-underline-offset: 4px; }
+  .home-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
   .home-picks-label { margin-bottom: 8px; }
-  .home-picks-row { flex-direction: column; gap: 16px; }
+  /* The column has the page links, so the intro's header drops its button. */
+  header[data-intro] .header-cta { display: none; }
   .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
   .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
   /* The Gemini card sits at the top right, under the header's right edge. */
@@ -3285,9 +3297,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 @media (max-width: 63.99rem) {
   .intro-stage.home-stage { min-height: calc(100svh - 64px); }
   .intro-surface.home-grid { padding-top: 24px; row-gap: 24px; }
-  /* The pills flow as one group, so About takes a free spot before starting a row. */
-  .home-picks ol { display: contents; }
-  .home-picks-row { gap: 8px; }
 }
 
 /* Prioritization criteria: one criterion per row, read top to bottom. */
@@ -4434,9 +4443,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* Entering About from the landing (lib/about-entrance.ts). */
-/* Everything leaves but the About pill, which the pointer is still on. */
-.home-stage :is(.home-tagline-wrap, .home-note, .home-picks-label, .home-picks ol) { transition: opacity 250ms ease; }
-.home-stage[data-entering] :is(.home-tagline-wrap, .home-note, .home-picks-label, .home-picks ol) { opacity: 0; }
+/* Everything leaves but the About link, which the pointer is still on. */
+.home-stage :is(.home-tagline-wrap, .home-note, .home-picks-label, .home-picks ol, .home-links li:not(:has(.home-about))) { transition: opacity 250ms ease; }
+.home-stage[data-entering] :is(.home-tagline-wrap, .home-note, .home-picks-label, .home-picks ol, .home-links li:not(:has(.home-about))) { opacity: 0; }
 .home-stage[data-entering] .home-picks ol .home-pick { pointer-events: none; }
 .about-entrance { position: fixed; z-index: 15; inset: 0; pointer-events: none; }
 .about-entrance img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 44% 30%; opacity: 0; transition: opacity 240ms ease; }
