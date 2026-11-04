@@ -4872,7 +4872,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-fc-head { fill: color-mix(in srgb, var(--dv-ink) 45%, transparent); }
 .dv-fc-handoff { fill: none; stroke: var(--dv-ink); stroke-width: 2.5; }
 .dv-fc-head-strong { fill: var(--dv-ink); }
-.dv-fc-link { fill: var(--dv-ink); font-size: 16px; font-weight: 500; }
 .dv-fc-when { fill: var(--fc-soft); font-size: 16px; }
 .dv-fc-meet { fill: var(--case-accent); font-size: 16px; font-weight: 500; }
 .dv-fc-list { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; list-style: none; }

@@ -295,11 +295,12 @@ export const study = {
       text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
       chart: {
         label: "User flow. The designer merges drafts and checks the rules. If they fit, it is saved; if not, it goes to the developer's change review. If it isn't a design decision the developer fixes it directly; if it is, the developer asks for approval with a fix and a reason. The decision-maker decides on the same screen, the developer applies and checks it, and it stays in History. The steps are in the list below.",
+        yes: "Yes", no: "No",
         groups: ["Designer", "Developer", "Decision-maker", "Developer", "Record"],
         nodes: {
           merge: ["Merge Studio", "combine drafts"], rule: ["Fits the", "rules?"],
           review: ["Change review", "write a fix"], decision: ["Design", "decision?"],
-          reviewDecider: ["Change review", "3 versions"], approve: ["Approve", "or keep?"],
+          reviewDecider: ["Change review", "3 versions"], approve: ["Approve or", "keep it"],
           apply: ["Apply, then", "verify"], history: ["History", "decision + why"],
         },
         links: { flag: ["If not, flag", "a Conflict Point"], request: ["If so, ask for approval:", "fix + reason"], decision: ["Decision +", "when to apply"] },
