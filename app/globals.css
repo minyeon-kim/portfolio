@@ -2590,7 +2590,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-stage { --picks-gutter: 0px; }
 .home-picks { position: absolute; z-index: 3; top: 50%; right: var(--project-text-inset); translate: 0 -50%; }
 .home-picks ol { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-picks-label { margin: 0 0 12px; color: var(--muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-align: right; }
+.home-picks-label { margin: 0 0 12px; color: var(--muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
 /* After metalab.com's case list: compact frosted grey pills, the name alone. */
 .home-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); box-shadow: inset 0 0 0 1px transparent; backdrop-filter: blur(30px) saturate(1.8); -webkit-backdrop-filter: blur(30px) saturate(1.8); color: var(--ink); font-size: 18px; font-weight: 500; line-height: 1.4; white-space: nowrap; cursor: pointer; transition: background-color 250ms ease, box-shadow 250ms ease, color 250ms ease; }
 /* Hovered or active: see-through, just the line (metalab.com). */
@@ -2620,9 +2620,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: auto; max-width: 12ch; font-size: clamp(44px, 11vw, 80px); text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; align-self: start; }
   .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; align-self: start; }
-  .home-picks ol { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
-  .home-picks-label { text-align: left; }
-  .home-device, .home-device[data-project="gemini-privacy"] { left: var(--project-text-inset); right: auto; width: min(calc(100vw - 2 * var(--project-text-inset)), 560px); aspect-ratio: 16 / 10; top: auto; bottom: 40px; translate: 0 12px; }
+  .home-picks ol { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }  .home-device, .home-device[data-project="gemini-privacy"] { left: var(--project-text-inset); right: auto; width: min(calc(100vw - 2 * var(--project-text-inset)), 560px); aspect-ratio: 16 / 10; top: auto; bottom: 40px; translate: 0 12px; }
   .home-device[data-active] { translate: 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -3245,23 +3243,20 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
 /* Landing, key things first (class feedback: the eye fell to the bottom):
-   the statement, note and case pills sit together at the bottom right, so Work is
+   the statement, note and case pills sit together at the bottom left, so Work is
    one click from the first glance. */
 @media (min-width: 64rem) {
-  /* Statement and what to press at the bottom right, flush to the page edge; the note
-     at the bottom left, in the spot a case's sentence takes on hover, sharing the
-     pills' bottom line. */
-  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr) auto auto; padding-bottom: 48px; }
-  .home-tagline-wrap { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; justify-items: end; }
-  .home-tagline { text-align: right; }
+  /* One column at the bottom left, read down from one edge: statement, note, then
+     what to press. */
+  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto auto; padding-bottom: 48px; }
+  .home-tagline-wrap { grid-column: 1; grid-row: 2; justify-self: start; align-self: end; justify-items: start; }
+  .home-tagline { text-align: left; }
   .home-note { grid-column: 1; grid-row: 3; justify-self: start; align-self: end; width: 36ch; max-width: 100%; text-align: left; }
   .home-note:lang(ko) { width: 460px; }
-  .home-picks { position: static; translate: none; grid-column: 2; grid-row: 3; justify-self: end; align-self: end; }
-  .home-picks ol { flex-direction: row; justify-content: flex-end; align-items: flex-start; }
+  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; justify-self: start; align-self: end; margin-top: 16px; }
+  .home-picks ol { flex-direction: row; justify-content: flex-start; align-items: flex-start; }
   .home-pick { min-height: 52px; padding: 0 24px; font-size: 20px; }
-  /* The pills hold the bottom right now, so a world's sentence takes the bottom left. */
-  .home-world-problem { right: auto; left: var(--project-text-inset); }
-  /* And the Gemini card moves up to the top right, clear of them. */
+  /* The Gemini card sits at the top right, under the header's right edge. */
   .home-device[data-project="gemini-privacy"] { top: 14%; bottom: auto; right: var(--project-text-inset); width: min(26vw, 400px); }
   /* The name stops short of the card's caption. */
   .home-stage[data-world="gemini-privacy"] { --gx: 18%; }
