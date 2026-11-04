@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowIcon } from "@/components/arrow-icon";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -305,29 +304,25 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
   );
 }
 
-type Problem = { title: string; body: string; feature?: string };
+type Problem = { title: string; body: string };
 
-// Key problems as one table: the problem is what you read, one sentence explains it, and the
-// feature that answers it is the only colour. Every row stays lit; nothing depends on scroll.
-export function ProblemPanels({ items, answeredBy, children }: { items: Problem[]; answeredBy: string; children?: React.ReactNode }) {
+// Key problems as one list: the problem is what you read, one sentence explains it. Define stops
+// at the problem; the feature answering each one is told in Deliver, under that feature.
+export function ProblemPanels({ items, children }: { items: Problem[]; children?: React.ReactNode }) {
   return (
     <div className="dv-panels-wrap">
       {children}
-      <div className="dv-panels-table reveal">
-        <p className="dv-panels-col" aria-hidden="true">{answeredBy}</p>
-        <ol className="dv-panels">
-          {items.map((item, i) => (
-            <li key={item.title}>
-              <b className="dv-panel-num">{pad(i + 1)}</b>
-              <div>
-                <h4>{item.title}</h4>
-                <p>{item.body}</p>
-              </div>
-              {item.feature && <p className="dv-panel-answer"><span className="sr-only">{answeredBy}: </span><ArrowIcon size={18} />{item.feature}</p>}
-            </li>
-          ))}
-        </ol>
-      </div>
+      <ol className="dv-panels reveal">
+        {items.map((item, i) => (
+          <li key={item.title}>
+            <b className="dv-panel-num">{pad(i + 1)}</b>
+            <div>
+              <h4>{item.title}</h4>
+              <p>{item.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
