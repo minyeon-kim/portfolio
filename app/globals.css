@@ -249,7 +249,7 @@ details[open]::details-content {
  * flashes first. If JS fails, it shows anyway after 2s. Never hidden without
  * JS or with reduced motion.
  */
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
   .js [data-scramble] {
     visibility: hidden;
     animation: scramble-fallback 0s 2s forwards;
@@ -4838,8 +4838,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-aff-tabs, .dv-aff-spot { display: none; }
   .dv-aff-reader { gap: 40px; }
   .dv-aff-panel { grid-area: auto; grid-template-columns: 1fr; gap: 16px; opacity: 1; visibility: visible; }
-  .dv-aff-panel ul { grid-template-columns: 1fr; gap: 8px; }
-  .dv-aff-panel li { min-height: 0; }
+  .dv-aff-panel ul { display: none; }
   .case-study .dv .dv-aff-panel p { font-size: var(--t-item); }
 }
 
@@ -4935,3 +4934,57 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-fc-list li[data-handoff] { font-weight: 600; }
 .dv-fc-list .dv-fc-listnote { margin: 12px 0 0; }
 .dv-fc-list .dv-fc-listnote + .dv-fc-listnote { margin-top: 4px; }
+
+/* Review pass. Text never depends on scroll position: a reader who stops sees it all. Blocks arrive
+   once through the reveal units; only bars, the section titles (done once fully on screen) and the
+   stage openings stay tied to scroll. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-funnel li, .dv-found tbody th, .dv-found td, .dv-evbox .dv-insight-voices li, .dv-flow p, .dv-asks li,
+    .dv-board img, .dv-aff-frame, .dv-meet-photo, .dv .dv-figure, .dv-section-head::after { animation: none; }
+    :is(.dv-headline, .dv-core-text) { -webkit-text-fill-color: currentColor; background: none; animation: none; }
+    .dv-section-title { animation-range: entry 0% entry 100%; }
+    .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation: dv-sheet-text linear both; animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
+  }
+}
+
+/* Stage nav steps aside while scrolling down; keyboard focus keeps it. */
+.dv-nav[data-away="true"]:not(:focus-within) { opacity: 0; translate: -50% 12px; pointer-events: none; }
+
+/* What isn't current stays readable (AA): it drops to the muted colour, never to low opacity. */
+.dv-reel-points li { color: var(--dv-muted); }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-reel-text { opacity: 1; }
+  .dv-reel-line { transition: color 400ms var(--ease); }
+  .dv-reel:not([data-on]) .dv-reel-line { color: var(--dv-muted); }
+}
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .dv-panels > li > * { opacity: 1; }
+  .dv-panels > li :is(h4, b) { transition: color 400ms var(--ease); }
+  .case-study .dv .dv-panels > li:not([data-on], :hover) h4 { color: var(--dv-muted); }
+  .dv-panels > li:not([data-on], :hover) :is(.dv-panel-num, .dv-panel-answer b) { color: var(--dv-muted); }
+}
+
+/* The product carries the page: process boards step back in the dark theme, the tool table's
+   conclusion is a tint, and the Takeaway photo is an aside. */
+.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: color-mix(in srgb, var(--case-accent) 24%, transparent); background: color-mix(in srgb, var(--case-accent) 14%, transparent); color: var(--dv-ink); }
+.dv-tool-gaps thead th:last-child { color: var(--case-accent); }
+.case-study .dv #takeaway .dv-figure { max-width: 640px; }
+:root[data-theme="dark"] :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); } }
+
+/* Fewer empty screens between stages. */
+.case-study .dv { --sp-stage: 160px; }
+@media (max-width: 47.99rem) { .case-study .dv { --sp-stage: 96px; } }
+
+/* Phones: the IA as its nodes only; pills stay readable over the dust. */
+@media (max-width: 47.99rem) { .dv-ia-items ul { display: none; } }
+@media (max-width: 63.99rem) { .home-pick { background: color-mix(in srgb, var(--bg) 84%, var(--ink)); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* About's closing deck reads at the size of the work it shows. */
+.case-study[data-project="about"] .more-work-deck { --deck-card: clamp(220px, 20vw, 300px); height: calc(var(--deck-card) * 1.25 + 24px); }
+
+/* AA in the light theme: small labels on the bands and the developer's name. */
+.case-study .dv .dv-caps { color: light-dark(#4f5754, var(--dv-muted)); }
+.case-study .dv .dv-cast article[data-line="developer"] h4 { color: light-dark(#a64a14, var(--dv-role)); }
+

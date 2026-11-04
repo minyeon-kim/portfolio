@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // The landing backdrop, after byotone.com: a few tens of thousands of still,
 // matte, off-white grains drifting slowly in a soft flow, gathered loosely
@@ -527,7 +527,30 @@ export function HeroObject({ variant = "default", active = true, portrait, class
   const buildPortrait = useRef<((next: Portrait) => void) | null>(null);
   useEffect(() => { if (portrait) buildPortrait.current?.(portrait); }, [portrait]);
 
+  // Compiling the shaders blocks the page, so it waits until the page is idle; phones also
+  // wait for the load to finish and a moment more, since it costs them about half a second.
+  const [started, setStarted] = useState(false);
   useEffect(() => {
+    const phone = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768;
+    let timer = 0, idle = 0;
+    const go = () => { setStarted(true); };
+    const schedule = () => {
+      if (phone) { timer = window.setTimeout(go, 1200); return; }
+      // Safari has no requestIdleCallback, whatever the types say.
+      if (typeof window.requestIdleCallback === "function") idle = window.requestIdleCallback(go, { timeout: 600 });
+      else timer = setTimeout(go, 100) as unknown as number;
+    };
+    if (!phone || document.readyState === "complete") schedule();
+    else window.addEventListener("load", schedule, { once: true });
+    return () => {
+      window.clearTimeout(timer);
+      if (idle) window.cancelIdleCallback(idle);
+      window.removeEventListener("load", schedule);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
     const el = canvas.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -860,7 +883,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.deleteTexture(scene.texture); gl.deleteFramebuffer(scene.framebuffer);
       gl.deleteBuffer(quad);
     };
-  }, []);
+  }, [started]);
 
   return <canvas ref={canvas} className={className} aria-hidden="true" />;
 }

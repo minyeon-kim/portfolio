@@ -6,17 +6,23 @@ type Item = { id: string; label: string };
 
 // Stage nav for the Devsign case, a floating pill at the bottom of the screen so
 // it never stacks with the header. It shows only while the case body is on
-// screen. The last section whose top has passed the upper third of the screen is
-// current; links jump to their section with native smooth scroll.
+// screen, and steps aside while scrolling down so it never sits on what's being
+// read; any scroll up brings it back. The last section whose top has passed the
+// upper third of the screen is current; links jump to their section with native
+// smooth scroll.
 export function DevsignNav({ items }: { items: Item[] }) {
   const [current, setCurrent] = useState(items[0]?.id);
   const [shown, setShown] = useState(false);
+  const [away, setAway] = useState(true);
   const list = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     let raf = 0;
+    let lastY = window.scrollY;
     const update = () => {
       raf = 0;
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) > 4) { setAway(y > lastY); lastY = y; }
       const line = window.innerHeight * 0.3;
       let next = items[0]?.id;
       for (const { id } of items) {
@@ -48,7 +54,7 @@ export function DevsignNav({ items }: { items: Item[] }) {
   }, [current]);
 
   return (
-    <nav className="dv-nav" data-shown={shown} aria-label="Case study sections">
+    <nav className="dv-nav" data-shown={shown} data-away={away} aria-label="Case study sections">
       <ol ref={list} className="dv-nav-links">
         {items.map(({ id, label }) => (
           <li key={id}>

@@ -35,7 +35,8 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
       if (!el) return;
 
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Phones get the text at first paint: no typing, and no cursor to follow.
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 48rem)", () => {
         let chars: HTMLElement[] = [];
         let held = new Set<HTMLElement>();
         let frame = 0;
