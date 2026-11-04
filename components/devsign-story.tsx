@@ -412,26 +412,26 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
 
 type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
 
-// Key problems as four fixed cards, everything readable at once. On desktop the heading and
-// cards stay on screen (CSS sticky) and native scroll lights each card in turn; only brightness
-// moves, so nothing shifts while reading. Without the pin every card stays lit.
+// Key problems as a vertical list beside a sticky heading (CSS). The page never stops: the row
+// nearest the middle of the screen is lit, so the eye moves the way the scroll does. The dimming
+// is desktop with motion only (CSS); elsewhere every row stays lit.
 export function ProblemPanels({ items, answeredBy, children }: { items: Problem[]; answeredBy: string; children?: React.ReactNode }) {
   const [lit, setLit] = useState(0);
-  const root = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLOListElement>(null);
   useEffect(() => {
-    const el = root.current;
+    const el = list.current;
     if (!el) return;
     let frame = 0;
     const read = () => {
       frame = 0;
-      const box = el.getBoundingClientRect();
-      const stage = (el.firstElementChild as HTMLElement).offsetHeight;
-      const top = Math.max(80, (window.innerHeight - stage) / 2);
-      const travel = box.height - stage;
-      el.style.setProperty("--stage-top", `${top}px`);
-      if (travel <= 1) return;
-      const progress = Math.min(1, Math.max(0, (top - box.top) / travel));
-      setLit(Math.min(items.length - 1, Math.floor(progress * items.length)));
+      const middle = window.innerHeight / 2;
+      let nearest = 0, best = Infinity;
+      Array.from(el.children).forEach((row, i) => {
+        const box = row.getBoundingClientRect();
+        const distance = Math.abs(box.top + box.height / 2 - middle);
+        if (distance < best) { best = distance; nearest = i; }
+      });
+      setLit(nearest);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -442,22 +442,22 @@ export function ProblemPanels({ items, answeredBy, children }: { items: Problem[
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [items.length]);
+  }, []);
   return (
-    <div ref={root} className="dv-panels-track" style={{ "--n": items.length } as React.CSSProperties}>
-      <div className="dv-panels-stage">
-        {children}
-        <ol className="dv-panels dv-gap-40 reveal">
-          {items.map((item, i) => (
-            <li key={item.title} data-tone={item.tone} data-on={i === lit || undefined}>
-              <b className="dv-panel-num">{pad(i + 1)}</b>
+    <div className="dv-panels-wrap">
+      <div className="dv-panels-head">{children}</div>
+      <ol ref={list} className="dv-panels reveal">
+        {items.map((item, i) => (
+          <li key={item.title} data-tone={item.tone} data-on={i === lit || undefined}>
+            <b className="dv-panel-num">{pad(i + 1)}</b>
+            <div>
               <h4>{item.title}</h4>
               <p>{item.body}</p>
               {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
-            </li>
-          ))}
-        </ol>
-      </div>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
