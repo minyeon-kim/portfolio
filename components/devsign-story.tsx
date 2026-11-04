@@ -28,11 +28,29 @@ export function OpenFrame({ children, href }: { children: React.ReactNode; href:
 // its column, and what it says appears under the board as readable text.
 type BoardTheme = { tab: string; name: string; color: string; insight: string; notes: [string, string][] };
 const THEME_EDGE = 0.8; // % of the board left and right of the seven columns
-export function AffinityBoard({ board, themes, label, first = 2 }: { board: { src: string; width: number; height: number; alt: string }; themes: BoardTheme[]; label: string; first?: number }) {
+// Plays through the themes by itself while it is on screen (the bar on the current tab is the
+// timer: its animationend picks the next). Hover or keyboard focus holds it, the button stops it,
+// and pointing at a tab or a column still picks that theme. Reduced motion never plays.
+export function AffinityBoard({ board, themes, label, autoLabels, first = 0 }: { board: { src: string; width: number; height: number; alt: string }; themes: BoardTheme[]; label: string; autoLabels: [string, string]; first?: number }) {
   const [current, setCurrent] = useState(first);
+  const [auto, setAuto] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [focus, setFocus] = useState(false);
+  const [stopped, setStopped] = useState(false);
+  const map = useRef<HTMLDivElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  useEffect(() => {
+    const element = map.current;
+    if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setAuto(true);
+    const observer = new IntersectionObserver(([entry]) => setSeen(entry.isIntersecting), { threshold: 0.4 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const width = (100 - THEME_EDGE * 2) / themes.length;
   const at = (event: React.PointerEvent<HTMLDivElement>) => {
+    if ((event.target as Element).closest(".dv-aff-stop")) return;
     const box = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - box.left) / box.width) * 100;
     setCurrent(Math.max(0, Math.min(themes.length - 1, Math.floor((x - THEME_EDGE) / width))));
@@ -46,8 +64,23 @@ export function AffinityBoard({ board, themes, label, first = 2 }: { board: { sr
     tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-aff-map">
-      <div className="dv-aff-tabs" role="tablist" aria-label={label} onKeyDown={onKey}>
+    <div
+      ref={map}
+      className="dv-aff-map"
+      onPointerEnter={(event) => { if (event.pointerType === "mouse") setHover(true); }}
+      onPointerLeave={() => setHover(false)}
+      onFocus={(event) => { if (event.target.matches(":focus-visible")) setFocus(true); }}
+      onBlur={() => setFocus(false)}
+    >
+      <div
+        className="dv-aff-tabs"
+        role="tablist"
+        aria-label={label}
+        onKeyDown={onKey}
+        data-auto={(auto && !stopped) || undefined}
+        data-run={(seen && !hover && !focus) || undefined}
+        onAnimationEnd={(event) => { if (event.animationName === "dv-aff-fill") setCurrent((c) => (c + 1) % themes.length); }}
+      >
         {themes.map((theme, i) => (
           <button
             key={theme.tab}
@@ -66,6 +99,11 @@ export function AffinityBoard({ board, themes, label, first = 2 }: { board: { sr
       <div className="dv-aff-frame" onPointerMove={(event) => { if (event.pointerType === "mouse") at(event); }} onClick={at}>
         <Image src={withBase(board.src)} alt={board.alt} width={board.width} height={board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
         <span className="dv-aff-spot" aria-hidden="true" style={{ left: `${THEME_EDGE + current * width}%`, width: `${width}%` }} />
+        {auto && (
+          <button type="button" className="dv-aff-stop press" aria-label={stopped ? autoLabels[1] : autoLabels[0]} onClick={(event) => { event.stopPropagation(); setStopped(!stopped); }}>
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor">{stopped ? <path d="M5 3l8 5-8 5z" /> : <path d="M4 3h3v10H4zM9 3h3v10H9z" />}</svg>
+          </button>
+        )}
       </div>
       <div className="dv-aff-reader">
         {themes.map((theme, i) => (
