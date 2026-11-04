@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -45,7 +46,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const router = useRouter();
   const [hover, setHover] = useState<string | null>(null);
   const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
-  // Only the projects: About is in the header now, so it isn't a pick here.
+  // Only the projects: About is a link beside them, not a pick with a world.
   const choices: { slug: string; name: string; caption?: string }[] = projects;
   const shown = projects.find((p) => p.slug === hover) ?? null;
   const about = hover === "about";
@@ -109,7 +110,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     if (hover) switching.current = window.setTimeout(() => setHover(slug), 140);
     else setHover(slug);
   };
-  // The header's About link, from here: hovering or focusing it gathers the dust
+  // The About pill beside the projects: hovering or focusing it gathers the dust
   // into the portrait, and clicking opens the page from the photo at once
   // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
   // running; otherwise it is an ordinary link.
@@ -124,10 +125,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     const image = new Image();
     image.src = src;
     let opening = false;
-    const aboutLink = (target: EventTarget | null) => {
-      const link = (target as Element | null)?.closest?.<HTMLAnchorElement>("header a[href]");
-      return link && link.pathname.endsWith(localize("/about/", locale)) ? link : null;
-    };
+    const aboutLink = (target: EventTarget | null) => (target as Element | null)?.closest?.<HTMLAnchorElement>(".home-about") ?? null;
     const ready = () => document.querySelector<HTMLElement>(".home-object")?.dataset.live !== undefined && image.naturalWidth > 0;
     const show = (event: Event) => {
       if (!aboutLink(event.target) || !ready()) return;
@@ -207,6 +205,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
       <div className="intro-surface home-grid">
         <nav className="home-picks" aria-labelledby="home-picks-label">
           <p id="home-picks-label" className="home-picks-label">{t.projects}</p>
+          <div className="home-picks-row">
           <ol>
             {choices.map((c, i) => (
               <li key={c.slug}>
@@ -227,6 +226,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
               </li>
             ))}
           </ol>
+          <Link href={localize("/about/", locale)} className="press home-pick home-about" data-active={portrait ? "" : undefined}>{t.about}</Link>
+          </div>
         </nav>
         <div className="home-note" data-swap={next ? "" : undefined}>
           <p className="home-note-default">{t.heroParagraph}</p>

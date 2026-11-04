@@ -1,23 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { withBase } from "@/lib/site";
-import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
+import { localeOf, ui } from "@/lib/i18n";
 
-// The page links, always in view at the top (md+): there are only a few, so
-// they don't hide behind a Menu button. Phones keep the Menu (SiteMenu).
+// The header's one page link (md+), once the resume exists. The projects and About
+// are entered from the landing; phones keep the Menu (SiteMenu).
 export function SiteNav({ resumeUrl }: { resumeUrl?: string }) {
-  const pathname = usePathname() ?? "/";
-  const locale = localeOf(pathname);
-  const page = stripLocale(pathname);
-  const t = ui[locale];
-  const current = (match: boolean) => (match ? ("page" as const) : undefined);
+  const t = ui[localeOf(usePathname() ?? "/")];
+  if (!resumeUrl) return null;
   return (
     <nav aria-label={t.siteNav} className="site-nav">
       <ul>
-        <li><Link href={localize("/about/", locale)} aria-current={current(page.startsWith("/about"))}>{t.about}</Link></li>
-        {resumeUrl && <li><a href={withBase(resumeUrl)}>{t.resume}</a></li>}
+        <li><a href={withBase(resumeUrl)}>{t.resume}</a></li>
       </ul>
     </nav>
   );
