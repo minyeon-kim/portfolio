@@ -4983,21 +4983,36 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @keyframes dv-reel-grow { from { scale: 0.92; } to { scale: 1; } }
 
 /* Core features, desktop: all clips share one sticky stage on the left, and each
-   feature's text is a screen-tall row on the right. The li steps aside so stage and
-   text are items of one grid. The stage is a whole screen tall, so the clip stays
-   centred, and the list is pulled in by the empty part above and below it. */
+   feature's text holds beside it on the right. The li steps aside so stage and rows
+   are items of one grid. Each .dv-reel-row sets its height and tells the script which
+   feature is current. The text inside it is a zero-height sticky box whose
+   content overflows both ways, so it stays centred on the clip whatever its length;
+   its margins (--reel-g) keep it clear of its neighbour where two rows meet. The list
+   runs past the column by the same amount on both sides, up to 32px from the screen
+   edge and at most 160px. */
+.dv-reel-row { display: contents; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-reels { grid-template-columns: minmax(0, 1fr) clamp(300px, 30vw, 400px); grid-template-rows: repeat(var(--reels), auto); column-gap: clamp(40px, 5vw, 72px); row-gap: 0; }
+  .dv-reels {
+    --reel-out: clamp(0px, var(--dv-pad) - 32px, 160px);
+    --reel-text: clamp(300px, 30vw, 400px);
+    --reel-gap: clamp(40px, 5vw, 72px);
+    --reel-w: min(100vw - 2 * var(--dv-pad) + 2 * var(--reel-out) - var(--reel-text) - var(--reel-gap), (100svh - 216px) * 1.6 + 40px);
+    --reel-h: calc((var(--reel-w) - 40px) / 1.6 + 40px);
+    --reel-g: clamp(180px, 20svh, 220px);
+    --reel-hold: 50svh;
+    grid-template-columns: minmax(0, 1fr) var(--reel-text); grid-template-rows: repeat(var(--reels), auto); column-gap: var(--reel-gap); row-gap: 0; margin-inline: calc(-1 * var(--reel-out));
+  }
   /* !important: the part-gap rule's :is() holds an id, so its specificity can't be matched here. */
-  .case-study .dv .dv-reels { margin-block: min(0px, calc(340px - 50svh)) !important; }
-  /* The clip runs left past the column, up to 32px from the screen edge and at most 160px. */
-  .dv-reels { margin-left: calc(-1 * clamp(0px, var(--dv-pad) - 32px, 160px)); }
+  .case-study .dv .dv-reels { margin-block: min(0px, 72px + var(--reel-h) / 2 - 50svh) !important; }
   .dv-reel { display: contents; }
-  .dv-reel-text { grid-column: 2; grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: center; min-height: 90svh; }
-  .dv-reel:first-child .dv-reel-text, .dv-reel:last-child .dv-reel-text { min-height: 100svh; }
+  .dv-reel-row { display: flow-root; grid-column: 2; grid-row: var(--row); min-height: calc(2 * var(--reel-g) + var(--reel-hold)); pointer-events: none; }
+  .dv-reel:first-child .dv-reel-row, .dv-reel:last-child .dv-reel-row { min-height: calc(50svh + var(--reel-g) + var(--reel-hold)); }
+  .dv-reel-text { position: sticky; top: 50svh; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 0; margin-block: var(--reel-g); }
+  .dv-reel:first-child .dv-reel-text { margin-top: 50svh; }
+  .dv-reel:last-child .dv-reel-text { margin-bottom: 50svh; }
   .dv-reel-stage { grid-column: 1; grid-row: 1 / span var(--reels); align-self: start; position: sticky; top: 0; display: grid; align-content: center; justify-items: start; height: 100svh; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s linear 400ms; }
   .dv-reel[data-on] .dv-reel-stage { pointer-events: auto; opacity: 1; visibility: visible; transition: opacity 400ms var(--ease), visibility 0s; }
-  .dv-reel-media { width: min(100%, calc((100svh - 216px) * 1.6 + 40px)); padding: 20px; }
+  .dv-reel-media { width: var(--reel-w); padding: 20px; }
   .dv-reel-media video { border-radius: 10px; animation: none; scale: 0.96; transition: scale 400ms var(--ease); }
   .dv-reel[data-on] .dv-reel-media video { scale: 1; }
   .case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); line-height: 1.3; }

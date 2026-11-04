@@ -158,7 +158,7 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boolean; pinned: boolean; load: boolean }) {
+function FeatureReel({ reel, row, active, pinned, load }: { reel: Reel; row: number; active: boolean; pinned: boolean; load: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
   const [refused, setRefused] = useState(false);
@@ -212,16 +212,18 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
     startClip.current();
   }, [active, pinned]);
   return (
-    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined}>
-      <div className="dv-reel-text">
-        <div>
-          <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
-          <h4 className="dv-reel-line">{reel.body}</h4>
-          {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
+    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined} style={{ "--row": row } as CSSProperties}>
+      <div className="dv-reel-row">
+        <div className="dv-reel-text">
+          <div>
+            <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
+            <h4 className="dv-reel-line">{reel.body}</h4>
+            {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
+          </div>
+          <ol className="dv-reel-points">
+            {reel.points.map((text) => <li key={text}>{text}</li>)}
+          </ol>
         </div>
-        <ol className="dv-reel-points">
-          {reel.points.map((text) => <li key={text}>{text}</li>)}
-        </ol>
       </div>
       <div className="dv-reel-stage">
         <div className="dv-reel-media">
@@ -235,9 +237,9 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
 // Keep in step with the pinned rules at the end of globals.css.
 const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
 
-// On desktop the clip stays pinned on the left while each feature's text scrolls past
-// on the right, and the clip and its colour change as that text crosses the middle of
-// the screen. Native scroll only. Elsewhere each feature stacks its text and clip.
+// On desktop the clip stays pinned on the left and each feature's text holds beside it
+// on the right. The clip and its colour change where two rows meet, as one text hands
+// over to the next. Native scroll only. Elsewhere each feature stacks its text and clip.
 export function FeatureReels({ reels }: { reels: Reel[] }) {
   const root = useRef<HTMLUListElement>(null);
   const [pinned, setPinned] = useState(false);
@@ -251,16 +253,16 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   }, []);
   useEffect(() => {
     if (!pinned || !root.current) return;
-    const texts = [...root.current.querySelectorAll(".dv-reel-text")];
+    const rows = [...root.current.querySelectorAll(".dv-reel-row")];
     const middle = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) setCurrent(texts.indexOf(entry.target));
+      for (const entry of entries) if (entry.isIntersecting) setCurrent(rows.indexOf(entry.target));
     }, { rootMargin: "-50% 0px -50% 0px" });
-    texts.forEach((text) => middle.observe(text));
+    rows.forEach((row) => middle.observe(row));
     return () => middle.disconnect();
   }, [pinned]);
   return (
     <ul ref={root} className="dv-reels dv-gap-40" style={{ "--reels": reels.length } as CSSProperties}>
-      {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
+      {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} row={index + 1} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
     </ul>
   );
 }
