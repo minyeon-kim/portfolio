@@ -8,25 +8,59 @@ import { withBase } from "@/lib/site";
 // An item is [name, ...children].
 type IaColumn = { label?: string; items: string[][] };
 type IaGroup = { name: string; main?: boolean; columns: IaColumn[] };
-export type IaTreeData = { root: string; groups: IaGroup[] };
+export type IaTreeData = { root: string; groups: IaGroup[]; detailed?: string[] };
 
-// The tree. With `focus` (the case page) only the main group keeps its full depth; the
-// others show their first level, in neutral colours, so the eye goes to the main group.
-const firstLevel = (column: IaColumn): IaColumn => ({
-  ...column,
-  items: column.items.length === 1 ? column.items[0].slice(1).map((name) => [name]) : column.items.map(([name]) => [name]),
-});
-
-export function IaTree({ tree, focus = false, more, moreHref }: { tree: IaTreeData; focus?: boolean; more?: string; moreHref?: string }) {
+// The case page's form: lines only between boxes, details inside them. The main group
+// branches into its own boxes; only the items named in `detailed` show their children.
+export function IaFocusTree({ tree, more, moreHref }: { tree: IaTreeData; more?: string; moreHref?: string }) {
+  const names = (group: IaGroup) => group.columns.flatMap((column) => column.items.length === 1 ? column.items[0].slice(1) : column.items.map(([name]) => name));
   return (
-    <div className="dv-ia dv-gap-40 reveal" data-focus={focus || undefined}>
+    <div className="dv-iaf dv-gap-40 reveal">
+      <p className="dv-ia-root">{tree.root}</p>
+      <ul className="dv-iaf-groups">
+        {tree.groups.map((group) => group.main ? (
+          <li key={group.name} data-main="">
+            <h4>{group.name}</h4>
+            <div className="dv-iaf-branches">
+              {group.columns.map((column) => (
+                <div key={column.label}>
+                  <p className="dv-iaf-label">{column.label}</p>
+                  <ul>
+                    {column.items.map(([name, ...children]) => (
+                      <li key={name}>
+                        <b>{name}</b>
+                        {tree.detailed?.includes(name) && <span>{children.join(" · ")}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </li>
+        ) : (
+          <li key={group.name}>
+            <div className="dv-iaf-box">
+              <h4>{group.name}</h4>
+              <ul>{names(group).map((name) => <li key={name}>{name}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
+    </div>
+  );
+}
+
+export function IaTree({ tree }: { tree: IaTreeData }) {
+  return (
+    <div className="dv-ia dv-gap-40 reveal">
       <p className="dv-ia-root">{tree.root}</p>
       <ul className="dv-ia-groups">
         {tree.groups.map((group) => (
           <li key={group.name} className="dv-ia-group" data-main={group.main || undefined}>
             <h4>{group.name}</h4>
             <div className="dv-ia-columns">
-              {(focus && !group.main ? group.columns.map(firstLevel) : group.columns).map((column, c) => (
+              {group.columns.map((column, c) => (
                 <div key={column.label ?? c}>
                   {column.label && <p className="dv-ia-label">{column.label}</p>}
                   <ul className="dv-ia-items">
@@ -43,7 +77,6 @@ export function IaTree({ tree, focus = false, more, moreHref }: { tree: IaTreeDa
           </li>
         ))}
       </ul>
-      {more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
     </div>
   );
 }
