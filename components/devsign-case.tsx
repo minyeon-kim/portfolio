@@ -14,7 +14,6 @@ import { withBase } from "@/lib/site";
 // in the persona orange, anyone else in blue.
 const toneOf = (role: string) => (/design|디자인/i.test(role) ? "accent" : /develop|개발/i.test(role) ? "second" : "blue");
 const VOICE_TONES = ["accent", "blue", "second"];
-const PROBLEM_TONES = ["accent", "blue", "second", "teal"];
 
 const slugOf = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -415,15 +414,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-subsection">
           <ProblemPanels
             answeredBy={develop.selection?.answeredBy}
-            themesLabel={define.affinity.themesLabel}
-            items={define.problems.items.map((item: Study, index: number) => ({
+            items={define.problems.items.map((item: Study) => ({
               title: item.title,
               body: item.body,
-              role: item.role,
-              tone: PROBLEM_TONES[index % PROBLEM_TONES.length],
               feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
-              themes: item.themes,
-              quote: item.quote,
             }))}
           >
             <Block {...define.problems} ff={ff} />

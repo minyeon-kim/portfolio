@@ -4715,21 +4715,18 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* Key problems: heading held at the left, the problems as a vertical list at the right. */
-.dv-panels-wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: 64px; align-items: start; }
-.dv-panels-head { position: sticky; top: 120px; }
+.dv-panels-table { margin-top: var(--sp-part); }
+.dv-panels-col { margin: 0 0 16px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-align: left; padding-left: calc(100% - 240px); }
 .case-study .dv .dv-panels { margin: 0; padding: 0; list-style: none; }
-.dv-panels > li { display: grid; grid-template-columns: 56px minmax(0, 1fr); padding-block: 40px; border-top: 1px solid var(--dv-card-line); }
-.dv-panels > li:first-child { padding-top: 0; border-top: 0; }
-.dv-panels > li:last-child { padding-bottom: 0; }
-.dv-panel-num { color: var(--tone); font-size: 18px; font-weight: 500; line-height: 1.55; font-variant-numeric: tabular-nums; }
-.case-study .dv .dv-panels > li h4 { margin: 0; color: var(--dv-ink); font-size: var(--t-heading); line-height: 1.3; word-break: keep-all; }
-.dv-panels > li p { margin: 12px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
-.dv-panels > li .dv-panel-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 16px; font-size: 16px; font-weight: 500; }
-.dv-panel-answer b { color: var(--case-accent); font-weight: 500; }
+.dv-panels > li { display: grid; grid-template-columns: 56px minmax(0, 1fr) 240px; gap: 0 32px; align-items: baseline; padding-block: 40px; border-top: 1px solid var(--dv-card-line); }
+.dv-panel-num { color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-panels > li h4 { margin: 0; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.3; word-break: keep-all; }
+.dv-panels > li div > p { margin: 8px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
+.dv-panels > li .dv-panel-answer { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--case-accent); font-size: 20px; font-weight: 500; line-height: 1.3; }
 @media (max-width: 63.99rem) {
-  .dv-panels-wrap { grid-template-columns: minmax(0, 1fr); gap: var(--sp-part); }
-  .dv-panels-head { position: static; }
+  .dv-panels-col { display: none; }
   .dv-panels > li { grid-template-columns: 40px minmax(0, 1fr); padding-block: 32px; }
+  .dv-panels > li .dv-panel-answer { grid-column: 2; margin-top: 16px; font-size: 18px; }
 }
 
 /* Research questions as three keywords you can scan, each with its full question. No rules or scroll dimming. */
@@ -4809,11 +4806,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   }
 }
 
-/* Key problems: the row nearest the middle of the screen is lit while the page scrolls past. */
-@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  .dv-panels > li > * { opacity: 0.55; transition: opacity 400ms var(--ease); }
-  .dv-panels > li[data-on] > *, .dv-panels > li:hover > * { opacity: 1; }
-}
 
 /* Information architecture and user flow, drawn in code. */
 .dv-ia-root { width: fit-content; margin: 0 auto; padding: 8px 20px; border-radius: 999px; background: var(--dv-ink); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 600; line-height: 1.5; }
@@ -4919,12 +4911,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-reel-line { transition: color 400ms var(--ease); }
   .dv-reel:not([data-on]) .dv-reel-line { color: var(--dv-muted); }
 }
-@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  .dv-panels > li > * { opacity: 1; }
-  .dv-panels > li :is(h4, b) { transition: color 400ms var(--ease); }
-  .case-study .dv .dv-panels > li:not([data-on], :hover) h4 { color: var(--dv-muted); }
-  .dv-panels > li:not([data-on], :hover) :is(.dv-panel-num, .dv-panel-answer b) { color: var(--dv-muted); }
-}
 
 /* The product carries the page: process boards step back in the dark theme, the tool table's
    conclusion is the one solid fill, and the Takeaway photo is an aside. */
@@ -4954,14 +4940,3 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-meet-photo, .dv-meet-photo img { aspect-ratio: 2400 / 1072; }
 .dv-meet-photo img { position: static; width: 100%; height: auto; max-width: 100%; }
 
-/* Key problem rows: themes they came from, one real quote, the feature that answers them. */
-.dv-panels > li .dv-panel-quote { margin-top: 16px; padding-left: 14px; border-left: 2px solid var(--tone); color: var(--dv-ink); }
-.dv-panel-quote span { margin-left: 8px; color: var(--dv-muted); font-size: 16px; }
-.dv-panel-meta { display: flex; flex-wrap: wrap; gap: 4px clamp(16px, 2vw, 32px); margin-top: 16px; }
-.dv-panels > li .dv-panel-meta p { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; font-size: 16px; font-weight: 500; line-height: 1.5; }
-.dv-panels > li .dv-panel-meta p:not(.dv-panel-answer) { color: var(--dv-ink); }
-.dv-panels > li .dv-panel-meta p > span { color: var(--dv-muted); }
-@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  .dv-panels > li .dv-panel-quote, .dv-panels > li .dv-panel-meta p:not(.dv-panel-answer) { transition: color 400ms var(--ease); }
-  .dv-panels > li:not([data-on], :hover) .dv-panel-quote, .dv-panels > li:not([data-on], :hover) .dv-panel-meta p:not(.dv-panel-answer) { color: var(--dv-muted); }
-}
