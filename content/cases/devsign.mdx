@@ -286,14 +286,35 @@ export const study = {
       title: "Information architecture",
       lead: "We put all the work in one workspace with four tabs.",
       text: "The tabs are Preview, Screens, Code and Merge. Every decision is saved in History.",
-      image: { src: "/images/devsign/information-architecture.webp", width: 2332, height: 554, alt: "Information architecture: Dashboard, Project and Workspace, with the Preview, Screens, Code and Merge tabs and their child screens" },
+      tree: {
+        root: "Devsign Home",
+        groups: [
+          { name: "Dashboard", columns: [{ items: [["Home", "Review queue", "All projects"], ["Activity", "Recent activity", "Most active projects"], ["Team", "Members", "Teams"], ["Project home", "Conflicts", "Recent activity", "Reference docs"]] }] },
+          { name: "Workspace", main: true, columns: [
+            { label: "4 tabs", items: [["Preview", "Device preview"], ["Screens", "Screen board"], ["Code", "Code editor"], ["Merge Studio", "Design Compare", "Merge canvas", "Share"]] },
+            { label: "Beside the work", items: [["Conflict Points", "Conflict list", "Change review", "Decision steps"], ["Side panel", "Files", "Layers", "Assets", "Inspect", "Terminal · Console"], ["AI Chat"]] },
+          ] },
+          { name: "History & Docs", columns: [{ items: [["History", "Timeline", "Compare with current", "Rollback to checkpoint"], ["Docs", "Guidelines", "Component specs", "Engineering", "Process"]] }] },
+          { name: "Import", columns: [{ items: [["Import sources", "GitHub", "Figma", "ZIP", "Spreadsheet", "Code", "Design"]] }] },
+          { name: "Global", columns: [{ items: [["Notifications & Inbox"], ["Command palette"], ["Settings", "Language"]] }] },
+        ],
+      },
     },
     flow: {
       method: "Structure",
       title: "User flow",
       lead: "We mapped how three people with different jobs come together on a single change request.",
       text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
-      image: { src: "/images/devsign/user-flow.webp", width: 2282, height: 654, alt: "User flow in three swimlanes, one per role, meeting at a shared change request" },
+      chart: {
+        label: "User flow. The designer, developer and decision-maker meet on the change review screen, and every path ends in History. The steps are in the list below.",
+        meet: ["Where all", "three meet"], yes: "Yes", no: "No", sent: "Sent to developer",
+        lanes: [{ name: "Designer", job: ["merges AI drafts"] }, { name: "Developer", job: ["fixes a design–build gap"] }, { name: "Decision-maker", job: ["decides on", "the request"] }],
+        nodes: {
+          drafts: ["AI drafts of", "one screen"], compare: ["Open Design", "Compare"], merge: ["Merge Studio", "pick each area"], preview: ["Preview the", "merged screen"], rule: ["Breaks", "a rule?"], save: ["Save one result", "and share"], flag: ["Flag as a", "Conflict Point"],
+          differs: ["Build differs", "from design"], points: ["Conflict Points", "drawer"], review: ["Change review", "3 versions"], decision: ["Design", "decision?"], fix: ["Fix it directly"], request: ["Ask for approval", "fix + reason"], apply: ["Apply the", "decision"], verify: ["Verify on", "the screen"], resolved: ["Resolved"], history: ["History"],
+          inbox: ["Review request", "(Inbox)"], reviewDecider: ["Change review", "3 versions"], approve: ["Approve", "or keep?"], decide: ["Decide, and", "when to apply"],
+        },
+      },
     },
     system: {
       method: "Structure",
