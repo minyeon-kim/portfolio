@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { withBase } from "@/lib/site";
 
@@ -8,32 +9,31 @@ import { withBase } from "@/lib/site";
 // An item is [name, ...children].
 type IaColumn = { label?: string; items: string[][] };
 type IaGroup = { name: string; main?: boolean; columns: IaColumn[] };
-export type IaTreeData = { root: string; groups: IaGroup[]; detailed?: string[] };
+export type IaTreeData = { root: string; groups: IaGroup[] };
 
-// The case page's form: only the main group, where the structure was decided, branching
-// into its boxes, then the place its decisions end up. Only the items named in `detailed`
-// show their children. The whole tree is on the spec page.
+// The case page's form: only the main group, as a tree with its levels showing, then the
+// place its decisions end up. The whole product is on the spec page.
 export function IaFocusTree({ tree, keeps, more, moreHref }: { tree: IaTreeData; keeps?: { name: string; text: string }; more?: string; moreHref?: string }) {
   const main = tree.groups.find((group) => group.main);
   if (!main) return null;
   return (
     <div className="dv-iaf dv-gap-40 reveal">
       <h4>{main.name}</h4>
-      <div className="dv-iaf-branches">
+      <ul className="dv-iaf-tree">
         {main.columns.map((column) => (
-          <div key={column.label}>
+          <li key={column.label} style={{ "--n": column.items.length } as CSSProperties}>
             <p className="dv-iaf-label">{column.label}</p>
-            <ul>
+            <ul className="dv-iaf-items">
               {column.items.map(([name, ...children]) => (
                 <li key={name}>
                   <b>{name}</b>
-                  {tree.detailed?.includes(name) && <span>{children.join(" · ")}</span>}
+                  {children.length > 0 && <ul className="dv-iaf-leaves">{children.map((child) => <li key={child}>{child}</li>)}</ul>}
                 </li>
               ))}
             </ul>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
       {keeps && <p className="dv-iaf-keeps"><b>{keeps.name}</b>{keeps.text}</p>}
       {more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
     </div>

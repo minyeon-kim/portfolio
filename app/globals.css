@@ -5062,30 +5062,39 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* The case page's tree: lines only between boxes, details inside them. */
-.dv-iaf { --iaf-card: light-dark(#ffffff, var(--dv-band-card-dark)); --iaf-line: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
+.dv-iaf { --iaf-card: light-dark(#ffffff, var(--dv-band-card-dark)); --iaf-line: color-mix(in srgb, var(--dv-ink) 40%, transparent); --iaf-step: 20px; --iaf-gap: 12px; }
 .dv-iaf ul { margin: 0; padding: 0; list-style: none; }
-.dv-iaf-branches > div > ul > li { border-radius: 12px; background: var(--iaf-card); }
 .case-study .dv .dv-iaf > h4 { width: fit-content; margin: 0 auto; padding: 12px 32px; border-radius: 12px; background: var(--dv-accent-fill, var(--case-accent)); color: #ffffff; font-size: 18px; font-weight: 500; line-height: 1.35; }
-.dv-iaf-branches { position: relative; display: grid; grid-template-columns: 1fr 1.5fr; gap: 16px; margin-top: 24px; }
-.dv-iaf-branches::before { content: ""; position: absolute; top: -24px; left: 50%; width: 1px; height: 12px; background: var(--iaf-line); }
-.dv-iaf-branches > div { position: relative; }
-.dv-iaf-branches > div::before { content: ""; position: absolute; top: -12px; left: 50%; width: 1px; height: 12px; background: var(--iaf-line); }
-.dv-iaf-branches > div::after { content: ""; position: absolute; top: -12px; left: -8px; right: -8px; height: 1px; background: var(--iaf-line); }
-.dv-iaf-branches > div:first-child::after { left: 50%; }
-.dv-iaf-branches > div:last-child::after { right: 50%; }
-.case-study .dv .dv-iaf-label { margin: 0 0 8px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.5; text-align: center; }
-.dv-iaf-branches > div > ul { display: grid; gap: 8px; }
-.dv-iaf-branches > div > ul > li { padding: 10px 14px; font-size: 16px; line-height: 1.4; }
-.dv-iaf-branches b { display: block; color: var(--dv-ink); font-weight: 500; }
-.dv-iaf-branches span { display: block; margin-top: 2px; color: var(--dv-muted); word-break: keep-all; }
-.case-study .dv .dv-iaf-keeps { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; margin: 24px 0 0; padding: 14px; border-radius: 12px; background: var(--iaf-card); color: var(--dv-muted); font-size: 16px; line-height: 1.45; word-break: keep-all; }
+.case-study .dv .dv-iaf-label { margin: 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--case-accent) 22%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; text-align: center; word-break: keep-all; }
+.dv-iaf-items > li > b { display: block; padding: 10px 8px; border-radius: 12px; background: var(--iaf-card); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; text-align: center; word-break: keep-all; }
+.dv-iaf-leaves > li { position: relative; padding: 6px 0 0 20px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; word-break: keep-all; }
+.dv-iaf-leaves > li::before { content: ""; position: absolute; top: 0; bottom: 0; left: 8px; width: 1px; background: var(--iaf-line); }
+.dv-iaf-leaves > li:last-child::before { bottom: auto; height: 17px; }
+.dv-iaf-leaves > li::after { content: ""; position: absolute; top: 17px; left: 8px; width: 8px; height: 1px; background: var(--iaf-line); }
+.case-study .dv .dv-iaf-keeps { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; margin: 40px 0 0; padding: 14px; border-radius: 12px; background: var(--iaf-card); color: var(--dv-muted); font-size: 16px; line-height: 1.45; word-break: keep-all; }
 .dv-iaf-keeps b { color: var(--dv-ink); font-weight: 500; }
-@media (max-width: 71.99rem) {
-  .dv-iaf-branches::before, .dv-iaf-branches > div::before, .dv-iaf-branches > div::after { display: none; }
-  .case-study .dv .dv-iaf > h4 { margin-left: 0; }
-  .dv-iaf-branches { margin-top: 16px; }
-  .case-study .dv .dv-iaf-label { text-align: left; }
+/* From 72rem the tree runs top down, wider than the column: one line from each box to the boxes under it. */
+@media (min-width: 72rem) {
+  .dv-iaf { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); }
+  .dv-iaf .dv-iaf-tree { position: relative; display: flex; gap: var(--iaf-gap); margin-top: calc(var(--iaf-step) * 2); }
+  .dv-iaf-tree::before { content: ""; position: absolute; top: calc(var(--iaf-step) * -2); left: 50%; width: 1px; height: var(--iaf-step); background: var(--iaf-line); }
+  .dv-iaf-tree > li { position: relative; flex: var(--n) var(--n) 0; min-width: 0; }
+  .dv-iaf .dv-iaf-items { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--iaf-gap); margin-top: calc(var(--iaf-step) * 2); }
+  .dv-iaf-items::before { content: ""; position: absolute; top: calc(var(--iaf-step) * -2); left: 50%; width: 1px; height: var(--iaf-step); background: var(--iaf-line); }
+  .dv-iaf-items > li { position: relative; }
+  .dv-iaf-tree > li::before, .dv-iaf-items > li::before { content: ""; position: absolute; top: calc(var(--iaf-step) * -1); left: 50%; width: 1px; height: var(--iaf-step); background: var(--iaf-line); }
+  .dv-iaf-tree > li::after, .dv-iaf-items > li::after { content: ""; position: absolute; top: calc(var(--iaf-step) * -1); left: calc(var(--iaf-gap) / -2); right: calc(var(--iaf-gap) / -2); height: 1px; background: var(--iaf-line); }
+  .dv-iaf-tree > li:first-child::after, .dv-iaf-items > li:first-child::after { left: 50%; }
+  .dv-iaf-tree > li:last-child::after, .dv-iaf-items > li:last-child::after { right: 50%; }
 }
-@media (max-width: 47.99rem) { .dv-iaf-branches { grid-template-columns: 1fr; } }
+/* Below it the same levels read as an indented outline. */
+@media (max-width: 71.99rem) {
+  .case-study .dv .dv-iaf > h4 { margin-left: 0; }
+  .dv-iaf .dv-iaf-tree { margin: 12px 0 0 12px; padding-left: 16px; border-left: 1px solid var(--iaf-line); }
+  .dv-iaf-tree > li + li { margin-top: 24px; }
+  .case-study .dv .dv-iaf-label { width: fit-content; text-align: left; }
+  .dv-iaf .dv-iaf-items { display: grid; gap: 8px; margin: 12px 0 0 12px; padding-left: 16px; border-left: 1px solid var(--iaf-line); }
+  .dv-iaf-items > li > b { width: fit-content; padding: 8px 14px; text-align: left; }
+}
 #ia { scroll-margin-top: 96px; }
 .case-study .dv-spec-page .dv-ia, .dv-spec-page .dv .dv-ia { max-width: none; }
