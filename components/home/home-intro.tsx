@@ -205,7 +205,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         ))}
       </div>
       <div className="intro-surface home-grid">
-        <nav className="home-picks" aria-label={t.projects}>
+        <nav className="home-picks" aria-labelledby="home-picks-label">
+          <p id="home-picks-label" className="home-picks-label">{t.projects}</p>
           <ol>
             {choices.map((c, i) => (
               <li key={c.slug}>
