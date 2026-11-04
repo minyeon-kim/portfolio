@@ -3249,23 +3249,26 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-show-zoom[data-zoomed] .dv-story-area:not([data-on]) { opacity: 0; }
 .dv-show-zoom .dv-story-area { transition: opacity 250ms var(--ease), border-color 250ms var(--ease), background-color 250ms var(--ease); }
 
-/* Landing, text and dust each get their own part of the stage: the statement and
-   note at the top left, the dot landscape across the lower half (HeroObject's
-   `ground`), and the case pills at the bottom left, on the waves. */
+/* Landing after metalab.com's home, in the same proportions: the case pills in one
+   column at the left edge, centred on the screen; the statement low and centred with
+   its second line stepped in; the note high on the right, in the sky above the waves. */
 @media (min-width: 64rem) {
-  .intro-surface.home-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; padding-bottom: 48px; }
-  .home-tagline-wrap { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; justify-items: start; }
-  .home-tagline { text-align: left; }
-  .home-note { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; width: 36ch; max-width: 100%; text-align: left; }
-  .home-note:lang(ko) { width: 460px; }
-  .home-picks { position: static; translate: none; grid-column: 1; grid-row: 4; justify-self: start; align-self: end; margin-top: 16px; }
-  .home-picks ol { flex-direction: row; justify-content: flex-start; align-items: flex-start; }
-  .home-pick { min-height: 52px; padding: 0 24px; font-size: 20px; }
+  .intro-surface.home-grid { display: block; }
+  .home-tagline-wrap { position: absolute; left: 34%; bottom: 24%; justify-items: start; }
+  .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(44px, min(4.7vw, 9svh), 96px); line-height: 1.02; text-align: left; text-wrap: wrap; }
+  /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
+  .home-tagline * { text-indent: 0; }
+  .home-note { position: absolute; left: 59.5%; top: 25%; width: 30ch; text-align: left; }
+  .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
+  .home-picks-label { margin-bottom: 8px; }
+  .home-picks-row { flex-direction: column; gap: 16px; }
+  .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
   /* The Gemini card sits at the top right, under the header's right edge. */
   .home-device[data-project="gemini-privacy"] { top: 14%; bottom: auto; right: var(--project-text-inset); width: min(26vw, 400px); }
   /* The name stops short of the card's caption. */
-  .home-stage[data-world="gemini-privacy"] { --gx: 18%; }
-  .home-stage[data-world="gemini-privacy"] .home-world-name { max-width: calc(100vw - var(--project-text-inset) - min(26vw, 400px) - 190px - 18vw - 32px); }
+  .home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 240px)); }
+  .home-stage[data-world="gemini-privacy"] .home-world-name { max-width: calc(100vw - var(--project-text-inset) - min(26vw, 400px) - 190px - var(--gx) - 32px); }
   .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 48%; width: min(26ch, calc(52% - var(--project-text-inset) - min(26vw, 400px) - 32px)); }
   .home-device-caption[data-project="gemini-privacy"] { top: calc(14% + min(26vw, 400px) * 1.25 - 96px); right: calc(var(--project-text-inset) + min(26vw, 400px) - 110px); bottom: auto; }
 }
