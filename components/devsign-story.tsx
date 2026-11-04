@@ -367,11 +367,13 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][] };
-type SpecData = { shared: string; open: string; screens: SpecScreen[]; only?: string; more?: string; moreHref?: string };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; only?: string; rules?: { pin: number; name: string; text: string }[]; more?: string; moreHref?: string };
 
 // The handoff spec: one key screen at a time, numbered pins on the real screen and the same
 // numbers in the list beside it. Pointing at either lights the other. Phones list all four.
+// With `one`, the case page's short form: one screen and only its key rules.
 export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boolean }) {
+  const rules = one ? spec.rules : undefined;
   const screens = one ? spec.screens.filter((screen) => screen.id === spec.only) : spec.screens;
   const [current, setCurrent] = useState(0);
   const [lit, setLit] = useState<number | null>(null);
@@ -386,7 +388,7 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
     tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-spec dv-gap-40 reveal">
+    <div className="dv-spec dv-gap-40 reveal" data-short={rules ? "" : undefined}>
       {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
         {screens.map((screen, i) => (
           <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
@@ -397,12 +399,12 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
         <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role={screens.length > 1 ? "tabpanel" : undefined} aria-labelledby={screens.length > 1 ? `spec-tab-${screen.id}` : undefined} data-on={i === current || undefined}>
           <div className="dv-spec-shot">
             <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 60vw, 100vw" />
-            {screen.pins.map(([x, y], n) => (
+            {(rules ? rules.map((rule) => screen.pins[rule.pin]) : screen.pins).map(([x, y], n) => (
               <span key={n} className="dv-spec-pin" data-lit={lit === n || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>{n + 1}</span>
             ))}
           </div>
           <ol className="dv-spec-rows">
-            {screen.rows.map(([name, does, state], n) => (
+            {(rules ? rules.map((rule): [string, string, string] => [rule.name, rule.text, "-"]) : screen.rows).map(([name, does, state], n) => (
               <li key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
                 <b aria-hidden="true">{n + 1}</b>
                 <div>
@@ -416,7 +418,7 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
         </div>
       ))}
       </div>
-      <p className="dv-spec-note">{spec.shared}</p>
+      {!rules && <p className="dv-spec-note">{spec.shared}</p>}
       <p className="dv-spec-note">{spec.open}</p>
       {one && spec.more && spec.moreHref && <p className="dv-spec-more"><Link className="link" href={spec.moreHref}>{spec.more} →</Link></p>}
     </div>

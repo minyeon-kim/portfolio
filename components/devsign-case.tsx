@@ -628,7 +628,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
           </div>
         )}
-        {deliver.handoff && (
+        {deliver.handoff && !deliver.spec && (
           <div className="dv-gap-96">
             <Block {...deliver.handoff} ff={ff} />
             <Wireflow nodes={deliver.handoff.nodes} label={deliver.handoff.lead} />
