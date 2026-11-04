@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -350,58 +351,29 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
   );
 }
 
-type Problem = { title: string; body: string; role: string; tone: string; feature?: string; themes?: string[]; quote?: [string, string] };
+type Problem = { title: string; body: string; feature?: string };
 
-// Key problems as a vertical list beside a sticky heading (CSS). The page never stops: the row
-// nearest the middle of the screen is lit, so the eye moves the way the scroll does. The dimming
-// is desktop with motion only (CSS); elsewhere every row stays lit.
-export function ProblemPanels({ items, answeredBy, themesLabel, children }: { items: Problem[]; answeredBy: string; themesLabel?: string; children?: React.ReactNode }) {
-  const [lit, setLit] = useState(0);
-  const list = useRef<HTMLOListElement>(null);
-  useEffect(() => {
-    const el = list.current;
-    if (!el) return;
-    let frame = 0;
-    const read = () => {
-      frame = 0;
-      const middle = window.innerHeight / 2;
-      let nearest = 0, best = Infinity;
-      Array.from(el.children).forEach((row, i) => {
-        const box = row.getBoundingClientRect();
-        const distance = Math.abs(box.top + box.height / 2 - middle);
-        if (distance < best) { best = distance; nearest = i; }
-      });
-      setLit(nearest);
-    };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
-    read();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
+// Key problems as one table: the problem is what you read, one sentence explains it, and the
+// feature that answers it is the only colour. Every row stays lit; nothing depends on scroll.
+export function ProblemPanels({ items, answeredBy, children }: { items: Problem[]; answeredBy: string; children?: React.ReactNode }) {
   return (
     <div className="dv-panels-wrap">
-      <div className="dv-panels-head">{children}</div>
-      <ol ref={list} className="dv-panels reveal">
-        {items.map((item, i) => (
-          <li key={item.title} data-tone={item.tone} data-on={i === lit || undefined}>
-            <b className="dv-panel-num">{pad(i + 1)}</b>
-            <div>
-              <h4>{item.title}</h4>
-              <p>{item.body}</p>
-              {item.quote && <p className="dv-panel-quote">“{item.quote[0]}”<span>{item.quote[1]}</span></p>}
-              <div className="dv-panel-meta">
-                {item.themes && <p><span>{themesLabel}</span>{item.themes.join(" · ")}</p>}
-                {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+      {children}
+      <div className="dv-panels-table reveal">
+        <p className="dv-panels-col" aria-hidden="true">{answeredBy}</p>
+        <ol className="dv-panels">
+          {items.map((item, i) => (
+            <li key={item.title}>
+              <b className="dv-panel-num">{pad(i + 1)}</b>
+              <div>
+                <h4>{item.title}</h4>
+                <p>{item.body}</p>
               </div>
-            </div>
-          </li>
-        ))}
-      </ol>
+              {item.feature && <p className="dv-panel-answer"><span className="sr-only">{answeredBy}: </span><ArrowIcon size={18} />{item.feature}</p>}
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }
