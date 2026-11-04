@@ -4206,7 +4206,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-meet ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
 }
 
-@media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
 
 /* Core features: the problem answered is its own block under a hairline, not another list line. */
 .dv-reel-solves { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--dv-card-line); }
@@ -4711,29 +4710,19 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   }
 }
 
-/* Key problems: a horizontal accordion, one panel open. Stacked and all open below 64rem. */
-.dv-panels { display: flex; gap: 12px; height: 320px; margin-inline: 0; padding: 0; list-style: none; container-type: inline-size; }
-.dv-panels > li { position: relative; display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 70%); transition: flex-grow 450ms var(--ease), border-color 250ms var(--ease); }
-.dv-panels > li[data-on] { flex-grow: 2.6; border-color: color-mix(in srgb, var(--tone) 55%, transparent); }
-.dv-panels button { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 0; padding: 24px 24px 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
-.dv-panels button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: -4px; border-radius: var(--dv-card-radius); }
-.dv-panel-who { display: flex; flex-wrap: wrap; gap: 2px 10px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
-.dv-panel-who b { color: var(--tone); font-weight: 500; font-variant-numeric: tabular-nums; }
-.case-study .dv .dv-panels h4 { color: var(--dv-ink); font-size: clamp(20px, 1.9vw, 28px); font-weight: 500; line-height: 1.25; word-break: keep-all; text-wrap: balance; }
-.dv-panel-more { display: grid; grid-template-rows: 0fr; padding: 0 24px 24px; opacity: 0; transition: grid-template-rows 450ms var(--ease), opacity 250ms var(--ease); }
-.dv-panels > li[data-on] .dv-panel-more { grid-template-rows: 1fr; opacity: 1; transition-delay: 0ms, 150ms; }
-.dv-panel-more > div { width: calc(46cqw - 60px); min-height: 0; overflow: hidden; }
-.dv-panel-more p { margin: 12px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
-.dv-panel-more .dv-panel-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 16px; font-size: 16px; font-weight: 500; }
+/* Key problems: four fixed cards, rows aligned through subgrid. Two columns on narrow desktops, stacked on phones. */
+.dv-panels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-inline: 0; padding: 0; list-style: none; }
+.dv-panels > li { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; min-width: 0; padding: 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), light-dark(#f6f6f8, #1a1826)) 0%, light-dark(#f6f6f8, #1a1826) 70%); }
+.dv-panel-num { color: var(--tone); font-size: 16px; font-weight: 500; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-panels h4 { margin: 40px 0 0; color: var(--dv-ink); word-break: keep-all; text-wrap: balance; }
+.dv-panels > li > p { margin: 12px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
+.dv-panels > li > .dv-panel-answer { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 24px; font-size: 16px; font-weight: 500; }
 .dv-panel-answer b { color: var(--case-accent); font-weight: 500; }
-@media (max-width: 63.99rem) {
-  .dv-panels { flex-direction: column; height: auto; }
-  .dv-panels > li { flex: none; }
-  .dv-panels button { cursor: default; gap: 12px; }
-  .dv-panel-more { grid-template-rows: 1fr; opacity: 1; }
-  .dv-panel-more > div { width: auto; }
+@media (max-width: 74.99rem) {
+  .dv-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .case-study .dv .dv-panels h4 { margin-top: 16px; }
 }
-@media (prefers-reduced-motion: reduce) { .dv-panels > li, .dv-panel-more { transition: none; } }
+@media (max-width: 47.99rem) { .dv-panels { grid-template-columns: minmax(0, 1fr); } }
 
 /* Research questions as three keywords you can scan, each with its full question. No rules or scroll dimming. */
 .case-study .dv .dv-keyq .dv-caps { margin: 0 0 24px; }
@@ -4812,11 +4801,15 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   }
 }
 
-/* Key problems, pinned: heading and panels stay while scrolling opens each panel in turn.
-   The travel is a block after the stage, since sticky can't move into padding. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+/* Key problems, pinned: heading and cards stay while scrolling lights each card in turn.
+   The travel is a block after the stage, since sticky can't move into padding. Two rows of
+   cards (below 75rem) need a taller screen to fit. */
+@media (min-width: 75rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference), (min-width: 64rem) and (min-height: 800px) and (prefers-reduced-motion: no-preference) {
   .dv-panels-track::after { content: ""; display: block; height: calc((var(--n) - 1) * 60svh); }
   .dv-panels-stage { position: sticky; top: var(--stage-top, 80px); }
+  .dv-panels > li { opacity: 0.6; transition: opacity 400ms var(--ease), border-color 400ms var(--ease); }
+  .dv-panels > li[data-on] { border-color: color-mix(in srgb, var(--tone) 55%, transparent); }
+  .dv-panels > li[data-on], .dv-panels > li:hover { opacity: 1; }
 }
 
 /* Affinity board as a map: pick a theme, its column lights, its words appear below. Nothing scales. */
