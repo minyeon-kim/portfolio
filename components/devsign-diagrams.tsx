@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { withBase } from "@/lib/site";
 
 // The information architecture and the user flow, drawn in code so their text is real
@@ -8,6 +9,36 @@ import { withBase } from "@/lib/site";
 type IaColumn = { label?: string; items: string[][] };
 type IaGroup = { name: string; main?: boolean; columns: IaColumn[] };
 export type IaTreeData = { root: string; groups: IaGroup[] };
+
+// The case page's form: the groups and their first level, with the main group set apart.
+// The last group has no place of its own, so it is one line under the map.
+export function IaMap({ tree, more, moreHref }: { tree: IaTreeData; more?: string; moreHref?: string }) {
+  const places = tree.groups.slice(0, -1);
+  const shared = tree.groups[tree.groups.length - 1];
+  const names = (column: IaColumn) => column.items.length === 1 ? column.items[0].slice(1) : column.items.map(([name]) => name);
+  return (
+    <div className="dv-iamap dv-gap-40 reveal">
+      <p className="dv-iamap-root">{tree.root}</p>
+      <ul className="dv-iamap-groups">
+        {places.map((group) => (
+          <li key={group.name} data-main={group.main || undefined}>
+            <h4>{group.name}</h4>
+            <div className="dv-iamap-columns">
+              {group.columns.map((column, c) => (
+                <div key={column.label ?? c}>
+                  {column.label && <p>{column.label}</p>}
+                  <ul>{names(column).map((name) => <li key={name}>{name}</li>)}</ul>
+                </div>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p className="dv-iamap-shared"><b>{shared.name}</b>{shared.columns[0].items.map(([name]) => name).join(" · ")}</p>
+      {more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
+    </div>
+  );
+}
 
 export function IaTree({ tree }: { tree: IaTreeData }) {
   return (
