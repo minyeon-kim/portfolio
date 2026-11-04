@@ -4981,3 +4981,25 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   }
 }
 @keyframes dv-reel-grow { from { scale: 0.92; } to { scale: 1; } }
+
+/* Core features, desktop: all clips share one sticky stage on the left, and each
+   feature's text is a screen-tall row on the right. The li steps aside so stage and
+   text are items of one grid. The stage is a whole screen tall, so the clip stays
+   centred, and the list is pulled in by the empty part above and below it. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-reels { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); grid-template-rows: repeat(var(--reels), auto); column-gap: clamp(40px, 5vw, 72px); row-gap: 0; }
+  /* !important: the part-gap rule's :is() holds an id, so its specificity can't be matched here. */
+  .case-study .dv .dv-reels { margin-block: min(0px, calc(280px - 50svh)) !important; }
+  .dv-reel { display: contents; }
+  .dv-reel-text { grid-column: 2; grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: center; min-height: 90svh; }
+  .dv-reel:first-child .dv-reel-text, .dv-reel:last-child .dv-reel-text { min-height: 100svh; }
+  .dv-reel-stage { grid-column: 1; grid-row: 1 / span var(--reels); align-self: start; position: sticky; top: 0; display: grid; align-content: center; justify-items: start; height: 100svh; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s linear 400ms; }
+  .dv-reel[data-on] .dv-reel-stage { pointer-events: auto; opacity: 1; visibility: visible; transition: opacity 400ms var(--ease), visibility 0s; }
+  .dv-reel-media { width: min(100%, calc((100svh - 216px) * 1.6 + 56px)); padding: 28px; }
+  .dv-reel-media video { border-radius: 10px; animation: none; scale: 0.96; transition: scale 400ms var(--ease); }
+  .dv-reel[data-on] .dv-reel-media video { scale: 1; }
+  .case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); line-height: 1.3; }
+  .case-study .dv .dv-reel-points { padding-top: 0; }
+  .case-study .dv :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { transition: color 250ms var(--ease); }
+  .case-study .dv .dv-reel:not([data-on]) :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { color: var(--dv-muted); }
+}
