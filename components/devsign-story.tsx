@@ -154,15 +154,13 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
   );
 }
 
-// One core feature: the real prototype clip and its one sentence. The list under
-// the sentence follows the clip: the point on screen now is lit. With reduced motion
+// One core feature: its one sentence and the real prototype clip. With reduced motion
 // nothing autoplays and the video shows its controls. If the browser refuses to
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
 function FeatureReel({ reel }: { reel: Reel }) {
   const video = useRef<HTMLVideoElement>(null);
-  const [point, setPoint] = useState(0);
   const [still, setStill] = useState(false);
   const [refused, setRefused] = useState(false);
   const [near, setNear] = useState(false);
@@ -202,26 +200,20 @@ function FeatureReel({ reel }: { reel: Reel }) {
       window.removeEventListener("keydown", retry);
     };
   }, []);
-  const sync = () => {
-    const t = video.current?.currentTime ?? 0;
-    setPoint(reel.clip.marks.reduce((at, mark, i) => (t >= mark ? i : at), 0));
-  };
   return (
     <li id={reel.id} className="dv-reel dv-link-target">
       <div className="dv-reel-text">
         <div>
           <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
           <h4 className="dv-reel-line">{reel.body}</h4>
-        </div>
-        <div>
-          <ol className="dv-reel-points">
-            {reel.points.map((text, i) => <li key={text} data-on={i === point || undefined}>{text}</li>)}
-          </ol>
           {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
         </div>
+        <ol className="dv-reel-points">
+          {reel.points.map((text) => <li key={text}>{text}</li>)}
+        </ol>
       </div>
       <div className="dv-reel-media">
-        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onTimeUpdate={sync} onPlaying={() => setRefused(false)} />
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onPlaying={() => setRefused(false)} />
       </div>
     </li>
   );
