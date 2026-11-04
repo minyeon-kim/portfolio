@@ -412,14 +412,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
 
         <div className="dv-subsection">
-          <ProblemPanels
-            answeredBy={develop.selection?.answeredBy}
-            items={define.problems.items.map((item: Study) => ({
-              title: item.title,
-              body: item.body,
-              feature: develop.selection?.items.find((pick: { problem: string }) => pick.problem === item.title)?.feature,
-            }))}
-          >
+          <ProblemPanels items={define.problems.items}>
             <Block {...define.problems} ff={ff} />
           </ProblemPanels>
         </div>
