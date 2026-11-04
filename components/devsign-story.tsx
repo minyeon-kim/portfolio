@@ -158,7 +158,7 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, row, active, pinned, load }: { reel: Reel; row: number; active: boolean; pinned: boolean; load: boolean }) {
+function FeatureReel({ reel, row, active, past, pinned, load }: { reel: Reel; row: number; active: boolean; past: boolean; pinned: boolean; load: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
   const [refused, setRefused] = useState(false);
@@ -212,7 +212,7 @@ function FeatureReel({ reel, row, active, pinned, load }: { reel: Reel; row: num
     startClip.current();
   }, [active, pinned]);
   return (
-    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined} style={{ "--row": row } as CSSProperties}>
+    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined} data-past={past || undefined} style={{ "--row": row } as CSSProperties}>
       <div className="dv-reel-row">
         <div className="dv-reel-text">
           <div>
@@ -262,7 +262,7 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   }, [pinned]);
   return (
     <ul ref={root} className="dv-reels dv-gap-40" style={{ "--reels": reels.length } as CSSProperties}>
-      {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} row={index + 1} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
+      {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} row={index + 1} active={index === current} past={index < current} pinned={pinned} load={!pinned || index <= current + 1} />)}
     </ul>
   );
 }
