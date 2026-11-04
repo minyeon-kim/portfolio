@@ -29,6 +29,7 @@ void main() { v = a * 0.5 + 0.5; gl_Position = vec4(a, 0.0, 1.0); }`;
 const common = `
 uniform float time;
 uniform float symbol;
+uniform float ground; // the landscape's height: lower where the copy sits above it
 uniform float SIZE;
 uniform float lightTheme;  // 1 in the light theme
 uniform float focus;  // 0.85 on the landing galaxy, 1 while a case is hovered: the form gathers tighter
@@ -71,7 +72,7 @@ vec3 formOf(float n, vec2 uv) {
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.16 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.08 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 0.75;
-      p = vec3(x, y - 0.3, z);
+      p = vec3(x, y + ground, z);
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
@@ -215,7 +216,7 @@ void main() {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect; uniform vec2 cam; uniform float skyFrom; uniform float ground;
 uniform float keep;  // the share of the simulation drawn
 uniform float portraitMix; uniform sampler2D portrait; uniform sampler2D portraitColor;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
@@ -247,7 +248,7 @@ void main() {
   vSpec = mix(vSpec, 0.85, bolt);
   // The landing galaxy is the richest: every project's colour wound through
   // its arms (blue, violet, teal, a touch of pink) round a warm white core.
-  vec2 gq = (p.xy - vec2(0.35, 0.1)) / vec2(4.5, 1.1);
+  vec2 gq = (p.xy - vec2(0.35, 0.4 + ground)) / vec2(4.5, 1.1);
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
@@ -323,7 +324,7 @@ void main() {
   // in brightness and matte, so the form reads by density alone.
   // Landing: the dust thins out with height above the landscape, so the
   // waves dissolve into the sky instead of a second field sitting on top.
-  float sky = galaxy * smoothstep(0.1, 0.9, s.y);
+  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.8, s.y);
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
@@ -376,7 +377,7 @@ void main() {
 // shift: the depth the move happens in.
 const starVertex = `#version 300 es
 precision highp float;
-uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time; uniform float galaxy;
+uniform float aspect; uniform vec2 cam; uniform vec3 travel; uniform float dpr; uniform float time; uniform float galaxy; uniform float skyFrom;
 out float vA; out vec3 vC;
 ${view}
 float hs(float n) { return fract(sin(n) * 43758.5453); }
@@ -390,7 +391,7 @@ void main() {
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
   // Landing: fewer and dimmer towards the top, with no bright ones up there.
-  float sky = galaxy * smoothstep(0.1, 0.9, s.y);
+  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.8, s.y);
   if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
   vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
@@ -555,6 +556,9 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 150 : 216;
+    // From 64rem the copy sits above the landscape, so the waves run lower.
+    const wideStage = () => window.innerWidth >= 1024;
+    const landHeight = () => (wideStage() ? -0.95 : -0.3);
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const gl = el.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "high-performance" });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
@@ -603,7 +607,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     };
     const bind = (p: WebGLProgram, name: string, unit: number, texture: WebGLTexture) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, texture); gl.uniform1i(uniform(p, name), unit); };
     const start = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); }));
+    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); gl.uniform1f(uniform(pInit, "ground"), landHeight()); }));
 
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -798,7 +802,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       mouse.px = mouse.x; mouse.py = mouse.y;
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture); bind(pVel, "portrait", 2, portraitTarget.texture);
-        gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
+        gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "ground"), landHeight()); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), toPortrait ? 9 : mouse.x, toPortrait ? 9 : mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform1f(uniform(pVel, "gather"), toPortrait ? 0 : logo ? 4.6 : 1.15 + 3.45 * early); gl.uniform1f(uniform(pVel, "damp"), toPortrait ? 10 : logo ? 6.5 : 2.4 + 4.1 * early); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), toPortrait ? 0 : logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
@@ -808,7 +812,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); bind(pPos, "portrait", 2, portraitTarget.texture); gl.uniform1f(uniform(pPos, "dt"), dt);
         gl.uniform1f(uniform(pPos, "catchUp"), 1 - Math.exp(-elapsed * 6)); gl.uniform3f(uniform(pPos, "shift"), shift[0], shift[1], shift[2]); gl.uniform1f(uniform(pPos, "travelling"), travelling ? 1 : 0);
         gl.uniform3f(uniform(pPos, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pPos, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
-        gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
+        gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "ground"), landHeight()); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
       });
       P.reverse();
 
@@ -824,7 +828,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy);
+      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), wideStage() ? -0.34 : 0.1);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       // The portrait keeps only a few of the far stars.
       gl.drawArrays(gl.POINTS, 0, Math.round(4200 * (1 - 0.8 * portraitMix)));
@@ -832,7 +836,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture); bind(pDraw, "portraitColor", 3, portraitColor.texture);
       gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
-      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol);
+      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), wideStage() ? -0.34 : 0.1); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
