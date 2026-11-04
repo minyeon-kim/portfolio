@@ -703,43 +703,52 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
-        {/* The statement, three learning cards, limits if any, then the next step
-            as one wide card. */}
-        <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
-        <p className="dv-body reveal">{takeaway.text}</p>
-        {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 767px) 100vw, 1200px" className="dv-gap-40" />}
-        <div className="dv-gap-80">
-          <h3 className="dv-caps reveal">{takeaway.reviewTitle}</h3>
-          <ol className="dv-learned">
-            {takeaway.review.map((item: { title: string; body: string }, i: number) => (
-              <li key={item.title} className="reveal" data-tone={["accent", "blue", "teal"][i % 3]}>
-                <span className="dv-learned-number">{pad(i + 1)}</span>
-                <h4>{item.title}</h4>
-                <p>{item.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-        {takeaway.limitations && <div className="dv-gap-40">
-          <h3 className="dv-caps reveal">{takeaway.limitationsTitle}</h3>
-          <ul className="dv-learned dv-learned-plain">
-            {takeaway.limitations.map((l: { lead: string; text: string }) => (
-              <li key={l.lead} className="reveal">
-                <h4>{l.lead}</h4>
-                <p>{l.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>}
-        <div className="dv-next-card reveal" data-after-limits={takeaway.limitations ? "" : undefined}>
-          <p className="dv-caps dv-accent">{takeaway.next.label}</p>
-          <p className="dv-finding">{takeaway.next.title}</p>
-          {!ff && <>
-            <p className="dv-body">{takeaway.next.text}</p>
-            <ul className="dv-next-chips">
-              {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
-            </ul>
-          </>}
+        {/* Two columns: the conclusion on the left, what it rests on and what comes next on the right. */}
+        <div className="dv-tk">
+          <div className="dv-tk-lead">
+            <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
+            <p className="dv-body reveal">{takeaway.text}</p>
+            {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 1023px) 100vw, 480px" />}
+          </div>
+          <div className="dv-tk-list">
+            <div>
+              <h3 className="dv-caps reveal">{takeaway.reviewTitle}</h3>
+              <ol className="dv-tk-rows reveal">
+                {takeaway.review.map((item: { title: string; body: string }, i: number) => (
+                  <li key={item.title}>
+                    <span className="dv-tk-number">{pad(i + 1)}</span>
+                    <div>
+                      <h4>{item.title}</h4>
+                      <p>{item.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            {takeaway.limitations && <div>
+              <h3 className="dv-caps reveal">{takeaway.limitationsTitle}</h3>
+              <ul className="dv-tk-rows reveal">
+                {takeaway.limitations.map((l: { lead: string; text: string }) => (
+                  <li key={l.lead}>
+                    <div>
+                      <h4>{l.lead}</h4>
+                      <p>{l.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>}
+            <div className="dv-tk-next reveal">
+              <p className="dv-caps">{takeaway.next.label}</p>
+              <p className="dv-finding">{takeaway.next.title}</p>
+              {!ff && <>
+                <p className="dv-body">{takeaway.next.text}</p>
+                <ul className="dv-tk-chips">
+                  {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
+                </ul>
+              </>}
+            </div>
+          </div>
         </div>
       </Section>
     </div>

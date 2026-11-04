@@ -3867,32 +3867,28 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-ut-summary + .dv-scores-row, .dv-scores-row + .dv-result { margin-top: 32px; }
 }
 
-/* Takeaway: three learning cards in a row, the next step as one wide card. */
-.dv-learned { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto; gap: 0 16px; margin: 16px 0 0; padding: 0; list-style: none; }
-.dv-learned > li { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 12px; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), var(--dv-surface)) 0%, var(--dv-surface) 62%); }
-.dv-learned-number { color: var(--tone); font-size: 16px; font-weight: 500; line-height: 1.4; font-variant-numeric: tabular-nums; }
-.dv-learned h4 { color: var(--dv-ink); font-size: 20px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
-.dv-learned p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
-.dv-next-card { margin-top: 16px; padding: 28px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-surface); }
-.dv-next-card .dv-finding { margin-top: 8px; max-width: var(--dv-measure-wide); }
+/* Takeaway: the conclusion on the left stays beside what it rests on, as hairline rows on the
+   right, ending on the next step. After Metalab's Outcomes and this site's About: no boxes. */
+.dv-tk { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(56px, 6.7vw, 96px); align-items: start; }
+.dv-tk-lead { position: sticky; top: 96px; }
+.case-study .dv .dv-tk-lead .dv-body { margin-top: 16px; }
+.case-study .dv .dv-tk-lead .dv-figure { margin-top: 40px; }
+.dv-tk-list { display: grid; gap: 64px; min-width: 0; }
+.case-study .dv .dv-tk-list .dv-caps + .dv-tk-rows { margin: 16px 0 0; padding: 0; border-bottom: 1px solid var(--dv-line); list-style: none; }
+.dv-tk-rows > li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 0 16px; padding-block: 28px; border-top: 1px solid var(--dv-line); }
+.dv-tk-rows > li > div:only-child { grid-column: 1 / -1; }
+.dv-tk-number { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.75; font-variant-numeric: tabular-nums; }
+.dv-tk-rows h4 { color: var(--dv-ink); }
+.dv-tk-rows p { margin-top: 8px; color: var(--dv-muted); font-size: 18px; line-height: 1.55; text-wrap: pretty; }
+.case-study .dv .dv-tk-next .dv-finding { margin-top: 16px; text-wrap: pretty; }
+.case-study .dv .dv-tk-next .dv-body { margin-top: 16px; }
+.dv-tk-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
+.dv-tk-chips li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 @media (max-width: 63.99rem) {
-  .dv-learned { grid-template-columns: 1fr; grid-template-rows: none; gap: 12px; }
-  .dv-learned > li { grid-row: auto; grid-template-rows: none; padding: 24px; }
-  .dv-next-card { margin-top: 12px; padding: 24px; }
-}
-
-/* Gemini's Takeaway carries limits and a fuller next step in the same cards.
-   Its section sits on the band, so the cards take the band's card colour. */
-.dv-learned-plain { grid-template-rows: auto auto; }
-.dv-learned-plain > li { grid-row: span 2; background: var(--dv-surface); }
-.dv-next-card[data-after-limits] { margin-top: 40px; }
-.dv-next-card .dv-body { margin-top: 12px; }
-.dv-next-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
-.dv-next-chips li { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
-.dv > #takeaway:not(.dv:has(> #testing) > *) { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
-@media (max-width: 63.99rem) {
-  .dv-learned-plain > li { grid-row: auto; }
-  .dv-next-card[data-after-limits] { margin-top: 32px; }
+  .dv-tk { grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .dv-tk-lead { position: static; }
+  .dv-tk-list { gap: 48px; }
+  .dv-tk-rows > li { grid-template-columns: 32px minmax(0, 1fr); gap: 0 12px; padding-block: 24px; }
 }
 
 /* Small card rows on a banded stage: Ideation's rules and goals, Prioritization's criteria. */
@@ -3900,7 +3896,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-mini:not([class*="dv-gap"]) { margin: 16px 0 0; }
 .dv-mini > li { display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid var(--dv-card-line); border-radius: var(--dv-card-radius); background: var(--dv-mini-bg); }
 .dv-mini > li[data-tone] { background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 18%), var(--dv-mini-bg)) 0%, var(--dv-mini-bg) 62%); }
-.dv-mini .dv-learned-number { color: var(--case-accent); }
 .dv-mini h4 { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
 .dv-mini > li[data-tone] h4 { color: var(--tone); }
 .dv-mini p { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; text-wrap: pretty; }
@@ -4712,13 +4707,13 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv :is(.dv-subsection, .dv-subsection-120, .dv-question, .dv-gap-96, .dv-process, .dv-main-features, .dv-block + .dv-gap-72, .dv-core + .dv-hmw) { margin-top: var(--sp-block); }
 .dv > section > .dv-core.dv-core { margin-top: var(--sp-block); }
 .case-study .dv .dv-section-head + .dv-gap-96 { margin-top: 0; }
-.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-gap-72, .dv-try-link), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-interview-result, .dv-iter-why + .dv-figure, #takeaway .dv-figure + *) { margin-top: var(--sp-part); }
+.case-study .dv :is(.dv-gap-40, .dv-block + :not(.dv-iter-why, .dv-ut-summary, .dv-gap-72, .dv-try-link), .dv-headline + .dv-glance-block, .dv-headline-plain + .dv-gap-96, .dv-keyq + *, .dv-cast + .dv-journey, .dv-interview-result, .dv-iter-why + .dv-figure) { margin-top: var(--sp-part); }
 .case-study .dv .dv-cast { margin-bottom: 0; }
 .case-study .dv .dv-ut-summary + .dv-ut-panel { margin-top: 64px; }
 .case-study .dv .dv-funnel + .dv-board { margin-top: 48px; }
 .case-study .dv .dv-evbox + .dv-evbox { margin-top: 24px; }
 .case-study .dv .dv-keyq .dv-caps { margin-bottom: var(--sp-label); }
-.case-study .dv .dv-caps + :is(.dv-scroll, table, .dv-learned, ul, ol) { margin-top: var(--sp-label); }
+.case-study .dv .dv-caps + :is(.dv-scroll, table, ul, ol) { margin-top: var(--sp-label); }
 @media (max-width: 47.99rem) {
   .case-study .dv .dv-ut-summary + .dv-ut-panel, .case-study .dv .dv-funnel + .dv-board { margin-top: 32px; }
   .case-study .dv .dv-evbox + .dv-evbox { margin-top: 16px; }
@@ -4852,11 +4847,10 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* What isn't current stays readable (AA): it drops to the muted colour, never to low opacity. */
 
 /* The product carries the page: process boards step back in the dark theme, the tool table's
-   conclusion is the one solid fill, and the Takeaway photo is an aside. */
+   conclusion is the one solid fill. */
 .dv { --dv-accent-fill: #5b3fd6; }
 .case-study[data-project="gemini"] .dv { --dv-accent-fill: #245cc0; }
 .dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: rgb(255 255 255 / 0.2); background: var(--dv-accent-fill); color: #fff; }
-.case-study .dv #takeaway .dv-figure { max-width: 640px; }
 :root[data-theme="dark"] .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-canvas-full img { filter: brightness(0.8) saturate(0.85); } }
 
