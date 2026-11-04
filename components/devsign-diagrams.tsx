@@ -45,7 +45,10 @@ export type FlowChartData = {
   // Who acts: designer, developer, decision-maker, developer, record.
   groups: string[];
   nodes: Record<FlowNodeId, string[]>;
-  // What is handed to the next person.
+  yes: string;
+  no: string;
+  // What is handed to the next person, and the developer's own way in. The phone list only:
+  // the row stays short, and the handoff spec below it has the detail.
   links: { flag: string[]; request: string[]; decision: string[] };
   // The three short branches under the row.
   branches: { save: { when: string; node: string[] }; direct: { when: string; node: string[] }; start: { node: string[] } };
@@ -57,9 +60,9 @@ const FC_W = 124;
 const FC_H = 64;
 const FC_STEP = 152;
 const FC_WIDTH = 1192;
-const FC_HEIGHT = 288;
-const FC_ROW = 92;
-const FC_BELOW = 212;
+const FC_HEIGHT = 252;
+const FC_ROW = 76;
+const FC_BELOW = 188;
 const fcLeft = (col: number) => FC_STEP * col;
 const fcRight = (col: number) => fcLeft(col) + FC_W;
 const fcMid = (col: number) => fcLeft(col) + FC_W / 2;
@@ -72,7 +75,7 @@ const FC_NODES: { id: FlowNodeId; kind: FcKind }[] = [
   { id: "review", kind: "key" },
   { id: "decision", kind: "ask" },
   { id: "reviewDecider", kind: "key" },
-  { id: "approve", kind: "ask" },
+  { id: "approve", kind: "step" },
   { id: "apply", kind: "step" },
   { id: "history", kind: "store" },
 ];
@@ -81,15 +84,14 @@ function FcLines({ lines, x, y, className }: { lines: string[]; x: number; y: nu
   return <>{lines.map((line, l) => <text key={line} x={x} y={y + l * 22} textAnchor="middle" className={className}>{line}</text>)}</>;
 }
 
-// One row, read left to right. Only the three decisions branch, each to one short result, and the
-// person changing above the row is the handoff (the heavy arrows, which say what is handed over).
+// One row, read left to right. Only the two decisions branch, each to one short result, and the
+// person changing above the row is the handoff (the heavy arrows).
 export function FlowChart({ chart }: { chart: FlowChartData }) {
   const { nodes, links, branches } = chart;
   const middle = FC_ROW + FC_H / 2;
   const heavy = new Set([1, 3, 5]);
   const below = [
     { col: 1, node: branches.save.node },
-    { col: 2, node: branches.start.node },
     { col: 3, node: branches.direct.node },
   ];
   const list = [
@@ -128,20 +130,18 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
               </g>
             );
           })}
-          <FcLines lines={links.flag} x={fcRight(1) + 14} y={FC_ROW - 34} className="dv-fc-link" />
-          <FcLines lines={links.request} x={fcRight(3) + 14} y={FC_ROW - 34} className="dv-fc-link" />
-          <FcLines lines={links.decision} x={fcRight(5) + 14} y={FC_ROW - 34} className="dv-fc-link" />
+          <text x={fcRight(1) + 14} y={FC_ROW - 10} textAnchor="middle" className="dv-fc-when">{chart.no}</text>
+          <text x={fcRight(3) + 14} y={FC_ROW - 10} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
           {below.map(({ col, node }) => (
             <g key={col}>
-              <rect x={fcLeft(col)} y={FC_BELOW} width={FC_W} height={FC_H} rx={col === 2 ? FC_H / 2 : 12} className="dv-fc-branchnode" />
+              <rect x={fcLeft(col)} y={FC_BELOW} width={FC_W} height={FC_H} rx={12} className="dv-fc-branchnode" />
               <FcLines lines={node} x={fcMid(col)} y={FC_BELOW + FC_H / 2 + 6 - 11} className="dv-fc-text dv-fc-text-branch" />
             </g>
           ))}
           <path d={`M${fcMid(1)} ${FC_ROW + FC_H + 3}V${FC_BELOW - 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
           <path d={`M${fcMid(3)} ${FC_ROW + FC_H + 3}V${FC_BELOW - 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
-          <path d={`M${fcMid(2)} ${FC_BELOW - 3}V${FC_ROW + FC_H + 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
-          <text x={fcMid(1) + 10} y={FC_ROW + FC_H + 34} className="dv-fc-when">{branches.save.when}</text>
-          <text x={fcMid(3) + 10} y={FC_ROW + FC_H + 34} className="dv-fc-when">{branches.direct.when}</text>
+          <text x={fcMid(1) + 10} y={FC_ROW + FC_H + 30} className="dv-fc-when">{chart.yes}</text>
+          <text x={fcMid(3) + 10} y={FC_ROW + FC_H + 30} className="dv-fc-when">{chart.no}</text>
           <text x={fcMid(4)} y={FC_ROW + FC_H + 28} textAnchor="middle" className="dv-fc-meet">{chart.meet}</text>
         </svg>
       </div>
