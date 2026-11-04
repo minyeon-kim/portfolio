@@ -4849,28 +4849,41 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 /* Information architecture and user flow, drawn in code. */
 .dv-ia-root { width: fit-content; margin: 0 auto; padding: 8px 20px; border-radius: 999px; background: var(--dv-ink); color: light-dark(#ffffff, #120f24); font-size: 16px; font-weight: 600; line-height: 1.5; }
-.dv-ia-groups { position: relative; display: grid; grid-template-columns: 1.2fr 2.05fr 1.2fr .85fr 1.1fr; align-items: start; gap: 12px; margin: 24px 0 0; padding: 24px 0 0; list-style: none; }
-.dv-ia-groups::after { content: ""; position: absolute; top: -24px; left: 50%; width: 1px; height: 24px; background: var(--dv-line); }
-.dv-ia-group { position: relative; padding: 16px; border-radius: 16px; background: var(--dv-surface); }
-.dv-ia-group::before { content: ""; position: absolute; top: -24px; left: 50%; width: 1px; height: 24px; background: var(--dv-line); }
-.dv-ia-group::after { content: ""; position: absolute; top: -24px; left: -6px; right: -6px; height: 1px; background: var(--dv-line); }
+.dv-ia-groups { position: relative; display: grid; grid-template-columns: 1.2fr 2.05fr 1.2fr .85fr 1.1fr; align-items: start; gap: 24px; margin: 24px 0 0; padding: 24px 0 0; list-style: none; }
+.dv-ia-groups::after { content: ""; position: absolute; top: -24px; left: 50%; width: 1px; height: 24px; background: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
+.dv-ia-group { position: relative; --ia-line: color-mix(in srgb, var(--g) 55%, transparent); }
+.dv-ia-group:nth-child(1) { --g: light-dark(#b45309, #fbbf24); }
+.dv-ia-group:nth-child(2) { --g: var(--case-accent); }
+.dv-ia-group:nth-child(3) { --g: light-dark(#0f766e, #2dd4bf); }
+.dv-ia-group:nth-child(4) { --g: light-dark(#1d6fd1, #7cb8ff); }
+.dv-ia-group:nth-child(5) { --g: light-dark(#be3a84, #f59ac9); }
+/* The trunk: one line across the groups, a stem down to each. */
+.dv-ia-group::before { content: ""; position: absolute; top: -24px; left: 50%; width: 1px; height: 24px; background: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
+.dv-ia-group::after { content: ""; position: absolute; top: -24px; left: -12px; right: -12px; height: 1px; background: color-mix(in srgb, var(--dv-ink) 40%, transparent); }
 .dv-ia-group:first-child::after { left: 50%; }
 .dv-ia-group:last-child::after { right: 50%; }
-.dv-ia-group[data-main] { background: color-mix(in srgb, var(--case-accent) 12%, var(--dv-surface)); outline: 1.5px solid var(--case-accent); outline-offset: -1.5px; }
-.dv-ia-group h4 { margin: 0 0 16px; font-size: 18px; font-weight: 600; line-height: 1.35; color: var(--dv-ink); }
-.dv-ia-group[data-main] h4 { color: var(--case-accent); }
-.dv-ia-columns { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 20px; }
-.dv-ia-label { margin: 0 0 12px; font-size: 16px; font-weight: 500; line-height: 1.5; color: var(--case-accent); }
+.dv-ia-group h4 { margin: 0 0 16px; padding: 10px 16px; border-radius: 12px; background: var(--g); color: light-dark(#ffffff, #120f24); font-size: 18px; font-weight: 600; line-height: 1.35; text-align: center; }
+.dv-ia-columns { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
+.dv-ia-label { margin: 0 0 8px; font-size: 16px; font-weight: 500; line-height: 1.5; color: var(--g); }
 .dv-ia-items, .dv-ia-items ul { margin: 0; padding: 0; list-style: none; }
-.dv-ia-items > li { font-size: 16px; font-weight: 500; line-height: 1.5; color: var(--dv-ink); }
-.dv-ia-items > li + li { margin-top: 12px; }
-.dv-ia-items ul { margin: 4px 0 0 2px; padding-left: 12px; border-left: 1px solid var(--dv-line); }
-.dv-ia-items ul li { font-weight: 400; line-height: 1.75; color: var(--dv-muted); }
+/* Branches: every item hangs off its parent's line. */
+.dv-ia-items li { position: relative; padding-left: 16px; }
+.dv-ia-items li::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 1px; background: var(--ia-line); }
+.dv-ia-items li:last-child::before { bottom: auto; height: var(--tick); }
+.dv-ia-items li::after { content: ""; position: absolute; top: var(--tick); left: 0; width: 12px; height: 1px; background: var(--ia-line); }
+.dv-ia-items > li { --tick: 18px; padding-bottom: 10px; }
+.dv-ia-items > li:last-child { padding-bottom: 0; }
+.dv-ia-node { display: inline-block; padding: 3px 10px; border-radius: 8px; background: color-mix(in srgb, var(--g) 16%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-ia-items ul { margin: 2px 0 0 10px; }
+.dv-ia-items ul li { --tick: 14px; color: var(--dv-muted); font-size: 16px; line-height: 28px; }
+/* Wider than the reading column, so the tree can spread. */
+@media (min-width: 72rem) {
+  .dv-ia { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); }
+}
 @media (max-width: 71.99rem) {
-  .dv-ia-groups { grid-template-columns: 1fr 1fr; }
+  .dv-ia-groups { grid-template-columns: 1fr 1fr; margin-top: 12px; padding-top: 0; }
   .dv-ia-group[data-main] { grid-column: 1 / -1; grid-row: 1; }
   .dv-ia-groups::after, .dv-ia-group::before, .dv-ia-group::after { display: none; }
-  .dv-ia-groups { margin-top: 12px; padding-top: 0; }
 }
 @media (max-width: 47.99rem) {
   .dv-ia-groups { grid-template-columns: 1fr; }
@@ -4906,4 +4919,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-fc-list li { padding: 4px 0 4px 12px; font-size: 16px; line-height: 1.5; color: var(--dv-ink); }
   .dv-fc-list li[data-key] { color: var(--case-accent); font-weight: 600; }
 }
-.dv-ia, .dv-fc { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-fc { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
+/* The branch reaches up to the group's head (or its label, inside Workspace). */
+.dv-ia-columns > div:only-child .dv-ia-items > li:first-child::before { top: -16px; }
+.dv-ia-columns > div:not(:only-child) .dv-ia-items > li:first-child::before { top: -6px; }
+.dv-ia-columns > div:only-child .dv-ia-items > li:only-child::before { height: 34px; }
+.dv-ia-columns > div:not(:only-child) .dv-ia-items > li:only-child::before { height: 24px; }
