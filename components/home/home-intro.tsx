@@ -2,7 +2,7 @@
 
 import { localize } from "@/lib/i18n";
 import { useLocale, useStrings } from "@/lib/use-locale";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { site, withBase } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
@@ -16,6 +16,13 @@ import { HeroObject } from "./hero-object";
 import type { AboutWorld, StageProject } from "./project-stage";
 
 type Props = { projects: StageProject[]; about?: AboutWorld; onSelect: (index: number, from?: HTMLElement | null) => void };
+
+const STACKED = "(max-width: 63.99rem)";
+const subscribeStacked = (onChange: () => void) => {
+  const query = window.matchMedia(STACKED);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
 
 // The landing stage, after metalab.com's home: one dark screen, no scroll.
 // A glossy object (HeroObject) turns slowly behind everything. Left: the case
@@ -107,9 +114,10 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
   // running; otherwise it is an ordinary link.
   const [portrait, setPortrait] = useState<{ image: HTMLImageElement } | null>(null);
-  // The first case's card shows from the start, so the first screen has the
-  // work in it without a hover. Clicking or tapping it opens the case.
-  const previewed = shown ?? (hover === "about" || portrait ? null : projects[0]);
+  // A case's card shows on hover or focus. Below 64rem there is no hover, and
+  // the layout keeps room for a card, so the first case's shows from the start.
+  const stacked = useSyncExternalStore(subscribeStacked, () => window.matchMedia(STACKED).matches, () => false);
+  const previewed = shown ?? (stacked && hover !== "about" && !portrait ? projects[0] : null);
   useEffect(() => {
     if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
     const src = withBase("/images/about/portrait.webp");
