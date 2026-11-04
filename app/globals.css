@@ -3749,13 +3749,16 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .dv-dd-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
 .dv-dd-stages a { display: block; height: 100%; border-radius: 12px; color: inherit; text-decoration: none; }
 .dv-dd-stages a:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
-.dv-dd-name { display: grid; aspect-ratio: 300 / 240; place-items: center; font-size: 24px; font-weight: 500; line-height: 1.2; transition: color 250ms var(--ease); }
+.dv-dd-name { display: grid; aspect-ratio: 300 / 334; place-items: center; font-size: 24px; font-weight: 500; line-height: 1.2; transition: color 250ms var(--ease); }
 .dv-dd-stages li:nth-child(odd) .dv-dd-name { padding-left: 22%; }
 .dv-dd-stages li:nth-child(even) .dv-dd-name { padding-right: 22%; }
 .dv-dd-stages li[data-current] .dv-dd-name, .dv-dd-stages a:hover .dv-dd-name { color: var(--case-accent); }
-.dv-dd-outcome { display: block; margin-top: 24px; padding-right: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.45; transition: color 250ms var(--ease); }
+.dv-dd-outcome { display: block; margin-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.45; text-align: center; text-wrap: balance; transition: color 250ms var(--ease); }
+/* Text under a stage centres on its name, which sits off-centre towards the diamond's wide side. */
+.dv-dd-stages li:nth-child(odd) :is(.dv-dd-outcome, .dv-dd-pivot) { padding: 0 2% 0 22%; }
+.dv-dd-stages li:nth-child(even) :is(.dv-dd-outcome, .dv-dd-pivot) { padding: 0 22% 0 2%; }
 .dv-dd-stages a:hover .dv-dd-outcome { color: var(--dv-ink); }
-.dv-dd-pivot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 12px; padding-right: 24px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.35; }
+.dv-dd-pivot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; margin-top: 12px; text-align: center; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.35; }
 .dv-dd-body:has(li:nth-child(1) a:hover) .dv-dd-half:nth-of-type(1),
 .dv-dd-body:has(li:nth-child(2) a:hover) .dv-dd-half:nth-of-type(2),
 .dv-dd-body:has(li:nth-child(3) a:hover) .dv-dd-half:nth-of-type(3),
@@ -3770,7 +3773,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .dv-dd-stages a { padding: 16px 0; }
   .dv-dd-stages li + li a { border-top: 1px solid var(--dv-card-line); border-radius: 0; }
   .dv-dd-name, .dv-dd-stages li:nth-child(n) .dv-dd-name { display: block; aspect-ratio: auto; padding: 0; font-size: 18px; }
-  .dv-dd-outcome { margin-top: 4px; padding: 0; }
+  .dv-dd-outcome { margin-top: 4px; }
+  .dv-dd-stages li:nth-child(n) :is(.dv-dd-outcome, .dv-dd-pivot) { padding: 0; text-align: left; justify-content: flex-start; }
 }
 
 /* Testing iterations: one change at a time, two large close-ups. */
@@ -3920,11 +3924,14 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 
 /* Double diamond methods. By default listed under the outcome; with a pointer on a
    wide screen the stage name crossfades to them, in the same spot in the diamond. */
-.dv-dd-methods { display: flex; flex-direction: column; gap: 2px; margin: 12px 24px 0 0; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.35; }
+.dv-dd-methods { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 12px 0 0; text-align: center; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.35; }
 .dv-dd-methods span { display: block; }
+.dv-dd-stages li:nth-child(odd) .dv-dd-methods { padding-left: 22%; }
+.dv-dd-stages li:nth-child(even) .dv-dd-methods { padding-right: 22%; }
+@media (max-width: 47.99rem) { .dv-dd-stages li:nth-child(n) .dv-dd-methods { align-items: flex-start; padding: 0; text-align: left; } }
 @media (hover: hover) and (min-width: 90rem) {
   .dv-dd-stages a { position: relative; }
-  .dv-dd-methods { position: absolute; top: 0; left: 0; right: 0; aspect-ratio: 300 / 240; align-items: center; justify-content: center; margin: 0; text-align: center; white-space: nowrap; opacity: 0; pointer-events: none; }
+  .dv-dd-methods { position: absolute; top: 0; left: 0; right: 0; aspect-ratio: 300 / 334; align-items: center; justify-content: center; margin: 0; text-align: center; white-space: nowrap; opacity: 0; pointer-events: none; }
   .dv-dd-stages li:nth-child(odd) .dv-dd-methods { padding-left: 38%; }
   .dv-dd-stages li:nth-child(even) .dv-dd-methods { padding-right: 38%; }
   .dv-dd-name > span, .dv-dd-methods { transition: opacity 200ms var(--ease); }
