@@ -4157,8 +4157,21 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-reel:nth-child(3) .dv-reel-text { grid-row: 3; }
   .dv-reel:nth-child(4) .dv-reel-text { grid-row: 4; }
   .dv-reel .dv-reel-media { grid-column: 1; grid-row: 1 / 5; position: sticky; top: max(72px, calc(50svh - 17vw)); align-self: start; margin-inline: calc(var(--dv-edge) - var(--dv-pad)) 0; border-radius: 0 var(--dv-band-radius) var(--dv-band-radius) 0; opacity: 0; transition: opacity 400ms var(--ease); }
-  .dv-reel[data-shown] .dv-reel-media { opacity: 1; }
+  .dv-reel[data-shown] .dv-reel-media { opacity: 1; transition-duration: 200ms; }
 }
+/* The clips are all the same dark app, so each carries its name, and the pinned one
+   opens on a title card that hands over to the clip. The media is always dark. */
+.dv-reel-media { position: relative; }
+.dv-reel-tag { position: absolute; z-index: 1; bottom: 16px; left: 16px; display: flex; align-items: center; gap: 8px; margin: 0; padding: 6px 14px; border-radius: 999px; background: rgb(10 11 20 / 0.7); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #fff; font-size: 16px; font-weight: 500; line-height: 1.5; pointer-events: none; }
+.dv-reel-tag b, .dv-reel-card b { color: color-mix(in srgb, var(--case-accent) 45%, #fff); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-reel-steps { display: none; gap: 4px; margin-left: 6px; }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) { .dv-reel-steps { display: inline-flex; } }
+.dv-reel-steps i { width: 16px; height: 3px; border-radius: 2px; background: rgb(255 255 255 / 0.28); }
+.dv-reel-steps i[data-on] { background: #fff; }
+.dv-reel-card { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: #17181d; color: #fff; opacity: 0; pointer-events: none; transition: opacity 250ms var(--ease); }
+.dv-reel-card[data-on] { opacity: 1; transition: none; }
+.dv-reel-card b { font-size: 20px; }
+.dv-reel-card span { font-size: clamp(36px, 4vw, 64px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; }
 
 /* Analysis steps: stage, then one sentence. */
 
