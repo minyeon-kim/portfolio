@@ -294,16 +294,18 @@ export const study = {
       lead: "We mapped how three people with different jobs come together on a single change request.",
       text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
       chart: {
-        meet: "The same change review screen",
-        steps: [
-          { who: "Designer", text: "Combines AI drafts area by area in Merge Studio" },
-          { who: "Designer", text: "Flags what breaks a rule as a Conflict Point" },
-          { who: "Developer", text: "Writes a fix and a reason, and asks for approval", shared: true },
-          { who: "Decision-maker", text: "Compares the three versions and decides", shared: true },
-          { who: "Developer", text: "Applies the decision and checks it on screen" },
-          { who: "History", text: "The decision and its reason stay on record" },
-        ],
-        foot: "If nothing breaks a rule, the designer saves right away. If it isn’t a design decision, the developer fixes it directly. If the build differs from the design, the developer starts at step 3.",
+        label: "User flow. The designer merges drafts and checks the rules. If they fit, it is saved; if not, it goes to the developer's change review. If it isn't a design decision the developer fixes it directly; if it is, the developer asks for approval with a fix and a reason. The decision-maker decides on the same screen, the developer applies and checks it, and it stays in History. The steps are in the list below.",
+        groups: ["Designer", "Developer", "Decision-maker", "Developer", "Record"],
+        nodes: {
+          merge: ["Merge Studio", "combine drafts"], rule: ["Fits the", "rules?"],
+          review: ["Change review", "write a fix"], decision: ["Design", "decision?"],
+          reviewDecider: ["Change review", "3 versions"], approve: ["Approve", "or keep?"],
+          apply: ["Apply, then", "verify"], history: ["History", "decision + why"],
+        },
+        links: { flag: ["If not, flag", "a Conflict Point"], request: ["If so, ask for approval:", "fix + reason"], decision: ["Decision +", "when to apply"] },
+        branches: { save: { when: "If so", node: ["Save it", "→ History"] }, direct: { when: "If not", node: ["Fix directly", "→ verify"] }, start: { node: ["Build differs", "from design"] } },
+        meet: "The same screen",
+        full: { src: "/images/devsign/user-flow.webp", label: "See the full flow ↗" },
       },
     },
     system: {
