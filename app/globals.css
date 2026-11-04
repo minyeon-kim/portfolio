@@ -5006,7 +5006,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-reel { display: contents; }
   .dv-reel-row { display: flow-root; grid-column: 2; grid-row: var(--row); min-height: calc(2 * var(--reel-g) + var(--reel-hold)); pointer-events: none; }
   .dv-reel:first-child .dv-reel-row, .dv-reel:last-child .dv-reel-row { min-height: calc(50svh + var(--reel-g) + var(--reel-hold)); }
-  .dv-reel-text { position: sticky; top: 50svh; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 0; margin-block: var(--reel-g); }
+  .dv-reel-text { position: sticky; top: 50svh; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 0; margin-block: var(--reel-g); transition: opacity 250ms var(--ease), visibility 0s; }
+  /* Text already read fades as the clip changes; the next one stays visible below in muted. */
+  .dv-reel[data-past] .dv-reel-text { opacity: 0; visibility: hidden; transition: opacity 250ms var(--ease), visibility 0s linear 250ms; }
   .dv-reel:first-child .dv-reel-text { margin-top: 50svh; }
   .dv-reel:last-child .dv-reel-text { margin-bottom: 50svh; }
   .dv-reel-stage { grid-column: 1; grid-row: 1 / span var(--reels); align-self: start; position: sticky; top: 0; display: grid; align-content: center; justify-items: start; height: 100svh; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s linear 400ms; }
