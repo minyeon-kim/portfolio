@@ -4884,115 +4884,11 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-ia-groups { grid-template-columns: 1fr; }
   .dv-ia-columns { grid-auto-flow: row; }
 }
-.dv-fc svg { display: block; width: 100%; min-width: 1080px; height: auto; }
-.dv-fc-lane { fill: color-mix(in srgb, var(--tone) 14%, var(--dv-surface)); }
-.dv-fc-band { fill: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
-.dv-fc-line { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.5; }
-.dv-fc-head { fill: color-mix(in srgb, var(--dv-ink) 45%, transparent); }
-.dv-fc-step, .dv-fc-ask, .dv-fc-start, .dv-fc-end { fill: var(--dv-surface); stroke: color-mix(in srgb, var(--dv-ink) 30%, transparent); stroke-width: 1; }
-.dv-fc-ask { stroke-width: 1.5; stroke: color-mix(in srgb, var(--dv-ink) 55%, transparent); }
-.dv-fc-key { fill: var(--dv-ink); }
-.dv-fc-store { fill: var(--dv-ink); }
-.dv-fc-text { fill: var(--dv-ink); font-size: 16px; }
-.dv-fc-text-key { fill: light-dark(#ffffff, #120f24); font-weight: 500; }
-.dv-fc-text-store { fill: light-dark(#ffffff, #120f24); font-weight: 600; }
-.dv-fc-lanename { fill: color-mix(in srgb, var(--tone) 60%, var(--dv-ink)); font-size: 18px; font-weight: 600; }
-.dv-fc-job { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; }
-.dv-fc-branch { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; font-weight: 500; }
-.dv-fc-meet { fill: var(--dv-ink); font-size: 16px; font-weight: 500; }
-.dv-fc-list { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.dv-fc { position: relative; }
-.dv-fc-scroll { overflow-y: hidden; }
-@media (min-width: 72rem) { .dv-fc-scroll { overflow: visible; } }
-@media (max-width: 47.99rem) {
-  .dv-fc-scroll { display: none; }
-  .dv-fc-list { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; display: grid; gap: 12px; }
-  .dv-fc-list > div { padding: 20px; border-radius: 16px; background: color-mix(in srgb, var(--tone) 14%, var(--dv-surface)); }
-  .dv-fc-list h4 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.35; color: color-mix(in srgb, var(--tone) 60%, var(--dv-ink)); }
-  .dv-fc-list p { margin: 4px 0 16px; font-size: 16px; line-height: 1.5; color: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); }
-  .dv-fc-list ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--dv-line); }
-  .dv-fc-list li { padding: 4px 0 4px 12px; font-size: 16px; line-height: 1.5; color: var(--dv-ink); }
-  .dv-fc-list li[data-key] { font-weight: 600; }
-}
-.dv-fc { --dv-surface: light-dark(#ffffff, var(--dv-band-card-dark)); }
 /* The branch reaches up to the group's head (or its label, inside Workspace). */
 .dv-ia-columns > div:only-child .dv-ia-items > li:first-child::before { top: -16px; }
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:first-child::before { top: -6px; }
 .dv-ia-columns > div:only-child .dv-ia-items > li:only-child::before { height: 34px; }
 .dv-ia-columns > div:not(:only-child) .dv-ia-items > li:only-child::before { height: 24px; }
-
-/* User flow as one main path: the arrows that cross lanes carry the weight, branches stay quiet. */
-.dv-fc-phase { fill: var(--dv-muted); font-size: 16px; font-weight: 500; }
-.dv-fc-phase[data-key] { fill: var(--dv-ink); font-weight: 600; }
-.dv-fc-phaseline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 25%, transparent); stroke-width: 1; }
-.dv-fc-handoff { fill: none; stroke: var(--dv-ink); stroke-width: 2.5; }
-.dv-fc-head-strong { fill: var(--dv-ink); }
-.dv-fc-handofftext { fill: var(--dv-ink); font-size: 16px; font-weight: 600; }
-.dv-fc-branchline { fill: none; stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.25; stroke-dasharray: 4 4; }
-.dv-fc-note { fill: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-surface)); font-size: 16px; }
-.dv-fc-text-storesub { fill: light-dark(rgb(255 255 255 / 0.82), rgb(18 15 36 / 0.82)); }
-.dv-fc-list li[data-handoff] { font-weight: 600; }
-.dv-fc-list .dv-fc-listnote { margin: 12px 0 0; }
-.dv-fc-list .dv-fc-listnote + .dv-fc-listnote { margin-top: 4px; }
-
-/* Review pass. Text never depends on scroll position: a reader who stops sees it all. Blocks arrive
-   once through the reveal units; only bars, the section titles (done once fully on screen) and the
-   stage openings stay tied to scroll. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .dv-funnel li, .dv-found tbody th, .dv-found td, .dv-evbox .dv-insight-voices li, .dv-flow p, .dv-asks li,
-    .dv-board img, .dv-aff-frame, .dv-meet-photo, .dv .dv-figure, .dv-section-head::after { animation: none; }
-    :is(.dv-headline, .dv-core-text) { -webkit-text-fill-color: currentColor; background: none; animation: none; }
-    .dv-section-title { animation-range: entry 0% entry 100%; }
-    .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation: dv-sheet-text linear both; animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
-  }
-}
-
-/* Stage nav steps aside while scrolling down; keyboard focus keeps it. */
-.dv-nav[data-away="true"]:not(:focus-within) { opacity: 0; translate: -50% 12px; pointer-events: none; }
-
-/* What isn't current stays readable (AA): it drops to the muted colour, never to low opacity. */
-.dv-reel-points li { color: var(--dv-muted); }
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-reel-text { opacity: 1; }
-  .dv-reel-line { transition: color 400ms var(--ease); }
-  .dv-reel:not([data-on]) .dv-reel-line { color: var(--dv-muted); }
-}
-@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  .dv-panels > li > * { opacity: 1; }
-  .dv-panels > li :is(h4, b) { transition: color 400ms var(--ease); }
-  .case-study .dv .dv-panels > li:not([data-on], :hover) h4 { color: var(--dv-muted); }
-  .dv-panels > li:not([data-on], :hover) :is(.dv-panel-num, .dv-panel-answer b) { color: var(--dv-muted); }
-}
-
-/* The product carries the page: process boards step back in the dark theme, the tool table's
-   conclusion is the one solid fill, and the Takeaway photo is an aside. */
-.dv { --dv-accent-fill: #5b3fd6; }
-.case-study[data-project="gemini"] .dv { --dv-accent-fill: #245cc0; }
-.dv-tool-gaps :is(thead th:last-child, td[data-gap]) { border-bottom-color: rgb(255 255 255 / 0.2); background: var(--dv-accent-fill); color: #fff; }
-.case-study .dv #takeaway .dv-figure { max-width: 640px; }
-:root[data-theme="dark"] :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.dv-canvas-full, .dv-aff-frame) img { filter: brightness(0.8) saturate(0.85); } }
-
-/* Fewer empty screens between stages. */
-.case-study .dv { --sp-stage: 160px; }
-@media (max-width: 47.99rem) { .case-study .dv { --sp-stage: 96px; } }
-
-/* Phones: the IA as its nodes only; pills stay readable over the dust. */
-@media (max-width: 47.99rem) { .dv-ia-items ul { display: none; } }
-@media (max-width: 63.99rem) { .home-pick { background: color-mix(in srgb, var(--bg) 84%, var(--ink)); -webkit-backdrop-filter: none; backdrop-filter: none; } }
-
-/* About's closing deck reads at the size of the work it shows. */
-.case-study[data-project="about"] .more-work-deck { --deck-card: clamp(220px, 20vw, 300px); height: calc(var(--deck-card) * 1.25 + 24px); }
-
-/* AA in the light theme: small labels on the bands and the developer's name. */
-.case-study .dv .dv-caps { color: light-dark(#4f5754, var(--dv-muted)); }
-.case-study .dv .dv-cast article[data-line="developer"] h4 { color: light-dark(#a64a14, var(--dv-role)); }
-
-/* The interview capture is already cropped (Meet tiles beside the question guide), so it shows whole. */
-.dv-meet-photo, .dv-meet-photo img { aspect-ratio: 2400 / 1072; }
-.dv-meet-photo img { position: static; width: 100%; height: auto; max-width: 100%; }
-
 
 /* The affinity board plays by itself: the bar on the current tab is its timer. */
 @keyframes dv-aff-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
@@ -5002,3 +4898,25 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-aff-stop:hover { background: rgb(14 17 17 / 0.92); }
 .dv-aff-stop:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
 @media (max-width: 63.99rem) { .dv-aff-stop { display: none; } }
+
+/* User flow as plain steps. The only colour is the accent on the screen two people share. */
+.dv-fc { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 24px; --fc-card: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.case-study .dv .dv-fc-meet { grid-row: 1; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--case-accent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-fc-steps { grid-row: 2; grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin: 0; padding: 0; list-style: none; }
+.dv-fc-steps li { position: relative; padding: 20px; border-radius: var(--dv-card-radius); background: var(--fc-card); }
+.dv-fc-steps li[data-shared] { background: color-mix(in srgb, var(--case-accent) 16%, var(--fc-card)); }
+.dv-fc-steps li:not(:last-child)::after { content: "→"; position: absolute; top: 50%; right: -20px; width: 16px; color: var(--dv-muted); font-size: 16px; line-height: 1; text-align: center; transform: translateY(-50%); }
+.dv-fc-who { display: flex; align-items: baseline; gap: 8px; color: color-mix(in srgb, var(--dv-ink) 80%, var(--fc-card)); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-fc-who b { color: var(--case-accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-fc-steps p { margin: 16px 0 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.35; word-break: keep-all; }
+.case-study .dv .dv-fc-foot { grid-row: 3; grid-column: 1 / -1; max-width: var(--dv-measure); margin: 24px 0 0; color: color-mix(in srgb, var(--dv-ink) 80%, var(--dv-bg, var(--bg))); font-size: 16px; line-height: 1.55; word-break: keep-all; }
+@media (max-width: 71.99rem) {
+  .dv-fc { display: block; }
+  .case-study .dv .dv-fc-meet { display: none; }
+  .dv-fc-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .dv-fc-steps li::after { display: none; }
+}
+@media (max-width: 47.99rem) {
+  .dv-fc-steps { grid-template-columns: 1fr; }
+  .case-study .dv .dv-fc-steps p { margin-top: 8px; }
+}
