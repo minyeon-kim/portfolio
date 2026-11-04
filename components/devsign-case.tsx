@@ -703,8 +703,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
-        {/* One column. Where scroll timelines run on desktop, the conclusion shrinks and stays on
-            top while the row crossing mid-screen comes forward; elsewhere it is a plain list. */}
+        {/* One column. Where scroll timelines run on desktop, the row crossing mid-screen lights up;
+            elsewhere it is a plain list. */}
         <div className="dv-tk">
           <div className="dv-tk-head">
             <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>

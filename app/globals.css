@@ -3899,31 +3899,20 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .case-study .dv .dv-tk-mark { font-size: var(--t-meta, 16px); font-weight: 500; line-height: 1.5; }
   .case-study .dv .dv-tk-mark:empty, .case-study .dv .dv-tk-row:last-child .dv-tk-mark { display: none; }
 }
-/* The conclusion shrinks with native scroll as it reaches the top and stays there; it is set at
-   its small size and scaled up, so nothing below it reflows. The row crossing mid-screen comes
-   forward: the others are a step smaller and muted (never faint, they stay readable). */
+/* One motion only: the row crossing mid-screen lights up. Nothing moves or changes size, and the
+   others stay readable in the muted colour. */
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) and (timeline-scope: --x) {
-    .dv-tk { timeline-scope: --dv-tk-list; }
-    .dv-tk-head { position: sticky; z-index: 2; top: 0; height: 184px; margin-top: -64px; padding-top: 80px; isolation: isolate; }
-    .dv-tk-head::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--dv-bg); mask-image: linear-gradient(#000 84%, transparent); }
-    .case-study .dv .dv-tk-head .dv-headline { max-width: min(700px, 58.3%); font-size: clamp(22px, 1.95vw, 28px); line-height: 1.3; transform-origin: 0 0; animation: dv-tk-shrink linear both; animation-timeline: --dv-tk-list; animation-range: cover calc(100svh - 420px) cover calc(100svh - 120px); }
-    .dv-tk-list { margin-top: 0; padding-block: 72px 40px; view-timeline: --dv-tk-list block; }
+  @supports (animation-timeline: view()) {
     .dv-tk-row { view-timeline: --dv-tk-row block; }
-    .dv-tk-copy { transform-origin: 0 50%; animation: dv-tk-forward linear both; animation-timeline: --dv-tk-row; animation-range: cover 20% cover 80%; }
     .case-study .dv .dv-tk-title { animation: dv-tk-title linear both; animation-timeline: --dv-tk-row; animation-range: cover 20% cover 80%; }
     .case-study .dv .dv-tk-mark { animation: dv-tk-mark linear both; animation-timeline: --dv-tk-row; animation-range: cover 20% cover 80%; }
-    /* The last row is where the case ends, so it stays forward as it leaves. */
-    .dv-tk-row:last-child .dv-tk-copy { animation-name: dv-tk-forward-end; animation-range: cover 20% cover 43%; }
+    /* The last row is where the case ends, so it stays lit. */
     .case-study .dv .dv-tk-row:last-child .dv-tk-title { animation-name: dv-tk-title-end; animation-range: cover 20% cover 43%; }
     .case-study .dv .dv-tk-row:last-child .dv-tk-mark { animation-name: dv-tk-mark-end; animation-range: cover 20% cover 43%; }
   }
 }
-@keyframes dv-tk-shrink { from { scale: 1.714; } to { scale: 1; } }
-@keyframes dv-tk-forward { 0% { scale: 0.86; } 38%, 62% { scale: 1; } 100% { scale: 0.86; } }
 @keyframes dv-tk-title { 0% { color: var(--dv-muted); } 38%, 62% { color: var(--dv-ink); } 100% { color: var(--dv-muted); } }
 @keyframes dv-tk-mark { 0% { color: var(--dv-muted); } 38%, 62% { color: var(--case-accent); } 100% { color: var(--dv-muted); } }
-@keyframes dv-tk-forward-end { from { scale: 0.86; } to { scale: 1; } }
 @keyframes dv-tk-title-end { from { color: var(--dv-muted); } to { color: var(--dv-ink); } }
 @keyframes dv-tk-mark-end { from { color: var(--dv-muted); } to { color: var(--case-accent); } }
 
@@ -4738,7 +4727,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway) { padding-block: var(--sp-stage) calc(var(--sp-stage) + 24px); }
 .dv > section:is(#overview) { padding-top: calc(var(--sp-stage) - 40px); }
-.dv > section:is(#takeaway) { padding-bottom: 0; }
+.dv > section:is(#takeaway) { padding-bottom: 40px; }
 .dv > section:is(#define):has(> .dv-core:last-child) { padding-bottom: 0; }
 .case-study .dv .dv-section-head { margin-bottom: var(--sp-head); }
 .case-study .dv :is(.dv-subsection, .dv-subsection-120, .dv-question, .dv-gap-96, .dv-process, .dv-main-features, .dv-block + .dv-gap-72, .dv-core + .dv-hmw) { margin-top: var(--sp-block); }
