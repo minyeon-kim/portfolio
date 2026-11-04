@@ -4880,7 +4880,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-ia-items ul li { --tick: 14px; color: var(--dv-muted); font-size: 16px; line-height: 28px; }
 /* Wider than the reading column, so the tree can spread. */
 @media (min-width: 72rem) {
-  .dv-ia { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); }
+  .dv-ia, .dv-fc { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); }
 }
 @media (max-width: 71.99rem) {
   .dv-ia-groups { grid-template-columns: 1fr 1fr; margin-top: 12px; padding-top: 0; }
