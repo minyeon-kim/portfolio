@@ -5,6 +5,7 @@ import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
+import { FlowChart, IaTree } from "@/components/devsign-diagrams";
 import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, AffinityBoard, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
@@ -582,10 +583,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
         <div className="dv-subsection">
           <Block {...develop.ia} text={ff ? undefined : develop.ia.text} ff={ff} />
-          <Figure img={develop.ia.image} className="dv-board dv-gap-40" open />
+          <IaTree tree={develop.ia.tree} />
           <div className="dv-gap-96">
             <Block {...develop.flow} text={ff ? undefined : develop.flow.text} ff={ff} />
-            <Figure img={develop.flow.image} className="dv-board dv-gap-40" open />
+            <FlowChart chart={develop.flow.chart} />
           </div>
           {/* Shown once its capture is added (`develop.system.image`). */}
           {develop.system?.image && (
