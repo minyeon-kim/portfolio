@@ -24,104 +24,6 @@ export function OpenFrame({ children, href }: { children: React.ReactNode; href:
   );
 }
 
-// The affinity board as a map: nothing on it moves or scales. Picking a theme lights
-// its column, and what it says appears under the board as readable text.
-type BoardTheme = { tab: string; name: string; color: string; insight: string; notes: [string, string][] };
-const THEME_EDGE = 0.8; // % of the board left and right of the seven columns
-// Plays through the themes by itself while it is on screen (the bar on the current tab is the
-// timer: its animationend picks the next). Hover or keyboard focus holds it, the button stops it,
-// and pointing at a tab or a column still picks that theme. Reduced motion never plays.
-export function AffinityBoard({ board, themes, label, autoLabels, first = 0 }: { board: { src: string; width: number; height: number; alt: string }; themes: BoardTheme[]; label: string; autoLabels: [string, string]; first?: number }) {
-  const [current, setCurrent] = useState(first);
-  const [auto, setAuto] = useState(false);
-  const [seen, setSeen] = useState(false);
-  const [hover, setHover] = useState(false);
-  const [focus, setFocus] = useState(false);
-  const [stopped, setStopped] = useState(false);
-  const map = useRef<HTMLDivElement>(null);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  useEffect(() => {
-    const element = map.current;
-    if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setAuto(true);
-    const observer = new IntersectionObserver(([entry]) => setSeen(entry.isIntersecting), { threshold: 0.4 });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-  const width = (100 - THEME_EDGE * 2) / themes.length;
-  const at = (event: React.PointerEvent<HTMLDivElement>) => {
-    if ((event.target as Element).closest(".dv-aff-stop")) return;
-    const box = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - box.left) / box.width) * 100;
-    setCurrent(Math.max(0, Math.min(themes.length - 1, Math.floor((x - THEME_EDGE) / width))));
-  };
-  const onKey = (event: React.KeyboardEvent) => {
-    const last = themes.length - 1;
-    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
-    if (next === undefined) return;
-    event.preventDefault();
-    setCurrent(next);
-    tabs.current[next]?.focus();
-  };
-  return (
-    <div
-      ref={map}
-      className="dv-aff-map"
-      onPointerEnter={(event) => { if (event.pointerType === "mouse") setHover(true); }}
-      onPointerLeave={() => setHover(false)}
-      onFocus={(event) => { if (event.target.matches(":focus-visible")) setFocus(true); }}
-      onBlur={() => setFocus(false)}
-    >
-      <div
-        className="dv-aff-tabs"
-        role="tablist"
-        aria-label={label}
-        onKeyDown={onKey}
-        data-auto={(auto && !stopped) || undefined}
-        data-run={(seen && !hover && !focus) || undefined}
-        onAnimationEnd={(event) => { if (event.animationName === "dv-aff-fill") setCurrent((c) => (c + 1) % themes.length); }}
-      >
-        {themes.map((theme, i) => (
-          <button
-            key={theme.tab}
-            ref={(el) => { tabs.current[i] = el; }}
-            id={`aff-tab-${i}`}
-            type="button"
-            role="tab"
-            aria-selected={i === current}
-            aria-controls={`aff-panel-${i}`}
-            tabIndex={i === current ? 0 : -1}
-            onClick={() => setCurrent(i)}
-            onPointerEnter={(event) => { if (event.pointerType === "mouse") setCurrent(i); }}
-          >{theme.tab}</button>
-        ))}
-      </div>
-      <div className="dv-aff-frame" onPointerMove={(event) => { if (event.pointerType === "mouse") at(event); }} onClick={at}>
-        <Image src={withBase(board.src)} alt={board.alt} width={board.width} height={board.height} sizes="(min-width: 75rem) 1200px, 100vw" />
-        <span className="dv-aff-spot" aria-hidden="true" style={{ left: `${THEME_EDGE + current * width}%`, width: `${width}%` }} />
-        {auto && (
-          <button type="button" className="dv-aff-stop press" aria-label={stopped ? autoLabels[1] : autoLabels[0]} onClick={(event) => { event.stopPropagation(); setStopped(!stopped); }}>
-            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor">{stopped ? <path d="M5 3l8 5-8 5z" /> : <path d="M4 3h3v10H4zM9 3h3v10H9z" />}</svg>
-          </button>
-        )}
-      </div>
-      <div className="dv-aff-reader">
-        {themes.map((theme, i) => (
-          <div key={theme.tab} id={`aff-panel-${i}`} className="dv-aff-panel" role="tabpanel" aria-labelledby={`aff-tab-${i}`} data-on={i === current || undefined}>
-            <div>
-              <h4>{theme.name}</h4>
-              <p>{theme.insight}</p>
-            </div>
-            <ul style={{ "--note": theme.color } as React.CSSProperties}>
-              {theme.notes.map(([text, who]) => <li key={text}>{text}<b>{who}</b></li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // Only what is inside the box, fitted into a tile of one shape: no outline, no
 // surrounding screen, and never blown up past 1.6x (the shots are 2x).
 function Crop({ img, box, tile }: { img: Shot; box: Box; tile: number }) {
@@ -448,12 +350,12 @@ export function UsabilityResults({ scores, meaning }: { scores: UsabilityScore[]
   );
 }
 
-type Problem = { title: string; body: string; role: string; tone: string; feature?: string };
+type Problem = { title: string; body: string; role: string; tone: string; feature?: string; themes?: string[]; quote?: [string, string] };
 
 // Key problems as a vertical list beside a sticky heading (CSS). The page never stops: the row
 // nearest the middle of the screen is lit, so the eye moves the way the scroll does. The dimming
 // is desktop with motion only (CSS); elsewhere every row stays lit.
-export function ProblemPanels({ items, answeredBy, children }: { items: Problem[]; answeredBy: string; children?: React.ReactNode }) {
+export function ProblemPanels({ items, answeredBy, themesLabel, children }: { items: Problem[]; answeredBy: string; themesLabel?: string; children?: React.ReactNode }) {
   const [lit, setLit] = useState(0);
   const list = useRef<HTMLOListElement>(null);
   useEffect(() => {
@@ -491,7 +393,11 @@ export function ProblemPanels({ items, answeredBy, children }: { items: Problem[
             <div>
               <h4>{item.title}</h4>
               <p>{item.body}</p>
-              {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+              {item.quote && <p className="dv-panel-quote">“{item.quote[0]}”<span>{item.quote[1]}</span></p>}
+              <div className="dv-panel-meta">
+                {item.themes && <p><span>{themesLabel}</span>{item.themes.join(" · ")}</p>}
+                {item.feature && <p className="dv-panel-answer"><span>{answeredBy}</span><b>{item.feature}</b></p>}
+              </div>
             </div>
           </li>
         ))}
