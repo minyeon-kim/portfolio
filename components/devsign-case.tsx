@@ -6,7 +6,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaTree } from "@/components/devsign-diagrams";
-import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels } from "@/components/devsign-story";
+import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -639,6 +639,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-gap-96">
             <Block {...deliver.handoff} ff={ff} />
             <Wireflow nodes={deliver.handoff.nodes} label={deliver.handoff.lead} />
+          </div>
+        )}
+        {deliver.spec && (
+          <div className="dv-gap-96">
+            <Block method={deliver.spec.label} title={deliver.spec.label} lead={deliver.spec.lead} ff={ff} />
+            <HandoffSpec spec={deliver.spec} />
           </div>
         )}
       </Section>

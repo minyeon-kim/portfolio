@@ -378,3 +378,57 @@ export function ProblemPanels({ items, answeredBy, children }: { items: Problem[
   );
 }
 
+type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][] };
+type SpecData = { cols: { does: string; state: string }; shared: string; open: string; screens: SpecScreen[] };
+
+// The handoff spec: one key screen at a time, numbered pins on the real screen and the same
+// numbers in the list beside it. Pointing at either lights the other. Phones list all four.
+export function HandoffSpec({ spec }: { spec: SpecData }) {
+  const [current, setCurrent] = useState(0);
+  const [lit, setLit] = useState<number | null>(null);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const pick = (i: number) => { setCurrent(i); setLit(null); };
+  const onKey = (event: React.KeyboardEvent) => {
+    const last = spec.screens.length - 1;
+    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    pick(next);
+    tabs.current[next]?.focus();
+  };
+  return (
+    <div className="dv-spec dv-gap-40 reveal">
+      <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
+        {spec.screens.map((screen, i) => (
+          <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
+        ))}
+      </div>
+      <div className="dv-spec-panels">
+      {spec.screens.map((screen, i) => (
+        <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role="tabpanel" aria-labelledby={`spec-tab-${screen.id}`} data-on={i === current || undefined}>
+          <div className="dv-spec-shot">
+            <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 60vw, 100vw" />
+            {screen.pins.map(([x, y], n) => (
+              <span key={n} className="dv-spec-pin" data-lit={lit === n || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>{n + 1}</span>
+            ))}
+          </div>
+          <ol className="dv-spec-rows">
+            {screen.rows.map(([name, does, state], n) => (
+              <li key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
+                <b aria-hidden="true">{n + 1}</b>
+                <div>
+                  <h4>{name}</h4>
+                  <p>{does}</p>
+                  {state !== "-" && <p className="dv-spec-state">{state}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+      </div>
+      <p className="dv-spec-note">{spec.shared}</p>
+      <p className="dv-spec-note">{spec.open}</p>
+    </div>
+  );
+}
