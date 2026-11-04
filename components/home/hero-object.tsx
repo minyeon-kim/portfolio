@@ -71,8 +71,9 @@ vec3 formOf(float n, vec2 uv) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
-      float y = 0.16 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.08 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 0.75;
-      p = vec3(x, y + ground, z);
+      float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
+      // Tilted towards the viewer, so the rows open out down the screen.
+      p = vec3(x, y + (z + 0.9) * 0.42 + ground, z);
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
@@ -216,7 +217,7 @@ void main() {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[2]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[3]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
 uniform float keep;  // the share of the simulation drawn
 uniform float portraitMix; uniform sampler2D portrait; uniform sampler2D portraitColor;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
@@ -248,7 +249,7 @@ void main() {
   vSpec = mix(vSpec, 0.85, bolt);
   // The landing galaxy is the richest: every project's colour wound through
   // its arms (blue, violet, teal, a touch of pink) round a warm white core.
-  vec2 gq = (p.xy - vec2(0.35, 0.4 + ground)) / vec2(4.5, 1.1);
+  vec2 gq = (p.xy - vec2(0.35, 0.4 + ground)) / vec2(4.5, 1.9);
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
@@ -310,7 +311,7 @@ void main() {
   // The case's paragraph stays readable: dust behind it (with a soft margin)
   // all but disappears. clearRect is its box in clip space (x0, y0, x1, y1).
   vec2 m = vec2(0.09, 0.14);
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 3; i++) {
     vec4 c = clearRect[i];
     float inside = smoothstep(c.x - m.x, c.x, s.x) * smoothstep(c.z + m.x, c.z, s.x)
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
@@ -668,7 +669,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
 
     // The visible case paragraph's box in clip space, re-read now and then;
     // off-screen when none is shown.
-    const clear = [9, 9, 9, 9, 9, 9, 9, 9];
+    const clear = new Array(12).fill(9);
     let clearTick = 0;
     const readClear = () => {
       // A case's paragraph, or on the landing the statement (with the note
@@ -677,12 +678,15 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       const parts = shown.length ? shown : [...document.querySelectorAll<HTMLElement>(wideStage() ? ".home-tagline-wrap:not([data-swap]) .home-tagline-default" : ".home-tagline-wrap:not([data-swap]) .home-tagline-default, .home-note:not([data-swap]) .home-note-default")];
       const boxes = parts.map((part) => part.getBoundingClientRect()).filter((box) => box.width > 0);
       const c = el.getBoundingClientRect();
-      // The second box: the case pills, where they sit in the waves.
-      const picks = wideStage() ? document.querySelector<HTMLElement>(".home-picks")?.getBoundingClientRect() : undefined;
-      if (picks) {
-        clear[4] = ((picks.left - c.left) / c.width) * 2 - 1; clear[6] = ((picks.right - c.left) / c.width) * 2 - 1;
-        clear[5] = 1 - ((picks.bottom - c.top) / c.height) * 2; clear[7] = 1 - ((picks.top - c.top) / c.height) * 2;
-      } else clear.fill(9, 4);
+      // The other boxes, on wide screens: the case pills and the note, which
+      // sit apart from the statement, in the waves.
+      [".home-picks", ".home-note:not([data-swap]) .home-note-default"].forEach((selector, i) => {
+        const box = wideStage() ? document.querySelector<HTMLElement>(selector)?.getBoundingClientRect() : undefined;
+        const at = 4 + i * 4;
+        if (!box) { clear.fill(9, at, at + 4); return; }
+        clear[at] = ((box.left - c.left) / c.width) * 2 - 1; clear[at + 2] = ((box.right - c.left) / c.width) * 2 - 1;
+        clear[at + 1] = 1 - ((box.bottom - c.top) / c.height) * 2; clear[at + 3] = 1 - ((box.top - c.top) / c.height) * 2;
+      });
       if (!boxes.length) { clear.fill(9, 0, 4); return; }
       clear[0] = ((Math.min(...boxes.map((r) => r.left)) - c.left) / c.width) * 2 - 1; clear[2] = ((Math.max(...boxes.map((r) => r.right)) - c.left) / c.width) * 2 - 1;
       clear[1] = 1 - ((Math.max(...boxes.map((r) => r.bottom)) - c.top) / c.height) * 2; clear[3] = 1 - ((Math.min(...boxes.map((r) => r.top)) - c.top) / c.height) * 2;
@@ -839,7 +843,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.1);
+      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.3);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       // The portrait keeps only a few of the far stars.
       gl.drawArrays(gl.POINTS, 0, Math.round(4200 * (1 - 0.8 * portraitMix)));
@@ -847,7 +851,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture); bind(pDraw, "portraitColor", 3, portraitColor.texture);
       gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
-      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.1); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
+      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.3); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
@@ -857,7 +861,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       if (clearTick++ % 10 === 0) readClear();
       gl.uniform1f(uniform(pDraw, "dpr"), dpr);
       gl.uniform4fv(uniform(pDraw, "clearRect"), clear);
-      gl.uniform1f(uniform(pDraw, "keep"), 0.35 + 0.65 * portraitMix);
+      gl.uniform1f(uniform(pDraw, "keep"), 0.42 + 0.58 * portraitMix);
       gl.uniform3fv(uniform(pDraw, "calm"), colours.calm); gl.uniform1f(uniform(pDraw, "halo"), colours.light * (1 - portraitMix));
       gl.drawArrays(gl.POINTS, 0, SIZE * SIZE);
       // 2. Dithered onto the ground, opaque, each dot in its light's colour.
