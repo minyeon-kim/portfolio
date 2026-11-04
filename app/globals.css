@@ -4081,21 +4081,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study[data-project="about"] .dv { --case-accent: var(--accent); --dv-tint: light-dark(#eef0fd, color-mix(in srgb, var(--accent) 12%, var(--bg))); --dv-tint-core: light-dark(#eef0fd, #181c38); --dv-band-dark: #171a2b; --dv-band-card-dark: #232740; --dv-surface: light-dark(#ffffff, #171a2b); }
 .case-study[data-project="about"] .more-work + .site-footer { --ft-glow: #3f55e8; --ft-glow-hot: #b9c4ff; }
 .about-tools { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
-.about-story { max-width: var(--dv-measure); margin-top: 40px; }
-.about-story p { color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
-.about-story p + p { margin-top: 12px; }
-.about-story .story-label { margin: 0 0 8px; font-family: inherit; font-size: 16px; }
-.about-story .story-title { margin: 0 0 8px; font-size: 20px; font-weight: 600; line-height: 1.3; }
-.about-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
 .devsign-hero[data-project="about"] .has-emphasis { color: color-mix(in srgb, var(--dh-ink) 70%, transparent); }
 .devsign-hero[data-project="about"] .has-emphasis strong { color: var(--dh-ink); }
 .devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]) { background: color-mix(in srgb, var(--dh-ink) 10%, transparent); }
 .devsign-hero[data-project="about"] .devsign-hero-actions a:not([data-primary]):hover { background: color-mix(in srgb, var(--dh-ink) 16%, transparent); }
 .dv-features .about-tools li { display: block; padding: 0; border-radius: 0; background: none; }
-.about-story ol { padding-left: 32px; }
 @media (min-width: 64rem) { .devsign-hero[data-project="about"] .devsign-hero-details { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.about-contact button { height: auto; padding: 7px 14px; border: 1px solid color-mix(in srgb, var(--case-accent) 55%, transparent); background: transparent; color: var(--case-accent); font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.3; }
-.about-contact button:hover, .about-contact button:focus-visible { background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
 
 /* The canvas once, then the key pains in words. */
@@ -4270,9 +4261,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Devsign: the two people on the journey, the two structure boards. */
 .dv .dv-gap-16 { margin-top: 16px; }
 
-.about-skills { margin: 48px 0 0; max-width: var(--dv-measure); }
-.about-skills dt { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; }
-.about-skills dd { margin: 8px 0 0; color: var(--dv-muted); font-size: 18px; font-weight: 500; line-height: 1.5; }
 
 /* Five facts stay on one row on desktop. */
 @media (min-width: 64rem) { .devsign-hero-details:has(> :nth-child(5)) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; } }
@@ -4420,24 +4408,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .devsign-hero[data-project="about"] .devsign-hero-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(48px, 5vw, 80px); align-items: center; padding: 16px calc(max(56px, (100vw - 1200px) / 2) - 16px) 0; }
   .about-hero-portrait { order: 0; margin: 0; }
   .about-hero-portrait img, .about-hero-portrait .case-media-space { width: auto; height: min(calc(100svh - 112px), 760px); max-height: none; }
-}
-[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: clamp(32px, 5vw, 80px); max-width: var(--dv-max); margin-inline: auto; padding: clamp(72px, 8vw, 112px) 0; border-top: 1px solid var(--line); border-radius: 0; background: none; clip-path: none; opacity: 1; translate: none; scale: none; animation: none; }
-/* The shared band rule on these two carries a very high specificity (its :is() argument with :not(:has())). */
-[data-about-page] .dv > :is(#experience, #outside) { margin-inline: auto !important; padding-inline: 0 !important; border-radius: 0 !important; background: none !important; clip-path: none !important; animation: none !important; }
-[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > * { grid-column: 2; min-width: 0; }
-[data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > .dv-section-head { grid-column: 1; grid-row: 1 / span 20; align-self: start; margin: 0; }
-[data-about-page] .dv-section-head::after { content: none; }
-[data-about-page] .case-study .dv .dv-section-title { font-size: var(--t-statement); font-weight: 400; line-height: 1.25; }
-[data-about-page] .case-study .dv .dv-headline { font-size: var(--t-heading); line-height: 1.4; }
-[data-about-page] .dv > #contact .about-contact { margin-top: 32px; }
-.about-principles { margin: 48px 0 0; padding: 0; list-style: none; }
-.about-principles li { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 16px 32px; padding: 24px 0; border-top: 1px solid var(--line); }
-.about-principles h3 { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
-.about-principles p { margin: 0; color: var(--dv-muted); font-size: 18px; line-height: 1.55; }
-@media (max-width: 63.99rem) {
-  [data-about-page] .dv > :is(#approach, #experience, #outside, #contact) { display: block; padding: 64px 0; }
-  [data-about-page] .dv > :is(#approach, #experience, #outside, #contact) > .dv-section-head { margin-bottom: 24px; }
-  .about-principles li { grid-template-columns: 1fr; gap: 8px; }
 }
 
 /* Entering About from the landing (lib/about-entrance.ts). */
@@ -5034,3 +5004,57 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Phone menu: the links sit over the page, so they are opaque and a full tap target. */
 .header-menu-panel a { min-height: 44px; background: color-mix(in srgb, var(--ink) 14%, var(--bg)); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .header-menu-panel a:hover, .header-menu-panel a[aria-current="page"] { background: var(--bg); }
+
+/* About: security to design (shot B). Outside the case body, so it uses the page tokens. */
+.about-body { --about-col: min(1200px, calc(100vw - 2 * max(56px, (100vw - 1200px) / 2))); }
+.about-statement { max-width: 900px; color: var(--ink); font-family: var(--font-display); font-size: clamp(28px, 2.6vw, 36px); font-weight: 400; line-height: 1.25; text-wrap: pretty; }
+.about-bridge, .about-photos, .about-close { width: var(--about-col); margin-inline: auto; }
+.about-bridge { padding-block: clamp(72px, 8vw, 120px); }
+.about-bridge-head, .about-bridge-rows > li { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); column-gap: 24px; }
+.about-bridge-head { margin-top: clamp(40px, 4.4vw, 64px); padding-bottom: 16px; color: var(--muted); font-size: 16px; font-weight: 500; }
+.about-bridge-head span:last-child { grid-column: 3; color: var(--accent); }
+.about-bridge-rows { margin: 0; padding: 0; list-style: none; }
+.about-bridge-rows > li { padding-block: 32px; border-top: 1px solid var(--line); }
+.about-bridge-rows > li > svg { justify-self: center; width: 22px; height: 22px; margin-top: 6px; color: var(--accent); }
+.about-bridge-tag { display: none; }
+.about-bridge-then, .about-bridge-rows h3 { margin: 0; color: var(--ink); font-size: clamp(20px, 1.7vw, 24px); font-weight: 500; line-height: 1.35; }
+.about-bridge-text { margin: 10px 0 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.about-band { margin-inline: 16px; padding-block: clamp(64px, 8vw, 112px); border-radius: 32px; background: var(--surface); }
+.about-band-inner { width: calc(var(--about-col) - 0px); max-width: calc(100vw - 64px); margin-inline: auto; }
+.about-timeline { margin: clamp(32px, 4vw, 56px) 0 0; padding: 0; list-style: none; }
+.about-timeline > li { display: grid; grid-template-columns: 240px minmax(0, 1fr); column-gap: 48px; padding-block: 24px; border-top: 1px solid var(--line); }
+.about-timeline-label { margin: 3px 0 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.about-timeline h3 { margin: 0 0 8px; color: var(--ink); font-size: clamp(20px, 1.7vw, 24px); font-weight: 500; line-height: 1.35; }
+.about-timeline > li p:not(.about-timeline-label) { max-width: 740px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.about-photos { padding-top: clamp(72px, 8vw, 120px); }
+.about-photos .case-comparison, .about-photos > * { margin-block: 0; }
+.about-close { padding-block: clamp(72px, 8vw, 120px) clamp(56px, 6vw, 96px); }
+.about-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; }
+.about-actions :is(a, button) { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); color: var(--ink); font-family: inherit; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background-color var(--dur-fast) var(--ease); }
+.about-actions :is(a, button):hover { background: color-mix(in srgb, var(--ink) 16%, transparent); }
+.about-actions a[data-primary] { background: var(--ink); color: var(--bg); }
+.about-work { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: clamp(48px, 4vw, 56px) 0 0; padding: 0; list-style: none; }
+.about-work a { display: block; height: 100%; padding: 28px; border-radius: 16px; background: var(--surface); color: inherit; text-decoration: none; }
+.about-work a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.about-work h3 { width: fit-content; margin: 0 0 8px; font-family: var(--font-display); font-size: 28px; font-weight: 500; line-height: 1.2; }
+.about-work [data-project="devsign"] h3 { color: var(--devsign-title); }
+.about-work [data-project="gemini-privacy"] h3 { background: var(--gemini-title); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.about-work p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+[data-about-page] .about-body .site-footer { margin: 0; padding-block: 0; }
+[data-about-page] .about-body .site-footer-top { display: none; }
+[data-about-page] .about-body .site-footer-bottom { margin: 0; padding: 32px var(--edge-inset); border: 0; }
+@media (max-width: 47.99rem) {
+  .about-body { --about-col: calc(100vw - 32px); }
+  .about-bridge-head { display: none; }
+  .about-bridge-rows { margin-top: 32px; }
+  .about-bridge-rows > li { display: block; padding-block: 24px; }
+  .about-bridge-rows > li > svg { display: none; }
+  .about-bridge-tag { display: block; margin: 0 0 8px; color: var(--muted); font-size: 16px; font-weight: 500; }
+  .about-bridge-rows > li > div + svg + div { margin-top: 24px; }
+  .about-bridge-rows > li > div:last-child .about-bridge-tag { color: var(--accent); }
+  .about-band { margin-inline: 8px; border-radius: 24px; }
+  .about-band-inner { width: calc(100vw - 48px); }
+  .about-timeline > li { display: block; }
+  .about-timeline-label { margin: 0 0 8px; }
+  .about-work { grid-template-columns: 1fr; }
+}

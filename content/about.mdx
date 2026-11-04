@@ -16,24 +16,34 @@ export const headlineEmphasis = "End-to-end"; // set apart in the headline on th
 
 export const bio = [
   "I'm Minyeon. For four years as a security consultant I explained complex problems so developers and clients could act on them; now I design products people can understand and trust.",
-  // Why I switched, in short; the full story sits in the SK shieldus chapter below.
-  "Security work starts after a product is built. I wanted to be in the room earlier, so now I research the problem, design the flow and build a working prototype with AI to test with real users.",
 ];
 
-export const principles = [
-  {
-    title: "I speak developer",
-    body: "Security consulting meant explaining problems to developers and client teams so they could fix them. I understand how things get built, so handoffs are shorter and decisions are faster.",
-  },
-  {
-    title: "Collaboration is where I'm strongest",
-    body: "In Devsign, my teammate and I designed how designers and developers decide together when AI-made work drifts apart, and tested it with both roles.",
-  },
-  {
-    title: "I take things all the way",
-    body: "I don't stop at mockups. I research, define and design, then build a working prototype with AI so people can test the real thing, and keep iterating on what I learn.",
-  },
-];
+export const bridge = {
+  // The page's one idea: what security consulting taught, and what it became in product design.
+  // The second row's link to Devsign is Claude's reading, to be confirmed by Minyeon.
+  statement: "Security work starts after a product is built. I wanted to be in the room earlier.",
+  then: "In security consulting",
+  now: "In product design now",
+  rows: [
+    {
+      then: "I explained problems to developers and client teams so they could fix them.",
+      title: "I speak developer",
+      body: "I understand how things get built, so handoffs are shorter and decisions are faster.",
+    },
+    {
+      then: "I ran a security-check tool across thousands of servers. Failed checks gave no reason.",
+      note: "Working out why it was hard to use, and how it could work better, is what drew me to design.",
+      title: "I design for the reason",
+      body: "Devsign keeps why a decision was made next to the work, where the team can find it.",
+    },
+    {
+      then: "I came in after the product was built.",
+      title: "I take things all the way",
+      body: "I research, define and design, then build a working prototype with AI so people can test the real thing.",
+    },
+  ],
+};
+
 
 export const skills = {
   research: [
@@ -48,29 +58,20 @@ export const skills = {
   ],
 };
 
-<Story>
-
-<Chapter label="2026" title="Product design, Blossom UX School">
-
-Gemini Privacy Revamp: see where it came from, turn it off right there. Research with a teammate, then solo from problem definition to prototype.
-
-Devsign (10 weeks): merge the AI drafts and settle the design–code gaps in one place. A two-person team, end to end.
-
-</Chapter>
-
-<Chapter label="Mar 2022 – Mar 2026 · Seongnam" title="Security Consultant, SK shieldus">
-
-SK shieldus is one of South Korea's largest security companies. I assessed systems for public agencies, banks and large companies, and worked with developers and client teams on the fixes.
-
-For one client, I operated and managed the security-check tool across thousands of servers. The tool itself was the problem: servers had to be registered one by one, its checklist didn't fit Korean security standards, and failed checks gave no reason. I wrote up the issues for the client's security team and the tool's developers. Working out why it was hard to use, and how it could work better, is what drew me to design.
-
-</Chapter>
-
-<Chapter label="Education" title="Studied computer science">
-
-{/* TODO: add the school and years. */}
-Where I learned how software is built, the base for both security work and design.
-
-</Chapter>
-
-</Story>
+export const experience = [
+  {
+    label: "2026",
+    title: "Product design, Blossom UX School",
+    body: "Devsign (10 weeks, a two-person team, end to end) and Gemini privacy revamp (research with a teammate, then solo).",
+  },
+  {
+    label: "Mar 2022 – Mar 2026 · Seongnam",
+    title: "Security Consultant, SK shieldus",
+    body: "SK shieldus is one of South Korea's largest security companies. I assessed systems for public agencies, banks and large companies, and worked with developers and client teams on the fixes.",
+  },
+  {
+    label: "Education",
+    title: "Studied computer science", // TODO: add the school and years.
+    body: "Where I learned how software is built, the base for both security work and design.",
+  },
+];

@@ -7,7 +7,8 @@ declare module "*.mdx" {
   export const headline: string[];
   export const headlineEmphasis: string;
   export const bio: string[];
-  export const principles: { title: string; body: string }[];
+  export const bridge: { statement: string; then: string; now: string; rows: { then: string; note?: string; title: string; body: string }[] };
+  export const experience: { label: string; title: string; body: string }[];
   export const skills: { research: string[]; build: string[]; background: string[] };
   export default function MDXContent(props: MDXProps): React.JSX.Element;
 }
