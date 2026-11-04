@@ -411,7 +411,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>
           <figure className="dv-board reveal">
-            <AffinityBoard board={define.affinity.board} themes={define.affinity.boardThemes} label={define.affinity.themesLabel} />
+            <AffinityBoard board={define.affinity.board} themes={define.affinity.boardThemes} label={define.affinity.themesLabel} autoLabels={define.affinity.autoLabels} />
             <figcaption><a className="dv-board-open" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLink}</a></figcaption>
           </figure>
         </div>
