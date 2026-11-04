@@ -83,6 +83,7 @@ function MenuPanel({ contact, pathname }: Props & { pathname: string }) {
           <ul className="header-menu-pages">
             <li onClick={close}><HomeLink>{t.work}</HomeLink></li>
             <li><Link href={localize("/about/", locale)} onClick={close} aria-current={stripLocale(pathname) === "/about/" ? "page" : undefined}>{t.about}</Link></li>
+            <li><Link href={localize("/playground/", locale)} onClick={close} aria-current={stripLocale(pathname) === "/playground/" ? "page" : undefined}>{t.playground}</Link></li>
           </ul>
           {(contact.email || contact.linkedinUrl || contact.resumeUrl) && <div className="header-menu-contact">
             {contact.email && <a href={`mailto:${contact.email}`} onClick={close}>{t.email} ↗</a>}

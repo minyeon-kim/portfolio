@@ -429,7 +429,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <p className="dv-cast-context">{person.context}</p>
               <table className="dv-needs">
                 <thead>
-                  <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
+                  <tr><th scope="col">{labels.painPoint}</th><th scope="col"><span className="sr-only">→</span></th><th scope="col">{labels.need}</th></tr>
                 </thead>
                 <tbody>
                   {person.pairs.map(([pain, need]: string[]) => (
@@ -490,7 +490,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </div>
                 <table className="dv-needs">
                   <thead>
-                    <tr><th scope="col">{labels.painPoint}</th><td aria-hidden="true" /><th scope="col">{labels.need}</th></tr>
+                    <tr><th scope="col">{labels.painPoint}</th><th scope="col"><span className="sr-only">→</span></th><th scope="col">{labels.need}</th></tr>
                   </thead>
                   <tbody>
                     {person.pairs.map(([pain, need]: string[]) => (
@@ -709,7 +709,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-body reveal">{takeaway.text}</p>
         {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 767px) 100vw, 1200px" className="dv-gap-40" />}
         <div className="dv-gap-80">
-          <p className="dv-caps reveal">{takeaway.reviewTitle}</p>
+          <h3 className="dv-caps reveal">{takeaway.reviewTitle}</h3>
           <ol className="dv-learned">
             {takeaway.review.map((item: { title: string; body: string }, i: number) => (
               <li key={item.title} className="reveal" data-tone={["accent", "blue", "teal"][i % 3]}>
@@ -721,7 +721,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </ol>
         </div>
         {takeaway.limitations && <div className="dv-gap-40">
-          <p className="dv-caps reveal">{takeaway.limitationsTitle}</p>
+          <h3 className="dv-caps reveal">{takeaway.limitationsTitle}</h3>
           <ul className="dv-learned dv-learned-plain">
             {takeaway.limitations.map((l: { lead: string; text: string }) => (
               <li key={l.lead} className="reveal">

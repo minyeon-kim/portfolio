@@ -27,7 +27,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0a0b14;
-    --surface: #151918;
+    --surface: #17181d;
     --ink: #e8ecea;
     --muted: #8e9895;
     --line: #2a2c3c;
@@ -39,7 +39,7 @@
 
 :root[data-theme="dark"] {
   --bg: #0a0b14;
-  --surface: #151918;
+  --surface: #17181d;
   --ink: #e8ecea;
   --muted: #8e9895;
   --line: #2a2c3c;
@@ -203,7 +203,7 @@ details[open]::details-content {
 }
 @utility on-media {
   --bg: var(--media-bg);
-  --surface: #151918;
+  --surface: #17181d;
   --ink: #e8ecea;
   --muted: #8e9895;
   --line: #2a2c3c;
@@ -2965,7 +2965,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Next project, compact: no rule above, a quiet sentence-case label, a
    smaller deck and a tighter caption, so the end of a case stays short. */
 .more-work { margin-top: clamp(32px, 3vw, 56px); padding-top: 0; border-top: 0; }
-.more-work-label { margin-bottom: 20px; color: var(--muted); font: 500 13px/1.35 var(--font-sans); letter-spacing: 0; text-transform: none; }
+.more-work-label { margin-bottom: 20px; color: var(--muted); font: 500 16px/1.35 var(--font-sans); letter-spacing: 0; text-transform: none; }
 .more-work-deck { --deck-card: clamp(150px, 12vw, 190px); --deck-peek: 38%; --deck-fan: 62%; height: calc(var(--deck-card) * 1.25 + 16px); }
 .more-work-hit, .more-work-cover { border-radius: 16px; }
 .more-work-caption { gap: 6px; margin-top: 16px; }
@@ -5003,3 +5003,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .case-study .dv :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { transition: color 250ms var(--ease); }
   .case-study .dv .dv-reel:not([data-on]) :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { color: var(--dv-muted); }
 }
+
+/* Phone menu: the links sit over the page, so they are opaque and a full tap target. */
+.header-menu-panel a { min-height: 44px; background: color-mix(in srgb, var(--ink) 14%, var(--bg)); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.header-menu-panel a:hover, .header-menu-panel a[aria-current="page"] { background: var(--bg); }
