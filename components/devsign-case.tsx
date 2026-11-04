@@ -644,7 +644,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.spec && (
           <div className="dv-gap-96">
             <Block method={deliver.spec.label} title={deliver.spec.label} lead={deliver.spec.lead} ff={ff} />
-            <HandoffSpec spec={deliver.spec} />
+            <HandoffSpec spec={deliver.spec} one />
           </div>
         )}
       </Section>

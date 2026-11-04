@@ -4982,3 +4982,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-spec-pin { width: 20px; height: 20px; margin: -10px 0 0 -10px; box-shadow: 0 0 0 1px #fff; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-spec-pin, .dv-spec-rows li, .dv-spec-tabs button { transition: none; } }
+
+.case-study .dv .dv-spec-more { margin: 24px 0 0; font-size: 16px; }
+.dv-spec-page { padding-top: 32px; }
+.case-study .dv .dv-spec-back { margin: 0 0 32px; font-size: 16px; }
+.case-study .dv .dv-spec-lead { margin: 16px 0 0; max-width: var(--dv-measure); color: var(--dv-ink); font-size: var(--t-body); line-height: 1.55; word-break: keep-all; }
+.dv-spec-page .dv-section { padding-top: 48px; }
