@@ -5306,3 +5306,66 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-reel-steps button[data-done]:hover::before { background: var(--case-accent); }
   .dv-reel-steps button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; border-radius: 4px; }
 }
+
+/* Element cards: one thing per card, on the case's colour, with its words beside it. */
+.dv-iter-plate, .dv-spec-shot { background: radial-gradient(120% 110% at 50% 115%, #a58bff 0%, #5b3fd6 42%, #1e1648 100%); }
+
+/* Iteration 1: the changed part, As-is and To-be crossfading in one spot. */
+.dv-iter-card { display: grid; gap: 16px; padding: 12px; overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: 24px; background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.dv-iter-plate { padding: 16px; border-radius: 16px; }
+.dv-iter-views { display: grid; }
+.dv-iter-views .dv-iter-view { grid-area: 1 / 1; border-radius: 10px; opacity: 0; transition: opacity 400ms var(--ease); }
+.dv-iter-views .dv-iter-view[data-on] { opacity: 1; }
+@media (min-width: 64rem) {
+  .dv-iter-card { --reel-card: min(1640px, calc(100vw - 96px)); --reel-text: clamp(320px, 28vw, 420px); grid-template-columns: minmax(0, 1fr) var(--reel-text); gap: 0; width: var(--reel-card); margin-left: calc(50% - var(--reel-card) / 2); }
+  .dv-iter-plate { padding: 20px; }
+  .dv-iter-card .dv-iter-sides { grid-area: auto; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 16px; padding: 28px 28px 28px 40px; }
+}
+
+/* Handoff: the screen zooms to one element; the number row picks which. */
+.dv-spec-panel { overflow: hidden; gap: 16px; padding: 12px; border: 1px solid var(--dv-card-line); border-radius: 24px; background: var(--spec-card); }
+.dv-spec-shot { display: grid; place-items: center; padding: 16px; border-radius: 16px; }
+.dv-spec-frame { position: relative; overflow: hidden; width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; background: #111; }
+.dv-spec-zoom { position: relative; transform-origin: 0 0; transition: transform 400ms var(--ease); }
+.dv-spec-shot img { border-radius: 0; }
+.dv-spec-pin { cursor: pointer; transform: scale(calc(1 / var(--s, 1))); transition: transform 400ms var(--ease); }
+.dv-spec-pin[data-lit] { transform: scale(calc(1.25 / var(--s, 1))); }
+.dv-spec-side { padding: 12px; }
+.dv-spec-numbers { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.dv-spec-numbers button { width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font: inherit; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; transition: transform 150ms var(--ease), background-color 150ms var(--ease); }
+.dv-spec-numbers button:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
+.dv-spec-numbers button[aria-selected="true"] { background: var(--case-accent); color: light-dark(#ffffff, #120f24); }
+.dv-spec-numbers button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; }
+.dv-spec-els { display: grid; grid-template-columns: minmax(0, 1fr); }
+.dv-spec-el { grid-area: 1 / 1; visibility: hidden; opacity: 0; transition: opacity 250ms var(--ease); }
+.dv-spec-panel[data-on] .dv-spec-sub[data-on] .dv-spec-el[data-on] { visibility: visible; opacity: 1; }
+.case-study .dv .dv-spec-els .dv-spec-el h4 { margin: 0 0 8px; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 400; line-height: 1.3; word-break: keep-all; }
+.dv-spec-el h4 b { display: none; }
+.case-study .dv .dv-spec-el p { margin: 0; color: var(--dv-ink); font-size: 18px; line-height: 1.5; word-break: keep-all; }
+.case-study .dv .dv-spec-el .dv-spec-state { margin-top: 16px; color: var(--dv-muted); }
+.dv-spec-state span { display: block; margin-bottom: 4px; font-size: 16px; font-weight: 500; }
+/* Buttons rise a little on hover, back on press. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .dv-spec-tabs button, .dv-spec-numbers button { transition: transform 150ms var(--ease), background-color 150ms var(--ease); }
+  .dv-spec-tabs button:hover, .dv-spec-numbers button:hover { transform: translateY(-2px); }
+  .dv-spec-tabs button:active, .dv-spec-numbers button:active { transform: none; }
+}
+@media (min-width: 64rem) {
+  .dv-spec { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); max-width: none; margin-left: calc(50% - var(--ia-w) / 2); }
+  .dv-spec-panel { grid-template-columns: minmax(0, 1fr) clamp(320px, 28vw, 420px); gap: 0; align-items: stretch; align-content: stretch; }
+  .dv-spec-shot { padding: 20px; }
+  .dv-spec-frame { width: min(100%, calc((100svh - 160px) * 1.6)); }
+  .dv-spec-side { padding: 20px 16px 20px 40px; }
+}
+@media (max-width: 47.99rem) {
+  /* All of it, in a list: whole screen, every element named and numbered. */
+  .dv-spec-panels { gap: 16px; }
+  .dv-spec-panel, .dv-spec-panel[data-on] { margin-bottom: 0; }
+  .dv-spec-zoom { --s: 1 !important; transform: none !important; }
+  .dv-spec-numbers { display: none; }
+  .dv-spec-els { gap: 20px; }
+  .dv-spec-el, .dv-spec-panel[data-on] .dv-spec-sub[data-on] .dv-spec-el[data-on] { grid-area: auto; visibility: visible; opacity: 1; }
+  .case-study .dv .dv-spec-els .dv-spec-el h4 { display: flex; gap: 10px; font-size: var(--t-item); font-weight: 500; }
+  .dv-spec-el h4 b { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 14px; font-weight: 600; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-spec-zoom, .dv-spec-pin, .dv-spec-el, .dv-iter-views .dv-iter-view { transition: none; } }
