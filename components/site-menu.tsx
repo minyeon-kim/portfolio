@@ -234,7 +234,7 @@ export function SiteMenu({ contact, cases }: Props) {
             <ul className="menu-links">
               <li onMouseEnter={() => setShown("about")} onFocus={() => setShown("about")}><Link href={localize("/about/", locale)} aria-current={path === "/about/" ? "page" : undefined}>{t.about}</Link></li>
               {contact.email && <li><a href={`mailto:${contact.email}`}>{t.getInTouch}</a></li>}
-              {contact.linkedinUrl && <li><a href={contact.linkedinUrl}>LinkedIn ↗</a></li>}
+              {contact.linkedinUrl && <li><a href={contact.linkedinUrl}>LinkedIn</a></li>}
             </ul>
             <p className="menu-label">{t.caseStudiesLabel}</p>
             <ol className="menu-picks">
@@ -245,7 +245,7 @@ export function SiteMenu({ contact, cases }: Props) {
               ))}
             </ol>
           </nav>
-          {contact.resumeUrl && <ul className="menu-side"><li><a href={withBase(contact.resumeUrl)}>{t.resume} ↗</a></li></ul>}
+          {contact.resumeUrl && <ul className="menu-side"><li><a href={withBase(contact.resumeUrl)}>{t.resume}</a></li></ul>}
         </div>
       )}
     </div>
