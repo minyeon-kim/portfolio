@@ -5663,3 +5663,22 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-cycle-charts { grid-column: 1; grid-row: 2; }
   .dv-cycle-nav { grid-column: 1; grid-row: 3; }
 }
+
+/* Interview: the call as three equal tiles on the question cards' grid, each saying who it is. The guide is a link, not a picture. */
+.dv-meet ul.dv-meet-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+.dv-meet ul.dv-meet-tiles li { position: relative; display: block; padding: 0; overflow: hidden; border-radius: var(--dv-card-radius); background: none; transform: none; }
+.dv-meet-tiles img { display: block; width: 100%; height: auto; }
+.dv-meet ul.dv-meet-tiles span { position: absolute; left: 12px; bottom: 12px; padding: 2px 12px; border-radius: 999px; color: #ffffff; background: rgb(10 11 20 / 0.7); backdrop-filter: blur(12px); line-height: 1.5; }
+@media (hover: hover) { .dv-meet ul.dv-meet-tiles:hover li:not(:hover) { opacity: 1; } }
+.dv-meet-guide { display: inline-block; margin-top: 24px; color: var(--case-accent); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 4px; transition: text-decoration-color 150ms var(--ease), text-underline-offset 150ms var(--ease); }
+.dv-meet-guide:hover, .dv-meet-guide:focus-visible { text-decoration-color: currentColor; text-underline-offset: 2px; }
+@media (max-width: 47.99rem) {
+  .dv-meet ul.dv-meet-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dv-meet ul.dv-meet-tiles li:first-child { grid-column: 1 / -1; }
+  .dv-meet ul.dv-meet-tiles span { left: 8px; bottom: 8px; padding: 2px 10px; }
+}
+/* The people are a group of their own: a tile above isn't the card below it. */
+.case-study .dv .dv-meet-label { margin: 48px 0 0; }
+.dv-meet ul.dv-meet-people { margin-top: var(--sp-label); }
+.case-study .dv .dv-meet-guide { margin-top: 24px; }
+

@@ -157,7 +157,11 @@ export const study = {
       text: "So we spent 60 minutes each with four people who do this work every day.",
       resultLabel: "What we found",
       result: "Everyone double-checks AI work, but no one is clearly in charge.",
-      photo: { src: "/images/devsign/interview-session.webp", width: 2400, height: 1072, alt: "A remote interview: two researchers and a participant (blurred) on a video call, next to eight pages of the interview protocol, packed with questions and follow-ups" },
+      photo: { tiles: [
+        { src: "/images/devsign/interview-tile-a.webp", label: "Researcher", alt: "Minyeon, a researcher, on the video call" },
+        { src: "/images/devsign/interview-tile-p.webp", label: "Participant", alt: "The participant's video, blurred" },
+        { src: "/images/devsign/interview-tile-b.webp", label: "Researcher", alt: "The second researcher on the video call" },
+      ], guide: { src: "/images/devsign/interview-guide.webp", label: "Full interview guide, 8 pages (Korean) ↗" } },
       questionsLabel: "Research questions",
       questionKeys: ["Where it gets stuck", "Who decides", "Where the reason goes"],
       questions: [
@@ -165,6 +169,7 @@ export const study = {
         "When the design and the built product differ, who decides, and where do they talk it through?",
         "How do teams pick the final version, and where is the reason kept?",
       ],
+      peopleLabel: "Four participants",
       participantColumns: ["#", "Role", "Team size", "Experience"],
       participants: [
         ["P01", "Visual designer", "≤5", "Under 6 months"],
