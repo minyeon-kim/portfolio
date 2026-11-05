@@ -3,29 +3,31 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(useGSAP, ScrambleTextPlugin, SplitText);
+gsap.registerPlugin(useGSAP, SplitText);
 
-const CHARS = "01#$%&";
-const LOAD_DURATION = 1.2; // seconds, the hard cap for the load reveal
-const RADIUS = 56; // px around the cursor that re-scrambles after load (2-3 glyphs)
-const HOVER_DURATION = 0.35; // seconds, cursor re-scramble at the cursor's center
-// Kept light: only a short run of glyphs is ever scrambled at once.
-const GLYPH_SCRAMBLE = 0.1; // seconds each glyph spends scrambled on load (~9-glyph front)
-const SPEED = 0.25; // how often a scrambled glyph changes (lower = calmer)
-
-// The emphasized word stays encrypted after it appears and resolves last,
-// still inside LOAD_DURATION.
-const TYPE_END = 0.85; // seconds, the rest of the line has typed out
-const EMPHASIS_START = 0.95; // seconds, the emphasized word starts resolving
+// Letters and symbols a decoding glyph flickers through (Hangul for Hangul).
+const LATIN = "abcdefghijklmnopqrstuvwxyz!@#$%^&*+-=_;:";
+const HANGUL = "가나다라마바사아자차카타파하복잡제품처음끝디인합니";
+const HANGUL_GLYPH = /\p{Script=Hangul}/u;
+const TICK = 70; // ms between flickers
+// The white curtain is still opening at first, so the settling starts once it's mostly open.
+const LOAD_END = 1650; // ms, every glyph has settled
+const TYPE_START = 700; // ms, the first glyphs settle
+const TYPE_END = 1300; // ms, all but the emphasized word have settled
+const EMPHASIS_START = 1400; // ms, the emphasized word starts settling
+const RADIUS = 120; // px around the cursor that decodes again
+const HOVER_MIN = 250; // ms a glyph at the rim stays scrambled
+const HOVER_MAX = 700; // ms a glyph under the cursor can stay scrambled
 
 type Props = { text: string; className?: string; emphasis?: string };
+type Glyph = { start: number; until: number };
 
-// "Decrypted" hero headline: scrambles in left to right on load, then
-// characters near the mouse cursor briefly re-scramble. With reduced motion
-// none of this runs and the server-rendered text is shown as is.
+// "Decrypted" hero headline, after sui.io: the whole line decodes at once. Each glyph
+// flickers through blanks and random characters, bright, dim, in the accent or boxed,
+// and settles on its own at a random moment. After load, glyphs near the mouse do the
+// same. With reduced motion, or on phones, the server-rendered text is shown as is.
 export function ScrambleHeadline({ text, className, emphasis }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
 
@@ -35,44 +37,67 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
       if (!el) return;
 
       const mm = gsap.matchMedia();
-      // Phones get the text at first paint: no typing, and no cursor to follow.
       mm.add("(prefers-reduced-motion: no-preference) and (min-width: 48rem)", () => {
         let chars: HTMLElement[] = [];
-        let held = new Set<HTMLElement>();
+        const active = new Map<HTMLElement, Glyph>();
+        let timer = 0;
         let frame = 0;
         let pointer = { x: 0, y: 0 };
+        const loadStart = performance.now();
 
-        const scrambleNearCursor = () => {
-          frame = 0;
-          const box = el.getBoundingClientRect();
-          if (
-            pointer.x < box.left - RADIUS ||
-            pointer.x > box.right + RADIUS ||
-            pointer.y < box.top - RADIUS ||
-            pointer.y > box.bottom + RADIUS
-          ) {
-            return;
+        const settle = (char: HTMLElement) => {
+          char.textContent = char.dataset.char ?? "";
+          delete char.dataset.g;
+          active.delete(char);
+        };
+        const flicker = (char: HTMLElement, progress: number) => {
+          const original = char.dataset.char ?? "";
+          const roll = Math.random();
+          // Mostly noise at first, mostly the real letter near the end.
+          if (roll < progress * 0.65) char.textContent = original;
+          else if (roll < progress * 0.65 + (1 - progress) * 0.35) char.textContent = "\u00a0";
+          else {
+            const pool = HANGUL_GLYPH.test(original) ? HANGUL : LATIN;
+            char.textContent = pool[Math.floor(Math.random() * pool.length)];
           }
-          for (const char of chars) {
-            const r = char.getBoundingClientRect();
-            const dist = Math.hypot(
-              pointer.x - (r.left + r.width / 2),
-              pointer.y - (r.top + r.height / 2),
-            );
-            if (dist >= RADIUS) continue;
-            gsap.to(char, {
-              duration: HOVER_DURATION * (1 - dist / RADIUS),
-              ease: "none",
-              overwrite: true,
-              scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED },
-            });
+          const tone = Math.random();
+          if (tone < 0.04) char.dataset.g = "box";
+          else if (tone < 0.22) char.dataset.g = "accent";
+          else if (tone < 0.5) char.dataset.g = "dim";
+          else delete char.dataset.g;
+        };
+        const tick = () => {
+          const now = performance.now();
+          for (const [char, glyph] of active) {
+            if (now >= glyph.until) settle(char);
+            else if (now >= glyph.start) flicker(char, (now - glyph.start) / (glyph.until - glyph.start));
           }
+          timer = active.size ? window.setTimeout(tick, TICK) : 0;
+        };
+        const run = () => {
+          if (!timer) timer = window.setTimeout(tick, TICK);
         };
 
+        const decodeNearCursor = () => {
+          frame = 0;
+          const box = el.getBoundingClientRect();
+          if (pointer.x < box.left - RADIUS || pointer.x > box.right + RADIUS || pointer.y < box.top - RADIUS || pointer.y > box.bottom + RADIUS) return;
+          const now = performance.now();
+          for (const char of chars) {
+            const r = char.getBoundingClientRect();
+            const dist = Math.hypot(pointer.x - (r.left + r.width / 2), pointer.y - (r.top + r.height / 2));
+            if (dist >= RADIUS || !(char.dataset.char ?? "").trim()) continue;
+            const reach = HOVER_MIN + (HOVER_MAX - HOVER_MIN) * (1 - dist / RADIUS) * (0.5 + Math.random() * 0.5);
+            const glyph = active.get(char);
+            if (glyph) glyph.until = Math.max(glyph.until, now + reach);
+            else active.set(char, { start: now, until: now + reach });
+          }
+          run();
+        };
         const onPointerMove = (e: PointerEvent) => {
           if (e.pointerType !== "mouse") return;
           pointer = { x: e.clientX, y: e.clientY };
-          if (!frame) frame = requestAnimationFrame(scrambleNearCursor);
+          if (!frame) frame = requestAnimationFrame(decodeNearCursor);
         };
 
         const split = SplitText.create(el, {
@@ -81,75 +106,38 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
           autoSplit: true, // re-split when fonts load or the line wraps change
           onSplit(self) {
             chars = self.chars as HTMLElement[];
+            active.clear();
             // Letters of any script, so a Korean word matches too.
             const find = (word?: string) => word
               ? (self.words as HTMLElement[]).find((w) => (w.textContent ?? "").toLowerCase().replace(/[^\p{L}\p{N}-]/gu, "") === word.toLowerCase())
               : undefined;
             const target = find(emphasis);
-            held = new Set(target ? chars.filter((char) => target.contains(char)) : []);
-
+            const now = performance.now();
             for (const char of chars) {
               char.dataset.char = char.textContent ?? "";
               // Lock each glyph's width so a scrambled glyph never reflows the line.
               // In em, because the headline's size follows the window.
               char.style.width = `${char.getBoundingClientRect().width / parseFloat(getComputedStyle(char).fontSize)}em`;
               char.style.textAlign = "center";
+              // The emphasized word settles last; the rest at random moments.
+              const held = target?.contains(char);
+              const at = held ? EMPHASIS_START + Math.random() * (LOAD_END - EMPHASIS_START) : TYPE_START + Math.random() * (TYPE_END - TYPE_START);
+              const until = loadStart + at;
+              if (until > now) active.set(char, { start: now, until });
             }
+            for (const char of active.keys()) flicker(char, 0);
+            gsap.set(el, { visibility: "visible" });
+            run();
           },
         });
-
-        // The line types out left to right; only the few glyphs at the front
-        // are scrambled at any moment, each for GLYPH_SCRAMBLE, so the rest is
-        // either already readable or not shown yet. Done by LOAD_DURATION.
-        gsap.set(chars, { autoAlpha: 0 });
-        const load = gsap.timeline({
-          onStart: () => gsap.set(el, { visibility: "visible" }),
-          onComplete: () => { window.addEventListener("pointermove", onPointerMove); },
-        });
-        const span = (held.size ? TYPE_END : LOAD_DURATION) - GLYPH_SCRAMBLE;
-        const heldChars = chars.filter((char) => held.has(char));
-        // Typing is compressed when a word is held, so each glyph scrambles for
-        // proportionally less time and the scrambled front stays as short.
-        const glyph = GLYPH_SCRAMBLE * (span / (LOAD_DURATION - GLYPH_SCRAMBLE));
-        chars.forEach((char, i) => {
-          const at = chars.length > 1 ? (i / (chars.length - 1)) * span : 0;
-          load.set(char, { autoAlpha: 1 }, at);
-          const order = heldChars.indexOf(char);
-          if (order >= 0) {
-            // Encrypted from the moment it appears; resolves left to right at the end.
-            const resolveAt = EMPHASIS_START + (heldChars.length > 1 ? (order / (heldChars.length - 1)) * (LOAD_DURATION - EMPHASIS_START - 0.05) : 0);
-            const duration = resolveAt - at + 0.05;
-            load.to(
-              char,
-              {
-                duration,
-                ease: "none",
-                scrambleText: { text: char.dataset.char ?? "", chars: CHARS, speed: SPEED, revealDelay: duration - 0.05 },
-              },
-              at,
-            );
-            return;
-          }
-          load.to(
-            char,
-            {
-              duration: glyph,
-              ease: "none",
-              scrambleText: {
-                text: char.dataset.char ?? "",
-                chars: CHARS,
-                speed: SPEED,
-                // A one-glyph scramble otherwise resolves halfway through the tween.
-                revealDelay: Math.max(0, glyph - 0.05),
-              },
-            },
-            at,
-          );
-        });
+        const armed = window.setTimeout(() => window.addEventListener("pointermove", onPointerMove), LOAD_END);
 
         return () => {
+          window.clearTimeout(armed);
+          window.clearTimeout(timer);
           window.removeEventListener("pointermove", onPointerMove);
           cancelAnimationFrame(frame);
+          active.clear();
           split.revert();
         };
       });
