@@ -3138,7 +3138,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Gemini in the Devsign layout keeps its own colour (Figma 657:254 blue)
    instead of the Devsign purple: accent, tints and the current diamond. */
 .case-study[data-project="gemini"] .dv {
-  --case-accent: light-dark(#245cc0, #6ea2ff);
+  --case-accent: light-dark(#245cc0, #8fb4ff);
   --dv-tint: light-dark(#edf2fc, color-mix(in srgb, #6ea2ff 24%, var(--bg)));
   --dv-tint-core: light-dark(#eef3fd, color-mix(in srgb, #6ea2ff 20%, var(--bg)));
   --dv-diamond-current: light-dark(#e3ebfa, color-mix(in srgb, #6ea2ff 28%, var(--bg)));
@@ -3540,7 +3540,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero-actions a[data-primary] { background: light-dark(var(--ink), #ffffff); color: var(--bg); }
 .devsign-hero-actions a[data-primary]:hover { background: color-mix(in srgb, light-dark(var(--ink), #ffffff) 84%, var(--bg)); }
 .devsign-hero[data-project="devsign"] { --case-accent: var(--devsign-title); }
-.devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #6ea2ff); }
+.devsign-hero[data-project="gemini-privacy"] { --case-accent: light-dark(#245cc0, #8fb4ff); }
 .devsign-hero-panel .devsign-hero-media, .devsign-hero-page .devsign-hero-panel .devsign-hero-media { width: min(100%, 1200px); min-width: 0; aspect-ratio: 16 / 10; margin: clamp(40px, 6svh, 64px) auto 0; border-color: var(--dh-line); border-radius: 12px; box-shadow: none; }
 .devsign-hero-panel .devsign-hero-media .devsign-loop { margin-top: 0; }
 .devsign-hero:has(> .devsign-hero-panel) .devsign-hero-details { margin: clamp(40px, 5vw, 72px) calc(var(--dh-pad) - 16px) 0; }
@@ -5657,21 +5657,22 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-iv-claim { padding: 24px; }
 }
 
-/* Devsign, stronger contrast. Dark words and numbers are the lighter purple, fills a stronger one (the words used to
+/* Case studies, stronger contrast. Dark words and numbers are the lighter purple, fills a stronger one (the words used to
    be dimmer than body text). Cards step clearly off the section; charts are flat, with no glow or fade; posts are
-   columns, not cards inside a card. Gemini keeps its own values for now. */
-.case-study[data-project="devsign"] .dv { --dv-band-card-dark: #2a2b32; --dv-muted: light-dark(#5e5e63, #a3adaa); --dv-chart-fill: light-dark(#5b3fd6, #7c62ff); --dv-chart-rest: color-mix(in srgb, var(--dv-ink) 40%, light-dark(#ffffff, #2a2b32)); }
-.case-study[data-project="devsign"] .dv-bar-track i, .case-study[data-project="devsign"] .dv-pair-bar i { background: var(--dv-chart-rest); box-shadow: none; }
-.case-study[data-project="devsign"] .dv-bars-chart li[data-top] i, .case-study[data-project="devsign"] .dv-pair-bar[data-on] i { background: var(--dv-chart-fill); box-shadow: none; }
-.case-study[data-project="devsign"] .dv-trust-seg[data-on], .case-study[data-project="devsign"] .dv-sus-value { stroke: var(--dv-chart-fill); filter: none; }
-.case-study[data-project="devsign"] .dv-trust-flash { stroke: var(--dv-chart-fill); }
-.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-trust-seg[data-on] { animation: none; }
-.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-bars-chart li[data-top] i { animation: dv-bar-rise 900ms var(--ease-reveal) backwards; }
-.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-pair-bar[data-on] i { animation: dv-bar-rise 900ms var(--ease-reveal) 200ms backwards; }
-.case-study[data-project="devsign"] .dv-posts-list li { padding: 4px 24px; border-left: 1px solid var(--dv-line); border-radius: 0; background: none; }
-.case-study[data-project="devsign"] .dv-posts-list li:first-child { padding-left: 0; border-left: 0; }
+   columns, not cards inside a card. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --dv-band-card-dark: #2a2b32; --dv-muted: light-dark(#5e5e63, #a3adaa); --dv-chart-fill: light-dark(#5b3fd6, #7c62ff); --dv-chart-rest: color-mix(in srgb, var(--dv-ink) 40%, light-dark(#ffffff, #2a2b32)); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bar-track i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-pair-bar i { background: var(--dv-chart-rest); box-shadow: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bars-chart li[data-top] i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-pair-bar[data-on] i { background: var(--dv-chart-fill); box-shadow: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-trust-seg[data-on], .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-sus-value { stroke: var(--dv-chart-fill); filter: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-trust-flash { stroke: var(--dv-chart-fill); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-trust-seg[data-on] { animation: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-bars-chart li[data-top] i { animation: dv-bar-rise 900ms var(--ease-reveal) backwards; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-pair-bar[data-on] i { animation: dv-bar-rise 900ms var(--ease-reveal) 200ms backwards; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list li { padding: 4px 24px; border-left: 1px solid var(--dv-line); border-radius: 0; background: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list li:first-child { padding-left: 0; border-left: 0; }
 @media (max-width: 47.99rem) {
-  .case-study[data-project="devsign"] .dv-posts-list { row-gap: 0; }
-  .case-study[data-project="devsign"] .dv-posts-list li { padding: 20px 0; border-left: 0; border-top: 1px solid var(--dv-line); }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list { row-gap: 0; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list li { padding: 20px 0; border-left: 0; border-top: 1px solid var(--dv-line); }
 }
-
+.case-study[data-project="gemini"] .dv { --dv-chart-fill: light-dark(#245cc0, #4285f4); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-trust-legend [data-on] i { background: var(--dv-chart-fill); }
