@@ -1966,7 +1966,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .devsign-loop { position: relative; max-width: 1280px; margin-inline: auto; overflow: hidden; border-radius: 16px; border: 1px solid rgb(255 255 255 / 0.08); box-shadow: 0 30px 80px rgb(0 0 0 / 0.45); }
 .devsign-loop img { display: block; width: 100%; height: auto; }
 .project-hero-cover .devsign-loop img { border-radius: 0; max-width: none; }
-.devsign-loop-pin { position: absolute; left: 51.4%; top: 80.7%; width: 3.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 2px solid #ef4444; opacity: 0; }
+.devsign-loop-pin { position: absolute; left: 51.4%; top: 42.7%; width: 3.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 2px solid #ef4444; opacity: 0; }
 .devsign-loop-panel { position: absolute; left: 66.08%; top: 5.39%; width: 33.33%; transform: translateX(105%); box-shadow: -18px 0 40px rgb(0 0 0 / 0.35); }
 .devsign-loop-panel .devsign-loop-approved { position: absolute; inset: 0; opacity: 0; }
 .devsign-loop-approve { position: absolute; left: 70.5%; top: 94.9%; width: 20%; height: 3%; border-radius: 999px; box-shadow: 0 0 0 2px #34d399, 0 0 16px 3px rgb(52 211 153 / 0.5); opacity: 0; }
