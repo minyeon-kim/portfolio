@@ -135,7 +135,7 @@ body {
 /*
  * Interaction states (see "Interaction states" in claude.md).
  * press: tactile feedback on buttons and tiles.
- * lift: cards rise 4px on hover or focus-within.
+ * lift: cards rise 2px on hover or focus-within.
  * link: underline that is always there (40%) and firms up on hover.
  */
 @utility press {
@@ -150,7 +150,7 @@ body {
     background-color var(--dur-fast) var(--ease);
   &:hover,
   &:focus-within {
-    translate: 0 -4px;
+    translate: 0 -2px;
   }
 }
 
@@ -5342,12 +5342,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 .case-study .dv .dv-spec-el p { margin: 0; color: var(--dv-ink); font-size: 18px; line-height: 1.5; word-break: keep-all; }
 .case-study .dv .dv-spec-el .dv-spec-state { margin-top: 16px; color: var(--dv-muted); }
 .dv-spec-state span { display: block; margin-bottom: 4px; font-size: 16px; font-weight: 500; }
-/* Buttons rise a little on hover, back on press. */
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .dv-spec-tabs button, .dv-spec-numbers button { transition: transform 150ms var(--ease), background-color 150ms var(--ease); }
-  .dv-spec-tabs button:hover, .dv-spec-numbers button:hover { transform: translateY(-2px); }
-  .dv-spec-tabs button:active, .dv-spec-numbers button:active { transform: none; }
-}
 @media (min-width: 64rem) {
   .dv-spec { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); max-width: none; margin-left: calc(50% - var(--ia-w) / 2); }
   .dv-spec-panel { grid-template-columns: minmax(0, 1fr) clamp(320px, 28vw, 420px); gap: 0; align-items: stretch; align-content: stretch; }
@@ -5383,3 +5377,27 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-screens-held .dv-iter-clip { height: min(calc(100svh - 120px), 640px); box-sizing: border-box; }
   .dv-screens-held .dv-iter-clip img { width: auto; height: 100%; min-height: 0; }
 }
+
+/* Hover, one language across the site. Filled controls rise 2px and settle back on press
+   (with `press`, also 0.97). Cards that stand alone rise 2px; a card holding a playing clip or
+   tabs doesn't, since its inside is what moves. A board's image moves a little in its frame.
+   Mouse only, off with reduced motion. Cards lift with `transform`, because their reveal uses
+   `translate` at its own slower pace; the reveal timings are restated so they survive. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :root :is(.press:not(.theme-toggle), .dv-spec-tabs button, .dv-spec-numbers button, .dv-nav-links a, .menu-picks a, .menu-side a, .dv-journey-legend button, .devsign-hero-visit) {
+    transition: translate 150ms var(--ease), scale 150ms var(--ease), background-color 150ms var(--ease), box-shadow 150ms var(--ease), color 150ms var(--ease);
+  }
+  :root :is(.press:not(.theme-toggle), .dv-spec-tabs button, .dv-spec-numbers button, .dv-nav-links a, .menu-picks a, .menu-side a, .dv-journey-legend button, .devsign-hero-visit):hover { translate: 0 -2px; }
+  :root :is(.press:not(.theme-toggle), .dv-spec-tabs button, .dv-spec-numbers button, .dv-nav-links a, .menu-picks a, .menu-side a, .dv-journey-legend button, .devsign-hero-visit):active { translate: none; }
+
+  .dv-glance > li { transition: opacity 500ms var(--ease), translate 700ms var(--ease-out-soft), transform 250ms var(--ease); }
+  .dv-glance > li:nth-child(2) { transition-delay: 100ms, 100ms, 0ms; }
+  .dv-glance > li:nth-child(3) { transition-delay: 200ms, 200ms, 0ms; }
+  .dv-meet li { transition: opacity 250ms var(--ease), transform 250ms var(--ease); }
+  :root .case-study .dv :is(.dv-keyq li, .dv-features > li, .dv-cast article) { transition: opacity 800ms ease, translate 1000ms var(--ease-reveal), transform 250ms var(--ease); }
+  :is(.dv-glance > li, .dv-meet li, .dv-keyq li, .dv-features > li, .dv-cast article):hover { transform: translateY(-2px); }
+
+  .dv-open-frame img { transition: scale 400ms var(--ease); }
+  .dv-open-frame:hover img { scale: 1.012; }
+}
+
