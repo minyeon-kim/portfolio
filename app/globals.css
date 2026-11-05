@@ -1966,7 +1966,7 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 .devsign-loop { position: relative; max-width: 1280px; margin-inline: auto; overflow: hidden; border-radius: 16px; border: 1px solid rgb(255 255 255 / 0.08); box-shadow: 0 30px 80px rgb(0 0 0 / 0.45); }
 .devsign-loop img { display: block; width: 100%; height: auto; }
 .project-hero-cover .devsign-loop img { border-radius: 0; max-width: none; }
-.devsign-loop-pin { position: absolute; left: 51.4%; top: 42.7%; width: 3.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 2px solid #ef4444; opacity: 0; }
+.devsign-loop-pin { position: absolute; left: 51.4%; top: 80.7%; width: 3.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 2px solid #ef4444; opacity: 0; }
 .devsign-loop-panel { position: absolute; left: 66.08%; top: 5.39%; width: 33.33%; transform: translateX(105%); box-shadow: -18px 0 40px rgb(0 0 0 / 0.35); }
 .devsign-loop-panel .devsign-loop-approved { position: absolute; inset: 0; opacity: 0; }
 .devsign-loop-approve { position: absolute; left: 70.5%; top: 94.9%; width: 20%; height: 3%; border-radius: 999px; box-shadow: 0 0 0 2px #34d399, 0 0 16px 3px rgb(52 211 153 / 0.5); opacity: 0; }
@@ -3261,8 +3261,9 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
      in the bottom right corner. */
   .home-device[data-project="gemini-privacy"] { --card-h: 55svh; top: auto; bottom: 24px; right: var(--project-text-inset); width: auto; height: var(--card-h); aspect-ratio: 3 / 4; }
   .home-stage[data-world="gemini-privacy"] { --gx: max(18.7%, calc(var(--project-text-inset) + 240px)); }
-  /* One line, unless the card leaves too little room for it (1024 wide). */
-  .home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: calc(57% - 0.5em); max-width: calc(100% - var(--gx) - var(--project-text-inset) - 41.25svh - 16px); font-size: clamp(44px, min(5.4vw, 10svh), 104px); }
+  /* Two lines at the bottom left, level with the card, so the sparkle stays whole. */
+  .home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: auto; bottom: 24px; max-width: none; font-size: clamp(44px, min(5.4vw, 10svh), 104px); }
+  .home-stage[data-world="gemini-privacy"] .home-world-name > span { display: block; }
   .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 42.4%; right: auto; top: 18.8%; bottom: auto; width: min(30ch, 300px); }
   .home-device[data-project="devsign"] { top: 11.4%; left: 52%; right: auto; width: 40vw; }
   .home-stage[data-world="devsign"] .home-world-name { left: 35%; top: calc(73.5% - 0.5em); max-width: none; white-space: nowrap; }
