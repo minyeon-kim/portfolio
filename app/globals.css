@@ -4144,7 +4144,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .dv-iter-steps > li:not(:first-child) .dv-iter-screen { background: none; }
   .dv-iter-steps > li:not([data-on]) .dv-iter-mark { opacity: 0; }
   .dv-iter-name { display: none; }
-  .dv-iter-side figcaption { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
+  .dv-iter .dv-iter-side figcaption { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
   /* Under the screens: the changes down a list, and what the current one is. */
   .dv-iter-index { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
   .dv-iter-progress { position: relative; display: grid; gap: 12px; align-content: start; margin: 0; padding: 0 0 0 20px; list-style: none; }
