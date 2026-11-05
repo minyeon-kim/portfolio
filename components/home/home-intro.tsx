@@ -90,7 +90,9 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         .filter((box): box is DOMRect => Boolean(box?.width));
       const inside = event.clientX >= Math.min(...parts.map((b) => b.left)) && event.clientX <= Math.max(...parts.map((b) => b.right))
         && event.clientY >= Math.min(...parts.map((b) => b.top)) && event.clientY <= Math.max(...parts.map((b) => b.bottom));
-      if (inside) { window.clearTimeout(timer); timer = undefined; } else release();
+      // Over any pill the world stays until the pill's own switch takes over.
+      const onPick = event.target instanceof Element && event.target.closest(".home-pick");
+      if (inside || onPick) { window.clearTimeout(timer); timer = undefined; } else release();
     };
     window.addEventListener("pointermove", onMove, { passive: true });
     document.documentElement.addEventListener("pointerleave", release);
@@ -213,7 +215,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   data-slug={c.slug}
                   data-active={hover === c.slug || undefined}
                   onMouseEnter={() => enterPick(c.slug)}
-                  onMouseLeave={() => window.clearTimeout(switching.current)}
+                  onMouseLeave={(event) => { if (!(event.relatedTarget instanceof Element && event.relatedTarget.closest(".home-pick"))) window.clearTimeout(switching.current); }}
                   onFocus={() => setHover(c.slug)}
                   onBlur={() => setHover(null)}
                   onClick={() => open(c.slug)}
@@ -234,7 +236,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
         {displayed?.role && <p className={`home-world-role${displayed.emphasis ? " has-emphasis" : ""}`} data-on={copyOn || undefined} aria-hidden={!copyOn}><Emphasis text={displayed.role} phrase={displayed.emphasis} /></p>}
-        <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name}</p>
+        <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name.split(/(?<=^Gemini) /).map((line) => <span key={line}>{line}{" "}</span>)}</p>
         <p className="home-world-problem" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.text}</p>
       </div>
     </section>
