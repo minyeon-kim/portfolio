@@ -2594,7 +2594,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-tagline-wrap > * { grid-area: 1 / 1; transition: opacity 400ms ease, translate 400ms var(--ease); }
 /* Fixed widths in em, so the breaks never change with the window, running
    left past the grid column from the right edge. English in three lines
-   ("Designing / complex products / to feel clear"), Korean too
+   ("Designing / complex products, / end to end"), Korean too
    ("복잡한 제품을 / 이해하기 쉽게 / 디자인합니다"). */
 .home-tagline { width: 8.4em; max-width: none; margin: 0; font-family: var(--font-headline); font-size: clamp(44px, min(6vw, 10.5svh), 112px); font-weight: 200; line-height: 1.04; letter-spacing: -0.012em; word-break: keep-all; text-align: right; color: var(--ink); text-wrap: balance; }
 .home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
