@@ -114,11 +114,11 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
   );
 }
 
-// Scroll-driven steps, the usual pinned pattern: the stage stays on screen (CSS
-// sticky) and one change at a time crossfades in place as the page scrolls. A clip
-// that ends hands over to the next, round to the first, without moving the page;
-// scrolling into another step takes over again. Native scroll only. On phones and
-// with reduced motion (CSS) the steps are a plain list.
+// The same holding card as the core features: it stays on screen (CSS sticky) and one
+// change at a time crossfades inside it as the page scrolls. A clip that ends hands
+// over to the next, round to the first, without moving the page; scrolling into
+// another step takes over again. Native scroll only. On phones and with reduced
+// motion (CSS) each change is its own card.
 export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);
@@ -132,8 +132,8 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
       frame = 0;
       const box = el.getBoundingClientRect();
       const stage = (el.firstElementChild as HTMLElement).offsetHeight;
-      // The stage is only as tall as its content and pins centred on the screen.
-      const top = Math.max(24, (window.innerHeight - stage) / 2);
+      // Centred on the screen, below the header when the screen is short.
+      const top = Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20);
       const travel = box.height - stage;
       const progress = travel > 0 ? Math.min(1, Math.max(0, (top - box.top) / travel)) : 0;
       el.style.setProperty("--stage-top", `${top}px`);
@@ -156,12 +156,27 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
       window.removeEventListener("resize", onScroll);
     };
   }, [changes.length]);
+  // A step mark scrolls to the middle of its step, and shows it at once.
+  const go = (i: number) => {
+    const el = root.current;
+    if (!el) return;
+    setActive(i);
+    const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+    const top = Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20);
+    const travel = el.offsetHeight - stage;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + ((i + 0.5) / changes.length) * travel, behavior: "smooth" });
+  };
   return (
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as React.CSSProperties}>
       <div className="dv-iter-stage">
         <ol className="dv-iter-steps">
           {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
         </ol>
+        {pinned && (
+          <div className="dv-reel-steps">
+            {changes.map((c, i) => <button key={c.title} type="button" aria-label={c.title} aria-current={i === active ? "step" : undefined} data-done={i <= active || undefined} onClick={() => go(i)} />)}
+          </div>
+        )}
       </div>
     </div>
   );
