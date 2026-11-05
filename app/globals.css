@@ -5105,44 +5105,64 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 #ia { scroll-margin-top: 96px; }
 .case-study .dv-spec-page .dv-ia, .dv-spec-page .dv .dv-ia { max-width: none; }
 
-/* The Menu sheet, after metalab.com: the landing's left column on a plain page, with
-   the case under the pointer as a large card. The header stays above it. */
+/* The Menu, after metalab.com: the page shrinks into a card in the middle of the screen
+   and the links slide in from both sides. The header stays above it. */
 .site-header-bar > :not(.header-menu), .header-menu-trigger { position: relative; z-index: 1; }
-.menu-sheet { position: fixed; inset: 0; z-index: 0; display: flex; align-items: center; overflow-y: auto; overscroll-behavior: contain; padding: 88px var(--edge-inset) 32px; background: var(--bg); }
+.menu-sheet { --menu-ground: var(--surface); position: fixed; inset: 0; z-index: 0; display: flex; align-items: center; overflow-y: auto; overscroll-behavior: contain; padding: 88px var(--edge-inset) 32px; background: var(--menu-ground); }
 .menu-column { display: flex; flex-direction: column; align-items: flex-start; }
 .menu-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
 .menu-links a { color: var(--ink); font-family: var(--font-headline); font-size: 28px; font-weight: 400; line-height: 1.35; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
-.menu-links:lang(ko) a { font-family: var(--font-sans); letter-spacing: -0.01em; }
+.menu-links:lang(ko) a, .menu-column:lang(ko) .menu-links a { font-family: var(--font-sans); letter-spacing: -0.01em; }
 .menu-links a:hover, .menu-links a:focus-visible, .menu-links a[aria-current="page"] { text-decoration-color: currentColor; text-underline-offset: 4px; }
 .menu-label { margin: 0 0 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .menu-picks { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.menu-picks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 12%, var(--bg)); color: var(--ink); font-size: 16px; line-height: 1.2; white-space: nowrap; }
+.menu-picks a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, var(--menu-ground)); color: var(--ink); font-size: 16px; line-height: 1.2; white-space: nowrap; }
 .menu-picks a:hover, .menu-picks a:focus-visible, .menu-picks a[aria-current="page"] { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent); }
-.menu-more { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 32px 0 0; padding: 0; list-style: none; }
-.menu-more a { color: var(--muted); font-size: 16px; line-height: 1.4; }
-.menu-more a:hover, .menu-more a:focus-visible { color: var(--ink); }
-.menu-links a:focus-visible, .menu-picks a:focus-visible, .menu-more a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.menu-side { display: none; margin: 0; padding: 0; list-style: none; }
+.menu-side a { display: flex; align-items: center; min-height: 72px; padding: 0 16px; border-radius: 8px; background: color-mix(in srgb, var(--ink) 6%, var(--menu-ground)); color: var(--ink); font-size: 16px; line-height: 1.3; transition: background-color 250ms ease; }
+.menu-side a:hover, .menu-side a:focus-visible, .menu-side a[aria-current="page"] { background: color-mix(in srgb, var(--ink) 12%, var(--menu-ground)); }
+.menu-links a:focus-visible, .menu-picks a:focus-visible, .menu-side a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .menu-picks a:focus-visible { border-radius: 999px; }
-.menu-preview { display: none; }
+.menu-window { display: none; }
+/* Phones and tablets keep their links in the page's place, as a plain sheet. */
+@media (max-width: 63.99rem) {
+  .menu-sheet .menu-side { display: flex; flex-direction: column; gap: 8px; }
+  .menu-sheet { flex-direction: column; align-items: flex-start; justify-content: center; gap: 32px; }
+  .menu-side a { min-height: 44px; padding: 0; background: none; color: var(--muted); }
+  .menu-sheet { display: flex; }
+  html:not([data-menu="open"]) .menu-sheet { opacity: 0; }
+  .menu-sheet { transition: opacity 250ms ease; }
+}
 @media (min-width: 64rem) {
   .menu-picks a { min-height: 32px; }
-  .menu-preview { position: fixed; inset: 88px 0 32px; z-index: -1; display: block; pointer-events: none; }
-  .menu-card { position: absolute; left: 50%; top: 50%; overflow: hidden; border-radius: 8px; opacity: 0; translate: -50% -50%; transition: opacity 400ms ease; }
+  .menu-sheet { background: none; pointer-events: none; }
+  .menu-column, .menu-side, .menu-window { pointer-events: auto; }
+  main { transform-origin: 50% 50svh; }
+  html[data-menu] main { transition: transform 650ms var(--ease-out-soft); }
+  html[data-menu="open"] main { transform: translateY(20px) scale(var(--menu-s, 0.88)); }
+  /* The ground is the card's own shadow: no clip on a page this long. */
+  .menu-window { position: fixed; left: 0; top: 0; z-index: -1; display: block; width: 100vw; height: 100svh; overflow: hidden; border-radius: 0; box-shadow: 0 0 0 200vmax var(--menu-ground); pointer-events: none; transition: left 650ms var(--ease-out-soft), top 650ms var(--ease-out-soft), width 650ms var(--ease-out-soft), height 650ms var(--ease-out-soft), border-radius 650ms var(--ease-out-soft); }
+  html[data-menu="open"] .menu-window { left: 35vw; top: 72px; width: 30vw; height: calc(100svh - 104px); border-radius: 8px; pointer-events: auto; }
+  .menu-column { translate: calc(-100% - var(--edge-inset)) 0; transition: translate 650ms var(--ease-out-soft); }
+  html[data-menu="open"] .menu-column { translate: 0 0; }
+  .menu-side { position: fixed; right: var(--edge-inset); top: 50%; display: flex; flex-direction: column; gap: 8px; width: clamp(180px, 15vw, 260px); translate: calc(100% + var(--edge-inset)) -50%; transition: translate 650ms var(--ease-out-soft); }
+  html[data-menu="open"] .menu-side { translate: 0 -50%; }
+  .menu-card { position: absolute; inset: 0; display: block; overflow: hidden; opacity: 0; pointer-events: none; transition: opacity 400ms ease; }
   .menu-card[data-on] { opacity: 1; pointer-events: auto; }
-  .menu-card[data-project="devsign"] { width: min(48vw, 118svh); aspect-ratio: 16 / 10; background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
-  .menu-card[data-project="devsign"] .home-device-window { inset: 7%; border-radius: 6px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
-  .menu-card[data-project="gemini-privacy"] { height: min(76svh, 64vw); aspect-ratio: 3 / 4; background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
+  /* Leaving for another page, the card stays put until it's there, then fades as it grows. */
+  html[data-menu="closing"] .menu-card { opacity: 0; transition-duration: 250ms; }
+  .menu-card img { object-fit: cover; }
+  .menu-card-close { position: absolute; inset: 0; cursor: var(--cursor-action), pointer; }
+  .menu-card[data-project="devsign"] { background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
+  .menu-card[data-project="devsign"] .home-device-window { inset: auto 0 auto 6%; top: 50%; width: 170%; aspect-ratio: 16 / 10; height: auto; translate: 0 -50%; border-radius: 6px 0 0 6px; overflow: hidden; }
+  .menu-card[data-project="gemini-privacy"] { background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
   .menu-card[data-project="gemini-privacy"] .home-device-phone { background: none; }
+  /* Fixed parts of the page would drift with its scale. */
+  html[data-menu] .dv-nav { visibility: hidden; }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .menu-sheet { animation: menu-sheet-in 250ms ease both; }
-  .menu-column > * { animation: menu-item-in 400ms var(--ease) both; }
-  .menu-column > :nth-child(2) { animation-delay: 50ms; }
-  .menu-column > :nth-child(3) { animation-delay: 100ms; }
-  .menu-column > :nth-child(4) { animation-delay: 150ms; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu] main, .menu-window, .menu-column, .menu-side, .menu-sheet { transition: none !important; }
 }
-@keyframes menu-sheet-in { from { opacity: 0; } }
-@keyframes menu-item-in { from { opacity: 0; translate: 0 8px; } }
 
 /* The header folds with the scroll into one floating pill (metalab.com). --fold is set by
    HeaderShell. Top and width, not a transform, so the Menu sheet stays fixed to the screen. */
