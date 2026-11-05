@@ -3,11 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
-import { HomeLink } from "@/components/home/case-panels";
+import { revealNextProject } from "@/lib/project-transition";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
@@ -26,6 +26,7 @@ const GROW = 650;
 // following a link grows the new page back out of the card. Below 64rem it's a plain sheet.
 export function SiteMenu({ contact, cases }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [leaving, setLeaving] = useState(false);
@@ -141,13 +142,44 @@ export function SiteMenu({ contact, cases }: Props) {
   // just closes. The timer covers a route that doesn't change the path (home stage).
   const follow = (event: MouseEvent<HTMLDivElement>) => {
     const link = (event.target as Element).closest("a");
-    if (!link) return;
+    if (!link || event.defaultPrevented) return;
     const href = link.getAttribute("href") ?? "";
     if (href.startsWith("/") && !link.hasAttribute("aria-current")) {
       setLeaving(true);
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => end(), 1200);
     } else end();
+  };
+  // A case grows out of the card as the same picture and settles into its opener, as it
+  // does from the landing's pills. Capture, so the Link doesn't navigate first.
+  const zoomCase = (event: MouseEvent<HTMLDivElement>) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>("a[data-case]");
+    const slug = link?.dataset.case;
+    if (!link || !slug || link.hasAttribute("aria-current") || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    if (!window.matchMedia("(min-width: 64rem)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const card = sheet.current?.querySelector<HTMLElement>(`.menu-card[data-project="${slug}"]`);
+    const from = card?.querySelector<HTMLElement>(".home-device-window, .home-device-phone");
+    if (!card || !from) return;
+    event.preventDefault();
+    setShown(slug);
+    setLeaving(true);
+    revealNextProject(
+      () => router.push(targetOf(slug), { scroll: false }),
+      () => Boolean(document.querySelector(`[data-case-slug="${slug}"]`)),
+      {
+        from,
+        to: "main .devsign-hero-media",
+        project: slug,
+        box: card.getBoundingClientRect(),
+        // The picture covers the screen: the menu can go at once, with nothing to animate.
+        onCovered: () => {
+          window.clearTimeout(timer.current);
+          setOpen(false);
+          setLeaving(false);
+          setMounted(false);
+        },
+      },
+    );
   };
   const targetOf = (key: string) => (key === "about" ? localize("/about/", locale) : localize(`/work/${key}/`, locale));
 
@@ -172,10 +204,10 @@ export function SiteMenu({ contact, cases }: Props) {
         <span aria-hidden="true" className="header-menu-label">{open ? `${t.close} ×` : t.menu}</span>
       </button>
       {mounted && (
-        <div ref={sheet} id="site-menu" role="dialog" aria-modal="true" aria-label={t.siteNav} className="menu-sheet" onClick={follow} data-leaving={leaving || undefined}>
+        <div ref={sheet} id="site-menu" role="dialog" aria-modal="true" aria-label={t.siteNav} className="menu-sheet" onClickCapture={zoomCase} onClick={follow} data-leaving={leaving || undefined}>
           <div className="menu-window" aria-hidden="true">
             {list.map((c) => (
-              <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-project={c.slug} data-on={shown === c.slug || undefined}>
+              <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-case={c.slug} data-project={c.slug} data-on={shown === c.slug || undefined}>
                 {c.slug === "devsign"
                   ? <span className="home-device-window"><DevsignLoop alt="" /></span>
                   : c.slug === "gemini-privacy"
@@ -192,24 +224,20 @@ export function SiteMenu({ contact, cases }: Props) {
           </div>
           <nav className="menu-column" aria-label={t.siteNav} lang={locale}>
             <ul className="menu-links">
-              <li><HomeLink>{t.home}</HomeLink></li>
               <li onMouseEnter={() => setShown("about")} onFocus={() => setShown("about")}><Link href={localize("/about/", locale)} aria-current={path === "/about/" ? "page" : undefined}>{t.about}</Link></li>
               {contact.email && <li><a href={`mailto:${contact.email}`}>{t.getInTouch}</a></li>}
+              {contact.linkedinUrl && <li><a href={contact.linkedinUrl}>LinkedIn ↗</a></li>}
             </ul>
             <p className="menu-label">{t.caseStudiesLabel}</p>
             <ol className="menu-picks">
               {list.map((c) => (
                 <li key={c.slug}>
-                  <Link href={targetOf(c.slug)} aria-current={c.slug === current ? "page" : undefined} onMouseEnter={() => setShown(c.slug)} onFocus={() => setShown(c.slug)}>{c.name}</Link>
+                  <Link href={targetOf(c.slug)} data-case={c.slug} aria-current={c.slug === current ? "page" : undefined} onMouseEnter={() => setShown(c.slug)} onFocus={() => setShown(c.slug)}>{c.name}</Link>
                 </li>
               ))}
             </ol>
           </nav>
-          <ul className="menu-side">
-            {contact.linkedinUrl && <li><a href={contact.linkedinUrl}>LinkedIn ↗</a></li>}
-            <li><Link href={localize("/playground/", locale)} aria-current={path === "/playground/" ? "page" : undefined}>{t.playground}</Link></li>
-            {contact.resumeUrl && <li><a href={withBase(contact.resumeUrl)}>{t.resume} ↗</a></li>}
-          </ul>
+          {contact.resumeUrl && <ul className="menu-side"><li><a href={withBase(contact.resumeUrl)}>{t.resume} ↗</a></li></ul>}
         </div>
       )}
     </div>

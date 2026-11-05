@@ -31,7 +31,9 @@ export function freezeAmbient(source: HTMLElement) {
 // The layer is a copy of exactly what the device shows, its loops carried on
 // from the same moment, so the hover preview, the zoom and the opener read as
 // one continuous picture.
-export type ZoomOptions = { from: HTMLElement; to: string; project: string };
+// `box` is where the layer starts when that isn't the device's own box (the Menu's card
+// crops its device); `onCovered` runs once the layer fills the screen, before the page changes.
+export type ZoomOptions = { from: HTMLElement; to: string; project: string; box?: DOMRect; onCovered?: () => void };
 
 // Carries the CSS animations of `source` (and its descendants) over to the
 // same elements in `copy`, at the same point of their cycle. A fresh copy
@@ -180,7 +182,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   };
   if (zoom && !reduced) {
     const source = zoom.from;
-    const box = source.getBoundingClientRect();
+    const box = zoom.box ?? source.getBoundingClientRect();
     if (box.width > 10 && box.height > 10) {
       layer = document.createElement("div");
       layer.className = "project-zoom";
@@ -197,7 +199,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // The card's own surface (e.g. Gemini's bright blue) laid under the
       // copy, fading into the layer's darker opener ground as it grows, so the
       // colour changes gradually instead of switching on the first frame.
-      const card = source.closest<HTMLElement>(".home-device");
+      const card = source.closest<HTMLElement>(".home-device, .menu-card");
       const surface = card ? getComputedStyle(card).backgroundImage : "none";
       if (surface && surface !== "none") {
         const tint = document.createElement("div");
@@ -459,7 +461,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   // grow it stalled the layer's frames (the grow animates its box, which needs
   // the main thread). Behind the full-screen layer it can take its time.
   if (layer) {
-    window.setTimeout(() => { change(); begin(); }, Math.max(0, grow - (performance.now() - zoomStart)));
+    window.setTimeout(() => { zoom?.onCovered?.(); change(); begin(); }, Math.max(0, grow - (performance.now() - zoomStart)));
     return;
   }
   change();
