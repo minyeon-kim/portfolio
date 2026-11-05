@@ -426,7 +426,7 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][]; purpose: string; accept: string[]; tokens: string[]; code: [string, string][] };
-type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { accept: string; tokens: string; code: string }; excerpt?: { screen: string; crop: [number, number, number, number]; cols: string[]; rows: string[][]; note: string; code: [string, string] }; more?: string; moreHref?: string };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { accept: string; tokens: string; code: string }; more?: string; moreHref?: string };
 
 // `--ds-token` in the copy reads as code.
 const tokenText = (text: string) => text.split(/(`[^`]+`)/).map((part, i) => part.startsWith("`") ? <code key={i}>{part.slice(1, -1)}</code> : part);
@@ -495,41 +495,6 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
       </div>
       <p className="dv-spec-note">{spec.shared}</p>
       <p className="dv-spec-note">{spec.open}</p>
-    </div>
-  );
-}
-
-// The case page's form: the one part of a screen where the judgment lives, large enough to
-// read, and its states as a table. Everything else is on the spec page.
-export function HandoffExcerpt({ spec }: { spec: SpecData }) {
-  const excerpt = spec.excerpt;
-  const screen = spec.screens.find((item) => item.id === excerpt?.screen);
-  if (!excerpt || !screen) return null;
-  const [cropX, cropY, cropW, cropH] = excerpt.crop;
-  return (
-    <div className="dv-spec-doc dv-gap-40 reveal">
-      <div className="dv-spec-crop" style={{ aspectRatio: `${cropW * 16} / ${cropH * 10}` }}>
-        <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 75rem) 1600px, 120vw" style={{ width: `${10000 / cropW}%`, left: `${(-cropX / cropW) * 100}%`, top: `${(-cropY / cropH) * 100}%` }} />
-      </div>
-      <table className="dv-state-table">
-        <thead>
-          <tr>{excerpt.cols.map((col) => <th key={col} scope="col">{col}</th>)}</tr>
-        </thead>
-        <tbody>
-          {excerpt.rows.map(([selected, ...cells]) => (
-            <tr key={selected}>
-              <th scope="row">{selected}</th>
-              {cells.map((cell, i) => <td key={cell} data-label={excerpt.cols[i + 1]}>{cell}</td>)}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="dv-spec-note">{excerpt.note}</p>
-      <p className="dv-spec-note">{spec.open}</p>
-      <p className="dv-spec-more">
-        {spec.more && spec.moreHref && <Link className="link" href={spec.moreHref}>{spec.more} →</Link>}
-        <a className="link" href={excerpt.code[1]} target="_blank" rel="noreferrer">{excerpt.code[0]} ↗</a>
-      </p>
     </div>
   );
 }
