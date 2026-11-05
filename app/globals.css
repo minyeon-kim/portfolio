@@ -5013,48 +5013,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 @keyframes dv-reel-grow { from { scale: 0.92; } to { scale: 1; } }
 
-/* Core features, desktop: all clips share one sticky stage on the left, and each
-   feature's text holds beside it on the right. The li steps aside so stage and rows
-   are items of one grid. Each .dv-reel-row sets its height and tells the script which
-   feature is current. The text inside it is a zero-height sticky box whose
-   content overflows both ways, so it stays centred on the clip whatever its length;
-   its margins (--reel-g) keep it clear of its neighbour where two rows meet. The list
-   runs past the column by the same amount on both sides, up to 32px from the screen
-   edge and at most 160px. */
-.dv-reel-row { display: contents; }
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-reels {
-    --reel-out: clamp(0px, var(--dv-pad) - 32px, 160px);
-    --reel-text: clamp(300px, 30vw, 400px);
-    --reel-gap: clamp(40px, 5vw, 72px);
-    --reel-w: min(100vw - 2 * var(--dv-pad) + 2 * var(--reel-out) - var(--reel-text) - var(--reel-gap), (100svh - 216px) * 1.6 + 40px);
-    --reel-h: calc((var(--reel-w) - 40px) / 1.6 + 40px);
-    --reel-g: clamp(180px, 20svh, 220px);
-    --reel-hold: 50svh;
-    grid-template-columns: minmax(0, 1fr) var(--reel-text); grid-template-rows: repeat(var(--reels), auto); column-gap: var(--reel-gap); row-gap: 0; margin-inline: calc(-1 * var(--reel-out));
-  }
-  /* !important: the part-gap rule's :is() holds an id, so its specificity can't be matched here. */
-  .case-study .dv .dv-reels { margin-block: min(0px, 72px + var(--reel-h) / 2 - 50svh) !important; }
-  .dv-reel { display: contents; }
-  .dv-reel-row { display: flow-root; grid-column: 2; grid-row: var(--row); min-height: calc(2 * var(--reel-g) + var(--reel-hold)); pointer-events: none; }
-  .dv-reel:first-child .dv-reel-row, .dv-reel:last-child .dv-reel-row { min-height: calc(50svh + var(--reel-g) + var(--reel-hold)); }
-  .dv-reel-text { position: sticky; top: 50svh; display: flex; flex-direction: column; justify-content: center; gap: 24px; height: 0; margin-block: var(--reel-g); transition: opacity 250ms var(--ease), visibility 0s; }
-  /* Text already read fades as the clip changes; the next one stays visible below in muted. */
-  .dv-reel[data-past] .dv-reel-text { opacity: 0; visibility: hidden; transition: opacity 250ms var(--ease), visibility 0s linear 250ms; }
-  .dv-reel:first-child .dv-reel-text { margin-top: 50svh; }
-  .dv-reel:last-child .dv-reel-text { margin-bottom: 50svh; }
-  .dv-reel-stage { grid-column: 1; grid-row: 1 / span var(--reels); align-self: start; position: sticky; top: 0; display: grid; align-content: center; justify-items: start; height: 100svh; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s linear 400ms; }
-  .dv-reel[data-on] .dv-reel-stage { pointer-events: auto; opacity: 1; visibility: visible; transition: opacity 400ms var(--ease), visibility 0s; }
-  .dv-reel-media { width: var(--reel-w); padding: 20px; }
-  .dv-reel-media video { border-radius: 10px; animation: none; scale: 0.96; transition: scale 400ms var(--ease); }
-  .dv-reel[data-on] .dv-reel-media video { scale: 1; }
-  .case-study .dv .dv-reel-text .dv-reel-line { font-size: var(--t-heading); line-height: 1.3; }
-  .case-study .dv .dv-reel-points { padding-top: 0; }
-  .case-study .dv :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { transition: color 250ms var(--ease); }
-  .case-study .dv .dv-reel:not([data-on]) :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { color: var(--dv-muted); }
-  /* The number changes with the frame's crossfade. */
-  .case-study .dv .dv-reel-name b { transition: color 400ms var(--ease); }
-}
 
 
 /* About: security to design (shot B). Outside the case body, so it uses the page tokens. */
@@ -5312,4 +5270,35 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-spec-parts { display: none; }
   .dv-spec-subs > .dv-spec-sub, .dv-spec-panel[data-on] .dv-spec-subs > .dv-spec-sub { grid-area: auto; visibility: visible; margin-top: 16px; }
   .case-study .dv .dv-spec-sub-title { position: static; width: auto; height: auto; margin: 0 0 8px; overflow: visible; clip-path: none; }
+}
+
+/* Core features: each one a card holding its text and its clip on colour. */
+.dv-reels { gap: 16px; }
+.dv-reel { gap: 16px; padding: 12px; border: 1px solid var(--dv-card-line); border-radius: 24px; background: var(--dv-surface); }
+.dv-reel-text { display: flex; flex-direction: column; gap: 12px; padding: 12px; }
+.case-study .dv .dv-reel-text .dv-reel-line { margin: 0; font-size: var(--t-heading); font-weight: 400; line-height: 1.3; }
+.case-study .dv .dv-reel-solves { margin: 0; }
+.case-study .dv .dv-reel-solves b { color: var(--dv-muted); }
+.dv-reel-media { width: 100%; padding: 16px; border-radius: 16px; }
+/* Desktop: one card holds still and scroll changes what's inside (native scroll; the travel
+   is the empty length of the track under it). All in one cell, so the card keeps one height.
+   Wider than the column, the same width as the handoff spec. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-reels-track { --reel-card: min(1640px, calc(100vw - 96px)); --reel-text: clamp(320px, 28vw, 420px); width: var(--reel-card); margin-left: calc(50% - var(--reel-card) / 2); }
+  /* A block, not padding: sticky can't move into padding. */
+  .dv-reels-track::after { content: ""; display: block; height: calc((var(--reels) - 1) * 70svh); }
+  .dv-reels-card { position: sticky; top: var(--reel-top, 76px); overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: 24px; background: var(--dv-surface); }
+  .dv-reels { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .dv-reel { grid-area: 1 / 1; grid-template-columns: minmax(0, 1fr) var(--reel-text); gap: 0; padding: 12px; border: 0; border-radius: 0; background: none; opacity: 0; pointer-events: none; transition: opacity 400ms var(--ease); }
+  .dv-reel[data-on] { opacity: 1; pointer-events: auto; }
+  .dv-reel-media { display: grid; place-items: center; width: auto; padding: 20px; }
+  .dv-reel-media video { width: min(100%, calc((100svh - 160px) * 1.6)); border-radius: 10px; animation: none; }
+  .dv-reel-text { justify-content: center; gap: 16px; padding: 32px 28px 72px 40px; }
+  .dv-reel-steps { position: absolute; right: 28px; bottom: 28px; left: calc(100% - var(--reel-text) + 40px - 12px); display: flex; gap: 6px; }
+  .dv-reel-steps button { position: relative; flex: 1; height: 24px; padding: 0; border: 0; background: none; }
+  .dv-reel-steps button::before { content: ""; position: absolute; inset: 10px 0; border-radius: 2px; background: var(--dv-line); transition: background-color 250ms var(--ease), inset 150ms var(--ease); }
+  .dv-reel-steps button[data-done]::before { background: var(--reel-step, var(--case-accent)); }
+  .dv-reel-steps button:hover::before { inset-block: 9px; background: var(--dv-muted); }
+  .dv-reel-steps button[data-done]:hover::before { background: var(--case-accent); }
+  .dv-reel-steps button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; border-radius: 4px; }
 }
