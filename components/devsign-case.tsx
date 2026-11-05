@@ -135,10 +135,16 @@ function Insights({ discover }: { discover: Study }) {
           </ul>
         </div>
         <figure className="dv-meet reveal">
-          <div className="dv-meet-photo">
-            <Image src={withBase(interview.photo.src)} alt={interview.photo.alt} width={interview.photo.width} height={interview.photo.height} sizes="(max-width: 767px) 100vw, 1200px" />
-          </div>
-          <ul aria-label={interview.peopleLabel}>
+          <ul className="dv-meet-tiles">
+            {interview.photo.tiles.map((t: { src: string; label: string; alt: string }) => (
+              <li key={t.src}>
+                <Image src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="(max-width: 767px) 100vw, 400px" />
+                <span>{t.label}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="dv-caps dv-meet-label">{interview.peopleLabel}</p>
+          <ul className="dv-meet-people">
             {interview.participants.map((p: string[]) => (
               <li key={p[0]} data-tone={toneOf(p[1])}>
                 <b>{p[0]}</b>
@@ -147,6 +153,7 @@ function Insights({ discover }: { discover: Study }) {
               </li>
             ))}
           </ul>
+          <a className="dv-meet-guide" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
         </figure>
         <div className="dv-interview-result reveal">
           <p className="dv-caps">{interview.resultLabel}</p>
