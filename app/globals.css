@@ -5455,7 +5455,8 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 
 /* Charts share one rhythm: heading, chart, key, source. The box belongs to the text above it, so
    it sits closer than the gap between parts (the owner found the old 80px gap odd). */
-.case-study .dv .dv-evbox.dv-gap-40 { margin-top: 48px; }
+.case-study .dv :is(.dv-evbox, .dv-cycle-card).dv-gap-40 { margin-top: 48px; }
+.case-study .dv .dv-cycle-card + .dv-evbox { margin-top: 24px; }
 .case-study .dv .dv-ut-meaning-text.dv-gap-40 { margin-top: 40px; max-width: var(--dv-measure, 740px); }
 .dv-charts { grid-template-rows: auto 1fr auto auto; }
 .dv-chart { grid-row: span 4; }
@@ -5494,20 +5495,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 
 /* Survey stage (Metalab's Robinhood charts): tabs at the left, one large chart, the finding and
    its source at the right. The panels share one grid cell, so the box never changes height. */
-.dv-cycle-stage { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(240px, 300px); align-items: start; gap: clamp(24px, 3vw, 48px); }
-.dv-cycle-nav { display: grid; justify-items: center; align-self: center; gap: 32px; }
-.dv-cycle-tabs { display: grid; gap: 12px; }
-.dv-cycle-tabs button, .dv-cycle-stop { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--dv-muted); transition: color 150ms ease, background-color 150ms ease; }
-.dv-cycle-tabs svg:not(.dv-cycle-ring), .dv-cycle-stop svg { width: 20px; height: 20px; }
-.dv-cycle-tabs button:hover, .dv-cycle-stop:hover { color: var(--dv-ink); }
-.dv-cycle-tabs button[aria-pressed="true"] { color: var(--case-accent); background: color-mix(in srgb, var(--case-accent) 14%, transparent); }
-.dv-cycle-tabs button:focus-visible, .dv-cycle-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.dv-cycle-ring { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; pointer-events: none; }
-.dv-cycle-ring circle { fill: none; stroke: var(--case-accent); stroke-width: 1.5; stroke-dasharray: 0 100; animation: dv-cycle-progress var(--show-ms) linear forwards paused; }
-.dv-cycle-stage[data-run] .dv-cycle-ring circle { animation-play-state: running; }
-@keyframes dv-cycle-progress { to { stroke-dasharray: 100 100; } }
-.dv-cycle-stop { width: 32px; height: 32px; }
-.dv-cycle-stop svg { width: 16px; height: 16px; }
 
 .dv-cycle-stack { display: grid; min-width: 0; transition: opacity 280ms var(--ease), translate 280ms var(--ease); }
 .dv-cycle-stack > * { grid-area: 1 / 1; min-width: 0; }
@@ -5550,8 +5537,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-posts-list cite { padding-top: 8px; color: var(--dv-muted); font-size: 16px; font-style: normal; line-height: 1.5; }
 
 @media (max-width: 74.99rem) {
-  .dv-cycle-stage { grid-template-columns: 44px minmax(0, 1fr); }
-  .dv-cycle-texts { grid-column: 1 / -1; grid-row: 1; }
 }
 @media (max-width: 63.99rem) {
   .dv-posts-list { grid-template-columns: 1fr; grid-template-rows: none; row-gap: 12px; }
@@ -5560,10 +5545,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-posts-head > a { grid-column: 1 / -1; justify-self: start; }
 }
 @media (max-width: 47.99rem) {
-  .dv-cycle-stage { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .dv-cycle-nav { display: flex; justify-content: flex-start; align-items: center; gap: 12px; align-self: auto; }
-  .dv-cycle-tabs { display: flex; }
-  .dv-cycle-texts { grid-row: auto; order: -1; }
   .dv-trust-wrap { grid-template-columns: minmax(0, 1fr); }
   .dv-trust { width: min(100%, 280px); }
   .dv-cycle-charts, .dv-bars-chart { min-height: 300px; }
@@ -5616,19 +5597,36 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-score-table tbody th { font-size: 16px; }
 }
 
-/* Stage layout, reading order first (owner: the inside of the card felt off; three columns each
-   aligned differently, with the finding read last). Finding and source top left, controls bottom
-   left, the chart filling the right. */
-.dv-cycle-stage { grid-template-columns: minmax(260px, 360px) minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: stretch; gap: 32px clamp(32px, 4vw, 64px); }
-.dv-cycle-texts { grid-column: 1; grid-row: 1; order: 0; }
-.dv-cycle-nav { grid-column: 1; grid-row: 2; display: flex; justify-content: flex-start; align-items: center; align-self: auto; gap: 8px; }
-.dv-cycle-tabs { display: flex; gap: 8px; }
-.dv-cycle-charts { grid-column: 2; grid-row: 1 / 3; }
+/* Word tabs on top, then one plate: finding at the left, chart at the right. The tabs say what can
+   be picked before the content is read (owner, after a Circle card); no outer box round them. */
+.dv-cycle-stage { display: grid; gap: 16px; }
+.dv-cycle-nav { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.dv-cycle-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.dv-cycle-tabs button { position: relative; overflow: hidden; min-height: 40px; padding: 0 16px; border-radius: 999px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.3; word-break: keep-all; transition: color 150ms ease, background-color 150ms ease; }
+.dv-cycle-tabs button > span { position: relative; }
+.dv-cycle-tabs button:hover { color: var(--dv-ink); background: color-mix(in srgb, var(--dv-ink) 7%, transparent); }
+.dv-cycle-tabs button[aria-pressed="true"] { color: var(--dv-ink); background: color-mix(in srgb, var(--case-accent) 14%, transparent); }
+.dv-cycle-timer { position: absolute; inset: 0; transform-origin: left; background: color-mix(in srgb, var(--case-accent) 20%, transparent); animation: dv-cycle-fill var(--show-ms) linear forwards paused; }
+.dv-cycle-stage[data-run] .dv-cycle-timer { animation-play-state: running; }
+@keyframes dv-cycle-fill { from { transform: scaleX(0); } }
+.dv-cycle-stop { display: grid; flex: none; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--dv-muted); transition: color 150ms ease, background-color 150ms ease; }
+.dv-cycle-stop:hover { color: var(--dv-ink); background: color-mix(in srgb, var(--dv-ink) 7%, transparent); }
+.dv-cycle-stop svg { width: 16px; height: 16px; }
+.dv-cycle-tabs button:focus-visible, .dv-cycle-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* One tint across the whole plate, so the finding and its chart read as one piece. */
+.dv-cycle-plate {
+  --plate-a: light-dark(color-mix(in srgb, var(--case-accent) 4%, #ffffff), color-mix(in srgb, var(--case-accent) 7%, var(--dv-band-card-dark)));
+  --plate-b: light-dark(color-mix(in srgb, var(--case-accent) 13%, #ffffff), color-mix(in srgb, var(--case-accent) 18%, var(--dv-band-card-dark)));
+  --dv-muted: light-dark(#5e5e63, #b4bcb9); /* Holds AA at the tinted end of the plate. */
+  display: grid; grid-template-columns: minmax(260px, 360px) minmax(0, 1fr); align-items: center; gap: 32px clamp(32px, 4vw, 64px);
+  padding: clamp(24px, 3.2vw, 48px); border-radius: var(--dv-card-radius); background: linear-gradient(115deg, var(--plate-a), var(--plate-b));
+}
 @media (max-width: 63.99rem) {
-  .dv-cycle-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 24px; }
-  .dv-cycle-texts { grid-column: 1; grid-row: 1; }
-  .dv-cycle-charts { grid-column: 1; grid-row: 2; }
-  .dv-cycle-nav { grid-column: 1; grid-row: 3; }
+  .dv-cycle-plate { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+}
+@media (max-width: 47.99rem) {
+  .dv-cycle-tabs button, .dv-cycle-stop { min-height: 44px; }
+  .dv-cycle-stop { width: 44px; height: 44px; }
 }
 
 @media (max-width: 47.99rem) {
