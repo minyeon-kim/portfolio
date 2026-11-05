@@ -44,8 +44,8 @@ Shape (Metalab-like, soft rather than wireframe):
 - Borders (1px var(--line)) only for dividers and text inputs. No drop shadows.
 Motion: 150/250/400ms, ease cubic-bezier(0.2,0.8,0.2,1).
 Interaction states (nothing interactive is static; utilities in app/globals.css):
-- press: buttons and tiles scale to 0.97 while pressed.
-- lift: cards rise 4px on hover or focus-within.
+- press: filled buttons and tiles rise 2px on hover and scale to 0.97 while pressed.
+- lift: cards rise 2px on hover or focus-within; a card holding a playing clip or tabs doesn't lift.
 - link: text links keep a 40% underline that firms up and tightens on hover/focus.
 - Inputs: border goes muted on hover, accent on focus.
 - Toggles and icons swap with a 250ms fade + quarter turn (theme toggle, Menu/Close),
@@ -1366,3 +1366,5 @@ Devsign Iteration 2 is the same holding card as the core features (supersedes th
 Devsign handoff and Iteration 1 are element cards in the same family as the core features (one purple plate at the left, words at the right, 1344px wide at 1440; supersedes the whole screen with six rows, and Iteration 1's two crops side by side). Handoff (`HandoffSpec`, also on the spec page): screen tabs above, inside the card numbers 1–6 pick one element and the screen zooms 1.8x to its pin (pan clamped to the shot, pins counter-scaled, 400ms), with its name, behavior and states beside it; Done when and Tokens & code are a second row of tabs and bring back the whole screen. The shared and open lines sit under the card. Phones list everything, whole screen, no tabs. The zoom centres on the pins, so an element wider than the view is cut (no element boxes yet). Iteration 1 (`IterationPair`): one crop spot crossfading As-is and To-be, the same As-is / To-be buttons as Iteration 2; it turns to To-be once 1.4s after half the card is on screen unless pressed, and reduced motion starts on To-be. Figma not updated.
 
 Gemini Deliver is the holding card too (`ScreenSteps`, supersedes the four change cards with struck-through lines; the logic is shared with Iteration 2 in `useHeldSteps` and `StepMarks`): 1344px at 1440, 70svh of native scroll per change, the whole phone screen on a Gemini blue plate at the left (640px tall at most, 100svh − 120 on short screens), `1 / 4`, title and As-is / To-be lines at the right, four step bars. The As-is lines are plain text, not switches, because there is no As-is screen. The text column is wider (36vw, up to 560px) because a phone is narrow. Phones and reduced motion: one card per change. Figma not updated.
+
+Hover, one language (owner, after agentcard.com/vault; end of globals.css): filled controls (`press`, stage nav, handoff tabs and numbers, journey legend, menu pills) rise 2px and settle back on press. Standalone cards (Overview summary, research questions, participants, persona, Gemini's `.dv-features`, About and Playground `lift`) rise 2px. Holding cards don't. Boards under `OpenFrame` move their image 1.2% in the frame. Mouse only, off with reduced motion. Cards lift with `transform`, since their reveal uses `translate`. These cards aren't links; only the rise says they respond. Figma not updated.
