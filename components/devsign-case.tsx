@@ -128,36 +128,42 @@ function Insights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block {...interview} ff />
-        <div className="dv-keyq dv-gap-40">
-          <p className="dv-caps reveal">{interview.questionsLabel}</p>
-          <ul>
-            {interview.questions.map((q: string, i: number) => <li key={q}><h4>{interview.questionKeys[i]}</h4><p>{q}</p></li>)}
-          </ul>
+        <div className="dv-iv-quotes">
+          {interview.quotes.map(([quote, who]: string[]) => (
+            <figure key={quote} className="reveal">
+              <blockquote>“{quote}”</blockquote>
+              <figcaption>{who}</figcaption>
+            </figure>
+          ))}
         </div>
-        <figure className="dv-meet reveal">
-          <ul className="dv-meet-tiles">
-            {interview.photo.tiles.map((t: { src: string; label: string; alt: string }) => (
-              <li key={t.src}>
-                <Image src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="(max-width: 767px) 100vw, 400px" />
-                <span>{t.label}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="dv-caps dv-meet-label">{interview.peopleLabel}</p>
-          <ul className="dv-meet-people">
-            {interview.participants.map((p: string[]) => (
-              <li key={p[0]} data-tone={toneOf(p[1])}>
-                <b>{p[0]}</b>
-                <strong>{p[1]}</strong>
-                <span>{interview.participantColumns[2]} {p[2]} · {p[3]}</span>
-              </li>
-            ))}
-          </ul>
-          <a className="dv-meet-guide" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
-        </figure>
-        <div className="dv-interview-result reveal">
-          <p className="dv-caps">{interview.resultLabel}</p>
-          <p className="dv-finding">{interview.result}</p>
+        <div className="dv-iv-facts reveal">
+          <div>
+            <p className="dv-caps">{interview.peopleLabel}</p>
+            <ul>
+              {interview.participants.map((p: string[]) => (
+                <li key={p[0]}><strong>{p[1]}</strong><span>{interview.participantColumns[2]} {p[2]} · {p[3]}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="dv-caps">{interview.questionsLabel}</p>
+            <ul>
+              {interview.questions.map((q: string, i: number) => (
+                <li key={q}><strong>{interview.questionKeys[i]}</strong><span>{q}</span></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="dv-iv-evidence reveal">
+          <figure>
+            <div className="dv-iv-tiles">
+              {interview.photo.tiles.map((t: { src: string; alt: string }) => (
+                <Image key={t.src} src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="176px" />
+              ))}
+            </div>
+            <figcaption>{interview.photo.caption}</figcaption>
+          </figure>
+          <a className="dv-iv-guide" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
         </div>
       </div>
     </div>
