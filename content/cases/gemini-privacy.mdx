@@ -92,7 +92,6 @@ export const study = {
     },
   },
   discover: {
-    scale: "5 AI services · 6 papers · survey data · 2 interviews + 2 guide tests",
     desk: {
       method: "Secondary research",
       title: "Desk research",
@@ -101,10 +100,32 @@ export const study = {
     q1: {
       label: "Question 1 · Do people want control?",
       answer: "People want control, but most don't feel they have it.",
-      surveyLabel: "Survey · Pew Research Center 2025–2026",
-      stats: [
-        { value: "61%", text: "of U.S. adults want more control over how AI is used in their lives; only 17% are comfortable with what they have" },
-        { value: "71%", text: "think more AI will make their personal information less secure" },
+      charts: [
+        {
+          type: "donut",
+          title: "Most U.S. adults want more control over how AI is used in their lives. Only 17% are comfortable with what they have.",
+          value: "61%",
+          valueLabel: "want more control",
+          segments: [
+            { label: "Want more control", value: 61, on: true },
+            { label: "Comfortable", value: 17 },
+            { label: "Not sure", value: 21, rest: true },
+          ],
+          source: { label: "Pew Research Center, Sept 2025", url: "https://www.pewresearch.org/science/2025/09/17/ai-in-americans-lives-awareness-experiences-and-attitudes/", detail: "5,023 U.S. adults, June 2025." },
+        },
+        {
+          type: "donut",
+          title: "Most expect more AI to make their personal information less secure. Only 3% expect the opposite.",
+          value: "71%",
+          valueLabel: "less secure",
+          segments: [
+            { label: "Less secure", value: 71, on: true },
+            { label: "Not much difference", value: 10 },
+            { label: "More secure", value: 3 },
+            { label: "Not sure", value: 16, rest: true },
+          ],
+          source: { label: "Pew Research Center, June 2026", url: "https://www.pewresearch.org/internet/2026/06/17/americans-and-ai-2026-chatbots-smart-devices-and-views-on-impact/", detail: "5,119 U.S. adults, Feb 2026." },
+        },
       ],
       communityLabel: "Papers · 6 studies on AI memory UX",
       groups: [
@@ -217,7 +238,7 @@ export const study = {
       title: "How might we",
       question: "How might Gemini users see where the personal data in an answer came from, and turn it off or delete it right there, with a result they can trust?",
       successLabel: "Success looks like",
-      success: ["People find the source and the switch without hints, within 10 seconds", "People can explain blocking vs. deleting in their own words"],
+      success: ["People find the source and the switch without hints", "People can explain blocking vs. deleting in their own words"],
     },
   },
   develop: {
@@ -291,12 +312,25 @@ export const study = {
       title: "Moderated think-aloud",
       lead: "Up to five people run two scenarios on a fictional persona's data.",
       text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking); no participant shares their own data.",
-      scores: [
-        { value: "10", unit: "sec", ratio: 0, title: "Find the switch", note: "Goal · no hints, within 10 seconds" },
-        { value: "68+", unit: "SUS", ratio: 0, title: "SUS target", note: "Goal · above the average" },
-        { value: "1–7", unit: "SEQ", ratio: 0, title: "Task difficulty", note: "Asked after each scenario" },
-        { value: "1–7", unit: "load", ratio: 0, title: "Information load", note: "Is the source panel too much?" },
-      ],
+      charts: {
+        sus: {
+          title: "After 2 of 5 sessions, SUS is 77.5 and 82.5.",
+          items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
+          marks: [{ value: 68, label: "Average 68" }],
+          note: "A trend only: the two used different prototype versions, and P01 wasn’t sure what the survey was rating.",
+        },
+        dots: {
+          title: "Both found the source without help (46.5 s, 14.8 s), but task 1 showed too much information.",
+          max: 7, people: ["P01", "P02"],
+          rows: [
+            { label: "Task 1, source panel · Ease", values: [5, 3] },
+            { label: "Task 2, asking in chat · Ease", values: [6, 4] },
+            { label: "Task 1 · Amount of information", values: [6, 6] },
+            { label: "Task 2 · Amount of information", values: [4, 4] },
+          ],
+          note: "Ease: 7 is very easy. Information: 4 is about right, 7 is far too much.",
+        },
+      },
     },
   },
   takeaway: {
