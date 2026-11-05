@@ -4965,6 +4965,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-reel:nth-child(2) .dv-reel-media { background: radial-gradient(120% 110% at 50% 115%, #8f9bff 0%, #3f4fd6 42%, #151a4c 100%); }
 .dv-reel:nth-child(3) .dv-reel-media { background: radial-gradient(120% 110% at 50% 115%, #7cc4ff 0%, #2675d6 42%, #0f2348 100%); }
 .dv-reel:nth-child(4) .dv-reel-media { background: radial-gradient(120% 110% at 50% 115%, #7fe6d2 0%, #1c9d90 42%, #0c2b30 100%); }
+/* The feature's number takes its frame's colour, in a tone that reads as text on the page. */
+.dv-reel:nth-child(1) { --reel-tone: light-dark(#5b3fd6, #a58bff); }
+.dv-reel:nth-child(2) { --reel-tone: light-dark(#3f4fd6, #8f9bff); }
+.dv-reel:nth-child(3) { --reel-tone: light-dark(#2675d6, #7cc4ff); }
+.dv-reel:nth-child(4) { --reel-tone: light-dark(#0f766e, #7fe6d2); }
+.case-study .dv .dv-reel .dv-reel-name b { color: var(--reel-tone, var(--case-accent)); }
 @media (max-width: 63.99rem) {
   .dv-reel-media { width: 100%; padding: 16px; border-radius: 16px; }
   .dv-reel-media video { border-radius: 8px; }
@@ -5016,6 +5022,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   .case-study .dv .dv-reel-points { padding-top: 0; }
   .case-study .dv :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { transition: color 250ms var(--ease); }
   .case-study .dv .dv-reel:not([data-on]) :is(.dv-reel-name, .dv-reel-name b, .dv-reel-line, .dv-reel-solves span, .dv-reel-points li) { color: var(--dv-muted); }
+  /* The number changes with the frame's crossfade. */
+  .case-study .dv .dv-reel-name b { transition: color 400ms var(--ease); }
 }
 
 
