@@ -2277,7 +2277,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 .dv-fit img { width: auto; max-width: 100%; height: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
 .dv-screens { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 24px; padding: 32px; border-radius: 16px; background: var(--dv-alt); }
 .dv-screens .dv-screen img { width: 100%; height: auto; border-radius: 14px; }
-.dv-points.dv-changes { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
 .dv-point-phone { display: grid; place-items: center; height: 280px; }
 .dv-point-phone img { width: auto; height: 100%; max-height: 256px; border-radius: 12px; }
 .dv-features li { display: flex; flex-direction: column; gap: 8px; padding: 28px 28px 36px; border-radius: 12px; background: var(--dv-alt); }
@@ -2382,7 +2381,6 @@ html:lang(ko) :is(.case-eyebrow, .case-media-note, .case-gallery-heading, .case-
 @media (max-width: 47.99rem) {
   .dv, .case-study:has(.dv) { --dv-pad: var(--project-text-inset); }
   .dv-points { grid-template-columns: 1fr; gap: 32px; }
-  .dv-points.dv-changes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dv-screens { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 16px; }
   .dv-crops-overview { grid-template-columns: 1fr; }
   .dv-nav { padding-block: 16px; }
@@ -5369,3 +5367,19 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-spec-el h4 b { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-size: 14px; font-weight: 600; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-spec-zoom, .dv-spec-pin, .dv-spec-el, .dv-iter-views .dv-iter-view { transition: none; } }
+
+/* Gemini Deliver: the holding card with still phone screens, on Gemini's blue. On the page's
+   ground here, so the card is the surface colour. */
+.dv-screens-held .dv-iter-step, .dv-screens-held .dv-iter-stage { background: var(--dv-surface); }
+.dv-screens-held .dv-iter-clip { display: grid; place-items: center; background: radial-gradient(120% 110% at 50% 115%, #9dbeff 0%, #245cc0 42%, #0c1a3f 100%); }
+.dv-screens-held .dv-iter-clip img { display: block; width: min(100%, 280px); height: auto; border-radius: 16px; }
+.case-study .dv .dv-screen-line { margin: 0; color: var(--dv-muted); font-size: 18px; line-height: 1.5; word-break: keep-all; }
+.case-study .dv .dv-screen-line[data-side="b"] { color: var(--dv-ink); }
+.dv-screen-line span { display: block; margin-bottom: 4px; font-size: 16px; font-weight: 500; }
+.dv-screen-line[data-side="b"] span { color: var(--case-accent); }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  /* A phone is narrow: more room for the words. Height, not width, sizes the screen. */
+  .dv-screens-held { --reel-text: clamp(360px, 36vw, 560px); }
+  .dv-screens-held .dv-iter-clip { height: min(calc(100svh - 120px), 640px); box-sizing: border-box; }
+  .dv-screens-held .dv-iter-clip img { width: auto; height: 100%; min-height: 0; }
+}
