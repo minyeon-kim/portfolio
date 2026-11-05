@@ -5634,30 +5634,25 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 @media (max-width: 47.99rem) {
 }
 
-/* Interview: the finding is the heading, the two quotes carry the block. Who and what we asked are plain rows; the call is small proof beside the guide. */
-.dv-iv-facts { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 5vw, 80px); }
-.case-study .dv .dv-iv-facts p.dv-caps { margin: 0 0 12px; padding: 0; }
-.dv-iv-facts ul { margin: 0; padding: 0; list-style: none; }
-.dv-iv-facts li { display: flex; flex-direction: column; gap: 2px; padding: 14px 0; border-top: 1px solid var(--dv-line); }
-.dv-iv-facts strong { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
-.dv-iv-facts span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; text-wrap: pretty; }
-.dv-iv-quotes { display: grid; gap: clamp(40px, 4vw, 56px); }
-.dv-iv-facts { margin-top: var(--sp-part); }
-.dv-iv-quotes figure { max-width: 960px; margin: 0; }
-.case-study .dv .dv-iv-quotes blockquote { margin: 0; padding: 0; border: 0; color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; word-break: keep-all; text-wrap: pretty; }
-.dv-iv-quotes figcaption { margin-top: 16px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-iv-evidence { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px; margin-top: var(--sp-part); }
-.dv-iv-evidence figure { margin: 0; }
-.dv-iv-tiles { display: flex; gap: 4px; overflow: hidden; width: fit-content; border-radius: var(--dv-card-radius); }
-.dv-iv-tiles img { display: block; width: clamp(88px, 12vw, 176px); height: auto; }
-.dv-iv-evidence figcaption { margin-top: 12px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
-.dv-iv-guide { color: var(--case-accent); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 4px; transition: text-decoration-color 150ms var(--ease), text-underline-offset 150ms var(--ease); }
+/* Interview: the finding splits into its two claims, each card holding the quotes behind it. */
+.dv-iv-top { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 4vw, 48px); align-items: start; }
+.case-study .dv .dv-iv-top .dv-finding { font-size: var(--t-statement); font-weight: 400; line-height: 1.25; }
+.dv-iv-guide { display: inline-block; margin-top: 20px; color: var(--case-accent); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 4px; transition: text-decoration-color 150ms var(--ease), text-underline-offset 150ms var(--ease); }
 .dv-iv-guide:hover, .dv-iv-guide:focus-visible { text-decoration-color: currentColor; text-underline-offset: 2px; }
-@media (max-width: 47.99rem) { .dv-iv-facts { grid-template-columns: 1fr; } .dv-iv-tiles img { width: calc((100vw - 2 * var(--dv-pad, 24px) - 8px) / 3); } }
-/* Wide enough: each row on one line, so the facts stay quieter than the quotes above them. */
-@media (min-width: 64rem) {
-  .dv-iv-facts li { flex-direction: row; align-items: baseline; gap: 16px; padding: 12px 0; }
-  .dv-iv-facts strong { flex: 0 0 148px; font-size: 16px; }
-  .dv-iv-facts div:first-child strong { flex-basis: 136px; }
+.case-study .dv .dv-iv-top a.dv-iv-guide { margin-top: 20px; }
+.dv-iv-top figure { margin: 0; padding-top: 40px; }
+.dv-iv-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; overflow: hidden; border-radius: var(--dv-card-radius); }
+.dv-iv-tiles img { display: block; width: 100%; height: auto; }
+.dv-iv-top figcaption { margin-top: 12px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-iv-claims { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 56px; }
+.dv-iv-claim { padding: 32px; border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
+.case-study .dv .dv-iv-claims .dv-iv-claim h4 { margin: 0; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; word-break: keep-all; }
+.dv-iv-claim ul { display: grid; gap: 20px; margin: 24px 0 0; padding: 0; list-style: none; }
+.case-study .dv .dv-iv-claim blockquote { margin: 0; padding: 0; border: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 400; line-height: 1.4; word-break: keep-all; text-wrap: pretty; }
+.dv-iv-claim span { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (max-width: 47.99rem) {
+  .dv-iv-top, .dv-iv-claims { grid-template-columns: minmax(0, 1fr); }
+  .dv-iv-top figure { padding-top: 0; }
+  .dv-iv-claims { gap: 12px; margin-top: 32px; }
+  .dv-iv-claim { padding: 24px; }
 }
-
