@@ -4163,27 +4163,12 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* Tool table: no label in the corner. */
 
 /* Interview: questions light up with scroll, then the session wide, people credited under it. */
-.dv-meet { margin: 56px 0 0; }
-.dv-meet-photo { position: relative; aspect-ratio: 2.2; overflow: hidden; border-radius: var(--dv-card-radius); background: #0c0c10; }
-.dv-meet-photo img { position: absolute; left: -14%; top: -18%; width: 128%; max-width: none; height: auto; }
-.dv-meet ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 24px 0 0; padding: 0; list-style: none; }
-.dv-meet li { display: flex; flex-direction: column; gap: 2px; min-width: 0; transition: opacity 250ms var(--ease); }
-.dv-meet li b { color: var(--tone); font-size: 16px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }
-.dv-meet li strong { color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
-.dv-meet li span { color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.45; }
-@media (hover: hover) { .dv-meet ul:hover li:not(:hover) { opacity: 0.4; } }
 @supports (animation-timeline: view()) {
   @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-    .dv-meet-photo { animation: dv-meet-grow linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
   }
 }
 @keyframes dv-lit { from { color: color-mix(in srgb, var(--dv-ink) 28%, transparent); } }
-@keyframes dv-meet-grow { from { clip-path: inset(0 14% round var(--dv-card-radius)); } to { clip-path: inset(0 round var(--dv-card-radius)); } }
 @media (max-width: 47.99rem) {
-  .dv-meet { margin-top: 40px; }
-  .dv-meet-photo { aspect-ratio: 1.5; }
-  .dv-meet-photo img { left: -14%; top: -8%; }
-  .dv-meet ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
 }
 
 
@@ -4694,23 +4679,9 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 
 /* Research questions as three keywords you can scan, each with its full question. No rules or scroll dimming. */
-.case-study .dv .dv-keyq .dv-caps { margin: 0 0 24px; }
-.dv-keyq ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 48px); margin: 0; padding: 0; list-style: none; }
-.dv-keyq li { min-width: 0; }
-.case-study .dv .dv-keyq h4 { margin: 0; color: var(--dv-ink); }
-.case-study .dv .dv-keyq p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.55; word-break: keep-all; text-wrap: pretty; }
-@media (max-width: 47.99rem) { .dv-keyq ul { grid-template-columns: 1fr; gap: 20px; } }
 
 /* Interview: research questions and participants as cards on the band, so the block isn't all plain text. Participants carry their role's colour and sit tight under the photo. */
-.dv-keyq ul { gap: 16px; }
-.dv-keyq li { padding: 24px; border-radius: var(--dv-card-radius); background: light-dark(#ffffff, var(--dv-band-card-dark)); }
-.dv-meet ul { gap: 16px; margin-top: 16px; }
-.dv-meet li { gap: 4px; padding: 20px 24px; border-radius: var(--dv-card-radius); background: linear-gradient(115deg, color-mix(in srgb, var(--tone) light-dark(10%, 16%), light-dark(#ffffff, var(--dv-band-card-dark))) 0%, light-dark(#ffffff, var(--dv-band-card-dark)) 62%); }
 @media (max-width: 47.99rem) {
-  .dv-keyq ul { gap: 12px; }
-  .dv-keyq li { padding: 20px; }
-  .dv-meet ul { gap: 12px; margin-top: 12px; }
-  .dv-meet li { padding: 16px; }
 }
 
 /* Wireflow: the way back to the workspace is dashed. */
@@ -4737,7 +4708,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv .dv-ut-summary + .dv-ut-panel { margin-top: 64px; }
 .case-study .dv .dv-funnel + .dv-board { margin-top: 48px; }
 .case-study .dv .dv-evbox + .dv-evbox { margin-top: 24px; }
-.case-study .dv .dv-keyq .dv-caps { margin-bottom: var(--sp-label); }
 .case-study .dv .dv-caps + :is(.dv-scroll, table, ul, ol) { margin-top: var(--sp-label); }
 @media (max-width: 47.99rem) {
   .case-study .dv .dv-ut-summary + .dv-ut-panel, .case-study .dv .dv-funnel + .dv-board { margin-top: 32px; }
@@ -4896,8 +4866,6 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv .dv-cast article[data-line="developer"] h4 { color: light-dark(#a64a14, var(--dv-role)); }
 
 /* The interview capture is already cropped (Meet tiles beside the question guide), so it shows whole. */
-.dv-meet-photo, .dv-meet-photo img { aspect-ratio: 2400 / 1072; }
-.dv-meet-photo img { position: static; width: 100%; height: auto; max-width: 100%; }
 
 
 /* Handoff spec: real screen with numbered pins, the same numbers in the list. */
@@ -5389,7 +5357,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-glance > li { transition: opacity 500ms var(--ease), translate 700ms var(--ease-out-soft), transform 250ms var(--ease); }
   .dv-glance > li:nth-child(2) { transition-delay: 100ms, 100ms, 0ms; }
   .dv-glance > li:nth-child(3) { transition-delay: 200ms, 200ms, 0ms; }
-  .dv-meet li { transition: opacity 250ms var(--ease), transform 250ms var(--ease); }
   :root .case-study .dv :is(.dv-keyq li, .dv-features > li, .dv-cast article) { transition: opacity 800ms ease, translate 1000ms var(--ease-reveal), transform 250ms var(--ease); }
   :is(.dv-glance > li, .dv-meet li, .dv-keyq li, .dv-features > li, .dv-cast article):hover { transform: translateY(-2px); }
 
@@ -5664,21 +5631,33 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-cycle-nav { grid-column: 1; grid-row: 3; }
 }
 
-/* Interview: the call as three equal tiles on the question cards' grid, each saying who it is. The guide is a link, not a picture. */
-.dv-meet ul.dv-meet-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
-.dv-meet ul.dv-meet-tiles li { position: relative; display: block; padding: 0; overflow: hidden; border-radius: var(--dv-card-radius); background: none; transform: none; }
-.dv-meet-tiles img { display: block; width: 100%; height: auto; }
-.dv-meet ul.dv-meet-tiles span { position: absolute; left: 12px; bottom: 12px; padding: 2px 12px; border-radius: 999px; color: #ffffff; background: rgb(10 11 20 / 0.7); backdrop-filter: blur(12px); line-height: 1.5; }
-@media (hover: hover) { .dv-meet ul.dv-meet-tiles:hover li:not(:hover) { opacity: 1; } }
-.dv-meet-guide { display: inline-block; margin-top: 24px; color: var(--case-accent); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 4px; transition: text-decoration-color 150ms var(--ease), text-underline-offset 150ms var(--ease); }
-.dv-meet-guide:hover, .dv-meet-guide:focus-visible { text-decoration-color: currentColor; text-underline-offset: 2px; }
 @media (max-width: 47.99rem) {
-  .dv-meet ul.dv-meet-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dv-meet ul.dv-meet-tiles li:first-child { grid-column: 1 / -1; }
-  .dv-meet ul.dv-meet-tiles span { left: 8px; bottom: 8px; padding: 2px 10px; }
 }
-/* The people are a group of their own: a tile above isn't the card below it. */
-.case-study .dv .dv-meet-label { margin: 48px 0 0; }
-.dv-meet ul.dv-meet-people { margin-top: var(--sp-label); }
-.case-study .dv .dv-meet-guide { margin-top: 24px; }
+
+/* Interview: the finding is the heading, the two quotes carry the block. Who and what we asked are plain rows; the call is small proof beside the guide. */
+.dv-iv-facts { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 5vw, 80px); }
+.case-study .dv .dv-iv-facts p.dv-caps { margin: 0 0 12px; padding: 0; }
+.dv-iv-facts ul { margin: 0; padding: 0; list-style: none; }
+.dv-iv-facts li { display: flex; flex-direction: column; gap: 2px; padding: 14px 0; border-top: 1px solid var(--dv-line); }
+.dv-iv-facts strong { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-iv-facts span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; text-wrap: pretty; }
+.dv-iv-quotes { display: grid; gap: clamp(40px, 4vw, 56px); }
+.dv-iv-facts { margin-top: var(--sp-part); }
+.dv-iv-quotes figure { max-width: 960px; margin: 0; }
+.case-study .dv .dv-iv-quotes blockquote { margin: 0; padding: 0; border: 0; color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; word-break: keep-all; text-wrap: pretty; }
+.dv-iv-quotes figcaption { margin-top: 16px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-iv-evidence { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px; margin-top: var(--sp-part); }
+.dv-iv-evidence figure { margin: 0; }
+.dv-iv-tiles { display: flex; gap: 4px; overflow: hidden; width: fit-content; border-radius: var(--dv-card-radius); }
+.dv-iv-tiles img { display: block; width: clamp(88px, 12vw, 176px); height: auto; }
+.dv-iv-evidence figcaption { margin-top: 12px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-iv-guide { color: var(--case-accent); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 4px; transition: text-decoration-color 150ms var(--ease), text-underline-offset 150ms var(--ease); }
+.dv-iv-guide:hover, .dv-iv-guide:focus-visible { text-decoration-color: currentColor; text-underline-offset: 2px; }
+@media (max-width: 47.99rem) { .dv-iv-facts { grid-template-columns: 1fr; } .dv-iv-tiles img { width: calc((100vw - 2 * var(--dv-pad, 24px) - 8px) / 3); } }
+/* Wide enough: each row on one line, so the facts stay quieter than the quotes above them. */
+@media (min-width: 64rem) {
+  .dv-iv-facts li { flex-direction: row; align-items: baseline; gap: 16px; padding: 12px 0; }
+  .dv-iv-facts strong { flex: 0 0 148px; font-size: 16px; }
+  .dv-iv-facts div:first-child strong { flex-basis: 136px; }
+}
 
