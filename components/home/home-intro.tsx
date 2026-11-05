@@ -43,7 +43,12 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const t = useStrings();
   const locale = useLocale();
   const router = useRouter();
-  const [hover, setHover] = useState<string | null>(null);
+  const [hover, setHoverNow] = useState<string | null>(null);
+  // The picked case's world stays as it is while its device grows over it: the
+  // click blurs the pill and the pointer stops reaching it, which would clear it.
+  const setHover = (slug: string | null) => {
+    if (!document.documentElement.hasAttribute("data-project-navigation")) setHoverNow(slug);
+  };
   const [recent, setRecent] = useState<{ name: string; text: string } | null>(null);
   // Only the projects: About is a text link above them, not a pick with a world.
   const choices: { slug: string; name: string; caption?: string }[] = projects;
