@@ -35,16 +35,20 @@ export function SiteMenu({ contact, cases }: Props) {
   const list = cases[locale];
   const path = stripLocale(pathname);
   const current = path.match(/^\/work\/([^/]+)/)?.[1];
+  // A case or About shows its own card, not whatever part of the page happens to be on screen.
+  const ownCard = current ?? (path === "/about/" ? "about" : null);
   const [shown, setShown] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
   const timer = useRef<number>(undefined);
   const wasPath = useRef(pathname);
+  const zooming = useRef(false);
 
   const begin = () => {
     window.clearTimeout(timer.current);
-    setShown(null);
+    zooming.current = false;
+    setShown(ownCard);
     setLeaving(false);
     setMounted(true);
     setOpen(true);
@@ -142,7 +146,8 @@ export function SiteMenu({ contact, cases }: Props) {
   // just closes. The timer covers a route that doesn't change the path (home stage).
   const follow = (event: MouseEvent<HTMLDivElement>) => {
     const link = (event.target as Element).closest("a");
-    if (!link || event.defaultPrevented) return;
+    // Not defaultPrevented: Next's Link sets that on every click it handles.
+    if (!link || zooming.current) return;
     const href = link.getAttribute("href") ?? "";
     if (href.startsWith("/") && !link.hasAttribute("aria-current")) {
       setLeaving(true);
@@ -153,6 +158,8 @@ export function SiteMenu({ contact, cases }: Props) {
   // A case grows out of the card as the same picture and settles into its opener, as it
   // does from the landing's pills. Capture, so the Link doesn't navigate first.
   const zoomCase = (event: MouseEvent<HTMLDivElement>) => {
+    // The page you're on just closes the menu, without a reload of itself or a jump to the top.
+    if ((event.target as Element).closest('a[aria-current="page"]')) event.preventDefault();
     const link = (event.target as Element).closest<HTMLAnchorElement>("a[data-case]");
     const slug = link?.dataset.case;
     if (!link || !slug || link.hasAttribute("aria-current") || event.metaKey || event.ctrlKey || event.shiftKey) return;
@@ -161,6 +168,7 @@ export function SiteMenu({ contact, cases }: Props) {
     const from = card?.querySelector<HTMLElement>(".home-device-window, .home-device-phone");
     if (!card || !from) return;
     event.preventDefault();
+    zooming.current = true;
     setShown(slug);
     setLeaving(true);
     revealNextProject(
@@ -207,7 +215,7 @@ export function SiteMenu({ contact, cases }: Props) {
         <div ref={sheet} id="site-menu" role="dialog" aria-modal="true" aria-label={t.siteNav} className="menu-sheet" onClickCapture={zoomCase} onClick={follow} data-leaving={leaving || undefined}>
           <div className="menu-window" aria-hidden="true">
             {list.map((c) => (
-              <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-case={c.slug} data-project={c.slug} data-on={shown === c.slug || undefined}>
+              <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-case={c.slug} aria-current={c.slug === current ? "page" : undefined} data-project={c.slug} data-on={shown === c.slug || undefined}>
                 {c.slug === "devsign"
                   ? <span className="home-device-window"><DevsignLoop alt="" /></span>
                   : c.slug === "gemini-privacy"
@@ -215,7 +223,7 @@ export function SiteMenu({ contact, cases }: Props) {
                     : null}
               </Link>
             ))}
-            <Link href={targetOf("about")} tabIndex={-1} className="menu-card" data-project="about" data-on={shown === "about" || undefined}>
+            <Link href={targetOf("about")} tabIndex={-1} className="menu-card" aria-current={path === "/about/" ? "page" : undefined} data-project="about" data-on={shown === "about" || undefined}>
               <Image src={withBase("/images/about/portrait.webp")} alt="" fill sizes="30vw" />
             </Link>
             {!shown && <button type="button" tabIndex={-1} className="menu-card-close" onClick={() => end()} />}
