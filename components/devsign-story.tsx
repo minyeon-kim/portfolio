@@ -369,14 +369,12 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][] };
-type SpecData = { shared: string; open: string; screens: SpecScreen[]; only?: string; rules?: { pin: number; name: string; text: string }[]; more?: string; moreHref?: string };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; excerpt?: { screen: string; crop: [number, number, number, number]; rows: number[] }; more?: string; moreHref?: string };
 
 // The handoff spec: one key screen at a time, numbered pins on the real screen and the same
 // numbers in the list beside it. Pointing at either lights the other. Phones list all four.
-// With `one`, the case page's short form: one screen and only its key rules.
-export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boolean }) {
-  const rules = one ? spec.rules : undefined;
-  const screens = one ? spec.screens.filter((screen) => screen.id === spec.only) : spec.screens;
+export function HandoffSpec({ spec }: { spec: SpecData }) {
+  const screens = spec.screens;
   const [current, setCurrent] = useState(0);
   const [lit, setLit] = useState<number | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -390,7 +388,7 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
     tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-spec dv-gap-40 reveal" data-short={rules ? "" : undefined}>
+    <div className="dv-spec dv-gap-40 reveal">
       {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
         {screens.map((screen, i) => (
           <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
@@ -401,12 +399,12 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
         <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role={screens.length > 1 ? "tabpanel" : undefined} aria-labelledby={screens.length > 1 ? `spec-tab-${screen.id}` : undefined} data-on={i === current || undefined}>
           <div className="dv-spec-shot">
             <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 60vw, 100vw" />
-            {(rules ? rules.map((rule) => screen.pins[rule.pin]) : screen.pins).map(([x, y], n) => (
+            {screen.pins.map(([x, y], n) => (
               <span key={n} className="dv-spec-pin" data-lit={lit === n || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>{n + 1}</span>
             ))}
           </div>
           <ol className="dv-spec-rows">
-            {(rules ? rules.map((rule): [string, string, string] => [rule.name, rule.text, "-"]) : screen.rows).map(([name, does, state], n) => (
+            {screen.rows.map(([name, does, state], n) => (
               <li key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
                 <b aria-hidden="true">{n + 1}</b>
                 <div>
@@ -420,9 +418,46 @@ export function HandoffSpec({ spec, one = false }: { spec: SpecData; one?: boole
         </div>
       ))}
       </div>
-      {!rules && <p className="dv-spec-note">{spec.shared}</p>}
+      <p className="dv-spec-note">{spec.shared}</p>
       <p className="dv-spec-note">{spec.open}</p>
-      {one && spec.more && spec.moreHref && <p className="dv-spec-more"><Link className="link" href={spec.moreHref}>{spec.more} →</Link></p>}
+    </div>
+  );
+}
+
+// The case page's form: an excerpt of the document. The part of one screen where the rules
+// live, cropped large enough to read, and those rules as a spec table with the same numbers.
+export function HandoffExcerpt({ spec }: { spec: SpecData }) {
+  const [lit, setLit] = useState<number | null>(null);
+  const excerpt = spec.excerpt;
+  const screen = spec.screens.find((item) => item.id === excerpt?.screen);
+  if (!excerpt || !screen) return null;
+  const [cropX, cropY, cropW, cropH] = excerpt.crop;
+  const rows = excerpt.rows.map((row) => ({ cells: screen.rows[row], pin: screen.pins[row] }));
+  return (
+    <div className="dv-spec-doc dv-gap-40 reveal">
+      <div className="dv-spec-crop" style={{ aspectRatio: `${cropW * 16} / ${cropH * 10}` }}>
+        <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 75rem) 1430px, 120vw" style={{ width: `${10000 / cropW}%`, left: `${(-cropX / cropW) * 100}%`, top: `${(-cropY / cropH) * 100}%` }} />
+        {rows.map(({ pin: [x, y] }, n) => (
+          <span key={n} className="dv-spec-pin" data-lit={lit === n || undefined} aria-hidden="true" style={{ left: `${((x - cropX) / cropW) * 100}%`, top: `${((y - cropY) / cropH) * 100}%` }} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>{n + 1}</span>
+        ))}
+      </div>
+      <table className="dv-spec-table">
+        <thead>
+          <tr><th scope="col"><span className="sr-only">No.</span></th><th scope="col">{spec.cols.name}</th><th scope="col">{spec.cols.does}</th><th scope="col">{spec.cols.state}</th></tr>
+        </thead>
+        <tbody>
+          {rows.map(({ cells: [name, does, state] }, n) => (
+            <tr key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
+              <td><b>{n + 1}</b></td>
+              <th scope="row">{name}</th>
+              <td data-label={spec.cols.does}>{does}</td>
+              <td data-label={spec.cols.state}>{state}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="dv-spec-note">{spec.open}</p>
+      {spec.more && spec.moreHref && <p className="dv-spec-more"><Link className="link" href={spec.moreHref}>{spec.more} →</Link></p>}
     </div>
   );
 }
