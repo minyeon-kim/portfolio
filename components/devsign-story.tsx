@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -12,7 +12,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const PLAYBACK_RATE = 1;
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
-type Change = { title: string; before: string; after: string; a: Box[]; b: Box[] };
+type Note = { box: Box; label?: string; right?: boolean };
+type Change = { title: string; before: string; after: string; a: Box; b: Box; notesA?: Note[]; notesB?: Note[] };
 
 // Boards too dense to read at column width stay still; the frame opens the full image.
 export function OpenFrame({ children, href }: { children: React.ReactNode; href: string }) {
@@ -25,29 +26,35 @@ export function OpenFrame({ children, href }: { children: React.ReactNode; href:
   );
 }
 
-// Only what is inside the box, fitted into a tile of one shape: no outline, no
-// surrounding screen, and never blown up past 1.6x (the shots are 2x).
-function Crop({ img, box, tile }: { img: Shot; box: Box; tile: number }) {
+// Only what is inside the box, fitted into a tile of one shape: no surrounding
+// screen, and never blown up past 1.6x (the shots are 2x). Notes sit on the picture,
+// in the same screen % as the box: an outline, a label, or both.
+function Crop({ img, box, tile, notes = [] }: { img: Shot; box: Box; tile: number; notes?: Note[] }) {
   const [x, y, w, h] = box;
   const ratio = (w * 16) / (h * 9);
   return (
     <span className="dv-iter-crop" style={{ width: `min(${Math.min(100, (100 * ratio) / tile)}%, ${w * 14.4 * 1.6}px)`, aspectRatio: ratio }}>
       <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={{ width: `${(100 / w) * 100}%`, left: `${(-x / w) * 100}%`, top: `${(-y / h) * 100}%` }} />
+      {notes.map((n) => (
+        <span key={n.box.join()} className="dv-iter-note" data-right={n.right || undefined} data-outline={n.box[2] > 0 || undefined} style={{ left: `${((n.box[0] - x) / w) * 100}%`, top: `${((n.box[1] - y) / h) * 100}%`, width: `${(n.box[2] / w) * 100}%`, height: `${(n.box[3] / h) * 100}%` }}>
+          {n.label && <b>{n.label}</b>}
+        </span>
+      ))}
     </span>
   );
 }
 
-function CropPair({ before, after, a, b, lines, labels, tile = 1.6 }: { before: Shot; after: Shot; a: Box; b: Box; lines: [string, string]; labels: { asIs: string; toBe: string }; tile?: number }) {
+function CropPair({ before, after, a, b, lines, labels, notes, tile = 1.6 }: { before: Shot; after: Shot; a: Box; b: Box; lines: [string, string]; labels: { asIs: string; toBe: string }; notes?: [Note[] | undefined, Note[] | undefined]; tile?: number }) {
   const sides = [
-    { key: "a", tag: labels.asIs, img: before, box: a, line: lines[0] },
-    { key: "b", tag: labels.toBe, img: after, box: b, line: lines[1] },
+    { key: "a", tag: labels.asIs, img: before, box: a, line: lines[0], marks: notes?.[0] },
+    { key: "b", tag: labels.toBe, img: after, box: b, line: lines[1], marks: notes?.[1] },
   ] as const;
   return (
     <div className="dv-iter-pair">
-      {sides.map(({ key, tag, img, box, line }) => (
+      {sides.map(({ key, tag, img, box, line, marks }) => (
         <figure key={key} className="dv-iter-side" data-side={key}>
           <span className="dv-iter-tag">{tag}</span>
-          <div className="dv-iter-view" style={{ aspectRatio: tile }}><Crop img={img} box={box} tile={tile} /></div>
+          <div className="dv-iter-view" style={{ aspectRatio: tile }}><Crop img={img} box={box} tile={tile} notes={marks} /></div>
           <figcaption>{line}</figcaption>
         </figure>
       ))}
@@ -55,32 +62,13 @@ function CropPair({ before, after, a, b, lines, labels, tile = 1.6 }: { before: 
   );
 }
 
-// The whole screen with what changed left bright and outlined; the rest dims, so
-// both sides are read at one scale.
-function MarkedScreen({ img, boxes, base, id }: { img: Shot; boxes: Box[]; base: boolean; id: string }) {
-  return (
-    <div className="dv-iter-screen">
-      <Image src={withBase(img.src)} alt={base ? img.alt ?? "" : ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 700px" />
-      <svg className="dv-iter-mark" aria-hidden="true">
-        <mask id={id}>
-          <rect width="100%" height="100%" fill="#fff" />
-          {boxes.map(([x, y, w, h]) => <rect key={`${x}-${y}`} x={`${x}%`} y={`${y}%`} width={`${w}%`} height={`${h}%`} rx="6" fill="#000" />)}
-        </mask>
-        <rect width="100%" height="100%" mask={`url(#${id})`} className="dv-iter-dim" />
-        {boxes.map(([x, y, w, h]) => <rect key={`${x}-${y}`} x={`${x}%`} y={`${y}%`} width={`${w}%`} height={`${h}%`} rx="6" className="dv-iter-line" />)}
-      </svg>
-    </div>
-  );
-}
-
-// Scroll-driven steps, the usual pinned pattern: the two whole screens stay on
-// screen (CSS sticky) and only the marks move to the next change as the page
-// scrolls; the changes read down a list under them. Native scroll only. On phones
-// and with reduced motion (CSS) the steps are a plain list.
+// Scroll-driven steps, the usual pinned pattern: the stage stays on screen (CSS
+// sticky) and one change at a time crossfades in place as the page scrolls: its
+// title, then the same crop of both screens at one scale. Native scroll only. On
+// phones and with reduced motion (CSS) the steps are a plain list.
 export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
-  const id = useId();
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -94,7 +82,6 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
       const travel = box.height - stage;
       const progress = travel > 0 ? Math.min(1, Math.max(0, (top - box.top) / travel)) : 0;
       el.style.setProperty("--stage-top", `${top}px`);
-      el.style.setProperty("--p", String(progress));
       setActive(Math.min(changes.length - 1, Math.floor(progress * changes.length)));
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
@@ -113,35 +100,11 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
         <ol className="dv-iter-steps">
           {changes.map((c, i) => (
             <li key={c.title} data-on={i === active || undefined}>
-              <h4 className="dv-iter-name"><b>{i + 1}</b>{c.title}</h4>
-              <div className="dv-iter-pair">
-                <figure className="dv-iter-side" data-side="a">
-                  <span className="dv-iter-tag">{labels.asIs}</span>
-                  <MarkedScreen img={before} boxes={c.a} base={i === 0} id={`${id}-a${i}`} />
-                  <figcaption>{c.before}</figcaption>
-                </figure>
-                <figure className="dv-iter-side" data-side="b">
-                  <span className="dv-iter-tag">{labels.toBe}</span>
-                  <MarkedScreen img={after} boxes={c.b} base={i === 0} id={`${id}-b${i}`} />
-                  <figcaption>{c.after}</figcaption>
-                </figure>
-              </div>
+              <h4 className="dv-iter-name"><b>{i + 1} / {changes.length}</b>{c.title}</h4>
+              <CropPair before={before} after={after} a={c.a} b={c.b} lines={[c.before, c.after]} labels={labels} notes={[c.notesA, c.notesB]} />
             </li>
           ))}
         </ol>
-        <div className="dv-iter-index" aria-hidden="true">
-          <ol className="dv-iter-progress">
-            {changes.map((c, i) => <li key={c.title} data-on={i === active || undefined}><b>{i + 1}</b>{c.title}</li>)}
-          </ol>
-          <div className="dv-iter-lines">
-            {changes.map((c, i) => (
-              <dl key={c.title} data-on={i === active || undefined}>
-                <dt>{labels.asIs}</dt><dd>{c.before}</dd>
-                <dt data-side="b">{labels.toBe}</dt><dd data-side="b">{c.after}</dd>
-              </dl>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
