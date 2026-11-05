@@ -683,17 +683,14 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     const clear = new Array(16).fill(9);
     let clearTick = 0;
     const readClear = () => {
-      // A case's paragraph, or on the landing the statement (with the note
-      // too where they stack; on wide screens the note sits apart, in the sky).
-      const shown = [...document.querySelectorAll<HTMLElement>(".home-world-problem[data-on]")];
-      const parts = shown.length ? shown : [...document.querySelectorAll<HTMLElement>(wideStage() ? ".home-tagline-wrap:not([data-swap]) .home-tagline-default" : ".home-tagline-wrap:not([data-swap]) .home-tagline-default, .home-note:not([data-swap]) .home-note-default")];
+      // A case's paragraph. On the landing itself the text simply lies over the dust.
+      const parts = [...document.querySelectorAll<HTMLElement>(".home-world-problem[data-on]")];
       const boxes = parts.map((part) => part.getBoundingClientRect()).filter((box) => box.width > 0);
       const c = el.getBoundingClientRect();
-      // The other boxes, on wide screens: the case pills and the note, which
-      // sit apart from the statement, in the waves.
-      [".home-picks", ".home-note:not([data-swap]) .home-note-default, .home-world-role[data-on]", ".home-world-name[data-on]"].forEach((selector, i) => {
+      // The case's role and name, on wide screens, which sit apart from its paragraph.
+      [".home-world-role[data-on]", ".home-world-name[data-on]"].forEach((selector, i) => {
         const box = wideStage() ? document.querySelector<HTMLElement>(selector)?.getBoundingClientRect() : undefined;
-        const at = 4 + i * 4;
+        const at = 8 + i * 4;
         if (!box) { clear.fill(9, at, at + 4); return; }
         clear[at] = ((box.left - c.left) / c.width) * 2 - 1; clear[at + 2] = ((box.right - c.left) / c.width) * 2 - 1;
         clear[at + 1] = 1 - ((box.bottom - c.top) / c.height) * 2; clear[at + 3] = 1 - ((box.top - c.top) / c.height) * 2;

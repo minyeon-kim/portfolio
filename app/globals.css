@@ -5287,3 +5287,8 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 .case-study .dv .dv-spec-basis { max-width: var(--dv-measure); margin: 12px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.55; word-break: keep-all; }
 .case-study .dv .dv-spec-basis a { display: inline-block; margin-right: 16px; white-space: nowrap; }
 @media (max-width: 71.99rem) { .dv-spec-detail { grid-template-columns: 1fr; gap: 24px; } }
+
+/* The landing's text lies over the dust. A soft halo of the ground right around the glyphs
+   keeps it readable where bright grains pass behind; the dust itself isn't thinned. */
+.home-tagline { text-shadow: 0 0 6px light-dark(transparent, rgb(10 11 20 / 0.85)), 0 0 18px light-dark(transparent, rgb(10 11 20 / 0.6)); }
+.home-note p { text-shadow: 0 0 3px light-dark(rgb(255 255 255 / 0.8), rgb(10 11 20 / 0.95)), 0 0 10px light-dark(rgb(255 255 255 / 0.7), rgb(10 11 20 / 0.85)); }
