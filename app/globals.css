@@ -1592,11 +1592,8 @@ body:has(.selected-stage[data-gemini]) .project-rail { --picker-canvas: var(--ge
 .header-cta { display: none; align-items: center; height: 32px; margin-left: 8px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 15px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; transition: background-color 150ms ease; }
 .header-cta:hover, .header-cta:focus-visible { background: color-mix(in srgb, var(--ink) 84%, var(--bg)); }
 .header-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* Once scrolled the bar keeps its place and shape; it gets a ground and a hairline, so text passing under it fades instead of being cut off. */
-.site-header-bar { transition: background-color 250ms ease, box-shadow 250ms ease; }
 @media (min-width: 48rem) {
   .header-cta { display: inline-flex; }
-  [data-compact] .site-header-bar { background: color-mix(in srgb, var(--bg) 92%, transparent); box-shadow: inset 0 -1px 0 var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 }
 /* Page links in the bar (md+): plain words, no pills, so the header reads as one quiet line.
    The current page is in ink; the others muted, with the link underline on hover. Phones use the Menu. */
@@ -1992,7 +1989,6 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
    returns on any scroll up. While it is showing, the case stage bar sits just
    under it instead of behind it. */
 header.group\/header { transition: transform 320ms var(--ease), background-color 400ms var(--ease); }
-header.group\/header[data-hidden]:not(:focus-within) { transform: translateY(-110%); }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
 
 
@@ -5147,3 +5143,14 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 @keyframes menu-sheet-in { from { opacity: 0; } }
 @keyframes menu-item-in { from { opacity: 0; translate: 0 8px; } }
+
+/* The header folds with the scroll into one floating pill (metalab.com). --fold is set by
+   HeaderShell. Top and width, not a transform, so the Menu sheet stays fixed to the screen. */
+header.group\/header { height: 64px; }
+.site-header-bar { --pill-w: min(645px, 100vw - 16px); position: relative; top: calc(12px * var(--fold, 0)); width: calc(100% - (100% - var(--pill-w)) * var(--fold, 0)); min-height: calc(64px - 12px * var(--fold, 0)); margin-inline: auto; }
+.site-header-bar::before { content: ""; position: absolute; inset: 0; border-radius: 999px; background: light-dark(rgb(255 255 255 / 0.72), rgb(62 64 72 / 0.62)); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); opacity: var(--fold, 0); pointer-events: none; }
+/* Never a pill inside the pill: their own fills fade as it folds. */
+.site-header-bar .header-menu-trigger:not(.theme-toggle, :hover, [aria-expanded="true"]) { background: color-mix(in srgb, light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.14)) calc((1 - var(--fold, 0)) * 100%), transparent); -webkit-backdrop-filter: none; backdrop-filter: none; }
+/* The button lets go of its fill early, so its label isn't grey on grey for long. */
+.site-header-bar .header-cta:not(:hover, :focus-visible) { --cta: clamp(0, (var(--fold, 0) - 0.1) * 5, 1); background: color-mix(in srgb, var(--ink) calc((1 - var(--cta)) * 100%), transparent); color: color-mix(in srgb, var(--ink) calc(var(--cta) * 100%), var(--bg)); }
+header[data-compact] .site-nav a, header[data-compact] .header-menu-trigger.theme-toggle, header[data-compact] .lang-toggle { color: var(--ink); }
