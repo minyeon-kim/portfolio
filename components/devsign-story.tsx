@@ -217,7 +217,7 @@ export function IterationPair({ before, after, labels }: { before: Shot & { box:
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
 type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
-function FeatureReel({ reel, row, active, past, pinned, load }: { reel: Reel; row: number; active: boolean; past: boolean; pinned: boolean; load: boolean }) {
+function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boolean; pinned: boolean; load: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
   const [refused, setRefused] = useState(false);
@@ -271,23 +271,14 @@ function FeatureReel({ reel, row, active, past, pinned, load }: { reel: Reel; ro
     startClip.current();
   }, [active, pinned]);
   return (
-    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined} data-past={past || undefined} style={{ "--row": row } as CSSProperties}>
-      <div className="dv-reel-row">
-        <div className="dv-reel-text">
-          <div>
-            <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
-            <h4 className="dv-reel-line">{reel.body}</h4>
-            {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
-          </div>
-          <ol className="dv-reel-points">
-            {reel.points.map((text) => <li key={text}>{text}</li>)}
-          </ol>
-        </div>
+    <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined}>
+      <div className="dv-reel-media">
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near && load ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onPlaying={() => setRefused(false)} />
       </div>
-      <div className="dv-reel-stage">
-        <div className="dv-reel-media">
-          <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near && load ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onPlaying={() => setRefused(false)} />
-        </div>
+      <div className="dv-reel-text">
+        <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
+        <h4 className="dv-reel-line">{reel.body}</h4>
+        {reel.solves && <p className="dv-reel-solves">{reel.solves}</p>}
       </div>
     </li>
   );
@@ -296,13 +287,15 @@ function FeatureReel({ reel, row, active, past, pinned, load }: { reel: Reel; ro
 // Keep in step with the pinned rules at the end of globals.css.
 const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
 
-// On desktop the clip stays pinned on the left and each feature's text holds beside it
-// on the right. The clip and its colour change where two rows meet, as one text hands
-// over to the next. Native scroll only. Elsewhere each feature stacks its text and clip.
+// On desktop one card holds still on the screen: the clip on its colour at the left, the
+// text at the right, and native scroll changes what's inside. The steps show where you are
+// and jump there. Elsewhere each feature is its own card, clip above its text.
 export function FeatureReels({ reels }: { reels: Reel[] }) {
-  const root = useRef<HTMLUListElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const card = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
   const [current, setCurrent] = useState(0);
+  const travel = useRef({ top: 0, length: 0 });
   useEffect(() => {
     const query = window.matchMedia(REELS_PIN);
     const update = () => setPinned(query.matches);
@@ -311,18 +304,59 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
     return () => query.removeEventListener("change", update);
   }, []);
   useEffect(() => {
-    if (!pinned || !root.current) return;
-    const rows = [...root.current.querySelectorAll(".dv-reel-row")];
-    const middle = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) setCurrent(rows.indexOf(entry.target));
-    }, { rootMargin: "-50% 0px -50% 0px" });
-    rows.forEach((row) => middle.observe(row));
-    return () => middle.disconnect();
-  }, [pinned]);
+    const box = track.current;
+    const held = card.current;
+    if (!pinned || !box || !held) { setCurrent(0); return; }
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      const { top, length } = travel.current;
+      const progress = length > 0 ? Math.min(1, Math.max(0, (top - box.getBoundingClientRect().top) / length)) : 0;
+      setCurrent(Math.min(reels.length - 1, Math.floor(progress * reels.length)));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(read); };
+    // Centred on the screen, below the header when the screen is short.
+    const measure = () => {
+      const top = Math.max(76, Math.round((window.innerHeight - held.offsetHeight) / 2) + 20);
+      box.style.setProperty("--reel-top", `${top}px`);
+      travel.current = { top, length: box.offsetHeight - held.offsetHeight };
+      schedule();
+    };
+    const resize = new ResizeObserver(measure);
+    resize.observe(held);
+    resize.observe(box);
+    measure();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(frame);
+      resize.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", measure);
+      box.style.removeProperty("--reel-top");
+    };
+  }, [pinned, reels.length]);
+  const go = (index: number) => {
+    const box = track.current;
+    if (!box) return;
+    const { top, length } = travel.current;
+    window.scrollTo({ top: box.getBoundingClientRect().top + window.scrollY - top + ((index + 0.5) / reels.length) * length, behavior: "smooth" });
+  };
   return (
-    <ul ref={root} className="dv-reels dv-gap-40" style={{ "--reels": reels.length } as CSSProperties}>
-      {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} row={index + 1} active={index === current} past={index < current} pinned={pinned} load={!pinned || index <= current + 1} />)}
-    </ul>
+    <div ref={track} className="dv-reels-track dv-gap-40" style={{ "--reels": reels.length } as CSSProperties}>
+      <div ref={card} className="dv-reels-card">
+        <ul className="dv-reels">
+          {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
+        </ul>
+        {pinned && (
+          <div className="dv-reel-steps">
+            {reels.map((reel, index) => (
+              <button key={reel.id} type="button" aria-label={reel.name} aria-current={index === current ? "step" : undefined} data-done={index <= current || undefined} onClick={() => go(index)} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
