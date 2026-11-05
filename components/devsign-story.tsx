@@ -59,7 +59,7 @@ function CropPair({ before, after, a, b, lines, labels, tile = 1.6 }: { before: 
 // what changed. The As-is / To-be lines follow the clip and jump to their part. It
 // plays only while current and half on screen; with reduced motion, or if the
 // browser refuses autoplay, it shows its controls instead.
-function IterationStep({ change, index, total, pinned, active, labels }: { change: Change; index: number; total: number; pinned: boolean; active: boolean; labels: { asIs: string; toBe: string } }) {
+function IterationStep({ change, index, total, pinned, active, labels, onEnd }: { change: Change; index: number; total: number; pinned: boolean; active: boolean; labels: { asIs: string; toBe: string }; onEnd: () => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const [near, setNear] = useState(false);
   const [onScreen, setOnScreen] = useState(false);
@@ -100,7 +100,7 @@ function IterationStep({ change, index, total, pinned, active, labels }: { chang
     <li className="dv-iter-step" data-on={active || undefined}>
       <h4 className="dv-iter-name"><b>{index + 1} / {total}</b>{change.title}</h4>
       <div className="dv-iter-clip">
-        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
+        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop={!pinned} playsInline preload={near ? "auto" : "none"} controls={still || refused} onEnded={onEnd} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
           onTimeUpdate={(e) => setPhase(e.currentTarget.currentTime >= change.clip.cut ? "b" : "a")} />
       </div>
       <div className="dv-iter-sides">
@@ -115,8 +115,10 @@ function IterationStep({ change, index, total, pinned, active, labels }: { chang
 }
 
 // Scroll-driven steps, the usual pinned pattern: the stage stays on screen (CSS
-// sticky) and one change at a time crossfades in place as the page scrolls. Native
-// scroll only. On phones and with reduced motion (CSS) the steps are a plain list.
+// sticky) and one change at a time crossfades in place as the page scrolls. A clip
+// that ends hands over to the next, round to the first, without moving the page;
+// scrolling into another step takes over again. Native scroll only. On phones and
+// with reduced motion (CSS) the steps are a plain list.
 export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);
@@ -125,6 +127,7 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
     const el = root.current;
     if (!el) return;
     let frame = 0;
+    let scrollStep = -1;
     const read = () => {
       frame = 0;
       const box = el.getBoundingClientRect();
@@ -134,7 +137,9 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
       const travel = box.height - stage;
       const progress = travel > 0 ? Math.min(1, Math.max(0, (top - box.top) / travel)) : 0;
       el.style.setProperty("--stage-top", `${top}px`);
-      setActive(Math.min(changes.length - 1, Math.floor(progress * changes.length)));
+      // Only a scroll into another step takes over from a clip that moved on by itself.
+      const step = Math.min(changes.length - 1, Math.floor(progress * changes.length));
+      if (step !== scrollStep) { scrollStep = step; setActive(step); }
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     const query = window.matchMedia(REELS_PIN);
@@ -155,7 +160,7 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as React.CSSProperties}>
       <div className="dv-iter-stage">
         <ol className="dv-iter-steps">
-          {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} />)}
+          {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
         </ol>
       </div>
     </div>
