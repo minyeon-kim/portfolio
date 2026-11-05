@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { localize, type Locale } from "@/lib/i18n";
 import { shareMeta, site } from "@/lib/site";
 
-type Spec = React.ComponentProps<typeof HandoffSpec>["spec"] & { label: string; pageLead: string; back: string; screensLabel: string };
+type Spec = React.ComponentProps<typeof HandoffSpec>["spec"] & { label: string; pageLead: string; back: string; screensLabel: string; basis: [string, string, string, string, string] };
 type Ia = { fullTitle: string; tree: IaTreeData };
 type Flow = { title: string; lead: string; nodes: React.ComponentProps<typeof Wireflow>["nodes"] };
 
@@ -33,6 +33,11 @@ export async function HandoffPage({ locale }: { locale: Locale }) {
           <p className="dv-spec-back"><Link className="link" href={localize("/work/devsign/", locale)}>{spec.back}</Link></p>
           <h1 id="spec-title" tabIndex={-1} className="dv-headline">{spec.label}</h1>
           <p className="dv-spec-lead">{spec.pageLead}</p>
+          <p className="dv-spec-basis">
+            {spec.basis[0]}{" "}
+            <a className="link" href={spec.basis[2]} target="_blank" rel="noreferrer">{spec.basis[1]} ↗</a>{" "}
+            <a className="link" href={spec.basis[4]} target="_blank" rel="noreferrer">{spec.basis[3]} ↗</a>
+          </p>
           <h2 id="ia" className="dv-spec-part">{ia.fullTitle}</h2>
           <IaTree tree={ia.tree} />
           <h2 className="dv-spec-part">{handoff.title}</h2>

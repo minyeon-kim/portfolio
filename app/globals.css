@@ -5256,3 +5256,34 @@ header[data-folded] .header-cta { visibility: hidden; }
 header[data-compact] .site-nav a, header[data-compact] .header-menu-trigger.theme-toggle, header[data-compact] .lang-link { color: var(--ink); }
 /* The grey pill takes pure white, which holds over bright screens better than the ink. */
 header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigger.theme-toggle, .lang-link) { color: light-dark(var(--ink), #fff); }
+
+/* Handoff on the case: the send area large, then its states. The first column is what the reader looks up. */
+.dv-state-table { width: 100%; margin-top: 32px; border-collapse: collapse; font-size: 18px; line-height: 1.45; word-break: keep-all; }
+.dv-state-table th, .dv-state-table td { padding: 18px 24px 18px 0; border-bottom: 1px solid var(--dv-line); color: var(--dv-ink); font-weight: 400; text-align: left; vertical-align: top; }
+.dv-state-table thead th { padding-top: 0; padding-bottom: 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; }
+.dv-state-table tbody th { width: 22%; font-weight: 500; }
+.dv-state-table td:nth-child(2) { width: 26%; }
+.dv-state-table td:nth-child(3) { width: 14%; }
+.dv-state-table td:last-child, .dv-state-table thead th:last-child { padding-right: 0; color: var(--dv-muted); }
+.dv-state-table thead th:last-child { color: var(--dv-muted); }
+.case-study .dv .dv-spec-doc .dv-spec-more { display: flex; flex-wrap: wrap; gap: 8px 32px; margin-top: 24px; }
+@media (max-width: 47.99rem) {
+  .dv-spec-doc .dv-spec-crop { display: none; }
+  .dv-state-table { margin-top: 0; }
+  .dv-state-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dv-state-table :is(tr, th, td) { display: block; width: auto !important; padding: 0; border: 0; }
+  .dv-state-table tr { padding-block: 16px; border-bottom: 1px solid var(--dv-line); }
+  .dv-state-table tbody th { margin-bottom: 8px; }
+  .dv-state-table td { margin-top: 4px; font-size: 16px; }
+  .dv-state-table td::before { content: attr(data-label) ": "; color: var(--dv-muted); }
+}
+
+/* Handoff on the spec page: each screen in one form, under its picture and elements. */
+.case-study .dv .dv-spec-purpose { grid-column: 1 / -1; margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-spec-detail { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 32px 48px; padding-top: 24px; border-top: 1px solid var(--dv-line); }
+.case-study .dv .dv-spec-detail h4 { margin: 0 0 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-spec-detail ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-spec-detail code { font-family: var(--font-mono); font-size: 0.875em; white-space: nowrap; }
+.case-study .dv .dv-spec-basis { max-width: var(--dv-measure); margin: 12px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.55; word-break: keep-all; }
+.case-study .dv .dv-spec-basis a { display: inline-block; margin-right: 16px; white-space: nowrap; }
+@media (max-width: 71.99rem) { .dv-spec-detail { grid-template-columns: 1fr; gap: 24px; } }
