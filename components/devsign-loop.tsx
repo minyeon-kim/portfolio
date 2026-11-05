@@ -6,7 +6,7 @@ import { withBase } from "@/lib/site";
 // the review panel slides in, the designer approves, and the panel moves on to
 // Fix · Verify with the before and after side by side. Positions are
 // percentages of the 1440x900 capture (hero-base.webp). The screens are the
-// prototype's light theme, whatever the site theme.
+// prototype's dark theme, whatever the site theme.
 export function DevsignLoop({ alt, preload = false }: { alt: string; preload?: boolean }) {
   const dir = "/images/cases/devsign";
   return (
