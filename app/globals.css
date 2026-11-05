@@ -5271,7 +5271,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 .home-tagline { text-shadow: 0 0 6px light-dark(transparent, rgb(10 11 20 / 0.85)), 0 0 18px light-dark(transparent, rgb(10 11 20 / 0.6)); }
 .home-note p { text-shadow: 0 0 3px light-dark(rgb(255 255 255 / 0.8), rgb(10 11 20 / 0.95)), 0 0 10px light-dark(rgb(255 255 255 / 0.7), rgb(10 11 20 / 0.85)); }
 
-/* A decoding glyph (ScrambleHeadline, after sui.io): bright by default, or dim, in the accent, or boxed. */
+/* A decoding glyph (ScrambleHeadline): the headline's own colour, at varying strength. */
 [data-scramble] [data-g="dim"] { opacity: 0.3; }
-[data-scramble] [data-g="accent"] { color: var(--accent); }
-[data-scramble] [data-g="box"] { border-radius: 0.06em; background: var(--accent); color: var(--bg); text-shadow: none; }
+[data-scramble] [data-g="mid"] { opacity: 0.6; }
