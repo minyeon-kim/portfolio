@@ -5220,12 +5220,15 @@ html[data-curtain="open"] .page-curtain > i { animation: pc-open 600ms cubic-bez
 /* The header folds with the scroll into one floating pill (metalab.com). --fold is set by
    HeaderShell. Top and width, not a transform, so the Menu sheet stays fixed to the screen. */
 header.group\/header { height: 64px; }
-.site-header-bar { --pill-w: min(645px, 100vw - 16px); position: relative; top: calc(12px * var(--fold, 0)); width: calc(100% - (100% - var(--pill-w)) * var(--fold, 0)); min-height: calc(64px - 12px * var(--fold, 0)); margin-inline: auto; }
+.site-header-bar { --pill-w: min(480px, 100vw - 16px); position: relative; top: calc(12px * var(--fold, 0)); width: calc(100% - (100% - var(--pill-w)) * var(--fold, 0)); min-height: calc(64px - 12px * var(--fold, 0)); margin-inline: auto; }
 .site-header-bar::before { content: ""; position: absolute; inset: 0; border-radius: 999px; background: light-dark(rgb(255 255 255 / 0.72), rgb(130 130 134 / 0.82)); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); opacity: var(--fold, 0); pointer-events: none; }
 /* Never a pill inside the pill: their own fills fade as it folds. */
 .site-header-bar .header-menu-trigger:not(.theme-toggle, :hover, [aria-expanded="true"]) { background: color-mix(in srgb, light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.14)) calc((1 - var(--fold, 0)) * 100%), transparent); -webkit-backdrop-filter: none; backdrop-filter: none; }
-/* The button lets go of its fill early, so its label isn't grey on grey for long. */
-.site-header-bar .header-cta:not(:hover, :focus-visible) { --cta: clamp(0, (var(--fold, 0) - 0.1) * 5, 1); background: color-mix(in srgb, var(--ink) calc((1 - var(--cta)) * 100%), transparent); color: color-mix(in srgb, var(--ink) calc(var(--cta) * 100%), var(--bg)); }
+/* Get in touch belongs to the full bar: it leaves early in the fold (Menu and the page's end
+   hold it from there), giving up its width so the pill stays balanced. data-folded takes it
+   out of the tab order; its threshold in HeaderShell is where this reaches zero. */
+.site-header-bar .header-cta { --cta: clamp(0, (0.3 - var(--fold, 0)) * 4, 1); overflow: hidden; max-width: calc(var(--cta) * 200px); margin-left: calc(var(--cta) * 8px); padding-inline: calc(var(--cta) * 14px); opacity: var(--cta); }
+header[data-folded] .header-cta { visibility: hidden; }
 header[data-compact] .site-nav a, header[data-compact] .header-menu-trigger.theme-toggle, header[data-compact] .lang-link { color: var(--ink); }
 /* The grey pill takes pure white, which holds over bright screens better than the ink. */
 header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigger.theme-toggle, .lang-link) { color: light-dark(var(--ink), #fff); }
