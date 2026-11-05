@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
-type Bar = { label: string; value: number };
 type Source = { label: string; url?: string; detail?: string };
-type DonutChart = { type: "donut"; tab: string; title: string; value: string; valueLabel: string; segments: Segment[]; source?: Source };
-type BarChart = { type: "bars"; tab: string; title: string; bars: Bar[]; source?: Source };
-type SurveyChart = DonutChart | BarChart;
+type Base = { tab: string; title: string; note?: string; source?: Source };
+type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; segments: Segment[] };
+type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
+type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
+type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
+type TableChart = Base & { type: "table"; max: number; people: string[]; rows: { label: string; values: number[] }[] };
+export type StageChart = DonutChart | BarChart | PairChart | RingChart | TableChart;
 
 function ChartSource({ source }: { source?: Source }) {
   if (!source) return null;
@@ -19,38 +22,12 @@ function ChartSource({ source }: { source?: Source }) {
   );
 }
 
-// Drawn once, when half the block is on screen. Before that (and without JS or with reduced
-// motion, where `wait` is never set) the final picture shows, so nothing depends on the script.
-function usePlayOnce() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<"final" | "wait" | "play">("final");
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!("IntersectionObserver" in window)) return;
-    const box = el.getBoundingClientRect();
-    if (box.bottom < 0) return; // Already scrolled past: leave it drawn.
-    setPhase("wait");
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setPhase("play");
-        observer.disconnect();
-      },
-      { threshold: 0.4 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return { ref, phase };
-}
-
 const GAP = 0.7; // Between ring segments, in hundredths of the ring.
 const SHOW_MS = 7000; // How long each chart stays; the progress ring on its tab is the timer.
 const LEAVE_MS = 280;
 
 // Counts up from 0 while its chart plays. The final value is what renders otherwise.
-function Count({ value, animate, delay = 0 }: { value: number; animate: boolean; delay?: number }) {
+function Count({ value, animate, delay = 0, suffix = "%" }: { value: number; animate: boolean; delay?: number; suffix?: string }) {
   const [shown, setShown] = useState(animate ? 0 : value);
   useEffect(() => {
     if (!animate) { setShown(value); return; }
@@ -65,7 +42,7 @@ function Count({ value, animate, delay = 0 }: { value: number; animate: boolean;
     return () => cancelAnimationFrame(frame);
   }, [animate, value, delay]);
   const decimals = Number.isInteger(value) ? 0 : 1;
-  return <>{shown.toFixed(decimals)}%</>;
+  return <>{shown.toFixed(decimals)}{suffix}</>;
 }
 
 function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
@@ -99,7 +76,6 @@ function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
                 className="dv-trust-seg"
                 data-on={p.on || undefined}
                 data-rest={p.rest || undefined}
-                data-first={p.i === 0 || undefined}
                 data-current={active === p.i || undefined}
                 cx="100"
                 cy="100"
@@ -139,7 +115,6 @@ function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
               type="button"
               data-on={p.on || undefined}
               data-rest={p.rest || undefined}
-              data-first={p.i === 0 || undefined}
               data-current={active === p.i || undefined}
               onMouseEnter={() => setActive(p.i)}
               onFocus={() => setActive(p.i)}
@@ -173,12 +148,68 @@ function Bars({ data, animate }: { data: BarChart; animate: boolean }) {
   );
 }
 
-function ChartIcon({ type }: { type: SurveyChart["type"] }) {
-  return type === "donut" ? (
-    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 3.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" strokeWidth="3" /></svg>
-  ) : (
-    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 16V10M10 16V4M15.5 16v-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
+function Pair({ data, animate }: { data: PairChart; animate: boolean }) {
+  return (
+    <div className="dv-pair" style={{ "--goal": data.goal / data.scale } as React.CSSProperties}>
+      <div className="dv-pair-plot">
+        <span className="dv-pair-goal"><b>{data.goalLabel}</b></span>
+        {data.items.map((item, i) => (
+          <div key={item.label} className="dv-pair-bar" data-on={item.on || undefined} style={{ "--i": i, "--r": item.value / data.scale } as React.CSSProperties}>
+            <strong><Count value={item.value} animate={animate} delay={i * 200} suffix="" /></strong>
+            <i aria-hidden="true" />
+          </div>
+        ))}
+      </div>
+      <div className="dv-pair-labels">{data.items.map((item) => <span key={item.label} data-on={item.on || undefined}>{item.label}</span>)}</div>
+    </div>
   );
+}
+
+function Rings({ data, animate }: { data: RingChart; animate: boolean }) {
+  return (
+    <ul className="dv-sus">
+      {data.items.map((item, i) => (
+        <li key={item.label} style={{ "--i": i } as React.CSSProperties}>
+          <div className="dv-sus-ring">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle className="dv-sus-track" cx="50" cy="50" r="42" pathLength={100} />
+              <circle className="dv-sus-value" cx="50" cy="50" r="42" pathLength={100} style={{ "--v": item.value } as React.CSSProperties} />
+            </svg>
+            <strong><Count value={item.value} animate={animate} suffix="" /></strong>
+          </div>
+          <span>{item.label}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function TableView({ data }: { data: TableChart }) {
+  return (
+    <table className="dv-score-table">
+      <thead>
+        <tr><td />{data.people.map((person) => <th key={person} scope="col">{person}</th>)}</tr>
+      </thead>
+      <tbody>
+        {data.rows.map((row, i) => (
+          <tr key={row.label} style={{ "--i": i } as React.CSSProperties}>
+            <th scope="row">{row.label}</th>
+            {row.values.map((value, who) => <td key={who}><strong>{value}</strong><small> / {data.max}</small></td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function ChartIcon({ type }: { type: StageChart["type"] }) {
+  if (type === "donut" || type === "rings") {
+    return <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 3.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" strokeWidth="3" /></svg>;
+  }
+  if (type === "table") {
+    return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
+  }
+  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 16V10M10 16V4M15.5 16v-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>;
 }
 
 // One large chart at a time, after the charts in Metalab's Robinhood case: each draws itself,
@@ -186,7 +217,7 @@ function ChartIcon({ type }: { type: SurveyChart["type"] }) {
 // focus holds it, the button stops it, tabs pick a chart. Every panel stays in one grid cell, so
 // the box keeps the height of the tallest and nothing below it moves. With reduced motion or no
 // JS the first chart stands complete and the tabs still work.
-export function SurveyCharts({ charts, labels }: { charts: SurveyChart[]; labels: { charts: string; pause: string; play: string } }) {
+export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels: { charts: string; pause: string; play: string } }) {
   const root = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const [motion, setMotion] = useState(false);
@@ -263,7 +294,11 @@ export function SurveyCharts({ charts, labels }: { charts: SurveyChart[]; labels
           const on = i === current;
           return (
             <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
-              {chart.type === "donut" ? <Donut data={chart} animate={on && phase === "play"} /> : <Bars data={chart} animate={on && phase === "play"} />}
+              {chart.type === "donut" && <Donut data={chart} animate={on && phase === "play"} />}
+              {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
+              {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
+              {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
+              {chart.type === "table" && <TableView data={chart} />}
             </div>
           );
         })}
@@ -272,125 +307,11 @@ export function SurveyCharts({ charts, labels }: { charts: SurveyChart[]; labels
         {charts.map((chart, i) => (
           <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
             <p>{chart.title}</p>
+            {chart.note && <p className="dv-chart-source">{chart.note}</p>}
             <ChartSource source={chart.source} />
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-/* Usability results, from the test workbook. The numbers are small (2 people), so every value
-   is shown as itself, per person, never as a percentage. */
-type HelpChart = {
-  title: string; first: string; second: string; goal: number; goalLabel: string; note?: string; scale: number;
-  groups: { label: string; tasks: { label: string; first: number; second: number }[] }[];
-};
-type SusChart = { title: string; items: { label: string; value: number }[]; marks: { value: number; label: string }[]; note?: string };
-type DotChart = { title: string; max: number; people: string[]; rows: { label: string; values: number[] }[]; note?: string };
-export type UsabilityChartData = { help?: HelpChart; sus: SusChart; dots: DotChart };
-
-function HelpBars({ data }: { data: HelpChart }) {
-  let i = 0;
-  return (
-    <figure className="dv-chart">
-      <figcaption>{data.title}</figcaption>
-      <div className="dv-help-scroll">
-        <div className="dv-help" style={{ "--goal": data.goal / data.scale } as React.CSSProperties}>
-          {data.groups.map((group) => (
-            <div key={group.label} className="dv-help-group" style={{ "--n": group.tasks.length } as React.CSSProperties}>
-              <p>{group.label}</p>
-              <ul>
-                {group.tasks.map((task) => {
-                  const order = i++;
-                  return (
-                    <li key={task.label} style={{ "--i": order } as React.CSSProperties}>
-                      <div className="dv-help-pair">
-                        <span data-try="first"><strong>{task.first}</strong><i aria-hidden="true" style={{ "--r": task.first / data.scale } as React.CSSProperties} /><em className="sr-only">{data.first}</em></span>
-                        <span data-try="second"><strong>{task.second}</strong><i aria-hidden="true" style={{ "--r": task.second / data.scale } as React.CSSProperties} /><em className="sr-only">{data.second}</em></span>
-                      </div>
-                      <small>{task.label}</small>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-      <ul className="dv-help-legend" aria-hidden="true"><li data-try="first">{data.first}</li><li data-try="second">{data.second}</li><li data-try="goal">{data.goalLabel}</li></ul>
-      {data.note && <p className="dv-chart-note">{data.note}</p>}
-    </figure>
-  );
-}
-
-function SusRings({ data }: { data: SusChart }) {
-  return (
-    <figure className="dv-chart">
-      <figcaption>{data.title}</figcaption>
-      <ul className="dv-sus">
-        {data.items.map((item) => (
-          <li key={item.label}>
-            <div className="dv-sus-ring">
-              <svg viewBox="0 0 100 100" aria-hidden="true">
-                <circle className="dv-sus-track" cx="50" cy="50" r="42" pathLength={100} />
-                <circle className="dv-sus-value" cx="50" cy="50" r="42" pathLength={100} style={{ "--v": item.value } as React.CSSProperties} />
-                {data.marks.map((mark) => (
-                  <line key={mark.value} className="dv-sus-mark" x1="50" y1="2" x2="50" y2="14" transform={`rotate(${mark.value * 3.6 + 90} 50 50)`} />
-                ))}
-              </svg>
-              <strong>{item.value}</strong>
-            </div>
-            <span>{item.label}</span>
-          </li>
-        ))}
-      </ul>
-      <p className="dv-chart-note">{data.marks.map((mark) => mark.label).join(" · ")}{data.note ? `. ${data.note}` : ""}</p>
-    </figure>
-  );
-}
-
-function DotRows({ data }: { data: DotChart }) {
-  return (
-    <figure className="dv-chart">
-      <figcaption>{data.title}</figcaption>
-      <ul className="dv-dots">
-        {data.rows.map((row) => (
-          <li key={row.label}>
-            <span className="dv-dots-label">{row.label}</span>
-            <span className="dv-dots-track" aria-hidden="true" style={{ "--max": data.max } as React.CSSProperties}>
-              {Array.from({ length: data.max }, (_, n) => <i key={n} />)}
-              {row.values.map((value, who) => (
-                <b key={who} data-who={who} data-tie={row.values.filter((v) => v === value).length > 1 || undefined} style={{ "--at": (value - 1) / (data.max - 1) } as React.CSSProperties} />
-              ))}
-            </span>
-            <span className="dv-dots-values">
-              {row.values.map((value, who) => <span key={who}><span className="sr-only">{data.people[who]} </span>{value}{who < row.values.length - 1 ? " · " : ""}</span>)}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <ul className="dv-help-legend dv-dots-legend" aria-hidden="true">{data.people.map((person, who) => <li key={person} data-who={who}>{person}</li>)}</ul>
-      {data.note && <p className="dv-chart-note">{data.note}</p>}
-    </figure>
-  );
-}
-
-export function UsabilityCharts({ charts }: { charts: UsabilityChartData }) {
-  const { ref, phase } = usePlayOnce();
-  return (
-    <div ref={ref} className="dv-ut-charts" data-phase={phase} data-split={charts.help ? undefined : true}>
-      {charts.help ? (
-        <>
-          <HelpBars data={charts.help} />
-          <div className="dv-ut-side"><SusRings data={charts.sus} /><DotRows data={charts.dots} /></div>
-        </>
-      ) : (
-        <>
-          <SusRings data={charts.sus} />
-          <div className="dv-ut-side"><DotRows data={charts.dots} /></div>
-        </>
-      )}
     </div>
   );
 }

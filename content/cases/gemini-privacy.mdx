@@ -315,25 +315,29 @@ export const study = {
       title: "Moderated think-aloud",
       lead: "Up to five people run two scenarios on a fictional persona's data.",
       text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking); no participant shares their own data.",
-      charts: {
-        sus: {
+      chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
+      charts: [
+        {
+          type: "rings",
+          tab: "SUS",
           title: "After 2 of 5 sessions, SUS is 77.5 and 82.5.",
+          note: "A trend only: they used different prototype versions. The average SUS is 68.",
           items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
-          marks: [{ value: 68, label: "Average 68" }],
-          note: "A trend only: the two used different prototype versions, and P01 wasn’t sure what the survey was rating.",
         },
-        dots: {
+        {
+          type: "table",
+          tab: "Ease and information",
           title: "Both found the source without help (46.5 s, 14.8 s), but task 1 showed too much information.",
+          note: "Task 1 is the source panel, task 2 is asking in chat. For information, 4 is about right.",
           max: 7, people: ["P01", "P02"],
           rows: [
-            { label: "Task 1, source panel · Ease", values: [5, 3] },
-            { label: "Task 2, asking in chat · Ease", values: [6, 4] },
-            { label: "Task 1 · Amount of information", values: [6, 6] },
-            { label: "Task 2 · Amount of information", values: [4, 4] },
+            { label: "Task 1 · Ease", values: [5, 3] },
+            { label: "Task 2 · Ease", values: [6, 4] },
+            { label: "Task 1 · Information", values: [6, 6] },
+            { label: "Task 2 · Information", values: [4, 4] },
           ],
-          note: "Ease: 7 is very easy. Information: 4 is about right, 7 is far too much.",
         },
-      },
+      ],
     },
   },
   takeaway: {

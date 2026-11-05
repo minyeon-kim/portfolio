@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { SurveyCharts, UsabilityCharts } from "@/components/devsign-survey-charts";
+import { SurveyCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
@@ -81,7 +81,6 @@ function Insights({ discover }: { discover: Study }) {
             <strong>{q1.communityCount}</strong>
             <div>
               <p>{q1.communityLead}</p>
-              <span>{q1.communitySources}</span>
             </div>
             <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
           </div>
@@ -639,12 +638,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          <section className="dv-evbox dv-gap-40"><UsabilityCharts charts={testing.usability.charts} /></section>
+          <section className="dv-evbox dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>
           {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
           </> : <>
           <Block {...testing.usability} ff={ff} />
-          <section className="dv-evbox dv-gap-40"><UsabilityCharts charts={testing.usability.charts} /></section>
+          <section className="dv-evbox dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
