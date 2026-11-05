@@ -35,6 +35,8 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       const fold = !canFold || menuOpen ? 0 : reduced.matches ? Number(y > FOLD_FROM) : Math.min(1, Math.max(0, (y - FOLD_FROM) / (FOLD_TO - FOLD_FROM)));
       header.style.setProperty("--fold", fold.toFixed(3));
       header.toggleAttribute("data-compact", fold > 0);
+      // Get in touch has faded out by here (globals.css).
+      header.toggleAttribute("data-folded", fold >= 0.3);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
