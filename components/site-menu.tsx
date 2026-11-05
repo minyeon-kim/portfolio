@@ -20,9 +20,9 @@ type Props = {
 
 const GROW = 650;
 
-// After metalab.com: Menu shrinks the page you're on into a card in the middle of the
-// screen (the page keeps running in it), with the links sliding in from the left and
-// the quieter ones from the right. Pointing at a case or About shows it in the card;
+// After metalab.com: Menu shrinks the page you're on into a card in the middle of a
+// white screen (the page keeps running in it), with the links sliding in from the left
+// and the quieter ones from the right. Pointing at a case or About shows it in the card;
 // following a link grows the new page back out of the card. Below 64rem it's a plain sheet.
 export function SiteMenu({ contact, cases }: Props) {
   const pathname = usePathname();
@@ -78,10 +78,16 @@ export function SiteMenu({ contact, cases }: Props) {
     if (!mounted) return;
     const html = document.documentElement;
     const main = document.querySelector("main");
+    const opener = main?.querySelector(".devsign-hero-panel");
+    const openerTop = opener ? opener.getBoundingClientRect().top + window.scrollY : 0;
     const place = () => {
       const height = window.innerHeight;
-      html.style.setProperty("--menu-s", String((height - 104) / height));
-      if (main) main.style.transformOrigin = `50% ${window.scrollY + height / 2}px`;
+      const scale = (height - 104) / height;
+      html.style.setProperty("--menu-s", String(scale));
+      // A case opener starts below the header strip; hold it at the card's top edge, so
+      // the strip doesn't sit in the card as a dark band. It lets go as the page scrolls.
+      html.style.setProperty("--menu-y", `${20 - Math.max(0, openerTop - window.scrollY) * scale}px`);
+      if (main) main.style.transformOrigin = `50% ${window.scrollY + height / 2 - main.offsetTop}px`;
     };
     place();
     window.addEventListener("scroll", place, { passive: true });
