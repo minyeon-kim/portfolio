@@ -1961,8 +1961,6 @@ header:has(.header-menu-trigger[aria-expanded="true"]) .site-header-bar { backgr
 :root[data-theme="dark"] [data-theme-show="light"] { display: none !important; }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) [data-theme-show="dark"] { display: none !important; } }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) [data-theme-show="light"] { display: none !important; } }
-:root[data-theme="dark"] .gemini-phone-display, :root[data-theme="dark"] .gemini-phone-sheet { background: #131314; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.gemini-phone-display, .gemini-phone-sheet) { background: #131314; } }
 
 /* Devsign hero: real prototype screens, one 9s loop (components/devsign-loop.tsx). */
 .devsign-loop { position: relative; max-width: 1280px; margin-inline: auto; overflow: hidden; border-radius: 16px; border: 1px solid rgb(255 255 255 / 0.08); box-shadow: 0 30px 80px rgb(0 0 0 / 0.45); }
@@ -2544,17 +2542,17 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-world-role, .home-world-name, .home-world-problem { display: none; }
 }
 /* The hovered case's media: a large flat card at the top right, in its own frame (metalab.com's project shot), not a posed device. */
-.home-device { position: absolute; top: 14%; right: calc(var(--project-text-inset) + var(--picks-gutter)); width: min(40vw, 620px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 22px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
-.home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 22px); transition: opacity 300ms ease, translate 800ms var(--ease-out-soft), clip-path 800ms var(--ease-out-soft); }
+.home-device { position: absolute; top: 14%; right: calc(var(--project-text-inset) + var(--picks-gutter)); width: min(40vw, 620px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 8px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 8px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
+.home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 8px); transition: opacity 300ms ease, translate 800ms var(--ease-out-soft), clip-path 800ms var(--ease-out-soft); }
 /* The cards sit above the backdrop's vignette, so the light theme's pale edge never washes over them. */
 .home-backdrop .home-device { z-index: 1; }
-.home-device[data-project="devsign"] { translate: 0 0; clip-path: inset(0 0 0 100% round 22px); }
-.home-device[data-project="devsign"][data-active] { clip-path: inset(0 0 0 0 round 22px); }
+.home-device[data-project="devsign"] { translate: 0 0; clip-path: inset(0 0 0 100% round 8px); }
+.home-device[data-project="devsign"][data-active] { clip-path: inset(0 0 0 0 round 8px); }
 .home-device > * { scale: 1.12; transition: scale 500ms var(--ease-out-soft); }
 .home-device[data-active] > * { scale: 1; transition: scale 1000ms var(--ease-out-soft); }
 /* The cards sit on the case's own colour plate, the screen set into it (after lusion.co/work). */
 .home-device[data-project="devsign"] { background: radial-gradient(80% 90% at 20% 0%, #8b6cff 0%, #5b3fd6 45%, #2a1a7a 100%); }
-.home-device[data-project="devsign"] .home-device-window { inset: 9% 7% -6% 7%; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
+.home-device[data-project="devsign"] .home-device-window { inset: 9% 7% -6% 7%; border-radius: 6px; overflow: hidden; box-shadow: 0 30px 60px -20px rgb(10 0 40 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.12); }
 .home-device[data-project="gemini-privacy"] { background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
 .home-device[data-project="gemini-privacy"] .home-device-phone { background: none; }
 /* Its caption: a black block overlapping a corner of the card. */
@@ -3258,20 +3256,17 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
   .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
   /* Each case's hover, in metalab.com's own proportions. Gemini follows its The Atlantic
-     state: portrait card at the bottom right, name left of centre, the sentence high,
-     the role low. Devsign follows Midjourney: card at the top right of centre, role high,
-     name low, the sentence in the bottom right corner. */
+     state: portrait card at the bottom right, name left of centre, the sentence high.
+     Devsign follows Midjourney: card at the top right of centre, name low, the sentence
+     in the bottom right corner. */
   .home-device[data-project="gemini-privacy"] { --card-h: 55svh; top: auto; bottom: 24px; right: var(--project-text-inset); width: auto; height: var(--card-h); aspect-ratio: 3 / 4; }
   .home-stage[data-world="gemini-privacy"] { --gx: max(18.7%, calc(var(--project-text-inset) + 240px)); }
   /* One line, unless the card leaves too little room for it (1024 wide). */
   .home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: calc(57% - 0.5em); max-width: calc(100% - var(--gx) - var(--project-text-inset) - 41.25svh - 16px); font-size: clamp(44px, min(5.4vw, 10svh), 104px); }
   .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 42.4%; right: auto; top: 18.8%; bottom: auto; width: min(30ch, 300px); }
-  .home-stage[data-world="gemini-privacy"] .home-world-role { left: min(59%, calc(100% - var(--project-text-inset) - 41.25svh - 214px)); top: 69%; width: 190px; translate: 0 16px; white-space: normal; }
   .home-device[data-project="devsign"] { top: 11.4%; left: 52%; right: auto; width: 40vw; }
   .home-stage[data-world="devsign"] .home-world-name { left: 35%; top: calc(73.5% - 0.5em); max-width: none; white-space: nowrap; }
-  .home-stage[data-world="devsign"] .home-world-role { left: 28%; top: 18.8%; max-width: calc(24% - 24px); translate: 0 16px; white-space: normal; }
   .home-stage[data-world="devsign"] .home-world-problem { left: 75.3%; right: var(--project-text-inset); bottom: 48px; width: auto; }
-  .home-stage:is([data-world="gemini-privacy"], [data-world="devsign"]) .home-world-role[data-on] { translate: 0 0; }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */

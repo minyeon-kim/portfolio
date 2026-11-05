@@ -57,8 +57,8 @@ bool inBolt(vec2 q) {
   }
   return inside;
 }
-const float BOLT_SCALE = 1.3;
-const vec2 BOLT_AT = vec2(-1.13, 0.2);
+const float BOLT_SCALE = 1.7;
+const vec2 BOLT_AT = vec2(-1.42, -0.19);
 // Where point n of the form leans: the form, with a wide halo of dust.
 vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
@@ -100,7 +100,8 @@ vec3 formOf(float n, vec2 uv) {
       }
       loose *= 0.3;
     }
-    // Left of the card and above the name, large.
+    // Large and tall at the left of the card, the name over its lower part
+    // (metalab.com's Midjourney head).
     p = vec3(q * BOLT_SCALE + BOLT_AT, (hq(n, 17u) - 0.5) * 0.2);
   } else {
     // The Gemini sparkle: a four-point star with concave sides, filled with a
@@ -110,8 +111,8 @@ vec3 formOf(float n, vec2 uv) {
     vec2 dir = vec2(cos(t), sin(t));
     float r = 1.2 / pow(pow(abs(dir.x), 0.5) + pow(abs(dir.y), 0.5), 2.0);
     float fill = a < 0.6 ? mix(0.62, 1.0, sqrt(c)) : sqrt(c);
-    // Top left, above the title, clear of the card and the paragraph.
-    p = vec3(dir * r * fill * 0.85 + vec2(-1.6, 0.9), (hq(n, 18u) - 0.5) * 0.2);
+    // Large behind the copy, above the card (metalab.com's Atlantic head).
+    p = vec3(dir * r * fill * 1.2 + vec2(-0.2, 0.23), (hq(n, 18u) - 0.5) * 0.2);
     loose *= a < 0.6 ? 0.6 : 0.75;
   }
   // While a case is hovered, most of the dust draws in so the form shows;
@@ -219,7 +220,7 @@ void main() {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[3]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
+uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[4]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
 uniform float keep;  // the share of the simulation drawn
 uniform float portraitMix; uniform sampler2D portrait; uniform sampler2D portraitColor;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
@@ -234,7 +235,7 @@ void main() {
   vSpeed = length(u);
   // Gemini: the sparkle takes the logo's colours, blue at its heart and
   // warmer towards its points (coral up, yellow left, green down).
-  vec2 g = (p.xy - vec2(-2.21, 1.56)) / 0.85;
+  vec2 g = (p.xy - vec2(0.03, 0.488)) / 1.2;
   float ga = atan(g.y, g.x);
   vec3 tips = vec3(0.26, 0.52, 1.0) * max(cos(ga), 0.0) + vec3(1.0, 0.42, 0.4) * max(sin(ga), 0.0)
     + vec3(1.0, 0.8, 0.25) * max(-cos(ga), 0.0) + vec3(0.2, 0.8, 0.5) * max(-sin(ga), 0.0);
@@ -243,9 +244,9 @@ void main() {
   vSpec = spectrum * mix(0.55, 0.95, smoothstep(0.05, 0.7, length(g)));
   // Devsign: the logo's violet, cyan along the lower right, and a soft
   // white sheen across the upper slab.
-  // The bolt's own coordinates, wherever formOf sets it (scale 1.3 at (-1.13, 0.2)).
-  vec2 d = ((p.xy - vec2(-1.13, 0.2)) / 1.3 + vec2(-1.75, 0.75) - vec2(0.35, 0.12)) / 1.6 - vec2(-1.75, 0.75);
-  float cyan = smoothstep(0.5, 0.8, dot(d, normalize(vec2(1.0, -0.7))));
+  // The bolt's own coordinates, wherever formOf sets it (scale 1.7 at (-1.42, -0.19)).
+  vec2 d = ((p.xy - vec2(0.35, 0.12)) / 1.6 - vec2(-1.42, -0.19)) / 1.7;
+  float cyan = smoothstep(0.25, 0.55, dot(d, normalize(vec2(1.0, -0.7))));
   float sheen = exp(-pow(dot(d - vec2(-0.25, 0.35), normalize(vec2(0.3, 1.0))) / 0.08, 2.0)) * 0.6;
   vec3 boltTint = mix(mix(vec3(0.56, 0.28, 1.0), vec3(0.3, 0.8, 1.0), cyan), vec3(0.95, 0.9, 1.0), sheen);
   vTint = mix(vTint, boltTint, bolt);
@@ -313,12 +314,13 @@ void main() {
   vFaint *= min(px, 1.0);
   // The case's paragraph stays readable: dust behind it (with a soft margin)
   // all but disappears. clearRect is its box in clip space (x0, y0, x1, y1).
-  vec2 m = vec2(0.09, 0.14);
-  for (int i = 0; i < 3; i++) {
+  vec2 m = vec2(0.05, 0.08);
+  for (int i = 0; i < 4; i++) {
     vec4 c = clearRect[i];
     float inside = smoothstep(c.x - m.x, c.x, s.x) * smoothstep(c.z + m.x, c.z, s.x)
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
-    vFaint *= 1.0 - 0.85 * inside;
+    // The last box is the big name: its form still shows through.
+    vFaint *= 1.0 - (i == 3 ? 0.82 : 0.85) * inside;
   }
   px *= mix(0.9, 1.0, smoothstep(0.3, 0.5, vDepth));
   // Flying through: dust grows as the camera nears it.
@@ -672,7 +674,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
 
     // The visible case paragraph's box in clip space, re-read now and then;
     // off-screen when none is shown.
-    const clear = new Array(12).fill(9);
+    const clear = new Array(16).fill(9);
     let clearTick = 0;
     const readClear = () => {
       // A case's paragraph, or on the landing the statement (with the note
@@ -683,7 +685,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       const c = el.getBoundingClientRect();
       // The other boxes, on wide screens: the case pills and the note, which
       // sit apart from the statement, in the waves.
-      [".home-picks", ".home-note:not([data-swap]) .home-note-default, .home-world-role[data-on]"].forEach((selector, i) => {
+      [".home-picks", ".home-note:not([data-swap]) .home-note-default, .home-world-role[data-on]", ".home-world-name[data-on]"].forEach((selector, i) => {
         const box = wideStage() ? document.querySelector<HTMLElement>(selector)?.getBoundingClientRect() : undefined;
         const at = 4 + i * 4;
         if (!box) { clear.fill(9, at, at + 4); return; }
