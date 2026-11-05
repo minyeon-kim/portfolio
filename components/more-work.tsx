@@ -70,6 +70,11 @@ export function MoreWork({ items, label }: { items: MoreWorkItem[]; label?: stri
       onFocus={() => setHeld(true)}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHeld(false); }}>
       <h2 id="more-work-label" className="more-work-label">{label ?? t.nextProject}</h2>
+      <div className="more-work-ticker" aria-hidden="true">
+        <div className="more-work-ticker-track">
+          {Array.from({ length: 6 }, (_, i) => <span key={i}>{label ?? t.nextProject}</span>)}
+        </div>
+      </div>
       <ul className="more-work-deck">
         {items.map((item, i) => {
           const r = rank(i);
