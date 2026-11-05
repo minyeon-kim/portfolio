@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -12,7 +12,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const PLAYBACK_RATE = 1;
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
-type Change = { title: string; before: string; after: string; a: Box; b: Box };
+type Change = { title: string; before: string; after: string; a: Box[]; b: Box[] };
 
 // Boards too dense to read at column width stay still; the frame opens the full image.
 export function OpenFrame({ children, href }: { children: React.ReactNode; href: string }) {
@@ -55,12 +55,32 @@ function CropPair({ before, after, a, b, lines, labels, tile = 1.6 }: { before: 
   );
 }
 
-// Scroll-driven steps, the usual pinned pattern: the stage stays on screen (CSS
-// sticky) and each change crossfades in place as the page scrolls. Native scroll
-// only. On phones and with reduced motion (CSS) the steps are a plain list.
+// The whole screen with what changed left bright and outlined; the rest dims, so
+// both sides are read at one scale.
+function MarkedScreen({ img, boxes, base, id }: { img: Shot; boxes: Box[]; base: boolean; id: string }) {
+  return (
+    <div className="dv-iter-screen">
+      <Image src={withBase(img.src)} alt={base ? img.alt ?? "" : ""} width={2880} height={1620} sizes="(max-width: 767px) 100vw, 700px" />
+      <svg className="dv-iter-mark" aria-hidden="true">
+        <mask id={id}>
+          <rect width="100%" height="100%" fill="#fff" />
+          {boxes.map(([x, y, w, h]) => <rect key={`${x}-${y}`} x={`${x}%`} y={`${y}%`} width={`${w}%`} height={`${h}%`} rx="6" fill="#000" />)}
+        </mask>
+        <rect width="100%" height="100%" mask={`url(#${id})`} className="dv-iter-dim" />
+        {boxes.map(([x, y, w, h]) => <rect key={`${x}-${y}`} x={`${x}%`} y={`${y}%`} width={`${w}%`} height={`${h}%`} rx="6" className="dv-iter-line" />)}
+      </svg>
+    </div>
+  );
+}
+
+// Scroll-driven steps, the usual pinned pattern: the two whole screens stay on
+// screen (CSS sticky) and only the marks move to the next change as the page
+// scrolls; the changes read down a list under them. Native scroll only. On phones
+// and with reduced motion (CSS) the steps are a plain list.
 export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
+  const id = useId();
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -90,19 +110,38 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
   return (
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as React.CSSProperties}>
       <div className="dv-iter-stage">
-        <ol className="dv-iter-progress" aria-hidden="true">
-          {changes.map((c, i) => (
-            <li key={c.title} data-on={i === active || undefined} style={{ "--i": i } as React.CSSProperties}><b>{i + 1}</b>{c.title}</li>
-          ))}
-        </ol>
         <ol className="dv-iter-steps">
           {changes.map((c, i) => (
             <li key={c.title} data-on={i === active || undefined}>
               <h4 className="dv-iter-name"><b>{i + 1}</b>{c.title}</h4>
-              <CropPair before={before} after={after} a={c.a} b={c.b} lines={[c.before, c.after]} labels={labels} />
+              <div className="dv-iter-pair">
+                <figure className="dv-iter-side" data-side="a">
+                  <span className="dv-iter-tag">{labels.asIs}</span>
+                  <MarkedScreen img={before} boxes={c.a} base={i === 0} id={`${id}-a${i}`} />
+                  <figcaption>{c.before}</figcaption>
+                </figure>
+                <figure className="dv-iter-side" data-side="b">
+                  <span className="dv-iter-tag">{labels.toBe}</span>
+                  <MarkedScreen img={after} boxes={c.b} base={i === 0} id={`${id}-b${i}`} />
+                  <figcaption>{c.after}</figcaption>
+                </figure>
+              </div>
             </li>
           ))}
         </ol>
+        <div className="dv-iter-index" aria-hidden="true">
+          <ol className="dv-iter-progress">
+            {changes.map((c, i) => <li key={c.title} data-on={i === active || undefined}><b>{i + 1}</b>{c.title}</li>)}
+          </ol>
+          <div className="dv-iter-lines">
+            {changes.map((c, i) => (
+              <dl key={c.title} data-on={i === active || undefined}>
+                <dt>{labels.asIs}</dt><dd>{c.before}</dd>
+                <dt data-side="b">{labels.toBe}</dt><dd data-side="b">{c.after}</dd>
+              </dl>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
