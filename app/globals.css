@@ -3870,7 +3870,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-tk-part, .dv-tk-next { margin-top: clamp(28px, 5svh, 48px); }
 .case-study .dv .dv-tk-label { margin: 0 0 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; }
 .dv-tk-cards, .dv-tk-limits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
-.dv-tk-cards li { display: flex; flex-direction: column; padding: 24px; border-radius: var(--dv-card-radius); background: var(--dv-surface); }
+.dv-tk-cards li { display: flex; flex-direction: column; padding: 24px; border-radius: var(--dv-card-radius); background: light-dark(#f4f4f6, var(--dv-surface)); }
 .dv-tk-cards b { margin-bottom: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .case-study .dv .dv-tk h4 { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.35; word-break: keep-all; text-wrap: balance; }
 .case-study .dv .dv-tk :is(.dv-tk-cards, .dv-tk-limits) p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; text-wrap: pretty; }
