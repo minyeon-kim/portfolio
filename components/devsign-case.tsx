@@ -1,13 +1,13 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { SurveyCharts } from "@/components/devsign-survey-charts";
+import { SurveyCharts, UsabilityCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
-import { FeatureReels, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
+import { FeatureReels, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -69,12 +69,10 @@ function Insights({ discover }: { discover: Study }) {
   const { q1, q2, synthesis, interview } = discover;
   return (
     <div className="dv-insights">
-      <p className="dv-insights-scale reveal">{discover.scale}</p>
-      <div className="dv-gap-48">
+      <div>
         <Block {...discover.desk} ff />
         {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
         <section className="dv-evbox dv-gap-40">
-          <p className="dv-evbox-head reveal"><a className="dv-source-link" href={q1.surveyUrl} target="_blank" rel="noreferrer">{q1.surveyLabel}</a></p>
           <SurveyCharts charts={q1.charts} />
         </section>
         <section className="dv-evbox dv-evbox-voices">
@@ -200,19 +198,10 @@ function SourceInsights({ discover }: { discover: Study }) {
   const { q1, q2, synthesis, interview, desk } = discover;
   return (
     <div className="dv-insights">
-      <p className="dv-insights-scale reveal">{discover.scale}</p>
-      <div className="dv-gap-48">
+      <div>
         <Block title={desk.title} lead={q1.answer} text={desk.text} ff />
         <section className="dv-evbox dv-gap-40">
-          <p className="dv-evbox-head reveal">{q1.surveyLabel}</p>
-          <div className="dv-insight-stats">
-            {q1.stats.map((stat: { value: string; text: string }) => (
-              <div key={stat.value} className="dv-insight-stat reveal" style={{ "--share": parseFloat(stat.value) / 100 } as React.CSSProperties}>
-                <p><strong>{stat.value}</strong><span>{stat.text}</span></p>
-                <i aria-hidden="true"><b /></i>
-              </div>
-            ))}
-          </div>
+          <SurveyCharts charts={q1.charts} />
         </section>
         <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
       </div>
@@ -645,20 +634,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          {/* Red only on the goal that was missed. */}
-          <UsabilityResults scores={testing.usability.scores} meaning={testing.usability.result} />
+          <section className="dv-evbox dv-gap-40"><UsabilityCharts charts={testing.usability.charts} /></section>
+          <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>
           {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
           </> : <>
           <Block {...testing.usability} ff={ff} />
-          <ul className="dv-plan dv-gap-40 reveal">
-            {testing.usability.scores.map((item: Study) => (
-              <li key={item.title}>
-                <strong>{item.value}<small>{item.unit}</small></strong>
-                <b>{item.title}</b>
-                <span>{item.note}</span>
-              </li>
-            ))}
-          </ul>
+          <section className="dv-evbox dv-gap-40"><UsabilityCharts charts={testing.usability.charts} /></section>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">

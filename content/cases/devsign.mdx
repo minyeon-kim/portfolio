@@ -55,7 +55,7 @@ export const study = {
       items: [
         { tone: "red", label: "Problem", title: "Drafts and their reasons scatter", text: "Teams pick versions in chat, and mismatches show up after release." },
         { tone: "accent", label: "Solution", title: "One place, from comparing to recording", text: "Combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen." },
-        { tone: "teal", label: "Impact", title: "Differences got easier to find: 5/5", text: "Both testers gave it 5. First tries still needed help, so we changed the screens twice; those changes aren’t retested yet." },
+        { tone: "teal", label: "Impact", title: "Less asking where design and code differ: 5/5", text: "Both testers expected this and gave it 5. First tries still needed help, so we changed the screens twice; those changes aren’t retested yet." },
       ],
     },
     headline: "In the AI era, the hard part is",
@@ -82,7 +82,6 @@ export const study = {
     },
   },
   discover: {
-    scale: "1 survey · 100+ community posts · 10+ tools · 4 practitioner interviews",
     desk: {
       method: "Secondary research",
       title: "Secondary research",
@@ -90,10 +89,9 @@ export const study = {
       text: "Combining our own AI drafts took longer than making them. Surveys and community posts showed the same pattern.",
     },
     q1: {
-      surveyLabel: "2025 Stack Overflow Developer Survey",
-      surveyUrl: "https://survey.stackoverflow.co/2025/ai",
-      charts: {
-        trust: {
+      charts: [
+        {
+          type: "donut",
           title: "More developers distrust the accuracy of AI output (46%) than trust it (33%).",
           value: "33%",
           valueLabel: "trust it",
@@ -102,10 +100,12 @@ export const study = {
             { label: "Somewhat trust", value: 29.6, on: true },
             { label: "Somewhat distrust", value: 26.1 },
             { label: "Highly distrust", value: 19.6 },
-            { label: "The rest", value: 21.6, rest: true },
+            { label: "Not listed", value: 21.6, rest: true },
           ],
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "33,244 responses. The page lists four answers; “not listed” is what they leave." },
         },
-        frustrations: {
+        {
+          type: "bars",
           title: "The most common frustration is AI answers that are almost right, but not quite.",
           note: "Select all that apply. 4 of the 7 answers shown.",
           bars: [
@@ -114,8 +114,9 @@ export const study = {
             { label: "Less confidence", value: 20 },
             { label: "Hard to understand", value: 16.3 },
           ],
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses." },
         },
-      },
+      ],
       problemsLabel: "Problems that kept coming up",
       communityLabel: "100+ community posts · Reddit, Hacker News, Medium",
       groups: [
@@ -420,19 +421,48 @@ export const study = {
         { label: "Participants", big: "2", value: "1 designer, 1 developer" },
         { label: "Tasks", big: "7 × 2", value: "7 tasks, each done twice" },
         { label: "Scenarios", value: "Combine two drafts, decide a change request, fix a mobile screen" },
-        { label: "Session", steps: ["Brief", "First try", "Retry without help", "Survey", "Interview"] },
-        { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "“Differences got easier to find” (1–5)"] },
+        { label: "Session", steps: ["Brief", "First try", "Second try", "Survey", "Interview"] },
+        { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "Expected change in communication (1–5)"] },
       ],
-      resultLead: "Both the designer and the developer saw the value, but neither could finish the tasks without help.",
+      resultLead: "Help dropped sharply on the second try, but neither person finished the first try without help.",
       result: "It wasn’t clear whose turn it was, and the designer felt the screens were made for developers. That was layout and wording, not the idea, so we kept the features.",
       sheet: { src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "All three pages of the usability test session sheet: for each scene of each scenario, the story read to the participant, the behavior to observe, the linked pain points and the questions to ask afterwards", caption: "The whole session sheet: for each scene, what we read aloud, what to observe and what to ask afterwards." },
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
-      scores: [
-        { value: "2.3", unit: "/3", ratio: 2.3 / 3, target: 0.5, title: "Help needed on the first try", note: "Lower is better · missed the 1.5 goal", missed: true },
-        { value: "55", unit: "SUS", ratio: 0.55, target: 0.68, title: "SUS · designer", note: "Below the 68 average" },
-        { value: "75", unit: "SUS", ratio: 0.75, target: 0.68, title: "SUS · developer", note: "Above the 68 average" },
-        { value: "5.0", unit: "/5", ratio: 1, title: "“Differences got easier to find”", note: "Both participants agreed" },
-      ],
+      charts: {
+        help: {
+          title: "Help dropped from 2.3 to 0.4 on the second try, but the first try missed our 1.5 goal.",
+          first: "First try", second: "Second try, same tasks", goal: 1.5, goalLabel: "Goal 1.5", scale: 3,
+          note: "0 on their own · 1 a word · 2 where to look · 3 told directly. Each person used a different prototype version.",
+          groups: [
+            { label: "Designer", tasks: [
+              { label: "Find", first: 0, second: 0 },
+              { label: "Decide", first: 2, second: 0 },
+              { label: "Approve, merge", first: 3, second: 1 },
+              { label: "Compare drafts", first: 2, second: 0 },
+            ] },
+            { label: "Developer", tasks: [
+              { label: "Find", first: 3, second: 0 },
+              { label: "Decide", first: 3, second: 1 },
+              { label: "Request, merge", first: 3, second: 1 },
+            ] },
+          ],
+        },
+        sus: {
+          title: "SUS: 55 and 75. Both cleared our goal.",
+          items: [{ label: "Designer", value: 55 }, { label: "Developer", value: 75 }],
+          marks: [{ value: 51.7, label: "Our goal 51.7" }, { value: 68, label: "Average 68" }],
+        },
+        dots: {
+          title: "Would it reduce back-and-forth? (1–5)",
+          max: 5, people: ["Designer", "Developer"],
+          rows: [
+            { label: "Less asking where design and code differ", values: [5, 5] },
+            { label: "Less communication overall", values: [1, 5] },
+            { label: "Worth using for our team", values: [4, 3] },
+          ],
+          note: "Expectations, not measured change. Answered later, with screenshots.",
+        },
+      },
     },
     iteration1: {
       method: "Iteration 1",
@@ -482,6 +512,6 @@ export const study = {
 <TLDR>
 - **Problem** Designers and developers both use AI, but drafts and their reasons end up in different tools. Teams pick versions in chat, and mismatches show up after release.
 - **Solution** One workspace from comparing drafts to a recorded decision: combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen.
-- **Impact** Differences got easier to find: 5/5. Both testers gave it 5. First tries still needed help, so we changed the screens twice; those changes aren’t retested yet.
+- **Impact** Less asking where design and code differ: 5/5. Both testers expected this and gave it 5. First tries still needed help, so we changed the screens twice; those changes aren’t retested yet.
 </TLDR>
 </DevsignCase>

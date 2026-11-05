@@ -91,7 +91,6 @@ export const study = {
     },
   },
   discover: {
-    scale: "AI 서비스 5곳 · 논문 6편 · 설문 · 인터뷰 2명 + 가이드 테스트 2명",
     desk: {
       method: "Secondary research",
       title: "데스크 리서치",
@@ -100,10 +99,32 @@ export const study = {
     q1: {
       label: "질문 1 · 사람들은 통제를 원할까?",
       answer: "사람들은 통제를 원하지만, 대부분은 통제하고 있다고 느끼지 못한다.",
-      surveyLabel: "설문 · Pew Research Center 2025–2026",
-      stats: [
-        { value: "61%", text: "AI가 삶에 쓰이는 방식을 더 통제하고 싶은 미국 성인 비율. 지금 수준에 만족하는 사람은 17%뿐이다" },
-        { value: "71%", text: "AI가 늘수록 개인 정보가 덜 안전해질 거라고 보는 비율" },
+      charts: [
+        {
+          type: "donut",
+          title: "미국 성인 다수는 AI가 삶에 쓰이는 방식을 더 통제하고 싶어 한다. 지금 수준에 만족하는 사람은 17%뿐이다.",
+          value: "61%",
+          valueLabel: "더 통제하고 싶음",
+          segments: [
+            { label: "더 통제하고 싶음", value: 61, on: true },
+            { label: "지금 수준에 만족", value: 17 },
+            { label: "잘 모르겠음", value: 21, rest: true },
+          ],
+          source: { label: "Pew Research Center, Sept 2025", url: "https://www.pewresearch.org/science/2025/09/17/ai-in-americans-lives-awareness-experiences-and-attitudes/", detail: "미국 성인 5,023명, 2025년 6월." },
+        },
+        {
+          type: "donut",
+          title: "다수는 AI가 늘수록 개인 정보가 덜 안전해질 거라고 본다. 더 안전해진다는 답은 3%다.",
+          value: "71%",
+          valueLabel: "덜 안전해짐",
+          segments: [
+            { label: "덜 안전해짐", value: 71, on: true },
+            { label: "큰 차이 없음", value: 10 },
+            { label: "더 안전해짐", value: 3 },
+            { label: "잘 모르겠음", value: 16, rest: true },
+          ],
+          source: { label: "Pew Research Center, June 2026", url: "https://www.pewresearch.org/internet/2026/06/17/americans-and-ai-2026-chatbots-smart-devices-and-views-on-impact/", detail: "미국 성인 5,119명, 2026년 2월." },
+        },
       ],
       communityLabel: "논문 · AI 메모리 UX 연구 6편",
       groups: [
@@ -216,7 +237,7 @@ export const study = {
       title: "How might we",
       question: "Gemini 사용자가 답변 속 개인 정보가 어디서 왔는지 보고, 그 자리에서 끄거나 삭제하고, 그 결과를 믿을 수 있게 하려면 어떻게 해야 할까?",
       successLabel: "성공의 기준",
-      success: ["힌트 없이 10초 안에 출처와 스위치를 찾는다", "차단과 삭제의 차이를 자기 말로 설명한다"],
+      success: ["힌트 없이 출처와 스위치를 찾는다", "차단과 삭제의 차이를 자기 말로 설명한다"],
     },
   },
   develop: {
@@ -290,12 +311,25 @@ export const study = {
       title: "진행자 동석 사용성 테스트",
       lead: "최대 5명이 가상 페르소나의 데이터로 두 시나리오를 수행한다.",
       text: "AI 사용량(많음/적음)과 프라이버시 민감도(높음/낮음)를 섞어 모집한다. 시나리오 A(인라인 컨트롤) 다음 B(요청해서 삭제)이고, 참여자는 자기 정보를 공유하지 않는다.",
-      scores: [
-        { value: "10", unit: "초", ratio: 0, title: "스위치 찾기", note: "목표 · 힌트 없이 10초 안에" },
-        { value: "68+", unit: "SUS", ratio: 0, title: "SUS 목표", note: "목표 · 평균 이상" },
-        { value: "1–7", unit: "SEQ", ratio: 0, title: "과제 난이도", note: "시나리오마다 질문" },
-        { value: "1–7", unit: "부담", ratio: 0, title: "정보 부담", note: "출처 패널이 너무 많을까?" },
-      ],
+      charts: {
+        sus: {
+          title: "5회 중 2회를 마친 시점의 SUS는 77.5와 82.5다.",
+          items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
+          marks: [{ value: 68, label: "평균 68" }],
+          note: "경향으로만 본다. 두 사람이 쓴 프로토타입 버전이 다르고, P01은 무엇을 평가하는 설문인지 헷갈려 했다.",
+        },
+        dots: {
+          title: "둘 다 도움 없이 출처를 찾았지만(46.5초, 14.8초), 과제 1은 정보가 너무 많았다.",
+          max: 7, people: ["P01", "P02"],
+          rows: [
+            { label: "과제 1, 출처 패널 · 쉬움", values: [5, 3] },
+            { label: "과제 2, 채팅 요청 · 쉬움", values: [6, 4] },
+            { label: "과제 1 · 정보량", values: [6, 6] },
+            { label: "과제 2 · 정보량", values: [4, 4] },
+          ],
+          note: "쉬움은 7이 매우 쉬움, 정보량은 4가 적절하고 7이 너무 많음.",
+        },
+      },
     },
   },
   takeaway: {

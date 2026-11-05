@@ -5488,3 +5488,99 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-chart + .dv-chart { margin: 32px 0 0; padding: 32px 0 0; border-left: 0; border-top: 1px solid var(--dv-line); }
   .dv-bars-chart { min-height: 280px; }
 }
+
+/* Charts share one rhythm: heading, chart, key, source. The box belongs to the text above it, so
+   it sits closer than the gap between parts (the owner found the old 80px gap odd). */
+.case-study .dv .dv-evbox.dv-gap-40 { margin-top: 48px; }
+.case-study .dv .dv-ut-meaning-text.dv-gap-40 { margin-top: 40px; max-width: var(--dv-measure, 740px); }
+.dv-charts { grid-template-rows: auto 1fr auto auto; }
+.dv-chart { grid-row: span 4; }
+.dv-chart-source { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-chart figcaption { max-width: 38ch; }
+
+.dv-ut-charts { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: clamp(32px, 5vw, 72px); }
+.dv-ut-charts[data-split] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dv-ut-charts > .dv-chart, .dv-ut-side > .dv-chart { display: flex; flex-direction: column; gap: 24px; }
+.dv-ut-side { display: grid; align-content: start; gap: 56px; padding-left: clamp(32px, 5vw, 72px); margin-left: calc(clamp(32px, 5vw, 72px) * -1); border-left: 1px solid var(--dv-line); }
+
+.dv-help-scroll { overflow-x: auto; }
+.dv-help { position: relative; display: grid; grid-template-columns: 4fr 3fr; gap: 24px; min-width: 560px; --h: 260px; }
+.dv-help-group > p { margin: 0 0 16px; color: var(--dv-muted); font-size: 16px; }
+.dv-help-group > ul { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.dv-help-group li { display: grid; gap: 12px; }
+.dv-help-group small { color: var(--dv-muted); font-size: 16px; line-height: 1.3; word-break: keep-all; }
+.dv-help-pair { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 4px; height: var(--h); }
+.dv-help-pair > span { display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; height: 100%; }
+.dv-help-pair strong { color: var(--dv-muted); font-size: 16px; font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; text-align: center; }
+.dv-help-pair i { display: block; flex: none; min-height: 3px; max-height: calc(100% - 22px); border-radius: 6px; transform-origin: bottom; background: color-mix(in srgb, var(--dv-ink) 22%, transparent); }
+.dv-help-pair [data-try="second"] strong { color: var(--case-accent); }
+.dv-help-pair [data-try="second"] i { background: var(--case-accent); box-shadow: 0 0 16px light-dark(transparent, color-mix(in srgb, var(--case-accent) 45%, transparent)); }
+/* Bars are as tall as their share of (--h minus the room kept for the value), so the line is too. */
+.dv-help-goal { position: absolute; z-index: 1; inset-inline: 0; top: calc(38px + (var(--h) - 22px) * (1 - var(--goal))); border-top: 1px dashed color-mix(in srgb, var(--dv-ink) 60%, transparent); pointer-events: none; }
+.dv-help-goal b { position: absolute; top: -28px; right: 0; color: var(--dv-ink); font-size: 16px; font-weight: 400; line-height: 1.5; }
+.dv-help-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; color: var(--dv-muted); font-size: 16px; list-style: none; }
+.dv-help-legend li { display: inline-flex; align-items: center; gap: 8px; }
+.dv-help-legend li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 22%, transparent); }
+.dv-help-legend [data-try="second"]::before { background: var(--case-accent); }
+.dv-dots-legend [data-who="0"]::before { background: var(--case-accent); }
+.dv-dots-legend [data-who="1"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--dv-ink); }
+
+.dv-sus { display: flex; gap: 32px; margin: 0; padding: 0; list-style: none; }
+.dv-sus li { display: grid; justify-items: center; gap: 12px; flex: 0 1 148px; color: var(--dv-muted); font-size: 16px; }
+.dv-sus-ring { position: relative; width: 100%; aspect-ratio: 1; }
+.dv-sus-ring svg { display: block; width: 100%; height: 100%; overflow: visible; rotate: -90deg; }
+.dv-sus-ring strong { position: absolute; inset: 0; display: grid; place-items: center; color: var(--case-accent); font-size: var(--t-statement); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; }
+.dv-sus-track, .dv-sus-value { fill: none; stroke-width: 9; }
+.dv-sus-track { stroke: color-mix(in srgb, var(--dv-ink) 12%, transparent); }
+.dv-sus-value { stroke: var(--case-accent); stroke-dasharray: var(--v) 100; filter: drop-shadow(0 0 5px light-dark(transparent, color-mix(in srgb, var(--case-accent) 60%, transparent))); }
+.dv-sus-mark { stroke: var(--dv-ink); stroke-width: 1.5; }
+
+.dv-dots { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-dots li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; }
+.dv-dots-label { grid-column: 1 / -1; color: var(--dv-ink); font-size: 16px; line-height: 1.4; word-break: keep-all; }
+.dv-dots-track { position: relative; display: flex; justify-content: space-between; align-items: center; height: 20px; }
+.dv-dots-track > i { width: 6px; height: 6px; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 22%, transparent); }
+.dv-dots-track > b { position: absolute; top: 2px; left: calc((100% - 16px) * var(--at)); width: 16px; height: 16px; border-radius: 50%; }
+.dv-dots-track > b[data-who="0"] { background: var(--case-accent); box-shadow: 0 0 10px light-dark(transparent, color-mix(in srgb, var(--case-accent) 55%, transparent)); }
+.dv-dots-track > b[data-who="1"] { box-shadow: inset 0 0 0 2px var(--dv-ink); }
+/* Same answer: the ring sits around the dot, so both stay visible. */
+.dv-dots-track > b[data-who="1"][data-tie] { top: -2px; left: calc((100% - 16px) * var(--at) - 4px); width: 24px; height: 24px; }
+.dv-dots-values { color: var(--dv-muted); font-size: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.dv-ut-charts[data-phase="wait"] :is(.dv-help-pair strong, .dv-sus-ring strong, .dv-dots-track > b) { opacity: 0; }
+.dv-ut-charts[data-phase="wait"] .dv-help-pair i { scale: 1 0; }
+.dv-ut-charts[data-phase="wait"] .dv-sus-value { stroke-dasharray: 0 100; }
+.dv-ut-charts[data-phase="play"] .dv-help-pair i { animation: dv-bar-rise 800ms var(--ease-reveal) calc(var(--i) * 80ms) backwards; }
+.dv-ut-charts[data-phase="play"] .dv-help-pair strong { animation: dv-chart-fade 400ms var(--ease-standard) calc(var(--i) * 80ms + 400ms) backwards; }
+.dv-ut-charts[data-phase="play"] .dv-sus-value { animation: dv-sus-fill 1100ms var(--ease-standard) backwards; }
+.dv-ut-charts[data-phase="play"] .dv-sus-ring strong { animation: dv-chart-fade 400ms var(--ease-standard) 700ms backwards; }
+.dv-ut-charts[data-phase="play"] .dv-dots-track > b { animation: dv-chart-fade 400ms var(--ease-standard) 600ms backwards; }
+@keyframes dv-sus-fill { from { stroke-dasharray: 0 100; } }
+
+@media (max-width: 63.99rem) {
+  .dv-charts { grid-template-rows: none; }
+  .dv-chart { grid-row: auto; }
+  .dv-ut-charts, .dv-ut-charts[data-split] { grid-template-columns: 1fr; row-gap: 32px; }
+  .dv-ut-side { padding: 32px 0 0; margin: 0; border-left: 0; border-top: 1px solid var(--dv-line); gap: 40px; }
+}
+
+/* Heights are exact shares of the room left under the value label. (They were a share of the
+   whole track, then clipped at the top, which made the tallest bar look closer to the others.) */
+.dv-bar-track i { height: calc((100% - 38px) * var(--r)); max-height: none; }
+.dv-help-pair { position: relative; }
+.dv-help-pair i { height: calc((var(--h) - 22px) * var(--r)); max-height: none; }
+.dv-help-goal { display: none; }
+.dv-help-pair::after { content: ""; position: absolute; inset-inline: -4px; bottom: calc((var(--h) - 22px) * var(--goal)); border-top: 1px dashed color-mix(in srgb, var(--dv-ink) 60%, transparent); pointer-events: none; }
+.dv-help-legend [data-try="goal"]::before { width: 16px; height: 0; border-radius: 0; background: none; border-top: 1px dashed color-mix(in srgb, var(--dv-ink) 60%, transparent); }
+/* The divider sits in the middle of the gap, clear of both columns. */
+.dv-chart + .dv-chart { padding-left: calc(clamp(32px, 5vw, 72px) / 2); margin-left: calc(clamp(32px, 5vw, 72px) / -2); }
+.dv-ut-side { padding-left: calc(clamp(32px, 5vw, 72px) / 2); margin-left: calc(clamp(32px, 5vw, 72px) / -2); }
+@media (max-width: 63.99rem) {
+  .dv-chart + .dv-chart { margin: 32px 0 0; padding: 32px 0 0; }
+  .dv-ut-side { margin: 0; padding: 32px 0 0; }
+}
+@media (max-width: 47.99rem) {
+  .dv-help { grid-template-columns: 1fr; min-width: 0; --h: 200px; gap: 32px; }
+  .dv-help-group > ul { gap: 6px; }
+}
+.dv-ut-side > .dv-chart + .dv-chart { margin: 0; padding: 0; border: 0; }
