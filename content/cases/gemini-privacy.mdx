@@ -100,9 +100,11 @@ export const study = {
     q1: {
       label: "Question 1 · Do people want control?",
       answer: "People want control, but most don't feel they have it.",
+      chartLabels: { charts: "Survey charts", pause: "Pause charts", play: "Play charts" },
       charts: [
         {
           type: "donut",
+          tab: "Control over AI",
           title: "Most U.S. adults want more control over how AI is used in their lives. Only 17% are comfortable with what they have.",
           value: "61%",
           valueLabel: "want more control",
@@ -115,6 +117,7 @@ export const study = {
         },
         {
           type: "donut",
+          tab: "Security of personal information",
           title: "Most expect more AI to make their personal information less secure. Only 3% expect the opposite.",
           value: "71%",
           valueLabel: "less secure",

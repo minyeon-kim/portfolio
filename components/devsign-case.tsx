@@ -73,14 +73,19 @@ function Insights({ discover }: { discover: Study }) {
         <Block {...discover.desk} ff />
         {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
         <section className="dv-evbox dv-gap-40">
-          <SurveyCharts charts={q1.charts} />
+          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
         </section>
-        <section className="dv-evbox dv-evbox-voices">
-          <div className="dv-evbox-head reveal">
-            <p>{q1.communityLabel}</p>
+        {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
+        <section className="dv-evbox dv-posts">
+          <div className="dv-posts-head reveal">
+            <strong>{q1.communityCount}</strong>
+            <div>
+              <p>{q1.communityLead}</p>
+              <span>{q1.communitySources}</span>
+            </div>
             <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
           </div>
-          <ul className="dv-insight-voices">
+          <ul className="dv-posts-list">
             {q1.groups.map((g: { name: string; quote: string; source: string; sourceUrl?: string }) => (
               <li key={g.name} className="reveal">
                 <strong>{g.name}</strong>
@@ -201,7 +206,7 @@ function SourceInsights({ discover }: { discover: Study }) {
       <div>
         <Block title={desk.title} lead={q1.answer} text={desk.text} ff />
         <section className="dv-evbox dv-gap-40">
-          <SurveyCharts charts={q1.charts} />
+          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
         </section>
         <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
       </div>

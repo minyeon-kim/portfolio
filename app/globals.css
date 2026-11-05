@@ -5468,15 +5468,15 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 
 /* Motion, one beat: the whole ring sweeps round in the case colour, then what doesn't carry the
    finding goes grey and the number lands. Bars rise one after another. */
-.dv-charts[data-phase="wait"] :is(.dv-trust-mask) { stroke-dasharray: 0 100; }
-.dv-charts[data-phase="wait"] :is(.dv-trust-pct, .dv-trust-center, .dv-bar-track strong) { opacity: 0; }
-.dv-charts[data-phase="wait"] .dv-bar-track i { scale: 1 0; }
-.dv-charts[data-phase="wait"] .dv-trust-flash { opacity: 1; }
-.dv-charts[data-phase="play"] .dv-trust-mask { animation: dv-trust-sweep 1000ms var(--ease-standard) both; }
-.dv-charts[data-phase="play"] .dv-trust-flash { animation: dv-trust-settle 500ms var(--ease-standard) 900ms backwards; }
-.dv-charts[data-phase="play"] :is(.dv-trust-pct, .dv-trust-center) { animation: dv-chart-fade 400ms var(--ease-standard) 1000ms backwards; }
-.dv-charts[data-phase="play"] .dv-bar-track i { animation: dv-bar-rise 900ms var(--ease-reveal) calc(var(--i) * 110ms) backwards; }
-.dv-charts[data-phase="play"] .dv-bar-track strong { animation: dv-chart-fade 400ms var(--ease-standard) calc(var(--i) * 110ms + 500ms) backwards; }
+.dv-cycle-panel[data-phase="wait"] :is(.dv-trust-mask) { stroke-dasharray: 0 100; }
+.dv-cycle-panel[data-phase="wait"] :is(.dv-trust-pct, .dv-trust-center, .dv-bar-track strong) { opacity: 0; }
+.dv-cycle-panel[data-phase="wait"] .dv-bar-track i { scale: 1 0; }
+.dv-cycle-panel[data-phase="wait"] .dv-trust-flash { opacity: 1; }
+.dv-cycle-panel[data-phase="play"] .dv-trust-mask { animation: dv-trust-sweep 1000ms var(--ease-standard) both; }
+.dv-cycle-panel[data-phase="play"] .dv-trust-flash { animation: dv-trust-settle 500ms var(--ease-standard) 900ms backwards; }
+.dv-cycle-panel[data-phase="play"] :is(.dv-trust-pct, .dv-trust-center) { animation: dv-chart-fade 400ms var(--ease-standard) 1000ms backwards; }
+.dv-cycle-panel[data-phase="play"] .dv-bar-track i { animation: dv-bar-rise 900ms var(--ease-reveal) calc(var(--i) * 110ms) backwards; }
+.dv-cycle-panel[data-phase="play"] .dv-bar-track strong { animation: dv-chart-fade 400ms var(--ease-standard) calc(var(--i) * 110ms + 500ms) backwards; }
 @keyframes dv-trust-sweep { from { stroke-dasharray: 0 100; } to { stroke-dasharray: 100 100; } }
 @keyframes dv-trust-settle { from { opacity: 1; } }
 @keyframes dv-chart-fade { from { opacity: 0; } }
@@ -5584,3 +5584,80 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-help-group > ul { gap: 6px; }
 }
 .dv-ut-side > .dv-chart + .dv-chart { margin: 0; padding: 0; border: 0; }
+
+/* Survey stage (Metalab's Robinhood charts): tabs at the left, one large chart, the finding and
+   its source at the right. The panels share one grid cell, so the box never changes height. */
+.dv-cycle-stage { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(240px, 300px); align-items: start; gap: clamp(24px, 3vw, 48px); }
+.dv-cycle-nav { display: grid; justify-items: center; align-self: center; gap: 32px; }
+.dv-cycle-tabs { display: grid; gap: 12px; }
+.dv-cycle-tabs button, .dv-cycle-stop { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--dv-muted); transition: color 150ms ease, background-color 150ms ease; }
+.dv-cycle-tabs svg:not(.dv-cycle-ring), .dv-cycle-stop svg { width: 20px; height: 20px; }
+.dv-cycle-tabs button:hover, .dv-cycle-stop:hover { color: var(--dv-ink); }
+.dv-cycle-tabs button[aria-pressed="true"] { color: var(--case-accent); background: color-mix(in srgb, var(--case-accent) 14%, transparent); }
+.dv-cycle-tabs button:focus-visible, .dv-cycle-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dv-cycle-ring { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; pointer-events: none; }
+.dv-cycle-ring circle { fill: none; stroke: var(--case-accent); stroke-width: 1.5; stroke-dasharray: 0 100; animation: dv-cycle-progress var(--show-ms) linear forwards paused; }
+.dv-cycle-stage[data-run] .dv-cycle-ring circle { animation-play-state: running; }
+@keyframes dv-cycle-progress { to { stroke-dasharray: 100 100; } }
+.dv-cycle-stop { width: 32px; height: 32px; }
+.dv-cycle-stop svg { width: 16px; height: 16px; }
+
+.dv-cycle-stack { display: grid; min-width: 0; transition: opacity 280ms var(--ease), translate 280ms var(--ease); }
+.dv-cycle-stack > * { grid-area: 1 / 1; min-width: 0; }
+.dv-cycle-stage[data-leaving] .dv-cycle-stack { opacity: 0; translate: 0 -8px; }
+.dv-cycle-panel, .dv-cycle-text { align-self: center; visibility: hidden; }
+.dv-cycle-panel[data-on], .dv-cycle-text[data-on] { visibility: visible; }
+.dv-cycle-text { align-self: start; display: grid; gap: 16px; }
+.dv-cycle-text[data-on] { animation: dv-chart-fade 500ms var(--ease) 200ms backwards; }
+.dv-cycle-text p:first-child { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-cycle-charts { min-height: 380px; align-items: center; }
+
+.dv-trust-wrap { display: grid; grid-template-columns: minmax(0, 340px) minmax(180px, 1fr); align-items: center; gap: clamp(24px, 3vw, 40px); }
+.dv-trust { width: 100%; justify-self: center; }
+.dv-trust-center { padding: 18%; }
+.dv-trust-legend { display: grid; flex-wrap: nowrap; gap: 4px; }
+.dv-trust-legend button { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; width: 100%; min-height: 36px; text-align: left; word-break: keep-all; }
+.dv-trust-legend b { color: var(--dv-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+.dv-trust-legend [data-on], .dv-trust-legend [data-on] b { color: var(--dv-ink); }
+.dv-trust-legend [data-current], .dv-trust-legend [data-current] b { color: var(--dv-ink); }
+.dv-cycle-panel[data-phase="wait"] .dv-trust-legend li { opacity: 0; }
+.dv-cycle-panel[data-phase="play"] .dv-trust-legend li { animation: dv-chart-rise 400ms var(--ease) calc(900ms + var(--i) * 70ms) backwards; }
+@keyframes dv-chart-rise { from { opacity: 0; translate: 0 8px; } }
+
+/* Once drawn, the part that carries the finding keeps breathing, so the chart stays alive. */
+@keyframes dv-glow-breathe { 50% { opacity: 0.84; } }
+.dv-cycle-panel[data-phase="play"] .dv-trust-seg[data-on] { animation: dv-glow-breathe 2.4s ease-in-out 1.4s infinite; }
+.dv-cycle-panel[data-phase="play"] .dv-bars-chart li[data-top] i { animation: dv-bar-rise 900ms var(--ease-reveal) backwards, dv-glow-breathe 2.4s ease-in-out 1.4s infinite; }
+
+.dv-bars-chart { min-height: 380px; }
+
+/* Community posts: the count at the size of the survey numbers, then the posts as cards. */
+.dv-posts-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px clamp(16px, 2vw, 24px); margin-bottom: 32px; }
+.dv-posts-head > strong { color: var(--case-accent); font-size: var(--t-display); font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1; }
+.dv-posts-head p { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-posts-head span { color: var(--dv-muted); font-size: 16px; }
+.dv-posts-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; column-gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-posts-list li { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 12px; padding: 24px; border-radius: var(--dv-card-radius); background: light-dark(#f4f4f6, color-mix(in srgb, var(--dv-ink) 5%, transparent)); }
+.dv-posts-list strong { color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-posts-list blockquote { margin: 0; color: var(--dv-ink); font-size: var(--t-item); line-height: 1.45; word-break: keep-all; }
+.dv-posts-list cite { padding-top: 8px; color: var(--dv-muted); font-size: 16px; font-style: normal; line-height: 1.5; }
+
+@media (max-width: 74.99rem) {
+  .dv-cycle-stage { grid-template-columns: 44px minmax(0, 1fr); }
+  .dv-cycle-texts { grid-column: 1 / -1; grid-row: 1; }
+}
+@media (max-width: 63.99rem) {
+  .dv-posts-list { grid-template-columns: 1fr; grid-template-rows: none; row-gap: 12px; }
+  .dv-posts-list li { grid-row: auto; grid-template-rows: auto; }
+  .dv-posts-head { grid-template-columns: auto minmax(0, 1fr); }
+  .dv-posts-head > a { grid-column: 1 / -1; justify-self: start; }
+}
+@media (max-width: 47.99rem) {
+  .dv-cycle-stage { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .dv-cycle-nav { display: flex; justify-content: flex-start; align-items: center; gap: 12px; align-self: auto; }
+  .dv-cycle-tabs { display: flex; }
+  .dv-cycle-texts { grid-row: auto; order: -1; }
+  .dv-trust-wrap { grid-template-columns: minmax(0, 1fr); }
+  .dv-trust { width: min(100%, 280px); }
+  .dv-cycle-charts, .dv-bars-chart { min-height: 300px; }
+}

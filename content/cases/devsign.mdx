@@ -89,9 +89,11 @@ export const study = {
       text: "Combining our own AI drafts took longer than making them. Surveys and community posts showed the same pattern.",
     },
     q1: {
+      chartLabels: { charts: "Survey charts", pause: "Pause charts", play: "Play charts" },
       charts: [
         {
           type: "donut",
+          tab: "Trust in AI output",
           title: "More developers distrust the accuracy of AI output (46%) than trust it (33%).",
           value: "33%",
           valueLabel: "trust it",
@@ -100,25 +102,27 @@ export const study = {
             { label: "Somewhat trust", value: 29.6, on: true },
             { label: "Somewhat distrust", value: 26.1 },
             { label: "Highly distrust", value: 19.6 },
-            { label: "Not listed", value: 21.6, rest: true },
+            { label: "Other", value: 21.6, rest: true },
           ],
-          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "33,244 responses. The page lists four answers; “not listed” is what they leave." },
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "33,244 responses. The page lists four answers; “other” is the rest." },
         },
         {
           type: "bars",
+          tab: "Frustrations with AI tools",
           title: "The most common frustration is AI answers that are almost right, but not quite.",
-          note: "Select all that apply. 4 of the 7 answers shown.",
           bars: [
             { label: "Almost right, but not quite", value: 66 },
             { label: "Debugging takes longer", value: 45.2 },
             { label: "Less confidence", value: 20 },
             { label: "Hard to understand", value: 16.3 },
           ],
-          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses." },
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses, select all that apply. 4 of the 7 answers shown." },
         },
       ],
       problemsLabel: "Problems that kept coming up",
-      communityLabel: "100+ community posts · Reddit, Hacker News, Medium",
+      communityCount: "100+",
+      communityLead: "community posts kept coming back to the same three problems.",
+      communitySources: "Reddit, Hacker News, Medium",
       groups: [
         { name: "No one knows why a decision was made", detail: "The final version and the reasons behind it get lost between tools.", quote: "The author says ‘the AI suggested it.’ They don’t know why.", source: "Reddit, r/cscareerquestions" },
         { name: "It’s unclear whose job it is", detail: "The line between design work and development work blurs.", quote: "Can’t tell which parts are deliberate design decisions and which parts the agent generated.", source: "Reddit, r/DesignSystems" },
@@ -450,7 +454,7 @@ export const study = {
         sus: {
           title: "SUS: 55 and 75. Both cleared our goal.",
           items: [{ label: "Designer", value: 55 }, { label: "Developer", value: 75 }],
-          marks: [{ value: 51.7, label: "Our goal 51.7" }, { value: 68, label: "Average 68" }],
+          marks: [{ value: 51.7, label: "Goal 51.7" }, { value: 68, label: "Average 68" }],
         },
         dots: {
           title: "Would it reduce back-and-forth? (1–5)",
