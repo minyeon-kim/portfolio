@@ -155,27 +155,15 @@ export const study = {
       title: "Primary research · In-depth interview",
       lead: "Everyone double-checks AI work, but no one is clearly in charge.",
       text: "We knew it was painful, but not how teams actually decide, so we spent 60 minutes each with four people who do this work every day.",
-      quotes: [["I just look at it and fix it again myself.", "PM, 3+ years"], ["With AI, design and dev roles blur, and conflicts arise over who manages UI structure and changes: ‘why should we do it?’", "Developer, 10+ years"]],
-      photo: { caption: "A moment from a remote session. The participant’s video is blurred.", tiles: [
+      claims: [
+        { title: "Everyone checks it again", quotes: [["Even if AI does 80%, review doesn’t go away.", "Developer, 10+ years"], ["I just look at it and fix it again myself.", "PM, 3+ years"]] },
+        { title: "No one clearly owns the decision", quotes: [["On our team, developers hold most of the initiative.", "UI/UX designer, 3–5 years"], ["Conflicts arise over who manages UI structure and changes: ‘why should we do it?’", "Developer, 10+ years"]] },
+      ],
+      photo: { caption: "A remote session. The participant’s video is blurred.", tiles: [
         { src: "/images/devsign/interview-tile-a.webp", alt: "Minyeon, a researcher, on the video call" },
         { src: "/images/devsign/interview-tile-p.webp", alt: "The participant’s video, blurred" },
         { src: "/images/devsign/interview-tile-b.webp", alt: "The second researcher on the video call" },
-      ], guide: { src: "/images/devsign/interview-guide.webp", label: "Full interview guide, 8 pages (Korean) ↗" } },
-      questionsLabel: "Research questions",
-      questionKeys: ["Where it gets stuck", "Who decides", "Where the reason goes"],
-      questions: [
-        "Where does AI-made work get stuck between designers and developers?",
-        "When the design and the built product differ, who decides, and where do they talk it through?",
-        "How do teams pick the final version, and where is the reason kept?",
-      ],
-      peopleLabel: "Four participants",
-      participantColumns: ["#", "Role", "Team size", "Experience"],
-      participants: [
-        ["P01", "Visual designer", "≤5", "Under 6 months"],
-        ["P02", "PM", "≤5", "3+ years"],
-        ["P03", "UI/UX designer", "≤5", "3–5 years"],
-        ["P04", "Developer", "31+", "10+ years"],
-      ],
+      ], guide: { src: "/images/devsign/interview-guide.webp", label: "Questions we asked, 8 pages (Korean) ↗" } },
     },
   },
   define: {

@@ -127,43 +127,31 @@ function Insights({ discover }: { discover: Study }) {
       </div>
 
       <div className="dv-subsection">
-        <Block {...interview} ff />
-        <div className="dv-iv-quotes">
-          {interview.quotes.map(([quote, who]: string[]) => (
-            <figure key={quote} className="reveal">
-              <blockquote>“{quote}”</blockquote>
-              <figcaption>{who}</figcaption>
-            </figure>
-          ))}
-        </div>
-        <div className="dv-iv-facts reveal">
+        <div className="dv-iv-top">
           <div>
-            <p className="dv-caps">{interview.peopleLabel}</p>
-            <ul>
-              {interview.participants.map((p: string[]) => (
-                <li key={p[0]}><strong>{p[1]}</strong><span>{interview.participantColumns[2]} {p[2]} · {p[3]}</span></li>
-              ))}
-            </ul>
+            <Block {...interview} ff />
+            <a className="dv-iv-guide reveal" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
           </div>
-          <div>
-            <p className="dv-caps">{interview.questionsLabel}</p>
-            <ul>
-              {interview.questions.map((q: string, i: number) => (
-                <li key={q}><strong>{interview.questionKeys[i]}</strong><span>{q}</span></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="dv-iv-evidence reveal">
-          <figure>
+          <figure className="reveal">
             <div className="dv-iv-tiles">
               {interview.photo.tiles.map((t: { src: string; alt: string }) => (
-                <Image key={t.src} src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="176px" />
+                <Image key={t.src} src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="(max-width: 767px) 33vw, 240px" />
               ))}
             </div>
             <figcaption>{interview.photo.caption}</figcaption>
           </figure>
-          <a className="dv-iv-guide" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
+        </div>
+        <div className="dv-iv-claims">
+          {interview.claims.map((c: { title: string; quotes: string[][] }) => (
+            <div key={c.title} className="dv-iv-claim reveal">
+              <h4>{c.title}</h4>
+              <ul>
+                {c.quotes.map(([quote, who]) => (
+                  <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </div>
