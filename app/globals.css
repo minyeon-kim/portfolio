@@ -6,6 +6,7 @@
  */
 
 :root {
+  --font-headline: var(--font-serif), var(--font-serif-ko), Georgia, serif;
   --bg: #f5f6f4;
   --surface: #ffffff;
   --ink: #0e1111;
@@ -2532,7 +2533,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 /* Devsign: the role sits just above the name, clear of the card at the top right. */
 .home-stage[data-world="devsign"] .home-world-role { left: 26%; top: auto; bottom: calc(40% + 16px); translate: 0 16px; }
 .home-stage[data-world="devsign"] .home-world-role[data-on] { translate: 0 0; }
-.home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-display), var(--font-sans); font-size: clamp(56px, 7vw, 128px); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; text-wrap: balance; }
+.home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-headline); font-size: clamp(56px, 7vw, 128px); font-weight: 200; line-height: 1; letter-spacing: -0.012em; text-wrap: balance; }
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 16px; font-weight: 500; line-height: 1.55; }
 /* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
 /* Gemini (Robinhood): a portrait card cropped at the bottom right, the name at the left of centre, the role under it, the problem top centre-right. */
@@ -2540,7 +2541,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-device[data-project="gemini-privacy"] { top: auto; bottom: -30vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
 /* The name starts clear of the pill column and stops short of the card (which begins at 68vw, or 102vw - 520px once the card caps). */
 .home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 300px)); }
-.home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: 44%; max-width: calc(min(68vw, 102vw - 520px) - var(--gx) - 48px); font-size: clamp(44px, 5.4vw, 104px); }
+.home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: 50%; max-width: calc(min(68vw, 102vw - 520px) - var(--gx) - 48px); font-size: clamp(44px, 5.4vw, 104px); }
 .home-stage[data-world="gemini-privacy"] .home-world-role { left: var(--gx); top: auto; bottom: calc(56% + 16px); translate: 0 16px; }
 .home-stage[data-world="gemini-privacy"] .home-world-role[data-on] { translate: 0 0; }
 .home-stage[data-world="gemini-privacy"] .home-world-problem { right: auto; left: 52%; top: 22%; bottom: auto; width: min(100%, 28ch); }
@@ -2620,7 +2621,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    left past the grid column from the right edge. English in three lines
    ("Designing / complex products / to feel clear"), Korean too
    ("복잡한 제품을 / 이해하기 쉽게 / 디자인합니다"). */
-.home-tagline { width: 8.4em; max-width: none; margin: 0; font-family: var(--font-display), var(--font-sans); font-size: clamp(44px, min(6vw, 10.5svh), 112px); font-weight: 400; line-height: 0.98; letter-spacing: -0.02em; text-align: right; color: var(--ink); text-wrap: balance; }
+.home-tagline { width: 8.4em; max-width: none; margin: 0; font-family: var(--font-headline); font-size: clamp(44px, min(6vw, 10.5svh), 112px); font-weight: 200; line-height: 1.04; letter-spacing: -0.012em; word-break: keep-all; text-align: right; color: var(--ink); text-wrap: balance; }
 .home-note-project, .home-tagline-project { opacity: 0; translate: 0 6px; pointer-events: none; }
 [data-swap] .home-note-default, [data-swap] .home-tagline-default { opacity: 0; translate: 0 -6px; }
 [data-swap] .home-note-project, [data-swap] .home-tagline-project { opacity: 1; translate: 0 0; }
@@ -3261,14 +3262,17 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 @media (min-width: 64rem) {
   .intro-surface.home-grid { display: block; }
   .home-tagline-wrap { position: absolute; left: 34%; bottom: 24%; justify-items: start; }
-  .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(44px, min(4.7vw, 9svh), 96px); line-height: 1.02; text-align: left; text-wrap: wrap; }
+  .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(48px, min(5.8vw, 10svh), 112px); line-height: 1.04; text-align: left; text-wrap: wrap; }
+  .home-tagline-wrap:lang(ko) .home-tagline { width: 12em; font-size: clamp(44px, min(5vw, 9svh), 96px); line-height: 1.2; }
   /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
   .home-tagline * { text-indent: 0; }
   .home-note { position: absolute; left: 59.5%; top: 25%; width: 30ch; text-align: left; }
   .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
   /* After metalab.com's menu: the pages as large text, then the cases as pills. */
   .home-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
-  .home-links a { color: var(--ink); font-family: var(--font-display), var(--font-sans); font-size: 24px; font-weight: 400; line-height: 1.35; letter-spacing: -0.01em; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+  .home-links a { color: var(--ink); font-family: var(--font-headline); font-size: 24px; font-weight: 400; line-height: 1.35; letter-spacing: 0; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+  /* Only the thin cut of the Hangul serif is loaded; at this size it would be too faint. */
+  .home-links:lang(ko) a { font-family: var(--font-sans); letter-spacing: -0.01em; }
   .home-links a:hover, .home-links a:focus-visible, .home-links a[data-active] { text-decoration-color: currentColor; text-underline-offset: 4px; }
   .home-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
   .home-picks-label { margin-bottom: 8px; }
