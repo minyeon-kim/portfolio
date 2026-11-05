@@ -5397,3 +5397,17 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
   .dv-open-frame:hover img { scale: 1.012; }
 }
 
+
+/* Header words after metalab.com (measured: 12px, weight 350, -0.01em, on rgba(185,185,185,.6)
+   over a 20px blur; pills over the page rgba(185,185,185,.2) over 14px). One step up from 12,
+   because Geist at 12 reads thin here. A deliberate exception to the 16px minimum. */
+.header-menu-trigger, .lang-link, .site-header-bar .header-cta { font-size: 13px; font-weight: 400; letter-spacing: -0.01em; }
+.header-name { font-size: 16px; }
+.site-header-bar .header-menu-trigger.theme-toggle svg { width: 14px; height: 14px; }
+/* Fade the fill and the blur by the fold, not with opacity: opacity on a backdrop-filter mixes
+   the sharp page back in, so everything behind read crisp through the half-folded pill. */
+.site-header-bar::before { opacity: 1; background: rgb(185 185 185 / calc(0.6 * var(--fold, 0))); -webkit-backdrop-filter: blur(calc(20px * var(--fold, 0))); backdrop-filter: blur(calc(20px * var(--fold, 0))); }
+.header-menu-trigger:not(.theme-toggle) { background: rgb(185 185 185 / 0.2); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.site-header-bar .header-menu-trigger:not(.theme-toggle, :hover, [aria-expanded="true"]) { background: color-mix(in srgb, rgb(185 185 185 / 0.2) calc((1 - var(--fold, 0)) * 100%), transparent); -webkit-backdrop-filter: blur(calc(14px * (1 - var(--fold, 0)))); backdrop-filter: blur(calc(14px * (1 - var(--fold, 0)))); }
+/* See-through pill in dark: white words need a little help when something bright passes under. */
+header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-shadow: light-dark(none, 0 0 10px rgb(0 0 0 / 0.45)); }
