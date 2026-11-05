@@ -77,15 +77,18 @@ export type FlowChartData = {
   full: { src: string; label: string };
 };
 
-const FC_W = 148;
-const FC_H = 64;
-const FC_STEP = 170;
-const FC_WIDTH = 1168;
-const FC_HEIGHT = 368;
-const ROW_A = 40;
-const ROW_B = 184;
-const ROW_C = 300;
-const fcLeft = (col: number) => FC_STEP * col;
+const FC_PAD = 32;
+const FC_W = 195;
+const FC_H = 72;
+const FC_STEP = 235;
+const FC_WIDTH = 1200;
+const FC_HEIGHT = 548;
+const FC_BOX_A = 192;
+const FC_BOX_B = 216;
+const ROW_A = 72;
+const ROW_B = 316;
+const ROW_C = 444;
+const fcLeft = (col: number) => FC_PAD + FC_STEP * col;
 const fcRight = (col: number) => fcLeft(col) + FC_W;
 const fcMid = (col: number) => fcLeft(col) + FC_W / 2;
 const mid = (row: number) => row + FC_H / 2;
@@ -96,23 +99,24 @@ const FC_NODES: { id: FlowNodeId; col: number; row: number; kind: FcKind }[] = [
   { id: "pick", col: 1, row: ROW_A, kind: "step" },
   { id: "rule", col: 2, row: ROW_A, kind: "ask" },
   { id: "save", col: 3, row: ROW_A, kind: "result" },
-  { id: "review", col: 2, row: ROW_B, kind: "key" },
-  { id: "decision", col: 3, row: ROW_B, kind: "ask" },
-  { id: "decide", col: 4, row: ROW_B, kind: "key" },
-  { id: "apply", col: 5, row: ROW_B, kind: "step" },
-  { id: "history", col: 6, row: ROW_B, kind: "store" },
-  { id: "direct", col: 3, row: ROW_C, kind: "result" },
+  { id: "review", col: 0, row: ROW_B, kind: "key" },
+  { id: "decision", col: 1, row: ROW_B, kind: "ask" },
+  { id: "decide", col: 2, row: ROW_B, kind: "key" },
+  { id: "apply", col: 3, row: ROW_B, kind: "step" },
+  { id: "history", col: 4, row: ROW_B, kind: "store" },
+  { id: "direct", col: 1, row: ROW_C, kind: "result" },
 ];
 
 const across = (row: number, col: number) => `M${fcRight(col) + 3} ${mid(row)}H${fcLeft(col + 1) - 3}`;
-const FC_EDGES = [across(ROW_A, 0), across(ROW_A, 1), across(ROW_A, 2), across(ROW_B, 2), across(ROW_B, 5)];
-const FC_HANDOFFS = [`M${fcMid(2)} ${ROW_A + FC_H + 3}V${ROW_B - 3}`, across(ROW_B, 3), across(ROW_B, 4)];
+const FC_EDGES = [across(ROW_A, 0), across(ROW_A, 1), across(ROW_A, 2), across(ROW_B, 0), across(ROW_B, 3)];
+// A's "no" leaves its box, runs down the left margin of B's and enters B's first step.
+const FC_HANDOFFS = [`M${fcMid(2)} ${ROW_A + FC_H + 3}V${(FC_BOX_A + FC_BOX_B) / 2}H14V${mid(ROW_B)}H${fcLeft(0) - 3}`, across(ROW_B, 1), across(ROW_B, 2)];
 
 function FcLines({ lines, x, y, className }: { lines: string[]; x: number; y: number; className: string }) {
   return <>{lines.map((line, l) => <text key={line} x={x} y={y + l * 22} textAnchor="middle" className={className}>{line}</text>)}</>;
 }
 
-// Two situations, each read left to right. The heavy arrows are where the work passes to someone
+// Two situations, each in its own box and read left to right. The heavy arrows are where the work passes to someone
 // else; the one going down joins the first situation to the second.
 export function FlowChart({ chart }: { chart: FlowChartData }) {
   const { nodes, who } = chart;
@@ -124,12 +128,14 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
             <marker id="dv-fc-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0L8 4L0 8Z" className="dv-fc-head" /></marker>
             <marker id="dv-fc-arrow-strong" viewBox="0 0 8 8" refX="7" refY="4" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0L8 4L0 8Z" className="dv-fc-head-strong" /></marker>
           </defs>
-          <text x={0} y={18} className="dv-fc-situation">{chart.a}</text>
-          <text x={0} y={mid(ROW_B) - 6} className="dv-fc-situation">{chart.b}</text>
-          <text x={0} y={mid(ROW_B) + 18} className="dv-fc-when">{chart.example}</text>
+          <rect x={0} y={0} width={FC_WIDTH} height={FC_BOX_A} rx={16} className="dv-fc-box" />
+          <rect x={0} y={FC_BOX_B} width={FC_WIDTH} height={FC_HEIGHT - FC_BOX_B} rx={16} className="dv-fc-box" />
+          <text x={FC_PAD} y={46} className="dv-fc-situation">{chart.a}</text>
+          <text x={FC_PAD} y={FC_BOX_B + 46} className="dv-fc-situation">{chart.b}</text>
+          <text x={FC_PAD} y={FC_BOX_B + 74} className="dv-fc-when">{chart.example}</text>
           {FC_EDGES.map((edge) => <path key={edge} d={edge} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />)}
           {FC_HANDOFFS.map((edge) => <path key={edge} d={edge} className="dv-fc-handoff" markerEnd="url(#dv-fc-arrow-strong)" />)}
-          <path d={`M${fcMid(3)} ${ROW_B + FC_H + 3}V${ROW_C - 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
+          <path d={`M${fcMid(1)} ${ROW_B + FC_H + 3}V${ROW_C - 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
           {FC_NODES.map(({ id, col, row, kind }) => {
             const x = fcLeft(col);
             const lines = nodes[id];
@@ -142,13 +148,13 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
               </g>
             );
           })}
-          <text x={fcRight(2) + 11} y={ROW_A - 8} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
-          <text x={fcMid(2) + 12} y={ROW_A + FC_H + 44} className="dv-fc-when">{chart.no}</text>
-          <text x={fcRight(3) + 11} y={ROW_B - 8} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
-          <text x={fcMid(3) + 12} y={ROW_B + FC_H + 30} className="dv-fc-when">{chart.no}</text>
-          <text x={fcMid(2)} y={ROW_B + FC_H + 24} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
-          <text x={fcMid(4)} y={ROW_B + FC_H + 24} textAnchor="middle" className="dv-fc-meet">{who.decider}</text>
-          <text x={fcMid(5)} y={ROW_B + FC_H + 24} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
+          <text x={fcRight(2) + 20} y={mid(ROW_A) - 12} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
+          <text x={fcMid(2) + 12} y={ROW_A + FC_H + 30} className="dv-fc-when">{chart.no}</text>
+          <text x={fcRight(1) + 20} y={mid(ROW_B) - 12} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
+          <text x={fcMid(1) + 12} y={ROW_B + FC_H + 34} className="dv-fc-when">{chart.no}</text>
+          <text x={fcMid(0)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
+          <text x={fcMid(2)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-meet">{who.decider}</text>
+          <text x={fcMid(3)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
         </svg>
       </div>
       {/* Phones read it as a list; screen readers always get this list. */}
