@@ -4947,10 +4947,28 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .case-study .dv .dv-spec-lead + .dv-spec-part { margin-top: 96px; }
 .case-study .dv .dv-spec-part + .dv-spec { margin-top: 32px; }
 /* The case page's short form: fewer rules, so each can be larger. */
-.dv-spec[data-short] .dv-spec-panel { align-items: center; }
-.dv-spec[data-short] .dv-spec-rows { gap: 24px; }
-.case-study .dv .dv-spec[data-short] .dv-spec-rows h4 { font-size: var(--t-item); font-weight: 500; }
-.case-study .dv .dv-spec[data-short] .dv-spec-rows p { color: var(--dv-muted); font-size: var(--t-body); line-height: 1.55; }
+/* The case page's excerpt reads as a page of the document: same column as the heading,
+   the cropped screen, then the table. */
+.dv-spec-crop { position: relative; width: 100%; overflow: hidden; border-radius: var(--dv-card-radius); background: #17181d; line-height: 0; }
+.dv-spec-crop img { position: absolute; max-width: none; height: auto; }
+.dv-spec-table { width: 100%; margin-top: 32px; border-collapse: collapse; font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-spec-table th, .dv-spec-table td { padding: 16px 24px 16px 0; border-bottom: 1px solid var(--dv-line); text-align: left; vertical-align: top; font-weight: 400; color: var(--dv-muted); transition: background-color 150ms var(--ease); }
+.dv-spec-table thead th { padding-top: 0; padding-bottom: 12px; font-weight: 500; }
+.dv-spec-table thead th:first-child, .dv-spec-table td:first-child { width: 44px; padding-right: 0; }
+.dv-spec-table tbody th { width: 24%; color: var(--dv-ink); font-weight: 500; }
+.dv-spec-table td:nth-child(3) { width: 34%; }
+.dv-spec-table td:last-child { padding-right: 0; }
+.dv-spec-table b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-spec-table tr[data-lit] :is(th, td) { background: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+.dv-spec-doc .dv-spec-more { margin-top: 12px; }
+@media (max-width: 47.99rem) {
+  .dv-spec-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dv-spec-table tr { display: grid; grid-template-columns: 40px minmax(0, 1fr); padding: 16px 0; border-bottom: 1px solid var(--dv-line); }
+  .dv-spec-table :is(th, td) { padding: 0; border: 0; width: auto !important; }
+  .dv-spec-table td:first-child { grid-row: 1 / span 3; }
+  .dv-spec-table td:nth-child(n+3) { grid-column: 2; margin-top: 6px; }
+  .dv-spec-table td:nth-child(3) { color: var(--dv-ink); }
+}
 
 /* Core feature text reads in one order: the sentence, the problem it answers, then
    the points, all at one brightness. */
