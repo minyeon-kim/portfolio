@@ -13,6 +13,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const PLAYBACK_RATE = 1;
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
+type PairSide = Shot & { clip: { src: string; poster: string } };
 type Change = { title: string; before: string; after: string; clip: { src: string; poster: string; cut: number } };
 
 // Boards too dense to read at column width stay still; the frame opens the full image.
@@ -23,18 +24,6 @@ export function OpenFrame({ children, href }: { children: React.ReactNode; href:
       {children}
       <span className="dv-open-hint" aria-hidden="true">{locale === "ko" ? "크게 보기 ↗" : "View full size ↗"}</span>
     </a>
-  );
-}
-
-// Only what is inside the box, fitted into a tile of one shape: no outline, no
-// surrounding screen, and never blown up past 1.6x (the shots are 2x).
-function Crop({ img, box, tile }: { img: Shot; box: Box; tile: number }) {
-  const [x, y, w, h] = box;
-  const ratio = (w * 16) / (h * 9);
-  return (
-    <span className="dv-iter-crop" style={{ width: `min(${Math.min(100, (100 * ratio) / tile)}%, ${w * 14.4 * 1.6}px)`, aspectRatio: ratio }}>
-      <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={{ width: `${(100 / w) * 100}%`, left: `${(-x / w) * 100}%`, top: `${(-y / h) * 100}%` }} />
-    </span>
   );
 }
 
@@ -236,20 +225,47 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
 
 // A smaller iteration: As-is and To-be side by side as two cards, the same part of the screen at
 // one shape, so the difference reads at a glance. Only To-be sits on the case's colour.
-export function IterationPair({ before, after, labels }: { before: Shot & { box: Box }; after: Shot & { box: Box }; labels: { asIs: string; toBe: string } }) {
+export function IterationPair({ before, after, labels }: { before: PairSide; after: PairSide; labels: { asIs: string; toBe: string } }) {
+  const root = useRef<HTMLDivElement>(null);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  const [turn, setTurn] = useState(0);
+  const [onScreen, setOnScreen] = useState(false);
+  const [near, setNear] = useState(false);
+  const [manual, setManual] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    setManual(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const nearby = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); nearby.disconnect(); } }, { rootMargin: "100% 0px" });
+    const half = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.4 });
+    nearby.observe(el);
+    half.observe(el);
+    return () => { nearby.disconnect(); half.disconnect(); };
+  }, []);
+  // One plays at a time: As-is, then To-be, round again.
+  useEffect(() => {
+    if (manual) return;
+    videos.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === turn && onScreen && near) { v.currentTime = 0; v.play().catch(() => setManual(true)); }
+      else { v.pause(); if (v.currentTime) v.currentTime = 0; }
+    });
+  }, [turn, onScreen, near, manual]);
   const sides = [
-    { key: "a", tag: labels.asIs, img: before },
-    { key: "b", tag: labels.toBe, img: after },
+    { key: "a", tag: labels.asIs, side: before },
+    { key: "b", tag: labels.toBe, side: after },
   ] as const;
   return (
-    <div className="dv-iter-duo reveal">
-      {sides.map(({ key, tag, img }) => (
-        <figure key={key} className="dv-iter-card" data-side={key}>
+    <div ref={root} className="dv-iter-duo reveal">
+      {sides.map(({ key, tag, side }, i) => (
+        <figure key={key} className="dv-iter-card" data-side={key} data-on={(!manual && turn === i && onScreen) || undefined}>
           <div className="dv-iter-plate">
-            <div className="dv-iter-view" style={{ aspectRatio: 2.1 }}><Crop img={img} box={img.box} tile={2.1} /></div>
+            <div className="dv-iter-view">
+              <video ref={(el) => { videos.current[i] = el; }} src={near ? withBase(side.clip.src) : undefined} poster={withBase(side.clip.poster)} muted playsInline preload={near ? "auto" : "none"} controls={manual} width={1440} height={686} aria-label={`${side.alt ?? tag} ${side.text}`} onEnded={() => setTurn(i === 0 ? 1 : 0)} />
+            </div>
             {key === "b" && <span className="dv-iter-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>}
           </div>
-          <figcaption><span>{tag}</span>{img.text}</figcaption>
+          <figcaption><span>{tag}</span>{side.text}</figcaption>
         </figure>
       ))}
     </div>
