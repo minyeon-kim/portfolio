@@ -25,8 +25,8 @@ type Props = { text: string; className?: string; emphasis?: string };
 type Glyph = { start: number; until: number };
 
 // "Decrypted" hero headline, after sui.io: the whole line decodes at once. Each glyph
-// flickers through blanks and random characters, bright, dim, in the accent or boxed,
-// and settles on its own at a random moment. After load, glyphs near the mouse do the
+// flickers through blanks and random characters, in the headline's own colour at varying
+// strength, and settles on its own at a random moment. After load, glyphs near the mouse do the
 // same. With reduced motion, or on phones, the server-rendered text is shown as is.
 export function ScrambleHeadline({ text, className, emphasis }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
@@ -61,9 +61,8 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
             char.textContent = pool[Math.floor(Math.random() * pool.length)];
           }
           const tone = Math.random();
-          if (tone < 0.04) char.dataset.g = "box";
-          else if (tone < 0.22) char.dataset.g = "accent";
-          else if (tone < 0.5) char.dataset.g = "dim";
+          if (tone < 0.25) char.dataset.g = "dim";
+          else if (tone < 0.55) char.dataset.g = "mid";
           else delete char.dataset.g;
         };
         const tick = () => {
