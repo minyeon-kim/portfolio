@@ -423,20 +423,22 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-cast dv-gap-40">
           {define.personas.people.map((person: Study, index: number) => (
             <article key={person.name} className="reveal" data-line={index === 0 ? "designer" : "developer"}>
-              <h4>{person.name}</h4>
-              <p className="dv-cast-bio">{person.bio}</p>
+              <div className="dv-cast-head">
+                {person.avatar && <Image src={withBase(person.avatar)} alt="" width={96} height={96} className="dv-cast-photo" />}
+                <div>
+                  <h4>{person.name}</h4>
+                  <p className="dv-cast-bio">{person.bio}</p>
+                </div>
+              </div>
               <p className="dv-cast-quote">{person.quote}</p>
-              <p className="dv-cast-context">{person.context}</p>
-              <table className="dv-needs">
-                <thead>
-                  <tr><th scope="col">{labels.painPoint}</th><th scope="col"><span className="sr-only">→</span></th><th scope="col">{labels.need}</th></tr>
-                </thead>
-                <tbody>
-                  {person.pairs.map(([pain, need]: string[]) => (
-                    <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td><strong>{need}</strong></td></tr>
-                  ))}
-                </tbody>
-              </table>
+              <ul className="dv-cast-needs">
+                {person.pairs.map(([pain, need]: string[]) => (
+                  <li key={pain}>
+                    <span><span className="sr-only">{labels.painPoint}: </span>{pain}</span>
+                    <strong><ArrowIcon /><span className="sr-only">{labels.need}: </span>{need}</strong>
+                  </li>
+                ))}
+              </ul>
             </article>
           ))}
         </div>
