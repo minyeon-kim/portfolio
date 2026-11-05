@@ -95,10 +95,30 @@ export const study = {
     q1: {
       surveyLabel: "2025 Stack Overflow Developer Survey",
       surveyUrl: "https://survey.stackoverflow.co/2025/ai",
-      stats: [
-        { value: "33%", text: "AI 결과물의 정확도를 신뢰한다고 답한 개발자" },
-        { value: "66%", text: "‘거의 맞지만 조금 틀린’ AI 결과를 불만으로 꼽은 개발자. 가장 많이 꼽힌 불만이다" },
-      ],
+      charts: {
+        trust: {
+          title: "AI 결과물의 정확도를 불신하는 개발자(46%)가 신뢰하는 개발자(33%)보다 많다.",
+          value: "33%",
+          valueLabel: "신뢰",
+          segments: [
+            { label: "매우 신뢰", value: 3.1, on: true },
+            { label: "어느 정도 신뢰", value: 29.6, on: true },
+            { label: "어느 정도 불신", value: 26.1 },
+            { label: "매우 불신", value: 19.6 },
+            { label: "나머지", value: 21.6, rest: true },
+          ],
+        },
+        frustrations: {
+          title: "가장 많이 꼽힌 불만은 ‘거의 맞지만 조금 틀린’ AI 결과다.",
+          note: "복수 응답. 답변 7개 중 4개만 표시.",
+          bars: [
+            { label: "거의 맞지만 틀림", value: 66 },
+            { label: "디버깅 시간 증가", value: 45.2 },
+            { label: "자신감 감소", value: 20 },
+            { label: "이해하기 어려움", value: 16.3 },
+          ],
+        },
+      },
       problemsLabel: "글에서 반복된 문제",
       communityLabel: "커뮤니티 게시글 100여 개 · Reddit, Hacker News, Medium",
       groups: [
