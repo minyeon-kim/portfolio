@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { SurveyCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
@@ -74,14 +75,7 @@ function Insights({ discover }: { discover: Study }) {
         {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
         <section className="dv-evbox dv-gap-40">
           <p className="dv-evbox-head reveal"><a className="dv-source-link" href={q1.surveyUrl} target="_blank" rel="noreferrer">{q1.surveyLabel}</a></p>
-          <div className="dv-insight-stats">
-            {q1.stats.map((stat: { value: string; text: string }) => (
-              <div key={stat.value} className="dv-insight-stat reveal" style={{ "--share": parseFloat(stat.value) / 100 } as React.CSSProperties}>
-                <p><strong>{stat.value}</strong><span>{stat.text}</span></p>
-                <i aria-hidden="true"><b /></i>
-              </div>
-            ))}
-          </div>
+          <SurveyCharts charts={q1.charts} />
         </section>
         <section className="dv-evbox dv-evbox-voices">
           <div className="dv-evbox-head reveal">

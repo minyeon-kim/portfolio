@@ -92,10 +92,30 @@ export const study = {
     q1: {
       surveyLabel: "2025 Stack Overflow Developer Survey",
       surveyUrl: "https://survey.stackoverflow.co/2025/ai",
-      stats: [
-        { value: "33%", text: "of developers say they trust the accuracy of AI output" },
-        { value: "66%", text: "named “almost right, but not quite” AI answers as a frustration, the most common one" },
-      ],
+      charts: {
+        trust: {
+          title: "More developers distrust the accuracy of AI output (46%) than trust it (33%).",
+          value: "33%",
+          valueLabel: "trust it",
+          segments: [
+            { label: "Highly trust", value: 3.1, on: true },
+            { label: "Somewhat trust", value: 29.6, on: true },
+            { label: "Somewhat distrust", value: 26.1 },
+            { label: "Highly distrust", value: 19.6 },
+            { label: "The rest", value: 21.6, rest: true },
+          ],
+        },
+        frustrations: {
+          title: "The most common frustration is AI answers that are almost right, but not quite.",
+          note: "Select all that apply. 4 of the 7 answers shown.",
+          bars: [
+            { label: "Almost right, but not quite", value: 66 },
+            { label: "Debugging takes longer", value: 45.2 },
+            { label: "Less confidence", value: 20 },
+            { label: "Hard to understand", value: 16.3 },
+          ],
+        },
+      },
       problemsLabel: "Problems that kept coming up",
       communityLabel: "100+ community posts · Reddit, Hacker News, Medium",
       groups: [
