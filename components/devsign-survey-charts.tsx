@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
 type Bar = { label: string; value: number };
 type Source = { label: string; url?: string; detail?: string };
-type DonutChart = { type: "donut"; title: string; value: string; valueLabel: string; segments: Segment[]; source?: Source };
-type BarChart = { type: "bars"; title: string; note?: string; bars: Bar[]; source?: Source };
+type DonutChart = { type: "donut"; tab: string; title: string; value: string; valueLabel: string; segments: Segment[]; source?: Source };
+type BarChart = { type: "bars"; tab: string; title: string; bars: Bar[]; source?: Source };
 type SurveyChart = DonutChart | BarChart;
 
 function ChartSource({ source }: { source?: Source }) {
@@ -46,25 +46,45 @@ function usePlayOnce() {
 }
 
 const GAP = 0.7; // Between ring segments, in hundredths of the ring.
+const SHOW_MS = 7000; // How long each chart stays; the progress ring on its tab is the timer.
+const LEAVE_MS = 280;
 
-function Donut({ data }: { data: DonutChart }) {
+// Counts up from 0 while its chart plays. The final value is what renders otherwise.
+function Count({ value, animate, delay = 0 }: { value: number; animate: boolean; delay?: number }) {
+  const [shown, setShown] = useState(animate ? 0 : value);
+  useEffect(() => {
+    if (!animate) { setShown(value); return; }
+    let frame = 0;
+    const start = performance.now() + delay;
+    const tick = (now: number) => {
+      const t = Math.min(Math.max(now - start, 0) / 1000, 1);
+      setShown(value * (1 - (1 - t) ** 3));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [animate, value, delay]);
+  const decimals = Number.isInteger(value) ? 0 : 1;
+  return <>{shown.toFixed(decimals)}%</>;
+}
+
+function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
   const mask = `dv-trust-sweep-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const [active, setActive] = useState<number | null>(null);
   const total = data.segments.reduce((sum, s) => sum + s.value, 0);
   let start = 0;
   const parts = data.segments.map((s, i) => {
     const share = (s.value / total) * 100;
-    const part = { ...s, i, start, share, mid: start + share / 2 };
+    const part = { ...s, i, start, share };
     start += share;
     return part;
   });
   const current = active === null ? null : data.segments[active];
 
   return (
-    <figure className="dv-chart">
-      <figcaption>{data.title}</figcaption>
+    <div className="dv-trust-wrap">
       <div className="dv-trust" data-active={active === null ? undefined : true}>
-        <svg viewBox="0 0 200 200" aria-hidden="true">
+        <svg viewBox="20 20 160 160" aria-hidden="true">
           <defs>
             {/* The sweep: one wide stroke drawing round, wider than the ring so the glow survives. */}
             <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
@@ -107,77 +127,155 @@ function Donut({ data }: { data: DonutChart }) {
             ))}
           </g>
         </svg>
-        {parts.map((p) => {
-          const angle = (p.mid / 100) * Math.PI * 2;
-          return (
-            <span
-              key={p.label}
-              className="dv-trust-pct"
-              data-on={p.on || undefined}
-              data-current={active === p.i || undefined}
-              aria-hidden="true"
-              style={{ left: `${50 + Math.sin(angle) * 47.5}%`, top: `${50 - Math.cos(angle) * 47.5}%` }}
-            >
-              {p.value}%
-            </span>
-          );
-        })}
         <p className="dv-trust-center" aria-hidden="true">
-          <strong>{current ? `${current.value}%` : data.value}</strong>
+          <strong>{current ? `${current.value}%` : <Count value={parseFloat(data.value)} animate={animate} />}</strong>
           <span>{current ? current.label : data.valueLabel}</span>
         </p>
       </div>
       <ul className="dv-trust-legend" onMouseLeave={() => setActive(null)}>
         {parts.map((p) => (
-          <li key={p.label}>
+          <li key={p.label} style={{ "--i": p.i } as React.CSSProperties}>
             <button
               type="button"
               data-on={p.on || undefined}
               data-rest={p.rest || undefined}
               data-first={p.i === 0 || undefined}
+              data-current={active === p.i || undefined}
               onMouseEnter={() => setActive(p.i)}
               onFocus={() => setActive(p.i)}
               onBlur={() => setActive(null)}
             >
               <i aria-hidden="true" />
-              {p.label}
-              <span className="sr-only"> {p.value}%</span>
+              <span>{p.label}</span>
+              <b>{p.value}%</b>
             </button>
           </li>
         ))}
       </ul>
-      <ChartSource source={data.source} />
-    </figure>
+    </div>
   );
 }
 
-function Bars({ data }: { data: BarChart }) {
+function Bars({ data, animate }: { data: BarChart; animate: boolean }) {
   const top = Math.max(...data.bars.map((b) => b.value));
   return (
-    <figure className="dv-chart">
-      <figcaption>{data.title}</figcaption>
-      <ul className="dv-bars-chart">
-        {data.bars.map((bar, i) => (
-          <li key={bar.label} data-top={bar.value === top || undefined} style={{ "--i": i } as React.CSSProperties}>
-            <div className="dv-bar-track">
-              <strong>{bar.value}%</strong>
-              <i aria-hidden="true" style={{ "--r": bar.value / top } as React.CSSProperties} />
-            </div>
-            <span>{bar.label}</span>
-          </li>
-        ))}
-      </ul>
-      <p className="dv-chart-note">{data.note}</p>
-      <ChartSource source={data.source} />
-    </figure>
+    <ul className="dv-bars-chart">
+      {data.bars.map((bar, i) => (
+        <li key={bar.label} data-top={bar.value === top || undefined} style={{ "--i": i } as React.CSSProperties}>
+          <div className="dv-bar-track">
+            <strong><Count value={bar.value} animate={animate} delay={i * 110} /></strong>
+            <i aria-hidden="true" style={{ "--r": bar.value / top } as React.CSSProperties} />
+          </div>
+          <span>{bar.label}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-export function SurveyCharts({ charts }: { charts: SurveyChart[] }) {
-  const { ref, phase } = usePlayOnce();
+function ChartIcon({ type }: { type: SurveyChart["type"] }) {
+  return type === "donut" ? (
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 3.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" strokeWidth="3" /></svg>
+  ) : (
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 16V10M10 16V4M15.5 16v-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
+  );
+}
+
+// One large chart at a time, after the charts in Metalab's Robinhood case: each draws itself,
+// holds, and hands over to the next, round and round, while it's on screen. Pointer or keyboard
+// focus holds it, the button stops it, tabs pick a chart. Every panel stays in one grid cell, so
+// the box keeps the height of the tallest and nothing below it moves. With reduced motion or no
+// JS the first chart stands complete and the tabs still work.
+export function SurveyCharts({ charts, labels }: { charts: SurveyChart[]; labels: { charts: string; pause: string; play: string } }) {
+  const root = useRef<HTMLDivElement>(null);
+  const timer = useRef<number | undefined>(undefined);
+  const [motion, setMotion] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [hold, setHold] = useState(false);
+  const [stopped, setStopped] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [round, setRound] = useState(0);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    setMotion(true);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting) setSeen(true);
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  const go = useCallback((pick: (i: number) => number) => {
+    window.clearTimeout(timer.current);
+    setLeaving(true);
+    timer.current = window.setTimeout(() => {
+      setCurrent(pick);
+      setRound((r) => r + 1);
+      setLeaving(false);
+    }, LEAVE_MS);
+  }, []);
+
+  const phase = !motion ? "final" : seen ? "play" : "wait";
+  const running = motion && inView && !hold && !stopped && !leaving;
+
   return (
-    <div ref={ref} className="dv-charts" data-phase={phase}>
-      {charts.map((chart) => chart.type === "donut" ? <Donut key={chart.title} data={chart} /> : <Bars key={chart.title} data={chart} />)}
+    <div
+      ref={root}
+      className="dv-cycle-stage"
+      data-run={running || undefined}
+      data-leaving={leaving || undefined}
+      style={{ "--show-ms": `${SHOW_MS}ms` } as React.CSSProperties}
+      onMouseEnter={() => setHold(true)}
+      onMouseLeave={() => setHold(false)}
+      onFocusCapture={() => setHold(true)}
+      onBlurCapture={() => setHold(false)}
+    >
+      <div className="dv-cycle-nav">
+        <div role="group" aria-label={labels.charts} className="dv-cycle-tabs">
+          {charts.map((chart, i) => (
+            <button key={chart.tab} type="button" aria-label={chart.tab} aria-pressed={i === current} onClick={() => i !== current && go(() => i)}>
+              <ChartIcon type={chart.type} />
+              {i === current && motion && (
+                <svg className="dv-cycle-ring" viewBox="0 0 44 44" aria-hidden="true">
+                  <circle key={round} cx="22" cy="22" r="21" pathLength={100} onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+        {motion && (
+          <button type="button" className="dv-cycle-stop" aria-label={stopped ? labels.play : labels.pause} onClick={() => setStopped((v) => !v)}>
+            <svg viewBox="0 0 20 20" aria-hidden="true">{stopped ? <path d="M7 4.5v11l9-5.5z" fill="currentColor" /> : <path d="M7 4.5v11M13 4.5v11" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />}</svg>
+          </button>
+        )}
+      </div>
+      <div className="dv-cycle-stack dv-cycle-charts">
+        {charts.map((chart, i) => {
+          const on = i === current;
+          return (
+            <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
+              {chart.type === "donut" ? <Donut data={chart} animate={on && phase === "play"} /> : <Bars data={chart} animate={on && phase === "play"} />}
+            </div>
+          );
+        })}
+      </div>
+      <div className="dv-cycle-stack dv-cycle-texts">
+        {charts.map((chart, i) => (
+          <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
+            <p>{chart.title}</p>
+            <ChartSource source={chart.source} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

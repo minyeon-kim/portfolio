@@ -99,9 +99,11 @@ export const study = {
     q1: {
       label: "질문 1 · 사람들은 통제를 원할까?",
       answer: "사람들은 통제를 원하지만, 대부분은 통제하고 있다고 느끼지 못한다.",
+      chartLabels: { charts: "설문 차트", pause: "차트 일시정지", play: "차트 재생" },
       charts: [
         {
           type: "donut",
+          tab: "AI 통제",
           title: "미국 성인 다수는 AI가 삶에 쓰이는 방식을 더 통제하고 싶어 한다. 지금 수준에 만족하는 사람은 17%뿐이다.",
           value: "61%",
           valueLabel: "더 통제하고 싶음",
@@ -114,6 +116,7 @@ export const study = {
         },
         {
           type: "donut",
+          tab: "개인 정보 안전",
           title: "다수는 AI가 늘수록 개인 정보가 덜 안전해질 거라고 본다. 더 안전해진다는 답은 3%다.",
           value: "71%",
           valueLabel: "덜 안전해짐",
