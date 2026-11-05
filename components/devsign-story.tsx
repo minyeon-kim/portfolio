@@ -12,8 +12,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const PLAYBACK_RATE = 1;
 
 type Shot = { src: string; alt?: string; text: string; lead?: string };
-type Note = { box: Box; label?: string; right?: boolean };
-type Change = { title: string; before: string; after: string; a: Box; b: Box; notesA?: Note[]; notesB?: Note[] };
+type Change = { title: string; before: string; after: string; clip: { src: string; poster: string; cut: number } };
 
 // Boards too dense to read at column width stay still; the frame opens the full image.
 export function OpenFrame({ children, href }: { children: React.ReactNode; href: string }) {
@@ -26,35 +25,29 @@ export function OpenFrame({ children, href }: { children: React.ReactNode; href:
   );
 }
 
-// Only what is inside the box, fitted into a tile of one shape: no surrounding
-// screen, and never blown up past 1.6x (the shots are 2x). Notes sit on the picture,
-// in the same screen % as the box: an outline, a label, or both.
-function Crop({ img, box, tile, notes = [] }: { img: Shot; box: Box; tile: number; notes?: Note[] }) {
+// Only what is inside the box, fitted into a tile of one shape: no outline, no
+// surrounding screen, and never blown up past 1.6x (the shots are 2x).
+function Crop({ img, box, tile }: { img: Shot; box: Box; tile: number }) {
   const [x, y, w, h] = box;
   const ratio = (w * 16) / (h * 9);
   return (
     <span className="dv-iter-crop" style={{ width: `min(${Math.min(100, (100 * ratio) / tile)}%, ${w * 14.4 * 1.6}px)`, aspectRatio: ratio }}>
       <Image src={withBase(img.src)} alt={img.alt ?? ""} width={2880} height={1620} sizes="(max-width: 767px) 300vw, 200vw" style={{ width: `${(100 / w) * 100}%`, left: `${(-x / w) * 100}%`, top: `${(-y / h) * 100}%` }} />
-      {notes.map((n) => (
-        <span key={n.box.join()} className="dv-iter-note" data-right={n.right || undefined} data-outline={n.box[2] > 0 || undefined} style={{ left: `${((n.box[0] - x) / w) * 100}%`, top: `${((n.box[1] - y) / h) * 100}%`, width: `${(n.box[2] / w) * 100}%`, height: `${(n.box[3] / h) * 100}%` }}>
-          {n.label && <b>{n.label}</b>}
-        </span>
-      ))}
     </span>
   );
 }
 
-function CropPair({ before, after, a, b, lines, labels, notes, tile = 1.6 }: { before: Shot; after: Shot; a: Box; b: Box; lines: [string, string]; labels: { asIs: string; toBe: string }; notes?: [Note[] | undefined, Note[] | undefined]; tile?: number }) {
+function CropPair({ before, after, a, b, lines, labels, tile = 1.6 }: { before: Shot; after: Shot; a: Box; b: Box; lines: [string, string]; labels: { asIs: string; toBe: string }; tile?: number }) {
   const sides = [
-    { key: "a", tag: labels.asIs, img: before, box: a, line: lines[0], marks: notes?.[0] },
-    { key: "b", tag: labels.toBe, img: after, box: b, line: lines[1], marks: notes?.[1] },
+    { key: "a", tag: labels.asIs, img: before, box: a, line: lines[0] },
+    { key: "b", tag: labels.toBe, img: after, box: b, line: lines[1] },
   ] as const;
   return (
     <div className="dv-iter-pair">
-      {sides.map(({ key, tag, img, box, line, marks }) => (
+      {sides.map(({ key, tag, img, box, line }) => (
         <figure key={key} className="dv-iter-side" data-side={key}>
           <span className="dv-iter-tag">{tag}</span>
-          <div className="dv-iter-view" style={{ aspectRatio: tile }}><Crop img={img} box={box} tile={tile} notes={marks} /></div>
+          <div className="dv-iter-view" style={{ aspectRatio: tile }}><Crop img={img} box={box} tile={tile} /></div>
           <figcaption>{line}</figcaption>
         </figure>
       ))}
@@ -62,12 +55,71 @@ function CropPair({ before, after, a, b, lines, labels, notes, tile = 1.6 }: { b
   );
 }
 
+// One change as one recording: the old workspace, then the new one, zooming in on
+// what changed. The As-is / To-be lines follow the clip and jump to their part. It
+// plays only while current and half on screen; with reduced motion, or if the
+// browser refuses autoplay, it shows its controls instead.
+function IterationStep({ change, index, total, pinned, active, labels }: { change: Change; index: number; total: number; pinned: boolean; active: boolean; labels: { asIs: string; toBe: string } }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [near, setNear] = useState(false);
+  const [onScreen, setOnScreen] = useState(false);
+  const [still, setStill] = useState(false);
+  const [refused, setRefused] = useState(false);
+  const [phase, setPhase] = useState<"a" | "b">("a");
+  const wanted = (!pinned || active) && onScreen && !still;
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    setStill(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const nearby = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); nearby.disconnect(); } }, { rootMargin: "100% 0px" });
+    const half = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.5 });
+    nearby.observe(el);
+    half.observe(el);
+    return () => { nearby.disconnect(); half.disconnect(); };
+  }, []);
+  useEffect(() => {
+    const el = video.current;
+    if (!el) return;
+    if (!wanted) { el.pause(); return; }
+    // A clip that takes over starts from its As-is part.
+    if (pinned) el.currentTime = 0;
+    el.play().then(() => setRefused(false)).catch(() => setRefused(true));
+  }, [wanted, pinned, near]);
+  const seek = (to: "a" | "b") => {
+    const el = video.current;
+    if (!el) return;
+    el.currentTime = to === "a" ? 0 : change.clip.cut;
+    setPhase(to);
+    if (wanted) el.play().catch(() => {});
+  };
+  const sides = [
+    { key: "a", tag: labels.asIs, line: change.before },
+    { key: "b", tag: labels.toBe, line: change.after },
+  ] as const;
+  return (
+    <li className="dv-iter-step" data-on={active || undefined}>
+      <h4 className="dv-iter-name"><b>{index + 1} / {total}</b>{change.title}</h4>
+      <div className="dv-iter-clip">
+        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
+          onTimeUpdate={(e) => setPhase(e.currentTarget.currentTime >= change.clip.cut ? "b" : "a")} />
+      </div>
+      <div className="dv-iter-sides">
+        {sides.map(({ key, tag, line }) => (
+          <button key={key} type="button" className="dv-iter-switch" data-side={key} aria-pressed={phase === key} onClick={() => seek(key)}>
+            <span>{tag}</span>{line}
+          </button>
+        ))}
+      </div>
+    </li>
+  );
+}
+
 // Scroll-driven steps, the usual pinned pattern: the stage stays on screen (CSS
-// sticky) and one change at a time crossfades in place as the page scrolls: its
-// title, then the same crop of both screens at one scale. Native scroll only. On
-// phones and with reduced motion (CSS) the steps are a plain list.
-export function IterationCompare({ before, after, changes, labels }: { before: Shot; after: Shot; changes: Change[]; labels: { asIs: string; toBe: string } }) {
+// sticky) and one change at a time crossfades in place as the page scrolls. Native
+// scroll only. On phones and with reduced motion (CSS) the steps are a plain list.
+export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const [active, setActive] = useState(0);
+  const [pinned, setPinned] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = root.current;
@@ -85,11 +137,16 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
       setActive(Math.min(changes.length - 1, Math.floor(progress * changes.length)));
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    const query = window.matchMedia(REELS_PIN);
+    const sync = () => setPinned(query.matches);
+    sync();
     read();
+    query.addEventListener("change", sync);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
+      query.removeEventListener("change", sync);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
@@ -98,12 +155,7 @@ export function IterationCompare({ before, after, changes, labels }: { before: S
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as React.CSSProperties}>
       <div className="dv-iter-stage">
         <ol className="dv-iter-steps">
-          {changes.map((c, i) => (
-            <li key={c.title} data-on={i === active || undefined}>
-              <h4 className="dv-iter-name"><b>{i + 1} / {changes.length}</b>{c.title}</h4>
-              <CropPair before={before} after={after} a={c.a} b={c.b} lines={[c.before, c.after]} labels={labels} notes={[c.notesA, c.notesB]} />
-            </li>
-          ))}
+          {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} />)}
         </ol>
       </div>
     </div>

@@ -4126,23 +4126,29 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-iter-name { display: flex; gap: 12px; align-items: baseline; margin-bottom: 24px; color: var(--dv-ink); font-size: clamp(22px, 2vw, 28px); font-weight: 500; line-height: 1.3; }
 .dv-iter-name b { color: var(--case-accent); font-weight: 600; font-variant-numeric: tabular-nums; }
 .dv-iter-steps { display: grid; gap: 64px; margin: 0; padding: 0; list-style: none; }
-/* Notes on the picture: the outline and label of what changed, nothing dimmed. */
-.dv-iter-note { position: absolute; }
-.dv-iter-note[data-outline] { outline: 2px solid #fff; outline-offset: 2px; border-radius: 6px; }
-.dv-iter-note b { position: absolute; top: calc(100% + 8px); left: -2px; padding: 2px 10px; border-radius: 999px; background: #fff; color: #111; font-size: 16px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
-.dv-iter-note:not([data-outline]) b { top: 0; left: 0; }
-.dv-iter-note[data-right] b { right: -2px; left: auto; }
-.dv-iter-side[data-side="b"] .dv-iter-note[data-outline] { outline-color: #a594ff; }
-.dv-iter-side[data-side="b"] .dv-iter-note b { background: #a594ff; color: #120f24; }
-.case-study .dv .dv-iter-steps .dv-iter-name { gap: 16px; margin-bottom: 32px; font-size: var(--t-heading); font-weight: 400; }
+/* One recording per change: the clip, its title, then As-is and To-be following the clip. */
+.dv-iter-clip { overflow: hidden; border-radius: var(--dv-card-radius); background: #111; }
+.dv-iter-clip video { display: block; width: 100%; height: auto; }
+.dv-iter-sides { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 20px; }
+.dv-iter-switch { display: block; padding: 0; border: 0; background: none; color: var(--dv-muted); font: inherit; font-size: 18px; line-height: 1.5; text-align: left; transition: color 250ms var(--ease); }
+.dv-iter-switch span { display: block; margin-bottom: 4px; font-size: 16px; font-weight: 500; }
+.dv-iter-switch[aria-pressed="true"] { color: var(--dv-ink); }
+.dv-iter-switch[aria-pressed="true"] span { color: var(--case-accent); }
+.dv-iter-switch:hover { color: var(--dv-ink); }
+.case-study .dv .dv-iter-steps .dv-iter-name { gap: 16px; margin-bottom: 24px; font-size: var(--t-heading); font-weight: 400; }
 .dv-iter-name b { font-size: var(--t-item, 20px); font-weight: 500; white-space: nowrap; }
+@media (max-width: 47.99rem) { .dv-iter-sides { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   /* The scroll travel is a block after the stage: sticky can't move into padding. */
-  .dv-iter::after { content: ""; display: block; height: calc((var(--n) - 1) * 70svh); }
-  .dv-iter-stage { position: sticky; top: var(--stage-top, 24px); }
+  .dv-iter::after { content: ""; display: block; height: calc((var(--n) - 1) * 100svh); }
+  .dv-iter-stage { --iter-out: clamp(0px, var(--dv-pad) - 32px, 88px); position: sticky; top: var(--stage-top, 24px); margin-inline: calc(-1 * var(--iter-out)); }
   .dv-iter-steps { gap: 0; }
-  .dv-iter-steps > li { grid-area: 1 / 1; opacity: 0; transition: opacity 350ms var(--ease); }
-  .dv-iter-steps > li[data-on] { opacity: 1; }
+  /* The clip large at the left, its words beside it, as in the core features. */
+  .dv-iter-step { grid-area: 1 / 1; display: grid; grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 320px); grid-template-rows: 1fr auto auto 1fr; column-gap: 32px; opacity: 0; pointer-events: none; transition: opacity 350ms var(--ease); }
+  .dv-iter-step[data-on] { opacity: 1; pointer-events: auto; }
+  .dv-iter-clip { grid-area: 1 / 1 / 5 / 2; width: min(100%, calc((100svh - 160px) * 1.6)); justify-self: end; }
+  .case-study .dv .dv-iter-steps .dv-iter-name { grid-area: 2 / 2; flex-direction: column; gap: 8px; }
+  .dv-iter-sides { grid-area: 3 / 2; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 0; }
 }
 
 /* Analysis steps: stage, then one sentence. */
