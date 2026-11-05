@@ -3238,8 +3238,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   /* After metalab.com's menu: the pages as large text, then the cases as pills. */
   .home-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
   .home-links a { color: var(--ink); font-family: var(--font-headline); font-size: 24px; font-weight: 400; line-height: 1.35; letter-spacing: 0; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
-  /* Only the thin cut of the Hangul serif is loaded; at this size it would be too faint. */
-  .home-links:lang(ko) a { font-family: var(--font-sans); letter-spacing: -0.01em; }
   .home-links a:hover, .home-links a:focus-visible, .home-links a[data-active] { text-decoration-color: currentColor; text-underline-offset: 4px; }
   .home-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
   .home-picks-label { margin-bottom: 8px; }
@@ -5126,7 +5124,6 @@ html[data-menu="open"] { --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='ht
 .menu-column { display: flex; flex-direction: column; align-items: flex-start; }
 .menu-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
 .menu-links a { color: var(--ink); font-family: var(--font-headline); font-size: 28px; font-weight: 400; line-height: 1.35; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
-.menu-links:lang(ko) a, .menu-column:lang(ko) .menu-links a { font-family: var(--font-sans); letter-spacing: -0.01em; }
 .menu-links a:hover, .menu-links a:focus-visible, .menu-links a[aria-current="page"] { text-decoration-color: currentColor; text-underline-offset: 4px; }
 .menu-label { margin: 0 0 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .menu-picks { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 0; padding: 0; list-style: none; }
