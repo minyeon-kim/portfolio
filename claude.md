@@ -1354,3 +1354,5 @@ Hero decode after sui.io's footer (owner's reference; supersedes the typed line,
 Decoding glyphs stay in the headline's own colour (owner: the blue and the boxes stood out): full, 600r 30trength; no accent or box (supersedes those in the Sui note).
 
 Landing statement sits below the waves: bottom 11% (Korean, with three lines, 6%; supersedes 24%), so it mostly clears the dense band, which moves over time. Figma Main not updated.
+
+Landing statement smaller and higher, after Metalab (owner; supersedes the 5.8vw size and the 11% / 6% offsets): clamp(40px, min(4.6vw, 8svh), 88px) at bottom 22%, Korean clamp(36px, min(4vw, 7.2svh), 76px) at 19%. It overlaps the lower edge of the waves again; the halo keeps it readable. public/og/home.png still shows the larger size. Figma Main not updated.
