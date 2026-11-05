@@ -933,7 +933,7 @@ details[open]::details-content {
     --ambient-pearl-motion: ambient-edge-pearl;
     --intro-canvas: #080909;
     --devsign-canvas: #1c1c1c;
-    --devsign-title: #9480ff;
+    --devsign-title: #b3a5ff;
     --canvas-dot: rgb(255 255 255 / 0.09);
     --gemini-canvas: #0c0f16;
     --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
@@ -954,7 +954,7 @@ details[open]::details-content {
     --ambient-pearl-motion: ambient-edge-pearl;
     --intro-canvas: #080909;
   --devsign-canvas: #1c1c1c;
-  --devsign-title: #9480ff;
+  --devsign-title: #b3a5ff;
   --canvas-dot: rgb(255 255 255 / 0.09);
   --gemini-canvas: #0c0f16;
   --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
@@ -2975,7 +2975,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    cards; tokens are switched to the dark band locally. */
 .case-study .more-work {
   --bg: light-dark(#0e1111, #0a0b14); --ink: #e8ecea; --muted: #8e9895;
-  --devsign-title: #9480ff;
+  --devsign-title: #b3a5ff;
   --gemini-title: linear-gradient(90deg, #d6e2ff, #9dbeff 55%, #d5c5ff);
   margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0;
   padding: clamp(64px, 7vw, 112px) var(--project-text-inset) clamp(56px, 6vw, 88px);
@@ -5656,3 +5656,22 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-iv-claims { gap: 12px; margin-top: 32px; }
   .dv-iv-claim { padding: 24px; }
 }
+
+/* Devsign, stronger contrast. Dark words and numbers are the lighter purple, fills a stronger one (the words used to
+   be dimmer than body text). Cards step clearly off the section; charts are flat, with no glow or fade; posts are
+   columns, not cards inside a card. Gemini keeps its own values for now. */
+.case-study[data-project="devsign"] .dv { --dv-band-card-dark: #2a2b32; --dv-muted: light-dark(#5e5e63, #a3adaa); --dv-chart-fill: light-dark(#5b3fd6, #7c62ff); --dv-chart-rest: color-mix(in srgb, var(--dv-ink) 40%, light-dark(#ffffff, #2a2b32)); }
+.case-study[data-project="devsign"] .dv-bar-track i, .case-study[data-project="devsign"] .dv-pair-bar i { background: var(--dv-chart-rest); box-shadow: none; }
+.case-study[data-project="devsign"] .dv-bars-chart li[data-top] i, .case-study[data-project="devsign"] .dv-pair-bar[data-on] i { background: var(--dv-chart-fill); box-shadow: none; }
+.case-study[data-project="devsign"] .dv-trust-seg[data-on], .case-study[data-project="devsign"] .dv-sus-value { stroke: var(--dv-chart-fill); filter: none; }
+.case-study[data-project="devsign"] .dv-trust-flash { stroke: var(--dv-chart-fill); }
+.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-trust-seg[data-on] { animation: none; }
+.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-bars-chart li[data-top] i { animation: dv-bar-rise 900ms var(--ease-reveal) backwards; }
+.case-study[data-project="devsign"] .dv-cycle-panel[data-phase="play"] .dv-pair-bar[data-on] i { animation: dv-bar-rise 900ms var(--ease-reveal) 200ms backwards; }
+.case-study[data-project="devsign"] .dv-posts-list li { padding: 4px 24px; border-left: 1px solid var(--dv-line); border-radius: 0; background: none; }
+.case-study[data-project="devsign"] .dv-posts-list li:first-child { padding-left: 0; border-left: 0; }
+@media (max-width: 47.99rem) {
+  .case-study[data-project="devsign"] .dv-posts-list { row-gap: 0; }
+  .case-study[data-project="devsign"] .dv-posts-list li { padding: 20px 0; border-left: 0; border-top: 1px solid var(--dv-line); }
+}
+
