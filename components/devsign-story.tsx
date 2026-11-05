@@ -96,15 +96,18 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
   );
 }
 
-// The same holding card as the core features: it stays on screen (CSS sticky) and one
-// change at a time crossfades inside it as the page scrolls. A clip that ends hands
-// over to the next, round to the first, without moving the page; scrolling into
-// another step takes over again. Native scroll only. On phones and with reduced
-// motion (CSS) each change is its own card.
-export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
+// The holding card: it stays on screen (CSS sticky) and one step at a time crossfades inside it
+// as the page scrolls. Native scroll only. On phones and with reduced motion (CSS) each step is
+// its own card. A step mark scrolls to the middle of its step, and shows it at once.
+function useHeldSteps(count: number) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  const measure = (el: HTMLElement) => {
+    const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+    // Centred on the screen, below the header when the screen is short.
+    return { top: Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20), travel: el.offsetHeight - stage };
+  };
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -112,15 +115,11 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
     let scrollStep = -1;
     const read = () => {
       frame = 0;
-      const box = el.getBoundingClientRect();
-      const stage = (el.firstElementChild as HTMLElement).offsetHeight;
-      // Centred on the screen, below the header when the screen is short.
-      const top = Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20);
-      const travel = box.height - stage;
-      const progress = travel > 0 ? Math.min(1, Math.max(0, (top - box.top) / travel)) : 0;
+      const { top, travel } = measure(el);
+      const progress = travel > 0 ? Math.min(1, Math.max(0, (top - el.getBoundingClientRect().top) / travel)) : 0;
       el.style.setProperty("--stage-top", `${top}px`);
-      // Only a scroll into another step takes over from a clip that moved on by itself.
-      const step = Math.min(changes.length - 1, Math.floor(progress * changes.length));
+      // Only a scroll into another step takes over from a step that moved on by itself.
+      const step = Math.min(count - 1, Math.floor(progress * count));
       if (step !== scrollStep) { scrollStep = step; setActive(step); }
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
@@ -137,28 +136,62 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [changes.length]);
-  // A step mark scrolls to the middle of its step, and shows it at once.
+  }, [count]);
   const go = (i: number) => {
     const el = root.current;
     if (!el) return;
     setActive(i);
-    const stage = (el.firstElementChild as HTMLElement).offsetHeight;
-    const top = Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20);
-    const travel = el.offsetHeight - stage;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + ((i + 0.5) / changes.length) * travel, behavior: "smooth" });
+    const { top, travel } = measure(el);
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + ((i + 0.5) / count) * travel, behavior: "smooth" });
   };
+  return { root, active, setActive, pinned, go };
+}
+
+function StepMarks({ names, active, go }: { names: string[]; active: number; go: (i: number) => void }) {
   return (
-    <div ref={root} className="dv-iter" style={{ "--n": changes.length } as React.CSSProperties}>
+    <div className="dv-reel-steps">
+      {names.map((name, i) => <button key={name} type="button" aria-label={name} aria-current={i === active ? "step" : undefined} data-done={i <= active || undefined} onClick={() => go(i)} />)}
+    </div>
+  );
+}
+
+// A clip that ends hands over to the next, round to the first, without moving the page;
+// scrolling into another step takes over again.
+export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
+  const { root, active, setActive, pinned, go } = useHeldSteps(changes.length);
+  return (
+    <div ref={root} className="dv-iter" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
         <ol className="dv-iter-steps">
           {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
         </ol>
-        {pinned && (
-          <div className="dv-reel-steps">
-            {changes.map((c, i) => <button key={c.title} type="button" aria-label={c.title} aria-current={i === active ? "step" : undefined} data-done={i <= active || undefined} onClick={() => go(i)} />)}
-          </div>
-        )}
+        {pinned && <StepMarks names={changes.map((c) => c.title)} active={active} go={go} />}
+      </div>
+    </div>
+  );
+}
+
+// The same holding card for still phone screens: the whole screen on the case's colour, and
+// what changed beside it. The As-is line has no screen of its own, so it isn't a switch.
+type ScreenChange = { title: string; before: string; after: string; src: string; alt?: string; width?: number; height?: number };
+export function ScreenSteps({ changes, labels }: { changes: ScreenChange[]; labels: { asIs: string; toBe: string } }) {
+  const { root, active, pinned, go } = useHeldSteps(changes.length);
+  return (
+    <div ref={root} className="dv-iter dv-screens-held" style={{ "--n": changes.length } as CSSProperties}>
+      <div className="dv-iter-stage">
+        <ol className="dv-iter-steps">
+          {changes.map((c, i) => (
+            <li key={c.title} className="dv-iter-step" data-on={i === active || undefined}>
+              <h4 className="dv-iter-name"><b>{i + 1} / {changes.length}</b>{c.title}</h4>
+              <div className="dv-iter-clip"><Image src={withBase(c.src)} alt={c.alt ?? ""} width={c.width ?? 750} height={c.height ?? 1624} sizes="320px" loading="eager" /></div>
+              <div className="dv-iter-sides">
+                <p className="dv-screen-line"><span>{labels.asIs}</span>{c.before}</p>
+                <p className="dv-screen-line" data-side="b"><span>{labels.toBe}</span>{c.after}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        {pinned && <StepMarks names={changes.map((c) => c.title)} active={active} go={go} />}
       </div>
     </div>
   );

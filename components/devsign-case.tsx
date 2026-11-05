@@ -6,7 +6,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
-import { FeatureReels, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
+import { FeatureReels, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, UsabilityResults, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -618,15 +618,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {!ff && (
           <div className="dv-gap-64">
             {deliver.changes ? (
-              <ol className="dv-points dv-changes" style={{ "--n": deliver.changes.length } as React.CSSProperties}>
-                {deliver.changes.map((c: Study, n: number) => (
-                  <li key={c.title} className="dv-point reveal">
-                    <div className="dv-point-media dv-point-phone"><Image src={withBase(c.src)} alt={c.alt ?? ""} width={c.width ?? 720} height={c.height ?? 1560} sizes="200px" /></div>
-                    <p className="dv-point-title"><b aria-hidden="true">{n + 1}</b>{c.title}</p>
-                    <p className="dv-point-change"><span className="dv-point-before">{c.before}</span><span className="dv-point-after">{c.after}</span></p>
-                  </li>
-                ))}
-              </ol>
+              <ScreenSteps changes={deliver.changes} labels={labels} />
             ) : <CaseGallery title={deliver.title} items={deliver.features.map((f: Study) => ({ ...f, label: f.title }))} />}
           </div>
         )}
