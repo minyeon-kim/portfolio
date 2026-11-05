@@ -3228,7 +3228,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    its second line stepped in; the note high on the right, in the sky above the waves. */
 @media (min-width: 64rem) {
   .intro-surface.home-grid { display: block; }
-  .home-tagline-wrap { position: absolute; left: 34%; bottom: 24%; justify-items: start; }
+  .home-tagline-wrap { position: absolute; left: 34%; bottom: 11%; justify-items: start; }
+  .home-tagline-wrap:lang(ko) { bottom: 6%; }
   .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(48px, min(5.8vw, 10svh), 112px); line-height: 1.04; text-align: left; text-wrap: wrap; }
   .home-tagline-wrap:lang(ko) .home-tagline { width: 9.6em; font-size: clamp(44px, min(5vw, 9svh), 96px); line-height: 1.2; }
   /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
