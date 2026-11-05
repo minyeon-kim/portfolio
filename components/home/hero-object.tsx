@@ -306,6 +306,10 @@ void main() {
   float size = mix(0.8, 1.35, vDepth) * mix(mix(mix(mix(0.9, 1.1, vDepth), mix(1.0, 1.3, vDepth), dark), mix(0.7, 0.85, vDepth), fine), mix(mix(1.2, 1.6, vDepth) * 0.7, mix(1.5, 2.1, vDepth), dark), star) * (1.0 + 0.2 * vStar);
   // With sparse dust, a case's form needs each grain brighter to read.
   vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star) * 2.0 * mix(1.0, 1.7, step(0.5, symbol));
+  // A case's form is the backdrop: its colour stays, but it sits well below the
+  // card, which is the brightest thing on the stage (metalab.com).
+  vFaint *= mix(1.0, mix(0.6, 0.55, light), max(spectrum, bolt));
+  vTint = mix(vTint, vec3(dot(vTint, vec3(0.3, 0.6, 0.1))), 0.15 * max(spectrum, bolt));
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
@@ -320,7 +324,7 @@ void main() {
     float inside = smoothstep(c.x - m.x, c.x, s.x) * smoothstep(c.z + m.x, c.z, s.x)
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
     // The last box is the big name: its form still shows through.
-    vFaint *= 1.0 - (i == 3 ? 0.82 : 0.85) * inside;
+    vFaint *= 1.0 - (i == 3 ? 0.55 : 0.85) * inside;
   }
   px *= mix(0.9, 1.0, smoothstep(0.3, 0.5, vDepth));
   // Flying through: dust grows as the camera nears it.
@@ -426,7 +430,7 @@ precision highp float; in vec2 v; out vec4 o;
 uniform sampler2D scene; uniform float dpr; uniform float grainTime;
 uniform vec3 ground; uniform vec3 ink;
 uniform float time; uniform float light;
-uniform float halo;  // the light theme: glow on the dawn ground instead of the printed look
+uniform float caseDim; uniform float halo;  // the light theme: glow on the dawn ground instead of the printed look
 uniform sampler2D photo; uniform float photoMix; uniform vec2 photoScale; uniform vec2 photoCentre; uniform vec2 cssSize;
 float hash(vec2 p) {
   vec3 q = fract(vec3(p.xyx) * 0.1031);
@@ -477,7 +481,9 @@ void main() {
   // darkened shade, so the page sparkles instead of looking inked.
   vec3 vivid = clamp(mix(vec3(dot(hue, vec3(0.3, 0.5, 0.2))), hue, 1.6), 0.0, 1.0);
   vivid = vivid / max(max(vivid.r, max(vivid.g, vivid.b)), 1e-3) * 0.9;
-  vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05, vivid, light);
+  // On the dark page the dots themselves dim while a case is shown: the print
+  // has no brightness to lower otherwise, only fewer dots.
+  vec3 coloured = mix(mix(vec3(0.62), hue, 0.85) * 1.05 * mix(1.0, 0.5, caseDim), vivid, light);
   o = vec4(mix(base, coloured, cover), 1.0);
   // Light theme: the grains glow instead of being printed. The ground steps
   // down from white to a dawn gradient (peach below, lilac middle, pale sky
@@ -878,6 +884,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       bind(pDither, "scene", 0, scene.texture); bind(pDither, "photo", 1, photoTexture);
       gl.uniform1f(uniform(pDither, "photoMix"), photoMix); gl.uniform2f(uniform(pDither, "photoScale"), photoScale[0], photoScale[1]); gl.uniform2f(uniform(pDither, "photoCentre"), photoCentre[0], photoCentre[1]); gl.uniform2f(uniform(pDither, "cssSize"), width / dpr, height / dpr);
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
+      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt));
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
       gl.uniform1f(uniform(pDither, "halo"), colours.light * (1 - portraitMix));
