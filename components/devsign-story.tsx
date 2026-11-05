@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
 
@@ -233,46 +234,24 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
   );
 }
 
-// A smaller iteration, one card: the changed part on colour at the left, As-is and To-be
-// at the right. As-is shows first and turns to To-be once, shortly after half the card is on
-// screen, unless someone has already pressed a side. With reduced motion it starts on To-be.
+// A smaller iteration: As-is and To-be side by side as two cards, the same part of the screen at
+// one shape, so the difference reads at a glance. Only To-be sits on the case's colour.
 export function IterationPair({ before, after, labels }: { before: Shot & { box: Box }; after: Shot & { box: Box }; labels: { asIs: string; toBe: string } }) {
-  const [side, setSide] = useState<"a" | "b">("a");
-  const root = useRef<HTMLDivElement>(null);
-  const pressed = useRef(false);
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setSide("b"); return; }
-    let timer = 0;
-    const seen = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      seen.disconnect();
-      timer = window.setTimeout(() => { if (!pressed.current) setSide("b"); }, 1400);
-    }, { threshold: 0.5 });
-    seen.observe(el);
-    return () => { seen.disconnect(); clearTimeout(timer); };
-  }, []);
   const sides = [
     { key: "a", tag: labels.asIs, img: before },
     { key: "b", tag: labels.toBe, img: after },
   ] as const;
   return (
-    <div ref={root} className="dv-iter-card reveal">
-      <div className="dv-iter-plate">
-        <div className="dv-iter-views">
-          {sides.map(({ key, img }) => (
-            <div key={key} className="dv-iter-view" data-on={side === key || undefined} style={{ aspectRatio: 2.1 }}><Crop img={img} box={img.box} tile={2.1} /></div>
-          ))}
-        </div>
-      </div>
-      <div className="dv-iter-sides">
-        {sides.map(({ key, tag, img }) => (
-          <button key={key} type="button" className="dv-iter-switch" data-side={key} aria-pressed={side === key} onClick={() => { pressed.current = true; setSide(key); }}>
-            <span>{tag}</span>{img.text}
-          </button>
-        ))}
-      </div>
+    <div className="dv-iter-duo reveal">
+      {sides.map(({ key, tag, img }) => (
+        <figure key={key} className="dv-iter-card" data-side={key}>
+          <div className="dv-iter-plate">
+            <div className="dv-iter-view" style={{ aspectRatio: 2.1 }}><Crop img={img} box={img.box} tile={2.1} /></div>
+            {key === "b" && <span className="dv-iter-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>}
+          </div>
+          <figcaption><span>{tag}</span>{img.text}</figcaption>
+        </figure>
+      ))}
     </div>
   );
 }
@@ -525,7 +504,7 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][]; purpose: string; accept: string[]; tokens: string[]; code: [string, string][] };
-type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { elements: string; states: string; accept: string; dev: string; tokens: string; code: string }; more?: string; moreHref?: string };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { elements: string; states: string; accept: string; dev: string; tokens: string; code: string; play: string; pause: string }; more?: string; moreHref?: string };
 
 // `--ds-token` in the copy reads as code.
 const tokenText = (text: string) => text.split(/(`[^`]+`)/).map((part, i) => part.startsWith("`") ? <code key={i}>{part.slice(1, -1)}</code> : part);
@@ -537,32 +516,58 @@ const specZoom = (x: number, y: number) => {
   return { "--s": SPEC_ZOOM, transform: `translate(${at(x)}%, ${at(y)}%) scale(${SPEC_ZOOM})` } as CSSProperties;
 };
 
-// The handoff spec, one element per card: tabs pick a screen, numbers pick an element, and the
-// screen on its colour zooms to that element while its behavior and states sit beside it. When
-// it's done and its tokens and code are a second row of tabs, with the whole screen back. Hidden
-// panels keep their place, so nothing jumps. Phones list all of it, whole screen, no tabs.
-export function HandoffSpec({ spec }: { spec: SpecData }) {
+// Long enough to read a step, whatever its length.
+const specDwell = (text: string) => Math.min(8000, Math.max(4000, text.length * 55));
+
+// The handoff spec plays by itself: the screen on its colour zooms to one element at a time with
+// its behavior and states beside it, then what "done" means and the tokens and code with the whole
+// screen back, then the next screen, round to the first. The bars show where it is; a bar, a tab or
+// a pin jumps there, and nothing has to be pressed. It runs while 40% of it is on screen and holds
+// while the pointer is on the words, on keyboard focus, or on pause. `auto={false}` starts on pause
+// (the spec page is for looking things up). Reduced motion never plays; phones list all of it.
+export function HandoffSpec({ spec, auto = true }: { spec: SpecData; auto?: boolean }) {
   const screens = spec.screens;
   const [current, setCurrent] = useState(0);
-  const [element, setElement] = useState(0);
-  const [part, setPart] = useState(0);
+  const [step, setStep] = useState(0);
+  const [paused, setPaused] = useState(!auto);
+  const [held, setHeld] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const [canPlay, setCanPlay] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const partTabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const numberTabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const pick = (i: number) => { setCurrent(i); setElement(0); };
-  const parts = [spec.cols.name, spec.labels.accept, spec.labels.dev];
-  // Arrow keys, Home and End, for every row of tabs.
-  const arrows = (event: React.KeyboardEvent, at: number, count: number, go: (i: number) => void, refs: (HTMLButtonElement | null)[]) => {
-    const last = count - 1;
-    const next = { ArrowRight: at === last ? 0 : at + 1, ArrowLeft: at === 0 ? last : at - 1, Home: 0, End: last }[event.key];
+  const pick = (i: number) => { setCurrent(i); setStep(0); };
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const allowed = window.matchMedia("(min-width: 48rem) and (prefers-reduced-motion: no-preference)");
+    const sync = () => setCanPlay(allowed.matches);
+    sync();
+    allowed.addEventListener("change", sync);
+    const watch = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { threshold: 0.4 });
+    watch.observe(el);
+    return () => { allowed.removeEventListener("change", sync); watch.disconnect(); };
+  }, []);
+  const stepsOf = (screen: SpecScreen) => [
+    ...screen.rows.map(([name, does, state]) => ({ label: name, text: name + does + state })),
+    { label: spec.labels.accept, text: screen.accept.join("") },
+    { label: spec.labels.dev, text: screen.tokens.join("") + screen.code.map(([label]) => label).join("") },
+  ];
+  const advance = () => {
+    if (step < stepsOf(screens[current]).length - 1) setStep(step + 1);
+    else pick((current + 1) % screens.length);
+  };
+  const running = canPlay && !paused && !held && seen;
+  const onTabKeys = (event: React.KeyboardEvent) => {
+    const last = screens.length - 1;
+    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
     if (next === undefined) return;
     event.preventDefault();
-    go(next);
-    refs[next]?.focus();
+    pick(next);
+    tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-spec dv-gap-40 reveal">
-      {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={(event) => arrows(event, current, screens.length, pick, tabs.current)}>
+    <div ref={root} className="dv-spec dv-gap-40 reveal" onFocus={(event) => { if (event.target.matches(":focus-visible")) setHeld(true); }} onBlur={() => setHeld(false)}>
+      {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={onTabKeys}>
         {screens.map((screen, i) => (
           <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
         ))}
@@ -570,7 +575,9 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
       <div className="dv-spec-panels">
       {screens.map((screen, i) => {
         const on = i === current;
-        const zoomed = on && part === 0 && screen.pins[element];
+        const steps = stepsOf(screen);
+        const count = screen.rows.length;
+        const zoomed = on && step < count && screen.pins[step];
         return (
         <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role={screens.length > 1 ? "tabpanel" : undefined} aria-labelledby={screens.length > 1 ? `spec-tab-${screen.id}` : undefined} data-on={on || undefined}>
           <div className="dv-spec-shot">
@@ -578,28 +585,18 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
               <div className="dv-spec-zoom" style={zoomed ? specZoom(zoomed[0], zoomed[1]) : undefined}>
                 <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 64rem) 70vw, 100vw" />
                 {screen.pins.map(([x, y], n) => (
-                  <span key={n} className="dv-spec-pin" data-lit={(on && part === 0 && n === element) || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onClick={() => { setElement(n); setPart(0); }}>{n + 1}</span>
+                  <span key={n} className="dv-spec-pin" data-lit={(on && n === step) || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onClick={() => setStep(n)}>{n + 1}</span>
                 ))}
               </div>
             </div>
           </div>
-          <div className="dv-spec-side">
+          <div className="dv-spec-side" onPointerEnter={(event) => { if (event.pointerType === "mouse") setHeld(true); }} onPointerLeave={(event) => { if (event.pointerType === "mouse") setHeld(false); }}>
             <p className="dv-spec-purpose">{screen.purpose}</p>
-            <div className="dv-spec-parts" role="tablist" onKeyDown={(event) => arrows(event, part, parts.length, setPart, partTabs.current)}>
-              {parts.map((label, p) => (
-                <button key={label} ref={(el) => { if (on) partTabs.current[p] = el; }} id={`spec-part-${screen.id}-${p}`} type="button" role="tab" aria-selected={p === part} aria-controls={`spec-sub-${screen.id}-${p}`} tabIndex={p === part ? 0 : -1} onClick={() => setPart(p)}>{label}</button>
-              ))}
-            </div>
             <div className="dv-spec-subs">
-              <div id={`spec-sub-${screen.id}-0`} className="dv-spec-sub" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-0`} data-on={part === 0 || undefined}>
-                <div className="dv-spec-numbers" role="tablist" onKeyDown={(event) => arrows(event, element, screen.rows.length, setElement, numberTabs.current)}>
-                  {screen.rows.map(([name], n) => (
-                    <button key={name} ref={(el) => { if (on) numberTabs.current[n] = el; }} id={`spec-el-tab-${screen.id}-${n}`} type="button" role="tab" aria-label={name} aria-selected={n === element} aria-controls={`spec-el-${screen.id}-${n}`} tabIndex={n === element ? 0 : -1} onClick={() => setElement(n)}>{n + 1}</button>
-                  ))}
-                </div>
+              <div className="dv-spec-sub" data-on={step < count || undefined}>
                 <div className="dv-spec-els">
                   {screen.rows.map(([name, does, state], n) => (
-                    <div key={name} id={`spec-el-${screen.id}-${n}`} className="dv-spec-el" role="tabpanel" aria-labelledby={`spec-el-tab-${screen.id}-${n}`} data-on={n === element || undefined}>
+                    <div key={name} className="dv-spec-el" data-on={n === step || undefined}>
                       <h4><b aria-hidden="true">{n + 1}</b>{name}</h4>
                       <p>{does}</p>
                       {state !== "-" && <p className="dv-spec-state"><span>{spec.cols.state}</span>{state}</p>}
@@ -607,17 +604,29 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
                   ))}
                 </div>
               </div>
-              <div id={`spec-sub-${screen.id}-1`} className="dv-spec-sub dv-spec-detail" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-1`} data-on={part === 1 || undefined}>
-                <h4 className="dv-spec-sub-title">{spec.labels.accept}</h4>
+              <div className="dv-spec-sub dv-spec-detail" data-on={step === count || undefined}>
+                <h4>{spec.labels.accept}</h4>
                 <ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul>
               </div>
-              <div id={`spec-sub-${screen.id}-2`} className="dv-spec-sub dv-spec-detail" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-2`} data-on={part === 2 || undefined}>
+              <div className="dv-spec-sub dv-spec-detail" data-on={step === count + 1 || undefined}>
                 <h4>{spec.labels.tokens}</h4>
                 <ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul>
                 <h4>{spec.labels.code}</h4>
                 <ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul>
               </div>
             </div>
+            {on && <div className="dv-spec-progress">
+              {canPlay && <button type="button" className="dv-spec-play" aria-label={paused ? spec.labels.play : spec.labels.pause} onClick={() => setPaused(!paused)}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">{paused ? <path d="M2.5 1v10l8-5z" /> : <path d="M2 1h3v10H2zM7 1h3v10H7z" />}</svg>
+              </button>}
+              <div className="dv-spec-bars">
+                {steps.map((item, n) => (
+                  <button key={item.label} type="button" aria-label={item.label} aria-current={n === step ? "step" : undefined} data-done={n < step || undefined} onClick={() => setStep(n)}>
+                    {n === step && <i key={`${current}-${n}`} data-run={canPlay || undefined} style={{ animationDuration: `${specDwell(item.text)}ms`, animationPlayState: running ? "running" : "paused" }} onAnimationEnd={advance} />}
+                  </button>
+                ))}
+              </div>
+            </div>}
           </div>
         </div>
         );
