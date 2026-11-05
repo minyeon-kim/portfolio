@@ -34,7 +34,7 @@ const subscribeStacked = (onChange: () => void) => {
 // its surface (Devsign's dark canvas, Gemini's blue night) while the loop
 // fades, its media sits in a large card at the top right (the Devsign browser
 // window with the live prototype, or the Gemini phone on its surface), the
-// name large and the problem line and role set apart. Each world has its own
+// name large and the problem line set apart. Each world has its own
 // composition (CSS by data-world): Devsign like metalab.com's Midjourney state,
 // Gemini like The Atlantic (portrait card at the bottom right), About (name bottom centre, no
 // card: the site's own loop stays as the image, the headline is the statement
@@ -59,7 +59,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // composition (metalab.com's per-project layouts). Kept while it fades out.
   type World = { slug: string; role?: string; emphasis?: string; name: string; text: string };
   const world: World | null = shown
-    ? { slug: shown.slug, role: [shown.role, shown.timeline].filter(Boolean).join(" · "), name: shown.name, text: shown.hook ?? shown.problem }
+    ? { slug: shown.slug, name: shown.name, text: shown.hook ?? shown.problem }
     : about && aboutCopy
       ? { slug: "about", role: aboutCopy.headline, emphasis: aboutCopy.emphasis, name: site.name, text: aboutCopy.bio }
       : null;
