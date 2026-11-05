@@ -426,30 +426,36 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
 }
 
 type SpecScreen = { id: string; tab: string; alt: string; src: string; rows: [string, string, string][]; pins: [number, number][]; purpose: string; accept: string[]; tokens: string[]; code: [string, string][] };
-type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { accept: string; tokens: string; code: string }; more?: string; moreHref?: string };
+type SpecData = { shared: string; open: string; screens: SpecScreen[]; cols: { name: string; does: string; state: string }; labels: { elements: string; states: string; accept: string; dev: string; tokens: string; code: string }; more?: string; moreHref?: string };
 
 // `--ds-token` in the copy reads as code.
 const tokenText = (text: string) => text.split(/(`[^`]+`)/).map((part, i) => part.startsWith("`") ? <code key={i}>{part.slice(1, -1)}</code> : part);
 
-// The handoff spec: one key screen at a time, numbered pins on the real screen and the same
-// numbers in the list beside it. Pointing at either lights the other. Phones list all four.
+// The handoff spec, one screen's worth at a time: the key screen with numbered pins, and beside
+// it a second row of tabs for how it behaves, its states, when it's done, and its tokens and code. Pointing
+// at a pin or a row lights the other. Hidden panels keep their place, so nothing jumps between
+// tabs. Phones list all of it.
 export function HandoffSpec({ spec }: { spec: SpecData }) {
   const screens = spec.screens;
   const [current, setCurrent] = useState(0);
   const [lit, setLit] = useState<number | null>(null);
+  const [part, setPart] = useState(0);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const partTabs = useRef<(HTMLButtonElement | null)[]>([]);
   const pick = (i: number) => { setCurrent(i); setLit(null); };
-  const onKey = (event: React.KeyboardEvent) => {
-    const last = screens.length - 1;
-    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
+  const parts = [spec.labels.elements, spec.labels.states, spec.labels.accept, spec.labels.dev];
+  // Arrow keys, Home and End, for either row of tabs.
+  const arrows = (event: React.KeyboardEvent, at: number, count: number, go: (i: number) => void, refs: (HTMLButtonElement | null)[]) => {
+    const last = count - 1;
+    const next = { ArrowRight: at === last ? 0 : at + 1, ArrowLeft: at === 0 ? last : at - 1, Home: 0, End: last }[event.key];
     if (next === undefined) return;
     event.preventDefault();
-    pick(next);
-    tabs.current[next]?.focus();
+    go(next);
+    refs[next]?.focus();
   };
   return (
     <div className="dv-spec dv-gap-40 reveal">
-      {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={onKey}>
+      {screens.length > 1 && <div className="dv-spec-tabs" role="tablist" onKeyDown={(event) => arrows(event, current, screens.length, pick, tabs.current)}>
         {screens.map((screen, i) => (
           <button key={screen.id} ref={(el) => { tabs.current[i] = el; }} id={`spec-tab-${screen.id}`} type="button" role="tab" aria-selected={i === current} aria-controls={`spec-panel-${screen.id}`} tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>{screen.tab}</button>
         ))}
@@ -457,43 +463,52 @@ export function HandoffSpec({ spec }: { spec: SpecData }) {
       <div className="dv-spec-panels">
       {screens.map((screen, i) => (
         <div key={screen.id} id={`spec-panel-${screen.id}`} className="dv-spec-panel" role={screens.length > 1 ? "tabpanel" : undefined} aria-labelledby={screens.length > 1 ? `spec-tab-${screen.id}` : undefined} data-on={i === current || undefined}>
-          <p className="dv-spec-purpose">{screen.purpose}</p>
           <div className="dv-spec-shot">
-            <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 60vw, 100vw" />
+            <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 72rem) 70vw, 100vw" />
             {screen.pins.map(([x, y], n) => (
               <span key={n} className="dv-spec-pin" data-lit={lit === n || undefined} aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>{n + 1}</span>
             ))}
           </div>
-          <ol className="dv-spec-rows">
-            {screen.rows.map(([name, does, state], n) => (
-              <li key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
-                <b aria-hidden="true">{n + 1}</b>
-                <div>
-                  <h4>{name}</h4>
-                  <p>{does}</p>
-                  {state !== "-" && <p className="dv-spec-state">{state}</p>}
+          <div className="dv-spec-side">
+            <p className="dv-spec-purpose">{screen.purpose}</p>
+            <div className="dv-spec-parts" role="tablist" onKeyDown={(event) => arrows(event, part, parts.length, setPart, partTabs.current)}>
+              {parts.map((label, p) => (
+                <button key={label} ref={(el) => { if (i === current) partTabs.current[p] = el; }} id={`spec-part-${screen.id}-${p}`} type="button" role="tab" aria-selected={p === part} aria-controls={`spec-sub-${screen.id}-${p}`} tabIndex={p === part ? 0 : -1} onClick={() => setPart(p)}>{label}</button>
+              ))}
+            </div>
+            <div className="dv-spec-subs">
+              {[0, 1].map((column) => (
+                <div key={column} id={`spec-sub-${screen.id}-${column}`} className="dv-spec-sub" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-${column}`} data-on={part === column || undefined}>
+                  <h4 className="dv-spec-sub-title">{parts[column]}</h4>
+                  <ol className="dv-spec-rows">
+                    {screen.rows.map(([name, does, state], n) => (column === 0 || state !== "-") && (
+                      <li key={name} data-lit={lit === n || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(null)}>
+                        <b aria-hidden="true">{n + 1}</b>
+                        <div>
+                          <h4>{name}</h4>
+                          <p>{column === 0 ? does : state}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-              </li>
-            ))}
-          </ol>
-          <div className="dv-spec-detail">
-            <div>
-              <h4>{spec.labels.accept}</h4>
-              <ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul>
-            </div>
-            <div>
-              <h4>{spec.labels.tokens}</h4>
-              <ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul>
-            </div>
-            <div>
-              <h4>{spec.labels.code}</h4>
-              <ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul>
+              ))}
+              <div id={`spec-sub-${screen.id}-2`} className="dv-spec-sub dv-spec-detail" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-2`} data-on={part === 2 || undefined}>
+                <h4 className="dv-spec-sub-title">{spec.labels.accept}</h4>
+                <ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul>
+              </div>
+              <div id={`spec-sub-${screen.id}-3`} className="dv-spec-sub dv-spec-detail" role="tabpanel" aria-labelledby={`spec-part-${screen.id}-3`} data-on={part === 3 || undefined}>
+                <h4>{spec.labels.tokens}</h4>
+                <ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul>
+                <h4>{spec.labels.code}</h4>
+                <ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul>
+                <p className="dv-spec-shared">{spec.shared}</p>
+              </div>
             </div>
           </div>
         </div>
       ))}
       </div>
-      <p className="dv-spec-note">{spec.shared}</p>
       <p className="dv-spec-note">{spec.open}</p>
     </div>
   );

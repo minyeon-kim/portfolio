@@ -5275,3 +5275,41 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 /* A decoding glyph (ScrambleHeadline): the headline's own colour, at varying strength. */
 [data-scramble] [data-g="dim"] { opacity: 0.3; }
 [data-scramble] [data-g="mid"] { opacity: 0.6; }
+
+/* Handoff spec, one view (owner: it was scattered, small, and its pins too big): wider than the
+   column, the screen beside everything about it. align-content: the panels share a height, and
+   stretched rows were what spread each one apart. */
+@media (min-width: 72rem) {
+  .dv-spec { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); max-width: none; margin-left: calc(50% - var(--ia-w) / 2); }
+  .dv-spec-panel { grid-template-columns: minmax(0, 1fr) clamp(340px, 28vw, 420px); gap: 32px; align-content: start; }
+}
+.dv-spec-tabs { margin-bottom: 16px; }
+.dv-spec-panel { align-content: start; }
+.case-study .dv .dv-spec-purpose { margin-bottom: 16px; font-size: 18px; line-height: 1.4; }
+.dv-spec-parts { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 16px; border-bottom: 1px solid var(--dv-line); }
+.dv-spec-parts button { position: relative; padding: 0 0 10px; border: 0; background: none; color: var(--dv-muted); font: inherit; font-size: 16px; font-weight: 500; transition: color 150ms var(--ease); }
+.dv-spec-parts button:hover { color: var(--dv-ink); }
+.dv-spec-parts button[aria-selected="true"] { color: var(--dv-ink); box-shadow: inset 0 -2px 0 var(--dv-ink); }
+.dv-spec-parts button:focus-visible { outline: 2px solid var(--case-accent); outline-offset: 2px; border-radius: 4px; }
+.dv-spec-subs { display: grid; grid-template-columns: minmax(0, 1fr); }
+.dv-spec-subs > .dv-spec-sub { grid-area: 1 / 1; visibility: hidden; }
+.dv-spec-panel[data-on] .dv-spec-subs > .dv-spec-sub[data-on] { visibility: visible; }
+.dv-spec-rows { gap: 2px; }
+.dv-spec-rows li { grid-template-columns: 20px minmax(0, 1fr); gap: 10px; padding: 8px; margin-inline: -8px; }
+.dv-spec-rows b, .dv-spec-pin { width: 20px; height: 20px; font-size: 12px; font-weight: 600; }
+.dv-spec-pin { margin: -10px 0 0 -10px; box-shadow: 0 0 0 1.5px light-dark(#ffffff, #0a0b14); }
+.case-study .dv .dv-spec-rows h4 { margin: 0 0 2px; line-height: 20px; }
+.case-study .dv .dv-spec-rows .dv-spec-state { color: var(--dv-muted); }
+.dv-spec-detail { display: block; padding-top: 0; border-top: 0; }
+.case-study .dv .dv-spec-detail h4 { margin: 0 0 8px; }
+.case-study .dv .dv-spec-detail ul + h4 { margin-top: 24px; }
+.case-study .dv .dv-spec-sub-title { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); }
+.dv-spec-detail ul { gap: 10px; }
+.dv-spec-detail code { white-space: normal; overflow-wrap: anywhere; }
+.case-study .dv .dv-spec-shared { margin: 24px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+@media (prefers-reduced-motion: reduce) { .dv-spec-parts button { transition: none; } }
+@media (max-width: 47.99rem) {
+  .dv-spec-parts { display: none; }
+  .dv-spec-subs > .dv-spec-sub, .dv-spec-panel[data-on] .dv-spec-subs > .dv-spec-sub { grid-area: auto; visibility: visible; margin-top: 16px; }
+  .case-study .dv .dv-spec-sub-title { position: static; width: auto; height: auto; margin: 0 0 8px; overflow: visible; clip-path: none; }
+}
