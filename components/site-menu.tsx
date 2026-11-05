@@ -187,6 +187,8 @@ export function SiteMenu({ contact, cases }: Props) {
               <Image src={withBase("/images/about/portrait.webp")} alt="" fill sizes="30vw" />
             </Link>
             {!shown && <button type="button" tabIndex={-1} className="menu-card-close" onClick={() => end()} />}
+            {/* The dust alone reads as an empty box, so the landing's line goes into the card with it. */}
+            {path === "/" && <p className="menu-card-line" data-on={!shown || undefined}>{t.heroLine}</p>}
           </div>
           <nav className="menu-column" aria-label={t.siteNav} lang={locale}>
             <ul className="menu-links">
