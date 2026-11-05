@@ -69,6 +69,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {/* Route changes crossfade (View Transitions; static where unsupported). */}
           <ViewTransition>{children}</ViewTransition>
         </main>
+        {/* White panels: the page opens out of a thin line on load and between pages (metalab.com). */}
+        <div className="page-curtain" aria-hidden="true">
+          <i data-p="l" /><i data-p="r" /><i data-p="t" /><i data-p="b" /><i data-c="tl" /><i data-c="tr" /><i data-c="bl" /><i data-c="br" />
+        </div>
         <HtmlLang />
         <RevealObserver />
         <SmoothScroll />

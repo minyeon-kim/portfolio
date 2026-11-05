@@ -12,8 +12,7 @@ import { GetInTouch, SiteNav } from "./site-nav";
 const toMenu = (cases: CaseEntry[]) => cases.filter((c) => !c.meta.draft).map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title }));
 
 // The name in the middle; language, theme and the one clear action (Get in touch)
-// at the right; Menu at the left on every page but the landing, whose left column
-// already holds the same links. Phones keep Menu at the right, on every page.
+// at the right; Menu at the left on every page. Phones keep Menu at the right.
 export async function SiteHeader() {
   const [en, ko] = await Promise.all([getCases("en"), getCases("ko")]);
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));

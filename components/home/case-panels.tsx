@@ -3,9 +3,11 @@
 import { localize } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Children, useEffect, useState, type ReactNode } from "react";
 import { setUi, useUi } from "@/lib/ui-store";
 import { withBase } from "@/lib/site";
+import { curtainTo } from "@/lib/project-transition";
 
 // Below the stage: the selected case's full content, so scrolling down reads
 // straight into it. Nothing is mounted until a case is picked (the intro has
@@ -54,16 +56,34 @@ export function CasePanels({ children }: { children: ReactNode }) {
 // Header name on the landing page: back to the intro, at the top.
 export function HomeLink({ className, children }: { className?: string; children: ReactNode }) {
   const home = localize("/", useLocale());
+  const router = useRouter();
   return (
     <Link
       href={home}
       className={className}
       onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         // A case open on the landing has its own URL but is still this page.
-        if (window.location.pathname !== withBase(home) && !document.querySelector("[data-stage-index]")) return;
+        const onStage = Boolean(document.querySelector("[data-stage-index]"));
+        const atHome = window.location.pathname === withBase(home);
+        // The Menu grows the page back itself; and with no motion there is nothing to play.
+        const plain = document.documentElement.hasAttribute("data-menu") || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (plain) {
+          if (!atHome && !onStage) return;
+          e.preventDefault();
+          setUi({ activeCase: null, menuOpen: false });
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
         e.preventDefault();
-        setUi({ activeCase: null, menuOpen: false });
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (atHome && !onStage) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+        curtainTo(
+          () => (onStage ? setUi({ activeCase: null, menuOpen: false }) : router.push(home, { scroll: false })),
+          () => Boolean(document.querySelector("main .home-tagline-wrap")),
+        );
       }}
     >
       {children}

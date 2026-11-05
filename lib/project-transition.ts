@@ -55,6 +55,49 @@ export function syncAnimations(source: Element, copy: Element) {
   });
 }
 
+// After metalab.com: the page closes to a thin line on a white screen and the next one
+// opens out of that line. The panels are PageCurtain, driven by html[data-curtain]; the
+// same opening plays on first load, from CSS alone. Timings match the CSS.
+const CURTAIN_CLOSE = 500;
+const CURTAIN_WHITE = 250;
+const CURTAIN_OPEN = 600;
+export function curtainTo(change: () => void, ready: () => boolean) {
+  const html = document.documentElement;
+  if (html.hasAttribute("data-project-navigation") || html.getAttribute("data-curtain") === "close") return;
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  const overflow = html.style.overflow;
+  // Leftover momentum from the click-time scroll must not move the new page.
+  html.style.overflow = "hidden";
+  html.dataset.curtain = "close";
+  window.setTimeout(() => {
+    // Set only now: it also takes the current case's body down, which must stay until covered.
+    html.dataset.projectNavigation = "true";
+    if (window.location.hash) history.replaceState(history.state, "", window.location.pathname + window.location.search);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    change();
+    const closed = performance.now();
+    const wait = () => {
+      const elapsed = performance.now() - closed;
+      if (elapsed < CURTAIN_WHITE || (!ready() && elapsed < 3000)) {
+        requestAnimationFrame(wait);
+        return;
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      const main = document.querySelector("main");
+      main?.querySelector("[data-stage-index], [data-case-slug]")?.setAttribute("data-project-arrived", "true");
+      const heading = main?.querySelector<HTMLElement>(".selected-stage-title, .project-hero h1, h1");
+      heading?.setAttribute("tabindex", "-1");
+      heading?.focus({ preventScroll: true });
+      html.dataset.curtain = "open";
+      window.setTimeout(() => {
+        delete html.dataset.projectNavigation;
+        html.style.overflow = overflow;
+      }, CURTAIN_OPEN);
+    };
+    wait();
+  }, CURTAIN_CLOSE);
+}
+
 // The new page rises a short way and fades in over the old view, which drifts
 // up slightly and fades out. The two overlap, so there is no seam between them.
 // With `zoom`, the old view's device instead grows to the full screen first,
@@ -68,6 +111,10 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     return;
   }
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!zoom && !reduced) {
+    curtainTo(change, ready);
+    return;
+  }
   // The device layer: a copy of the hovered device at its on-screen box, grown
   // to the viewport over 650ms while the old view leaves. Flattened as it
   // grows (its 3D pose animates to none).
