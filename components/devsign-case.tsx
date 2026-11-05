@@ -72,7 +72,7 @@ function Insights({ discover }: { discover: Study }) {
       <div>
         <Block {...discover.desk} ff />
         {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
-        <section className="dv-evbox dv-gap-40">
+        <section className="dv-cycle-card dv-gap-40">
           <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
         </section>
         {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
@@ -205,7 +205,7 @@ function SourceInsights({ discover }: { discover: Study }) {
     <div className="dv-insights">
       <div>
         <Block title={desk.title} lead={q1.answer} text={desk.text} ff />
-        <section className="dv-evbox dv-gap-40">
+        <section className="dv-cycle-card dv-gap-40">
           <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
         </section>
         <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
@@ -639,12 +639,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          <section className="dv-evbox dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
+          <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>
           {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
           </> : <>
           <Block {...testing.usability} ff={ff} />
-          <section className="dv-evbox dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
+          <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">

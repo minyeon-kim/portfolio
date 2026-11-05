@@ -202,18 +202,9 @@ function TableView({ data }: { data: TableChart }) {
   );
 }
 
-function ChartIcon({ type }: { type: StageChart["type"] }) {
-  if (type === "donut" || type === "rings") {
-    return <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 3.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" strokeWidth="3" /></svg>;
-  }
-  if (type === "table") {
-    return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
-  }
-  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 16V10M10 16V4M15.5 16v-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>;
-}
-
-// One large chart at a time, after the charts in Metalab's Robinhood case: each draws itself,
-// holds, and hands over to the next, round and round, while it's on screen. Pointer or keyboard
+// One large chart at a time: word tabs on top, then one tinted plate with the finding at the left
+// and the chart at the right. Each chart draws itself, holds, and hands over to the next, round and
+// round, while it's on screen; the fill inside the current tab is the timer. Pointer or keyboard
 // focus holds it, the button stops it, tabs pick a chart. Every panel stays in one grid cell, so
 // the box keeps the height of the tallest and nothing below it moves. With reduced motion or no
 // JS the first chart stands complete and the tabs still work.
@@ -273,13 +264,9 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
       <div className="dv-cycle-nav">
         <div role="group" aria-label={labels.charts} className="dv-cycle-tabs">
           {charts.map((chart, i) => (
-            <button key={chart.tab} type="button" aria-label={chart.tab} aria-pressed={i === current} onClick={() => i !== current && go(() => i)}>
-              <ChartIcon type={chart.type} />
-              {i === current && motion && (
-                <svg className="dv-cycle-ring" viewBox="0 0 44 44" aria-hidden="true">
-                  <circle key={round} cx="22" cy="22" r="21" pathLength={100} onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />
-                </svg>
-              )}
+            <button key={chart.tab} type="button" className="press" aria-pressed={i === current} onClick={() => i !== current && go(() => i)}>
+              {i === current && motion && <i key={round} className="dv-cycle-timer" aria-hidden="true" onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />}
+              <span>{chart.tab}</span>
             </button>
           ))}
         </div>
@@ -289,28 +276,30 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
           </button>
         )}
       </div>
-      <div className="dv-cycle-stack dv-cycle-charts">
-        {charts.map((chart, i) => {
-          const on = i === current;
-          return (
-            <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
-              {chart.type === "donut" && <Donut data={chart} animate={on && phase === "play"} />}
-              {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
-              {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
-              {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
-              {chart.type === "table" && <TableView data={chart} />}
+      <div className="dv-cycle-plate">
+        <div className="dv-cycle-stack dv-cycle-texts">
+          {charts.map((chart, i) => (
+            <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
+              <p>{chart.title}</p>
+              {chart.note && <p className="dv-chart-source">{chart.note}</p>}
+              <ChartSource source={chart.source} />
             </div>
-          );
-        })}
-      </div>
-      <div className="dv-cycle-stack dv-cycle-texts">
-        {charts.map((chart, i) => (
-          <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
-            <p>{chart.title}</p>
-            {chart.note && <p className="dv-chart-source">{chart.note}</p>}
-            <ChartSource source={chart.source} />
-          </div>
-        ))}
+          ))}
+        </div>
+        <div className="dv-cycle-stack dv-cycle-charts">
+          {charts.map((chart, i) => {
+            const on = i === current;
+            return (
+              <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
+                {chart.type === "donut" && <Donut data={chart} animate={on && phase === "play"} />}
+                {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
+                {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
+                {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
+                {chart.type === "table" && <TableView data={chart} />}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
