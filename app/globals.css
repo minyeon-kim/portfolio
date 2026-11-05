@@ -2530,21 +2530,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-world-problem { --stagger: 180ms; }
 .home-world-role { --stagger: 60ms; left: 50%; top: 23%; translate: -50% 16px; font-size: 16px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
 .home-world-role[data-on] { translate: -50% 0; }
-/* Devsign: the role sits just above the name, clear of the card at the top right. */
-.home-stage[data-world="devsign"] .home-world-role { left: 26%; top: auto; bottom: calc(40% + 16px); translate: 0 16px; }
-.home-stage[data-world="devsign"] .home-world-role[data-on] { translate: 0 0; }
 .home-world-name { left: 26%; top: 60%; max-width: 48vw; font-family: var(--font-headline); font-size: clamp(56px, 7vw, 128px); font-weight: 200; line-height: 1; letter-spacing: -0.012em; text-wrap: balance; }
 .home-world-problem { right: var(--project-text-inset); bottom: 48px; width: min(100%, 30ch); font-size: 16px; font-weight: 500; line-height: 1.55; }
-/* Each world's own composition (metalab.com lays every project out differently). Devsign is the default above (Uber: card top right, name left of centre). */
-/* Gemini (Robinhood): a portrait card cropped at the bottom right, the name at the left of centre, the role under it, the problem top centre-right. */
-/* The Gemini phone keeps its bleed off the right edge and sits lower, below the pills. */
-.home-device[data-project="gemini-privacy"] { top: auto; bottom: -30vh; right: -2vw; width: min(34vw, 520px); aspect-ratio: 4 / 5; }
-/* The name starts clear of the pill column and stops short of the card (which begins at 68vw, or 102vw - 520px once the card caps). */
-.home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 300px)); }
-.home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: 50%; max-width: calc(min(68vw, 102vw - 520px) - var(--gx) - 48px); font-size: clamp(44px, 5.4vw, 104px); }
-.home-stage[data-world="gemini-privacy"] .home-world-role { left: var(--gx); top: auto; bottom: calc(56% + 16px); translate: 0 16px; }
-.home-stage[data-world="gemini-privacy"] .home-world-role[data-on] { translate: 0 0; }
-.home-stage[data-world="gemini-privacy"] .home-world-problem { right: auto; left: 52%; top: 22%; bottom: auto; width: min(100%, 28ch); }
 /* About (Midjourney): the facts card top right, the name bottom centre, the headline top centre, the bio bottom right. */
 .home-stage[data-world="about"] .home-world-name { left: 38%; top: auto; bottom: 20%; }
 .home-stage[data-world="about"] .home-world-role { left: var(--project-text-inset); top: 17%; translate: 0 16px; max-width: min(46vw, 20ch); font-size: clamp(28px, 2.6vw, 44px); font-weight: 500; line-height: 1.08; letter-spacing: -0.02em; white-space: normal; text-wrap: balance; }
@@ -2560,7 +2547,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-device { position: absolute; top: 14%; right: calc(var(--project-text-inset) + var(--picks-gutter)); width: min(40vw, 620px); aspect-ratio: 16 / 10; overflow: hidden; border: 0; border-radius: 22px; background: #141414; box-shadow: 0 60px 120px -40px rgb(0 0 0 / 0.7), 0 16px 40px -16px rgb(0 0 0 / 0.4); opacity: 0; translate: 0 40px; clip-path: inset(100% 0 0 0 round 22px); transition: opacity 400ms ease, translate 500ms var(--ease-out-soft), clip-path 500ms var(--ease-out-soft); pointer-events: none; }
 .home-device[data-active] { opacity: 1; translate: 0 0; clip-path: inset(0 0 0 0 round 22px); transition: opacity 300ms ease, translate 800ms var(--ease-out-soft), clip-path 800ms var(--ease-out-soft); }
 /* The cards sit above the backdrop's vignette, so the light theme's pale edge never washes over them. */
-.home-backdrop .home-device, .home-backdrop .home-device-caption { z-index: 1; }
+.home-backdrop .home-device { z-index: 1; }
 .home-device[data-project="devsign"] { translate: 0 0; clip-path: inset(0 0 0 100% round 22px); }
 .home-device[data-project="devsign"][data-active] { clip-path: inset(0 0 0 0 round 22px); }
 .home-device > * { scale: 1.12; transition: scale 500ms var(--ease-out-soft); }
@@ -2571,16 +2558,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .home-device[data-project="gemini-privacy"] { background: radial-gradient(90% 80% at 30% 10%, #9ad7ff 0%, #5b8cff 40%, #3a2f9a 100%); }
 .home-device[data-project="gemini-privacy"] .home-device-phone { background: none; }
 /* Its caption: a black block overlapping a corner of the card. */
-.home-device-caption { position: absolute; z-index: 2; display: none; width: 300px; margin: 0; padding: 22px 24px 20px; border-radius: 2px; background: #0a0a0b; color: #f2f2f4; opacity: 0; translate: 0 20px; pointer-events: none; transition: opacity 300ms ease, translate 300ms var(--ease); }
-.home-device-caption[data-active] { opacity: 1; translate: 0 0; transition: opacity 450ms ease 300ms, translate 600ms var(--ease-out-soft) 300ms; }
-.home-device-caption-title { display: block; margin-bottom: 34px; font-family: var(--font-display), var(--font-sans); font-size: 22px; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; }
-.home-device-caption-meta { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; color: #b9b9c2; font-size: 16px; font-weight: 500; line-height: 1.4; }
-.home-device-caption-meta > span:last-child { color: #fff; font-size: 20px; line-height: 1; }
-@media (min-width: 64rem) {
-  .home-device-caption { display: block; }
-  .home-device-caption[data-project="devsign"] { right: calc(var(--project-text-inset) + var(--picks-gutter)); top: calc(14% + min(40vw, 620px) * 0.625 - 72px); }
-  .home-device-caption[data-project="gemini-privacy"] { right: calc(min(34vw, 520px) - 2vw - 110px); bottom: 12vh; }
-}
 .home-device-window { position: absolute; inset: 0; display: flex; flex-direction: column; }
 .home-device-window .devsign-loop { position: relative; inset: auto; flex: 1; min-height: 0; max-width: none; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
 .home-device-window .devsign-loop { overflow: hidden; }
@@ -3280,19 +3257,27 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   header[data-intro] .header-cta { display: none; }
   .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
   .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
-  /* The Gemini card sits at the top right, under the header's right edge. */
-  .home-device[data-project="gemini-privacy"] { top: 14%; bottom: auto; right: var(--project-text-inset); width: min(26vw, 400px); }
-  /* The name stops short of the card's caption. */
-  .home-stage[data-world="gemini-privacy"] { --gx: max(18%, calc(var(--project-text-inset) + 240px)); }
-  .home-stage[data-world="gemini-privacy"] .home-world-name { max-width: calc(100vw - var(--project-text-inset) - min(26vw, 400px) - 190px - var(--gx) - 32px); }
-  .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 48%; width: min(26ch, calc(52% - var(--project-text-inset) - min(26vw, 400px) - 32px)); }
-  .home-device-caption[data-project="gemini-privacy"] { top: calc(14% + min(26vw, 400px) * 1.25 - 96px); right: calc(var(--project-text-inset) + min(26vw, 400px) - 110px); bottom: auto; }
+  /* Each case's hover, in metalab.com's own proportions. Gemini follows its The Atlantic
+     state: portrait card at the bottom right, name left of centre, the sentence high,
+     the role low. Devsign follows Midjourney: card at the top right of centre, role high,
+     name low, the sentence in the bottom right corner. */
+  .home-device[data-project="gemini-privacy"] { --card-h: 55svh; top: auto; bottom: 24px; right: var(--project-text-inset); width: auto; height: var(--card-h); aspect-ratio: 3 / 4; }
+  .home-stage[data-world="gemini-privacy"] { --gx: max(18.7%, calc(var(--project-text-inset) + 240px)); }
+  /* One line, unless the card leaves too little room for it (1024 wide). */
+  .home-stage[data-world="gemini-privacy"] .home-world-name { left: var(--gx); top: calc(57% - 0.5em); max-width: calc(100% - var(--gx) - var(--project-text-inset) - 41.25svh - 16px); font-size: clamp(44px, min(5.4vw, 10svh), 104px); }
+  .home-stage[data-world="gemini-privacy"] .home-world-problem { left: 42.4%; right: auto; top: 18.8%; bottom: auto; width: min(30ch, 300px); }
+  .home-stage[data-world="gemini-privacy"] .home-world-role { left: min(59%, calc(100% - var(--project-text-inset) - 41.25svh - 214px)); top: 69%; width: 190px; translate: 0 16px; white-space: normal; }
+  .home-device[data-project="devsign"] { top: 11.4%; left: 52%; right: auto; width: 40vw; }
+  .home-stage[data-world="devsign"] .home-world-name { left: 35%; top: calc(73.5% - 0.5em); max-width: none; white-space: nowrap; }
+  .home-stage[data-world="devsign"] .home-world-role { left: 28%; top: 18.8%; max-width: calc(24% - 24px); translate: 0 16px; white-space: normal; }
+  .home-stage[data-world="devsign"] .home-world-problem { left: 75.3%; right: var(--project-text-inset); bottom: 48px; width: auto; }
+  .home-stage:is([data-world="gemini-privacy"], [data-world="devsign"]) .home-world-role[data-on] { translate: 0 0; }
 }
 /* The shown card and its caption open the case. They sit in the backdrop, so the
    copy layer above lets the pointer through, except on its own visible parts. */
 .intro-surface.home-grid { pointer-events: none; }
 .home-picks, .home-note:not([data-swap]), .home-tagline-wrap:not([data-swap]) { pointer-events: auto; }
-.home-device[data-active], .home-device-caption[data-active] { pointer-events: auto; cursor: var(--cursor-action), pointer; }
+.home-device[data-active] { pointer-events: auto; cursor: var(--cursor-action), pointer; }
 @media (hover: hover) and (min-width: 64rem) {
   .home-device[data-active]:hover > * { scale: 1.02; transition-duration: 400ms; }
 }

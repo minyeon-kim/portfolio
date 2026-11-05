@@ -34,10 +34,9 @@ const subscribeStacked = (onChange: () => void) => {
 // its surface (Devsign's dark canvas, Gemini's blue night) while the loop
 // fades, its media sits in a large card at the top right (the Devsign browser
 // window with the live prototype, or the Gemini phone on its surface), the
-// name large at the left of centre and the problem line bottom right; the role
-// is in the card's caption. Each world has its own composition (CSS by data-world):
-// Devsign like metalab.com's Uber state, Gemini like Robinhood (portrait card
-// cropped at the bottom right), About like Midjourney (name bottom centre, no
+// name large and the problem line and role set apart. Each world has its own
+// composition (CSS by data-world): Devsign like metalab.com's Midjourney state,
+// Gemini like The Atlantic (portrait card at the bottom right), About (name bottom centre, no
 // card: the site's own loop stays as the image, the headline is the statement
 // with "End-to-end" set apart).
 export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
@@ -60,7 +59,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   // composition (metalab.com's per-project layouts). Kept while it fades out.
   type World = { slug: string; role?: string; emphasis?: string; name: string; text: string };
   const world: World | null = shown
-    ? { slug: shown.slug, name: shown.name, text: shown.hook ?? shown.problem }
+    ? { slug: shown.slug, role: [shown.role, shown.timeline].filter(Boolean).join(" · "), name: shown.name, text: shown.hook ?? shown.problem }
     : about && aboutCopy
       ? { slug: "about", role: aboutCopy.headline, emphasis: aboutCopy.emphasis, name: site.name, text: aboutCopy.bio }
       : null;
@@ -86,7 +85,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     const release = () => { timer ??= window.setTimeout(() => setHover(null), 160); };
     const onMove = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" || document.activeElement?.matches(".home-pick:focus-visible")) return;
-      const parts = [`.home-pick[data-slug="${hover}"]`, `.home-device[data-project="${hover}"]`, `.home-device-caption[data-project="${hover}"]`]
+      const parts = [`.home-pick[data-slug="${hover}"]`, `.home-device[data-project="${hover}"]`]
         .map((selector) => document.querySelector(selector)?.getBoundingClientRect())
         .filter((box): box is DOMRect => Boolean(box?.width));
       const inside = event.clientX >= Math.min(...parts.map((b) => b.left)) && event.clientX <= Math.max(...parts.map((b) => b.right))
@@ -194,11 +193,6 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
                   : null}
             </div>
-            {/* The card's caption (after lusion.co/work): what it is, the role and when. */}
-            <p className="home-device-caption" data-project={p.slug} data-active={shown?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
-              <span className="home-device-caption-title">{p.caption ?? p.title}</span>
-              <span className="home-device-caption-meta"><span>{[p.role, p.timeline].filter(Boolean).join(" · ")}</span><span aria-hidden="true">↘</span></span>
-            </p>
           </Fragment>
         ))}
       </div>

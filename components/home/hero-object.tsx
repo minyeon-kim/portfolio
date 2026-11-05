@@ -57,6 +57,8 @@ bool inBolt(vec2 q) {
   }
   return inside;
 }
+const float BOLT_SCALE = 1.3;
+const vec2 BOLT_AT = vec2(-1.13, 0.2);
 // Where point n of the form leans: the form, with a wide halo of dust.
 vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
@@ -98,8 +100,8 @@ vec3 formOf(float n, vec2 uv) {
       }
       loose *= 0.3;
     }
-    // Top left, clear of the title below and the project card on the right.
-    p = vec3(q + vec2(-1.75, 0.75), (hq(n, 17u) - 0.5) * 0.2);
+    // Left of the card and above the name, large.
+    p = vec3(q * BOLT_SCALE + BOLT_AT, (hq(n, 17u) - 0.5) * 0.2);
   } else {
     // The Gemini sparkle: a four-point star with concave sides, filled with a
     // thick band of dust inside its edge rather than a thin outline, so its
@@ -241,8 +243,9 @@ void main() {
   vSpec = spectrum * mix(0.55, 0.95, smoothstep(0.05, 0.7, length(g)));
   // Devsign: the logo's violet, cyan along the lower right, and a soft
   // white sheen across the upper slab.
-  vec2 d = (p.xy - vec2(0.35, 0.12)) / 1.6 - vec2(-1.75, 0.75);
-  float cyan = smoothstep(0.25, 0.55, dot(d, normalize(vec2(1.0, -0.7))));
+  // The bolt's own coordinates, wherever formOf sets it (scale 1.3 at (-1.13, 0.2)).
+  vec2 d = ((p.xy - vec2(-1.13, 0.2)) / 1.3 + vec2(-1.75, 0.75) - vec2(0.35, 0.12)) / 1.6 - vec2(-1.75, 0.75);
+  float cyan = smoothstep(0.5, 0.8, dot(d, normalize(vec2(1.0, -0.7))));
   float sheen = exp(-pow(dot(d - vec2(-0.25, 0.35), normalize(vec2(0.3, 1.0))) / 0.08, 2.0)) * 0.6;
   vec3 boltTint = mix(mix(vec3(0.56, 0.28, 1.0), vec3(0.3, 0.8, 1.0), cyan), vec3(0.95, 0.9, 1.0), sheen);
   vTint = mix(vTint, boltTint, bolt);
@@ -680,7 +683,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       const c = el.getBoundingClientRect();
       // The other boxes, on wide screens: the case pills and the note, which
       // sit apart from the statement, in the waves.
-      [".home-picks", ".home-note:not([data-swap]) .home-note-default"].forEach((selector, i) => {
+      [".home-picks", ".home-note:not([data-swap]) .home-note-default, .home-world-role[data-on]"].forEach((selector, i) => {
         const box = wideStage() ? document.querySelector<HTMLElement>(selector)?.getBoundingClientRect() : undefined;
         const at = 4 + i * 4;
         if (!box) { clear.fill(9, at, at + 4); return; }
