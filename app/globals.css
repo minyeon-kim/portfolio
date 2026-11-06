@@ -5924,3 +5924,31 @@ header.group\/header { transition: translate 350ms var(--ease), background-color
 header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 24px); }
 @media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
 
+/* One page rhythm (owner, after Linear's redesign write-up, Figma's UI3 story, Raycast for iOS,
+   Cursor features and Notion AI): words never sit in boxes, and every screen, board or recording
+   sits in one frame at one width. So: text blocks lose their cards and are split by a hairline and
+   space; boards and fitted screens go on the same case plate as the clips, at the same wide width.
+   The Problem statement stays the one full surface. */
+.case-study[data-project="devsign"] .dv { --plate-a: light-dark(#f6f3ff, #1e1a3a); --plate-b: light-dark(#e6defe, #2c2460); }
+.case-study[data-project="gemini"] .dv { --plate-a: light-dark(#f2f6ff, #151d36); --plate-b: light-dark(#dde8fd, #1d2d5e); }
+.case-study .dv :is(.dv-glance li, .dv-iv-claim, .dv-cast > *, .dv-tk-cards li, .dv-features li, .dv-persona) {
+  padding: 24px 0 0; border: 0; border-top: 1px solid var(--dv-line); border-radius: 0; background: none; box-shadow: none;
+}
+.case-study .dv :is(.dv-dd, .dv-journey, .dv-evbox, .dv-screens-held .dv-iter-stage) { padding-inline: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.case-study .dv .dv-evbox + .dv-evbox { margin-top: 64px; }
+/* Media: the same plate and width as the clips. */
+.case-study .dv :is(.dv-figure.dv-board > .dv-open-frame, .dv-figure.dv-board > img, .dv-vpc-view, .dv-fit) {
+  box-sizing: border-box; padding: clamp(16px, 2vw, 28px); border-radius: 24px; background: linear-gradient(115deg, var(--plate-a), var(--plate-b));
+}
+.case-study .dv :is(.dv-figure.dv-board, .dv-vpc-view, .dv-fit) img { border-radius: 10px; }
+.case-study .dv .dv-figure.dv-board > .dv-open-frame .dv-open-hint { right: 36px; bottom: 36px; }
+@media (min-width: 64rem) {
+  .case-study .dv :is(.dv-figure.dv-board, .dv-vpc-view, .dv-figure:has(.dv-fit)) {
+    --media-w: min(1640px, calc(100vw - 96px)); width: var(--media-w); max-width: none; margin-left: calc(50% - var(--media-w) / 2);
+  }
+}
+.case-study .dv .dv-board .dv-fit { padding: 0; background: none; }
+.case-study .dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-features li, .dv-voices li, .dv-people li, .dv-scenarios li, .dv-candidates li, .dv-selection-problem) { background: none; }
+.case-study .dv .dv-figure .dv-open-frame .dv-fit { padding: 0; background: none; }
+@media (min-width: 64rem) { .case-study .dv .dv-journey.dv-scroll { overflow: visible; } }
+.case-study .dv .dv-figure:has(.dv-fit) > .dv-open-frame { box-sizing: border-box; padding: clamp(16px, 2vw, 28px); border-radius: 24px; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
