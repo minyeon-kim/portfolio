@@ -1488,3 +1488,4 @@ Affinity map trimmed (owner: too much text besides the notes): no sentence under
 Landing statement a little higher (owner): bottom 14.5% (was 12%).
 Interview, lean (owner: still too wordy): finding + tiles → the two quotes without claim labels → two quiet lines of method (`.dv-iv-meta`: "What we asked" with the three keywords, "Who we talked to" with P01–P04 roles). Full questions and team size / experience live in the linked guide and the MDX only. Figma not updated.
 Affinity map spacing (owner: the top text was bunched): 64px between the 201 → 7 → 4 row and the board; the participant colour key moved under the notes (40px), then the board link. Figma not updated.
+Persona cards are lean (owner: too much text): photo, name, bio and quote only; the pain → need rows are off the page (`person.pairs` stays in the MDX). The journey with its two low points carries the rest. Figma not updated.
