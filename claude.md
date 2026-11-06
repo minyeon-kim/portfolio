@@ -1493,3 +1493,5 @@ Lean feature list and handoff (owner: both still busy): the open feature shows i
 Sketching shows an empty dashed box labelled "Sketches · to be added" / "스케치 · 추가 예정" (`develop.sketching.placeholder`, `.dv-placeholder-box`, 21:9 at the wide media width): the sketch photo was only an example (owner). Remove `placeholder` once the real sketches exist; `image` stays in the MDX. Figma not updated.
 
 Survey chart copy in plain words (owner: the bar chart was hard to follow), EN/KO: tabs ask a question (AI를 믿을까 / AI의 가장 큰 불만; Do they trust AI? / Biggest frustration), the trust title says 1 in 3 (33%), the frustration title says what it means (almost right but a little off, so people check it all again), bar labels are full phrases (거의 맞지만 조금 틀린 결과, AI 코드를 고치는 데 시간이 더 걸림…), and the source explains why the total passes 100% (pick more than one, 4 of 7 shown). Values unchanged. Figma not updated.
+
+Devsign personas block has no body line under its finding (owner: "대표 사용자 두 명…" read awkwardly); the cards and journey say it. EN/KO. Figma not updated.
