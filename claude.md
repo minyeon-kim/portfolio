@@ -1484,3 +1484,5 @@ Affinity mapping after the owner's sticky-board reference (supersedes the 201-st
 Affinity map problem groups have no circles (owner): each problem is its title, a short colour bar under it and the four notes as a tight 2 x 2 group (notes 46% of the group width), its sentence below; legend "Colours = participants. Each group = one of the four problems." / "색 = 참가자. 묶음 하나 = 문제 하나." Figma not updated.
 Interview hierarchy (owner: nothing to focus on): finding + call tiles → the two quotes as the evidence (28px, claim label above) → method context last and quiet (questions as one line each, key in ink and question muted; participants in a compact 2 x 2), after a hairline. Figma not updated.
 Affinity map trimmed (owner: too much text besides the notes): no sentence under each problem group and no legend line; the participant colour key and the problem titles stay. The stage shrinks to the groups once they form. Figma not updated.
+
+Landing statement a little higher (owner): bottom 14.5% (was 12%).
