@@ -297,12 +297,16 @@ export const study = {
     title: "Prototype",
     lead: "See, turn off and check, inside the answer.",
     text: "Built in HTML/JS with moderator and participant modes that log every click.",
-    changes: [
-      { title: "A Source badge under the answer", before: "Hard to tell where it came from.", after: "A Source badge with items per Gmail, Calendar and Memory.", src: "/images/cases/gemini-privacy/screen-a2-badge.webp", width: 750, height: 1624, alt: "The answer with a Source badge under it" },
-      { title: "One toggle per source", before: "Two settings pages, 3–5 clicks each.", after: "One toggle, without leaving the chat.", src: "/images/cases/gemini-privacy/screen-a3-panel.webp", width: 750, height: 1624, alt: "The source panel with one toggle per source" },
-      { title: "Deleted vs. only blocked", before: "Delete and block look the same.", after: "“Will be deleted” and “only blocked,” shown apart.", src: "/images/cases/gemini-privacy/screen-b2-list.webp", width: 750, height: 1624, alt: "The list of what will be deleted and what is only blocked" },
-      { title: "A result you can check", before: "Trusting the result is up to you.", after: "A line-by-line result and Check now.", src: "/images/cases/gemini-privacy/screen-b3-result.webp", width: 750, height: 1624, alt: "The line-by-line result with a Check now button" },
-    ],
+    details: {
+      label: "UI details",
+      lead: "The four places where the answer changed.",
+      items: [
+        { title: "A Source badge under the answer", body: "A Source badge with items per Gmail, Calendar and Memory.", before: "Hard to tell where it came from.", src: "/images/cases/gemini-privacy/detail-a2-badge.webp", width: 720, height: 250, alt: "The answer with a Source badge under it" },
+        { title: "One toggle per source", body: "One toggle, without leaving the chat.", before: "Two settings pages, 3–5 clicks each.", src: "/images/cases/gemini-privacy/detail-a3-panel.webp", width: 720, height: 790, alt: "The source panel with one toggle per source" },
+        { title: "Deleted vs. only blocked", body: "“Will be deleted” and “only blocked,” shown apart.", before: "Delete and block look the same.", src: "/images/cases/gemini-privacy/detail-b2-list.webp", width: 690, height: 764, alt: "The list of what will be deleted and what is only blocked" },
+        { title: "A result you can check", body: "A line-by-line result and Check now.", before: "Trusting the result is up to you.", src: "/images/cases/gemini-privacy/detail-b3-result.webp", width: 700, height: 648, alt: "The line-by-line result with a Check now button" },
+      ],
+    },
   },
   testing: {
     method: "Validation",
