@@ -5912,7 +5912,7 @@ li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 32
 .case-study .dv .dv-posts .dv-posts-list cite { padding-top: 0; }
 @media (min-width: 64rem) {
   .case-study .dv .dv-posts { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: clamp(40px, 5vw, 96px); align-items: start; }
-  .case-study .dv .dv-posts .dv-posts-head { position: sticky; top: 120px; }
+  .case-study .dv .dv-posts .dv-posts-head { position: static; }
 }
 @media (max-width: 47.99rem) {
   .case-study .dv .dv-posts { margin-top: 56px; }
@@ -6171,4 +6171,34 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .dv-hdoc-table tbody th { width: auto; }
   .dv-hdoc-pin { width: 18px; height: 18px; margin: -9px 0 0 -9px; font-size: 11px; }
 }
+/* Handoff excerpt comes alive (owner): the pins pop in one after another as it arrives, pointing at
+   a row or a pin lights both, and the screenshot leans in (1.5x) toward that pin. Desktop: screen
+   at the left, table at the right. */
+.dv-hdoc-lens { position: relative; transition: transform 500ms var(--ease-out-soft, var(--ease)); }
+.dv-hdoc-shot[data-zoom] .dv-hdoc-lens { transform: scale(1.5); }
+.dv-hdoc-pin { transition: transform 250ms var(--ease), box-shadow 250ms var(--ease); cursor: default; }
+.dv-hdoc-pin[data-lit] { transform: scale(1.25); box-shadow: 0 0 0 4px color-mix(in srgb, var(--case-accent) 45%, transparent); }
+.dv-hdoc-shot[data-zoom] .dv-hdoc-pin { scale: 0.67; }
+.dv-hdoc-table tbody tr { transition: background-color 200ms var(--ease); }
+.dv-hdoc-table tbody tr[data-lit] { background: color-mix(in srgb, var(--case-accent) 10%, transparent); }
+.dv-hdoc-table tbody tr[data-lit] th, .dv-hdoc-table tbody tr[data-lit] td { color: var(--dv-ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .dv-hdoc-excerpt .dv-hdoc-pin { opacity: 0; translate: 0 6px; }
+  .dv-hdoc-excerpt.reveal[data-shown] .dv-hdoc-pin { animation: dv-pin-in 400ms var(--ease) both; animation-delay: calc(500ms + var(--i) * 140ms); }
+}
+@keyframes dv-pin-in { to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .dv-hdoc-lens, .dv-hdoc-pin { transition: none; } .dv-hdoc-shot[data-zoom] .dv-hdoc-lens { transform: none; } }
+@media (min-width: 64rem) {
+  .case-study .dv .dv-hdoc-excerpt { --hx-w: min(1640px, calc(100vw - 96px)); width: var(--hx-w); max-width: none; margin-left: calc(50% - var(--hx-w) / 2); }
+  .dv-hdoc-pair { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(32px, 3vw, 48px); align-items: start; }
+  .dv-hdoc-pair .dv-hdoc-table { margin-top: 0; }
+  /* Beside the screen each row stacks: number, element, behavior, then states in the muted tone. */
+  .dv-hdoc-pair .dv-hdoc-table thead { display: none; }
+  .dv-hdoc-pair .dv-hdoc-table tr { display: grid; grid-template-columns: 32px 1fr; gap: 4px 8px; padding: 14px 12px 14px 8px; border-bottom: 1px solid var(--dv-line); border-radius: 8px; }
+  .dv-hdoc-pair .dv-hdoc-table th, .dv-hdoc-pair .dv-hdoc-table td { padding: 0; border: 0; }
+  .dv-hdoc-pair .dv-hdoc-table td:first-child { grid-row: span 3; width: auto; }
+  .dv-hdoc-pair .dv-hdoc-table tbody th { width: auto; }
+  .dv-hdoc-pair .dv-hdoc-table td:nth-child(4) { font-size: 16px; }
+}
 
+@media (min-width: 64rem) { .dv-hdoc-pair .dv-hdoc-shot { position: sticky; top: 120px; } }
