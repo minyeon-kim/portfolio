@@ -6336,6 +6336,27 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-iv-people li small { grid-column: 2; }
 @media (min-width: 64rem) { .case-study .dv .dv-iv-people { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
 /* Interview, lean: finding, two quotes, then two quiet lines of method. */
+.dv-iv-rows { display: grid; gap: 0; margin-top: 72px; }
+.dv-iv-row { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px; padding-block: 40px; border-top: 1px solid var(--dv-line); }
+.case-study .dv h4.dv-iv-rowlabel { margin: 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.dv-ivq, .dv-ivp { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-ivq { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dv-ivp { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.dv-ivq li, .dv-ivp li { display: grid; align-content: start; gap: 6px; padding: 20px; border-radius: var(--dv-card-radius); background: light-dark(#f3f2f8, #17181d); }
+.dv-ivq b { color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.35; }
+.dv-ivq span, .dv-ivp span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-ivp b { color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-ivp strong { color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.dv-iv-rows .dv-iv-claims { margin-top: 0; }
+.case-study .dv .dv-iv-insight { margin: 0 0 16px; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.case-study .dv .dv-iv-rows .dv-iv-claim blockquote { margin: 0; padding: 0 0 0 16px; border: 0; border-left: 2px solid color-mix(in srgb, var(--case-accent) 60%, transparent); color: var(--dv-muted); font-size: 18px; line-height: 1.5; word-break: keep-all; }
+.dv-iv-rows .dv-iv-claim blockquote span { display: block; margin-top: 6px; font-size: 16px; }
+.dv-iv-rows .dv-iv-label { margin-bottom: 8px; }
+@media (max-width: 63.99rem) {
+  .dv-iv-row { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 32px; }
+  .dv-ivq { grid-template-columns: minmax(0, 1fr); }
+  .dv-ivp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .dv-iv-meta { display: grid; gap: 8px; margin: 64px 0 0; padding-top: 20px; border-top: 1px solid var(--dv-line); font-size: 16px; line-height: 1.5; }
 .dv-iv-meta div { display: flex; flex-wrap: wrap; gap: 4px 16px; }
 .dv-iv-meta dt { min-width: 140px; color: var(--dv-muted); }
@@ -6354,3 +6375,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-placeholder-box { display: grid; place-items: center; aspect-ratio: 21 / 9; border: 1px dashed var(--dv-line); border-radius: 12px; background: color-mix(in srgb, var(--dv-ink) 4%, transparent); color: var(--dv-muted); font-size: 16px; }
 @media (min-width: 64rem) { .case-study .dv .dv-placeholder-box { --ph-w: min(1640px, calc(100vw - 96px)); width: var(--ph-w); max-width: none; margin-left: calc(50% - var(--ph-w) / 2); } }
 
+
+/* Interview rows: insights sit straight in their row, no extra rule or box. */
+.case-study .dv .dv-iv-rows .dv-iv-claims .dv-iv-claim { padding: 0; border: 0; border-radius: 0; background: none; }
+.case-study .dv .dv-iv-rows .dv-iv-claims { margin-top: 0; }
