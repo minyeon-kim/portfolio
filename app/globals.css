@@ -5912,3 +5912,8 @@ li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 32
   .case-study .dv .dv-posts .dv-posts-list li { grid-template-columns: minmax(0, 1fr); padding: 20px 0; }
   .case-study .dv .dv-posts .dv-posts-list strong { grid-row: auto; }
 }
+/* Chart cards without a plate (owner): the word tabs, the finding at the left and the chart at the
+   right sit straight on the page, one hairline above the chart area marking where the tabs end.
+   Applies to every chart stage (survey and usability, Devsign and Gemini). */
+.case-study .dv .dv-cycle-plate { padding: 32px 0 0; border-top: 1px solid var(--dv-line); border-radius: 0; background: none; }
+@media (max-width: 63.99rem) { .case-study .dv .dv-cycle-plate { padding-top: 24px; } }
