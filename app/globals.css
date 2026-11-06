@@ -5691,3 +5691,14 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 /* Evidence boxes share the plate (owner: the chart box and the posts box under it were two
    different colours): same tint, no outline. */
 .case-study .dv .dv-evbox { border: 0; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
+/* Handoff words (owner: the text sat oddly at the top with a hole below): the screen's purpose is
+   quiet context at the top, the current element sits centred beside the screen like the other
+   held cards, and the progress stays at the bottom. */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-spec-purpose { margin-bottom: 0; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; }
+  .dv-spec-side .dv-spec-subs { margin-block: auto; padding-block: 24px; }
+  .dv-spec-side .dv-spec-progress { margin-top: 0; padding-top: 0; }
+  /* The subs share one cell sized by the longest; each centres in it. */
+  .dv-spec-side .dv-spec-subs > .dv-spec-sub, .dv-spec-side .dv-spec-el { align-self: center; }
+  .dv-spec-side .dv-spec-sub, .dv-spec-side .dv-spec-els { display: grid; }
+}
