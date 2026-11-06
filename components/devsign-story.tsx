@@ -144,6 +144,17 @@ export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
   return { root, active, setActive, pinned, go };
 }
 
+// A short list that reveals one row per step: the heading and list hold on screen and each scroll
+// step brings in the next row (owner). Elsewhere the list shows with FlowPlay as before.
+export function HeldFlow({ count, children }: { count: number; children: React.ReactNode }) {
+  const held = useHeldSteps(count);
+  return (
+    <div ref={held.root} className="dv-held-track dv-held-flow" data-pinned={held.pinned || undefined} style={{ "--n": count, "--held-step": held.active } as CSSProperties}>
+      <div className="dv-held-flow-stage">{children}</div>
+    </div>
+  );
+}
+
 // Word tabs over a holding card: they say what can be picked before the card is read, and jump
 // to that step of the scroll (the chart cards use the same tabs).
 function StepTabs({ names, active, go, label }: { names: string[]; active: number; go: (i: number) => void; label: string }) {

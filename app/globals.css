@@ -6505,3 +6505,10 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-journey-play[data-armed] .dv-journey-developer { stroke-dashoffset: calc(1 - min(1, max(0, var(--sp, 0) * 1.25 - 0.12))) !important; }
 .dv-journey-play[data-armed] .dv-journey-low { transition: opacity 400ms var(--ease), transform 400ms var(--ease); transition-delay: 0ms; opacity: 0; transform: scale(0.7); }
 .dv-journey-play[data-armed][data-shown] .dv-journey-low[data-on] { opacity: 1; transform: none; }
+/* Analysis holds and brings in one stage per scroll step (HeldFlow), 45svh apart. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-held-flow::after { height: calc((var(--n, 1) - 1) * 45svh); }
+  .dv-held-flow > .dv-held-flow-stage { background: var(--dv-bg, var(--bg)); padding-block: 8px; }
+  .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow > li { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1) !important; translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px) !important; transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
+  .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow::after { transform: scaleY(calc((var(--held-step) + 1) / var(--n))) !important; transition: transform 450ms var(--ease); }
+}
