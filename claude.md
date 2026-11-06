@@ -1531,3 +1531,5 @@ Interview lists span the whole column (owner: at 800px they leaned left under th
 Interview block drops "나온 인사이트" / "What we found" (owner: the heading already says it and Define's key problems carry the insights): only 알고 싶었던 것 and 참가자 follow the finding. `insightsLabel` and the `claims` (labels, sentences, quotes) stay in the MDX, unused. Figma not updated.
 
 Handoff spec lead in plain words: "화면마다 무엇을 누르면 어떻게 되는지, 언제 버튼이 막히는지까지 정리했다." / "For each screen, we wrote down what every control does and when it’s disabled." (still no claim it was handed to developers). Figma not updated.
+
+Co-design wording: what to remove was decided while designing together, not by vote (owner). Iteration 2 line: "화면 5개를 현업 디자이너와 함께 고치며, 무엇을 뺄지 정했다." / "We reworked 5 screens with a practicing designer and decided together what to remove."; the photo alt no longer says voting with stickers. Figma not updated.
