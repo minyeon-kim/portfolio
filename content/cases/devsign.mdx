@@ -152,8 +152,8 @@ export const study = {
     interview: {
       method: "Primary research",
       title: "Primary research · In-depth interview",
-      lead: "Everyone double-checks AI work, but no one is clearly in charge.",
-      text: "We spent 60 minutes each with four people who do this work every day.",
+      lead: "Everyone reviewed the AI output. No one owned the decision.",
+      text: "We asked four people, designers, a PM and a developer, how they check AI output and who makes the final call. (1:1, remote, 60 min each)",
       questionsLabel: "What we asked",
       questionKeys: ["Where it gets stuck", "Who decides", "Where the reason goes"],
       questions: [
@@ -169,8 +169,8 @@ export const study = {
         ["P04", "Developer", "Team of 31+", "10+ years"],
       ],
       claims: [
-        { title: "Everyone checks it again", quotes: [["Even if AI does 80%, review doesn’t go away.", "Developer, 10+ years"], ["I just look at it and fix it again myself.", "PM, 3+ years"]] },
-        { title: "No one clearly owns the decision", quotes: [["On our team, developers hold most of the initiative.", "UI/UX designer, 3–5 years"], ["Conflicts arise over who manages UI structure and changes: ‘why should we do it?’", "Developer, 10+ years"]] },
+        { title: "Everyone checks it again", label: "Review", quotes: [["Even if AI does 80%, review doesn’t go away.", "Developer, 10+ years"], ["I just look at it and fix it again myself.", "PM, 3+ years"]] },
+        { title: "No one clearly owns the decision", label: "Decision", quotes: [["Conflicts arise over who manages UI structure and changes: ‘why should we do it?’", "Developer, 10+ years"], ["On our team, developers hold most of the initiative.", "UI/UX designer, 3–5 years"]] },
       ],
       photo: { caption: "A remote session. The participant’s video is blurred.", tiles: [
         { src: "/images/devsign/interview-tile-a.webp", alt: "Minyeon, a researcher, on the video call" },
