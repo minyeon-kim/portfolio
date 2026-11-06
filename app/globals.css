@@ -3226,13 +3226,13 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    its second line stepped in; the note high on the right, in the sky above the waves. */
 @media (min-width: 64rem) {
   .intro-surface.home-grid { display: block; }
-  .home-tagline-wrap { position: absolute; left: 34%; bottom: 22%; justify-items: start; }
-  .home-tagline-wrap:lang(ko) { bottom: 19%; }
+  .home-tagline-wrap { position: absolute; left: 31%; bottom: 19%; justify-items: start; }
+  .home-tagline-wrap:lang(ko) { bottom: 16%; }
   .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(40px, min(4.6vw, 8svh), 88px); line-height: 1.04; text-align: left; text-wrap: wrap; }
   .home-tagline-wrap:lang(ko) .home-tagline { width: 9.6em; font-size: clamp(36px, min(4vw, 7.2svh), 76px); line-height: 1.2; }
   /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
   .home-tagline * { text-indent: 0; }
-  .home-note { position: absolute; left: 59.5%; top: 25%; width: 30ch; text-align: left; }
+  .home-note { position: absolute; left: 62%; top: 25%; width: 30ch; text-align: left; }
   .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
   /* After metalab.com's menu: the pages as large text, then the cases as pills. */
   .home-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }

@@ -1443,3 +1443,5 @@ Less text on Devsign (owner: too much text overall), EN/KO: findings stay, bodie
 Gemini trimmed the same way (EN/KO): overview process, desk research, interview, persona summary, concept feedback, rules, user flow and test plan bodies cut to one line; the affinity and improvement-direction bodies and half of the SUS note removed. Figma not updated.
 Testing has no stage line under its title any more (owner: the text read as too many separate pieces); the usability finding opens the stage. `testing.lead` stays in the MDX. Figma not updated.
 Devsign usability block (findings first, with charts): the block keeps only its label and the who / how much line; each chart sentence is the finding, and the first one now carries the main result ("On the second try, help dropped from 2.3 to 0.4 (goal: 1.5 or less), but neither person finished the first try without help."). `resultLead` stays in the MDX for the case without charts. Figma not updated.
+
+Landing (≥64rem) statement moved a little left and down (left 31%, bottom 19%, Korean 16%; was 34% / 22% / 19%) and the note a little right (left 62%, was 59.5%), at the owner's request. Figma Main not updated.
