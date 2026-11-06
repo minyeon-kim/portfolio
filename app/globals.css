@@ -6017,3 +6017,13 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: 160px; }
 }
+/* Stages get more room than the blocks inside them (owner: the sections felt cramped; the stage
+   title sat 72px over its first block while blocks were 160px and a screen apart). Desktop only. */
+@media (min-width: 64rem) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway) {
+    padding-block: clamp(200px, 26svh, 280px);
+  }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section#overview { padding-top: 160px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 128px; }
+}
+
