@@ -73,9 +73,11 @@ vec3 formOf(float n, vec2 uv) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
-      float y = 0.29 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.1 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 0.85;
+      // Thinner through the middle, where the copy sits, full height towards the sides.
+      float mid = 1.0 - 0.45 * (1.0 - smoothstep(0.6, 2.6, abs(x)));
+      float y = (0.29 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.1 * sin(x * 4.1 + z * 3.3 + time * 0.5)) * mid + ridge * 0.85;
       // Tilted towards the viewer, so the rows open out down the screen.
-      p = vec3(x, y + (z + 0.9) * 0.3 + ground, z);
+      p = vec3(x, y + (z + 0.9) * 0.3 * mid + ground, z);
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
