@@ -361,6 +361,93 @@ const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduc
 // On desktop one card holds still on the screen: the clip on its colour at the left, the
 // text at the right, and native scroll changes what's inside. The steps show where you are
 // and jump there. Elsewhere each feature is its own card, clip above its text.
+// Core features after Mobbin's section (owner's reference): the features as a list at the left,
+// only the current one open (its sentence and what it solves, with a bar that fills as its clip
+// plays), and one wide frame at the right playing that feature's clip. When a clip ends the next
+// feature opens; pressing a name switches at once. Clips play only while the block is on screen;
+// with reduced motion nothing plays by itself and the clip shows its controls.
+export function FeatureList({ reels }: { reels: Reel[] }) {
+  const root = useRef<HTMLDivElement>(null);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  const [current, setCurrent] = useState(0);
+  const [onScreen, setOnScreen] = useState(false);
+  const [near, setNear] = useState(false);
+  const [still, setStill] = useState(false);
+  const [refused, setRefused] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    setStill(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const nearby = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); nearby.disconnect(); } }, { rootMargin: "100% 0px" });
+    const seen = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.4 });
+    nearby.observe(el);
+    seen.observe(el);
+    const retry = () => { const v = videos.current[current]; if (v && v.paused && !still) v.play().catch(() => {}); };
+    window.addEventListener("pointerdown", retry, { passive: true });
+    return () => { nearby.disconnect(); seen.disconnect(); window.removeEventListener("pointerdown", retry); };
+  }, [current, still]);
+  useEffect(() => {
+    videos.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === current && onScreen && !still) {
+        v.muted = true;
+        v.playbackRate = PLAYBACK_RATE;
+        v.play().catch((error: Error) => { if (error.name === "NotAllowedError") setRefused(true); });
+      } else {
+        v.pause();
+        if (i !== current && v.currentTime) v.currentTime = 0;
+      }
+    });
+  }, [current, onScreen, still]);
+  const pick = (i: number) => {
+    const v = videos.current[i];
+    if (v) v.currentTime = 0;
+    root.current?.style.setProperty("--fl-p", "0");
+    setCurrent(i);
+  };
+  return (
+    <div ref={root} className="dv-flist dv-gap-40">
+      <ol className="dv-flist-items">
+        {reels.map((reel, i) => (
+          <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined}>
+            <button type="button" aria-expanded={i === current} onClick={() => pick(i)}>
+              <b>{reel.kicker.split(" ")[0]}</b>
+              <span>{reel.name}</span>
+            </button>
+            <div className="dv-flist-more">
+              <div>
+                <p className="dv-flist-body">{reel.body}</p>
+                {reel.solves && <p className="dv-flist-solves">{reel.solves}</p>}
+              </div>
+            </div>
+            <i className="dv-flist-bar" aria-hidden="true"><i /></i>
+          </li>
+        ))}
+      </ol>
+      <div className="dv-flist-frame">
+        {reels.map((reel, i) => (
+          <video
+            key={reel.id}
+            ref={(el) => { videos.current[i] = el; }}
+            src={withBase(reel.clip.src)}
+            poster={withBase(reel.clip.poster)}
+            muted
+            playsInline
+            preload={near && i <= current + 1 ? "auto" : "none"}
+            controls={(still || refused) && i === current}
+            data-on={i === current || undefined}
+            aria-hidden={i !== current || undefined}
+            aria-label={reel.alt ?? reel.name}
+            onTimeUpdate={(e) => { if (i === current) root.current?.style.setProperty("--fl-p", String(e.currentTarget.duration ? e.currentTarget.currentTime / e.currentTarget.duration : 0)); }}
+            onPlaying={() => setRefused(false)}
+            onEnded={() => { if (i === current) pick((i + 1) % reels.length); }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function FeatureReels({ reels }: { reels: Reel[] }) {
   const locale = useLocale();
   const track = useRef<HTMLDivElement>(null);

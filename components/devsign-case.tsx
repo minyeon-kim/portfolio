@@ -8,7 +8,7 @@ import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
-import { FeatureReels, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
+import { FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -584,7 +584,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff && develop.selection && overview.features && (
           <div className="dv-main-features">
             <Block title={develop.selection.label} lead={overview.features.title} ff />
-            <FeatureReels
+            <FeatureList
               reels={overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 const shown = deliver.features?.find((item: Study) => item.title === f.name);
