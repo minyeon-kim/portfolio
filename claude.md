@@ -1550,3 +1550,5 @@ Held blocks give the last step more room (owner: the last item scrolled away bef
 Landing note, second pass (owner: still too much dust round it): slot 1 now clears 88% (was 75%) with a wider soft edge (clip margin 0.12 x / 0.22 y, the other boxes keep 0.05 / 0.08), so the dust thins around the note, not only under the letters.
 
 Key problems and the value proposition pairs come in one per scroll step (owner chose them from the review): both are HeldFlow tracks (heading + list hold, 45svh a step, last step 1.5×). Key problem rows rise in; a value proposition row fills left to right (pain, arrow, idea, arrow, feature; 0–440ms). On screens up to 860px tall the problem rows are tighter (22px) so the four fit while held. Held stages hug their content (no one-block-per-screen min-height). Phones, short screens and reduced motion show both at once. Figma not updated.
+
+Landing (≥64rem) statement sits at the left edge under the menu column (left = page inset, bottom clamp(32px, 6svh, 64px), Korean too; supersedes left 34% / bottom 14.5%). Its second line keeps the stepped indent. No overlaps at 1024–1920, no scroll. Figma Main not updated.
