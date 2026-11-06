@@ -6026,4 +6026,12 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section#overview { padding-top: 160px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 128px; }
 }
+/* Donut reads in one place (owner: finding left, ring middle, legend right made the eye go back and
+   forth): the legend is one short row centred under the ring, label and value together. */
+.case-study .dv .dv-trust-wrap { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+.case-study .dv .dv-trust { width: min(100%, 320px); }
+.case-study .dv .dv-trust-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; width: auto; }
+.case-study .dv .dv-trust-legend li { display: block; padding: 0; border: 0; }
+.case-study .dv .dv-trust-legend button { display: inline-flex; width: auto; gap: 8px; justify-content: flex-start; }
+.case-study .dv .dv-trust-legend b { margin-left: 2px; color: var(--dv-ink); font-weight: 500; }
 
