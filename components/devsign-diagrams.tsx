@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { withBase } from "@/lib/site";
+import { FlowPlay } from "./flow-play";
 
 // The information architecture and the user flow, drawn in code so their text is real
 // text at reading size, in the page's language and theme. The words live in the case
@@ -107,6 +108,12 @@ const FC_NODES: { id: FlowNodeId; col: number; row: number; kind: FcKind }[] = [
   { id: "direct", col: 1, row: ROW_C, kind: "result" },
 ];
 
+// The order the flow appears in (FlowPlay): A step by step, its "no" down into B, then B.
+const FC_ORDER: Record<FlowNodeId, number> = { compare: 1, pick: 3, rule: 5, save: 7, review: 12, decision: 14, decide: 16, direct: 16, apply: 18, history: 20 };
+const FC_EDGE_ORDER = [2, 4, 6, 13, 19];
+const FC_HANDOFF_ORDER = [8, 15, 17];
+const seq = (i: number) => ({ "data-seq": "", style: { "--i": i } as React.CSSProperties });
+
 const across = (row: number, col: number) => `M${fcRight(col) + 3} ${mid(row)}H${fcLeft(col + 1) - 3}`;
 const FC_EDGES = [across(ROW_A, 0), across(ROW_A, 1), across(ROW_A, 2), across(ROW_B, 0), across(ROW_B, 3)];
 // A's "no" leaves its box, runs down the left margin of B's and enters B's first step.
@@ -116,12 +123,12 @@ function FcLines({ lines, x, y, className }: { lines: string[]; x: number; y: nu
   return <>{lines.map((line, l) => <text key={line} x={x} y={y + l * 22} textAnchor="middle" className={className}>{line}</text>)}</>;
 }
 
-// Two situations, each in its own box and read left to right. The heavy arrows are where the work passes to someone
+// Two situations, each in its own box and read left to right, appearing in that order. The heavy arrows are where the work passes to someone
 // else; the one going down joins the first situation to the second.
 export function FlowChart({ chart }: { chart: FlowChartData }) {
   const { nodes, who } = chart;
   return (
-    <div className="dv-fc dv-gap-40 reveal">
+    <FlowPlay className="dv-fc dv-gap-40 reveal">
       <div className="dv-scroll dv-fc-scroll">
         <svg viewBox={`0 0 ${FC_WIDTH} ${FC_HEIGHT}`} role="img" aria-label={chart.label}>
           <defs>
@@ -130,17 +137,17 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
           </defs>
           <rect x={0} y={0} width={FC_WIDTH} height={FC_BOX_A} rx={16} className="dv-fc-box" />
           <rect x={0} y={FC_BOX_B} width={FC_WIDTH} height={FC_HEIGHT - FC_BOX_B} rx={16} className="dv-fc-box" />
-          <text x={FC_PAD} y={46} className="dv-fc-situation">{chart.a}</text>
-          <text x={FC_PAD} y={FC_BOX_B + 46} className="dv-fc-situation">{chart.b}</text>
-          <text x={FC_PAD} y={FC_BOX_B + 74} className="dv-fc-when">{chart.example}</text>
-          {FC_EDGES.map((edge) => <path key={edge} d={edge} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />)}
-          {FC_HANDOFFS.map((edge) => <path key={edge} d={edge} className="dv-fc-handoff" markerEnd="url(#dv-fc-arrow-strong)" />)}
-          <path d={`M${fcMid(1)} ${ROW_B + FC_H + 3}V${ROW_C - 3}`} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" />
+          <text x={FC_PAD} y={46} className="dv-fc-situation" {...seq(0)}>{chart.a}</text>
+          <text x={FC_PAD} y={FC_BOX_B + 46} className="dv-fc-situation" {...seq(10)}>{chart.b}</text>
+          <text x={FC_PAD} y={FC_BOX_B + 74} className="dv-fc-when" {...seq(10)}>{chart.example}</text>
+          {FC_EDGES.map((edge, i) => <path key={edge} d={edge} pathLength={1} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" {...seq(FC_EDGE_ORDER[i])} />)}
+          {FC_HANDOFFS.map((edge, i) => <path key={edge} d={edge} pathLength={1} className="dv-fc-handoff" markerEnd="url(#dv-fc-arrow-strong)" data-long={i === 0 || undefined} {...seq(FC_HANDOFF_ORDER[i])} />)}
+          <path d={`M${fcMid(1)} ${ROW_B + FC_H + 3}V${ROW_C - 3}`} pathLength={1} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" {...seq(15)} />
           {FC_NODES.map(({ id, col, row, kind }) => {
             const x = fcLeft(col);
             const lines = nodes[id];
             return (
-              <g key={id}>
+              <g key={id} {...seq(FC_ORDER[id])}>
                 {kind === "ask"
                   ? <path className="dv-fc-ask" d={`M${x + 14} ${row}H${x + FC_W - 14}L${x + FC_W} ${mid(row)}L${x + FC_W - 14} ${row + FC_H}H${x + 14}L${x} ${mid(row)}Z`} />
                   : <rect x={x} y={row} width={FC_W} height={FC_H} rx={12} className={kind === "result" ? "dv-fc-branchnode" : `dv-fc-${kind}`} />}
@@ -148,13 +155,13 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
               </g>
             );
           })}
-          <text x={fcRight(2) + 20} y={mid(ROW_A) - 12} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
-          <text x={fcMid(2) + 12} y={ROW_A + FC_H + 30} className="dv-fc-when">{chart.no}</text>
-          <text x={fcRight(1) + 20} y={mid(ROW_B) - 12} textAnchor="middle" className="dv-fc-when">{chart.yes}</text>
-          <text x={fcMid(1) + 12} y={ROW_B + FC_H + 34} className="dv-fc-when">{chart.no}</text>
-          <text x={fcMid(0)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
-          <text x={fcMid(2)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-meet">{who.decider}</text>
-          <text x={fcMid(3)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who">{who.developer}</text>
+          <text x={fcRight(2) + 20} y={mid(ROW_A) - 12} textAnchor="middle" className="dv-fc-when" {...seq(6)}>{chart.yes}</text>
+          <text x={fcMid(2) + 12} y={ROW_A + FC_H + 30} className="dv-fc-when" {...seq(8)}>{chart.no}</text>
+          <text x={fcRight(1) + 20} y={mid(ROW_B) - 12} textAnchor="middle" className="dv-fc-when" {...seq(15)}>{chart.yes}</text>
+          <text x={fcMid(1) + 12} y={ROW_B + FC_H + 34} className="dv-fc-when" {...seq(15)}>{chart.no}</text>
+          <text x={fcMid(0)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who" {...seq(12)}>{who.developer}</text>
+          <text x={fcMid(2)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-meet" {...seq(16)}>{who.decider}</text>
+          <text x={fcMid(3)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who" {...seq(18)}>{who.developer}</text>
         </svg>
       </div>
       {/* Phones read it as a list; screen readers always get this list. */}
@@ -167,6 +174,6 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
         ))}
       </ol>
       <a className="link dv-fc-full" href={withBase(chart.full.src)} target="_blank" rel="noreferrer">{chart.full.label}</a>
-    </div>
+    </FlowPlay>
   );
 }
