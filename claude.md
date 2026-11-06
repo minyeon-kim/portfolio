@@ -1486,3 +1486,4 @@ Interview hierarchy (owner: nothing to focus on): finding + call tiles → the t
 Affinity map trimmed (owner: too much text besides the notes): no sentence under each problem group and no legend line; the participant colour key and the problem titles stay. The stage shrinks to the groups once they form. Figma not updated.
 
 Landing statement a little higher (owner): bottom 14.5% (was 12%).
+Interview, lean (owner: still too wordy): finding + tiles → the two quotes without claim labels → two quiet lines of method (`.dv-iv-meta`: "What we asked" with the three keywords, "Who we talked to" with P01–P04 roles). Full questions and team size / experience live in the linked guide and the MDX only. Figma not updated.
