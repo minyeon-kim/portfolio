@@ -6437,3 +6437,6 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .dv-vpc-arrow { justify-content: start; rotate: 90deg; width: 20px; }
 }
 
+
+/* Takeaway: the learnings list and the next step span the whole column, like the label's rule above them (owner: they stopped at 900px and looked cut off). */
+.case-study .dv .dv-tk .dv-tk-cards, .case-study .dv .dv-tk .dv-tk-next { max-width: none; width: 100%; }
