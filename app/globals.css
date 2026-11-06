@@ -3235,15 +3235,17 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-note { position: absolute; left: auto; right: var(--project-text-inset); top: 25%; width: 30ch; text-align: left; }
   .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
   /* After metalab.com's menu: the pages as large text, then the cases as pills. */
-  .home-links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 32px; padding: 0; list-style: none; }
-  .home-links a { color: var(--ink); font-family: var(--font-headline); font-size: 24px; font-weight: 400; line-height: 1.35; letter-spacing: 0; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
-  .home-links a:hover, .home-links a:focus-visible, .home-links a[data-active] { text-decoration-color: currentColor; text-underline-offset: 4px; }
+  .home-links { display: flex; flex-direction: column; gap: 2px; margin: 0 0 32px; padding: 0; list-style: none; }
+  /* One face for the column; the pages step back so the case pills lead (owner). */
+  .home-links a { color: var(--muted); font-family: var(--font-sans); font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; text-decoration-thickness: 1px; transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+  .home-links a:hover, .home-links a:focus-visible, .home-links a[data-active] { color: var(--ink); text-decoration-color: currentColor; text-underline-offset: 4px; }
   .home-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
   .home-picks-label { margin-bottom: 8px; }
   /* The column has the page links, so the intro's header drops its button. */
   header[data-intro] .header-cta { display: none; }
-  .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
+  /* The column already lists the pages, so the intro drops the Menu button too (owner). */
+  header[data-intro] .header-menu { visibility: hidden; }
+  .home-picks ol { flex-direction: column; align-items: flex-start; gap: 8px; }
   /* Each case's hover, in metalab.com's own proportions. Gemini follows its The Atlantic
      state: portrait card at the bottom right, name left of centre, the sentence high.
      Devsign follows Midjourney: card at the top right of centre, name low, the sentence

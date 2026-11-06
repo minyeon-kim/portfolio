@@ -1570,3 +1570,5 @@ Landing dust (owner): the dot landscape sinks in the middle (y -= 0.5 * exp(-x²
 Landing sky thinning is for the middle only (owner: the sides lost their dust): from |clip x| 0.25 to 0.7 the start goes back to 0.3 with the 0.8 ramp and 12% kept, as before; only the middle uses 0.06 / 0.6 / 4%.
 
 Landing galaxy colours a step towards ice (owner): the dark arms are mixed 40% with silver-white / pale blue (0.62, 0.74, 1 → 0.9, 0.94, 1 by wave), and the core is a cool white (0.96, 0.95, 1, was warm 1, 0.92, 0.88). Light theme unchanged.
+
+Landing left column (≥64rem), one face and the cases first (owner, after a layout review): About / Get in touch are Geist 16px Regular in the muted colour (ink on hover; supersedes the 24px Newsreader links), the case pills keep their base 44px, 0 20px, 18px Medium with 8px between them (the 32px / 16px desktop override is gone), and the landing intro hides the header's Menu button (`header[data-intro] .header-menu`, visibility so the name stays centred), since the column lists the same pages. The note was left where it is. Figma Main not updated.
