@@ -18,19 +18,37 @@ import { shareMeta, site, withBase } from "@/lib/site";
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
 const copy = {
   en: {
-    label: "About", portrait: "Minyeon Kim working on a laptop",
+    label: "About", portrait: "Minyeon placing sticky notes on a wall during a workshop",
     experience: "Experience",
     skills: "Skills",
-    photos: ["Minyeon talking at a table with printed screens and sticky notes", "Hands around a table covered in printed screens, sketches and sticky notes"],
+    atWork: "At work",
+    photos: {
+      "board-wide": "Minyeon and a teammate sorting sticky notes on a glass wall",
+      side: "Minyeon laughing during a team discussion",
+      talk: "Minyeon talking at a table with printed screens and sticky notes",
+      "board-bw": "Minyeon at the sticky-note wall with a teammate, in black and white",
+      laptop: "Minyeon going through a design on a laptop with a teammate",
+      hands: "Hands around a table covered in printed screens, sketches and sticky notes",
+      desk: "Minyeon working on a laptop",
+    } as Record<string, string>,
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
-    label: "소개", portrait: "노트북으로 작업하는 김민연",
+    label: "소개", portrait: "워크숍에서 벽에 포스트잇을 붙이는 김민연",
     experience: "경력",
     skills: "역량",
-    photos: ["출력한 화면과 포스트잇이 놓인 테이블에서 이야기하는 김민연", "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손"],
+    atWork: "일하는 모습",
+    photos: {
+      "board-wide": "유리벽에 붙인 포스트잇을 팀원과 정리하는 김민연",
+      side: "팀 논의 중에 웃고 있는 김민연",
+      talk: "출력한 화면과 포스트잇이 놓인 테이블에서 이야기하는 김민연",
+      "board-bw": "포스트잇 벽 앞에서 팀원과 이야기하는 김민연, 흑백",
+      laptop: "노트북으로 팀원과 디자인을 함께 보는 김민연",
+      hands: "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손",
+      desk: "노트북으로 작업하는 김민연",
+    } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
     steps: "그때와 지금", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사했습니다", read: "케이스 보기",
@@ -57,8 +75,14 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   const drafting = process.env.NODE_ENV === "development";
   const portrait = "/images/about/portrait.webp";
   const hasPortrait = inPublic(portrait);
-  const outsidePhotos = ["/images/about/outside-1.webp", "/images/about/outside-2.webp"];
-  const hasOutside = outsidePhotos.every(inPublic);
+  // Photos from the Figma Photo page, in justified rows: each row keeps every photo
+  // whole at one height ([name, width, height]).
+  const photoRows: [string, number, number][][] = [
+    [["side", 1800, 1547], ["talk", 1800, 1200]],
+    [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
+    [["laptop", 1800, 1200], ["hands", 1800, 1200], ["desk", 2400, 1500]],
+  ];
+  const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
   const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
 
   return (
@@ -80,7 +104,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             {(hasPortrait || drafting) && (
               <div className="about-hero-portrait">
                 {hasPortrait
-                  ? <Image src={withBase(portrait)} alt={c.portrait} width={2400} height={1500} sizes="(min-width: 1024px) 620px, 100vw" priority />
+                  ? <Image src={withBase(portrait)} alt={c.portrait} width={854} height={1280} sizes="(min-width: 1024px) 620px, 100vw" priority />
                   : <CaseMedia variant="portrait" label={c.portrait} />}
               </div>
             )}
@@ -95,17 +119,19 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           <AboutBridge rows={bridge.rows} then={bridge.then} now={bridge.now} label={c.steps} />
         </section>
 
-        {(hasOutside || drafting) && (
-          <section className="about-photos" aria-label={c.photos.join(" / ")}>
-            <div className="about-fan">
-              {outsidePhotos.map((src, i) => (
-                <figure key={src} className="about-fan-card" data-i={i}>
-                  {hasOutside
-                    ? <Image src={withBase(src)} alt={c.photos[i]} width={1600} height={1067} sizes="(max-width: 767px) 100vw, 640px" />
-                    : <CaseMedia variant="screen" label={c.photos[i]} />}
-                </figure>
-              ))}
-            </div>
+        {photos.length > 0 && (
+          <section className="about-gallery" aria-label={c.atWork}>
+            <p className="about-gallery-label reveal">{c.atWork}</p>
+            {photos.map((row) => (
+              <div key={row[0][0]} className="about-gallery-row">
+                {row.map(([name, width, height]) => (
+                  <figure key={name} className="about-gallery-photo reveal" style={{ flexGrow: width / height }}>
+                    <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} width={width} height={height}
+                      sizes={row.length > 1 ? "(max-width: 767px) 100vw, 50vw" : "100vw"} />
+                  </figure>
+                ))}
+              </div>
+            ))}
           </section>
         )}
 
