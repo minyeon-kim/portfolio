@@ -325,7 +325,7 @@ void main() {
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
     // The last box is the big name: its form still shows through.
     // The landing's note (slot 1) only thins the dust, so the band still passes behind it.
-    vFaint *= 1.0 - (i == 3 ? 0.55 : i == 1 ? 0.6 : 0.85) * inside;
+    vFaint *= 1.0 - (i == 3 ? 0.55 : i == 1 ? 0.75 : 0.85) * inside;
   }
   px *= mix(0.9, 1.0, smoothstep(0.3, 0.5, vDepth));
   // Flying through: dust grows as the camera nears it.
