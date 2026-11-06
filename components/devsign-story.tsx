@@ -572,22 +572,25 @@ const specDwell = (text: string) => Math.min(8000, Math.max(4000, text.length * 
 // (the spec page is for looking things up). Reduced motion never plays; phones list all of it.
 // One screen of the spec as a still document part: the screenshot with numbered pins and, beside or
 // under it, the same numbers with element, behavior and states. Nothing plays by itself.
-function SpecShot({ screen }: { screen: SpecScreen }) {
+function SpecShot({ screen, lit = -1, onPin }: { screen: SpecScreen; lit?: number; onPin?: (n: number) => void }) {
+  const at = lit >= 0 ? screen.pins[lit] : undefined;
   return (
-    <div className="dv-hdoc-shot">
-      <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 64rem) 60vw, 100vw" />
-      {screen.pins.map(([x, y], n) => <span key={n} className="dv-hdoc-pin" aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }}>{n + 1}</span>)}
+    <div className="dv-hdoc-shot" data-zoom={at ? "" : undefined}>
+      <div className="dv-hdoc-lens" style={at ? ({ transformOrigin: `${at[0]}% ${at[1]}%` } as CSSProperties) : undefined}>
+        <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 64rem) 60vw, 100vw" />
+        {screen.pins.map(([x, y], n) => <span key={n} className="dv-hdoc-pin" aria-hidden="true" data-lit={n === lit || undefined} style={{ left: `${x}%`, top: `${y}%`, "--i": n } as CSSProperties} onPointerEnter={() => onPin?.(n)} onPointerLeave={() => onPin?.(-1)}>{n + 1}</span>)}
+      </div>
     </div>
   );
 }
 
-function SpecRows({ screen, cols }: { screen: SpecScreen; cols: SpecData["cols"] }) {
+function SpecRows({ screen, cols, lit = -1, onRow }: { screen: SpecScreen; cols: SpecData["cols"]; lit?: number; onRow?: (n: number) => void }) {
   return (
     <table className="dv-hdoc-table">
       <thead><tr><th scope="col"><span className="sr-only">#</span></th><th scope="col">{cols.name}</th><th scope="col">{cols.does}</th><th scope="col">{cols.state}</th></tr></thead>
       <tbody>
         {screen.rows.map(([name, does, state], n) => (
-          <tr key={name}><td><b>{n + 1}</b></td><th scope="row">{name}</th><td>{does}</td><td>{state === "-" ? "—" : state}</td></tr>
+          <tr key={name} data-lit={n === lit || undefined} onPointerEnter={() => onRow?.(n)} onPointerLeave={() => onRow?.(-1)}><td><b>{n + 1}</b></td><th scope="row">{name}</th><td>{does}</td><td>{state === "-" ? "—" : state}</td></tr>
         ))}
       </tbody>
     </table>
@@ -598,11 +601,14 @@ function SpecRows({ screen, cols }: { screen: SpecScreen; cols: SpecData["cols"]
 // (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
 export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {
   const screen = spec.screens.find((item) => item.id === screenId) ?? spec.screens[0];
+  const [lit, setLit] = useState(-1);
   return (
     <div className="dv-hdoc-excerpt dv-gap-40 reveal">
       <p className="dv-hdoc-purpose"><b>{screen.tab}</b>{screen.purpose}</p>
-      <SpecShot screen={screen} />
-      <SpecRows screen={screen} cols={spec.cols} />
+      <div className="dv-hdoc-pair">
+        <SpecShot screen={screen} lit={lit} onPin={setLit} />
+        <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+      </div>
       <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
     </div>
   );
