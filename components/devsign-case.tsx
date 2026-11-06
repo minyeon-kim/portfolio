@@ -7,6 +7,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
+import { FlowPlay } from "@/components/flow-play";
 import { FeatureReels, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffSpec } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
@@ -119,11 +120,11 @@ function Insights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
-        <ol className="dv-flow dv-gap-40 reveal">
-          {synthesis.rows.map((row: { stage: string; before?: string; gap: string }) => (
-            <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
+        <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
+          {synthesis.rows.map((row: { stage: string; before?: string; gap: string }, i: number) => (
+            <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
           ))}
-        </ol>
+        </ol></FlowPlay>
       </div>
 
       <div className="dv-subsection">
@@ -216,11 +217,11 @@ function SourceInsights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block title={synthesis.label} lead={synthesis.title} ff />
-        <ol className="dv-flow dv-gap-40 reveal">
-          {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }) => (
-            <li key={row.stage}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
+        <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
+          {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }, i: number) => (
+            <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
           ))}
-        </ol>
+        </ol></FlowPlay>
       </div>
 
       <div className="dv-subsection">
