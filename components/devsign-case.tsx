@@ -640,7 +640,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
           <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
-          <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>
+          {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
           </> : <>
           <Block {...testing.usability} ff={ff} />
