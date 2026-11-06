@@ -3,9 +3,7 @@ import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Emphasis } from "@/components/emphasis";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { CaseMedia } from "@/components/case-story";
 import { AboutBridge, AboutEmail } from "@/components/about-interactive";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
@@ -33,7 +31,7 @@ const copy = {
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
     open: "Open to product designer and design engineer roles.",
-    work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
+    work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
@@ -52,7 +50,7 @@ const copy = {
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
-    work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
+    work: "작업", contact: "Contact", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
     steps: "그때와 지금", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사했습니다", read: "케이스 보기",
   },
 };
@@ -67,16 +65,14 @@ export function aboutMetadata(locale: Locale): Metadata {
 // then the roles and the work. Photo spots are labelled placeholders until real
 // photos exist. The portrait's box is mirrored in lib/about-entrance.ts.
 export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
-  const { bio, bridge, experience, headline, headlineEmphasis, skills } = locale === "ko" ? ko : en;
+  const { bio, bridge, experience, headline, skills } = locale === "ko" ? ko : en;
   const c = copy[locale];
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
   // Photo spots show labelled boxes while writing; the live site leaves them out
   // until the real files are in /public/images/about/.
   const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
-  const drafting = process.env.NODE_ENV === "development";
-  const portrait = "/images/about/portrait.webp";
-  const hasPortrait = inPublic(portrait);
+  const heroPhoto = "/images/about/hero.webp";
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
@@ -86,44 +82,57 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   ];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
   const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
+  // The security years, as one glass card on the hero.
+  const then = experience.find((item) => /SK/.test(item.title));
+  const total = 5;
 
   return (
     <div data-about-page className="project-detail">
-      <header className="project-hero devsign-hero-page">
-        <div className="devsign-hero" data-project="about">
-          <div className="devsign-hero-panel">
-            <div className="devsign-hero-intro">
-              <h1 tabIndex={-1} className="devsign-hero-title has-emphasis">
-                {headline.map((line) => <span key={line} className="about-hero-line"><Emphasis text={line} phrase={headlineEmphasis} /> </span>)}
-              </h1>
-              <p className="devsign-hero-subtitle">{bio[0]}</p>
-              <p className="devsign-hero-actions">
-                {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
-                {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
-                {hasResume && <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>}
-              </p>
+      {/* After superhuman.com's hero: the photo fills the screen, the headline and actions
+          sit centred over it, and a few glass cards float on the plain wall at the right.
+          The photo's crop is mirrored in lib/about-entrance.ts (aboutHeroPosition). */}
+      <header className="about-hero">
+        <div className="about-hero-photo">
+          <Image src={withBase(heroPhoto)} alt={c.portrait} fill sizes="100vw" priority />
+        </div>
+        <div className="about-hero-copy">
+          <h1 tabIndex={-1} className="about-hero-title">
+            {headline.map((line) => <span key={line} className="about-hero-line">{line} </span>)}
+          </h1>
+          <p className="about-hero-subtitle">{bio[0]}</p>
+          <p className="about-hero-actions">
+            {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
+            {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
+            {hasResume && <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>}
+          </p>
+        </div>
+        <div className="about-floats">
+          {then && (
+            <div className="about-float" data-spot="then">
+              <p className="about-float-label">{then.label}</p>
+              <p className="about-float-title">{then.title}</p>
             </div>
-            {(hasPortrait || drafting) && (
-              <div className="about-hero-portrait">
-                {hasPortrait
-                  ? <Image src={withBase(portrait)} alt={c.portrait} width={854} height={1280} sizes="(min-width: 1024px) 620px, 100vw" priority />
-                  : <CaseMedia variant="portrait" label={c.portrait} />}
-              </div>
-            )}
-          </div>
+          )}
+          {work.map((entry, index) => (
+            <Link key={entry.slug} href={localize(`/work/${entry.slug}/`, locale)} className="about-float about-float-case" data-spot={index ? "case-2" : "case-1"} data-project={entry.slug}>
+              <span className="about-float-label">{c.work}</span>
+              <span className="about-float-title">{entry.meta.short ?? entry.meta.title}<ArrowIcon /></span>
+            </Link>
+          ))}
         </div>
       </header>
       <article className="about-body">
         <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
 
         <section className="about-bridge">
-          <h2 className="about-statement reveal">{bridge.statement}</h2>
+          <StageHead n={1} total={total} title={c.steps} />
+          <p className="about-statement reveal">{bridge.statement}</p>
           <AboutBridge rows={bridge.rows} then={bridge.then} now={bridge.now} label={c.steps} />
         </section>
 
         {photos.length > 0 && (
-          <section className="about-gallery" aria-label={c.atWork}>
-            <p className="about-gallery-label reveal">{c.atWork}</p>
+          <section className="about-gallery" aria-labelledby="about-at-work">
+            <StageHead n={2} total={total} title={c.atWork} id="about-at-work" />
             {photos.map((row) => (
               <div key={row[0][0]} className="about-gallery-row">
                 {row.map(([name, width, height]) => (
@@ -139,7 +148,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
         <section className="about-band">
           <div className="about-band-inner">
-            <h2 className="about-statement reveal">{c.experience}</h2>
+            <StageHead n={3} total={total} title={c.experience} />
             <ol className="about-timeline">
               {experience.map((item) => (
                 <li key={item.title} className="reveal">
@@ -166,7 +175,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         </section>
 
         <section className="about-close">
-          <h2 className="about-statement reveal">{c.work}</h2>
+          <StageHead n={4} total={total} title={c.work} />
           <ul className="about-work">
             {work.map((entry) => (
               <li key={entry.slug} className="reveal">
@@ -185,7 +194,8 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           </ul>
 
           <div className="about-contact">
-            <h2 className="about-statement reveal">{c.open}</h2>
+            <StageHead n={5} total={total} title={c.contact} />
+            <p className="about-statement reveal">{c.open}</p>
             {site.email && <div className="reveal"><AboutEmail email={site.email} copied={c.copied} hint={c.copyHint} /></div>}
             <div className="about-actions reveal">
               {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
@@ -198,6 +208,16 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         </section>
         <SiteFooter />
       </article>
+    </div>
+  );
+}
+
+// A section title in the case pages' form: display size, light, with its n / total counter.
+function StageHead({ n, total, title, id }: { n: number; total: number; title: string; id?: string }) {
+  return (
+    <div className="about-stage-head reveal">
+      <h2 id={id}>{title}</h2>
+      <span aria-hidden="true">{String(n).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
     </div>
   );
 }

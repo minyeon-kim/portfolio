@@ -126,7 +126,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const stacked = useSyncExternalStore(subscribeStacked, () => window.matchMedia(STACKED).matches, () => false);
   const previewed = shown ?? (stacked && hover !== "about" ? projects[0] : null);
   useEffect(() => {
-    const src = withBase("/images/about/portrait.webp");
+    const src = withBase("/images/about/hero.webp");
     const aboutLink = (target: EventTarget | null) => (target as Element | null)?.closest?.<HTMLAnchorElement>(".home-about") ?? null;
     const onClick = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
