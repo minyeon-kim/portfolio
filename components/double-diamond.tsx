@@ -13,10 +13,11 @@ const HALVES = ["M0 167L300 0V334Z", "M300 0L600 167L300 334Z", "M600 167L900 0V
 // Each stage links to its section. On hover or keyboard focus its name crossfades
 // to its methods, in the same spot inside the diamond; touch and narrow screens
 // list them under the outcome instead. Shared by the Devsign body and CaseDiamond.
-// While it is on screen it also walks through the stages by itself, showing each one's methods for
-// a moment (owner: show the methods one at a time); hover or focus takes over.
-// Per stage while on screen (owner: 2.2s felt too slow; a full pass is now about 5s).
-const METHOD_MS = 1200;
+// Scrolling moves it through the stages (owner: step with the scroll, not a timer): as the
+// diagram's middle travels from 78% to 28% of the screen height, each stage in turn shows
+// its methods and tints its half. Native scroll only, no pin. Hover or focus takes over.
+const SCROLL_FROM = 0.78;
+const SCROLL_TO = 0.28;
 
 export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot?: string }) {
   const [from, to] = pivot?.split(" → ") ?? [];
@@ -26,16 +27,20 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
   useEffect(() => {
     const el = root.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let timer = 0;
-    let step = -1;
-    const tick = () => { step = (step + 1) % stages.length; setShown(step); timer = window.setTimeout(tick, METHOD_MS); };
-    const seen = new IntersectionObserver(([e]) => {
-      window.clearTimeout(timer);
-      if (e.isIntersecting) timer = window.setTimeout(tick, 300);
-      else { step = -1; setShown(-1); }
-    }, { threshold: 0.5 });
-    seen.observe(el);
-    return () => { seen.disconnect(); window.clearTimeout(timer); };
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const r = el.getBoundingClientRect();
+      const mid = (r.top + r.height / 2) / window.innerHeight;
+      if (mid > SCROLL_FROM + 0.12 || mid < SCROLL_TO - 0.3) { setShown(-1); return; }
+      const t = Math.min(Math.max((SCROLL_FROM - mid) / (SCROLL_FROM - SCROLL_TO), 0), 0.999);
+      setShown(Math.floor(t * stages.length));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(frame); };
   }, [stages.length]);
   return (
     <figure ref={root} className="dv-dd reveal" data-held={held || undefined} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
