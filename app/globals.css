@@ -6547,3 +6547,14 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 @media (max-width: 63.99rem) {
   .home-device[data-project="about"] { display: none; }
 }
+
+/* Devsign Overview: a real photo of me with the case on screen, right under the headline (owner: too few photos of me). */
+.dv .dv-figure.dv-me-photo { margin: 72px 0 0; animation: none; }
+.dv-me-photo img { width: 100%; height: auto; aspect-ratio: 2; border-radius: var(--dv-card-radius); object-fit: cover; }
+.dv-me-photo figcaption { margin-top: 12px; font-size: 16px; color: var(--dv-muted); }
+.dv .dv-me-photo + .dv-glance-block { margin-top: 120px; }
+@media (max-width: 47.99rem) {
+  .dv .dv-figure.dv-me-photo { margin-top: 40px; }
+  .dv-me-photo img { aspect-ratio: 4 / 3; object-position: 70% 50%; }
+  .dv .dv-me-photo + .dv-glance-block { margin-top: 64px; }
+}

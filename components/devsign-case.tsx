@@ -345,6 +345,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-headline reveal">
           {overview.headline} <span>{overview.headlineAccent}</span>
         </p>
+        {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         {overview.summary ? (
           <section className="dv-glance-block" aria-labelledby="tldr">
             <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
