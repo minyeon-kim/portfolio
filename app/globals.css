@@ -6531,3 +6531,19 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study .dv .dv-held-flow[data-pinned] .dv-panels { margin-top: 32px; }
   .case-study .dv .dv-held-flow[data-pinned] .dv-panels > li { padding-block: 22px; }
 }
+
+/* About's world on the landing, like the cases' (owner): the dust in its own
+   form, the portrait as a card at the right, the About headline at the top
+   left, the name large at the bottom and the bio at the bottom right. */
+.about-entrance[data-card] img { opacity: 1; transition: none; }
+.home-device[data-project="about"] { background: #17181d; }
+.home-device[data-project="about"] img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 44% 50%; }
+@media (min-width: 64rem) {
+  .home-device[data-project="about"] { top: 11.4%; left: 56%; right: auto; width: auto; height: 64svh; aspect-ratio: 4 / 5; }
+  .home-stage[data-world="about"] .home-world-role { left: calc(var(--project-text-inset) + 240px); top: 17%; max-width: min(28vw, 18ch); }
+  .home-stage[data-world="about"] .home-world-name { left: 31%; top: auto; bottom: 24px; max-width: none; white-space: nowrap; }
+  .home-stage[data-world="about"] .home-world-problem { left: auto; right: var(--project-text-inset); top: auto; bottom: 48px; width: min(30ch, 26vw); }
+}
+@media (max-width: 63.99rem) {
+  .home-device[data-project="about"] { display: none; }
+}

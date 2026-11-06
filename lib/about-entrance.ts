@@ -1,8 +1,8 @@
-// Entering About from the landing: hovering the header's About link prints the
-// photo across the stage in dots (HeroObject, variant "portrait"). Clicking fades
-// the real photo in over those dots, in the same crop, swaps the page in behind it,
-// and shrinks the photo into its place in the About opener while the page
-// appears round it, so it is one continuous picture.
+// Entering About from the landing: hovering About lays out its world with the
+// portrait as a card (HomeIntro). Clicking lifts the photo from that card (`from`),
+// swaps the page in behind it, and moves the photo into its place in the About
+// opener while the page appears round it, so it is one continuous picture.
+// Without a card the photo fades in full screen first.
 
 export type Box = { left: number; top: number; width: number; height: number };
 
@@ -16,7 +16,7 @@ export function portraitBox(): Box {
 
 const FADE = 240, SETTLE = 720;
 
-export function enterAbout(box: Box, src: string, go: () => void, ready: () => boolean) {
+export function enterAbout(box: Box, src: string, go: () => void, ready: () => boolean, from?: Box) {
   const root = document.documentElement;
   const layer = document.createElement("div");
   layer.className = "about-entrance";
@@ -24,6 +24,10 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
   const photo = document.createElement("img");
   photo.src = src;
   photo.alt = "";
+  if (from) {
+    layer.dataset.card = "";
+    Object.assign(photo.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "44% 50%" });
+  }
   layer.append(photo);
   document.body.append(layer);
 
@@ -33,7 +37,9 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
     layer.dataset.reveal = "";
     const animation = photo.animate(
       [
-        { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: "44% 30%" },
+        from
+          ? { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "44% 50%" }
+          : { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: "44% 30%" },
         { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "16px", objectPosition: "44% 50%" },
       ],
       { duration: SETTLE, easing: "cubic-bezier(0.65, 0, 0.2, 1)", fill: "forwards" },
