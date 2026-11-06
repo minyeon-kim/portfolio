@@ -6752,3 +6752,5 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .about-gallery > .about-stage-head { width: var(--about-col); justify-self: center; }
 .about-contact { margin-top: clamp(120px, 12vw, 176px); }
 .about-contact .about-statement { max-width: 900px; }
+.case-study .dv .dv-detail-before { display: flex; gap: 10px; margin: 16px 0 0; max-width: 40ch; font-size: 16px; line-height: 1.5; color: var(--dv-muted); }
+.case-study .dv .dv-detail-before span { flex: none; font-weight: 500; color: var(--ink); opacity: 0.7; }
