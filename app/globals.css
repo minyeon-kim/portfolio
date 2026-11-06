@@ -5873,3 +5873,17 @@ li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 32
 .dv-iter-card[data-on] { animation: dv-iter-turn 500ms var(--ease) both; }
 @keyframes dv-iter-turn { from { scale: 0.985; } }
 @media (prefers-reduced-motion: reduce) { .dv-iter-card[data-on] { animation: none; } }
+/* No section plates (owner, after Linear, Vercel, Metalab, Raycast and Stripe: none of them put a
+   plate behind a section; sections are split by space and the stage title, and only the cards that
+   hold content get a surface). The banded stages lose their fill, corners and opening clip and rise
+   like the others. Develop keeps the page colour behind it, with round top corners, only so it
+   still covers the Problem statement sheet it rises over. Cards that sat on the band keep a soft
+   fill so they don't vanish on a white page. */
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { background: transparent; border-radius: 0; }
+.dv > #develop#develop#develop { background: var(--dv-bg, var(--bg)); border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; }
+.dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) :is(.dv-voices li, .dv-features li, .dv-people li, .dv-scenarios li, .dv-stage-box:not(.dv-stage-gap), .dv-selection-problem, .dv-candidates li) { background: light-dark(#f3f2f8, var(--dv-band-card-dark)); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv > :is(#discover, #develop, #testing, #experience, #outside, #takeaway:not(.dv:has(> #testing) > *)) { animation-name: dv-in, dv-close; }
+  }
+}
