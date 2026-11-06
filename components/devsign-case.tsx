@@ -140,9 +140,26 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           </figure>
         </div>
+        {/* What was asked and who answered, so the finding has its ground (owner: the block said too
+            little about the research itself). */}
+        {interview.questions && <div className="dv-iv-facts reveal">
+          <div>
+            <p className="dv-iv-facts-label">{interview.questionsLabel}</p>
+            <ol className="dv-iv-asks">
+              {interview.questions.map((q: string, i: number) => <li key={q}><b>{interview.questionKeys?.[i]}</b><span>{q}</span></li>)}
+            </ol>
+          </div>
+          <div>
+            <p className="dv-iv-facts-label">{interview.peopleLabel}</p>
+            <ul className="dv-iv-people">
+              {interview.participants.map(([id, role, team, years]: string[]) => <li key={id}><b>{id}</b><span>{role}</span><small>{team} · {years}</small></li>)}
+            </ul>
+          </div>
+        </div>}
         <div className="dv-iv-claims">
           {interview.claims.map((c: { title: string; quotes: string[][] }) => (
             <div key={c.title} className="dv-iv-claim reveal">
+              <p className="dv-iv-claim-title">{c.title}</p>
               <ul>
                 {c.quotes.slice(0, 1).map(([quote, who]) => (
                   <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>

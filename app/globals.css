@@ -6222,4 +6222,19 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-flist-items button small { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.45; }
 .dv-flist-items li[data-on] button small { color: var(--dv-ink); }
 .dv-flist-flow { display: inline-flex; margin: 12px 0 0; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--case-accent) 14%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.5; }
+/* Interview: what we asked and who answered sit between the finding and the quotes (owner). */
+.dv-iv-facts { display: grid; gap: 40px; margin-top: 64px; }
+.dv-iv-facts-label { margin: 0 0 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-iv-asks, .dv-iv-people { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.dv-iv-asks li { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid var(--dv-line); }
+.dv-iv-asks li b { color: var(--dv-ink); font-size: var(--t-item); font-weight: 500; }
+.dv-iv-asks li span { color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-iv-people li { display: grid; grid-template-columns: 48px 1fr; gap: 2px 12px; padding: 16px 0; border-top: 1px solid var(--dv-line); }
+.dv-iv-people li b { grid-row: span 2; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-iv-people li span { color: var(--dv-ink); font-size: 18px; font-weight: 500; }
+.dv-iv-people li small { color: var(--dv-muted); font-size: 16px; }
+.dv-iv-claim-title { margin: 0 0 12px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+@media (min-width: 64rem) {
+  .dv-iv-facts { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(40px, 5vw, 80px); }
+}
 
