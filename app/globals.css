@@ -6593,7 +6593,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .home-pick[data-slug="gemini-privacy"] { --pill-c1: light-dark(#245cc0, #8fb4ff); --pill-c2: light-dark(#7b5cd6, #c5a8ff); }
 .home-pick[data-slug]::before { content: ""; position: absolute; inset: 0; padding: 1px; border-radius: inherit; pointer-events: none; background: conic-gradient(from var(--pill-a), transparent 0deg, var(--pill-c1) 60deg, var(--pill-c2) 150deg, transparent 240deg, transparent 360deg); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0.9; animation: pill-turn 6s linear infinite; transition: opacity 250ms ease; }
 .home-pick[data-slug="gemini-privacy"]::before { animation-delay: -3s; }
-.home-pick[data-slug]:hover, .home-pick[data-slug]:focus-visible, .home-pick[data-slug][data-active] { box-shadow: none; }
+/* The fill takes the same hue as the border instead of neutral grey (owner). */
+.home-pick[data-slug] { background: color-mix(in srgb, var(--pill-c2) 14%, light-dark(rgb(255 255 255 / 0.55), rgb(10 11 20 / 0.55))); }
+.home-pick[data-slug]:hover, .home-pick[data-slug]:focus-visible, .home-pick[data-slug][data-active] { box-shadow: none; background: color-mix(in srgb, var(--pill-c2) 24%, light-dark(rgb(255 255 255 / 0.6), rgb(10 11 20 / 0.6))); backdrop-filter: blur(30px) saturate(1.8); }
 .home-pick[data-slug]:hover::before, .home-pick[data-slug]:focus-visible::before, .home-pick[data-slug][data-active]::before { opacity: 1; }
 @keyframes pill-turn { to { --pill-a: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .home-pick[data-slug]::before { animation: none; --pill-a: 30deg; } }
