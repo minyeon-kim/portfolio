@@ -6321,4 +6321,20 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-amap-bar { display: block; width: 40px; height: 3px; margin: 4px 0 12px; border-radius: 2px; opacity: 0; transform: scaleX(0); transition: opacity 300ms var(--ease) 600ms, transform 500ms var(--ease) 600ms; }
 .dv-amap-cluster[data-on] .dv-amap-bar { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .dv-amap-bar { transition: none; } }
+/* Interview hierarchy (owner: nothing to focus on): finding → the two quotes as the evidence (large)
+   → method context (questions, participants) as a quiet small block at the end. */
+.case-study .dv .dv-iv-claims { margin-top: 56px; }
+.case-study .dv .dv-iv-claims .dv-iv-claim blockquote { font-size: var(--t-heading); line-height: 1.35; }
+.case-study .dv .dv-iv-claim-title { font-size: 16px; }
+.case-study .dv .dv-iv-facts { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--dv-line); gap: 32px; }
+.case-study .dv .dv-iv-facts-label { margin-bottom: 8px; color: var(--dv-muted); }
+.case-study .dv .dv-iv-asks li, .case-study .dv .dv-iv-people li { padding: 6px 0; border-top: 0; }
+.case-study .dv .dv-iv-asks li { display: block; }
+.case-study .dv .dv-iv-asks li b { margin-right: 8px; color: var(--dv-ink); font-size: 16px; }
+.case-study .dv .dv-iv-asks li span { color: var(--dv-muted); font-size: 16px; }
+.case-study .dv .dv-iv-people li { grid-template-columns: 40px 1fr; }
+.case-study .dv .dv-iv-people li b { grid-row: auto; color: var(--dv-muted); }
+.case-study .dv .dv-iv-people li span { font-size: 16px; font-weight: 400; }
+.case-study .dv .dv-iv-people li small { grid-column: 2; }
+@media (min-width: 64rem) { .case-study .dv .dv-iv-people { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
 
