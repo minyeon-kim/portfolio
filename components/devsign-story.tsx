@@ -873,9 +873,6 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
       <ol className="dv-wall-steps" aria-label={wall.steps.join(" → ")}>
         {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined} data-done={i < step || undefined}><strong>{n}</strong><span>{label}</span></li>)}
       </ol>
-      <div className="dv-amap-people">
-        {people.map(([id, role]) => <span key={id}><i style={{ background: AFF_PEOPLE[id] }} />{id} · {role}</span>)}
-      </div>
       <div ref={root} className="dv-amap-stage" data-phase={phase} style={{ height }} aria-hidden="true">
         {themeLabels.map((l, t) => <p key={t} className="dv-amap-theme" data-on={phase === 1 || undefined} style={{ left: l.x, top: l.y, width: l.w }}>{wall.themes[t][0]}</p>)}
         {clusters.map((c, pi) => (
@@ -893,6 +890,9 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
             </div>
           );
         })}
+      </div>
+      <div className="dv-amap-people">
+        {people.map(([id, role]) => <span key={id}><i style={{ background: AFF_PEOPLE[id] }} />{id} · {role}</span>)}
       </div>
       <div className="sr-only"><ol>{problems.map((p, pi) => <li key={p.title}>{p.title}: {wall.themes.filter(([, x]) => x === pi).map(([name]) => name).join(", ")}</li>)}</ol></div>
     </div>
