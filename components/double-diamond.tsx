@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { ArrowIcon } from "@/components/arrow-icon";
 
 export type DiamondStage = { name: string; outcome?: string; methods?: string[]; current?: boolean };
@@ -10,10 +13,31 @@ const HALVES = ["M0 167L300 0V334Z", "M300 0L600 167L300 334Z", "M600 167L900 0V
 // Each stage links to its section. On hover or keyboard focus its name crossfades
 // to its methods, in the same spot inside the diamond; touch and narrow screens
 // list them under the outcome instead. Shared by the Devsign body and CaseDiamond.
+// While it is on screen it also walks through the stages by itself, showing each one's methods for
+// a moment (owner: show the methods one at a time); hover or focus takes over.
+const METHOD_MS = 2200;
+
 export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot?: string }) {
   const [from, to] = pivot?.split(" → ") ?? [];
+  const root = useRef<HTMLElement>(null);
+  const [shown, setShown] = useState(-1);
+  const [held, setHeld] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer = 0;
+    let step = -1;
+    const tick = () => { step = (step + 1) % stages.length; setShown(step); timer = window.setTimeout(tick, METHOD_MS); };
+    const seen = new IntersectionObserver(([e]) => {
+      window.clearTimeout(timer);
+      if (e.isIntersecting) timer = window.setTimeout(tick, 600);
+      else { step = -1; setShown(-1); }
+    }, { threshold: 0.5 });
+    seen.observe(el);
+    return () => { seen.disconnect(); window.clearTimeout(timer); };
+  }, [stages.length]);
   return (
-    <figure className="dv-dd reveal">
+    <figure ref={root} className="dv-dd reveal" data-held={held || undefined} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
       <div className="dv-dd-body">
         <svg className="dv-dd-lines" viewBox="0 0 1200 334" fill="none" aria-hidden="true">
           {HALVES.map((d, i) => <path key={d} className="dv-dd-half" d={d} data-current={stages[i]?.current || undefined} />)}
@@ -22,7 +46,7 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
         </svg>
         <ol className="dv-dd-stages">
           {stages.map((stage) => (
-            <li key={stage.name} data-current={stage.current || undefined}>
+            <li key={stage.name} data-current={stage.current || undefined} data-show={(!held && shown === stages.indexOf(stage)) || undefined}>
               <a href={`#${stage.name.toLowerCase()}`}>
                 <span className="dv-dd-name"><span>{stage.name}</span></span>
                 {stage.outcome && <span className="dv-dd-outcome">{stage.outcome}</span>}

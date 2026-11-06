@@ -23,7 +23,7 @@ function ChartSource({ source }: { source?: Source }) {
 }
 
 const GAP = 0.7; // Between ring segments, in hundredths of the ring.
-const SHOW_MS = 7000; // How long each chart stays; the progress ring on its tab is the timer.
+const SHOW_MS = 4500; // How long each chart stays; the progress ring on its tab is the timer.
 const LEAVE_MS = 280;
 
 // Counts up from 0 while its chart plays. The final value is what renders otherwise.
@@ -68,7 +68,6 @@ function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
               <circle className="dv-trust-mask" cx="100" cy="100" r="66" pathLength={100} />
             </mask>
           </defs>
-          <circle className="dv-trust-dots" cx="100" cy="100" r="50" />
           <g mask={`url(#${mask})`}>
             {parts.map((p) => (
               <circle

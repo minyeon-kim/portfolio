@@ -6110,4 +6110,28 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .dv-flist-frame { order: 2; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-flist-more, .dv-flist-frame video, .dv-flist-items button { transition: none; } }
+/* Review batch (owner): */
+@media (min-width: 64rem) {
+  /* Core features: the clip at the left, the list at the right. */
+  .case-study .dv .dv-flist { grid-template-columns: minmax(0, 2.4fr) minmax(280px, 1fr); }
+  .dv-flist-frame { order: 1; }
+  .dv-flist-items { order: 2; }
+  /* The posts block hugs its content, so the sticky 100+ stops with the last quote. */
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-posts { min-height: 0; }
+  /* A block sitting beside a picture is not a screen-tall unit (the interview text beside its call
+     tiles left a hole above the quotes). */
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-iv-top > * { min-height: 0 !important; }
+}
+/* Diamond: the stage being walked through shows its methods, like hover. */
+@media (hover: hover) and (min-width: 90rem) {
+  .dv-dd:not([data-held]) .dv-dd-stages li[data-show] .dv-dd-methods { opacity: 1; }
+  .dv-dd:not([data-held]) .dv-dd-stages li[data-show] .dv-dd-name > span { opacity: 0; }
+}
+.dv-dd-stages li[data-show] .dv-dd-name { color: var(--case-accent); }
+/* Chart draw a little quicker to match the shorter stay. */
+.case-study .dv .dv-cycle-stage { --show-ms: 4500ms; }
+/* Holding cards on a quiet neutral surface instead of the purple plate (owner: the purple cards
+   stood out too much); the case colour stays only in marks and the active tab. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-held-plate, .dv-spec-panel, .dv-iter-step) { background: light-dark(#f3f3f5, #17181d); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-held-plate .dv-reel, .dv-held-plate .dv-iter-step) { background: none; }
 
