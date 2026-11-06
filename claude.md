@@ -1546,3 +1546,5 @@ Sketching lead (KO): "기능 후보 5개를 먼저 종이에 그려 봤다." (th
 
 Landing note: dust behind it thins to 25% (was 40%; clearRect slot 1 strength 0.75, was 0.6), at the owner's request for a little less behind the text. Wide screens only, as before.
 Held blocks give the last step more room (owner: the last item scrolled away before it could be read): every held track is (n + 0.5) steps long and steps are equal, so the last one holds 1.5 steps (≈ 950px at 1440x900, others ≈ 630) before the stage lets go (`HELD_TAIL` in useHeldSteps; .dv-held-track, .dv-iter, .dv-gs, .dv-held-flow; the About pairs the same way). Iteration 2 clips loop while their change is current instead of handing over to the next on their own, so the scroll alone moves the steps. Figma not updated.
+
+Landing note, second pass (owner: still too much dust round it): slot 1 now clears 88% (was 75%) with a wider soft edge (clip margin 0.12 x / 0.22 y, the other boxes keep 0.05 / 0.08), so the dust thins around the note, not only under the letters.
