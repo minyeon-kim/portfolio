@@ -287,7 +287,7 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
 // nothing autoplays and the video shows its controls. If the browser refuses to
 // autoplay (iPhone Low Power Mode, a locked-down classroom PC), the clip shows its
 // controls too and tries again on the next press or key, so it is never a dead image.
-type Reel = { id: string; kicker: string; name: string; body: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
+type Reel = { id: string; kicker: string; name: string; body: string; hook?: string; flow?: string; alt?: string; points: string[]; clip: { src: string; poster: string; marks: number[] }; solves?: React.ReactNode };
 function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boolean; pinned: boolean; load: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
@@ -412,11 +412,12 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
           <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined}>
             <button type="button" aria-expanded={i === current} onClick={() => pick(i)}>
               <b>{reel.kicker.split(" ")[0]}</b>
-              <span>{reel.name}</span>
+              <span>{reel.name}{reel.hook && <small>{reel.hook}</small>}</span>
             </button>
             <div className="dv-flist-more">
               <div>
                 <p className="dv-flist-body">{reel.body}</p>
+                {reel.flow && <p className="dv-flist-flow">{reel.flow}</p>}
                 {reel.solves && <p className="dv-flist-solves">{reel.solves}</p>}
               </div>
             </div>

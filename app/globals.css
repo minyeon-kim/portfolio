@@ -6216,4 +6216,10 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-hdoc-excerpt .dv-hdoc-notes { margin-top: 48px; }
 .dv-hdoc-excerpt .dv-hdoc-cols { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--dv-line); }
 @media (prefers-reduced-motion: reduce) { .dv-hdoc-panel { animation: none; } .dv-hdoc-tabs button { transition: none; } }
+/* Feature list copy after Calendly (owner): the feature name stays, a plain benefit line sits under
+   it, and the open item shows one sentence and the flow as "who → result". */
+.dv-flist-items button span { display: grid; gap: 4px; }
+.dv-flist-items button small { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.45; }
+.dv-flist-items li[data-on] button small { color: var(--dv-ink); }
+.dv-flist-flow { display: inline-flex; margin: 12px 0 0; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--case-accent) 14%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.5; }
 
