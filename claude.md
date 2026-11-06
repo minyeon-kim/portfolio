@@ -1422,3 +1422,5 @@ Iteration 1 pair: As-is on a neutral charcoal (#1c1d22 to #25262c, light #f3f3f5
 No section plates (owner, after a reference check of Linear, Vercel, Metalab, Raycast and Stripe; supersedes the banded stages): Discover, Develop, Testing (and About experience / outside, Gemini Takeaway) lose their fill, corners and opening clip and rise like the other stages; chapters are split by the stage title and space, and only content cards carry a surface. Develop keeps the page colour with round top corners so it still covers the Problem statement sheet. Cards that sat on the band use #f3f2f8 in light. Figma not updated.
 
 Community posts sit on the page, not in a box (owner): the 100+ count, its sentence and the boards link hold a left column (sticky from 64rem), the three posts read down the right as hairline rows (problem in the accent, quote 20-26px, source quiet); the survey chart card above stays the block's one card. Phones stack. Figma not updated.
+
+Chart stages have no plate (owner): tabs, finding and chart sit on the page with one hairline under the tabs; every SurveyCharts stage on both cases. Figma not updated.
