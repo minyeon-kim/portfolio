@@ -138,8 +138,9 @@ function Insights({ discover }: { discover: Study }) {
           </figure>
         </div>
         <div className="dv-iv-claims">
-          {interview.claims.map((c: { title: string; quotes: string[][] }) => (
+          {interview.claims.map((c: { title: string; label?: string; quotes: string[][] }) => (
             <div key={c.title} className="dv-iv-claim reveal">
+              {c.label && <p className="dv-iv-label">{c.label}</p>}
               <ul>
                 {c.quotes.slice(0, 1).map(([quote, who]) => (
                   <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
@@ -150,7 +151,6 @@ function Insights({ discover }: { discover: Study }) {
         </div>
         {/* Method context in two quiet lines (owner: the block was still too wordy). */}
         {interview.questions && <dl className="dv-iv-meta reveal">
-          <div><dt>{interview.questionsLabel}</dt><dd>{interview.questionKeys.join(" · ")}</dd></div>
           <div><dt>{interview.peopleLabel}</dt><dd>{interview.participants.map(([id, role]: string[]) => `${id} ${role}`).join(" · ")}</dd></div>
         </dl>}
       </div>
