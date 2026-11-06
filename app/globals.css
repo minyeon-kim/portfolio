@@ -6812,6 +6812,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .about-copy > span:nth-child(2) { opacity: 0; translate: 0 6px; color: var(--accent); }
 .about-copy[data-done] > span:first-child { opacity: 0; translate: 0 -6px; }
 .about-copy[data-done] > span:nth-child(2) { opacity: 1; translate: 0 0; }
+.about-close + .about-close { padding-top: 0; }
 @media (max-width: 63.99rem) {
   .about-contact-stage .about-contact { grid-template-columns: 1fr; }
 }

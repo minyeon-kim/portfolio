@@ -4,7 +4,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { AboutBridge, AboutEmail } from "@/components/about-interactive";
+import { AboutBridge, CopyButton } from "@/components/about-interactive";
+import { DevsignLoop } from "@/components/devsign-loop";
+import { GeminiPhone } from "@/components/gemini-phone";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
@@ -31,14 +33,14 @@ const copy = {
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
     open: "Open to product designer and design engineer roles.",
-    work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
+    work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy",
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
     label: "소개", portrait: "워크숍에서 벽에 포스트잇을 붙이는 김민연",
-    experience: "경력",
+    experience: "Experience",
     skills: "역량",
-    atWork: "일하는 모습",
+    atWork: "At work",
     photos: {
       "board-wide": "유리벽에 붙인 포스트잇을 팀원과 정리하는 김민연",
       side: "팀 논의 중에 웃고 있는 김민연",
@@ -50,8 +52,8 @@ const copy = {
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
-    work: "작업", contact: "Contact", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
-    steps: "그때와 지금", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사했습니다", read: "케이스 보기",
+    work: "Selected work", contact: "Contact", resume: "이력서 (PDF)", email: "이메일", copyEmail: "복사",
+    steps: "Then and now", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사됨", read: "케이스 보기",
   },
 };
 
@@ -82,8 +84,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   ];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
   const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
-  // The security years, as one glass card on the hero.
-  const then = experience.find((item) => /SK/.test(item.title));
   const total = 5;
 
   return (
@@ -105,20 +105,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
             {hasResume && <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>}
           </p>
-        </div>
-        <div className="about-floats">
-          {then && (
-            <div className="about-float" data-spot="then">
-              <p className="about-float-label">{then.label}</p>
-              <p className="about-float-title">{then.title}</p>
-            </div>
-          )}
-          {work.map((entry, index) => (
-            <Link key={entry.slug} href={localize(`/work/${entry.slug}/`, locale)} className="about-float about-float-case" data-spot={index ? "case-2" : "case-1"} data-project={entry.slug}>
-              <span className="about-float-label">{c.work}</span>
-              <span className="about-float-title">{entry.meta.short ?? entry.meta.title}<ArrowIcon /></span>
-            </Link>
-          ))}
         </div>
       </header>
       <article className="about-body">
@@ -176,34 +162,54 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
         <section className="about-close">
           <StageHead n={4} total={total} title={c.work} />
-          <ul className="about-work">
+          <ul className="about-projects">
             {work.map((entry) => (
               <li key={entry.slug} className="reveal">
-                <Link href={localize(`/work/${entry.slug}/`, locale)} className="about-work-card" data-project={entry.slug}>
-                  <div className="about-work-cover">
-                    <Image src={withBase(`/og/${entry.slug}.png`)} alt="" width={1200} height={630} sizes="(max-width: 767px) 100vw, 600px" />
-                  </div>
-                  <div className="about-work-text">
-                    <h3>{entry.meta.short ?? entry.meta.title}</h3>
-                    <p>{entry.meta.hook ?? entry.tldr.problem}</p>
-                    <span className="about-work-more">{c.read}<ArrowIcon /></span>
-                  </div>
+                <Link href={localize(`/work/${entry.slug}/`, locale)} className="about-project" data-project={entry.slug}>
+                  <span className="about-project-plate" data-project={entry.slug}>
+                    {entry.slug === "gemini-privacy"
+                      ? <span className="about-project-phone"><GeminiPhone alt="" /></span>
+                      : entry.slug === "devsign"
+                        ? <span className="about-project-app"><DevsignLoop alt="" /></span>
+                        : <Image src={withBase(`/og/${entry.slug}.png`)} alt="" fill sizes="(max-width: 767px) 100vw, 600px" className="object-cover" />}
+                  </span>
+                  <span className="about-project-meta">{(entry.meta.hero?.details[0]?.value ?? entry.meta.timeline ?? "").split(". ")[0]}</span>
+                  <span className="about-project-name">{entry.meta.short ?? entry.meta.title}<ArrowIcon /></span>
+                  <span className="about-project-text">{entry.meta.hook ?? entry.tldr.problem}</span>
                 </Link>
               </li>
             ))}
           </ul>
+        </section>
 
+        <section className="about-close about-contact-stage">
+          <StageHead n={5} total={total} title={c.contact} />
           <div className="about-contact">
-            <StageHead n={5} total={total} title={c.contact} />
             <p className="about-statement reveal">{c.open}</p>
-            {site.email && <div className="reveal"><AboutEmail email={site.email} copied={c.copied} hint={c.copyHint} /></div>}
-            <div className="about-actions reveal">
-              {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
-              {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
-              {hasResume
-                ? <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>
-                : <Todo>add public/resume.pdf; the link appears once it exists</Todo>}
-            </div>
+            <ul className="about-contact-rows reveal">
+              {site.email && (
+                <li>
+                  <span className="about-contact-label">{c.email}</span>
+                  <a href={`mailto:${site.email}`} className="about-contact-value">{site.email}</a>
+                  <CopyButton text={site.email} label={c.copyEmail} copied={c.copied} />
+                </li>
+              )}
+              {site.linkedinUrl && (
+                <li>
+                  <span className="about-contact-label">LinkedIn</span>
+                  <a href={site.linkedinUrl} className="about-contact-value">{site.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a>
+                  <span className="about-contact-arrow" aria-hidden="true">↗</span>
+                </li>
+              )}
+              {hasResume && (
+                <li>
+                  <span className="about-contact-label">{c.resume}</span>
+                  <a href={withBase(site.resumeUrl)} className="about-contact-value">PDF</a>
+                  <span className="about-contact-arrow" aria-hidden="true">↓</span>
+                </li>
+              )}
+            </ul>
+            {!hasResume && <Todo>add public/resume.pdf; the Resume row appears once it exists</Todo>}
           </div>
         </section>
         <SiteFooter />

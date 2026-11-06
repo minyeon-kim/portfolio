@@ -135,3 +135,22 @@ export function AboutEmail({ email, copied, hint }: { email: string; copied: str
     </button>
   );
 }
+
+// A small pill beside the address: copies it and says so in place for a moment.
+export function CopyButton({ text, label, copied }: { text: string; label: string; copied: string }) {
+  const [done, setDone] = useState(false);
+  const timer = useRef<number>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(text); setDone(true); } catch { setDone(false); }
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setDone(false), 1800);
+  };
+  return (
+    <button type="button" className="about-copy" data-done={done || undefined} onClick={copy}>
+      <span aria-hidden={done}>{label}</span>
+      <span aria-hidden={!done}>{copied}</span>
+      <span role="status" className="sr-only">{done ? copied : ""}</span>
+    </button>
+  );
+}
