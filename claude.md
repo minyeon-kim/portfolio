@@ -1582,3 +1582,5 @@ Both case pills share one fill (`--pill-fill`, #8c8cff dark / #6f5fe6 light, mix
 Korean landing note breaks into three even lines on 64rem and up ("보안 컨설턴트 출신으로, / AI와 함께 리서치부터 프로토타입까지 / 직접 하는 프로덕트 디자이너입니다."): the breaks are \n in `ui.heroParagraph` (KO), held by `white-space: pre-line` on `.home-note-default` only at that width, so phones flow it as one paragraph. The note stays Korean on the Korean page (owner).
 
 Devsign Takeaway photo is now IMG_2666 at the owner's pick (supersedes IMG_2658): Minyeon (navy top) typing at the meeting table, this portfolio site on the big screen behind; portrait 4:5 crop (1280x1600, same file case-me-2.webp), 520px wide, caption "Me, with this portfolio on the big screen." / "큰 화면에 띄운 이 포트폴리오와 나." The screen shows the portfolio, not Devsign, and the caption says so.
+
+Devsign Takeaway has no photo for now (owner); `takeaway.photo` support stays in the code. IMG_2666 (this portfolio on the big screen, Minyeon at her laptop, 4:5) moved to the About gallery as public/images/about/screen.webp, third photo in the first row (side, talk, screen). Supersedes the Takeaway photo notes above.

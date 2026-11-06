@@ -30,6 +30,7 @@ const copy = {
       laptop: "Minyeon going through a design on a laptop with a teammate",
       hands: "Hands around a table covered in printed screens, sketches and sticky notes",
       desk: "Minyeon working on a laptop",
+      screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
@@ -48,6 +49,7 @@ const copy = {
       laptop: "노트북으로 팀원과 디자인을 함께 보는 김민연",
       hands: "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손",
       desk: "노트북으로 작업하는 김민연",
+      screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
@@ -78,7 +80,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
-    [["side", 1800, 1547], ["talk", 1800, 1200]],
+    [["side", 1800, 1547], ["talk", 1800, 1200], ["screen", 1280, 1600]],
     [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
     [["laptop", 1800, 1200], ["hands", 1800, 1200], ["desk", 2400, 1500]],
   ];
