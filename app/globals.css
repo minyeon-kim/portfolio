@@ -5952,3 +5952,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-figure .dv-open-frame .dv-fit { padding: 0; background: none; }
 @media (min-width: 64rem) { .case-study .dv .dv-journey.dv-scroll { overflow: visible; } }
 .case-study .dv .dv-figure:has(.dv-fit) > .dv-open-frame { box-sizing: border-box; padding: clamp(16px, 2vw, 28px); border-radius: 24px; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
+/* Interview block, lighter (owner: the call tiles were stuck together and the block held too much):
+   the three tiles stand apart with their own corners, and each claim shows its one strongest quote
+   at a larger size (the second quote stays in the MDX). */
+.dv-iv-tiles { gap: 8px; overflow: visible; border-radius: 0; }
+.dv-iv-tiles img { border-radius: 12px; }
+.case-study .dv .dv-iv-claim blockquote { font-size: clamp(20px, 1.8vw, 24px); line-height: 1.4; }
