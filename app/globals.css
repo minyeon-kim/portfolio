@@ -6565,9 +6565,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 }
 
 /* Takeaway photo of Minyeon: 4:3, at the text measure, under the statement. */
-.dv .dv-figure.dv-me-photo-tk { max-width: 800px; margin: 64px 0 0; }
-.dv-me-photo-tk img { aspect-ratio: 4 / 3; object-position: 50% 50%; }
-@media (max-width: 47.99rem) { .dv .dv-figure.dv-me-photo-tk { margin-top: 32px; } }
+.dv .dv-figure.dv-me-photo-tk { max-width: 520px; margin: 64px 0 0; }
+.dv .dv-me-photo-tk img { aspect-ratio: 4 / 5; object-position: 50% 50%; }
+@media (max-width: 47.99rem) { .dv .dv-figure.dv-me-photo-tk { margin-top: 32px; } .dv .dv-me-photo-tk img { aspect-ratio: 4 / 5; object-position: 50% 50%; } }
 /* About gallery: photos from the Figma Photo page in justified rows (each photo
    whole, one height per row; flex-grow = its aspect ratio). Wider than the text
    column. Each photo rises with the usual reveal and settles from 1.06 inside its
