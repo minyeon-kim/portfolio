@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useHeldSteps } from "@/components/devsign-story";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
 type Source = { label: string; url?: string; detail?: string };
@@ -218,6 +219,9 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
   const [leaving, setLeaving] = useState(false);
   const [current, setCurrent] = useState(0);
   const [round, setRound] = useState(0);
+  // With room and motion the stage holds on screen and native scroll picks the chart (no timer).
+  const held = useHeldSteps(charts.length);
+  const scrolled = held.pinned;
 
   useEffect(() => {
     const el = root.current;
@@ -245,10 +249,16 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
     }, LEAVE_MS);
   }, []);
 
+  useEffect(() => {
+    if (scrolled && held.active !== current) go(() => held.active);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [held.active, scrolled]);
+
   const phase = !motion ? "final" : seen ? "play" : "wait";
-  const running = motion && inView && !hold && !stopped && !leaving;
+  const running = motion && inView && !hold && !stopped && !leaving && !scrolled;
 
   return (
+    <div ref={held.root} className="dv-held-track dv-cycle-track" style={{ "--n": charts.length } as React.CSSProperties}>
     <div
       ref={root}
       className="dv-cycle-stage"
@@ -263,13 +273,13 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
       <div className="dv-cycle-nav">
         <div role="group" aria-label={labels.charts} className="dv-cycle-tabs">
           {charts.map((chart, i) => (
-            <button key={chart.tab} type="button" className="press" aria-pressed={i === current} onClick={() => i !== current && go(() => i)}>
-              {i === current && motion && <i key={round} className="dv-cycle-timer" aria-hidden="true" onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />}
+            <button key={chart.tab} type="button" className="press" aria-pressed={i === current} onClick={() => { if (scrolled) held.go(i); else if (i !== current) go(() => i); }}>
+              {i === current && motion && !scrolled && <i key={round} className="dv-cycle-timer" aria-hidden="true" onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />}
               <span>{chart.tab}</span>
             </button>
           ))}
         </div>
-        {motion && (
+        {motion && !scrolled && (
           <button type="button" className="dv-cycle-stop" aria-label={stopped ? labels.play : labels.pause} onClick={() => setStopped((v) => !v)}>
             <svg viewBox="0 0 20 20" aria-hidden="true">{stopped ? <path d="M7 4.5v11l9-5.5z" fill="currentColor" /> : <path d="M7 4.5v11M13 4.5v11" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />}</svg>
           </button>
@@ -303,6 +313,7 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
         {charts[current].note && <p className="dv-chart-source">{charts[current].note}</p>}
         <ChartSource source={charts[current].source} />
       </div>}
+    </div>
     </div>
   );
 }
