@@ -7,7 +7,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
-import { CountUp, AffinityMotion, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, AffinityWall, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -395,10 +395,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div>
           <Block {...define.affinity} ff={ff} />
           {/* The process first: how many statements became how many problems, and the board itself. */}
-          <ol className="dv-funnel dv-gap-40 reveal">
+          {define.affinity.wall
+            ? <AffinityWall wall={define.affinity.wall} problems={define.problems.items.map((item: { title: string }) => item.title)} funnel={define.affinity.funnel} />
+            : <ol className="dv-funnel dv-gap-40 reveal">
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
-          </ol>
-          {define.affinity.groups
+          </ol>}
+          {define.affinity.wall ? <p className="dv-aff-foot"><a className="link" href={withBase(define.affinity.board.src)} target="_blank" rel="noreferrer">{define.affinity.boardLabel}</a></p> : define.affinity.groups
             ? <AffinityMotion groups={define.affinity.groups} replay={define.affinity.replay} board={{ href: withBase(define.affinity.board.src), label: define.affinity.boardLabel }} />
             : <Figure img={define.affinity.board} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board" open />}
         </div>

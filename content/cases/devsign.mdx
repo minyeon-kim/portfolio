@@ -232,6 +232,21 @@ export const study = {
       groups: [["Real-time collaboration", "#ffafa3", 8], ["Versions & finals", "#ffe299", 5], ["Shared context", "#b3efbd", 12], ["Manual review", "#a6ece4", 7], ["Blurred role lines", "#a8daff", 7], ["Tool sprawl", "#d3bdff", 9], ["AI limits", "#ffb6d9", 6]],
       replay: "Replay",
       boardLabel: "See the real board ↗",
+      wall: {
+        types: [["pain", "Pain point", "#ffafa3"], ["need", "Need", "#a8daff"], ["act", "Behavior", "#b3efbd"], ["think", "Perception", "#ffe299"], ["feel", "Emotion", "#d3bdff"]],
+        steps: ["Sorted by type of statement", "Grouped into 7 themes", "Narrowed to 4 problems"],
+        aside: "AI limits stayed out of the four problems.",
+        themes: [["Versions & finals", 0], ["Manual review", 1], ["Blurred role lines", 1], ["Tool sprawl", 2], ["Real-time collaboration", 2], ["Shared context", 3], ["AI limits", -1]],
+        notes: [
+        [["They said there’s no such thing as saving a B option separately.", "P03", "pain"], ["After two or three months, I’d think: wait, where did I get this from?", "P02", "pain"], ["I do wish it were managed automatically.", "P02", "need"], ["Details like seeing the before-and-after of an edit in one click.", "P01", "need"]],
+        [["Even if AI does 80%, review doesn’t go away.", "P04", "act"], ["I just look at it and fix it again myself.", "P02", "act"]],
+        [["I feel the part where I can step in has actually shrunk.", "P03", "pain"], ["On our team, developers hold most of the initiative.", "P03", "think"]],
+        [["Using each separately makes merging and sharing results hard.", "P01", "pain"], ["I checked it in Notion and GitHub.", "P01", "act"]],
+        [["We just do it verbally. Things keep changing.", "P04", "act"], ["When you don’t know, asking is the easiest way.", "P03", "act"]],
+        [["These days, when we’re rushed, we don’t really explain things to each other.", "P03", "pain"], ["If it seems too minor to mention, I sometimes find out about it later.", "P03", "pain"], ["At first there were a lot of times I really didn’t understand.", "P03", "feel"], ["It kind of auto-fills the parts people miss.", "P03", "think"]],
+        [["Built-in AI features in tools don’t perform well, so I barely use them.", "P02", "think"], ["It’s not very readable. Wordy and long-winded.", "P03", "pain"]],
+      ],
+      },
       board: { src: "/images/devsign/affinity-board.webp", width: 7000, height: 3022, alt: "Affinity map: interview quotes grouped into seven colored theme columns, from real-time collaboration to AI limits" },
     },
     problems: {

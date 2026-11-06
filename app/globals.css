@@ -6255,3 +6255,38 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 @media (prefers-reduced-motion: reduce) { .dv-aff-note, .dv-aff-label { transition: none; } }
 
 .case-study .dv .dv-posts-head .dv-count span { color: inherit; font-size: inherit; }
+/* Affinity wall: type → theme → problem, real notes, plays once and stays grouped. */
+.dv-wall-steps { display: flex; flex-wrap: wrap; gap: 12px 40px; margin: 0 0 32px; padding: 0; list-style: none; }
+.dv-wall-steps li { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 2px 10px; color: var(--dv-muted); transition: color 400ms var(--ease); }
+.dv-wall-steps strong { font-size: var(--t-statement); font-weight: 300; line-height: 1; font-variant-numeric: tabular-nums; }
+.dv-wall-steps span { font-size: 16px; }
+.dv-wall-steps small { grid-column: 1 / -1; font-size: 16px; }
+.dv-wall-steps li[data-on], .dv-wall-steps li[data-done] { color: var(--dv-ink); }
+.dv-wall-steps li[data-on] strong { color: var(--case-accent); }
+.dv-wall-stage { position: relative; transition: height 600ms var(--ease); }
+.dv-wall-note { position: absolute; top: 0; left: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; padding: 12px 14px; border-radius: 6px; color: #1b1b1f; box-shadow: 0 1px 2px rgb(0 0 0 / 0.25); transition: transform 1000ms cubic-bezier(0.22, 0.61, 0.36, 1), width 1000ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 600ms var(--ease); }
+.dv-wall-note p { display: -webkit-box; margin: 0; overflow: hidden; font-size: 16px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 4; word-break: keep-all; }
+.dv-wall-note span { font-size: 13px; font-weight: 600; opacity: 0.7; }
+.dv-wall-legend { position: absolute; top: 0; left: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--dv-ink); font-size: 16px; opacity: 0; transition: opacity 400ms var(--ease); }
+.dv-wall-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.dv-wall-legend i { width: 14px; height: 14px; border-radius: 3px; }
+.dv-wall-label { position: absolute; margin: 0; padding-top: 8px; border-top: 2px solid var(--dv-line); color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.3; opacity: 0; transform: translateY(6px); transition: opacity 400ms var(--ease) 600ms, transform 400ms var(--ease) 600ms; word-break: keep-all; }
+.dv-wall-problem { border-top-color: var(--case-accent); font-size: var(--t-item); }
+.dv-wall-problem b { display: block; margin-bottom: 2px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-wall-legend[data-on], .dv-wall-label[data-on] { opacity: 1; transform: none; }
+.dv-wall-label:not([data-on]) { transition-delay: 0ms; }
+.dv-wall-aside { margin: 20px 0 0; color: var(--dv-muted); font-size: 16px; opacity: 0; transition: opacity 400ms var(--ease) 800ms; }
+.dv-wall-aside[data-on] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .dv-wall-note, .dv-wall-label, .dv-wall-legend, .dv-wall-aside, .dv-wall-stage, .dv-wall-steps li { transition: none; } }
+/* Feature list hierarchy (owner): name > benefit line > sentence > flow and solves. */
+.case-study .dv .dv-flist-items button { font-size: var(--t-item); }
+.case-study .dv .dv-flist-items li[data-on] button > span { font-size: 22px; }
+.case-study .dv .dv-flist-items button small { margin-top: 2px; font-size: 18px; color: var(--dv-muted); }
+.case-study .dv .dv-flist-items li[data-on] button small { color: var(--case-accent); }
+.case-study .dv .dv-flist-body { margin-top: 14px; color: var(--dv-muted); font-size: 16px; line-height: 1.55; }
+.case-study .dv .dv-flist-flow { margin-top: 14px; }
+.case-study .dv .dv-flist-solves { margin-top: 10px; }
+/* Chart source and note: small, under the chart, after a hairline. */
+.dv-cycle-foot { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--dv-line); }
+.case-study .dv .dv-cycle-foot .dv-chart-source { color: var(--dv-muted); font-size: 16px; }
+
