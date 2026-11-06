@@ -6352,4 +6352,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    issues live on the full spec page. */
 .dv-hdoc-table[data-brief] td:nth-child(4), .dv-hdoc-table[data-brief] thead th:nth-child(4) { display: none; }
 .case-study .dv .dv-hdoc-excerpt .dv-hdoc-cols { margin-top: 40px; }
+/* Empty media slot until a real image exists. */
+.dv-placeholder-box { display: grid; place-items: center; aspect-ratio: 21 / 9; border: 1px dashed var(--dv-line); border-radius: 12px; background: color-mix(in srgb, var(--dv-ink) 4%, transparent); color: var(--dv-muted); font-size: 16px; }
+@media (min-width: 64rem) { .case-study .dv .dv-placeholder-box { --ph-w: min(1640px, calc(100vw - 96px)); width: var(--ph-w); max-width: none; margin-left: calc(50% - var(--ph-w) / 2); } }
 

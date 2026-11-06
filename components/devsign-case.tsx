@@ -527,7 +527,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>}
         <div className="dv-gap-96">
           <Block {...develop.sketching} ff={ff} />
-          <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />
+          {/* TODO: the photo here was only an example; an empty box until Minyeon adds the real sketches. */}
+          {develop.sketching.placeholder
+            ? <div className="dv-placeholder-box dv-gap-40 reveal" role="img" aria-label={develop.sketching.placeholder}><span>{develop.sketching.placeholder}</span></div>
+            : <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />}
         </div>
         {develop.selection && !ff && (
           <div className="dv-gap-96">
