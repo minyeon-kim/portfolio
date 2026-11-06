@@ -8,7 +8,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
-import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -116,12 +116,14 @@ function Insights({ discover }: { discover: Study }) {
       </div>
 
       <div className="dv-subsection">
+        <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; before?: string; gap: string }, i: number) => (
             <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
           ))}
         </ol></FlowPlay>
+        </HeldFlow>
       </div>
 
       <div className="dv-subsection">
@@ -221,12 +223,14 @@ function SourceInsights({ discover }: { discover: Study }) {
       </div>
 
       <div className="dv-subsection">
+        <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} ff />
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }, i: number) => (
             <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
           ))}
         </ol></FlowPlay>
+        </HeldFlow>
       </div>
 
       <div className="dv-subsection">
