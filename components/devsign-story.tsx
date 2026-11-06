@@ -233,6 +233,7 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
           <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
         </OpenFrame>
       </div>
+      <HeldFlow count={rows.length}>
       <p className="dv-vpc-title reveal">{overviewLabel}</p>
       {/* One row per pair, read left to right like a comparison table (owner: three cards read
           top to bottom were awkward): the pain heard → the idea that answers it → the feature. */}
@@ -240,8 +241,8 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
         <div className="dv-vpc-head" role="row">
           <span role="columnheader">{painLabel}</span><span aria-hidden="true" /><span role="columnheader">{reliefLabel}</span><span aria-hidden="true" /><span role="columnheader">{featureLabel}</span>
         </div>
-        {rows.map((c) => (
-          <div key={c.id} className="dv-vpc-row" role="row">
+        {rows.map((c, i) => (
+          <div key={c.id} className="dv-vpc-row" role="row" style={{ "--i": i } as CSSProperties}>
             <p role="cell" data-label={painLabel}>“{c.pain}”</p>
             <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
             <p role="cell" data-label={reliefLabel}>{c.name}</p>
@@ -250,6 +251,7 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
           </div>
         ))}
       </div>
+      </HeldFlow>
       <ul className="sr-only">
         {others.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>
@@ -583,10 +585,11 @@ type Problem = { title: string; body: string };
 export function ProblemPanels({ items, children }: { items: Problem[]; children?: React.ReactNode }) {
   return (
     <div className="dv-panels-wrap">
+      <HeldFlow count={items.length}>
       {children}
       <ol className="dv-panels reveal">
         {items.map((item, i) => (
-          <li key={item.title}>
+          <li key={item.title} className="dv-step-item" style={{ "--i": i } as CSSProperties}>
             <b className="dv-panel-num">{pad(i + 1)}</b>
             <div>
               <h4>{item.title}</h4>
@@ -595,6 +598,7 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
           </li>
         ))}
       </ol>
+      </HeldFlow>
     </div>
   );
 }

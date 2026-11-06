@@ -6512,3 +6512,19 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow > li { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1) !important; translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px) !important; transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
   .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow::after { transform: scaleY(calc((var(--held-step) + 1) / var(--n))) !important; transition: transform 450ms var(--ease); }
 }
+/* Key problems and the value proposition pairs come in one per scroll step (HeldFlow). A pair
+   fills left to right: the pain heard, the idea that answers it, the feature it became. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv-held-flow[data-pinned] .dv-step-item { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1); translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px); transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
+  .dv-held-flow[data-pinned] .dv-vpc-row > * { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1); translate: calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * -12px) 0; transition: opacity 400ms var(--ease), translate 400ms var(--ease); }
+  .dv-held-flow[data-pinned] .dv-vpc-row > :nth-child(2) { transition-delay: 120ms; }
+  .dv-held-flow[data-pinned] .dv-vpc-row > :nth-child(3) { transition-delay: 220ms; }
+  .dv-held-flow[data-pinned] .dv-vpc-row > :nth-child(4) { transition-delay: 340ms; }
+  .dv-held-flow[data-pinned] .dv-vpc-row > :nth-child(5) { transition-delay: 440ms; }
+}
+/* A held stage is as tall as its content, so it fits the screen while it holds. */
+.case-study .dv .dv-held-flow-stage { min-height: 0 !important; }
+@media (min-width: 64rem) and (min-height: 640px) and (max-height: 860px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-held-flow[data-pinned] .dv-panels { margin-top: 32px; }
+  .case-study .dv .dv-held-flow[data-pinned] .dv-panels > li { padding-block: 22px; }
+}
