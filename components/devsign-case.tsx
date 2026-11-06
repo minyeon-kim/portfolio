@@ -636,7 +636,10 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {/* With a `protocol`: the result first (finding, who and how much, the
               scores, what they meant). */}
           {testing.usability.protocol ? <>
-          <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
+          {/* With charts, each chart's sentence is the finding (owner: the block finding and the first
+              chart said the same thing), so the block keeps only its label and who / how much. */}
+          {testing.usability.charts ? <div className="dv-block"><p className="dv-label reveal">{testing.usability.title}</p></div>
+            : <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />}
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
