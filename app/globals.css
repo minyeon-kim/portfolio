@@ -5964,7 +5964,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    to edge with a 24px gutter, straight on the page with no plate. Desktop only. */
 @media (min-width: 64rem) {
   .case-study[data-project="devsign"] .dv > #develop {
-    --txt-in: min(200px, 16.667%);
+    --txt-in: 0px;
     --bleed: calc(100vw - 2 * var(--edge-inset, 24px));
   }
   .case-study[data-project="devsign"] #develop :is(.dv-section-head, .dv-block, .dv-vpc-title, .dv-vpc-pairs) {
@@ -5984,3 +5984,16 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 }
 
 @media (min-width: 64rem) { .case-study[data-project="devsign"] #develop :is(.dv-spec-more, .dv-fc-full) { display: block; width: fit-content; margin-inline: auto; } }
+/* Develop trial, second pass (owner: text on the column's left edge, shorter, flow without its two
+   boxes, a lighter canvas table). */
+@media (min-width: 64rem) {
+  .case-study[data-project="devsign"] .dv > #develop { --sp-block: 128px; --sp-part: 48px; }
+  .case-study[data-project="devsign"] #develop .dv-section-head { margin-bottom: 72px; }
+  .case-study[data-project="devsign"] #develop :is(.dv-vpc-view, .dv-vpc-title) { margin-top: 48px; }
+  .case-study[data-project="devsign"] #develop .dv-fc-box { fill: none; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-head { display: none; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-pair { padding-block: 10px; border-top: 0; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-pair :is(span, i) { color: var(--dv-muted); }
+  .case-study[data-project="devsign"] #develop .dv-vpc-pair > b { font-size: 18px; font-weight: 500; }
+}
+
