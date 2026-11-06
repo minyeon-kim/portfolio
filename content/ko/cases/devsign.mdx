@@ -54,7 +54,7 @@ export const study = {
   },
   overview: {
     summary: {
-      label: "한눈에 보기",
+      label: "At a glance",
       items: [
         { tone: "red", label: "문제", title: "시안과 이유가 흩어진다", text: "어떤 안을 쓸지는 채팅에서 정하고, 디자인과 달라진 곳은 출시한 뒤에야 보인다." },
         { tone: "accent", label: "해결", title: "비교부터 기록까지 한곳에서", text: "여러 시안의 좋은 부분만 골라 합치고, 달라진 곳은 정할 사람에게 보내고, 정한 내용은 그 화면과 함께 남긴다." },
@@ -64,12 +64,12 @@ export const study = {
     headline: "AI 시대의 가장 큰 과제는",
     headlineAccent: "AI가 만든 결과물을 확인하고 합치는 일이다.",
     process: {
-      title: "프로세스 · 더블 다이아몬드",
+      title: "Process · Double Diamond",
       stages: [
-        { name: "Discover", outcome: "AI로 일은 빨라졌지만, 왜 그렇게 정했는지는 남지 않았다.", methods: ["자료 조사", "비교 분석", "심층 인터뷰"] },
-        { name: "Define", outcome: "핵심 문제를 네 가지로 좁혔다.", methods: ["어피니티 매핑", "페르소나·저니맵"] },
-        { name: "Develop", outcome: "기능 후보 5개를 4개로 추렸다.", methods: ["브레인스토밍", "2x2 매트릭스", "가치 제안 캔버스", "스케치·IA"] },
-        { name: "Deliver", outcome: "프로토타입을 만들고, 테스트와 코디자인으로 두 번 고쳤다.", methods: ["AI 프로토타입", "사용성 테스트", "코디자인"] },
+        { name: "Discover", outcome: "AI로 일은 빨라졌지만, 왜 그렇게 정했는지는 남지 않았다.", methods: ["Secondary research", "Comparative", "Interviews"] },
+        { name: "Define", outcome: "핵심 문제를 네 가지로 좁혔다.", methods: ["Affinity map", "Personas", "Journey map"] },
+        { name: "Develop", outcome: "기능 후보 5개를 4개로 추렸다.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
+        { name: "Deliver", outcome: "프로토타입을 만들고, 테스트와 코디자인으로 두 번 고쳤다.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
     },
     features: {
@@ -87,7 +87,7 @@ export const study = {
   discover: {
     desk: {
       method: "Secondary research",
-      title: "자료 조사",
+      title: "Secondary research",
       lead: "이제 오래 걸리는 건 만드는 일이 아니라 확인하는 일이다.",
     },
     q1: {
@@ -131,7 +131,7 @@ export const study = {
       boards: { src: "/images/devsign/research-boards.webp", width: 4096, height: 1310, caption: "리서치 보드 · Reddit, Hacker News, Medium 글을 패턴별로 정리" },
     },
     q2: {
-      title: "비교 분석",
+      title: "Comparative analysis",
       answer: "AI 시안을 합치고 결정 이유까지 남기는 도구는 찾지 못했다.",
       auditLabel: "도구 10여 개, 유형별",
       headers: ["유형", "대표 도구", "해결하는 것", "찾지 못한 것"],
@@ -143,7 +143,7 @@ export const study = {
       ],
     },
     synthesis: {
-      label: "분석",
+      label: "Analysis",
       title: "AI로 일은 빨라졌지만, 왜 그렇게 정했는지는 남지 않았다.",
       rows: [
         { stage: "기획", gap: "필요를 정하기 전에 AI 초안부터 나온다." },
@@ -154,7 +154,7 @@ export const study = {
     },
     interview: {
       method: "Primary research",
-      title: "직접 조사 · 심층 인터뷰",
+      title: "Primary research · In-depth interview",
       lead: "검토는 모두가 했지만, 결정은 누구의 몫도 아니었다.",
       text: "디자이너, PM, 개발자 4명에게 AI 결과물을 어떻게 확인하고 최종 결정은 누가 하는지 물었다. (1:1 원격, 각 60분)",
       questionsLabel: "무엇을 물었나",
@@ -185,7 +185,7 @@ export const study = {
   define: {
     personas: {
       method: "User definition",
-      title: "페르소나와 사용자 여정 지도",
+      title: "Persona & user journey map",
       lead: "디자이너와 개발자는 서로 다른 단계에서 막히지만, 이유는 같다.",
       people: [
         {
@@ -226,8 +226,8 @@ export const study = {
     },
     affinity: {
       method: "Research analysis",
-      title: "어피니티 매핑",
-      label: "어피니티 매핑",
+      title: "Affinity mapping",
+      label: "Affinity mapping",
       lead: "대화로 정한 내용이 작업물에 남지 않았다.",
       funnel: [["201", "인터뷰에서 나온 말"], ["7", "테마"], ["4", "문제"]],
       themesLabel: "테마",
@@ -255,7 +255,7 @@ export const study = {
     },
     problems: {
       method: "Problem definition",
-      title: "핵심 문제",
+      title: "Key problems",
       lead: "테마를 다시 묶으니 문제 네 가지가 남았다.",
       lowest: "Lowest point",
       items: [
@@ -267,7 +267,7 @@ export const study = {
     },
     core: {
       method: "Problem definition",
-      title: "문제 정의",
+      title: "Problem statement",
       lead: "디자이너와 개발자가 AI 결과물을 함께 논의할 곳이 없어서, 누가 무엇을 왜 정했는지 기록이 남지 않는다.",
     },
     hmw: {
@@ -281,7 +281,7 @@ export const study = {
   develop: {
     canvas: {
       method: "Ideation",
-      title: "가치 제안 캔버스",
+      title: "Value proposition canvas",
       lead: "인터뷰에서 나온 불편을 해결하는 아이디어만 기능 후보로 남겼다.",
       text: "아이디어마다 어떤 불편을 해결하는지 연결하고, 같은 불편을 해결하는 것끼리 묶었더니 후보가 5개로 줄었다.",
       candidatesLabel: "기능 후보와 각 후보가 해결하는 불편",
@@ -301,14 +301,14 @@ export const study = {
     },
     sketching: {
       method: "Ideation",
-      title: "스케치",
+      title: "Sketching",
       lead: "코드로 만들기 전에, 후보 5개를 먼저 종이에 그려 봤다.",
       text: "그려 보니 ‘실시간 작업 현황’이 워크스페이스와 겹쳐서 하나로 합쳤고, 기능은 4개가 됐다.",
       placeholder: "스케치 · 추가 예정",
       image: { src: "/images/devsign/sketches.webp", width: 1280, height: 960, alt: "펜과 함께 놓인 손으로 그린 인터페이스 스케치" },
     },
     selection: {
-      label: "핵심 기능 4개",
+      label: "4 core features",
       solves: "해결하는 문제",
       items: [
         { problem: "변경이 흩어져 있다", feature: "Live Workspace", from: "후보 D + E에서" },
@@ -319,7 +319,7 @@ export const study = {
     },
     ia: {
       method: "Structure",
-      title: "정보 구조",
+      title: "Information architecture",
       lead: "모든 작업은 워크스페이스 한 곳에서 하고, 결정은 옆 패널에서 내린다.",
       text: "화면은 미리보기·화면·코드 세 가지로 보고, 시안 합치기와 결정은 옆 패널에서 연다. 내린 결정은 모두 History에 남는다.",
       more: "전체 구조 보기",
@@ -341,7 +341,7 @@ export const study = {
     },
     flow: {
       method: "Structure",
-      title: "유저 플로우",
+      title: "User flow",
       lead: "시안을 합칠 때와 구현이 디자인과 다를 때, 누가 무엇을 하는지 정리했다.",
       text: "디자이너는 시안을 합치고, 개발자는 직접 고치거나 결정을 요청하고, 결정권자는 결정한다. 세 사람은 같은 변경 요청 화면을 함께 본다.",
       chart: {
@@ -365,14 +365,14 @@ export const study = {
     },
     system: {
       method: "Structure",
-      title: "디자인 시스템",
+      title: "Design system",
       lead: "화면마다 모양이 달라지지 않도록, 디자인 규칙을 한곳에 정리했다.",
       text: "색, 간격, 버튼 규칙을 파일 하나에 모아 두고, 모든 화면이 그 규칙을 따르게 했다.",
     },
   },
   deliver: {
     method: "Final design",
-    title: "프로토타입",
+    title: "Prototype",
     lead: "시안 비교부터 결정, 그 이유를 남기는 일까지 한곳에서 할 수 있는 프로토타입을 만들었다.",
     text: "직접 눌러 볼 수 있다. 새 탭에서 열리고, 데스크톱 화면에 맞춰져 있다.",
     link: { label: "프로토타입 써 보기 ↗", href: "https://minyeon-kim.github.io/devsign/?lang=ko" },
@@ -421,7 +421,7 @@ export const study = {
     spec: {"more":"전체 핸드오프 스펙 보기 →","moreHref":"/ko/work/devsign/handoff/","label":"개발 전달 문서(핸드오프 스펙)","lead":"개발자가 짐작으로 만들지 않도록, 화면마다 생길 수 있는 상태를 먼저 정리했다.","screensLabel":"화면별 스펙","cols":{"name":"요소","does":"동작","state":"상태·예외"},"shared":"공통: 컨트롤 높이 32px, 카드 모서리 12px, 주요 버튼 #5EEAB5에 글자 #0A0A0A, 영역 사이 12px.","open":"아직 안 정한 것: 프로토타입은 목 데이터로 움직여서 로딩, 전송 실패, 좁은 화면 동작은 미정이다.","screens":[{"id":"merge","tab":"Merge Studio","alt":"Merge Studio. 왼쪽 캔버스에 결제 화면, 오른쪽에 영역 탭과 시안 카드, 아래에 병합 요청 버튼","rows":[["영역 탭","누르면 그 영역의 시안 목록으로 바뀐다.","고른 영역은 이름 옆에 시안 글자(A~D)가 붙는다."],["시안 카드","올리면 캔버스에서 미리 보고, 누르면 적용한다.","적용한 카드는 '사용 중' 표시와 민트 테두리."],["캔버스의 선택 영역","선택한 영역에 이름과 시안 글자를 표시한다. 옆 도구로 순서 이동, 복제, 삭제.","맨 끝 영역은 그쪽 이동이 비활성. 복제 ⌘D, 삭제 ⌫."],["실행 취소·다시 실행","조합 작업을 되돌리거나 다시 한다.","되돌릴 내용이 없으면 비활성."],["전체 시안 비교","영역별 선택에서 시안 전체 비교로 바꾼다.","-"],["선택 수와 병합 요청","누르면 검토 요청 창이 열린다.","모든 영역을 고르기 전에는 비활성(투명도 40%). 왼쪽에 '4/4 선택'과 남은 확인 항목 수."]],"src":"/images/devsign/handoff-merge-ko.webp","pins":[[65.6,20.8],[65.6,30],[30.6,56],[44.2,95.1],[96.5,16],[87.8,96]],"purpose":"AI 시안 여러 개를 영역별로 골라 한 화면으로 합친다.","accept":["모든 영역에 시안을 고르기 전에는 병합 요청을 누를 수 없다.","시안 카드를 누르면 캔버스에 적용되고 ‘사용 중’으로 표시된다.","고른 개수가 바뀌면 스크린 리더에도 전달된다."],"tokens":["컨트롤 `--ds-control-height` 32px","주요 버튼 `--ds-primary` #5EEAB5, 글자 #0A0A0A","비활성은 투명도 40%"],"code":[["MergeStudioWorkspace.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MergeStudioWorkspace.jsx"],["BlockDeckPanel.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/BlockDeckPanel.jsx"],["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L5-L30"]]},{"id":"request","tab":"검토 요청","alt":"병합 요청 버튼 위에 열린 검토 요청 창. 검토자 체크박스, 메모, 보내기 버튼","rows":[["검토자","체크박스로 고른다.","Jordan이 기본 선택. 한 명도 없으면 보낼 수 없다."],["메모","검토자에게 남길 말을 적는다.","선택 입력."],["검토 요청 보내기","요청을 보내고 창을 닫는다.","검토자가 없으면 비활성. 확인 항목이 남아 있으면 개수를 경고하되 보낼 수 있다. 보낸 뒤 버튼 자리는 '병합 요청됨'."]],"src":"/images/devsign/handoff-request-ko.webp","pins":[[77.2,71.6],[77.2,82.6],[77.2,90.5]],"purpose":"합친 화면을 검토자에게 보낸다.","accept":["검토자가 한 명도 없으면 보낼 수 없다.","남은 확인 항목은 경고만 하고 전송을 막지 않는다.","보내면 창이 닫히고 버튼 자리에 ‘병합 요청됨’이 보인다."],"tokens":["컨트롤 `--ds-control-height` 32px","주요 버튼 `--ds-primary` #5EEAB5, 글자 #0A0A0A","비활성은 투명도 40%"],"code":[["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L19-L28"]]},{"id":"decide","tab":"Conflict Points 결정","alt":"주문 버튼의 변경확인 화면. 요청 내용, 현재 값과 디자인 값, 이유 입력, 결정 버튼","rows":[["요청 내용","누가 무엇을 왜 요청했는지 보여 준다.","읽기 전용."],["현재 값과 디자인 값","속성마다 코드 값과 디자인 토큰을 나란히 보여 준다.","예: 높이 40px, 디자인 44px(button.height.lg)."],["이유","결정한 이유를 적는다.","재검토 요청과 원안으로 수정은 필수. 비면 보내기 옆에 '이유를 입력해 주세요'. 승인은 이유 없이 한 번에 보낸다."],["재검토 요청·원안으로 수정","누르면 선택되고, 다시 누르면 풀린다. 재검토는 요청자에게 다른 수정안을 요청하고, 원안으로 수정은 코드를 디자인에 맞춰 고친다.","둘 다 안 고르면 오른쪽 버튼은 승인."],["나중에 반영","출시 전 또는 다음 버전을 고른다.","재검토 요청에는 없다."],["보내기","결정을 요청자에게 전달하고 승인 이력에 저장한다.","글자가 선택을 따라 바뀐다. 보낸 뒤 다음 단계 '수정·확인'으로 넘어간다."]],"src":"/images/devsign/handoff-decide-ko.webp","pins":[[14.7,45],[13.6,68.5],[14.7,88],[14.7,94.6],[68.9,94.6],[90.6,94.6]],"purpose":"구현이 디자인과 달라졌을 때 어느 쪽을 남길지 정하고, 이유를 남긴다.","accept":["아무것도 고르지 않으면 버튼은 승인이고, 한 번에 보낸다.","재검토 요청과 원안으로 수정은 이유가 비면 보낼 수 없다. 공백만 있어도 빈 값이다.","고른 항목을 다시 누르면 선택이 풀린다.","재검토 요청에는 나중에 반영이 없다."],"tokens":["컨트롤 `--ds-control-height` 32px","주요 버튼 `bg-emerald-400`, 글자 `slate-950`. `--ds-primary`와 달라 맞춰야 한다","보조 버튼 흰색 6%, 선택 시 16%"],"code":[["DesignDecisionFlow.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/conflicts/DesignDecisionFlow.jsx#L1100-L1177"],["designDecisions.js","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/lib/designDecisions.js#L4"]]},{"id":"history","tab":"History","alt":"History. 왼쪽에 버전 목록과 맨 위의 새 결정, 오른쪽에 그 버전의 화면과 재생 도구","rows":[["버전 항목","누르면 그 버전을 오른쪽에 연다.","방금 보낸 결정이 맨 위에 쌓인다. 제목, 사람, 종류, 시간."],["검색과 필터","검색하거나 종류, 파일로 좁힌다.","재생 범위도 같이 좁혀진다."],["변경 확인·상세","변경 확인은 근거를 열고, 상세는 결정 이유를 펼친다.","-"],["보기 전환과 비교","화면, 코드, 둘 다로 바꾸고 비교 기준을 고른다.","기본 비교는 이전 버전."],["이 버전으로 복원","복원 창을 연다.","현재 버전에서는 비활성. 복원해도 지워지지 않고 새 버전으로 쌓인다."],["재생","버전을 차례로 재생하거나 하나씩 넘긴다.","← → 키도 된다. 처음과 끝에서는 이전, 다음이 비활성."]],"src":"/images/devsign/handoff-history-ko.webp","pins":[[4,20],[2.9,11.7],[33.7,13],[24.6,17],[81.8,9.8],[51.2,95]],"purpose":"무엇을 누가 왜 정했는지 찾고, 그 시점으로 돌아간다.","accept":["방금 보낸 결정이 목록 맨 위에 나타난다.","현재 버전은 복원할 수 없다.","복원해도 지워지지 않고 새 버전으로 쌓인다."],"tokens":["컨트롤 `--ds-control-height` 32px","패널 `--ds-surface-card` #121212","카드 모서리 `--ds-radius-card` 12px"],"code":[["HistoryOverlay.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryOverlay.jsx"],["HistoryTimeline.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryTimeline.jsx"],["HistoryCompare.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryCompare.jsx"],["RollbackCheckpointModal.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/RollbackCheckpointModal.jsx"]]}],"pageLead":"이 제품을 이어서 구현할 사람을 위한 문서다. 초기 기획 문서가 아니라 지금의 프로토타입을 기준으로 정리했다.","back":"← Devsign 케이스로","basis":["기준: 프로토타입 커밋 1fc6ef5 (2026-10-29). 이 문서와 코드가 다르면 코드가 맞다. 코드는 목 데이터로 움직이므로 제품 코드가 아니라 동작을 확인하는 참고용이다.","해당 커밋 보기","https://github.com/minyeon-kim/devsign/tree/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c","design.md (토큰)","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/design.md"],"labels":{"play":"재생","pause":"일시정지","accept":"완료 조건","tokens":"토큰","code":"코드","elements":"동작","dev":"토큰·코드","states":"상태·예외"}},
     handoff: {
       method: "Wireflow",
-      title: "와이어플로우",
+      title: "Wireflow",
       lead: "워크스페이스에서 시안을 합치거나 변경을 결정하면, 그 결정이 History에 남는다.",
       nodes: [
         { title: "라이브 워크스페이스", action: ["Merge를 누르거나,", "변경 표시를 누른다"] },
@@ -441,7 +441,7 @@ export const study = {
     lead: "사용성 테스트와 코디자인을 거쳐 화면을 두 번 고쳤다.",
     usability: {
       method: "Testing",
-      title: "사용성 테스트",
+      title: "Usability test",
       lead: "디자이너 1명, 개발자 1명이 핵심 과제를 직접 해 보게 했다.",
       processLabel: "프로토콜",
       methodLabel: "테스트 진행 방식",
@@ -487,7 +487,7 @@ export const study = {
     iteration1: {
       method: "Iteration 1",
       title: "Split by role",
-      label: "1차 개선 · Conflict Points",
+      label: "Iteration 1 · Conflict Points",
       lead: "리뷰 화면을 디자이너용과 개발자용으로 나눴다.",
       text: "두 참가자 모두 함께 쓰는 화면을 ‘상대 팀 도구’라고 불렀다.",
       before: { src: "/images/devsign/iter1-as-is.webp", alt: "As-is: 디자이너와 개발자가 함께 쓰는 리뷰 화면 하나", text: "둘 다 숫자와 코드 이름을 읽고 골랐다.", clip: { src: "/images/devsign/clips/iter1-ko-asis.mp4", poster: "/images/devsign/clips/iter1-ko-asis-poster.jpg" } },
@@ -496,7 +496,7 @@ export const study = {
     iteration2: {
       method: "Iteration 2",
       title: "Co-design",
-      label: "2차 개선 · Live Workspace",
+      label: "Iteration 2 · Live Workspace",
       lead: "현업 디자이너와 함께 화면을 다시 디자인하며(코디자인), 사용자가 멈춰서 읽어야 했던 부분을 덜어냈다.",
       text: "화면 5개를 함께 보며, 무엇을 뺄지 투표로 정했다.",
       photo: { src: "/images/devsign/codesign-session-blurred.webp", width: 1532, height: 893, alt: "화상 회의로 진행한 코디자인 세션: 프로토타입 화면에 색 스티커로 투표" },
@@ -519,8 +519,8 @@ export const study = {
       { title: "기능을 더하기보다 덜어냈다", body: "기능을 더하는 대신 워크스페이스를 정리했다. 두 번째 버전은 이틀 만에 완성했다." },
     ],
     next: {
-      label: "다음 단계",
-      title: "고친 화면으로 2차 사용성 테스트를 진행한다.",
+      label: "Next step",
+      title: "나눈 두 화면을 실제 팀 데이터로 다시 테스트한다.",
       text: "1차 테스트에서 재지 못한 성공 기준 2, “모든 결정에 이유가 남는다”를 이때 확인한다.",
       chips: ["UI 수정 범위 확인", "실제 팀 데이터로 검증", "성공 기준 2 측정"],
     },
