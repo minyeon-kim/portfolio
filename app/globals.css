@@ -4128,7 +4128,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
    features. The travel is a block after it: sticky can't move into padding. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-iter { --reel-card: min(1640px, calc(100vw - 96px)); --reel-text: clamp(320px, 28vw, 420px); width: var(--reel-card); margin-left: calc(50% - var(--reel-card) / 2); }
-  .dv-iter::after { content: ""; display: block; height: calc((var(--n) - 1) * 70svh); }
+  .dv-iter::after { content: ""; display: block; height: calc((var(--n) + 0.5) * 70svh); }
   .dv-iter-stage { position: sticky; top: var(--stage-top, 76px); overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: 24px; background: light-dark(#ffffff, var(--dv-band-card-dark)); }
   .dv-iter-steps { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .dv-iter-step { grid-area: 1 / 1; display: grid; grid-template-columns: minmax(0, 1fr) var(--reel-text); grid-template-rows: 1fr auto auto 1fr; gap: 0; padding: 12px; border: 0; border-radius: 0; background: none; opacity: 0; pointer-events: none; transition: opacity 400ms var(--ease); }
@@ -5761,7 +5761,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
    draws down and its dots light, skills are chips, the work cards carry their screens, and the email
    copies itself. All native scroll; with reduced motion everything stands still. */
 .about-bridge-tag[data-now] { color: var(--accent); }
-.about-turn { position: relative; height: calc(100svh + (var(--n) - 1) * 70svh); margin-top: clamp(40px, 4vw, 64px); }
+.about-turn { position: relative; height: calc(100svh + (var(--n) - 0.5) * 70svh); margin-top: clamp(40px, 4vw, 64px); }
 .about-turn-stage { position: sticky; top: var(--stage-top, 120px); }
 .about-turn-head { display: grid; grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); padding-bottom: 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 16px; font-weight: 500; }
 .about-turn-head span:last-child { grid-column: 3; color: var(--accent); }
@@ -6444,7 +6444,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    sticks centred on the screen while native scroll moves through its steps, 70svh each.
    Same query as REELS_PIN in devsign-story.tsx; elsewhere the stage is a plain block. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-held-track::after { content: ""; display: block; height: calc((var(--n, 1) - 1) * 70svh); }
+  .dv-held-track::after { content: ""; display: block; height: calc((var(--n, 1) + 0.5) * 70svh); }
   .dv-held-track > :first-child { position: sticky; top: var(--stage-top, 76px); }
   .dv-held-track > .dv-cycle-stage { background: var(--dv-bg, var(--bg)); }
 }
@@ -6466,7 +6466,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-gs-title { margin: 12px 0 0; max-width: 900px; color: var(--dv-ink); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.3; word-break: keep-all; text-wrap: balance; }
 .case-study .dv .dv-gs-text { margin: 12px 0 0; max-width: 640px; color: var(--dv-muted); font-size: 18px; line-height: 1.6; word-break: keep-all; text-wrap: pretty; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-gs[data-pinned]::after { content: ""; display: block; height: calc((var(--n, 3) - 1) * 70svh); }
+  .dv-gs[data-pinned]::after { content: ""; display: block; height: calc((var(--n, 3) + 0.5) * 70svh); }
   .dv-gs[data-pinned] > .dv-gs-stage { position: sticky; top: var(--stage-top, 76px); padding-block: 8px; background: var(--dv-bg, var(--bg)); }
   .dv-gs[data-pinned] .dv-gs-list { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); grid-auto-rows: auto; column-gap: 48px; }
   .dv-gs[data-pinned] .dv-gs-list > li { display: contents; }
@@ -6507,7 +6507,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-journey-play[data-armed][data-shown] .dv-journey-low[data-on] { opacity: 1; transform: none; }
 /* Analysis holds and brings in one stage per scroll step (HeldFlow), 45svh apart. */
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-  .dv-held-flow::after { height: calc((var(--n, 1) - 1) * 45svh); }
+  .dv-held-flow::after { height: calc((var(--n, 1) + 0.5) * 45svh); }
   .dv-held-flow > .dv-held-flow-stage { background: var(--dv-bg, var(--bg)); padding-block: 8px; }
   .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow > li { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1) !important; translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px) !important; transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
   .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow::after { transform: scaleY(calc((var(--held-step) + 1) / var(--n))) !important; transition: transform 450ms var(--ease); }

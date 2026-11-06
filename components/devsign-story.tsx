@@ -72,7 +72,7 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
     <li className="dv-iter-step" data-on={active || undefined}>
       <h4 className="dv-iter-name"><b>{index + 1} / {total}</b>{change.title}</h4>
       <div className="dv-iter-clip">
-        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop={!pinned} playsInline preload={near ? "auto" : "none"} controls={still || refused} onEnded={onEnd} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
+        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} onEnded={onEnd} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
           onTimeUpdate={(e) => setPhase(e.currentTarget.currentTime >= change.clip.cut ? "b" : "a")} />
       </div>
       <div className="dv-iter-sides">
@@ -90,6 +90,7 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
 // as the page scrolls. Native scroll only. On phones and with reduced motion (CSS) each step is
 // its own card. A step mark scrolls to the middle of its step, and shows it at once.
 export const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
+const HELD_TAIL = 0.5;
 const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
 
 export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
@@ -113,10 +114,13 @@ export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
     const read = () => {
       frame = 0;
       const { top, travel } = measure(el);
-      const progress = travel > 0 ? Math.min(1, Math.max(0, (top - el.getBoundingClientRect().top) / travel)) : 0;
+      const moved = Math.max(0, top - el.getBoundingClientRect().top);
       el.style.setProperty("--stage-top", `${top}px`);
+      // Equal steps, and the last one gets half a step more before the stage lets go, so its
+      // content can be read before the page moves on (owner). The CSS track is (n + 0.5) steps.
+      const unit = travel / (count + HELD_TAIL);
       // Only a scroll into another step takes over from a step that moved on by itself.
-      const step = Math.min(count - 1, Math.floor(progress * count));
+      const step = travel > 0 ? Math.min(count - 1, Math.floor(moved / unit)) : 0;
       if (step !== scrollStep) { scrollStep = step; setActive(step); }
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
@@ -139,7 +143,7 @@ export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
     if (!el) return;
     setActive(i);
     const { top, travel } = measure(el);
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + ((i + 0.5) / count) * travel, behavior: "smooth" });
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + (i + 0.5) * (travel / (count + HELD_TAIL)), behavior: "smooth" });
   };
   return { root, active, setActive, pinned, go };
 }
@@ -176,7 +180,7 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
         {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
         <div className="dv-held-plate">
           <ol className="dv-iter-steps">
-            {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
+            {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => {}} />)}
           </ol>
         </div>
       </div>
