@@ -261,7 +261,9 @@ void main() {
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
   vec3 arms = mix(mix(vec3(0.38, 0.6, 1.0), vec3(0.56, 0.42, 1.0), wave), vec3(0.32, 0.86, 0.96), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
   arms = mix(arms, vec3(0.82, 0.62, 1.0), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
-  vec3 galaxyTint = mix(arms, vec3(1.0, 0.92, 0.88), exp(-gr * gr / 0.06));
+  // A step towards ice: silver white and pale blue mixed into the arms.
+  arms = mix(arms, mix(vec3(0.62, 0.74, 1.0), vec3(0.9, 0.94, 1.0), wave), 0.4);
+  vec3 galaxyTint = mix(arms, vec3(0.96, 0.95, 1.0), exp(-gr * gr / 0.06));
   // Light theme: a brighter, sunnier palette on the pale page (sky blue,
   // violet, hot pink, coral, mint) with no grey core, so it reads as
   // glitter rather than ink.
