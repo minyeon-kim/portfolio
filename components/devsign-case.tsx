@@ -675,7 +675,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {/* The conclusion, the learnings as rows that read down, then the next step on its own panel. */}
         <div className="dv-tk">
           <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
-          {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 1023px) 100vw, 800px" className="dv-me-photo dv-me-photo-tk" />}
+          {takeaway.photo && <Figure img={takeaway.photo} sizes="(max-width: 1023px) 100vw, 520px" className="dv-me-photo dv-me-photo-tk" />}
           <div className="dv-tk-part reveal">
             <h3 className="dv-tk-label">{takeaway.reviewTitle}</h3>
             <ol className="dv-tk-cards">
