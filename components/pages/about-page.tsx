@@ -3,10 +3,10 @@ import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { CopyButton } from "@/components/copy-button";
 import { Emphasis } from "@/components/emphasis";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { CaseMedia, CaseMediaPair } from "@/components/case-story";
+import { CaseMedia } from "@/components/case-story";
+import { AboutBridge, AboutEmail } from "@/components/about-interactive";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
@@ -24,6 +24,7 @@ const copy = {
     photos: ["Minyeon talking at a table with printed screens and sticky notes", "Hands around a table covered in printed screens, sketches and sticky notes"],
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy email",
+    steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
     label: "소개", portrait: "노트북으로 작업하는 김민연",
@@ -32,6 +33,7 @@ const copy = {
     photos: ["출력한 화면과 포스트잇이 놓인 테이블에서 이야기하는 김민연", "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손"],
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "작업", resume: "이력서 (PDF)", email: "이메일", copyEmail: "이메일 복사",
+    steps: "그때와 지금", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사했습니다", read: "케이스 보기",
   },
 };
 
@@ -90,28 +92,22 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
         <section className="about-bridge">
           <h2 className="about-statement reveal">{bridge.statement}</h2>
-          <div className="about-bridge-head" aria-hidden="true">
-            <span>{bridge.then}</span>
-            <span>{bridge.now}</span>
-          </div>
-          <ol className="about-bridge-rows">
-            {bridge.rows.map((row) => (
-              <li key={row.title} className="reveal">
-                <div>
-                  <p className="about-bridge-tag">{bridge.then}</p>
-                  <p className="about-bridge-then">{row.then}</p>
-                  {row.note && <p className="about-bridge-text">{row.note}</p>}
-                </div>
-                <ArrowIcon />
-                <div>
-                  <p className="about-bridge-tag">{bridge.now}</p>
-                  <h3>{row.title}</h3>
-                  <p className="about-bridge-text">{row.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <AboutBridge rows={bridge.rows} then={bridge.then} now={bridge.now} label={c.steps} />
         </section>
+
+        {(hasOutside || drafting) && (
+          <section className="about-photos" aria-label={c.photos.join(" / ")}>
+            <div className="about-fan">
+              {outsidePhotos.map((src, i) => (
+                <figure key={src} className="about-fan-card" data-i={i}>
+                  {hasOutside
+                    ? <Image src={withBase(src)} alt={c.photos[i]} width={1600} height={1067} sizes="(max-width: 767px) 100vw, 640px" />
+                    : <CaseMedia variant="screen" label={c.photos[i]} />}
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="about-band">
           <div className="about-band-inner">
@@ -126,45 +122,51 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                   </div>
                 </li>
               ))}
-              <li className="reveal">
-                <p className="about-timeline-label">{c.skills}</p>
-                <p>{[...skills.research, ...skills.build].join(" · ")}</p>
-              </li>
             </ol>
+            <div className="about-skills reveal">
+              <h3 className="about-timeline-label">{c.skills}</h3>
+              <div className="about-skill-groups">
+                {([[c.research, skills.research], [c.build, skills.build]] as const).map(([name, list]) => (
+                  <div key={name}>
+                    <p>{name}</p>
+                    <ul>{list.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
-        {(hasOutside || drafting) && (
-          <section className="about-photos reveal">
-            <CaseMediaPair>
-              {outsidePhotos.map((src, i) => (
-                <CaseMedia key={src} variant="screen" label={c.photos[i]} src={hasOutside ? src : undefined} width={1600} height={1067} />
-              ))}
-            </CaseMediaPair>
-          </section>
-        )}
-
         <section className="about-close">
-          <h2 className="about-statement reveal">{c.open}</h2>
-          <div className="about-actions reveal">
-            {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
-            {site.email && <CopyButton value={site.email} label={c.copyEmail} />}
-            {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
-            {hasResume
-              ? <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>
-              : <Todo>add public/resume.pdf; the link appears once it exists</Todo>}
-          </div>
-          <h2 className="sr-only">{c.work}</h2>
+          <h2 className="about-statement reveal">{c.work}</h2>
           <ul className="about-work">
             {work.map((entry) => (
               <li key={entry.slug} className="reveal">
-                <Link href={localize(`/work/${entry.slug}/`, locale)} className="lift" data-project={entry.slug}>
-                  <h3>{entry.meta.short ?? entry.meta.title}</h3>
-                  <p>{entry.meta.hook ?? entry.tldr.problem}</p>
+                <Link href={localize(`/work/${entry.slug}/`, locale)} className="about-work-card" data-project={entry.slug}>
+                  <div className="about-work-cover">
+                    <Image src={withBase(`/og/${entry.slug}.png`)} alt="" width={1200} height={630} sizes="(max-width: 767px) 100vw, 600px" />
+                  </div>
+                  <div className="about-work-text">
+                    <h3>{entry.meta.short ?? entry.meta.title}</h3>
+                    <p>{entry.meta.hook ?? entry.tldr.problem}</p>
+                    <span className="about-work-more">{c.read}<ArrowIcon /></span>
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
+
+          <div className="about-contact">
+            <h2 className="about-statement reveal">{c.open}</h2>
+            {site.email && <div className="reveal"><AboutEmail email={site.email} copied={c.copied} hint={c.copyHint} /></div>}
+            <div className="about-actions reveal">
+              {site.email && <a href={`mailto:${site.email}`} className="press" data-primary="">{c.email}<ArrowIcon /></a>}
+              {site.linkedinUrl && <a href={site.linkedinUrl} className="press">LinkedIn</a>}
+              {hasResume
+                ? <a href={withBase(site.resumeUrl)} className="press">{c.resume}</a>
+                : <Todo>add public/resume.pdf; the link appears once it exists</Todo>}
+            </div>
+          </div>
         </section>
         <SiteFooter />
       </article>

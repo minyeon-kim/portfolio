@@ -5745,3 +5745,119 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-iter-arrow { display: none; }
 .case-study .dv .dv-iter-card[data-side="b"] figcaption { color: #ffffff; }
 .case-study .dv .dv-iter-card[data-side="b"] figcaption span { color: rgb(255 255 255 / 0.78); }
+
+/* About, with more going on (owner: more interaction, more variety). Each block moves its own way:
+   the then/now pairs hold and turn with scroll, the photos fan apart as they rise, the timeline's rail
+   draws down and its dots light, skills are chips, the work cards carry their screens, and the email
+   copies itself. All native scroll; with reduced motion everything stands still. */
+.about-bridge-tag[data-now] { color: var(--accent); }
+.about-turn { position: relative; height: calc(100svh + (var(--n) - 1) * 70svh); margin-top: clamp(40px, 4vw, 64px); }
+.about-turn-stage { position: sticky; top: var(--stage-top, 120px); }
+.about-turn-head { display: grid; grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); padding-bottom: 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 16px; font-weight: 500; }
+.about-turn-head span:last-child { grid-column: 3; color: var(--accent); }
+.about-turn-rows { display: grid; margin: 0; padding: 48px 0 0; list-style: none; }
+.about-turn-rows > li { display: grid; grid-area: 1 / 1; grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); align-items: start; min-height: 240px; pointer-events: none; }
+.about-turn-rows > li[data-on] { pointer-events: auto; }
+.about-turn-then p:first-child, .about-turn-now h3 { margin: 0; color: var(--ink); font-size: clamp(26px, 2.4vw, 36px); font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; text-wrap: balance; }
+.about-turn-then p:first-child { color: var(--muted); }
+.about-turn-then, .about-turn-arrow, .about-turn-now { opacity: 0; translate: 0 16px; transition: opacity 400ms var(--ease), translate 600ms var(--ease-reveal, var(--ease)); }
+.about-turn-arrow { justify-self: center; margin-top: 8px; color: var(--accent); translate: -16px 0; }
+.about-turn-now { translate: -24px 0; }
+li[data-on] > .about-turn-then { opacity: 1; translate: 0 0; transition-delay: 0ms; }
+li[data-on] > .about-turn-arrow { opacity: 1; translate: 0 0; transition-delay: 200ms; }
+li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 320ms; }
+.about-turn-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); }
+.about-turn-count { color: var(--muted); font-size: 16px; font-variant-numeric: tabular-nums; }
+.about-turn-steps { display: flex; gap: 8px; }
+.about-turn-steps button { display: grid; place-items: center; width: 48px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
+.about-turn-steps i { display: block; width: 100%; height: 3px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 18%, transparent); transition: background-color 250ms var(--ease); }
+.about-turn-steps button[aria-pressed="true"] i { background: var(--accent); }
+.about-turn-steps button:hover i { background: color-mix(in srgb, var(--ink) 40%, transparent); }
+.about-turn-steps button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+/* Photos: two prints that lie fanned and slide apart flat as they rise; pointing at one brings it up. */
+.about-photos { padding-top: clamp(40px, 4vw, 64px); padding-bottom: clamp(72px, 8vw, 120px); }
+.about-fan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.about-fan-card { margin: 0; overflow: hidden; border-radius: 16px; transition: transform 400ms var(--ease), box-shadow 400ms var(--ease); }
+.about-fan-card img { display: block; width: 100%; height: auto; transition: scale 600ms var(--ease); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .about-fan-card:hover { transform: translateY(-6px); }
+  .about-fan-card:hover img { scale: 1.03; }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+    .about-fan-card { animation: about-fan-a linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .about-fan-card[data-i="1"] { animation-name: about-fan-b; }
+  }
+}
+@keyframes about-fan-a { from { rotate: -5deg; translate: 18% 40px; } to { rotate: 0deg; translate: 0 0; } }
+@keyframes about-fan-b { from { rotate: 4deg; translate: -18% 80px; } to { rotate: 0deg; translate: 0 0; } }
+
+/* Timeline: a rail that draws down as the list rises, and a dot per row that lights at mid-screen. */
+.about-timeline { position: relative; }
+.about-timeline > li { position: relative; }
+@media (min-width: 64rem) {
+  .about-timeline > li { padding-left: 32px; }
+  .about-timeline::before { content: ""; position: absolute; left: 4px; top: 32px; bottom: 32px; width: 1px; background: var(--line); }
+  .about-timeline::after { content: ""; position: absolute; left: 4px; top: 32px; bottom: 32px; width: 1px; background: var(--accent); transform-origin: top; scale: 1 1; }
+  .about-timeline > li::before { content: ""; position: absolute; left: 0; top: 33px; width: 9px; height: 9px; border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 40%, transparent); transition: background-color 250ms var(--ease); }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .about-timeline::after { animation: about-rail linear both; animation-timeline: view(); animation-range: cover 20% cover 70%; }
+      .about-timeline > li::before { animation: about-dot linear both; animation-timeline: view(); animation-range: cover 35% cover 45%; }
+    }
+  }
+}
+@keyframes about-rail { from { scale: 1 0; } to { scale: 1 1; } }
+@keyframes about-dot { from { background: var(--surface); } to { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); } }
+
+/* Skills: chips in two groups instead of one long line. */
+.about-skills { display: grid; grid-template-columns: 240px minmax(0, 1fr); column-gap: 48px; margin-top: 0; padding-block: 24px; border-top: 1px solid var(--line); }
+@media (min-width: 64rem) { .about-skills { padding-left: 32px; } }
+.case-study .about-skills h3, .about-skills h3 { margin: 3px 0 0; font-weight: 400; }
+.about-skill-groups { display: grid; gap: 20px; }
+.about-skill-groups p { margin: 0 0 10px; color: var(--muted); font-size: 16px; }
+.about-skill-groups ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.about-skill-groups li { padding: 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink); font-size: 16px; line-height: 1.4; transition: background-color 150ms var(--ease), transform 250ms var(--ease); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .about-skill-groups li:hover { background: color-mix(in srgb, var(--ink) 12%, transparent); transform: translateY(-2px); } }
+
+/* Work: the case screen above its name; the screen eases up on hover. */
+.about-close .about-work { margin-top: clamp(32px, 4vw, 48px); }
+.about-work-card { display: block; height: 100%; overflow: hidden; border-radius: 16px; background: var(--surface); color: inherit; text-decoration: none; transition: transform 250ms var(--ease); }
+.about-work-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.about-work-cover { display: block; overflow: hidden; aspect-ratio: 1200 / 560; }
+.about-work-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; transform-origin: 50% 100%; transition: scale 600ms var(--ease); }
+.about-work-text { display: block; padding: 24px 28px 28px; }
+.about-work-card h3 { width: fit-content; margin: 0 0 8px; font-family: var(--font-display); font-size: 28px; font-weight: 500; line-height: 1.2; }
+.about-work-card[data-project="devsign"] h3 { color: var(--devsign-title); }
+.about-work-card[data-project="gemini-privacy"] h3 { background: var(--gemini-title); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.about-work-card p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.about-work-more { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--ink); font-size: 16px; font-weight: 500; }
+.about-work-more .arrow-icon { transition: translate 250ms var(--ease); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .about-work-card:hover { transform: translateY(-2px); }
+  .about-work-card:hover .about-work-cover img { scale: 1.04; }
+  .about-work-card:hover .about-work-more .arrow-icon { translate: 4px 0; }
+}
+
+/* Contact: the address itself, large; pressing copies it. */
+.about-contact { margin-top: clamp(96px, 10vw, 160px); }
+.about-email { display: grid; justify-items: start; gap: 8px; margin-top: 24px; padding: 0; border: 0; background: none; color: var(--ink); text-align: left; cursor: pointer; }
+.about-email-address { font-family: var(--font-headline, var(--font-display)); font-size: clamp(36px, 5.6vw, 80px); font-weight: 200; line-height: 1.05; letter-spacing: -0.02em; overflow-wrap: anywhere; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 400ms var(--ease); }
+.about-email:hover .about-email-address, .about-email:focus-visible .about-email-address { background-size: 100% 1px; }
+.about-email:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 8px; }
+.about-email-hint { display: grid; color: var(--muted); font-size: 16px; }
+.about-email-hint span { grid-area: 1 / 1; transition: opacity 250ms var(--ease), translate 250ms var(--ease); }
+.about-email-hint span:last-child { opacity: 0; translate: 0 6px; color: var(--accent); }
+.about-email[data-done] .about-email-hint span:first-child { opacity: 0; translate: 0 -6px; }
+.about-email[data-done] .about-email-hint span:last-child { opacity: 1; translate: 0 0; }
+.about-contact .about-actions { margin-top: 32px; }
+
+@media (max-width: 47.99rem) {
+  .about-fan { grid-template-columns: 1fr; gap: 12px; }
+  .about-skills { display: block; }
+  .about-skills h3 { margin: 0 0 12px; }
+  .about-bridge-tag[data-now] { color: var(--accent); }
+}
+
+.about-work a.about-work-card { padding: 0; }
