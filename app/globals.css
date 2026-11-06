@@ -3233,6 +3233,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
   .home-tagline * { text-indent: 0; }
   .home-note { position: absolute; left: auto; right: var(--project-text-inset); top: 25%; width: 30ch; text-align: left; }
+  /* Line breaks written into the copy (Korean, three even lines) only hold on wide screens. */
+  .home-note-default { white-space: pre-line; }
   .home-picks { position: absolute; left: var(--project-text-inset); right: auto; top: 50%; translate: 0 -50%; }
   /* After metalab.com's menu: the pages as large text, then the cases as pills. */
   .home-links { display: flex; flex-direction: column; gap: 2px; margin: 0 0 32px; padding: 0; list-style: none; }
