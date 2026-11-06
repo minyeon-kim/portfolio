@@ -416,8 +416,6 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
             </button>
             <div className="dv-flist-more">
               <div>
-                <p className="dv-flist-body">{reel.body}</p>
-                {reel.flow && <p className="dv-flist-flow">{reel.flow}</p>}
                 {reel.solves && <p className="dv-flist-solves">{reel.solves}</p>}
               </div>
             </div>
@@ -913,9 +911,9 @@ function SpecShot({ screen, lit = -1, onPin }: { screen: SpecScreen; lit?: numbe
   );
 }
 
-function SpecRows({ screen, cols, lit = -1, onRow }: { screen: SpecScreen; cols: SpecData["cols"]; lit?: number; onRow?: (n: number) => void }) {
+function SpecRows({ screen, cols, lit = -1, onRow, brief }: { screen: SpecScreen; cols: SpecData["cols"]; lit?: number; onRow?: (n: number) => void; brief?: boolean }) {
   return (
-    <table className="dv-hdoc-table">
+    <table className="dv-hdoc-table" data-brief={brief || undefined}>
       <thead><tr><th scope="col"><span className="sr-only">#</span></th><th scope="col">{cols.name}</th><th scope="col">{cols.does}</th><th scope="col">{cols.state}</th></tr></thead>
       <tbody>
         {screen.rows.map(([name, does, state], n) => (
@@ -956,17 +954,13 @@ export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecD
         <p className="dv-hdoc-purpose">{screen.purpose}</p>
         <div className="dv-hdoc-pair">
           <SpecShot screen={screen} lit={lit} onPin={setLit} />
-          <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+          <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} brief />
         </div>
         <div className="dv-hdoc-cols">
           <div><h4>{spec.labels.accept}</h4><ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul></div>
           <div><h4>{spec.labels.tokens}</h4><ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul></div>
           <div><h4>{spec.labels.code}</h4><ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul></div>
         </div>
-      </div>
-      <div className="dv-hdoc-notes">
-        <p>{spec.shared}</p>
-        <p>{spec.open}</p>
       </div>
       <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
     </div>
