@@ -6650,3 +6650,23 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-ax-quotes li span { display: block; margin-top: 2px; color: var(--dv-muted, var(--muted)); }
 @media (prefers-reduced-motion: reduce) { .dv-ax-note, .dv-ax-stage { transition: none; } }
 @media (max-height: 820px) { .dv-ax-quotes li:nth-child(n + 2) { display: none; } }
+
+/* Deliver UI details: a cut-out part of a screen on a soft case-colour card, text beside it, sides alternating. */
+.case-study .dv .dv-details { margin-top: var(--sp-block, 160px); }
+.case-study .dv .dv-details-list { list-style: none; margin: 64px 0 0; padding: 0; display: grid; gap: clamp(64px, 10svh, 120px); }
+.case-study .dv .dv-detail { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+.case-study .dv .dv-detail[data-wide] { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.case-study .dv .dv-detail[data-wide] .dv-detail-card { height: auto; padding: clamp(32px, 5vw, 72px); }
+.case-study .dv .dv-detail-num { display: block; margin-bottom: 12px; font-size: 16px; font-weight: 500; color: var(--case-accent); font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-detail-title { margin: 0; font-size: var(--t-heading); font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; color: var(--ink); }
+.case-study .dv .dv-detail-body { margin: 16px 0 0; max-width: 40ch; font-size: 18px; line-height: 1.6; color: var(--dv-muted); }
+.case-study .dv .dv-detail-card { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; height: clamp(360px, 52svh, 520px); padding: clamp(28px, 4vw, 56px); border-radius: var(--dv-card-radius, 16px); overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--dv-chart-fill) 45%, transparent), transparent 62%),
+    radial-gradient(100% 80% at 100% 100%, color-mix(in srgb, var(--case-accent) 35%, transparent), transparent 66%),
+    color-mix(in srgb, var(--dv-chart-fill) 14%, var(--bg)); }
+.case-study .dv .dv-detail-card img { display: block; width: auto; height: auto; max-width: min(100%, calc(var(--dw) * 1px)); max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+@media (max-width: 63.99rem) {
+  .case-study .dv .dv-detail { grid-template-columns: 1fr; gap: 24px; }
+  .case-study .dv .dv-detail-card { height: auto; max-height: 440px; padding: 24px; }
+}
