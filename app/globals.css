@@ -6347,4 +6347,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-amap .dv-wall-steps { margin-bottom: 64px; }
 .case-study .dv .dv-amap-people { margin: 40px 0 0; }
 .case-study .dv .dv-amap-title { height: 40px; }
+/* Lean feature list and handoff (owner: still too busy). Features: name, benefit line, what it
+   solves. Handoff on the case: each element's name and behavior; states, shared rules and open
+   issues live on the full spec page. */
+.dv-hdoc-table[data-brief] td:nth-child(4), .dv-hdoc-table[data-brief] thead th:nth-child(4) { display: none; }
+.case-study .dv .dv-hdoc-excerpt .dv-hdoc-cols { margin-top: 40px; }
 
