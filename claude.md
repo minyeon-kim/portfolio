@@ -1505,3 +1505,5 @@ Value proposition pairs are three cards (owner: the arrow rows didn't read; supe
 
 Iteration 2's line before the clips credits the co-design session, not the vote: "코디자인 세션을 거쳐 바꾼 세 가지." / "Three changes from the co-design session." (supersedes "투표 결과, 세 가지를 바꿨다."). Figma not updated.
 Iteration 1 pair: the As-is clip plays at 2.5x (about 4.5s), To-be stays at 1.6x (about 5.6s), so the before no longer holds longest (owner). PAIR_RATE is per side.
+
+Double Diamond walkthrough is faster (owner): 1.2s per stage (was 2.2s), starting 300ms after it is half on screen (was 600ms), so one pass takes about 5s. Hover and focus still take over.

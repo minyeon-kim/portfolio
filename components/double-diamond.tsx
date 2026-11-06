@@ -15,7 +15,8 @@ const HALVES = ["M0 167L300 0V334Z", "M300 0L600 167L300 334Z", "M600 167L900 0V
 // list them under the outcome instead. Shared by the Devsign body and CaseDiamond.
 // While it is on screen it also walks through the stages by itself, showing each one's methods for
 // a moment (owner: show the methods one at a time); hover or focus takes over.
-const METHOD_MS = 2200;
+// Per stage while on screen (owner: 2.2s felt too slow; a full pass is now about 5s).
+const METHOD_MS = 1200;
 
 export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot?: string }) {
   const [from, to] = pivot?.split(" → ") ?? [];
@@ -30,7 +31,7 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
     const tick = () => { step = (step + 1) % stages.length; setShown(step); timer = window.setTimeout(tick, METHOD_MS); };
     const seen = new IntersectionObserver(([e]) => {
       window.clearTimeout(timer);
-      if (e.isIntersecting) timer = window.setTimeout(tick, 600);
+      if (e.isIntersecting) timer = window.setTimeout(tick, 300);
       else { step = -1; setShown(-1); }
     }, { threshold: 0.5 });
     seen.observe(el);
