@@ -1529,3 +1529,5 @@ Overview summary is three steps, not three columns (owner: the horizontal grid r
 Interview lists span the whole column (owner: at 800px they leaned left under the call tiles): questions and participants share one three-column track (1fr | 3fr | 8fr; the question keyword spans the first two), so the questions and the team · experience column start on the same line; the two insights sit side by side at full width (one column below 64rem). Figma not updated.
 
 Interview block drops "나온 인사이트" / "What we found" (owner: the heading already says it and Define's key problems carry the insights): only 알고 싶었던 것 and 참가자 follow the finding. `insightsLabel` and the `claims` (labels, sentences, quotes) stay in the MDX, unused. Figma not updated.
+
+Handoff spec lead in plain words: "화면마다 무엇을 누르면 어떻게 되는지, 언제 버튼이 막히는지까지 정리했다." / "For each screen, we wrote down what every control does and when it’s disabled." (still no claim it was handed to developers). Figma not updated.
