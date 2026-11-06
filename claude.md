@@ -1519,3 +1519,5 @@ Takeaway with room (owner: too cramped; after Metalab's Outcomes and Linear's lo
 Interview heading in plain words (owner: 검토는 모두가 했지만, 결정은 누구의 몫도 아니었다 didn't read): "네 명 모두 AI 결과물을 다시 확인했지만, 최종 결정을 누가 내리는지는 정해져 있지 않았다." / "All four checked the AI output again, but no one was clearly the one to make the final call." Figma not updated.
 
 Value proposition key pairs are a table read left to right (owner: three vertical cards were awkward; supersedes .dv-vpc-cards): header row once (pain heard / idea / feature), then one hairline row per pair, pain → idea → feature (feature in the case colour at heading size). Phones stack each row with the labels and down arrows. Figma not updated.
+
+Takeaway: the learnings list and the next-step card span the whole 1200 column (were capped at 900px and looked cut off next to the label's full-width rule). Text inside keeps its 640 measure.
