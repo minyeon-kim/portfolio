@@ -5917,3 +5917,10 @@ li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 32
    Applies to every chart stage (survey and usability, Devsign and Gemini). */
 .case-study .dv .dv-cycle-plate { padding: 32px 0 0; border-top: 1px solid var(--dv-line); border-radius: 0; background: none; }
 @media (max-width: 63.99rem) { .case-study .dv .dv-cycle-plate { padding-top: 24px; } }
+
+/* The header hides while scrolling down and returns on scroll up (owner: the pill sat over the
+   content). Keyboard focus inside it keeps it shown. */
+header.group\/header { transition: translate 350ms var(--ease), background-color 400ms var(--ease); }
+header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 24px); }
+@media (prefers-reduced-motion: reduce) { header.group\/header { transition: none; } }
+

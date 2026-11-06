@@ -1424,3 +1424,5 @@ No section plates (owner, after a reference check of Linear, Vercel, Metalab, Ra
 Community posts sit on the page, not in a box (owner): the 100+ count, its sentence and the boards link hold a left column (sticky from 64rem), the three posts read down the right as hairline rows (problem in the accent, quote 20-26px, source quiet); the survey chart card above stays the block's one card. Phones stack. Figma not updated.
 
 Chart stages have no plate (owner): tabs, finding and chart sit on the page with one hairline under the tabs; every SurveyCharts stage on both cases. Figma not updated.
+
+Header (owner: the pill covered content; supersedes "the header stays on screen" and Get in touch in the header): no Get in touch button any more (contact is in the Menu, the landing's links and the end of pages; `GetInTouch` is removed). Past 160px the header slides up out of view while scrolling down and comes back on any scroll up (`data-hide` from HeaderShell, 6px jitter ignored, 350ms; not with the Menu open or keyboard focus inside; instant with reduced motion). It still folds into the pill at the top of the scroll. Figma not updated.
