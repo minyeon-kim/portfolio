@@ -1554,3 +1554,4 @@ Key problems and the value proposition pairs come in one per scroll step (owner 
 Landing (≥64rem) statement sits at the left edge under the menu column (left = page inset, bottom clamp(32px, 6svh, 64px), Korean too; supersedes left 34% / bottom 14.5%). Its second line keeps the stepped indent. No overlaps at 1024–1920, no scroll. Figma Main not updated.
 
 Deliver prototype block no longer takes a whole screen: `.dv-deliver-intro` is exempt from the one-block-per-screen min-height, so the core features start 96px under "Try the prototype" (owner). Figma not updated.
+Landing note sits at the right edge (right = page inset, top 25%, left-aligned text; supersedes left 59.5%).
