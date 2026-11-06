@@ -342,8 +342,10 @@ void main() {
   // in brightness and matte, so the form reads by density alone.
   // Landing: the dust thins out with height above the landscape, so the
   // waves dissolve into the sky instead of a second field sitting on top.
-  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.6, s.y);
-  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.04, sky));
+  // Only the middle of the sky thins early; the sides keep their ridges as before.
+  float side = smoothstep(0.25, 0.7, abs(s.x));
+  float sky = galaxy * smoothstep(mix(skyFrom, 0.3, side), mix(skyFrom, 0.3, side) + mix(0.6, 0.8, side), s.y);
+  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix);
@@ -410,7 +412,9 @@ void main() {
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
   // Landing: fewer and dimmer towards the top, with no bright ones up there.
-  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.6, s.y);
+  // Only the middle of the sky thins early; the sides keep their ridges as before.
+  float side = smoothstep(0.25, 0.7, abs(s.x));
+  float sky = galaxy * smoothstep(mix(skyFrom, 0.3, side), mix(skyFrom, 0.3, side) + mix(0.6, 0.8, side), s.y);
   if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
   vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
