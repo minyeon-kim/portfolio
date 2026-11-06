@@ -89,14 +89,14 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     let timer: number | undefined;
     const release = () => { timer ??= window.setTimeout(() => setHover(null), 160); };
     const onMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || document.activeElement?.matches(".home-pick:focus-visible")) return;
-      const parts = [`.home-pick[data-slug="${hover}"]`, `.home-device[data-project="${hover}"]`]
+      if (event.pointerType !== "mouse" || document.activeElement?.matches(".home-pick:focus-visible, .home-about:focus-visible")) return;
+      const parts = [`.home-picks [data-slug="${hover}"]`, `.home-device[data-project="${hover}"]`]
         .map((selector) => document.querySelector(selector)?.getBoundingClientRect())
         .filter((box): box is DOMRect => Boolean(box?.width));
       const inside = event.clientX >= Math.min(...parts.map((b) => b.left)) && event.clientX <= Math.max(...parts.map((b) => b.right))
         && event.clientY >= Math.min(...parts.map((b) => b.top)) && event.clientY <= Math.max(...parts.map((b) => b.bottom));
       // Over any pill the world stays until the pill's own switch takes over.
-      const onPick = event.target instanceof Element && event.target.closest(".home-pick");
+      const onPick = event.target instanceof Element && event.target.closest(".home-pick, .home-about");
       if (inside || onPick) { window.clearTimeout(timer); timer = undefined; } else release();
     };
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -116,57 +116,32 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
     if (hover) switching.current = window.setTimeout(() => setHover(slug), 140);
     else setHover(slug);
   };
-  // The About link above the projects: hovering or focusing it gathers the dust
-  // into the portrait, and clicking opens the page from the photo at once
-  // (lib/about-entrance.ts). Desktop only, with motion allowed and the dust
-  // running; otherwise it is an ordinary link.
-  const [portrait, setPortrait] = useState<{ image: HTMLImageElement } | null>(null);
+  // The About link has a world like the cases: hovering or focusing it lays the
+  // stage out with the dust, the portrait as a card and the name and bio in
+  // large type. Clicking (desktop, motion allowed) opens the page from that card:
+  // the photo grows from the card into its place in the About opener
+  // (lib/about-entrance.ts). Otherwise it is an ordinary link.
   // A case's card shows on hover or focus. Below 64rem there is no hover, and
   // the layout keeps room for a card, so the first case's shows from the start.
   const stacked = useSyncExternalStore(subscribeStacked, () => window.matchMedia(STACKED).matches, () => false);
-  const previewed = shown ?? (stacked && hover !== "about" && !portrait ? projects[0] : null);
+  const previewed = shown ?? (stacked && hover !== "about" ? projects[0] : null);
   useEffect(() => {
-    if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
     const src = withBase("/images/about/portrait.webp");
-    const image = new Image();
-    image.src = src;
-    let opening = false;
     const aboutLink = (target: EventTarget | null) => (target as Element | null)?.closest?.<HTMLAnchorElement>(".home-about") ?? null;
-    const ready = () => document.querySelector<HTMLElement>(".home-object")?.dataset.live !== undefined && image.naturalWidth > 0;
-    const show = (event: Event) => {
-      if (!aboutLink(event.target) || !ready()) return;
-      setHover(null);
-      setPortrait({ image });
-    };
-    const hide = (event: Event) => {
-      if (!opening && aboutLink(event.target)) setPortrait(null);
-    };
-    const onOver = (event: PointerEvent) => { if (event.pointerType === "mouse") show(event); };
-    const onOut = (event: PointerEvent) => { if (event.pointerType === "mouse" && document.activeElement !== aboutLink(event.target)) hide(event); };
     const onClick = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = aboutLink(event.target);
-      if (!link || !ready() || document.documentElement.hasAttribute("data-project-navigation")) return;
+      const link = aboutLink(event.target) ?? (event.target as Element | null)?.closest?.<HTMLElement>('.home-device[data-project="about"]');
+      if (!link || document.documentElement.hasAttribute("data-project-navigation")) return;
+      if (!window.matchMedia("(min-width: 64rem) and (prefers-reduced-motion: no-preference)").matches) return;
+      const card = document.querySelector<HTMLElement>('.home-device[data-project="about"][data-active] img');
       event.preventDefault();
       event.stopPropagation();
-      // Before the blur, which would otherwise bring the home copy back.
-      opening = true;
-      setPortrait({ image });
-      link.blur();
-      enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")));
+      const from = card?.getBoundingClientRect();
+      enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")),
+        from ? { left: from.left, top: from.top, width: from.width, height: from.height } : undefined);
     };
-    document.addEventListener("pointerover", onOver);
-    document.addEventListener("pointerout", onOut);
-    document.addEventListener("focusin", show);
-    document.addEventListener("focusout", hide);
     document.addEventListener("click", onClick, true);
-    return () => {
-      document.removeEventListener("pointerover", onOver);
-      document.removeEventListener("pointerout", onOut);
-      document.removeEventListener("focusin", show);
-      document.removeEventListener("focusout", hide);
-      document.removeEventListener("click", onClick, true);
-    };
+    return () => document.removeEventListener("click", onClick, true);
   }, [locale, router]);
   const open = (slug: string) => {
     if (slug === "about") {
@@ -184,10 +159,10 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   };
 
   return (
-    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug} data-entering={portrait ? "" : undefined}>
+    <section id="work" aria-label={t.introduction} className="intro-stage home-stage full-bleed md:-mt-[64px]" data-world={world?.slug} >
       <div className="home-backdrop" data-project={world?.slug} aria-hidden="true">
         <div className="intro-ambient"><span className="intro-ambient-blue" /><span className="intro-ambient-violet" /><span className="intro-ambient-pearl" /></div>
-        <HeroObject className="home-object" variant={portrait ? "portrait" : hover === "about" ? "about" : shown?.slug ?? "default"} portrait={portrait} />
+        <HeroObject className="home-object" variant={hover === "about" ? "about" : shown?.slug ?? "default"} />
         {choices.map((c) => <div key={c.slug} className="home-world" data-project={c.slug} data-active={world?.slug === c.slug || undefined} />)}
 
         {projects.map((p) => (
@@ -202,12 +177,24 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
             </div>
           </Fragment>
         ))}
+        {/* About's card: the portrait, a pointer shortcut like the case cards. */}
+        <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined} onClick={() => open("about")}>
+          <img src={withBase("/images/about/portrait.webp")} alt="" />
+        </div>
       </div>
       <div className="intro-surface home-grid">
         <nav className="home-picks" aria-label={t.siteNav}>
           {/* Wide screens only; on phones the Menu holds these. */}
           <ul className="home-links">
-            <li><Link href={localize("/about/", locale)} className="home-about" data-active={portrait ? "" : undefined}>{t.about}</Link></li>
+            <li><Link
+              href={localize("/about/", locale)}
+              className="home-about"
+              data-slug="about"
+              data-active={hover === "about" || undefined}
+              onMouseEnter={() => enterPick("about")}
+              onFocus={() => setHover("about")}
+              onBlur={() => setHover(null)}
+            >{t.about}</Link></li>
             <li><a href={`mailto:${site.email}`}>{t.getInTouch}</a></li>
           </ul>
           <p className="home-picks-label">{t.caseStudiesLabel}</p>
