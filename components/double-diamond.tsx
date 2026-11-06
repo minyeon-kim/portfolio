@@ -40,7 +40,7 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
     <figure ref={root} className="dv-dd reveal" data-held={held || undefined} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
       <div className="dv-dd-body">
         <svg className="dv-dd-lines" viewBox="0 0 1200 334" fill="none" aria-hidden="true">
-          {HALVES.map((d, i) => <path key={d} className="dv-dd-half" d={d} data-current={stages[i]?.current || undefined} />)}
+          {HALVES.map((d, i) => <path key={d} className="dv-dd-half" d={d} data-current={stages[i]?.current || undefined} data-show={(!held && shown === i) || undefined} />)}
           <path className="dv-dd-line" pathLength={1} d="M1 167L300 1L599 167L300 333Z" />
           <path className="dv-dd-line" pathLength={1} d="M601 167L900 1L1199 167L900 333Z" />
         </svg>

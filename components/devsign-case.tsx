@@ -7,7 +7,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
-import { FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -78,10 +78,7 @@ function Insights({ discover }: { discover: Study }) {
         {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
         <section className="dv-posts">
           <div className="dv-posts-head reveal">
-            <strong>{q1.communityCount}</strong>
-            <div>
-              <p>{q1.communityLead}</p>
-            </div>
+            <p className="dv-posts-lead"><CountUp value={q1.communityCount} /> {q1.communityLead}</p>
             <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
           </div>
           <ul className="dv-posts-list">
@@ -401,7 +398,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <ol className="dv-funnel dv-gap-40 reveal">
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>
-          <Figure img={define.affinity.board} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board" open />
+          {define.affinity.groups
+            ? <AffinityMotion groups={define.affinity.groups} replay={define.affinity.replay} board={{ href: withBase(define.affinity.board.src), label: define.affinity.boardLabel }} />
+            : <Figure img={define.affinity.board} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board" open />}
         </div>
 
         <div className="dv-subsection">

@@ -6237,4 +6237,21 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 @media (min-width: 64rem) {
   .dv-iv-facts { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(40px, 5vw, 80px); }
 }
+/* Diamond: the walked stage tints its half, like the selected region (owner). */
+.dv-dd-half[data-show] { fill: color-mix(in srgb, var(--case-accent) 16%, transparent); }
+.dv-dd-stages li[data-show] .dv-dd-outcome { color: var(--dv-ink); }
+.dv-dd-outcome { transition: color 250ms var(--ease); }
+/* Community: one sentence leads, its number counts up in the case colour. */
+.case-study .dv .dv-posts-head { display: block; }
+.dv-posts-lead { margin: 0 0 16px; color: var(--dv-ink); font-size: var(--t-heading); font-weight: 500; line-height: 1.35; word-break: keep-all; }
+.case-study .dv .dv-posts .dv-posts-lead .dv-count { color: var(--case-accent); font-size: inherit; font-weight: 500; font-variant-numeric: tabular-nums; line-height: inherit; }
+/* Affinity motion. */
+.dv-aff-stage { position: relative; overflow: hidden; }
+.dv-aff-note { position: absolute; top: 0; left: 0; border-radius: 3px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.25); transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1); will-change: transform; }
+.dv-aff-label { position: absolute; margin: 0; padding-top: 4px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.3; opacity: 0; transform: translateY(6px); transition: opacity 500ms var(--ease) 900ms, transform 500ms var(--ease) 900ms; border-top: 3px solid var(--c); }
+.dv-aff-stage[data-grouped] .dv-aff-label { opacity: 1; transform: none; }
+.dv-aff-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 32px 0 0; font-size: 16px; }
+.dv-aff-foot button { min-height: 40px; padding: 0 18px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 9%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .dv-aff-note, .dv-aff-label { transition: none; } }
 
+.case-study .dv .dv-posts-head .dv-count span { color: inherit; font-size: inherit; }
