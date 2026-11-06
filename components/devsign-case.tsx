@@ -688,7 +688,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </section>
 
       <Section id="takeaway" title="Takeaway">
-        {/* All of it fits one screen: the conclusion, three cards, then the next step. */}
+        {/* The conclusion, the learnings as rows that read down, then the next step on its own panel. */}
         <div className="dv-tk">
           <p className="dv-headline dv-headline-plain reveal">{takeaway.headline}</p>
           <div className="dv-tk-part reveal">
@@ -718,8 +718,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <h3 className="dv-tk-label">{takeaway.next.label}</h3>
             <div>
               <p className="dv-tk-next-title">{takeaway.next.title}</p>
+              <p className="dv-body">{takeaway.next.text}</p>
               {!ff && <>
-                <p className="dv-body">{takeaway.next.text}</p>
                 <ul className="dv-tk-chips">
                   {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
                 </ul>
