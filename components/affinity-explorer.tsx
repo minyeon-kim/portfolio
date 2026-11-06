@@ -6,8 +6,9 @@ import {
   AFF_THEMES, AFF_TYPE_ORDER, AFF_TYPE_COLOR, AFF_TYPE_NAME, AFF_PEOPLE,
   AFF_PROBLEM_THEMES, AFF_LEFT_OUT, AFF_UI, type Locale,
 } from "@/lib/devsign-affinity";
+import { AFF_NOTES } from "@/lib/devsign-affinity-notes";
 
-type Note = { theme: number; sub: number; type: string; who: string; k: number };
+type Note = { theme: number; sub: number; type: string; who: string; k: number; i: number };
 type At = { x: number; y: number; o: number };
 
 // The affinity map from the real FigJam board: 201 stickies (one per interview statement,
@@ -35,7 +36,7 @@ export function AffinityExplorer({ locale, problems, boardHref }: { locale: Loca
 
   const notes = useMemo(() => {
     const all: Note[] = [];
-    AFF_THEMES.forEach((t, ti) => t.subs.forEach((s, si) => [...s.types].forEach((type, i) => all.push({ theme: ti, sub: si, type, who: s.people[i], k: all.length }))));
+    AFF_THEMES.forEach((t, ti) => { let i = 0; t.subs.forEach((s, si) => [...s.types].forEach((type, j) => all.push({ theme: ti, sub: si, type, who: s.people[j], k: all.length, i: i++ }))); });
     return all;
   }, []);
   const typeCount = AFF_TYPE_ORDER.map((ty) => notes.filter((n) => n.type === ty).length);
@@ -108,6 +109,7 @@ export function AffinityExplorer({ locale, problems, boardHref }: { locale: Loca
   const go = (i: number) => (held.pinned ? held.go(i) : setTabStep(i));
 
   return (
+    <>
     <div ref={held.root} className="dv-held-track dv-ax-track dv-gap-40" style={{ "--n": 3 } as CSSProperties}>
       <div className="dv-ax">
         <div className="dv-ax-steps" role="tablist" aria-label={ui.steps.map(([n, l]) => `${n} ${l}`).join(" → ")}>
@@ -150,7 +152,8 @@ export function AffinityExplorer({ locale, problems, boardHref }: { locale: Loca
             {tip && (
               <p className="dv-ax-tip" style={{ left: Math.min(tip.x, w - 220), top: tip.y + s + 6 }}>
                 <i style={{ background: AFF_TYPE_COLOR[tip.n.type] }} />{AFF_TYPE_NAME[tip.n.type][locale]} · {AFF_PEOPLE[tip.n.who][locale]}<br />
-                <span>{AFF_THEMES[tip.n.theme].name[locale]} › {AFF_THEMES[tip.n.theme].subs[tip.n.sub].name[locale]}</span>
+                <span>{AFF_THEMES[tip.n.theme].name[locale]} › {AFF_THEMES[tip.n.theme].subs[tip.n.sub].name[locale]}</span><br />
+                <q>{AFF_NOTES[locale][tip.n.theme][tip.n.i]}</q>
               </p>
             )}
           </div>
@@ -209,5 +212,34 @@ export function AffinityExplorer({ locale, problems, boardHref }: { locale: Loca
         </div>
       </div>
     </div>
+    {/* The board itself: the picked theme's stickies as post-its, word for word, by sub-group. */}
+    <div className="dv-axb">
+      <p className="dv-axb-label">{ui.boardTitle}</p>
+      <div className="dv-axb-tabs" role="tablist" aria-label={ui.boardTitle}>
+        {AFF_THEMES.map((th, i) => (
+          <button key={th.name.ko} type="button" role="tab" aria-selected={i === theme} data-on={i === theme || undefined} onClick={() => setTheme(i)}>
+            {th.name[locale]}<b>{themeCount[i]}</b>
+          </button>
+        ))}
+      </div>
+      <p className="dv-axb-insight"><span>{ui.insight}</span>{t.insight[locale]}</p>
+      {(() => { let i = 0; return t.subs.map((sub) => (
+        <section key={sub.name.ko} className="dv-axb-sub">
+          <h4>{sub.name[locale]}<b>{sub.types.length}</b></h4>
+          <ul>
+            {[...sub.types].map((ty, j) => { const n = i++; return (
+              <li key={j} className="dv-axb-note" style={{ background: AFF_TYPE_COLOR[ty], rotate: `${(rand(theme * 97 + n) - 0.5) * 2.4}deg` } as CSSProperties}>
+                <p>{AFF_NOTES[locale][theme][n]}</p>
+                <span>{AFF_PEOPLE[sub.people[j]][locale]} · {AFF_TYPE_NAME[ty][locale]}</span>
+              </li>
+            ); })}
+          </ul>
+        </section>
+      )); })()}
+      <ul className="dv-axb-legend">
+        {AFF_TYPE_ORDER.map((ty) => <li key={ty}><i style={{ background: AFF_TYPE_COLOR[ty] }} />{AFF_TYPE_NAME[ty][locale]}</li>)}
+      </ul>
+    </div>
+    </>
   );
 }

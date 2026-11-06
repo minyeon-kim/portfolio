@@ -161,7 +161,7 @@ export const AFF_LEFT_OUT = 6;
 
 export const AFF_UI: Record<Locale, {
   steps: [string, string][]; legend: string; quotes: string; subs: string; insight: string;
-  leftOut: string; from: string; pick: string; boardLink: string; statements: string;
+  leftOut: string; from: string; pick: string; boardLink: string; statements: string; boardTitle: string;
 }> = {
   ko: {
     steps: [["201", "인터뷰 발화"], ["7", "테마"], ["4", "문제"]],
@@ -174,6 +174,7 @@ export const AFF_UI: Record<Locale, {
     pick: "테마를 눌러 내용을 보세요.",
     boardLink: "실제 보드 보기 ↗",
     statements: "개",
+    boardTitle: "테마별 포스트잇 전체",
   },
   en: {
     steps: [["201", "interview statements"], ["7", "themes"], ["4", "problems"]],
@@ -186,5 +187,6 @@ export const AFF_UI: Record<Locale, {
     pick: "Pick a theme to read it.",
     boardLink: "See the real board ↗",
     statements: "",
+    boardTitle: "Every sticky, by theme",
   },
 };
