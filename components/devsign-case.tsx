@@ -267,7 +267,7 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
   const sx = (x: number) => 688 + (x - 688) * k;
   const xs = [90, 329, 568, 808, 1047, 1286].map(sx);
   return (
-    <div className="dv-journey dv-scroll reveal">
+    <FlowPlay className="dv-journey dv-journey-play dv-scroll reveal" from={0.85} to={0.3}>
       <div className="dv-journey-legend">
         <button type="button" data-line="designer">{journey.designer}</button>
         <button type="button" data-line="developer">{journey.developer}</button>
@@ -284,12 +284,12 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
           <path transform="translate(87.5 125.23)" pathLength={1} className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
           <path transform="translate(87.5 157.52)" pathLength={1} className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         </g>
-                        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" className="dv-journey-low" data-line="developer" />
-        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps dv-journey-low" data-line="developer">{journey.developerLow.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" className="dv-journey-low" data-line="designer" />
-        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps dv-journey-low" data-line="designer">{journey.designerLow.toUpperCase()}</text>
+                        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="developer" />
+        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="developer">{journey.developerLow.toUpperCase()}</text>
+        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="designer" />
+        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="designer">{journey.designerLow.toUpperCase()}</text>
       </svg>
-    </div>
+    </FlowPlay>
   );
 }
 

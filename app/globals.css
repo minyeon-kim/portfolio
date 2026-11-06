@@ -6488,3 +6488,20 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study .dv :is(.dv-ivq, .dv-ivp) li { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 8fr); }
   .case-study .dv .dv-ivq li > b { grid-column: 1 / span 2; }
 }
+
+/* Sequences follow the scroll (FlowPlay): each part shows when the scroll reaches it, instead of
+   all of them playing on a timer once the block is in view. */
+.dv-fc[data-armed] [data-seq], .dv-flow-play[data-armed] ol.dv-flow > li { animation: none !important; opacity: 0; transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
+.dv-fc[data-armed] :is(g, text)[data-seq] { translate: 0 10px; }
+.dv-flow-play[data-armed] ol.dv-flow > li { translate: 0 16px; }
+.dv-fc[data-armed] :is(g, text)[data-seq][data-on], .dv-flow-play[data-armed] ol.dv-flow > li[data-on] { opacity: 1; translate: 0 0; }
+.dv-fc[data-armed] path[data-seq] { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 380ms var(--ease), opacity 1ms; }
+.dv-fc[data-armed] path[data-seq][data-on] { opacity: 1; stroke-dashoffset: 0; }
+@media (min-width: 64rem) {
+  .dv-flow-play[data-armed] ol.dv-flow::after { animation: none !important; transform: scaleY(var(--sp, 0)); transition: transform 300ms var(--ease); }
+}
+/* The journey lines draw with the scroll, the low points arrive at the end. */
+.dv-journey-play[data-armed] .dv-journey-line { transition: opacity 250ms var(--ease); stroke-dashoffset: calc(1 - min(1, var(--sp, 0) * 1.25)) !important; }
+.dv-journey-play[data-armed] .dv-journey-developer { stroke-dashoffset: calc(1 - min(1, max(0, var(--sp, 0) * 1.25 - 0.12))) !important; }
+.dv-journey-play[data-armed] .dv-journey-low { transition: opacity 400ms var(--ease), transform 400ms var(--ease); transition-delay: 0ms; opacity: 0; transform: scale(0.7); }
+.dv-journey-play[data-armed][data-shown] .dv-journey-low[data-on] { opacity: 1; transform: none; }
