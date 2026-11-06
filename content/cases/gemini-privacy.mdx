@@ -62,9 +62,9 @@ export const study = {
     summary: {
       label: "At a glance",
       items: [
-        { tone: "red", label: "Problem", title: "It reads your data but doesn’t say what it used", text: "Since Personal Intelligence (Jan 2026), answers hide their sources, the switches sit in two places, and a deletion can’t be checked." },
-        { tone: "accent", label: "Solution", title: "Control moves to the answer", text: "See the source, switch it off in place, and check the result." },
-        { tone: "teal", label: "Expected", title: "One toggle instead of two settings trips", text: "A deletion you can check would replace a promise. The usability test will measure whether that builds trust." },
+        { tone: "red", label: "Problem", title: "It reads your data but doesn’t say what it used", text: "Since Personal Intelligence launched in January 2026, answers don’t say which data they used. The off switches sit in two places, and you can’t check that something was deleted." },
+        { tone: "accent", label: "Solution", title: "Manage it right in the answer", text: "See the source, switch it off in place, and check the result." },
+        { tone: "teal", label: "Expected", title: "One toggle instead of two settings trips", text: "Instead of a promise that it was deleted, you can check the result yourself. The usability test will show whether that builds trust." },
       ],
     },
     headline: "Connecting took one tap.",
@@ -74,7 +74,7 @@ export const study = {
       body: "AI privacy is a broad topic, so we researched widely first. In Define I redefined the problem once: from warning people as they type, to controlling what's already connected.",
       stages: [
         { name: "Discover", outcome: "There’s an off switch, but no one knows what’s left after.", methods: ["Competitors", "Desk research", "Interviews"] },
-        { name: "Define", outcome: "Four insights, and one that moved the problem.", methods: ["Affinity map", "Personas", "HMW"], current: true },
+        { name: "Define", outcome: "Four insights; one of them changed the problem.", methods: ["Affinity map", "Personas", "HMW"], current: true },
         { name: "Develop", outcome: "11 sketches narrowed to 2 concepts.", methods: ["Sketching", "Feedback", "Design principles"] },
         { name: "Deliver", outcome: "Testing now: does checking it yourself build trust?", methods: ["HTML prototype", "Usability test", "SUS · SEQ"] },
       ],
@@ -86,8 +86,8 @@ export const study = {
       link: "See them in action in Deliver ↓",
       items: [
         { kicker: "01 See · On the answer", name: "Source badge", body: "A badge under any answer that used personal data shows which Memory, Gmail or Calendar items shaped it." },
-        { kicker: "02 Turn off · In place", name: "Inline controls", body: "One toggle per source. Gmail and Calendar are blocked, Memory can be deleted, with four seconds to undo." },
-        { kicker: "03 Delete · By asking", name: "Delete by asking", body: "Results split into “will be deleted” and “only blocked,” then Check now confirms it." },
+        { kicker: "02 Turn off · In place", name: "In-place switches", body: "One toggle per source. Gmail and Calendar are blocked, Memory can be deleted, with four seconds to undo." },
+        { kicker: "03 Delete · By asking", name: "Delete by asking", body: "Shows what “will be deleted” and what is “only blocked,” then Check now confirms it’s gone." },
       ],
     },
   },
@@ -144,8 +144,8 @@ export const study = {
       auditLabel: "5 AI services · What the controls miss",
       groups: [
         { name: "Off switches, but no result", detail: "Every service lets you turn memory or history off · None shows what remains after you do" },
-        { name: "Gemini splits control in two", detail: "Gemini app settings take 3–4 clicks · Training opt-out sits on the Google account page, 4–5 clicks away" },
-        { name: "Delete and block look the same", detail: "The law separates erasure from restricted processing · The screens show one “delete”" },
+        { name: "Gemini splits control in two", detail: "Gemini app settings take 3–4 clicks · The setting that stops AI training on your data sits on the Google account page, 4–5 clicks away" },
+        { name: "Delete and block look the same", detail: "The law treats deleting data and stopping its use as different things · The screens show one “delete”" },
       ],
     },
     synthesis: {
@@ -164,7 +164,7 @@ export const study = {
       method: "Primary research",
       title: "In-depth interview",
       lead: "Worried, but still using it.",
-      text: "Research showed controls are unpredictable, not how that feels. So we talked to people on both sides of personal data: someone who asks for it every day, and someone who gives it to AI.",
+      text: "Research showed the controls are hard to predict, but not how that feels. So we talked to people on both sides of personal data: someone who asks for it every day, and someone who gives it to AI.",
       questionsLabel: "Research questions",
       peopleLabel: "Participants",
       questions: [
@@ -176,8 +176,8 @@ export const study = {
       participants: [
         ["K01", "Call-center worker", "Asks people for personal data", "External"],
         ["U01", "Everyday AI user", "Uses AI daily", "External"],
-        ["D01", "Designer (teammate)", "Tested the guide", "Self"],
-        ["S01", "Security professional (me)", "Tested the guide", "Self"],
+        ["D01", "Designer (teammate)", "Tried out the questions", "Self"],
+        ["S01", "Security professional (me)", "Tried out the questions", "Self"],
       ],
     },
   },
@@ -185,7 +185,7 @@ export const study = {
     personas: {
       method: "User definition",
       title: "Persona & user journey map",
-      lead: "One persona, one moment that matters: the answer where personal data shows up.",
+      lead: "One persona (a typical user), and the one moment that matters: the answer where personal data shows up.",
       people: [
         {
           role: "Gemini user",
@@ -205,9 +205,9 @@ export const study = {
         designer: "Yuna · today",
         developer: "Yuna · design goal",
         developerLow: "Dips, then checks the result herself",
-        designerLow: "Lowest · can't tell where it came from",
+        designerLow: "Hardest moment · can't tell where it came from",
       },
-      summary: "Today the lowest point comes when personal data appears with no source, and stays low through two settings pages. The design goal: keep that dip short by putting the source and the switch right on the answer.",
+      summary: "Today the hardest moment comes when personal data appears with no source, and it stays hard through two settings pages. The design goal: keep that moment short by putting the source and the switch right on the answer.",
     },
     affinity: {
       method: "Research analysis",
@@ -220,11 +220,11 @@ export const study = {
     problems: {
       method: "Problem definition",
       title: "Key insights",
-      lead: "Four insights from the six themes, and the one that moved the problem.",
-      lowest: "Reframed the problem",
+      lead: "Four insights came from the six themes; one of them changed the problem.",
+      lowest: "Changed the problem",
       columns: ["Insight", "What it means"],
       items: [
-        { title: "Disclosure is decided every time", body: "Sharing data isn't one consent. People weigh risk and benefit with every question.", role: "Insight", from: "Theme I01" },
+        { title: "Sharing is decided every time", body: "Sharing data isn't one consent. People weigh risk and benefit with every question.", role: "Insight", from: "Theme I01" },
         { title: "Using it isn't trusting it", body: "People keep using AI by checking things themselves, not because they trust it.", role: "Insight", from: "Theme I02" },
         { title: "Unseen effects feed anxiety", body: "Worry grows when you can't see what's remembered or what deleting did.", role: "Core insight", from: "Theme I03", lowest: true },
         { title: "Act at the right moment", body: "A way to act when you could change your mind matters more than a notice.", role: "Insight", from: "Theme I04" },
@@ -249,7 +249,7 @@ export const study = {
       {
         method: "Ideation",
         title: "Improvement directions",
-        lead: "Six directions (24 features) narrowed to three once the problem moved.",
+        lead: "Six directions (24 features) narrowed to three after the problem changed.",
         text: "Of input protection, memory control, processing transparency, sources, purpose-based requests and work rules, memory control, transparency and sources stayed.",
       },
       {
@@ -262,7 +262,7 @@ export const study = {
         method: "Ideation",
         title: "Concept feedback",
         lead: "Of four concepts, the two that never send you to settings stayed.",
-        text: "Kept: inline controls (“Easy, I can just toggle it on and off”) and deleting from chat (“I don't have to go anywhere”). Dropped: per-file retention (more to manage) and a category dashboard (focus on sensitive items).",
+        text: "Kept: in-place switches (“Easy, I can just toggle it on and off”) and deleting from chat (“I don't have to go anywhere”). Dropped: per-file retention (more to manage) and a category dashboard (focus on sensitive items).",
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "Inline data-control concept with team feedback notes" },
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "Delete-by-chat concept with team feedback notes" },
@@ -275,7 +275,7 @@ export const study = {
         featuresLabel: "3 core features",
         features: [
           { name: "Source badge", solves: "Solves: Can't tell where it came from" },
-          { name: "Inline controls", solves: "Solves: The off switch is far away" },
+          { name: "In-place switches", solves: "Solves: The off switch is far away" },
           { name: "Delete by asking", solves: "Solves: Can't trust that it's gone" },
         ],
       },
@@ -312,16 +312,16 @@ export const study = {
     lead: "Testing now: does checking it yourself build trust?",
     usability: {
       method: "Test plan",
-      title: "Moderated think-aloud",
-      lead: "Up to five people run two scenarios on a fictional persona's data.",
-      text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (inline controls), then B (delete by asking); no participant shares their own data.",
+      title: "Moderated test (people think out loud)",
+      lead: "Up to five people run two scenarios using a made-up person’s data.",
+      text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (in-place switches), then B (delete by asking); no participant shares their own data.",
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
       charts: [
         {
           type: "rings",
-          tab: "SUS",
-          title: "After 2 of 5 sessions, SUS is 77.5 and 82.5.",
-          note: "A trend only: they used different prototype versions. The average SUS is 68.",
+          tab: "Usability score",
+          title: "After 2 of 5 sessions, the usability score (SUS, out of 100) is 77.5 and 82.5.",
+          note: "A trend only: they used different prototype versions. The usual average is 68.",
           items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
         },
         {
@@ -344,13 +344,13 @@ export const study = {
     headline: "Trust isn't a promise on screen. It's something users check for themselves.",
     reviewTitle: "Project review",
     review: [
-      { title: "Principles became requirements", body: "Erasure vs. restricted processing is built into the screen structure, not left to a help text." },
+      { title: "Principles became requirements", body: "The difference between deleting and blocking is shown in the screen itself, not hidden in help text." },
       { title: "Re-clustered to reduce bias", body: "Removed the labels and regrouped 79 quotes, so the first grouping didn't steer the result." },
       { title: "A prototype built to be tested", body: "It logs clicks, misclicks and time to find the badge, so every session turns into behavioral data." },
     ],
     limitationsTitle: "Limitations",
     limitations: [
-      { lead: "Only 2 external interviews", text: "Two of four answers came from the team and were used only to test the guide." },
+      { lead: "Only 2 external interviews", text: "Two of the four people were on the team, so we used them only to try out the questions." },
       { lead: "Results not in yet", text: "The usability test is still running." },
       { lead: "Fixed flows", text: "Free-form requests in chat are untested." },
     ],
