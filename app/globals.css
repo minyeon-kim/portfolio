@@ -6382,15 +6382,15 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 
 /* Interview rows read down, not across (owner: the label | grid layout was hard to read):
    each group has its label on top, then one item per line, within the text measure. */
-.case-study .dv .dv-iv-rows { max-width: 800px; margin-top: 80px; gap: 56px; }
+.case-study .dv .dv-iv-rows { max-width: none; margin-top: 80px; gap: 72px; }
 .case-study .dv .dv-iv-row { display: block; padding: 0; border-top: 0; }
 .case-study .dv .dv-iv-row h4.dv-iv-rowlabel { margin: 0 0 8px; color: var(--case-accent); }
 .case-study .dv .dv-ivq, .case-study .dv .dv-ivp { display: block; }
-.case-study .dv :is(.dv-ivq, .dv-ivp) li { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-radius: 0; background: none; border-top: 1px solid var(--dv-line); }
+.case-study .dv :is(.dv-ivq, .dv-ivp) li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 4px 24px; align-items: baseline; padding: 16px 0; border-radius: 0; background: none; border-top: 1px solid var(--dv-line); }
 .case-study .dv :is(.dv-ivq, .dv-ivp) li:last-child { border-bottom: 1px solid var(--dv-line); }
 .case-study .dv .dv-ivq b { font-size: 18px; }
 .case-study .dv .dv-ivq span { color: var(--dv-ink); font-size: 18px; }
-.case-study .dv .dv-ivp li { grid-template-columns: 56px 180px minmax(0, 1fr); }
+.case-study .dv .dv-ivp li { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 8fr); }
 .case-study .dv .dv-ivp span { font-size: 18px; }
 .case-study .dv .dv-iv-rows .dv-iv-claims { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 8px; }
 @media (max-width: 47.99rem) {
@@ -6481,3 +6481,10 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study .dv .dv-gs[data-pinned] .dv-gs-text { margin-top: 20px; }
 }
 
+.case-study .dv .dv-iv-rows .dv-iv-claims { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+@media (max-width: 63.99rem) { .case-study .dv .dv-iv-rows .dv-iv-claims { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
+/* Questions and participants share one track, so their right columns start on the same line. */
+@media (min-width: 48rem) {
+  .case-study .dv :is(.dv-ivq, .dv-ivp) li { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 8fr); }
+  .case-study .dv .dv-ivq li > b { grid-column: 1 / span 2; }
+}
