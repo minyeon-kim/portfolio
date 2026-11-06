@@ -92,8 +92,8 @@ export const study = {
       charts: [
         {
           type: "donut",
-          tab: "Trust in AI output",
-          title: "Only 33% of developers trust the accuracy of AI output.",
+          tab: "Do they trust AI?",
+          title: "Only 1 in 3 developers (33%) trust that what AI makes is accurate.",
           value: "33%",
           valueLabel: "trust it",
           segments: [
@@ -105,15 +105,15 @@ export const study = {
         },
         {
           type: "bars",
-          tab: "Frustrations with AI tools",
-          title: "The biggest frustration is AI answers that are almost right, but not quite.",
+          tab: "Biggest frustration",
+          title: "What frustrates developers most is AI output that is almost right but a little off. So people end up checking it all again.",
           bars: [
-            { label: "Almost right", value: 66 },
-            { label: "Slower debugging", value: 45.2 },
-            { label: "Less confidence", value: 20 },
-            { label: "Hard to understand", value: 16.3 },
+            { label: "Almost right, but a little off", value: 66 },
+            { label: "Fixing AI code takes longer", value: 45.2 },
+            { label: "Less confident solving problems myself", value: 20 },
+            { label: "Hard to tell why the code works", value: 16.3 },
           ],
-          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses, select all. 4 of 7 answers shown" },
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses. People could pick more than one, so totals pass 100%. 4 of 7 answers shown" },
         },
       ],
       problemsLabel: "Problems that kept coming up",
