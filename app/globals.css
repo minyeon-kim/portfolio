@@ -6421,3 +6421,19 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study .dv .dv-tk-cards li > b { grid-row: auto; margin-bottom: 8px; font-size: 20px; }
   .case-study .dv .dv-tk-limits li > * { grid-column: 1; }
 }
+/* Value proposition pairs as a table read left to right (owner: the three vertical cards were
+   awkward to read across; NN/g: comparison tables are read row by row). */
+.case-study .dv .dv-vpc-table { margin-top: 32px; }
+.dv-vpc-head, .dv-vpc-row { display: grid; grid-template-columns: minmax(0, 1.5fr) 32px minmax(0, 1fr) 32px minmax(0, 1fr); align-items: center; column-gap: 24px; }
+.dv-vpc-head { padding-bottom: 16px; border-bottom: 1px solid var(--dv-line); color: var(--dv-muted); font-size: 16px; }
+.dv-vpc-row { padding: 28px 0; border-bottom: 1px solid var(--dv-line); }
+.dv-vpc-row p { margin: 0; color: var(--dv-ink); font-size: 20px; line-height: 1.45; }
+.dv-vpc-row b { color: var(--case-accent); font-size: var(--t-heading); font-weight: 500; line-height: 1.2; }
+.dv-vpc-arrow { display: grid; place-items: center; color: var(--dv-muted); }
+@media (max-width: 47.99rem) {
+  .dv-vpc-head { display: none; }
+  .dv-vpc-row { grid-template-columns: 1fr; row-gap: 8px; padding: 24px 0; }
+  .dv-vpc-row [data-label]::before { content: attr(data-label); display: block; margin-bottom: 2px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+  .dv-vpc-arrow { justify-content: start; rotate: 90deg; width: 20px; }
+}
+

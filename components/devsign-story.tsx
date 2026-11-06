@@ -212,18 +212,22 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
         </OpenFrame>
       </div>
       <p className="dv-vpc-title reveal">{overviewLabel}</p>
-      {/* One card per feature, read top to bottom: the pain heard, the idea that answers it, the feature it became. */}
-      <ol className="dv-vpc-cards reveal">
+      {/* One row per pair, read left to right like a comparison table (owner: three cards read
+          top to bottom were awkward): the pain heard → the idea that answers it → the feature. */}
+      <div className="dv-vpc-table reveal" role="table" aria-label={overviewLabel}>
+        <div className="dv-vpc-head" role="row">
+          <span role="columnheader">{painLabel}</span><span aria-hidden="true" /><span role="columnheader">{reliefLabel}</span><span aria-hidden="true" /><span role="columnheader">{featureLabel}</span>
+        </div>
         {rows.map((c) => (
-          <li key={c.id}>
-            <div className="dv-vpc-step"><span>{painLabel}</span><p>“{c.pain}”</p></div>
-            <i className="dv-vpc-down" aria-hidden="true" />
-            <div className="dv-vpc-step"><span>{reliefLabel}</span><p>{c.name}</p></div>
-            <i className="dv-vpc-down" aria-hidden="true" />
-            <div className="dv-vpc-step dv-vpc-feature"><span>{featureLabel}</span><b>{c.to}</b></div>
-          </li>
+          <div key={c.id} className="dv-vpc-row" role="row">
+            <p role="cell" data-label={painLabel}>“{c.pain}”</p>
+            <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
+            <p role="cell" data-label={reliefLabel}>{c.name}</p>
+            <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
+            <b role="cell" data-label={featureLabel}>{c.to}</b>
+          </div>
         ))}
-      </ol>
+      </div>
       <ul className="sr-only">
         {others.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>
