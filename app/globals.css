@@ -5959,47 +5959,47 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-iv-tiles img { border-radius: 12px; }
 .case-study .dv .dv-iv-claim blockquote { font-size: clamp(20px, 1.8vw, 24px); line-height: 1.4; }
 
-/* Devsign case in the Metalab rhythm (tried on Develop, then applied to every stage; after metalab.com/work/ro):
+/* Devsign and Gemini cases in the Metalab rhythm (tried on Devsign's Develop, then every stage and Gemini; after metalab.com/work/ro):
    one text column (same indent, 800px, findings at statement size) and media in one width only, edge
    to edge with a 24px gutter, straight on the page with no plate. Desktop only. */
 @media (min-width: 64rem) {
-  .case-study[data-project="devsign"] .dv > section {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section {
     --txt-in: 0px;
     --bleed: min(1640px, calc(100vw - 96px));
   }
-  .case-study[data-project="devsign"] .dv > section :is(.dv-section-head, .dv-block, .dv-vpc-title, .dv-vpc-pairs) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-section-head, .dv-block, .dv-vpc-title, .dv-vpc-pairs) {
     margin-left: var(--txt-in); max-width: 800px;
   }
-  .case-study[data-project="devsign"] .dv > section .dv-section-head { max-width: none; }
-  .case-study[data-project="devsign"] .dv > section .dv-finding { font-size: var(--t-statement); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; }
-  .case-study[data-project="devsign"] .dv > section .dv-body { margin-top: 20px; }
-  .case-study[data-project="devsign"] .dv > section :is(.dv-vpc-view, .dv-cover, .dv-iaf, .dv-fc, .dv-figure.dv-board, .dv-figure:has(.dv-fit)) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { max-width: none; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-finding { font-size: var(--t-statement); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-body { margin-top: 20px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view, .dv-cover, .dv-iaf, .dv-fc, .dv-figure.dv-board, .dv-figure:has(.dv-fit)) {
     width: var(--bleed); max-width: none; margin-left: calc(50% - var(--bleed) / 2);
   }
-  .case-study[data-project="devsign"] .dv > section :is(.dv-vpc-view, .dv-vpc-view .dv-open-frame) { padding: 0; border-radius: 12px; background: none; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-view img { border-radius: 12px; }
-  .case-study[data-project="devsign"] .dv > section .dv-cover img { aspect-ratio: 21 / 9; border-radius: 12px; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-view { margin-top: 64px; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-title { margin-top: 64px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view, .dv-vpc-view .dv-open-frame) { padding: 0; border-radius: 12px; background: none; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-view img { border-radius: 12px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-cover img { aspect-ratio: 21 / 9; border-radius: 12px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-view { margin-top: 64px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-title { margin-top: 64px; }
 }
 
-@media (min-width: 64rem) { .case-study[data-project="devsign"] .dv > section :is(.dv-spec-more, .dv-fc-full) { display: block; width: fit-content; margin-inline: auto; } }
+@media (min-width: 64rem) { .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-spec-more, .dv-fc-full) { display: block; width: fit-content; margin-inline: auto; } }
 /* Develop trial, second pass (owner: text on the column's left edge, shorter, flow without its two
    boxes, a lighter canvas table). */
 @media (min-width: 64rem) {
-  .case-study[data-project="devsign"] .dv > section { --sp-block: 128px; --sp-part: 48px; }
-  .case-study[data-project="devsign"] .dv > section .dv-section-head { margin-bottom: 72px; }
-  .case-study[data-project="devsign"] .dv > section :is(.dv-vpc-view, .dv-vpc-title) { margin-top: 48px; }
-  .case-study[data-project="devsign"] .dv > section .dv-fc-box { fill: none; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-head { display: none; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-pair { padding-block: 10px; border-top: 0; }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-pair :is(span, i) { color: var(--dv-muted); }
-  .case-study[data-project="devsign"] .dv > section .dv-vpc-pair > b { font-size: 18px; font-weight: 500; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: 128px; --sp-part: 48px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 72px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view, .dv-vpc-title) { margin-top: 48px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-fc-box { fill: none; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-head { display: none; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair { padding-block: 10px; border-top: 0; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair :is(span, i) { color: var(--dv-muted); }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair > b { font-size: 18px; font-weight: 500; }
 }
 /* Every stage: boards and fitted images sit straight on the page (no plate), at the one wide width. */
 @media (min-width: 64rem) {
-  .case-study[data-project="devsign"] .dv > section :is(.dv-figure.dv-board > .dv-open-frame, .dv-figure.dv-board > img, .dv-figure:has(.dv-fit) > .dv-open-frame, .dv-fit) { padding: 0; border-radius: 12px; background: none; }
-  .case-study[data-project="devsign"] .dv > section .dv-figure.dv-board img { border-radius: 12px; }
-  .case-study[data-project="devsign"] .dv > section .dv-figure.dv-board > .dv-open-frame .dv-open-hint { right: 12px; bottom: 12px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-figure.dv-board > .dv-open-frame, .dv-figure.dv-board > img, .dv-figure:has(.dv-fit) > .dv-open-frame, .dv-fit) { padding: 0; border-radius: 12px; background: none; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-figure.dv-board img { border-radius: 12px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-figure.dv-board > .dv-open-frame .dv-open-hint { right: 12px; bottom: 12px; }
 }
 
