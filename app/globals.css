@@ -6289,4 +6289,12 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 /* Chart source and note: small, under the chart, after a hairline. */
 .dv-cycle-foot { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--dv-line); }
 .case-study .dv .dv-cycle-foot .dv-chart-source { color: var(--dv-muted); font-size: 16px; }
-
+/* Wall: the small stickies (everything said) and the key notes, which start small and grow. */
+.dv-wall-tiny { position: absolute; top: 0; left: 0; border-radius: 2px; transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 700ms var(--ease), width 700ms var(--ease), height 700ms var(--ease); }
+.dv-wall-note { transition: transform 1000ms cubic-bezier(0.22, 0.61, 0.36, 1), width 1000ms cubic-bezier(0.22, 0.61, 0.36, 1), height 1000ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 600ms var(--ease), padding 600ms var(--ease); overflow: hidden; }
+.dv-wall-note[data-small] { padding: 0; border-radius: 2px; box-shadow: none; }
+.dv-wall-note[data-small] > * { opacity: 0; }
+.dv-wall-note > * { transition: opacity 300ms var(--ease) 500ms; }
+@media (prefers-reduced-motion: reduce) { .dv-wall-tiny, .dv-wall-note, .dv-wall-note > * { transition: none; } }
+/* The rest of what was said is neutral grey: colour belongs to the notes that are read. */
+.dv-wall-tiny { background: color-mix(in srgb, var(--dv-ink) 34%, transparent); }

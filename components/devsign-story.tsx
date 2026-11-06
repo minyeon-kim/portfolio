@@ -666,12 +666,14 @@ export function AffinityMotion({ groups, replay, board }: { groups: AffinityGrou
   );
 }
 
-type WallData = { types: [string, string, string][]; steps: string[]; aside: string; themes: [string, number][]; notes: [string, string, string][][] };
+type WallData = { types: [string, string, string][]; steps: string[]; aside: string; themes: [string, number, number?][]; notes: [string, string, string][][]; allLabel?: string };
 
-// Affinity mapping as it happened (owner): real interview notes first sorted by type of statement
-// (pain point, need, behavior...), then moved into the seven themes, then the themes gathered into the
-// four problems. It plays once when it comes into view and stays on the last step. Each note keeps
-// its type colour all the way through. Reduced motion shows the last step.
+// Affinity mapping as it happened (owner): all 201 interview notes start as small stickies spread
+// over the frame; then the 18 that carry the finding grow into readable notes sorted by type of
+// statement while the rest fade back into a small mosaic; then everything moves into the seven themes,
+// and the themes gather into the four problems. Only the key notes stay readable; the mosaic under
+// each column shows how much was said. It plays once when it comes into view and stays on the last
+// step. Reduced motion shows the last step.
 export function AffinityWall({ wall, problems, funnel }: { wall: WallData; problems: string[]; funnel: [string, string][] }) {
   const root = useRef<HTMLDivElement>(null);
   const [w, setW] = useState(1200);
@@ -681,12 +683,12 @@ export function AffinityWall({ wall, problems, funnel }: { wall: WallData; probl
     if (!el) return;
     const resize = new ResizeObserver(([e]) => setW(e.contentRect.width || 1200));
     resize.observe(el);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setPhase(2); return () => resize.disconnect(); }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setPhase(3); return () => resize.disconnect(); }
     const timers: number[] = [];
     const seen = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
       seen.disconnect();
-      timers.push(window.setTimeout(() => setPhase(1), 2200), window.setTimeout(() => setPhase(2), 5200));
+      timers.push(window.setTimeout(() => setPhase(1), 1600), window.setTimeout(() => setPhase(2), 4400), window.setTimeout(() => setPhase(3), 7400));
     }, { threshold: 0.05 });
     seen.observe(el);
     return () => { resize.disconnect(); seen.disconnect(); timers.forEach((t) => window.clearTimeout(t)); };
@@ -694,59 +696,95 @@ export function AffinityWall({ wall, problems, funnel }: { wall: WallData; probl
   const typeOrder = wall.types.map(([key]) => key);
   const colorOf = Object.fromEntries(wall.types.map(([key, , color]) => [key, color]));
   const notes = wall.notes.flatMap((group, theme) => group.map(([text, who, type]) => ({ text, who, type, theme })));
+  const rand = (seed: number) => { const x = Math.sin(seed * 999.13) * 43758.5453; return x - Math.floor(x); };
+  // The rest of what was said, as small blank stickies per theme (total per theme from the board).
+  const tiny = wall.themes.flatMap(([, , total = 0], theme) => {
+    const keyCount = wall.notes[theme]?.length ?? 0;
+    return Array.from({ length: Math.max(0, total - keyCount) }, (_, k) => ({ theme, k }));
+  });
   const gap = w >= 900 ? 12 : 8;
   const labelH = w >= 900 ? 72 : 60;
   const noteH = w >= 900 ? 148 : 156;
+  const tS = w >= 900 ? 12 : 9;
+  const tG = 3;
   const colsFor = (wide: number, mid: number, narrow: number) => (w >= 1100 ? wide : w >= 640 ? mid : narrow);
-  // Phase 0: a wall sorted by type, row by row.
-  const c0 = colsFor(6, 4, 2);
-  const w0 = (w - gap * (c0 - 1)) / c0;
-  const sorted = [...notes.keys()].sort((a, b) => typeOrder.indexOf(notes[a].type) - typeOrder.indexOf(notes[b].type) || a - b);
-  const pos0 = new Map(sorted.map((n, i) => [n, { x: (i % c0) * (w0 + gap), y: labelH + Math.floor(i / c0) * (noteH + gap), w: w0, o: 1 }]));
-  const h0 = labelH + Math.ceil(notes.length / c0) * (noteH + gap);
-  // Columns layout used by phases 1 and 2.
-  const columns = (groups: number[][], cols: number) => {
-    const cw = (w - gap * (cols - 1)) / cols;
-    const bands: number[] = [];
-    groups.forEach((g, i) => { const b = Math.floor(i / cols); bands[b] = Math.max(bands[b] ?? 0, g.length); });
-    const bandTop = bands.map((_, b) => bands.slice(0, b).reduce((sum, n) => sum + labelH + n * (noteH + gap) + 40, 0));
-    const at = new Map<number, { x: number; y: number; w: number; o: number }>();
-    const labels = groups.map((g, i) => ({ x: (i % cols) * (cw + gap), y: bandTop[Math.floor(i / cols)], w: cw }));
-    groups.forEach((g, i) => g.forEach((n, k) => at.set(n, { x: labels[i].x, y: labels[i].y + labelH + k * (noteH + gap), w: cw, o: 1 })));
-    const height = bandTop[bands.length - 1] + labelH + bands[bands.length - 1] * (noteH + gap);
-    return { at, labels, height };
+  type At = { x: number; y: number; w: number; h: number; o: number };
+  // A mosaic of tiny notes inside a box, row by row.
+  const mosaic = (ids: number[], x: number, y: number, width: number, out: Map<number, At>, o = 0.45) => {
+    const per = Math.max(1, Math.floor((width + tG) / (tS + tG)));
+    ids.forEach((id, i) => out.set(id, { x: x + (i % per) * (tS + tG), y: y + Math.floor(i / per) * (tS + tG), w: tS, h: tS * 0.82, o }));
+    return Math.ceil(ids.length / per) * (tS + tG);
   };
-  const byTheme = wall.themes.map((_, t) => notes.flatMap((note, n) => (note.theme === t ? [n] : [])));
-  const p1 = columns(byTheme, colsFor(7, 4, 2));
-  const kept = wall.themes.flatMap(([, problem], t) => (problem >= 0 ? [] : [t]));
-  const byProblem = problems.map((_, pi) => wall.themes.flatMap(([, problem], t) => (problem === pi ? byTheme[t] : [])));
-  const p2 = columns(byProblem, colsFor(4, 2, 1));
-  // Notes of a theme left out of the problems fade in place.
-  kept.forEach((t) => byTheme[t].forEach((n) => { const last = p1.at.get(n); if (last) p2.at.set(n, { ...last, o: 0 }); }));
-  const height = Math.max(h0, p1.height, p2.height);
-  const placeOf = (n: number) => (phase === 0 ? pos0.get(n) : phase === 1 ? p1.at.get(n) : p2.at.get(n)) ?? { x: 0, y: 0, w: w0, o: 0 };
+  // Phase 0: everything small and spread out.
+  const field = Math.max(420, Math.ceil((notes.length + tiny.length) / Math.max(1, Math.floor(w / 26))) * 26 + labelH);
+  const key0 = new Map<number, At>();
+  const tiny0 = new Map<number, At>();
+  notes.forEach((_, n) => key0.set(n, { x: rand(n + 11) * (w - tS * 1.6), y: labelH + rand(n + 57) * (field - labelH - tS), w: tS * 1.6, h: tS * 1.3, o: 1 }));
+  tiny.forEach((_, i) => tiny0.set(i, { x: rand(i + 211) * (w - tS), y: labelH + rand(i + 977) * (field - labelH - tS), w: tS, h: tS * 0.82, o: 0.85 }));
+  // Phase 1: key notes as a wall sorted by type; the rest as a mosaic under it, sorted by type too.
+  const c1 = colsFor(6, 4, 2);
+  const w1 = (w - gap * (c1 - 1)) / c1;
+  const sorted = [...notes.keys()].sort((a, b) => typeOrder.indexOf(notes[a].type) - typeOrder.indexOf(notes[b].type) || a - b);
+  const key1 = new Map<number, At>(sorted.map((n, i) => [n, { x: (i % c1) * (w1 + gap), y: labelH + Math.floor(i / c1) * (noteH + gap), w: w1, h: noteH, o: 1 }]));
+  const wallH = labelH + Math.ceil(notes.length / c1) * (noteH + gap);
+  const tiny1 = new Map<number, At>();
+  const tinySorted = [...tiny.keys()];
+  const h1 = wallH + 24 + mosaic(tinySorted, 0, wallH + 24, w, tiny1, 0.35);
+  // Columns (phases 2 and 3): key notes stacked, the rest as a mosaic under them.
+  const columns = (groups: { keys: number[]; tiny: number[] }[], cols: number) => {
+    const cw = (w - gap * (cols - 1)) / cols;
+    const per = Math.max(1, Math.floor((cw + tG) / (tS + tG)));
+    const heightOf = (g: { keys: number[]; tiny: number[] }) => labelH + g.keys.length * (noteH + gap) + 12 + Math.ceil(g.tiny.length / per) * (tS + tG);
+    const bands: number[] = [];
+    groups.forEach((g, i) => { const b = Math.floor(i / cols); bands[b] = Math.max(bands[b] ?? 0, heightOf(g)); });
+    const bandTop = bands.map((_, b) => bands.slice(0, b).reduce((sum, h) => sum + h + 40, 0));
+    const keys = new Map<number, At>();
+    const small = new Map<number, At>();
+    const labels = groups.map((_, i) => ({ x: (i % cols) * (cw + gap), y: bandTop[Math.floor(i / cols)], w: cw }));
+    groups.forEach((g, i) => {
+      g.keys.forEach((n, k) => keys.set(n, { x: labels[i].x, y: labels[i].y + labelH + k * (noteH + gap), w: cw, h: noteH, o: 1 }));
+      mosaic(g.tiny, labels[i].x, labels[i].y + labelH + g.keys.length * (noteH + gap) + 12, cw, small);
+    });
+    return { keys, small, labels, height: bandTop[bands.length - 1] + bands[bands.length - 1] };
+  };
+  const themeGroups = wall.themes.map((_, t) => ({ keys: notes.flatMap((note, n) => (note.theme === t ? [n] : [])), tiny: tiny.flatMap((note, i) => (note.theme === t ? [i] : [])) }));
+  const p2 = columns(themeGroups, colsFor(7, 4, 2));
+  const problemGroups = problems.map((_, pi) => {
+    const ts = wall.themes.flatMap(([, problem], t) => (problem === pi ? [t] : []));
+    return { keys: ts.flatMap((t) => themeGroups[t].keys), tiny: ts.flatMap((t) => themeGroups[t].tiny) };
+  });
+  const p3 = columns(problemGroups, colsFor(4, 2, 1));
+  // A theme left out of the problems fades where it stood.
+  wall.themes.forEach(([, problem], t) => {
+    if (problem >= 0) return;
+    themeGroups[t].keys.forEach((n) => { const at = p2.keys.get(n); if (at) p3.keys.set(n, { ...at, o: 0 }); });
+    themeGroups[t].tiny.forEach((i) => { const at = p2.small.get(i); if (at) p3.small.set(i, { ...at, o: 0 }); });
+  });
+  const height = Math.max(field, h1, p2.height, p3.height);
+  const keyAt = (n: number) => [key0, key1, p2.keys, p3.keys][phase].get(n);
+  const tinyAt = (i: number) => [tiny0, tiny1, p2.small, p3.small][phase].get(i);
+  const step = phase <= 1 ? 0 : phase - 1;
+  const box = (at: At | undefined): CSSProperties => (at ? { width: at.w, height: at.h, opacity: at.o, transform: `translate(${at.x}px, ${at.y}px)` } : { opacity: 0 });
   return (
     <div className="dv-wall dv-gap-40">
       <ol className="dv-wall-steps" aria-label={wall.steps.join(" → ")}>
-        {funnel.map(([n, label], i) => <li key={label} data-on={i === phase || undefined} data-done={i < phase || undefined}><strong>{n}</strong><span>{label}</span><small>{wall.steps[i]}</small></li>)}
+        {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined} data-done={i < step || undefined}><strong>{n}</strong><span>{label}</span><small>{wall.steps[i]}</small></li>)}
       </ol>
       <div ref={root} className="dv-wall-stage" data-phase={phase} style={{ height }} aria-hidden="true">
-        <div className="dv-wall-legend" data-on={phase === 0 || undefined}>
+        <div className="dv-wall-legend" data-on={phase <= 1 || undefined}>
           {wall.types.map(([key, label, color]) => <span key={key}><i style={{ background: color }} />{label}</span>)}
         </div>
-        {p1.labels.map((l, t) => <p key={`t${t}`} className="dv-wall-label" data-on={phase === 1 || undefined} style={{ left: l.x, top: l.y, width: l.w }}>{wall.themes[t][0]}</p>)}
-        {p2.labels.map((l, pi) => <p key={`p${pi}`} className="dv-wall-label dv-wall-problem" data-on={phase === 2 || undefined} style={{ left: l.x, top: l.y, width: l.w }}><b>{String(pi + 1).padStart(2, "0")}</b>{problems[pi]}</p>)}
-        {notes.map((note, n) => {
-          const at = placeOf(n);
-          return (
-            <div key={n} className="dv-wall-note" style={{ width: at.w, height: noteH, opacity: at.o, background: colorOf[note.type], transform: `translate(${at.x}px, ${at.y}px)`, transitionDelay: `${(n % 6) * 40}ms` } as CSSProperties}>
-              <p>{note.text}</p>
-              <span>{note.who}</span>
-            </div>
-          );
-        })}
+        {p2.labels.map((l, t) => <p key={`t${t}`} className="dv-wall-label" data-on={phase === 2 || undefined} style={{ left: l.x, top: l.y, width: l.w }}>{wall.themes[t][0]}</p>)}
+        {p3.labels.map((l, pi) => <p key={`p${pi}`} className="dv-wall-label dv-wall-problem" data-on={phase === 3 || undefined} style={{ left: l.x, top: l.y, width: l.w }}><b>{String(pi + 1).padStart(2, "0")}</b>{problems[pi]}</p>)}
+        {tiny.map((_, i) => <i key={`s${i}`} className="dv-wall-tiny" style={{ ...box(tinyAt(i)), transitionDelay: `${Math.round(rand(i + 5) * 400)}ms` }} />)}
+        {notes.map((note, n) => (
+          <div key={n} className="dv-wall-note" data-small={phase === 0 || undefined} style={{ ...box(keyAt(n)), background: colorOf[note.type], transitionDelay: `${(n % 6) * 40}ms` }}>
+            <p>{note.text}</p>
+            <span>{note.who}</span>
+          </div>
+        ))}
       </div>
-      <p className="dv-wall-aside" data-on={phase === 2 || undefined}>{wall.aside}</p>
+      <p className="dv-wall-aside" data-on={phase === 3 || undefined}>{wall.aside}</p>
       <div className="sr-only">
         <ol>{problems.map((title, pi) => <li key={title}>{title}: {wall.themes.filter(([, p]) => p === pi).map(([name]) => name).join(", ")}</li>)}</ol>
       </div>
