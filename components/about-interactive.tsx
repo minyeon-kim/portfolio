@@ -27,8 +27,10 @@ export function AboutBridge({ rows, then, now, label }: { rows: Row[]; then: str
       const top = Math.max(96, Math.round((window.innerHeight - stage) / 2));
       el.style.setProperty("--stage-top", `${top}px`);
       const travel = el.offsetHeight - stage;
-      const progress = travel > 0 ? Math.min(1, Math.max(0, (top - el.getBoundingClientRect().top) / travel)) : 0;
-      setActive(Math.min(rows.length - 1, Math.floor(progress * rows.length)));
+      // The last pair gets half a step more before the stage lets go, so it can be read.
+      const unit = travel / (rows.length + 0.5);
+      const moved = Math.max(0, top - el.getBoundingClientRect().top);
+      setActive(travel > 0 ? Math.min(rows.length - 1, Math.floor(moved / unit)) : 0);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     const sync = () => { setPinned(query.matches); onScroll(); };
@@ -49,7 +51,7 @@ export function AboutBridge({ rows, then, now, label }: { rows: Row[]; then: str
     const stage = (el.firstElementChild as HTMLElement).offsetHeight;
     const top = Math.max(96, Math.round((window.innerHeight - stage) / 2));
     const travel = el.offsetHeight - stage;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + ((i + 0.5) / rows.length) * travel, behavior: "smooth" });
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - top + (i + 0.5) * (travel / (rows.length + 0.5)), behavior: "smooth" });
   };
 
   if (!pinned) {
