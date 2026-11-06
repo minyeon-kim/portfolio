@@ -6760,3 +6760,32 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .about-contact .about-statement { max-width: 900px; }
 .case-study .dv .dv-detail-before { display: flex; gap: 10px; margin: 16px 0 0; max-width: 40ch; font-size: 16px; line-height: 1.5; color: var(--dv-muted); }
 .case-study .dv .dv-detail-before span { flex: none; font-weight: 500; color: var(--ink); opacity: 0.7; }
+
+/* Detail rows carrying video, a clip pair or a pinned screenshot (core features, handoff, iterations). */
+.case-study .dv .dv-detail-card video { display: block; width: 100%; height: auto; border-radius: 12px; background: #111; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.case-study .dv .dv-detail[data-wide] .dv-detail-text { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(32px, 5vw, 80px); align-items: end; }
+.case-study .dv .dv-detail-side > .dv-detail-before:first-child { margin-top: 0; }
+.case-study .dv .dv-detail[data-wide] .dv-detail-before { max-width: none; }
+.case-study .dv .dv-detail-before[data-strong] { color: var(--ink); }
+.case-study .dv .dv-detail-before[data-strong] span { color: var(--case-accent); opacity: 1; }
+.case-study .dv .dv-detail-spec { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: dvspec; }
+.case-study .dv .dv-detail-spec li { position: relative; padding-left: 36px; font-size: 16px; line-height: 1.5; color: var(--dv-muted); counter-increment: dvspec; }
+.case-study .dv .dv-detail-spec li::before { content: counter(dvspec); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 999px; background: var(--dv-deep, var(--case-accent)); color: #fff; font-size: 13px; font-weight: 600; }
+.case-study .dv .dv-detail-spec b { display: block; font-weight: 500; color: var(--ink); }
+.case-study .dv .dv-detail-pinned { position: relative; display: inline-block; max-width: 100%; }
+.case-study .dv .dv-detail-pinned img { max-height: none; }
+.case-study .dv .dv-detail-pin { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px; background: var(--dv-deep, var(--case-accent)); color: #fff; font-size: 13px; font-weight: 600; box-shadow: 0 0 0 3px rgb(255 255 255 / 0.85); }
+.case-study .dv .dv-detail-pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); width: 100%; }
+.case-study .dv .dv-detail-pair figure { margin: 0; display: grid; gap: 12px; align-content: start; }
+.case-study .dv .dv-detail-pair figcaption { display: grid; gap: 4px; font-size: 16px; line-height: 1.45; color: var(--dv-muted); }
+.case-study .dv .dv-detail-pair figcaption b { font-weight: 600; color: var(--ink); }
+.case-study .dv .dv-detail-pair figure[data-accent] figcaption b { color: var(--case-accent); }
+.case-study .dv .dv-details-solo .dv-detail-num { display: none; }
+.case-study .dv .dv-detail-more { margin: 48px 0 0; }
+@media (max-width: 63.99rem) {
+  .case-study .dv .dv-detail[data-wide] .dv-detail-text { display: block; }
+  .case-study .dv .dv-detail-side { margin-top: 20px; }
+  .case-study .dv .dv-detail-pair { grid-template-columns: 1fr; }
+  .case-study .dv .dv-detail-pin { width: 20px; height: 20px; font-size: 11px; box-shadow: 0 0 0 2px rgb(255 255 255 / 0.85); }
+}
+.case-study .dv .dv-details-solo .dv-detail-text { display: none; }
