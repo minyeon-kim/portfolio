@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { GlanceSteps } from "./glance-steps";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { SurveyCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
@@ -50,7 +50,7 @@ function Figure({ img, sizes = "(max-width: 767px) 100vw, 80vw", className = "",
   // reveal had already played, and popped in late.
   const image = <Image src={withBase(img.src)} alt={img.alt ?? ""} width={img.width} height={img.height} sizes={sizes} loading="eager" />;
   const frame = crop ? (
-    <div className="dv-crop" style={{ aspectRatio: crop[0], "--w": `${crop[1]}%`, "--h": `${crop[2]}%`, "--l": `${crop[3]}%`, "--t": `${crop[4]}%` } as React.CSSProperties}>{image}</div>
+    <div className="dv-crop" style={{ aspectRatio: crop[0], "--w": `${crop[1]}%`, "--h": `${crop[2]}%`, "--l": `${crop[3]}%`, "--t": `${crop[4]}%` } as CSSProperties}>{image}</div>
   ) : img.fit ? <div className="dv-fit" style={{ aspectRatio: img.fit }}>{image}</div> : image;
   return (
     <figure className={`dv-figure reveal ${className}`}>
@@ -121,7 +121,7 @@ function Insights({ discover }: { discover: Study }) {
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; before?: string; gap: string }, i: number) => (
-            <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
+            <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
           ))}
         </ol></FlowPlay>
         </HeldFlow>
@@ -228,7 +228,7 @@ function SourceInsights({ discover }: { discover: Study }) {
         <Block title={synthesis.label} lead={synthesis.title} ff />
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }, i: number) => (
-            <li key={row.stage} style={{ "--i": i } as React.CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
+            <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
           ))}
         </ol></FlowPlay>
         </HeldFlow>
@@ -289,10 +289,10 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
           <path transform="translate(87.5 125.23)" pathLength={1} className="dv-journey-line dv-journey-designer" d="M2.5 112.774C42.3 112.774 161.8 131.074 241.5 112.774C321.2 94.4739 400.7 7.57393 480.5 2.77393C560.3 -2.02607 640.7 57.4739 720.5 83.7739C800.3 110.074 879.8 159.074 959.5 160.774C1039.2 162.474 1158.7 104.974 1198.5 93.7739" />
           <path transform="translate(87.5 157.52)" pathLength={1} className="dv-journey-line dv-journey-developer" d="M2.50068 46.4758C42.3007 60.1758 161.801 135.676 241.501 128.476C321.201 121.276 400.701 13.1758 480.501 3.47581C560.301 -6.22419 640.701 59.2758 720.501 70.4758C800.301 81.6758 879.801 70.4758 959.501 70.4758H1198.5" />
         </g>
-                        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="developer" />
-        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="developer">{journey.developerLow.toUpperCase()}</text>
-        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="designer" />
-        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as React.CSSProperties} data-line="designer">{journey.designerLow.toUpperCase()}</text>
+                        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(329) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as CSSProperties} data-line="developer" />
+        <text x={sx(329)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-second dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as CSSProperties} data-line="developer">{journey.developerLow.toUpperCase()}</text>
+        <image href={withBase("/images/devsign/emoji-angry.svg")} x={sx(1047) - 17} y="269" width="34" height="34" className="dv-journey-low" data-seq="" style={{ "--i": 9 } as CSSProperties} data-line="designer" />
+        <text x={sx(1047)} y="325" textAnchor="middle" fontSize="18" className="dv-svg-accent dv-svg-caps dv-journey-low" data-seq="" style={{ "--i": 9 } as CSSProperties} data-line="designer">{journey.designerLow.toUpperCase()}</text>
       </svg>
     </FlowPlay>
   );
@@ -315,14 +315,14 @@ function DevelopBlock({ block }: { block: Study }) {
       <Block {...(block as Lead)} />
       {block.image && <Figure img={block.image} className="dv-cover dv-gap-40" open={Boolean(block.image.fit)} />}
       {block.images && (
-        <div className={block.images.length > 2 ? "dv-screens dv-gap-40" : "dv-two dv-gap-40"} style={{ "--n": block.images.length } as React.CSSProperties}>
+        <div className={block.images.length > 2 ? "dv-screens dv-gap-40" : "dv-two dv-gap-40"} style={{ "--n": block.images.length } as CSSProperties}>
           {block.images.map((img: Img) => <Figure key={img.src} img={img} sizes="(max-width: 767px) 100vw, 40vw" className={block.images.length > 2 ? "dv-screen" : "dv-photo"} />)}
         </div>
       )}
       {block.features && (
         <>
           <p className="dv-caps dv-accent dv-gap-40 reveal">{block.featuresLabel}</p>
-          <ul className="dv-features" style={{ "--n": block.features.length } as React.CSSProperties}>
+          <ul className="dv-features" style={{ "--n": block.features.length } as CSSProperties}>
             {block.features.map((f: { name: string; solves: string }) => (
               <li key={f.name} className="reveal"><strong>{f.name}</strong><span>{f.solves}</span></li>
             ))}
@@ -361,7 +361,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {overview.features && !(ff && develop.selection) && (
           <div className="dv-main-features">
             <Block title={overview.features.method} lead={overview.features.title} ff />
-            <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as React.CSSProperties}>
+            <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as CSSProperties}>
               {overview.features.items.map((f: { kicker: string; name: string; body: string; src?: string }) => (
                 <li key={f.name} className="reveal">
                   {f.src && <Image src={withBase(f.src)} alt="" width={1280} height={800} sizes="(max-width: 767px) 100vw, 300px" className="dv-feature-shot" />}
@@ -523,7 +523,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {develop.dvf && <div className="dv-gap-96">
           <Block {...develop.dvf} />
           <p className="dv-caps dv-accent dv-gap-40 reveal">{develop.dvf.featuresLabel}</p>
-          <ul className="dv-features" style={{ "--n": develop.dvf.features.length } as React.CSSProperties}>
+          <ul className="dv-features" style={{ "--n": develop.dvf.features.length } as CSSProperties}>
             {develop.dvf.features.map((f: { name: string; solves: string }) => (
               <li key={f.name} className="reveal"><strong>{f.name}</strong><span>{f.solves}</span></li>
             ))}
@@ -596,6 +596,27 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 };
               })}
             />
+          </div>
+        )}
+        {/* UI details: the small parts of a screen where a decision happens, cut out
+            and set on a soft case-colour card, one per row, text beside it. */}
+        {deliver.details && (
+          <div className="dv-details">
+            <Block title={deliver.details.label} lead={deliver.details.lead} ff={ff} />
+            <ol className="dv-details-list">
+              {deliver.details.items.map((d: { title: string; body: string; src: string; width: number; height: number; alt: string; wide?: boolean }, i: number) => (
+                <li key={d.title} className="dv-detail reveal" data-reveal-group="" data-wide={d.wide ? "" : undefined}>
+                  <div className="dv-detail-text">
+                    <span className="dv-detail-num">{String(i + 1).padStart(2, "0")}</span>
+                    <h4 className="dv-detail-title">{d.title}</h4>
+                    <p className="dv-detail-body">{d.body}</p>
+                  </div>
+                  <div className="dv-detail-card">
+                    <Image src={withBase(d.src)} alt={d.alt} width={d.width} height={d.height} sizes="(max-width: 1023px) 90vw, 560px" style={{ "--dw": d.width * 0.75 } as CSSProperties} />
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         )}
         {!ff && (
