@@ -4403,7 +4403,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .devsign-hero[data-project="about"] .devsign-hero-subtitle { max-width: 44ch; margin-inline: 0; text-align: left; }
 .devsign-hero[data-project="about"] .devsign-hero-actions { justify-content: flex-start; }
 .about-hero-portrait { order: -1; margin: 0 0 32px; overflow: hidden; border-radius: 16px; }
-.about-hero-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 72svh; object-fit: cover; object-position: 44% center; }
+.about-hero-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 72svh; object-fit: cover; object-position: 50% 28%; }
 .about-hero-portrait .case-media { max-width: none; margin: 0; }
 .about-hero-portrait .case-media-space { min-height: 0; aspect-ratio: 4 / 5; }
 .devsign-hero[data-project="about"] .devsign-hero-panel { display: flex; flex-direction: column; }
@@ -4419,7 +4419,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .home-stage[data-entering] :is(.home-tagline-wrap, .home-note, .home-picks-label, .home-picks ol, .home-links li:not(:has(.home-about))) { opacity: 0; }
 .home-stage[data-entering] .home-picks ol .home-pick { pointer-events: none; }
 .about-entrance { position: fixed; z-index: 15; inset: 0; pointer-events: none; }
-.about-entrance img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 44% 30%; opacity: 0; transition: opacity 240ms ease; }
+.about-entrance img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; opacity: 0; transition: opacity 240ms ease; }
 .about-entrance[data-photo] img { opacity: 1; }
 .about-entrance[data-ground] { background: var(--bg); }
 .about-entrance[data-reveal] { background: transparent; transition: background-color 460ms ease 120ms; }
@@ -6537,7 +6537,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    left, the name large at the bottom and the bio at the bottom right. */
 .about-entrance[data-card] img { opacity: 1; transition: none; }
 .home-device[data-project="about"] { background: #17181d; }
-.home-device[data-project="about"] img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 44% 50%; }
+.home-device[data-project="about"] img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
 @media (min-width: 64rem) {
   .home-device[data-project="about"] { top: 11.4%; left: 56%; right: auto; width: auto; height: 64svh; aspect-ratio: 4 / 5; }
   .home-stage[data-world="about"] .home-world-role { left: calc(var(--project-text-inset) + 240px); top: 17%; max-width: min(28vw, 18ch); }
@@ -6563,3 +6563,21 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv .dv-figure.dv-me-photo-tk { max-width: 800px; margin: 64px 0 0; }
 .dv-me-photo-tk img { aspect-ratio: 4 / 3; object-position: 50% 50%; }
 @media (max-width: 47.99rem) { .dv .dv-figure.dv-me-photo-tk { margin-top: 32px; } }
+/* About gallery: photos from the Figma Photo page in justified rows (each photo
+   whole, one height per row; flex-grow = its aspect ratio). Wider than the text
+   column. Each photo rises with the usual reveal and settles from 1.06 inside its
+   frame; a mouse over one eases it in a little. Stacks on phones. */
+.about-gallery { width: min(1440px, calc(100vw - 2 * var(--project-text-inset, 24px))); margin-inline: auto; padding-block: clamp(72px, 9vw, 144px); display: grid; gap: clamp(12px, 1.4vw, 20px); }
+.about-gallery-label { margin: 0 0 clamp(16px, 2vw, 32px); font-size: 16px; color: var(--muted); }
+.about-gallery-row { display: flex; gap: clamp(12px, 1.4vw, 20px); }
+.about-gallery-photo { flex: 1 1 0; min-width: 0; margin: 0; overflow: hidden; border-radius: 16px; background: var(--fill); }
+.about-gallery-photo img { display: block; width: 100%; height: auto; transition: scale 900ms var(--ease-reveal, cubic-bezier(0.22, 0.61, 0.36, 1)); }
+.about-gallery-photo.reveal:not([data-shown]) img { scale: 1.06; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .about-gallery-photo[data-shown]:hover img { scale: 1.025; }
+}
+@media (prefers-reduced-motion: reduce) { .about-gallery-photo img { transition: none; scale: 1 !important; } }
+@media (max-width: 47.99rem) {
+  .about-gallery-row { flex-direction: column; }
+  .about-gallery-photo { flex: none !important; border-radius: 12px; }
+}

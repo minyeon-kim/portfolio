@@ -26,7 +26,7 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
   photo.alt = "";
   if (from) {
     layer.dataset.card = "";
-    Object.assign(photo.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "44% 50%" });
+    Object.assign(photo.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "50% 28%" });
   }
   layer.append(photo);
   document.body.append(layer);
@@ -38,9 +38,9 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
     const animation = photo.animate(
       [
         from
-          ? { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "44% 50%" }
-          : { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: "44% 30%" },
-        { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "16px", objectPosition: "44% 50%" },
+          ? { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "50% 28%" }
+          : { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: "50% 28%" },
+        { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "16px", objectPosition: "50% 28%" },
       ],
       { duration: SETTLE, easing: "cubic-bezier(0.65, 0, 0.2, 1)", fill: "forwards" },
     );
