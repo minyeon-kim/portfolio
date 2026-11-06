@@ -5603,7 +5603,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-cycle-stop svg { width: 16px; height: 16px; }
 :is(.dv-cycle-tabs, .dv-held-tabs, .dv-spec-tabs) button:focus-visible, .dv-cycle-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* One tint across the whole plate, so the finding and its chart read as one piece. */
-.dv-cycle-plate, .dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step {
+.dv-cycle-plate, .dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step, .dv-evbox {
   --plate-a: light-dark(color-mix(in srgb, var(--case-accent) 4%, #ffffff), #22232a);
   --plate-b: light-dark(color-mix(in srgb, var(--case-accent) 13%, #ffffff), color-mix(in srgb, var(--dv-chart-fill, var(--case-accent)) 9%, #22232a));
   --dv-muted: light-dark(#5e5e63, #b4bcb9); /* Holds AA at the tinted end of the plate. */
@@ -5688,3 +5688,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .case-study .dv :is(.dv-reel .dv-reel-media, .dv-iter-step .dv-iter-clip, .dv-spec-shot) { background: none; }
 .case-study .dv .dv-reel { --reel-tone: var(--case-accent); }
 .case-study .dv .dv-reel .dv-reel-media video { box-shadow: none; }
+/* Evidence boxes share the plate (owner: the chart box and the posts box under it were two
+   different colours): same tint, no outline. */
+.case-study .dv .dv-evbox { border: 0; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
