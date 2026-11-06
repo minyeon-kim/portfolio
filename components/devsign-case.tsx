@@ -137,8 +137,19 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           </figure>
         </div>
-        {/* What was asked and who answered, so the finding has its ground (owner: the block said too
-            little about the research itself). */}
+        <div className="dv-iv-claims">
+          {interview.claims.map((c: { title: string; quotes: string[][] }) => (
+            <div key={c.title} className="dv-iv-claim reveal">
+              <p className="dv-iv-claim-title">{c.title}</p>
+              <ul>
+                {c.quotes.slice(0, 1).map(([quote, who]) => (
+                  <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        {/* Method context, kept quiet under the evidence (owner: the block had no clear focus). */}
         {interview.questions && <div className="dv-iv-facts reveal">
           <div>
             <p className="dv-iv-facts-label">{interview.questionsLabel}</p>
@@ -153,18 +164,6 @@ function Insights({ discover }: { discover: Study }) {
             </ul>
           </div>
         </div>}
-        <div className="dv-iv-claims">
-          {interview.claims.map((c: { title: string; quotes: string[][] }) => (
-            <div key={c.title} className="dv-iv-claim reveal">
-              <p className="dv-iv-claim-title">{c.title}</p>
-              <ul>
-                {c.quotes.slice(0, 1).map(([quote, who]) => (
-                  <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
