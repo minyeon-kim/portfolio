@@ -1404,3 +1404,5 @@ The holding cards follow the chart card (owner; supersedes the step bars at the 
 Holding and chart cards are one surface (owner: the purple frame behind the media and the card tint read as two colours, and the dark tint was too bright): the media sits straight on the plate (no per-feature, purple or Gemini blue frame behind clips, screens and the handoff shot), feature numbers use the case colour, and the dark plate is #22232a leaning 9% to the chart fill (light unchanged). Figma not updated.
 
 Evidence boxes (`.dv-evbox`: community posts, Gemini's survey, papers and service audit) use the same plate as the chart and holding cards: the case tint gradient, no outline (owner: the chart box and the posts box under it were different colours). Figma not updated.
+
+Handoff card words: the purpose is a quiet 16px muted line at the top, the current element is centred vertically beside the screen, the progress stays at the bottom (owner: the text sat oddly at the top with an empty hole below). Figma not updated.
