@@ -1408,3 +1408,5 @@ Evidence boxes (`.dv-evbox`: community posts, Gemini's survey, papers and servic
 Handoff card words: the purpose is a quiet 16px muted line at the top, the current element is centred vertically beside the screen, the progress stays at the bottom (owner: the text sat oddly at the top with an empty hole below). Figma not updated.
 
 Plate colour, third pass (owner: the charcoal read dull and the words did not stand out; supersedes #22232a): Devsign dark #1e1a3a to #2c2460, Gemini dark #151d36 to #1d2d5e, muted words cooled to match (#bcb6dc / #b3c0dc); light #f6f3ff to #e6defe and #f2f6ff to #dde8fd. Figma not updated.
+
+Devsign purple is one system (owner: the purples were all different; supersedes per-block purples): words in the accent (#b3a5ff / #5b3fd6), marks (chart shapes, bars, lines, dots, progress) in --dv-chart-fill (#7c62ff / #5b3fd6), numbered badges and solid surfaces with white text in --dv-deep #5b3fd6, plates #1e1a3a to #2c2460 (light #f6f3ff to #e6defe), and the two emphasis surfaces (Problem statement, Iteration 1 To-be) share --dv-deep-surface, the deep purple falling into #2c2460. Tints stay accent mixes. Figma not updated.
