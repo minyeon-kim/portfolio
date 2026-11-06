@@ -570,6 +570,73 @@ const specDwell = (text: string) => Math.min(8000, Math.max(4000, text.length * 
 // a pin jumps there, and nothing has to be pressed. It runs while 40% of it is on screen and holds
 // while the pointer is on the words, on keyboard focus, or on pause. `auto={false}` starts on pause
 // (the spec page is for looking things up). Reduced motion never plays; phones list all of it.
+// One screen of the spec as a still document part: the screenshot with numbered pins and, beside or
+// under it, the same numbers with element, behavior and states. Nothing plays by itself.
+function SpecShot({ screen }: { screen: SpecScreen }) {
+  return (
+    <div className="dv-hdoc-shot">
+      <Image src={withBase(screen.src)} alt={screen.alt} width={2160} height={1350} sizes="(min-width: 64rem) 60vw, 100vw" />
+      {screen.pins.map(([x, y], n) => <span key={n} className="dv-hdoc-pin" aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }}>{n + 1}</span>)}
+    </div>
+  );
+}
+
+function SpecRows({ screen, cols }: { screen: SpecScreen; cols: SpecData["cols"] }) {
+  return (
+    <table className="dv-hdoc-table">
+      <thead><tr><th scope="col"><span className="sr-only">#</span></th><th scope="col">{cols.name}</th><th scope="col">{cols.does}</th><th scope="col">{cols.state}</th></tr></thead>
+      <tbody>
+        {screen.rows.map(([name, does, state], n) => (
+          <tr key={name}><td><b>{n + 1}</b></td><th scope="row">{name}</th><td>{does}</td><td>{state === "-" ? "—" : state}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+// The case page shows one screen of the handoff spec as an excerpt and links to the full document
+// (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
+export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {
+  const screen = spec.screens.find((item) => item.id === screenId) ?? spec.screens[0];
+  return (
+    <div className="dv-hdoc-excerpt dv-gap-40 reveal">
+      <p className="dv-hdoc-purpose"><b>{screen.tab}</b>{screen.purpose}</p>
+      <SpecShot screen={screen} />
+      <SpecRows screen={screen} cols={spec.cols} />
+      <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
+    </div>
+  );
+}
+
+// The full handoff as a document: every screen open, one after another, each with its purpose, the
+// pinned screenshot, the element table, what "done" means, tokens and code links.
+export function HandoffDoc({ spec }: { spec: SpecData }) {
+  return (
+    <div className="dv-hdoc">
+      <nav className="dv-hdoc-toc" aria-label={spec.labels.elements}>
+        <ol>{spec.screens.map((screen, i) => <li key={screen.id}><a className="link" href={`#spec-${screen.id}`}>{i + 1}. {screen.tab}</a></li>)}</ol>
+      </nav>
+      {spec.screens.map((screen, i) => (
+        <section key={screen.id} id={`spec-${screen.id}`} className="dv-hdoc-screen" aria-labelledby={`spec-${screen.id}-title`}>
+          <h3 id={`spec-${screen.id}-title`}><b>{i + 1}</b>{screen.tab}</h3>
+          <p className="dv-hdoc-purpose">{screen.purpose}</p>
+          <SpecShot screen={screen} />
+          <SpecRows screen={screen} cols={spec.cols} />
+          <div className="dv-hdoc-cols">
+            <div><h4>{spec.labels.accept}</h4><ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul></div>
+            <div><h4>{spec.labels.tokens}</h4><ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul></div>
+            <div><h4>{spec.labels.code}</h4><ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul></div>
+          </div>
+        </section>
+      ))}
+      <div className="dv-hdoc-notes">
+        <p>{spec.shared}</p>
+        <p>{spec.open}</p>
+      </div>
+    </div>
+  );
+}
+
 export function HandoffSpec({ spec, auto = true }: { spec: SpecData; auto?: boolean }) {
   const screens = spec.screens;
   const [current, setCurrent] = useState(0);

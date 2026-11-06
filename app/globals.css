@@ -6134,4 +6134,41 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    stood out too much); the case colour stays only in marks and the active tab. */
 .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-held-plate, .dv-spec-panel, .dv-iter-step) { background: light-dark(#f3f3f5, #17181d); }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-held-plate .dv-reel, .dv-held-plate .dv-iter-step) { background: none; }
+/* Handoff as a document (owner): the case shows one screen as an excerpt; the spec page lists every
+   screen open, one after another. Still, no autoplay. */
+.dv-hdoc-purpose { margin: 0 0 20px; color: var(--dv-muted); font-size: 18px; line-height: 1.55; }
+.dv-hdoc-purpose b { margin-right: 12px; color: var(--dv-ink); font-weight: 500; }
+.dv-hdoc-shot { position: relative; overflow: hidden; border-radius: 16px; background: light-dark(#f3f3f5, #17181d); }
+.dv-hdoc-shot img { display: block; width: 100%; height: auto; }
+.dv-hdoc-pin { position: absolute; display: grid; place-items: center; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; background: var(--dv-deep, var(--case-accent)); color: #fff; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35); }
+.dv-hdoc-table { width: 100%; margin-top: 24px; border-collapse: collapse; font-size: 16px; line-height: 1.5; }
+.dv-hdoc-table th, .dv-hdoc-table td { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--dv-line); text-align: left; vertical-align: top; }
+.dv-hdoc-table thead th { padding-top: 0; color: var(--dv-muted); font-weight: 500; }
+.dv-hdoc-table tbody th { color: var(--dv-ink); font-weight: 500; }
+.dv-hdoc-table td { color: var(--dv-muted); }
+.dv-hdoc-table td:first-child { width: 36px; }
+.dv-hdoc-table td b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--dv-deep, var(--case-accent)); color: #fff; font-size: 12px; font-weight: 600; }
+.dv-hdoc-table tbody th { width: 22%; }
+.dv-hdoc-more { margin: 24px 0 0; font-size: 18px; font-weight: 500; }
+.dv-hdoc-toc ol { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0 0 64px; padding: 0; list-style: none; font-size: 16px; }
+.dv-hdoc-screen { scroll-margin-top: 96px; }
+.dv-hdoc-screen + .dv-hdoc-screen { margin-top: 120px; }
+.dv-hdoc-screen h3 { display: flex; align-items: center; gap: 14px; margin: 0 0 12px; font-size: var(--t-heading); font-weight: 500; }
+.dv-hdoc-screen h3 b { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: color-mix(in srgb, var(--case-accent) 20%, transparent); color: var(--case-accent); font-size: 16px; }
+.dv-hdoc-cols { display: grid; gap: 32px; margin-top: 32px; }
+.dv-hdoc-cols h4 { margin: 0 0 10px; color: var(--dv-ink); font-size: 16px; font-weight: 500; }
+.dv-hdoc-cols ul { display: grid; gap: 8px; margin: 0; padding-left: 18px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-hdoc-notes { display: grid; gap: 8px; margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--dv-line); color: var(--dv-muted); font-size: 16px; line-height: 1.55; }
+.dv-hdoc-notes p { margin: 0; }
+@media (min-width: 64rem) {
+  .dv-hdoc-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 47.99rem) {
+  .dv-hdoc-table thead { display: none; }
+  .dv-hdoc-table tr { display: grid; grid-template-columns: 32px 1fr; gap: 4px 8px; padding: 14px 0; border-bottom: 1px solid var(--dv-line); }
+  .dv-hdoc-table th, .dv-hdoc-table td { padding: 0; border: 0; }
+  .dv-hdoc-table td:first-child { grid-row: span 3; }
+  .dv-hdoc-table tbody th { width: auto; }
+  .dv-hdoc-pin { width: 18px; height: 18px; margin: -9px 0 0 -9px; font-size: 11px; }
+}
 
