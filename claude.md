@@ -1541,3 +1541,5 @@ Analysis holds and brings in one stage per scroll step (owner; supersedes FlowPl
 Korean case summaries use the English labels, like the English pages (owner): Problem / Solution / Impact on Devsign, Problem / Solution / Expected on Gemini (its English already says Expected until the test runs). Figma not updated.
 
 Korean survey chart tabs read as plain nouns: "AI 결과 신뢰도" / "가장 큰 불편" (were "AI를 믿을까" / "AI의 가장 큰 불만"). Figma not updated.
+
+Sketching lead (KO): "기능 후보 5개를 먼저 종이에 그려 봤다." (the "코드로 만들기 전에," opener read oddly). Figma not updated.
