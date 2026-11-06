@@ -280,8 +280,6 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
           {charts.map((chart, i) => (
             <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
               <p>{chart.title}</p>
-              {chart.note && <p className="dv-chart-source">{chart.note}</p>}
-              <ChartSource source={chart.source} />
             </div>
           ))}
         </div>
@@ -300,6 +298,11 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
           })}
         </div>
       </div>
+      {/* The note and the source sit small under the chart, not beside the finding (owner). */}
+      {(charts[current].note || charts[current].source) && <div className="dv-cycle-foot">
+        {charts[current].note && <p className="dv-chart-source">{charts[current].note}</p>}
+        <ChartSource source={charts[current].source} />
+      </div>}
     </div>
   );
 }
