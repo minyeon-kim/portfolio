@@ -4,7 +4,6 @@ import { SurveyCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
-import { DevsignNav } from "@/components/devsign-nav";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
@@ -326,21 +325,11 @@ function DevelopBlock({ block }: { block: Study }) {
 export function DevsignCase({ study, children }: { study: Study; children: ReactNode }) {
   const { overview, discover, define, develop, deliver, testing, takeaway, labels } = study;
   const ff = Boolean(study.findings);
-  const nav = [
-    { id: "overview", label: "Overview" },
-    { id: "discover", label: "Discover" },
-    { id: "define", label: "Define" },
-    { id: "develop", label: "Develop" },
-    { id: "deliver", label: "Deliver" },
-    { id: "testing", label: "Testing" },
-    { id: "takeaway", label: "Takeaway" },
-  ];
 
   // The tool review reads capability by capability, with Devsign's column first.
 
   return (
     <div className="dv">
-      <DevsignNav items={nav} />
 
       <Section id="overview" title="Overview">
         <p className="dv-headline reveal">
