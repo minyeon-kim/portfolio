@@ -26,17 +26,24 @@ export function HeaderShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let frame = 0;
+    let lastY = window.scrollY;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
       frame = 0;
       const header = ref.current;
       if (!header) return;
       const y = window.scrollY;
+      // It steps out of the way while reading down and comes back on any scroll up,
+      // so it never sits over the content being read. Small jitters are ignored.
+      const delta = y - lastY;
+      if (Math.abs(delta) > 6) {
+        header.toggleAttribute("data-hide", canFold && !menuOpen && delta > 0 && y > 160);
+        lastY = y;
+      }
+      if (y <= 160 || menuOpen) header.removeAttribute("data-hide");
       const fold = !canFold || menuOpen ? 0 : reduced.matches ? Number(y > FOLD_FROM) : Math.min(1, Math.max(0, (y - FOLD_FROM) / (FOLD_TO - FOLD_FROM)));
       header.style.setProperty("--fold", fold.toFixed(3));
       header.toggleAttribute("data-compact", fold > 0);
-      // Get in touch has faded out by here (globals.css).
-      header.toggleAttribute("data-folded", fold >= 0.3);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);

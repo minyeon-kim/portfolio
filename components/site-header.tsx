@@ -7,12 +7,12 @@ import { HeaderShell } from "./header-shell";
 import { SiteMenu } from "./site-menu";
 import { ThemeToggle } from "./theme-toggle";
 import { LangToggle } from "./lang-toggle";
-import { GetInTouch, SiteNav } from "./site-nav";
+import { SiteNav } from "./site-nav";
 
 const toMenu = (cases: CaseEntry[]) => cases.filter((c) => !c.meta.draft).map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title }));
 
-// The name in the middle; language, theme and the one clear action (Get in touch)
-// at the right; Menu at the left on every page. Phones keep Menu at the right.
+// The name in the middle; language and theme at the right; Menu at the left on every
+// page. Phones keep Menu at the right. Contact lives in the Menu and at the end of pages.
 export async function SiteHeader() {
   const [en, ko] = await Promise.all([getCases("en"), getCases("ko")]);
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
@@ -25,7 +25,6 @@ export async function SiteHeader() {
           <SiteNav resumeUrl={hasResume ? site.resumeUrl : undefined} />
           <LangToggle />
           <ThemeToggle />
-          <GetInTouch email={site.email} />
         </div>
         <SiteMenu
           contact={{

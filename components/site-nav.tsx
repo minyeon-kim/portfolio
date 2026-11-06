@@ -17,9 +17,3 @@ export function SiteNav({ resumeUrl }: { resumeUrl?: string }) {
     </nav>
   );
 }
-
-// The header's one filled button (md+): the thing a visitor is most likely here to do.
-export function GetInTouch({ email }: { email: string }) {
-  const locale = localeOf(usePathname() ?? "/");
-  return <a href={`mailto:${email}`} className="header-cta press">{ui[locale].getInTouch}</a>;
-}
