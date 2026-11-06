@@ -571,6 +571,101 @@ const specDwell = (text: string) => Math.min(8000, Math.max(4000, text.length * 
 // a pin jumps there, and nothing has to be pressed. It runs while 40% of it is on screen and holds
 // while the pointer is on the words, on keyboard focus, or on pause. `auto={false}` starts on pause
 // (the spec page is for looking things up). Reduced motion never plays; phones list all of it.
+// A number that counts up once when it comes into view ("100+" keeps its suffix). Static with
+// reduced motion; the final value is in the markup.
+export function CountUp({ value }: { value: string }) {
+  const match = value.match(/^(\D*)(\d+)(.*)$/);
+  const ref = useRef<HTMLElement>(null);
+  const [shown, setShown] = useState(value);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !match || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const [, pre, num, post] = match;
+    const end = Number(num);
+    let frame = 0;
+    const seen = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      seen.disconnect();
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / 1200);
+        const eased = 1 - Math.pow(1 - t, 3);
+        setShown(`${pre}${Math.round(end * eased)}${t === 1 ? post : ""}`);
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+      setShown(`${pre}0`);
+      frame = requestAnimationFrame(step);
+    }, { threshold: 0.6 });
+    seen.observe(el);
+    return () => { seen.disconnect(); cancelAnimationFrame(frame); };
+  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  return <strong ref={ref} className="dv-count" aria-label={value}><span aria-hidden="true">{shown}</span></strong>;
+}
+
+type AffinityGroup = [string, string, number];
+
+// Affinity mapping as motion (owner: show the grouping, not a photo of it): sticky notes start mixed
+// across the frame and, when it comes into view, travel into their theme's column, each column named
+// at its top. The notes carry no text: the motion shows the method, the real board is linked. Plays
+// once; Replay mixes them again. Reduced motion shows the grouped state.
+export function AffinityMotion({ groups, replay, board }: { groups: AffinityGroup[]; replay: string; board: { href: string; label: string } }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 0 });
+  const [grouped, setGrouped] = useState(false);
+  const [still, setStill] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setStill(reduced);
+    if (reduced) setGrouped(true);
+    const resize = new ResizeObserver(([e]) => setSize({ w: e.contentRect.width }));
+    resize.observe(el);
+    let timer = 0;
+    const seen = new IntersectionObserver(([e]) => { if (e.isIntersecting) { timer = window.setTimeout(() => setGrouped(true), 500); seen.disconnect(); } }, { threshold: 0.15 });
+    if (!reduced) seen.observe(el);
+    return () => { resize.disconnect(); seen.disconnect(); window.clearTimeout(timer); };
+  }, []);
+  const notes = groups.flatMap(([, color, n], g) => Array.from({ length: n }, (_, k) => ({ g, k, color })));
+  // Layout: columns of themes, two notes per row inside a column.
+  const w = size.w || 1200;
+  const cols = w >= 900 ? groups.length : w >= 560 ? 4 : 2;
+  const gap = w >= 900 ? 16 : 10;
+  const colW = (w - gap * (cols - 1)) / cols;
+  const noteW = (colW - 6) / 2;
+  const noteH = noteW * 0.8;
+  const labelH = w >= 900 ? 60 : 52;
+  const rowsPer = groups.map(([, , n]) => Math.ceil(n / 2));
+  const bandRows = Array.from({ length: Math.ceil(groups.length / cols) }, (_, r) => Math.max(...rowsPer.slice(r * cols, r * cols + cols)));
+  const bandTop = bandRows.map((_, r) => bandRows.slice(0, r).reduce((sum, rows) => sum + labelH + rows * (noteH + 6) + 32, 0));
+  const height = bandTop[bandTop.length - 1] + labelH + bandRows[bandRows.length - 1] * (noteH + 6);
+  const rand = (seed: number) => { const x = Math.sin(seed * 999.13) * 43758.5453; return x - Math.floor(x); };
+  const place = (g: number, k: number, i: number) => {
+    if (!grouped) return { x: rand(i + 1) * (w - noteW), y: rand(i + 77) * (height - noteH), r: (rand(i + 9) - 0.5) * 24 };
+    const c = g % cols;
+    const band = Math.floor(g / cols);
+    return { x: c * (colW + gap) + (k % 2) * (noteW + 6), y: bandTop[band] + labelH + Math.floor(k / 2) * (noteH + 6), r: 0 };
+  };
+  return (
+    <div className="dv-aff-motion dv-gap-40">
+      <div ref={root} className="dv-aff-stage" data-grouped={grouped || undefined} style={{ height }} aria-hidden="true">
+        {groups.map(([name, color], g) => (
+          <p key={name} className="dv-aff-label" style={{ left: (g % cols) * (colW + gap), top: bandTop[Math.floor(g / cols)], width: colW, "--c": color } as CSSProperties}>{name}</p>
+        ))}
+        {notes.map(({ g, k, color }, i) => {
+          const at = place(g, k, i);
+          return <i key={i} className="dv-aff-note" style={{ width: noteW, height: noteH, background: color, transform: `translate(${at.x}px, ${at.y}px) rotate(${at.r}deg)`, transitionDelay: still ? "0ms" : `${Math.round(rand(i + 31) * 500)}ms` } as CSSProperties} />;
+        })}
+      </div>
+      <ul className="sr-only">{groups.map(([name]) => <li key={name}>{name}</li>)}</ul>
+      <p className="dv-aff-foot">
+        {!still && <button type="button" className="press" onClick={() => { setGrouped(false); window.setTimeout(() => setGrouped(true), 700); }}>{replay}</button>}
+        <a className="link" href={board.href} target="_blank" rel="noreferrer">{board.label}</a>
+      </p>
+    </div>
+  );
+}
+
 // One screen of the spec as a still document part: the screenshot with numbered pins and, beside or
 // under it, the same numbers with element, behavior and states. Nothing plays by itself.
 function SpecShot({ screen, lit = -1, onPin }: { screen: SpecScreen; lit?: number; onPin?: (n: number) => void }) {
