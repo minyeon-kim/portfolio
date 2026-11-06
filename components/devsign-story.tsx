@@ -600,14 +600,44 @@ function SpecRows({ screen, cols, lit = -1, onRow }: { screen: SpecScreen; cols:
 // The case page shows one screen of the handoff spec as an excerpt and links to the full document
 // (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
 export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {
-  const screen = spec.screens.find((item) => item.id === screenId) ?? spec.screens[0];
+  const first = Math.max(0, spec.screens.findIndex((item) => item.id === screenId));
+  const [current, setCurrent] = useState(first);
   const [lit, setLit] = useState(-1);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const screen = spec.screens[current];
+  const pick = (i: number) => { setCurrent(i); setLit(-1); };
+  const onKeys = (event: React.KeyboardEvent) => {
+    const last = spec.screens.length - 1;
+    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    pick(next);
+    tabs.current[next]?.focus();
+  };
   return (
     <div className="dv-hdoc-excerpt dv-gap-40 reveal">
-      <p className="dv-hdoc-purpose"><b>{screen.tab}</b>{screen.purpose}</p>
-      <div className="dv-hdoc-pair">
-        <SpecShot screen={screen} lit={lit} onPin={setLit} />
-        <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+      <div className="dv-hdoc-tabs" role="tablist" aria-label={spec.labels.elements} onKeyDown={onKeys}>
+        {spec.screens.map((item, i) => (
+          <button key={item.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`hx-tab-${item.id}`} aria-selected={i === current} aria-controls="hx-panel" tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>
+            <b>{i + 1}</b>{item.tab}
+          </button>
+        ))}
+      </div>
+      <div id="hx-panel" role="tabpanel" aria-labelledby={`hx-tab-${screen.id}`} className="dv-hdoc-panel" key={screen.id}>
+        <p className="dv-hdoc-purpose">{screen.purpose}</p>
+        <div className="dv-hdoc-pair">
+          <SpecShot screen={screen} lit={lit} onPin={setLit} />
+          <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+        </div>
+        <div className="dv-hdoc-cols">
+          <div><h4>{spec.labels.accept}</h4><ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul></div>
+          <div><h4>{spec.labels.tokens}</h4><ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul></div>
+          <div><h4>{spec.labels.code}</h4><ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul></div>
+        </div>
+      </div>
+      <div className="dv-hdoc-notes">
+        <p>{spec.shared}</p>
+        <p>{spec.open}</p>
       </div>
       <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
     </div>
