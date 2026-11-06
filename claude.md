@@ -1566,3 +1566,5 @@ About photos (owner, 2026-11-07; supersedes "Portrait: IMG_3527", the At work ph
 Devsign Takeaway photo swapped at the owner's request: now IMG_2658 (Minyeon in navy at her laptop, a teammate in white leaning in and pointing at her screen; the owner approved publishing it with the teammate visible), 4:3, same file case-me-2.webp, caption "Going over a screen with a teammate." / "팀원과 함께 화면을 살펴보는 모습." Supersedes IMG_2697 in the note above.
 
 Landing dust (owner): the dot landscape sinks in the middle (y -= 0.5 * exp(-x² / 2.4), a soft bowl between the side ridges), the sky above it thins sooner and harder (skyFrom 0.06, ramp 0.6, down to 4% of the grains; supersedes skyFrom 0.3 / 12%), and the dark galaxy colours shift slightly (blue 0.38/0.6/1, violet 0.56/0.42/1, teal toward cyan 0.32/0.86/0.96, the pink touch now lilac 0.82/0.62/1). Light theme colours unchanged. Figma Main not updated.
+
+Landing sky thinning is for the middle only (owner: the sides lost their dust): from |clip x| 0.25 to 0.7 the start goes back to 0.3 with the 0.8 ramp and 12% kept, as before; only the middle uses 0.06 / 0.6 / 4%.
