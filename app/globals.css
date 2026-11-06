@@ -3245,7 +3245,8 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   header[data-intro] .header-cta { display: none; }
   /* The column already lists the pages, so the intro drops the Menu button too (owner). */
   header[data-intro] .header-menu { visibility: hidden; }
-  .home-picks ol { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
   /* Each case's hover, in metalab.com's own proportions. Gemini follows its The Atlantic
      state: portrait card at the bottom right, name left of centre, the sentence high.
      Devsign follows Midjourney: card at the top right of centre, name low, the sentence
@@ -6583,3 +6584,17 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .about-gallery-row { flex-direction: column; }
   .about-gallery-photo { flex: none !important; border-radius: 12px; }
 }
+
+/* Case pills: a 1px border of the project's colour whose light travels round the pill
+   (owner). A conic gradient turned by an animated angle, masked to the border. */
+@property --pill-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.home-pick[data-slug] { position: relative; --pill-c1: var(--accent); --pill-c2: var(--accent); }
+.home-pick[data-slug="devsign"] { --pill-c1: light-dark(#5b3fd6, #a594ff); --pill-c2: light-dark(#8a6dff, #7c62ff); }
+.home-pick[data-slug="gemini-privacy"] { --pill-c1: light-dark(#245cc0, #8fb4ff); --pill-c2: light-dark(#7b5cd6, #c5a8ff); }
+.home-pick[data-slug]::before { content: ""; position: absolute; inset: 0; padding: 1px; border-radius: inherit; pointer-events: none; background: conic-gradient(from var(--pill-a), transparent 0deg, var(--pill-c1) 60deg, var(--pill-c2) 150deg, transparent 240deg, transparent 360deg); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0.9; animation: pill-turn 6s linear infinite; transition: opacity 250ms ease; }
+.home-pick[data-slug="gemini-privacy"]::before { animation-delay: -3s; }
+.home-pick[data-slug]:hover, .home-pick[data-slug]:focus-visible, .home-pick[data-slug][data-active] { box-shadow: none; }
+.home-pick[data-slug]:hover::before, .home-pick[data-slug]:focus-visible::before, .home-pick[data-slug][data-active]::before { opacity: 1; }
+@keyframes pill-turn { to { --pill-a: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .home-pick[data-slug]::before { animation: none; --pill-a: 30deg; } }
+:root:not([data-theme="light"]) .home-pick[data-slug]::before { padding: 1.5px; }
