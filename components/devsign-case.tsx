@@ -137,22 +137,39 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           </figure>
         </div>
-        <div className="dv-iv-claims">
-          {interview.claims.map((c: { title: string; label?: string; quotes: string[][] }) => (
-            <div key={c.title} className="dv-iv-claim reveal">
-              {c.label && <p className="dv-iv-label">{c.label}</p>}
-              <ul>
-                {c.quotes.slice(0, 1).map(([quote, who]) => (
-                  <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
-                ))}
-              </ul>
+        {/* Three labelled rows: what we wanted to learn, who we met, what came out. */}
+        <div className="dv-iv-rows">
+          <section className="dv-iv-row reveal">
+            <h4 className="dv-iv-rowlabel">{interview.questionsLabel}</h4>
+            <ol className="dv-ivq">
+              {interview.questions.map((q: string, i: number) => (
+                <li key={q}><b>{interview.questionKeys[i]}</b><span>{q}</span></li>
+              ))}
+            </ol>
+          </section>
+          <section className="dv-iv-row reveal">
+            <h4 className="dv-iv-rowlabel">{interview.peopleLabel}</h4>
+            <ul className="dv-ivp">
+              {interview.participants.map(([id, role, team, exp]: string[]) => (
+                <li key={id}><b>{id}</b><strong>{role}</strong><span>{team} · {exp}</span></li>
+              ))}
+            </ul>
+          </section>
+          <section className="dv-iv-row reveal">
+            <h4 className="dv-iv-rowlabel">{interview.insightsLabel}</h4>
+            <div className="dv-iv-claims">
+              {interview.claims.map((c: { title: string; label?: string; quotes: string[][] }) => (
+                <div key={c.title} className="dv-iv-claim">
+                  {c.label && <p className="dv-iv-label">{c.label}</p>}
+                  <p className="dv-iv-insight">{c.title}</p>
+                  {c.quotes.slice(0, 1).map(([quote, who]) => (
+                    <blockquote key={quote}>“{quote}”<span>{who}</span></blockquote>
+                  ))}
+                </div>
+              ))}
             </div>
-          ))}
+          </section>
         </div>
-        {/* Method context in two quiet lines (owner: the block was still too wordy). */}
-        {interview.questions && <dl className="dv-iv-meta reveal">
-          <div><dt>{interview.peopleLabel}</dt><dd>{interview.participants.map(([id, role]: string[]) => `${id} ${role}`).join(" · ")}</dd></div>
-        </dl>}
       </div>
     </div>
   );
