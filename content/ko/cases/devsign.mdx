@@ -95,8 +95,8 @@ export const study = {
       charts: [
         {
           type: "donut",
-          tab: "AI 결과물 신뢰도",
-          title: "AI 결과물의 정확도를 믿는 개발자는 33%뿐이다.",
+          tab: "AI를 믿을까",
+          title: "AI가 만든 결과물이 정확하다고 믿는 개발자는 3명 중 1명(33%)뿐이다.",
           value: "33%",
           valueLabel: "믿는다",
           segments: [
@@ -108,15 +108,15 @@ export const study = {
         },
         {
           type: "bars",
-          tab: "AI 도구 불만",
-          title: "가장 큰 불만은 ‘거의 맞는데 조금 틀린’ 결과다.",
+          tab: "AI의 가장 큰 불만",
+          title: "개발자가 AI에 가장 많이 답답해한 건, 거의 맞지만 어딘가 조금씩 틀린 결과였다. 그래서 결국 사람이 하나하나 다시 확인한다.",
           bars: [
-            { label: "거의 맞는데 틀림", value: 66 },
-            { label: "디버깅이 더 걸림", value: 45.2 },
-            { label: "자신감이 줄어듦", value: 20 },
-            { label: "이해하기 어려움", value: 16.3 },
+            { label: "거의 맞지만 조금 틀린 결과", value: 66 },
+            { label: "AI 코드를 고치는 데 시간이 더 걸림", value: 45.2 },
+            { label: "스스로 문제를 푸는 자신감이 줄어듦", value: 20 },
+            { label: "코드가 왜 동작하는지 알기 어려움", value: 16.3 },
           ],
-          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "응답 31,476명, 복수 응답. 답변 7개 중 4개" },
+          source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "응답 31,476명. 여러 개를 고를 수 있는 질문이라 합이 100%를 넘고, 보기 7개 중 4개만 표시" },
         },
       ],
       problemsLabel: "글에서 반복된 문제",
