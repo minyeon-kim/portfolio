@@ -6342,4 +6342,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-iv-meta div { display: flex; flex-wrap: wrap; gap: 4px 16px; }
 .dv-iv-meta dt { min-width: 140px; color: var(--dv-muted); }
 .dv-iv-meta dd { margin: 0; color: var(--dv-ink); }
+/* Affinity map breathing room (owner: the top text was bunched): counts, then space, then the board;
+   the participant key sits under the notes. */
+.case-study .dv .dv-amap .dv-wall-steps { margin-bottom: 64px; }
+.case-study .dv .dv-amap-people { margin: 40px 0 0; }
+.case-study .dv .dv-amap-title { height: 40px; }
 
