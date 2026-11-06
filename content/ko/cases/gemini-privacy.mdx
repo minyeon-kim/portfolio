@@ -59,7 +59,7 @@ export const study = {
   },
   overview: {
     summary: {
-      label: "한눈에 보기",
+      label: "At a glance",
       items: [
         { tone: "red", label: "문제", title: "내 정보를 읽지만, 무엇을 썼는지 말하지 않는다", text: "2026년 1월 Personal Intelligence 기능이 나온 뒤로, 답변은 어떤 정보를 썼는지 말하지 않는다. 끄는 스위치는 두 곳에 나뉘어 있고, 지워졌는지도 확인할 수 없다." },
         { tone: "accent", label: "해결", title: "답변에서 바로 관리한다", text: "출처를 보고, 그 자리에서 끄고, 결과를 확인한다." },
@@ -72,10 +72,10 @@ export const study = {
       title: "Process · Double Diamond",
       body: "먼저 넓게 리서치하고, 문제를 한 번 다시 정의했다. 입력할 때 경고하기에서, 이미 연결된 것을 통제하기로.",
       stages: [
-        { name: "Discover", outcome: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모른다.", methods: ["경쟁 서비스 분석", "데스크 리서치", "심층 인터뷰"] },
-        { name: "Define", outcome: "인사이트 4개를 얻었고, 그중 하나가 문제를 다시 정하게 했다.", methods: ["어피니티 매핑", "페르소나", "HMW"], current: true },
-        { name: "Develop", outcome: "스케치 11개가 콘셉트 2개로 좁혀졌다.", methods: ["스케치", "콘셉트 피드백", "디자인 원칙"] },
-        { name: "Deliver", outcome: "테스트 중: 직접 확인하면 신뢰가 생길까?", methods: ["HTML 프로토타입", "사용성 테스트", "SUS · SEQ"] },
+        { name: "Discover", outcome: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모른다.", methods: ["Competitors", "Desk research", "Interviews"] },
+        { name: "Define", outcome: "인사이트 4개를 얻었고, 그중 하나가 문제를 다시 정하게 했다.", methods: ["Affinity map", "Personas", "HMW"], current: true },
+        { name: "Develop", outcome: "스케치 11개가 콘셉트 2개로 좁혀졌다.", methods: ["Sketching", "Feedback", "Design principles"] },
+        { name: "Deliver", outcome: "테스트 중: 직접 확인하면 신뢰가 생길까?", methods: ["HTML prototype", "Usability test", "SUS · SEQ"] },
       ],
       pivot: "입력할 때 경고 → 연결된 것을 통제",
     },
@@ -93,7 +93,7 @@ export const study = {
   discover: {
     desk: {
       method: "Secondary research",
-      title: "데스크 리서치",
+      title: "Desk research",
       text: "AI 서비스 5곳의 프라이버시 컨트롤을 비교하고, AI 메모리 UX 논문 6편을 읽었다.",
     },
     q1: {
@@ -137,7 +137,7 @@ export const study = {
       ],
     },
     q2: {
-      title: "서비스 비교",
+      title: "Service audit",
       label: "질문 2 · 지금의 컨트롤로 해결될까?",
       answer: "컨트롤은 두 곳에 나뉘어 있고, 어디에서도 끈 뒤에 무엇이 남는지 보여 주지 않는다.",
       auditLabel: "AI 서비스 5곳 · 컨트롤이 놓친 것",
@@ -148,7 +148,7 @@ export const study = {
       ],
     },
     synthesis: {
-      label: "종합",
+      label: "Synthesis",
       title: "통제는 네 지점에서 끊긴다.",
       withAi: "현재",
       gap: "공백",
@@ -161,7 +161,7 @@ export const study = {
     },
     interview: {
       method: "Primary research",
-      title: "심층 인터뷰",
+      title: "In-depth interview",
       lead: "걱정하지만 계속 쓴다.",
       text: "개인 정보를 매일 요청하는 사람과, AI에 건네는 사람을 만났다.",
       questionsLabel: "리서치 질문",
@@ -183,7 +183,7 @@ export const study = {
   define: {
     personas: {
       method: "사용자 정의",
-      title: "페르소나 · 저니맵",
+      title: "Persona & user journey map",
       lead: "대표 사용자(페르소나) 한 명을 만들고, 가장 중요한 순간 하나에 집중했다. 개인 정보가 답변에 나타나는 순간이다.",
       people: [
         {
@@ -210,14 +210,14 @@ export const study = {
     },
     affinity: {
       method: "리서치 분석",
-      title: "어피니티 매핑",
+      title: "Affinity mapping",
       lead: "불안이 가장 커진 순간은 정보를 입력할 때가 아니라, 답변에서 다시 나올 때였다.",
       funnel: [["79", "인터뷰 인용"], ["6", "테마"], ["4", "인사이트"]],
       board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "인터뷰 인용 79개를 테마 6개로 다시 묶은 어피니티 맵" },
     },
     problems: {
       method: "문제 정의",
-      title: "핵심 인사이트",
+      title: "Key insights",
       lead: "테마 6개에서 인사이트 4개가 나왔고, 그중 하나가 문제를 다시 정하게 했다.",
       lowest: "문제를 다시 정함",
       columns: ["인사이트", "의미"],
@@ -236,7 +236,7 @@ export const study = {
     },
     hmw: {
       method: "디자인 챌린지",
-      title: "어떻게 하면",
+      title: "How might we",
       question: "Gemini 사용자가 답변 속 개인 정보가 어디서 왔는지 보고, 그 자리에서 끄거나 삭제하고, 그 결과를 믿을 수 있게 하려면 어떻게 해야 할까?",
       successLabel: "성공의 기준",
       success: ["힌트 없이 출처와 스위치를 찾는다", "차단과 삭제의 차이를 자기 말로 설명한다"],
@@ -246,18 +246,18 @@ export const study = {
     blocks: [
       {
         method: "아이디에이션",
-        title: "개선 방향",
+        title: "Improvement directions",
         lead: "개선 방향 6개(기능 24개)를, 문제를 다시 정한 뒤 3개로 좁혔다.",
       },
       {
         method: "아이디에이션",
-        title: "스케치",
+        title: "Sketching",
         lead: "만들기 전에, ‘어떻게 하면’ 질문마다 한 줄씩 손으로 11개를 스케치했다.",
         image: { src: "/images/cases/gemini-privacy/sketches.webp", width: 1166, height: 2226, fit: 1184 / 625, alt: "HMW 질문별 손 스케치" },
       },
       {
         method: "아이디에이션",
-        title: "콘셉트 피드백",
+        title: "Concept feedback",
         lead: "콘셉트 4개 중, 설정 화면으로 보내지 않는 두 가지가 남았다.",
         text: "남긴 것: 바로 끄기, 채팅으로 삭제하기. 뺀 것: 파일별 보관 기간, 카테고리 대시보드.",
         images: [
@@ -267,7 +267,7 @@ export const study = {
       },
       {
         method: "선별",
-        title: "빈틈에서 나온 기능",
+        title: "Features from gaps",
         lead: "기능마다 Discover에서 찾은 빈틈 하나에 답하고, 세 기능 모두 답변에서 바로 쓴다.",
         featuresLabel: "핵심 기능 3개",
         features: [
@@ -279,13 +279,13 @@ export const study = {
       {
         rule: true,
         method: "구조",
-        title: "화면 뒤의 두 가지 규칙",
+        title: "Two rules behind the screens",
         lead: "출처마다 할 수 있는 일을 보여 주고, 한 단계씩 펼친다.",
         text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 된다.",
       },
       {
         method: "구조",
-        title: "사용자 흐름",
+        title: "User flow",
         lead: "유나의 하루에서 나온 두 시나리오.",
         text: "A: 답변에서 바로 출처를 끈다. B: Gemini에게 잊어 달라고 한 뒤 확인한다.",
       },
@@ -293,7 +293,7 @@ export const study = {
   },
   deliver: {
     method: "최종 디자인",
-    title: "프로토타입",
+    title: "Prototype",
     lead: "답변 안에서 보고, 끄고, 확인한다.",
     text: "HTML/JS로 프로토타입을 만들었다. 진행자 모드와 참여자 모드가 있고, 모든 클릭을 기록한다.",
     changes: [
@@ -305,7 +305,7 @@ export const study = {
   },
   testing: {
     method: "검증",
-    title: "사용성 테스트 · 진행 중",
+    title: "Usability test · in progress",
     lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",
     usability: {
       method: "테스트 계획",
@@ -352,7 +352,7 @@ export const study = {
       { lead: "고정된 흐름", text: "채팅의 자유로운 요청은 테스트하지 않았다." },
     ],
     next: {
-      label: "다음 단계",
+      label: "Next step",
       title: "사용성 테스트를 마치고, 채팅에서 삭제를 어떻게 발견하게 할지, 카테고리별 보관 기간, 여러 출처가 합쳐질 때의 위험을 디자인한다.",
       text: "성공 기준 2(차단과 삭제를 자기 말로 설명하기)를 여기서 측정한다.",
       chips: ["신뢰 측정", "발견 가능성 테스트", "합쳐진 데이터의 위험 표시"],
