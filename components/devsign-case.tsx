@@ -7,7 +7,7 @@ import { DevsignCompare } from "@/components/devsign-compare";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
-import { CountUp, AffinityMotion, AffinityWall, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -396,7 +396,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...define.affinity} ff={ff} />
           {/* The process first: how many statements became how many problems, and the board itself. */}
           {define.affinity.wall
-            ? <AffinityWall wall={define.affinity.wall} problems={define.problems.items.map((item: { title: string }) => item.title)} funnel={define.affinity.funnel} />
+            ? <AffinityMap wall={define.affinity.wall} problems={define.problems.items} people={discover.interview?.participants ?? []} funnel={define.affinity.funnel} />
             : <ol className="dv-funnel dv-gap-40 reveal">
             {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
           </ol>}
