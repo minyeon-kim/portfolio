@@ -1446,3 +1446,4 @@ Devsign usability block (findings first, with charts): the block keeps only its 
 
 Landing (≥64rem) statement moved a little left and down (left 31%, bottom 19%, Korean 16%; was 34% / 22% / 19%) and the note a little right (left 62%, was 59.5%), at the owner's request. Figma Main not updated.
 Discover calmer (owner: too much to look at): Analysis rows are one sentence each (`synthesis.rows` { stage, gap }, no `before` on Devsign; EN/KO rewritten to stand alone), and the interview claims show only their quote and who (claim titles and the photo caption off the page; titles stay in the MDX as keys). Figma not updated.
+Blocks inside a stage are clamp(200px, 30svh, 288px) apart on desktop for both cases (owner: two blocks on one screen looked busy; supersedes 128). Short blocks (Analysis) can still share a screen with the next at 1440x900. Figma not updated.

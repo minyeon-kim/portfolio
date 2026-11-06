@@ -5987,7 +5987,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 /* Develop trial, second pass (owner: text on the column's left edge, shorter, flow without its two
    boxes, a lighter canvas table). */
 @media (min-width: 64rem) {
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: 128px; --sp-part: 48px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: clamp(200px, 30svh, 288px); --sp-part: 48px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 72px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view, .dv-vpc-title) { margin-top: 48px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-fc-box { fill: none; }
