@@ -76,7 +76,7 @@ function Insights({ discover }: { discover: Study }) {
           <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
         </section>
         {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
-        <section className="dv-evbox dv-posts">
+        <section className="dv-posts">
           <div className="dv-posts-head reveal">
             <strong>{q1.communityCount}</strong>
             <div>
