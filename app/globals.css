@@ -5711,3 +5711,18 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .case-study[data-project="gemini"] :is(.dv-cycle-plate, .dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step, .dv-evbox) {
   --plate-a: light-dark(#f2f6ff, #151d36); --plate-b: light-dark(#dde8fd, #1d2d5e); --dv-muted: light-dark(#53607a, #b3c0dc);
 }
+/* Devsign purple, one system (owner: the purples were all different). Four roles, nothing else:
+   words in the accent (#b3a5ff dark / #5b3fd6 light), marks such as chart shapes, bars, lines
+   and dots in the mark colour (--dv-chart-fill: #7c62ff / #5b3fd6), numbered badges and solid
+   surfaces carrying white text in the deep purple #5b3fd6, and the plates. The two emphasis
+   surfaces (Problem statement, Iteration 1 To-be) share one gradient from the deep purple into
+   the plate's end colour. Tints stay mixes of the accent. */
+.case-study[data-project="devsign"] {
+  --dv-deep: #5b3fd6;
+  --dv-deep-surface: radial-gradient(80% 130% at 50% 0%, #5b3fd6 0%, transparent 72%), #2c2460;
+}
+.case-study[data-project="devsign"] :is(.dv-spec-bars i, .dv-spec-bars button[data-done]::before, .dv-trust-legend [data-on] i, .dv-journey-legend button:not([data-line="developer"])::before, .dv-insight-stat b, .dv-ut-gauge i, .dv-meter-bar i, .dv-flow-stage::before, .dv-reel-name i, .dv-handoff-steps button i, .dv-mark[data-on]) { background: var(--dv-chart-fill); }
+.case-study[data-project="devsign"] :is(.dv-journey-designer, .dv-sus-value, .dv-donut-value, .dv-trust-seg[data-on], .dv-trust-flash, .dv-fc-key, .dv-diamond-current, .dv-diamond-callout, .dv-wf-line, .dv-wf-hub) { stroke: var(--dv-chart-fill); }
+.case-study[data-project="devsign"] :is(.dv-svg-accent, .dv-svg-dot, .dv-journey-badge circle, .dv-wf-head) { fill: var(--dv-chart-fill); }
+.case-study[data-project="devsign"] :is(.dv-spec-pin, .dv-spec-rows b, .dv-spec-table b, .dv-spec-el h4 b, .dv-checks span, .dv-point-title b, .dv-iter-side[data-side="b"] .dv-iter-tag, .dv-prototype-link, .dv-show-points li[data-on] b, .dv-handoff-steps button[aria-current] b) { background: var(--dv-deep); color: #ffffff; }
+.case-study[data-project="devsign"] :is(.dv-core, .dv-iter-card[data-side="b"], .dv-iter-card[data-side="b"] .dv-iter-plate) { background: var(--dv-deep-surface); }
