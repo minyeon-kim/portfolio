@@ -146,7 +146,7 @@ function Insights({ discover }: { discover: Study }) {
             <div key={c.title} className="dv-iv-claim reveal">
               <h4>{c.title}</h4>
               <ul>
-                {c.quotes.map(([quote, who]) => (
+                {c.quotes.slice(0, 1).map(([quote, who]) => (
                   <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
                 ))}
               </ul>
