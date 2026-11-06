@@ -6558,3 +6558,8 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .dv-me-photo img { aspect-ratio: 4 / 3; object-position: 70% 50%; }
   .dv .dv-me-photo + .dv-glance-block { margin-top: 64px; }
 }
+
+/* Takeaway photo of Minyeon: 4:3, at the text measure, under the statement. */
+.dv .dv-figure.dv-me-photo-tk { max-width: 800px; margin: 64px 0 0; }
+.dv-me-photo-tk img { aspect-ratio: 4 / 3; object-position: 50% 50%; }
+@media (max-width: 47.99rem) { .dv .dv-figure.dv-me-photo-tk { margin-top: 32px; } }
