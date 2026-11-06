@@ -212,18 +212,18 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
         </OpenFrame>
       </div>
       <p className="dv-vpc-title reveal">{overviewLabel}</p>
-      <div className="dv-vpc-pairs reveal">
-        <p className="dv-vpc-head" aria-hidden="true"><span>{painLabel}</span><i /><span>{reliefLabel}</span><i /><span>{featureLabel}</span></p>
+      {/* One card per feature, read top to bottom: the pain heard, the idea that answers it, the feature it became. */}
+      <ol className="dv-vpc-cards reveal">
         {rows.map((c) => (
-          <p key={c.id} className="dv-vpc-pair">
-            <span>{c.pain}</span>
-            <i aria-hidden="true">→</i>
-            <span>{c.name}</span>
-            <i aria-hidden="true">→</i>
-            <b>{c.to}</b>
-          </p>
+          <li key={c.id}>
+            <div className="dv-vpc-step"><span>{painLabel}</span><p>“{c.pain}”</p></div>
+            <i className="dv-vpc-down" aria-hidden="true" />
+            <div className="dv-vpc-step"><span>{reliefLabel}</span><p>{c.name}</p></div>
+            <i className="dv-vpc-down" aria-hidden="true" />
+            <div className="dv-vpc-step dv-vpc-feature"><span>{featureLabel}</span><b>{c.to}</b></div>
+          </li>
         ))}
-      </div>
+      </ol>
       <ul className="sr-only">
         {others.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>

@@ -4083,18 +4083,19 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-vpc-view { overflow: hidden; border-radius: var(--dv-card-radius); background: #fbfbfb; }
 .dv-vpc-view img { display: block; width: 100%; height: auto; }
 .dv-vpc-title { margin-top: 56px; color: var(--dv-ink); font-size: 18px; font-weight: 600; line-height: 1.4; }
-.dv-vpc-pairs { --vpc-cols: minmax(0, 1.3fr) 24px minmax(0, 1fr) 24px minmax(0, 0.7fr); margin-top: 16px; }
-.dv-vpc-head, .dv-vpc-pair { display: grid; grid-template-columns: var(--vpc-cols); gap: 16px; align-items: baseline; }
-.dv-vpc-head { padding-bottom: 12px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
-.dv-vpc-pair { padding-block: 16px; border-top: 1px solid var(--dv-card-line); color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.45; }
-.dv-vpc-pair > i { color: var(--dv-muted); font-style: normal; text-align: center; }
-.dv-vpc-pair > b { color: var(--case-accent); font-weight: 600; }
-@media (max-width: 47.99rem) {
-  .dv-vpc-title { margin-top: 40px; }
-  .dv-vpc-head { display: none; }
-  .dv-vpc-pair { display: flex; flex-direction: column; gap: 2px; font-size: 16px; }
-  .dv-vpc-pair > i { display: none; }
-  .dv-vpc-pair > span:first-child { color: var(--dv-muted); }
+.dv-vpc-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0 0; padding: 0; list-style: none; }
+.dv-vpc-cards > li { display: grid; grid-template-rows: subgrid; grid-row: span 5; gap: 0; padding: 28px; border-radius: var(--dv-card-radius); background: light-dark(#f3f2f8, #17181d); }
+.dv-vpc-step > span { display: block; margin-bottom: 6px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.case-study .dv .dv-vpc-step > p { margin: 0; color: var(--dv-ink); font-size: 18px; font-weight: 400; line-height: 1.5; word-break: keep-all; text-wrap: pretty; }
+.case-study .dv .dv-vpc-step:first-child > p { font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
+.dv-vpc-down { position: relative; display: block; width: 2px; height: 40px; margin: 12px 0 12px 7px; background: color-mix(in srgb, var(--dv-ink) 22%, transparent); }
+.dv-vpc-down::after { content: ""; position: absolute; left: -4px; bottom: 0; width: 8px; height: 8px; border-right: 2px solid color-mix(in srgb, var(--dv-ink) 40%, transparent); border-bottom: 2px solid color-mix(in srgb, var(--dv-ink) 40%, transparent); transform: rotate(45deg); }
+.dv-vpc-feature { align-self: end; padding-top: 16px; border-top: 1px solid var(--dv-card-line, var(--line)); }
+.dv-vpc-feature > b { display: block; color: var(--case-accent); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.25; }
+@media (max-width: 63.99rem) {
+  .dv-vpc-cards { grid-template-columns: minmax(0, 1fr); }
+  .dv-vpc-cards > li { grid-template-rows: none; grid-row: auto; padding: 24px; }
+  .dv-vpc-down { height: 24px; }
 }
 
 /* Usability results: the goal and its verdict, the other scores beside it, what it meant under both. */
@@ -5976,7 +5977,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
     --txt-in: 0px;
     --bleed: min(1640px, calc(100vw - 96px));
   }
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-section-head, .dv-block, .dv-vpc-title, .dv-vpc-pairs) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-section-head, .dv-block, .dv-vpc-title) {
     margin-left: var(--txt-in); max-width: 800px;
   }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { max-width: none; }
@@ -6000,10 +6001,6 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 72px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view, .dv-vpc-title) { margin-top: 48px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-fc-box { fill: none; }
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-head { display: none; }
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair { padding-block: 10px; border-top: 0; }
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair :is(span, i) { color: var(--dv-muted); }
-  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-vpc-pair > b { font-size: 18px; font-weight: 500; }
 }
 /* Every stage: boards and fitted images sit straight on the page (no plate), at the one wide width. */
 @media (min-width: 64rem) {
