@@ -138,7 +138,7 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           </figure>
         </div>
-        {/* Three labelled rows: what we wanted to learn, who we met, what came out. */}
+        {/* What we wanted to learn and who we met; the insights live in Define (owner). */}
         <div className="dv-iv-rows">
           <section className="dv-iv-row reveal">
             <h4 className="dv-iv-rowlabel">{interview.questionsLabel}</h4>
@@ -155,20 +155,6 @@ function Insights({ discover }: { discover: Study }) {
                 <li key={id}><b>{id}</b><strong>{role}</strong><span>{team} · {exp}</span></li>
               ))}
             </ul>
-          </section>
-          <section className="dv-iv-row reveal">
-            <h4 className="dv-iv-rowlabel">{interview.insightsLabel}</h4>
-            <div className="dv-iv-claims">
-              {interview.claims.map((c: { title: string; label?: string; quotes: string[][] }) => (
-                <div key={c.title} className="dv-iv-claim">
-                  {c.label && <p className="dv-iv-label">{c.label}</p>}
-                  <p className="dv-iv-insight">{c.title}</p>
-                  {c.quotes.slice(0, 1).map(([quote, who]) => (
-                    <blockquote key={quote}>“{quote}”<span>{who}</span></blockquote>
-                  ))}
-                </div>
-              ))}
-            </div>
           </section>
         </div>
       </div>
