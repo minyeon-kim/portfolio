@@ -152,9 +152,10 @@ export const ui = {
     welcome: "무엇을 살펴보시겠습니까?",
     askPlaceholder: "프로젝트에 대해 물어보세요",
     askWork: "작업에 대해 물어보세요",
-    heroLine: "복잡한 제품을 처음부터 끝까지 디자인합니다",
+    // The display line stays English on both pages, like the site labels (owner): its serif is a Latin face.
+    heroLine: "Designing complex products, end to end",
     city: "서울",
-    heroEmphasis: "복잡한",
+    heroEmphasis: "complex",
     heroParagraph: "보안 컨설턴트 출신으로, AI와 함께 리서치부터 프로토타입까지 직접 하는 프로덕트 디자이너입니다.",
     scrollHint: "또는 스크롤해서 작업 보기 ↓",
     caseStudies: "케이스 스터디 {n}개",

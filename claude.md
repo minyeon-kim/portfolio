@@ -1454,3 +1454,5 @@ Analysis is a vertical rail on desktop (owner: four columns read sideways; super
 
 
 Devsign user flow appears in reading order (owner; `FlowPlay`, components/flow-play.tsx): once 35% of the chart is on screen, A's title, its steps and arrows, its "no" running down into B (640ms), then B's title and steps, each part 150ms after the last (boxes and words rise 10px in 420ms, arrows draw in 320ms; order in FC_ORDER / FC_EDGE_ORDER / FC_HANDOFF_ORDER), about 3.4s in all, once. The parts are hidden only after the script arms them, so no JS and reduced motion show the whole chart. Phones keep the list. Figma not updated.
+
+Landing text back where it was (statement left 34% / bottom 22%, Korean 19%; note left 59.5%), owner. The Korean page shows the English display line too ("Designing complex products, end to end", emphasis complex; the tagline wrap is lang="en", so it takes the English size and two lines); the note stays Korean. The dot landscape is narrower: wave heights 0.29 / 0.1 (were 0.42 / 0.14), side ridges 0.85 (1.2), row tilt 0.3 (0.42). Figma Main not updated.
