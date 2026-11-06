@@ -565,7 +565,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="deliver" title="Deliver">
-        <div>
+        <div className="dv-deliver-intro">
           <Block {...deliver} ff={ff} />
           {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
         </div>

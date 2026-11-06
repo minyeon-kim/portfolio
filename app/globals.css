@@ -6022,6 +6022,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
     min-height: calc(100svh - 240px);
   }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: 160px; }
+  /* The prototype line leads straight into the features (owner). */
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-deliver-intro { min-height: 0 !important; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-deliver-intro + * { margin-top: 96px; }
 }
 /* Stages get more room than the blocks inside them (owner: the sections felt cramped; the stage
    title sat 72px over its first block while blocks were 160px and a screen apart). Desktop only. */
