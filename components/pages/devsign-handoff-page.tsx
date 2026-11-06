@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HandoffSpec } from "@/components/devsign-story";
+import { HandoffDoc, HandoffSpec } from "@/components/devsign-story";
 import { IaTree, type IaTreeData } from "@/components/devsign-diagrams";
 import { Wireflow } from "@/components/devsign-wireflow";
 import { SiteFooter } from "@/components/site-footer";
@@ -44,7 +44,7 @@ export async function HandoffPage({ locale }: { locale: Locale }) {
           <p className="dv-spec-lead">{handoff.lead}</p>
           <Wireflow nodes={handoff.nodes} label={handoff.lead} />
           <h2 className="dv-spec-part">{spec.screensLabel}</h2>
-          <HandoffSpec spec={spec} auto={false} />
+          <HandoffDoc spec={spec} />
         </section>
       </div>
       <SiteFooter />
