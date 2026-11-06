@@ -5861,3 +5861,15 @@ li[data-on] > .about-turn-now { opacity: 1; translate: 0 0; transition-delay: 32
 }
 
 .about-work a.about-work-card { padding: 0; }
+/* Iteration 1, As-is against To-be (owner: the two should differ in colour, and the clips felt slow
+   with no sense of change): As-is sits on a neutral charcoal, To-be keeps the deep case colour.
+   The clips play at 1.6x, one at a time; the waiting card's recording fades back to grey, so the eye
+   follows the turn from As-is to To-be, and the card taking its turn settles in from a small dip. */
+.case-study .dv .dv-iter-card[data-side="a"] { background: linear-gradient(115deg, light-dark(#f3f3f5, #1c1d22), light-dark(#e8e8ec, #25262c)); }
+.dv-iter-card video { transition: opacity 400ms var(--ease), filter 400ms var(--ease); }
+.dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) video { opacity: 0.4; filter: grayscale(1); }
+.dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) figcaption { opacity: 0.55; }
+.dv-iter-card figcaption { transition: opacity 400ms var(--ease); }
+.dv-iter-card[data-on] { animation: dv-iter-turn 500ms var(--ease) both; }
+@keyframes dv-iter-turn { from { scale: 0.985; } }
+@media (prefers-reduced-motion: reduce) { .dv-iter-card[data-on] { animation: none; } }

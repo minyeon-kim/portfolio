@@ -233,6 +233,9 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
 
 // A smaller iteration: As-is and To-be side by side as two cards, the same part of the screen at
 // one shape, so the difference reads at a glance. Only To-be sits on the case's colour.
+// Faster than real time, so the change from one screen to the other reads as one beat.
+const PAIR_RATE = 1.6;
+
 export function IterationPair({ before, after, labels }: { before: PairSide; after: PairSide; labels: { asIs: string; toBe: string } }) {
   const root = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
@@ -255,7 +258,7 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
     if (manual) return;
     videos.current.forEach((v, i) => {
       if (!v) return;
-      if (i === turn && onScreen && near) { v.currentTime = 0; v.play().catch(() => setManual(true)); }
+      if (i === turn && onScreen && near) { v.currentTime = 0; v.playbackRate = PAIR_RATE; v.play().catch(() => setManual(true)); }
       else { v.pause(); if (v.currentTime) v.currentTime = 0; }
     });
   }, [turn, onScreen, near, manual]);
