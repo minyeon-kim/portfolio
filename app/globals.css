@@ -6007,4 +6007,13 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
    the blurred tile says it, and the alt text names it). */
 .case-study .dv .dv-flow p b { font-weight: 500; }
 .case-study .dv .dv-iv-claim blockquote { margin-top: 0; }
-
+/* One block per screen (owner, after metalab.com: two blocks on one screen looked busy). On desktop,
+   every block unit (the element whose first child is a block's label + finding) is at least about a
+   screen tall, content at its top and the rest left empty, so the next block starts below the fold;
+   taller units just grow. The normal gap between blocks stays on top of that. */
+@media (min-width: 64rem) and (min-height: 700px) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :has(> .dv-block:first-child) {
+    min-height: calc(100svh - 240px);
+  }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section { --sp-block: 160px; }
+}
