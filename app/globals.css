@@ -6071,4 +6071,15 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study .dv ol.dv-flow > li .dv-flow-stage { animation-name: dv-flow-lit-accent; }
 } } }
 @keyframes dv-flow-lit-accent { from { color: var(--dv-muted); } to { color: var(--case-accent); } }
+/* Survey and community posts are two pieces, not one crowded block (owner): the posts start a screen
+   of their own below the chart, and the quotes are a size down with more air between rows. */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-cycle-card + .dv-posts { margin-top: clamp(200px, 30svh, 288px); }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-posts { min-height: calc(100svh - 240px); }
+  .case-study .dv .dv-posts-list li { padding-block: 36px; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-posts .dv-posts-list li blockquote { font-size: var(--t-item); line-height: 1.45; }
+}
+/* One hierarchy for chart blocks (owner): the block finding is the heading (statement size); the
+   sentence beside each chart is its caption, a step down at item size, so the two never compete. */
+.case-study .dv .dv-cycle-plate .dv-cycle-text p:first-child { font-size: var(--t-item); font-weight: 500; line-height: 1.45; }
 
