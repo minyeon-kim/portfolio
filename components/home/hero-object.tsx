@@ -318,14 +318,15 @@ void main() {
   vFaint *= min(px, 1.0);
   // The case's paragraph stays readable: dust behind it (with a soft margin)
   // all but disappears. clearRect is its box in clip space (x0, y0, x1, y1).
-  vec2 m = vec2(0.05, 0.08);
   for (int i = 0; i < 4; i++) {
     vec4 c = clearRect[i];
+    // The note gets a wider soft edge, so the dust thins around it too, not only under the letters.
+    vec2 m = i == 1 ? vec2(0.12, 0.22) : vec2(0.05, 0.08);
     float inside = smoothstep(c.x - m.x, c.x, s.x) * smoothstep(c.z + m.x, c.z, s.x)
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
     // The last box is the big name: its form still shows through.
     // The landing's note (slot 1) only thins the dust, so the band still passes behind it.
-    vFaint *= 1.0 - (i == 3 ? 0.55 : i == 1 ? 0.75 : 0.85) * inside;
+    vFaint *= 1.0 - (i == 3 ? 0.55 : i == 1 ? 0.88 : 0.85) * inside;
   }
   px *= mix(0.9, 1.0, smoothstep(0.3, 0.5, vDepth));
   // Flying through: dust grows as the camera nears it.
