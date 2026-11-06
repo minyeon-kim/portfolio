@@ -156,7 +156,7 @@ export const ui = {
     heroLine: "Designing complex products, end to end",
     city: "서울",
     heroEmphasis: "complex",
-    heroParagraph: "보안 컨설턴트 출신으로, AI와 함께 리서치부터 프로토타입까지 직접 하는 프로덕트 디자이너입니다.",
+    heroParagraph: "보안 컨설턴트 출신으로,\nAI와 함께 리서치부터 프로토타입까지\n직접 하는 프로덕트 디자이너입니다.",
     scrollHint: "또는 스크롤해서 작업 보기 ↓",
     caseStudies: "케이스 스터디 {n}개",
     askAnother: "다른 질문",

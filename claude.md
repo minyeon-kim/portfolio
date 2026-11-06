@@ -1578,3 +1578,5 @@ Landing case pills are back to 32px, 0 16px, 16px Regular, 6px apart (owner; sup
 Case pill fill follows its project too (owner: the neutral grey didn't sit with the coloured border): 14% of the pill's second colour over a 55% dark (or white) glass, 24% on hover, focus or the shown case. Figma Main not updated.
 
 Both case pills share one fill (`--pill-fill`, #8c8cff dark / #6f5fe6 light, mixed 14% / 24% as before) so neither reads stronger; only the moving borders keep the project colours (owner). The landing note stays left-aligned inside a box whose right edge is on the page inset.
+
+Korean landing note breaks into three even lines on 64rem and up ("보안 컨설턴트 출신으로, / AI와 함께 리서치부터 프로토타입까지 / 직접 하는 프로덕트 디자이너입니다."): the breaks are \n in `ui.heroParagraph` (KO), held by `white-space: pre-line` on `.home-note-default` only at that width, so phones flow it as one paragraph. The note stays Korean on the Korean page (owner).
