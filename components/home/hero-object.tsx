@@ -324,7 +324,8 @@ void main() {
     float inside = smoothstep(c.x - m.x, c.x, s.x) * smoothstep(c.z + m.x, c.z, s.x)
       * smoothstep(c.y - m.y, c.y, s.y) * smoothstep(c.w + m.y, c.w, s.y);
     // The last box is the big name: its form still shows through.
-    vFaint *= 1.0 - (i == 3 ? 0.55 : 0.85) * inside;
+    // The landing's note (slot 1) only thins the dust, so the band still passes behind it.
+    vFaint *= 1.0 - (i == 3 ? 0.55 : i == 1 ? 0.6 : 0.85) * inside;
   }
   px *= mix(0.9, 1.0, smoothstep(0.3, 0.5, vDepth));
   // Flying through: dust grows as the camera nears it.
@@ -695,6 +696,12 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         clear[at] = ((box.left - c.left) / c.width) * 2 - 1; clear[at + 2] = ((box.right - c.left) / c.width) * 2 - 1;
         clear[at + 1] = 1 - ((box.bottom - c.top) / c.height) * 2; clear[at + 3] = 1 - ((box.top - c.top) / c.height) * 2;
       });
+      // The landing's note, on wide screens while no case is shown: the dust thins behind it.
+      const note = wideStage() ? document.querySelector<HTMLElement>(".home-note:not([data-swap]) .home-note-default")?.getBoundingClientRect() : undefined;
+      if (note && note.width > 0) {
+        clear[4] = ((note.left - c.left) / c.width) * 2 - 1; clear[6] = ((note.right - c.left) / c.width) * 2 - 1;
+        clear[5] = 1 - ((note.bottom - c.top) / c.height) * 2; clear[7] = 1 - ((note.top - c.top) / c.height) * 2;
+      } else clear.fill(9, 4, 8);
       if (!boxes.length) { clear.fill(9, 0, 4); return; }
       clear[0] = ((Math.min(...boxes.map((r) => r.left)) - c.left) / c.width) * 2 - 1; clear[2] = ((Math.max(...boxes.map((r) => r.right)) - c.left) / c.width) * 2 - 1;
       clear[1] = 1 - ((Math.max(...boxes.map((r) => r.bottom)) - c.top) / c.height) * 2; clear[3] = 1 - ((Math.min(...boxes.map((r) => r.top)) - c.top) / c.height) * 2;
