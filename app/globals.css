@@ -6697,8 +6697,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 @media (prefers-reduced-motion: reduce) { .dv-axb-note { transition: none; } }
 
 /* About hero after superhuman.com (owner): the photo fills the screen under the header,
-   the headline and actions sit centred over its top, and glass cards float on the plain
-   wall at the right. Always light-on-dark over the photo, whatever the theme. */
+   with the headline, a line and actions over it, and glass cards floating along the
+   bottom. Always light-on-dark over the photo, whatever the theme. On desktop the photo
+   is a tall profile looking right, so the copy sits on the plain wall she faces. */
 .about-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; height: 100svh; min-height: 620px; overflow: hidden; color: #fff; }
 @media (min-width: 48rem) { .about-hero { margin-top: -64px; } }
 .about-hero-photo { position: absolute; inset: 0; z-index: -1; background: #16171c; }
@@ -6716,18 +6717,24 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .about-hero-actions a[data-primary] { background: #fff; color: #0e1111; }
 .about-hero-actions a:focus-visible, .about-float:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .about-floats { display: none; }
+@keyframes about-float-in { from { opacity: 0; transform: translateY(16px); } }
 @media (min-width: 64rem) {
+  .about-hero { align-items: stretch; }
+  .about-hero-copy { width: min(720px, 42vw); margin: auto 0 auto 50%; padding-top: 0; text-align: left; translate: 0 -6svh; }
+  .about-hero-title { font-size: clamp(44px, min(4.4vw, 8svh), 76px); }
+  .about-hero-subtitle { margin-inline: 0; max-width: 520px; }
+  .about-hero-actions { justify-content: flex-start; }
+  .about-hero-photo::after { background:
+    linear-gradient(90deg, rgb(10 11 20 / 0.08) 0%, rgb(10 11 20 / 0.12) 40%, rgb(10 11 20 / 0.5) 70%, rgb(10 11 20 / 0.55) 100%),
+    linear-gradient(180deg, rgb(10 11 20 / 0.45) 0%, rgb(10 11 20 / 0) 22%, rgb(10 11 20 / 0) 70%, rgb(10 11 20 / 0.6) 100%); }
   .about-floats { display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-  .about-float { position: absolute; display: grid; gap: 6px; width: 280px; margin: 0; padding: 18px 20px; border-radius: 16px; background: rgb(18 20 28 / 0.46); -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3); color: #fff; text-decoration: none; pointer-events: auto; transition: translate 250ms var(--ease), background-color 150ms var(--ease); }
+  .about-float { position: absolute; bottom: 6%; display: grid; gap: 6px; min-width: 220px; margin: 0; padding: 18px 20px; border-radius: 16px; background: rgb(18 20 28 / 0.46); -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3); color: #fff; text-decoration: none; pointer-events: auto; transition: translate 250ms var(--ease), background-color 150ms var(--ease); }
   .about-float-label { color: rgb(255 255 255 / 0.68); font-size: 14px; line-height: 1.4; }
-  .about-float-title { display: inline-flex; align-items: center; gap: 8px; color: #fff; font-size: 17px; font-weight: 500; line-height: 1.35; }
-  .about-float-cover { display: block; overflow: hidden; margin: -6px -8px 8px; border-radius: 10px; aspect-ratio: 1200 / 560; }
-  .about-float-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
+  .about-float-title { display: inline-flex; align-items: center; gap: 8px; color: #fff; font-size: 17px; font-weight: 500; line-height: 1.35; white-space: nowrap; }
   a.about-float:hover { translate: 0 -2px; background: rgb(18 20 28 / 0.58); }
-  .about-float[data-spot="then"] { right: 6%; top: 46%; }
-  .about-float[data-spot="case-1"] { right: calc(6% + 304px); bottom: 7%; width: 300px; }
-  .about-float[data-spot="case-2"] { right: 6%; bottom: 9%; width: auto; padding: 12px 20px; border-radius: 999px; }
-  .about-float[data-spot="case-2"] .about-float-label { display: none; }
+  .about-float[data-spot="then"] { left: var(--edge-inset, 24px); }
+  .about-float[data-spot="case-1"] { left: 50%; }
+  .about-float[data-spot="case-2"] { left: calc(50% + 236px); }
   @media (prefers-reduced-motion: no-preference) {
     .about-float { animation: about-float-in 700ms var(--ease-reveal, cubic-bezier(0.22, 0.61, 0.36, 1)) both; }
     .about-float[data-spot="then"] { animation-delay: 450ms; }
@@ -6735,7 +6742,6 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
     .about-float[data-spot="case-2"] { animation-delay: 750ms; }
   }
 }
-@keyframes about-float-in { from { opacity: 0; transform: translateY(16px); } }
 /* The header reads light over the photo until it folds. */
 header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 / 0.78); color: #fff; }
 
@@ -6748,7 +6754,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .about-bridge, .about-close { padding-block: clamp(96px, 11vw, 160px); }
 .about-band { margin-inline: 0; padding-block: clamp(96px, 11vw, 160px); border-radius: 0; background: none; }
 .about-band-inner { width: var(--about-col); max-width: none; }
-.about-gallery { padding-block: clamp(96px, 11vw, 160px); }
+.about-gallery { padding-block: clamp(48px, 5vw, 80px); }
 .about-gallery > .about-stage-head { width: var(--about-col); justify-self: center; }
 .about-contact { margin-top: clamp(120px, 12vw, 176px); }
 .about-contact .about-statement { max-width: 900px; }

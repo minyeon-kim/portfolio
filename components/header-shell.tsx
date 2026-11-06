@@ -61,6 +61,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       ref={ref}
       data-home={overStage || undefined}
       data-intro={(overStage && activeCase === null) || undefined}
+      data-photo={pathname.startsWith("/about") || undefined}
       className={`group/header z-20 transition-[background-color] duration-400 ease-standard sticky top-0 data-compact:bg-transparent data-compact:backdrop-blur-none ${
         overStage || overHero
           ? "bg-bg/90 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none"

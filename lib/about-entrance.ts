@@ -6,13 +6,13 @@
 
 export type Box = { left: number; top: number; width: number; height: number };
 
-// Where the About opener puts the portrait (desktop): see .about-hero-portrait.
+// Where the About opener puts the photo: the whole screen (see .about-hero-photo).
 export function portraitBox(): Box {
-  const vw = document.documentElement.clientWidth;
-  const height = Math.min(window.innerHeight - 112, 760);
-  const width = height * 0.8;
-  return { left: vw - Math.max(56, (vw - 1200) / 2) - width, top: 88, width, height };
+  return { left: 0, top: 0, width: document.documentElement.clientWidth, height: window.innerHeight };
 }
+
+// The hero's crop of the same photo; the landing card shows it from 50% 28%.
+const HERO_POSITION = "22% 31%";
 
 const FADE = 240, SETTLE = 720;
 
@@ -39,8 +39,8 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
       [
         from
           ? { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: "8px", objectPosition: "50% 28%" }
-          : { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: "50% 28%" },
-        { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "16px", objectPosition: "50% 28%" },
+          : { left: "0px", top: "0px", width: `${window.innerWidth}px`, height: `${window.innerHeight}px`, borderRadius: "0px", objectPosition: HERO_POSITION },
+        { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "0px", objectPosition: HERO_POSITION },
       ],
       { duration: SETTLE, easing: "cubic-bezier(0.65, 0, 0.2, 1)", fill: "forwards" },
     );
