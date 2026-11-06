@@ -1539,3 +1539,5 @@ Sequences follow the scroll instead of a timer (owner: scrolling on should bring
 Analysis holds and brings in one stage per scroll step (owner; supersedes FlowPlay on it where it pins): HeldFlow wraps the heading and list in a held track (45svh a step), each row and the rail's fill arrive with the step the scroll reaches. Phones, short screens and reduced motion keep FlowPlay. Devsign and Gemini. Figma not updated.
 
 Korean case summaries use the English labels, like the English pages (owner): Problem / Solution / Impact on Devsign, Problem / Solution / Expected on Gemini (its English already says Expected until the test runs). Figma not updated.
+
+Korean survey chart tabs read as plain nouns: "AI 결과 신뢰도" / "가장 큰 불편" (were "AI를 믿을까" / "AI의 가장 큰 불만"). Figma not updated.
