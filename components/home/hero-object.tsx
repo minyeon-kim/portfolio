@@ -73,12 +73,9 @@ vec3 formOf(float n, vec2 uv) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
-      // A bow tie: thin through the middle, where the copy sits, opening wider
-      // than before towards the edges of the screen.
-      float mid = mix(0.5, 1.4, smoothstep(0.3, 3.1, abs(x)));
-      float y = (0.29 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.1 * sin(x * 4.1 + z * 3.3 + time * 0.5)) * mid + ridge * 0.85;
+      float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
       // Tilted towards the viewer, so the rows open out down the screen.
-      p = vec3(x, y + (z + 0.9) * 0.3 * mid + ground, z);
+      p = vec3(x, y + (z + 0.9) * 0.42 + ground, z);
       loose *= 0.06;
     } else {
       float col = floor(b * 46.0);
@@ -577,7 +574,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     const SIZE = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768 ? 150 : 216;
     // From 64rem the copy sits above the landscape, so the waves run lower.
     const wideStage = () => window.innerWidth >= 1024;
-    const landHeight = () => 0.02;
+    const landHeight = () => -0.3;
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const gl = el.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "high-performance" });
     if (!gl || !gl.getExtension("EXT_color_buffer_float")) return;
@@ -854,7 +851,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.5);
+      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.3);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       // The portrait keeps only a few of the far stars.
       gl.drawArrays(gl.POINTS, 0, Math.round(4200 * (1 - 0.8 * portraitMix)));
@@ -862,7 +859,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture); bind(pDraw, "portraitColor", 3, portraitColor.texture);
       gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
-      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.5); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
+      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.3); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
