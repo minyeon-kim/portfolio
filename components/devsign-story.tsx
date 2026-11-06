@@ -849,7 +849,7 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
   const d = Math.min(cw - 8, 300);
   const cn = d * 0.46;
   const titleH = 64;
-  const lineH = 84;
+  const lineH = 16;
   const clusterH = titleH + d + lineH;
   const clusters = problems.map((p, pi) => {
     const cx = (pi % cc) * (cw + gap) + cw / 2;
@@ -865,7 +865,7 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
   // Notes behind no problem fade where they stood on the board.
   notes.forEach((_, i) => { if (!circle.has(i)) { const at = board.get(i)!; circle.set(i, { ...at, o: 0 }); } });
   const circlesH = Math.ceil(problems.length / cc) * (clusterH + 24);
-  const height = Math.max(boardH, circlesH);
+  const height = phase === 2 ? circlesH : Math.max(boardH, circlesH);
   const at = (i: number) => (phase === 0 ? start : phase === 1 ? board : circle).get(i)!;
   const step = phase === 2 ? 2 : phase === 1 ? 1 : 0;
   return (
@@ -883,7 +883,6 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
             <p className="dv-amap-title"><b>{pi + 1}</b>{c.title}</p>
             <i className="dv-amap-bar" style={{ background: AFF_RINGS[pi % 4] }} />
             <span style={{ display: "block", height: d - 4 }} />
-            <p className="dv-amap-line">{c.body}</p>
           </div>
         ))}
         {notes.map((n, i) => {
@@ -895,7 +894,6 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
           );
         })}
       </div>
-      <p className="dv-amap-legend">{wall.legendNote}</p>
       <div className="sr-only"><ol>{problems.map((p, pi) => <li key={p.title}>{p.title}: {wall.themes.filter(([, x]) => x === pi).map(([name]) => name).join(", ")}</li>)}</ol></div>
     </div>
   );
