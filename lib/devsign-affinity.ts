@@ -161,7 +161,7 @@ export const AFF_LEFT_OUT = 6;
 
 export const AFF_UI: Record<Locale, {
   steps: [string, string][]; legend: string; quotes: string; subs: string; insight: string;
-  leftOut: string; from: string; pick: string; boardLink: string; statements: string; boardTitle: string;
+  leftOut: string; from: string; pick: string; boardLink: string; statements: string; boardTitle: string; pickProblem: string;
 }> = {
   ko: {
     steps: [["201", "인터뷰 발화"], ["7", "테마"], ["4", "문제"]],
@@ -171,10 +171,11 @@ export const AFF_UI: Record<Locale, {
     insight: "인사이트",
     leftOut: "문제에서 제외",
     from: "묶인 테마",
-    pick: "테마를 눌러 내용을 보세요.",
+    pick: "테마를 누르면 그 테마의 포스트잇이 아래에 펼쳐져요.",
     boardLink: "실제 보드 보기 ↗",
     statements: "개",
     boardTitle: "테마별 포스트잇 전체",
+    pickProblem: "문제를 누르면 어떤 테마에서 왔는지 보여요.",
   },
   en: {
     steps: [["201", "interview statements"], ["7", "themes"], ["4", "problems"]],
@@ -184,9 +185,10 @@ export const AFF_UI: Record<Locale, {
     insight: "Insight",
     leftOut: "Left out of the problems",
     from: "Themes in it",
-    pick: "Pick a theme to read it.",
+    pick: "Pick a theme and its stickies open below as post-its.",
     boardLink: "See the real board ↗",
     statements: "",
     boardTitle: "Every sticky, by theme",
+    pickProblem: "Pick a problem to see which themes it came from.",
   },
 };
