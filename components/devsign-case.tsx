@@ -413,14 +413,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                 </div>
               </div>
               <p className="dv-cast-quote">{person.quote}</p>
-              <ul className="dv-cast-needs">
-                {person.pairs.map(([pain, need]: string[]) => (
-                  <li key={pain}>
-                    <span><span className="sr-only">{labels.painPoint}: </span>{pain}</span>
-                    <strong><ArrowIcon /><span className="sr-only">{labels.need}: </span>{need}</strong>
-                  </li>
-                ))}
-              </ul>
             </article>
           ))}
         </div>
