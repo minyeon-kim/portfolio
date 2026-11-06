@@ -71,7 +71,7 @@ export const study = {
     headlineAccent: "Cleaning up took a trip to settings.",
     process: {
       title: "Process · Double Diamond",
-      body: "AI privacy is a broad topic, so we researched widely first. In Define I redefined the problem once: from warning people as they type, to controlling what's already connected.",
+      body: "We researched widely, then redefined the problem once: from warning people as they type to controlling what's already connected.",
       stages: [
         { name: "Discover", outcome: "There’s an off switch, but no one knows what’s left after.", methods: ["Competitors", "Desk research", "Interviews"] },
         { name: "Define", outcome: "Four insights; one of them changed the problem.", methods: ["Affinity map", "Personas", "HMW"], current: true },
@@ -95,7 +95,7 @@ export const study = {
     desk: {
       method: "Secondary research",
       title: "Desk research",
-      text: "We compared the privacy controls of five AI services, read data-protection law (GDPR) and six papers on AI memory UX, and looked at 2025–2026 survey data.",
+      text: "We compared five AI services' privacy controls and read six papers on AI memory UX.",
     },
     q1: {
       label: "Question 1 · Do people want control?",
@@ -164,7 +164,7 @@ export const study = {
       method: "Primary research",
       title: "In-depth interview",
       lead: "Worried, but still using it.",
-      text: "Research showed the controls are hard to predict, but not how that feels. So we talked to people on both sides of personal data: someone who asks for it every day, and someone who gives it to AI.",
+      text: "We talked to someone who asks for personal data every day, and someone who gives it to AI.",
       questionsLabel: "Research questions",
       peopleLabel: "Participants",
       questions: [
@@ -207,13 +207,12 @@ export const study = {
         developerLow: "Dips, then checks the result herself",
         designerLow: "Hardest moment · can't tell where it came from",
       },
-      summary: "Today the hardest moment comes when personal data appears with no source, and it stays hard through two settings pages. The design goal: keep that moment short by putting the source and the switch right on the answer.",
+      summary: "The hardest moment: personal data appears with no source. The goal: put the source and the switch on the answer.",
     },
     affinity: {
       method: "Research analysis",
       title: "Affinity mapping",
       lead: "Anxiety peaked not when people typed data in, but when it came back out in an answer.",
-      text: "79 quotes, color-coded, then re-clustered without labels into six themes.",
       funnel: [["79", "interview quotes"], ["6", "themes"], ["4", "insights"]],
       board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "Affinity map of 79 interview quotes regrouped into six themes" },
     },
@@ -250,7 +249,6 @@ export const study = {
         method: "Ideation",
         title: "Improvement directions",
         lead: "Six directions (24 features) narrowed to three after the problem changed.",
-        text: "Of input protection, memory control, processing transparency, sources, purpose-based requests and work rules, memory control, transparency and sources stayed.",
       },
       {
         method: "Ideation",
@@ -262,7 +260,7 @@ export const study = {
         method: "Ideation",
         title: "Concept feedback",
         lead: "Of four concepts, the two that never send you to settings stayed.",
-        text: "Kept: in-place switches (“Easy, I can just toggle it on and off”) and deleting from chat (“I don't have to go anywhere”). Dropped: per-file retention (more to manage) and a category dashboard (focus on sensitive items).",
+        text: "Kept: in-place switches and deleting from chat. Dropped: per-file retention and a category dashboard.",
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "Inline data-control concept with team feedback notes" },
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "Delete-by-chat concept with team feedback notes" },
@@ -284,13 +282,13 @@ export const study = {
         method: "Structure",
         title: "Two rules behind the screens",
         lead: "Show what each source allows, and reveal it one step at a time.",
-        text: "Memory can be deleted; Gmail and Calendar can only be blocked, and the originals stay. The answer carries only a badge; the full panel opens on tap.",
+        text: "Memory can be deleted; Gmail and Calendar can only be blocked.",
       },
       {
         method: "Structure",
         title: "User flow",
         lead: "Two scenarios from Yuna's day.",
-        text: "A: a name she never mentioned appears in a restaurant suggestion; she taps the Source badge and switches Gmail off. B: she asks Gemini to forget, sees what will be deleted and what is only blocked, then checks.",
+        text: "A: she switches a source off from the answer. B: she asks Gemini to forget, then checks.",
       },
     ],
   },
@@ -314,14 +312,14 @@ export const study = {
       method: "Test plan",
       title: "Moderated test (people think out loud)",
       lead: "Up to five people run two scenarios using a made-up person’s data.",
-      text: "Recruited across heavy and light AI use and high and low privacy sensitivity. Scenario A (in-place switches), then B (delete by asking); no participant shares their own data.",
+      text: "Scenario A (in-place switches), then B (delete by asking).",
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
       charts: [
         {
           type: "rings",
           tab: "Usability score",
           title: "After 2 of 5 sessions, the usability score (SUS, out of 100) is 77.5 and 82.5.",
-          note: "A trend only: they used different prototype versions. The usual average is 68.",
+          note: "A trend only: they used different prototype versions.",
           items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
         },
         {

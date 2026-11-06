@@ -70,7 +70,7 @@ export const study = {
     headlineAccent: "정리는 설정 화면까지 가야 했다.",
     process: {
       title: "Process · Double Diamond",
-      body: "AI 프라이버시는 범위가 넓어서 먼저 넓게 리서치했다. Define에서 문제를 한 번 재정의했다. 입력할 때 경고하는 것에서, 이미 연결된 것을 통제하는 것으로.",
+      body: "먼저 넓게 리서치하고, 문제를 한 번 다시 정의했다. 입력할 때 경고하기에서, 이미 연결된 것을 통제하기로.",
       stages: [
         { name: "Discover", outcome: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모른다.", methods: ["경쟁 서비스 분석", "데스크 리서치", "심층 인터뷰"] },
         { name: "Define", outcome: "인사이트 4개를 얻었고, 그중 하나가 문제를 다시 정하게 했다.", methods: ["어피니티 매핑", "페르소나", "HMW"], current: true },
@@ -94,7 +94,7 @@ export const study = {
     desk: {
       method: "Secondary research",
       title: "데스크 리서치",
-      text: "AI 서비스 5곳의 프라이버시 컨트롤을 비교하고, 유럽 개인정보 보호법(GDPR)과 AI 메모리 UX 논문 6편을 읽고, 2025–2026년 설문 데이터를 살폈다.",
+      text: "AI 서비스 5곳의 프라이버시 컨트롤을 비교하고, AI 메모리 UX 논문 6편을 읽었다.",
     },
     q1: {
       label: "질문 1 · 사람들은 통제를 원할까?",
@@ -163,7 +163,7 @@ export const study = {
       method: "Primary research",
       title: "심층 인터뷰",
       lead: "걱정하지만 계속 쓴다.",
-      text: "자료 조사로 설정이 예측하기 어렵다는 건 알았지만, 사람들이 그걸 어떻게 느끼는지는 알 수 없었다. 그래서 개인 정보를 매일 요청하는 사람과, AI에 개인 정보를 주는 사람을 만나 이야기했다.",
+      text: "개인 정보를 매일 요청하는 사람과, AI에 건네는 사람을 만났다.",
       questionsLabel: "리서치 질문",
       peopleLabel: "참여자",
       questions: [
@@ -206,13 +206,12 @@ export const study = {
         developerLow: "잠깐 떨어졌다가, 직접 결과를 확인한다",
         designerLow: "가장 힘든 순간 · 어디서 왔는지 알 수 없다",
       },
-      summary: "지금은 개인 정보가 출처 없이 나타날 때 가장 힘들고, 설정 화면 두 곳을 거치는 동안 계속 힘들다. 디자인 목표는 출처와 스위치를 답변 바로 아래에 두어, 그 시간을 짧게 만드는 것이다.",
+      summary: "가장 힘든 순간은 개인 정보가 출처 없이 나타날 때다. 목표는 답변 위에 출처와 스위치를 두는 것.",
     },
     affinity: {
       method: "리서치 분석",
       title: "어피니티 매핑",
       lead: "불안이 가장 커진 순간은 정보를 입력할 때가 아니라, 답변에서 다시 나올 때였다.",
-      text: "인용 79개를 색으로 분류한 뒤, 라벨 없이 다시 묶어 테마 6개로 정리했다.",
       funnel: [["79", "인터뷰 인용"], ["6", "테마"], ["4", "인사이트"]],
       board: { src: "/images/cases/gemini-privacy/affinity.webp", width: 1079, height: 1938, fit: 1200 / 633, alt: "인터뷰 인용 79개를 테마 6개로 다시 묶은 어피니티 맵" },
     },
@@ -249,7 +248,6 @@ export const study = {
         method: "아이디에이션",
         title: "개선 방향",
         lead: "개선 방향 6개(기능 24개)를, 문제를 다시 정한 뒤 3개로 좁혔다.",
-        text: "입력 보호, 메모리 통제, 처리 투명성, 출처, 목적 기반 요청, 작업 규칙 중 메모리 통제, 투명성, 출처가 남았다.",
       },
       {
         method: "아이디에이션",
@@ -261,7 +259,7 @@ export const study = {
         method: "아이디에이션",
         title: "콘셉트 피드백",
         lead: "콘셉트 4개 중, 설정 화면으로 보내지 않는 두 가지가 남았다.",
-        text: "남긴 것: 바로 끄기(“그냥 켰다 껐다 하면 돼서 쉬워요”)와 채팅에서 삭제(“어디 갈 필요가 없어요”). 뺀 것: 파일별 보관 기간(관리할 게 더 많아짐)과 카테고리 대시보드(민감한 항목에 집중).",
+        text: "남긴 것: 바로 끄기, 채팅으로 삭제하기. 뺀 것: 파일별 보관 기간, 카테고리 대시보드.",
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "팀 피드백이 달린 인라인 데이터 관리 콘셉트" },
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "팀 피드백이 달린 채팅으로 삭제 콘셉트" },
@@ -283,13 +281,13 @@ export const study = {
         method: "구조",
         title: "화면 뒤의 두 가지 규칙",
         lead: "출처마다 할 수 있는 일을 보여 주고, 한 단계씩 펼친다.",
-        text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 되며 원본은 남는다. 답변에는 배지만 두고, 전체 패널은 탭했을 때 연다.",
+        text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 된다.",
       },
       {
         method: "구조",
         title: "사용자 흐름",
         lead: "유나의 하루에서 나온 두 시나리오.",
-        text: "A: 말한 적 없는 이름이 맛집 추천에 나타나고, 출처 배지를 탭해 Gmail을 끈다. B: Gemini에게 잊어 달라고 하고, 무엇이 삭제되고 무엇이 차단만 되는지 본 뒤 확인한다.",
+        text: "A: 답변에서 바로 출처를 끈다. B: Gemini에게 잊어 달라고 한 뒤 확인한다.",
       },
     ],
   },
@@ -313,14 +311,14 @@ export const study = {
       method: "테스트 계획",
       title: "진행자가 함께하는 사용성 테스트",
       lead: "최대 5명이 가상 인물의 데이터로 두 가지 상황을 직접 해 본다.",
-      text: "AI 사용량(많음/적음)과 프라이버시 민감도(높음/낮음)를 섞어 모집한다. 시나리오 A(바로 끄기) 다음 B(요청해서 삭제)이고, 참여자는 자기 정보를 공유하지 않는다.",
+      text: "시나리오 A(바로 끄기) 다음 B(채팅으로 삭제).",
       chartLabels: { charts: "테스트 결과", pause: "차트 일시정지", play: "차트 재생" },
       charts: [
         {
           type: "rings",
           tab: "사용성 점수",
           title: "5회 중 2회를 마친 지금, 사용성 점수(SUS, 100점 만점)는 77.5와 82.5다.",
-          note: "경향으로만 본다. 두 사람이 쓴 프로토타입 버전이 다르다. 보통 평균은 68점이다.",
+          note: "경향으로만 본다. 두 사람이 쓴 프로토타입 버전이 다르다.",
           items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
         },
         {
