@@ -6080,4 +6080,34 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 /* One hierarchy for chart blocks (owner): the block finding is the heading (statement size); the
    sentence beside each chart is its caption, a step down at item size, so the two never compete. */
 .case-study .dv .dv-cycle-plate .dv-cycle-text p:first-child { font-size: var(--t-item); font-weight: 500; line-height: 1.45; }
+/* Core features as a list + one wide frame (after Mobbin; owner). Left: number + name per feature,
+   only the current one open, a bar filling with its clip. Right: the clip in a neutral frame.
+   Stacks (frame first) below 64rem. */
+.dv-flist { display: grid; gap: 24px; }
+.dv-flist-items { order: 2; margin: 0; padding: 0; list-style: none; }
+.dv-flist-items li { position: relative; padding: 20px 0; border-top: 1px solid var(--dv-line); }
+.dv-flist-items li:last-child { border-bottom: 1px solid var(--dv-line); }
+.dv-flist-items button { display: flex; align-items: baseline; gap: 16px; width: 100%; padding: 0; color: var(--dv-muted); font-size: var(--t-item); font-weight: 500; text-align: left; transition: color 250ms var(--ease); }
+.dv-flist-items button b { flex: none; min-width: 28px; color: inherit; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-flist-items button:hover, .dv-flist-items li[data-on] button { color: var(--dv-ink); }
+.dv-flist-items li[data-on] button b { color: var(--case-accent); }
+.dv-flist-items button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.dv-flist-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 400ms var(--ease); }
+.dv-flist-more > div { overflow: hidden; padding-left: 44px; }
+.dv-flist-items li[data-on] .dv-flist-more { grid-template-rows: 1fr; }
+.dv-flist-body { margin: 12px 0 0; color: var(--dv-ink); font-size: 18px; line-height: 1.55; }
+.dv-flist-solves { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-flist-solves b { margin-right: 6px; color: var(--case-accent); font-weight: 500; }
+.dv-flist-bar { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; overflow: hidden; }
+.dv-flist-bar > i { display: block; height: 100%; background: var(--dv-chart-fill, var(--case-accent)); transform-origin: left; transform: scaleX(0); }
+.dv-flist-items li[data-on] .dv-flist-bar > i { transform: scaleX(var(--fl-p, 0)); }
+.dv-flist-frame { order: 1; position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 16px; background: light-dark(#f3f3f5, #17181d); }
+.dv-flist-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 400ms var(--ease); }
+.dv-flist-frame video[data-on] { opacity: 1; }
+@media (min-width: 64rem) {
+  .case-study .dv .dv-flist { --fl-w: min(1640px, calc(100vw - 96px)); width: var(--fl-w); max-width: none; margin-left: calc(50% - var(--fl-w) / 2); grid-template-columns: minmax(280px, 1fr) minmax(0, 2.4fr); gap: clamp(32px, 4vw, 64px); align-items: center; }
+  .dv-flist-items { order: 1; }
+  .dv-flist-frame { order: 2; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-flist-more, .dv-flist-frame video, .dv-flist-items button { transition: none; } }
 
