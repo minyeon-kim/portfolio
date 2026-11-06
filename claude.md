@@ -1406,3 +1406,5 @@ Holding and chart cards are one surface (owner: the purple frame behind the medi
 Evidence boxes (`.dv-evbox`: community posts, Gemini's survey, papers and service audit) use the same plate as the chart and holding cards: the case tint gradient, no outline (owner: the chart box and the posts box under it were different colours). Figma not updated.
 
 Handoff card words: the purpose is a quiet 16px muted line at the top, the current element is centred vertically beside the screen, the progress stays at the bottom (owner: the text sat oddly at the top with an empty hole below). Figma not updated.
+
+Plate colour, third pass (owner: the charcoal read dull and the words did not stand out; supersedes #22232a): Devsign dark #1e1a3a to #2c2460, Gemini dark #151d36 to #1d2d5e, muted words cooled to match (#bcb6dc / #b3c0dc); light #f6f3ff to #e6defe and #f2f6ff to #dde8fd. Figma not updated.
