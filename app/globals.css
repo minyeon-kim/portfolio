@@ -6337,4 +6337,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-iv-people li span { font-size: 16px; font-weight: 400; }
 .case-study .dv .dv-iv-people li small { grid-column: 2; }
 @media (min-width: 64rem) { .case-study .dv .dv-iv-people { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+/* Interview, lean: finding, two quotes, then two quiet lines of method. */
+.dv-iv-meta { display: grid; gap: 8px; margin: 64px 0 0; padding-top: 20px; border-top: 1px solid var(--dv-line); font-size: 16px; line-height: 1.5; }
+.dv-iv-meta div { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.dv-iv-meta dt { min-width: 140px; color: var(--dv-muted); }
+.dv-iv-meta dd { margin: 0; color: var(--dv-ink); }
 

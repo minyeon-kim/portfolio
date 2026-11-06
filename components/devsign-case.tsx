@@ -140,7 +140,6 @@ function Insights({ discover }: { discover: Study }) {
         <div className="dv-iv-claims">
           {interview.claims.map((c: { title: string; quotes: string[][] }) => (
             <div key={c.title} className="dv-iv-claim reveal">
-              <p className="dv-iv-claim-title">{c.title}</p>
               <ul>
                 {c.quotes.slice(0, 1).map(([quote, who]) => (
                   <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>
@@ -149,21 +148,11 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           ))}
         </div>
-        {/* Method context, kept quiet under the evidence (owner: the block had no clear focus). */}
-        {interview.questions && <div className="dv-iv-facts reveal">
-          <div>
-            <p className="dv-iv-facts-label">{interview.questionsLabel}</p>
-            <ol className="dv-iv-asks">
-              {interview.questions.map((q: string, i: number) => <li key={q}><b>{interview.questionKeys?.[i]}</b><span>{q}</span></li>)}
-            </ol>
-          </div>
-          <div>
-            <p className="dv-iv-facts-label">{interview.peopleLabel}</p>
-            <ul className="dv-iv-people">
-              {interview.participants.map(([id, role, team, years]: string[]) => <li key={id}><b>{id}</b><span>{role}</span><small>{team} · {years}</small></li>)}
-            </ul>
-          </div>
-        </div>}
+        {/* Method context in two quiet lines (owner: the block was still too wordy). */}
+        {interview.questions && <dl className="dv-iv-meta reveal">
+          <div><dt>{interview.questionsLabel}</dt><dd>{interview.questionKeys.join(" · ")}</dd></div>
+          <div><dt>{interview.peopleLabel}</dt><dd>{interview.participants.map(([id, role]: string[]) => `${id} ${role}`).join(" · ")}</dd></div>
+        </dl>}
       </div>
     </div>
   );
