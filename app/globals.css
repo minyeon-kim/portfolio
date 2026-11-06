@@ -6034,4 +6034,33 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .case-study .dv .dv-trust-legend li { display: block; padding: 0; border: 0; }
 .case-study .dv .dv-trust-legend button { display: inline-flex; width: auto; gap: 8px; justify-content: flex-start; }
 .case-study .dv .dv-trust-legend b { margin-left: 2px; color: var(--dv-ink); font-weight: 500; }
+/* Analysis as a vertical rail (owner: four columns read sideways; stack them and let scroll carry it).
+   Desktop: stage name | sentence per row, a rail at the left that fills down with native scroll, and
+   each row lights (stage to the case colour, sentence to ink) as it reaches the middle of the screen,
+   then stays lit. Muted text stays readable (AA) before it lights; static with reduced motion. */
+@media (min-width: 64rem) {
+  .case-study .dv ol.dv-flow { display: block; position: relative; max-width: 900px; margin-left: 0; padding: 0 0 0 48px; view-timeline: --dv-rail block; }
+  .case-study .dv ol.dv-flow::before, .case-study .dv ol.dv-flow::after { content: ""; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 2px; border-radius: 2px; background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
+  .case-study .dv ol.dv-flow::after { background: var(--dv-chart-fill, var(--case-accent)); transform-origin: top; }
+  .case-study .dv ol.dv-flow > li { display: grid; grid-template-columns: 160px minmax(0, 1fr); align-items: baseline; gap: 32px; position: relative; padding: 28px 0; grid-row: auto; border: 0; }
+  .case-study .dv ol.dv-flow > li::before { content: ""; position: absolute; left: -48px; top: calc(28px + 0.55em); width: 16px; height: 16px; border-radius: 50%; background: var(--dv-bg, var(--bg)); box-shadow: inset 0 0 0 2px var(--dv-chart-fill, var(--case-accent)); }
+  .case-study .dv ol.dv-flow .dv-flow-stage { padding: 0; background: none; border-radius: 0; color: var(--case-accent); font-size: var(--t-item); }
+  .case-study .dv ol.dv-flow .dv-flow-stage::before { display: none; }
+  .case-study .dv ol.dv-flow p { padding: 0; font-size: var(--t-heading); line-height: 1.3; animation: none; }
+  .case-study .dv ol.dv-flow p b { display: inline; margin: 0; color: inherit; font-size: inherit; font-weight: 400; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .case-study .dv ol.dv-flow::after { animation: dv-rail-fill linear both; animation-timeline: --dv-rail; animation-range: entry 80% exit 20%; }
+      .case-study .dv ol.dv-flow > li :is(.dv-flow-stage, p) { animation: dv-flow-lit linear both; animation-timeline: view(); animation-range: entry 70% cover 50%; }
+      .case-study .dv ol.dv-flow > li::before { animation: dv-flow-dot linear both; animation-timeline: view(); animation-range: entry 70% cover 50%; }
+    }
+  }
+}
+@keyframes dv-rail-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes dv-flow-lit { from { color: var(--dv-muted); } to { color: var(--dv-ink); } }
+@keyframes dv-flow-dot { from { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--dv-ink) 30%, transparent); } to { box-shadow: inset 0 0 0 5px var(--dv-chart-fill, var(--case-accent)); } }
+@media (min-width: 64rem) { @supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  .case-study .dv ol.dv-flow > li .dv-flow-stage { animation-name: dv-flow-lit-accent; }
+} } }
+@keyframes dv-flow-lit-accent { from { color: var(--dv-muted); } to { color: var(--case-accent); } }
 
