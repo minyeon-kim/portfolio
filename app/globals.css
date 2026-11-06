@@ -4816,6 +4816,14 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-fc-list { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; list-style: none; }
 .dv-fc-list ul { margin: 0; padding: 0; list-style: none; }
 .dv-fc-full { display: inline-block; margin-top: 24px; font-size: 16px; }
+/* The flow appears in reading order (FlowPlay): boxes and words rise in, arrows draw. */
+.dv-fc[data-armed] [data-seq] { opacity: 0; }
+.dv-fc[data-play] :is(g, text)[data-seq] { animation: dv-fc-in 420ms var(--ease) both; animation-delay: calc(var(--i) * 150ms); }
+.dv-fc[data-play] path[data-seq] { stroke-dasharray: 1; animation: dv-fc-draw 320ms var(--ease) both; animation-delay: calc(var(--i) * 150ms); }
+.dv-fc[data-play] path[data-seq][data-long] { animation-duration: 640ms; }
+@keyframes dv-fc-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@keyframes dv-fc-draw { 0% { opacity: 0; stroke-dashoffset: 1; } 1% { opacity: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .dv-fc[data-armed] [data-seq] { opacity: 1; } }
 @media (max-width: 47.99rem) {
   .dv-fc-scroll { display: none; }
   .dv-fc-list { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; display: grid; gap: 12px; }
