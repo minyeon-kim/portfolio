@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GlanceSteps } from "./glance-steps";
 import type { ReactNode } from "react";
 import { SurveyCharts } from "@/components/devsign-survey-charts";
 import { ArrowIcon } from "@/components/arrow-icon";
@@ -357,15 +358,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {overview.summary ? (
           <section className="dv-glance-block" aria-labelledby="tldr">
             <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
-            <ul className="dv-glance reveal">
-              {overview.summary.items.map((item: { tone: string; label: string; title: string; text: string }) => (
-                <li key={item.label} data-tone={item.tone}>
-                  <p className="dv-glance-label">{item.label}</p>
-                  <p className="dv-glance-title">{item.title}</p>
-                  <p className="dv-glance-text">{item.text}</p>
-                </li>
-              ))}
-            </ul>
+            <div className="reveal"><GlanceSteps items={overview.summary.items} label={overview.summary.label} /></div>
           </section>
         ) : <div className="dv-psi">{children}</div>}
         <div className="dv-process">
