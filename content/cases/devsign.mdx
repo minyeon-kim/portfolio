@@ -74,10 +74,10 @@ export const study = {
       title: "We designed one feature for each of the four key problems.",
       link: "See them in action in Deliver ↓",
       items: [
-        { kicker: "01 See", name: "Live Workspace", body: "See all of the app’s screens on one board.", src: "/images/devsign/screen-live-workspace.webp" },
-        { kicker: "02 Merge", name: "Merge Studio", body: "Pick the best parts of several AI drafts and combine them.", src: "/images/devsign/screen-merge-studio.webp" },
-        { kicker: "03 Decide", name: "Conflict Points", body: "Pins every spot where the app no longer matches the design.", src: "/images/devsign/screen-conflict-points.webp" },
-        { kicker: "04 Record", name: "History", body: "Saves what was decided and why, with the screen it changed.", src: "/images/devsign/screen-history.webp" },
+        { kicker: "01 See", name: "Live Workspace", hook: "Every screen on one board", flow: "Designer, developer → one board", body: "See the whole app in the order users see it, without digging through Figma, GitHub and Slack.", src: "/images/devsign/screen-live-workspace.webp" },
+        { kicker: "02 Merge", name: "Merge Studio", hook: "Mix the best of each AI draft", flow: "4 AI drafts → 1 screen", body: "Pick a draft for each area of the screen, then send one combined screen for review.", src: "/images/devsign/screen-merge-studio.webp" },
+        { kicker: "03 Decide", name: "Conflict Points", hook: "Decide where design and code differ", flow: "Developer → decision-maker", body: "Every mismatch gets a pin on the screen; the developer proposes a fix and the decision-maker picks one.", src: "/images/devsign/screen-conflict-points.webp" },
+        { kicker: "04 Record", name: "History", hook: "Keep why each change was made", flow: "Decision → screen + reason", body: "Each decision is saved with its screen, so anyone can find why it changed later.", src: "/images/devsign/screen-history.webp" },
       ],
     },
   },
@@ -212,7 +212,7 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       label: "Affinity mapping",
-      lead: "Grouping the interviews showed the real problem: what teams agreed on in chat never stayed with the work.",
+      lead: "What teams agreed on in chat never stayed with the work.",
       funnel: [["201", "interview quotes"], ["7", "themes"], ["4", "problems"]],
       themesLabel: "Themes",
       board: { src: "/images/devsign/affinity-board.webp", width: 7000, height: 3022, alt: "Affinity map: interview quotes grouped into seven colored theme columns, from real-time collaboration to AI limits" },
@@ -266,7 +266,7 @@ export const study = {
     sketching: {
       method: "Ideation",
       title: "Sketching",
-      lead: "Before writing any code, we drew the five candidates on paper to see how each would look as a real screen.",
+      lead: "Before any code, we drew all five candidates on paper.",
       text: "Paper showed one overlap: “See who’s working on what” repeated the workspace, so four features remained.",
       image: { src: "/images/devsign/sketches.webp", width: 1280, height: 960, alt: "Hand-drawn interface sketches on paper with pens" },
     },
@@ -283,7 +283,7 @@ export const study = {
     ia: {
       method: "Structure",
       title: "Information architecture",
-      lead: "We put all the work in one workspace: three views of the product, with merging and decisions in a panel beside them.",
+      lead: "All the work in one workspace, with decisions in a panel beside it.",
       text: "The views are Preview, Screens and Code. Merging and decisions open beside them, and every decision is saved in History.",
       more: "See the full structure",
       moreHref: "/work/devsign/handoff/#ia",
@@ -305,7 +305,7 @@ export const study = {
     flow: {
       method: "Structure",
       title: "User flow",
-      lead: "We mapped who does what in two situations: combining drafts, and when the build differs from the design.",
+      lead: "Who does what, in two situations.",
       text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
       chart: {
         label: "User flow. When the designer combines AI drafts: compare the drafts and pick each area; if it fits the design rules it is saved or sent for review, if not it goes to the developer's change review. When the build differs from the design: the developer writes a fix; if it isn't a design decision they fix it directly; if it is, the decision-maker compares and decides on the same screen, the developer applies and verifies it, and it stays in History. The steps are in the list below.",
@@ -484,7 +484,7 @@ export const study = {
     ],
     next: {
       label: "Next step",
-      title: "Test the new decision screen and fix screen with real team data, with designers and developers separately.",
+      title: "Test the two split screens again, with real team data.",
       text: "This is where success goal 2, “every decision keeps its reason,” gets measured.",
       chips: ["Checks the UI-only scope", "Uses real team data", "Measures success goal 2"],
     },

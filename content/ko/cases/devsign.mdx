@@ -77,10 +77,10 @@ export const study = {
       title: "핵심 문제 네 가지에 기능을 하나씩 만들어 답했다.",
       link: "Deliver에서 실제 화면 보기 ↓",
       items: [
-        { kicker: "01 보기", name: "Live Workspace", body: "앱의 모든 화면을 한 보드에서 본다.", src: "/images/devsign/screen-live-workspace.webp" },
-        { kicker: "02 합치기", name: "Merge Studio", body: "AI 시안에서 좋은 부분만 골라 합친다.", src: "/images/devsign/screen-merge-studio.webp" },
-        { kicker: "03 결정하기", name: "Conflict Points", body: "디자인과 달라진 곳을 핀으로 알려 준다.", src: "/images/devsign/screen-conflict-points.webp" },
-        { kicker: "04 기록하기", name: "History", body: "무엇을 왜 정했는지 화면과 함께 남긴다.", src: "/images/devsign/screen-history-ko.webp" },
+        { kicker: "01 보기", name: "Live Workspace", hook: "모든 화면을 한 보드에서", flow: "디자이너·개발자 → 같은 보드", body: "Figma, GitHub, Slack을 오가지 않고, 앱 전체를 사용자가 보는 순서대로 본다.", src: "/images/devsign/screen-live-workspace.webp" },
+        { kicker: "02 합치기", name: "Merge Studio", hook: "AI 시안의 좋은 부분만 골라 합치기", flow: "AI 시안 4개 → 화면 1개", body: "화면 영역마다 시안을 하나씩 골라, 합친 화면 하나로 리뷰를 보낸다.", src: "/images/devsign/screen-merge-studio.webp" },
+        { kicker: "03 결정하기", name: "Conflict Points", hook: "디자인과 코드가 다른 곳, 바로 결정", flow: "개발자 → 결정권자", body: "다른 곳마다 화면에 핀이 꽂히고, 개발자가 수정안을 내면 결정권자가 고른다.", src: "/images/devsign/screen-conflict-points.webp" },
+        { kicker: "04 기록하기", name: "History", hook: "왜 바꿨는지 남기기", flow: "결정 → 화면 + 이유", body: "결정이 그 화면과 함께 저장돼, 나중에 누구든 바뀐 이유를 찾을 수 있다.", src: "/images/devsign/screen-history-ko.webp" },
       ],
     },
   },
@@ -215,7 +215,7 @@ export const study = {
       method: "Research analysis",
       title: "어피니티 매핑",
       label: "어피니티 매핑",
-      lead: "인터뷰 내용을 묶어 보니, 대화로 정한 내용이 작업물에 남지 않는 문제가 드러났다.",
+      lead: "대화로 정한 내용이 작업물에 남지 않았다.",
       funnel: [["201", "인터뷰에서 나온 말"], ["7", "테마"], ["4", "문제"]],
       themesLabel: "테마",
       board: { src: "/images/devsign/affinity-board.webp", width: 7000, height: 3022, alt: "어피니티 맵: 인터뷰 발화를 실시간 협업부터 AI 한계까지 색깔별 테마 7개로 묶은 보드" },
@@ -269,7 +269,7 @@ export const study = {
     sketching: {
       method: "Ideation",
       title: "스케치",
-      lead: "코드를 짜기 전에, 후보 5개가 실제 화면에서 어떻게 보일지 종이에 먼저 그려 봤다.",
+      lead: "코드 전에 후보 5개를 종이에 먼저 그렸다.",
       text: "실시간 작업 현황은 워크스페이스와 겹쳐 합쳤고, 기능은 4개가 됐다.",
       image: { src: "/images/devsign/sketches.webp", width: 1280, height: 960, alt: "펜과 함께 놓인 손으로 그린 인터페이스 스케치" },
     },
@@ -286,7 +286,7 @@ export const study = {
     ia: {
       method: "Structure",
       title: "정보 구조",
-      lead: "모든 작업을 워크스페이스 하나에 모았다. 화면은 세 가지 방식으로 볼 수 있고, 합치기와 결정은 옆 패널에서 한다.",
+      lead: "모든 작업은 워크스페이스 하나에, 결정은 옆 패널에서.",
       text: "미리보기·화면·코드로 보고, 합치기와 결정은 옆에서 열리며, 모든 결정은 History에 남는다.",
       more: "전체 구조 보기",
       moreHref: "/ko/work/devsign/handoff/#ia",
@@ -308,7 +308,7 @@ export const study = {
     flow: {
       method: "Structure",
       title: "유저 플로우",
-      lead: "시안을 합칠 때와 구현이 다를 때, 두 상황에서 누가 무엇을 하는지 정리했다.",
+      lead: "두 상황에서 누가 무엇을 하는지.",
       text: "디자이너는 시안을 합치고, 개발자는 고치거나 결정을 요청하고, 결정권자는 결정한다. 세 사람 모두 같은 변경 요청 화면을 본다.",
       chart: {
         label: "유저 플로우. 디자이너가 AI 시안을 합칠 때: 시안을 비교하고 영역별로 고른 뒤 디자인 규칙에 맞으면 저장하거나 검토를 요청하고, 아니면 개발자의 변경 리뷰로 넘어간다. 디자인과 구현이 다를 때: 개발자가 수정안을 쓰고, 디자인 결정이 아니면 바로 고친다. 디자인 결정이면 결정권자가 같은 화면에서 비교해 결정하고, 개발자가 반영해 확인하면 History에 남는다. 단계는 아래 목록에 있다.",
@@ -486,7 +486,7 @@ export const study = {
     ],
     next: {
       label: "다음 단계",
-      title: "새로 나눈 결정 화면과 수정 화면을, 실제 팀 데이터로 디자이너와 개발자에게 각각 테스트한다.",
+      title: "나눈 두 화면을 실제 팀 데이터로 다시 테스트한다.",
       text: "성공 기준 2, “모든 결정에 이유가 남는다”는 이 테스트에서 확인한다.",
       chips: ["UI 수정 범위 확인", "실제 팀 데이터로 검증", "성공 기준 2 측정"],
     },

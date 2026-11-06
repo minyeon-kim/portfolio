@@ -574,7 +574,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-main-features">
             <Block title={develop.selection.label} lead={overview.features.title} ff />
             <FeatureList
-              reels={overview.features.items.map((f: { kicker: string; name: string; body: string }) => {
+              reels={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string; flow?: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 const shown = deliver.features?.find((item: Study) => item.title === f.name);
                 return {
@@ -582,6 +582,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
                   kicker: f.kicker,
                   name: f.name,
                   body: f.body,
+                  hook: f.hook,
+                  flow: f.flow,
                   alt: shown?.alt,
                   points: shown?.points ?? [],
                   clip: shown?.clip,
