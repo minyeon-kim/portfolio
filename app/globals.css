@@ -5733,3 +5733,15 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-svg-accent, .dv-svg-dot, .dv-journey-badge circle, .dv-wf-head) { fill: var(--dv-chart-fill); }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-spec-pin, .dv-spec-rows b, .dv-spec-table b, .dv-spec-el h4 b, .dv-checks span, .dv-point-title b, .dv-iter-side[data-side="b"] .dv-iter-tag, .dv-prototype-link, .dv-show-points li[data-on] b, .dv-handoff-steps button[aria-current] b) { background: var(--dv-deep); color: #ffffff; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-core, .dv-iter-card[data-side="b"], .dv-iter-card[data-side="b"] .dv-iter-plate) { background: var(--dv-deep-surface); }
+/* Iteration 1 pair, tidied (owner: the cards and the arrow looked odd): each card is one surface,
+   the As-is on the quiet plate and the To-be on the deep emphasis surface, the recording straight
+   on it (no inner plate, no outline), and no floating arrow: the As-is / To-be labels and the
+   left-to-right order already say which way it went. */
+.case-study .dv .dv-iter-card { border: 0; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
+.case-study .dv .dv-iter-card :is(.dv-iter-plate) { background: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-iter-card[data-side="b"] { background: var(--dv-deep-surface); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-iter-card[data-side="b"] .dv-iter-plate { background: none; }
+.dv-iter-card { --plate-a: light-dark(#f6f3ff, #1e1a3a); --plate-b: light-dark(#e6defe, #2c2460); }
+.dv-iter-arrow { display: none; }
+.case-study .dv .dv-iter-card[data-side="b"] figcaption { color: #ffffff; }
+.case-study .dv .dv-iter-card[data-side="b"] figcaption span { color: rgb(255 255 255 / 0.78); }
