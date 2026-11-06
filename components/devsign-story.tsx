@@ -137,10 +137,12 @@ function useHeldSteps(count: number) {
   return { root, active, setActive, pinned, go };
 }
 
-function StepMarks({ names, active, go }: { names: string[]; active: number; go: (i: number) => void }) {
+// Word tabs over a holding card: they say what can be picked before the card is read, and jump
+// to that step of the scroll (the chart cards use the same tabs).
+function StepTabs({ names, active, go, label }: { names: string[]; active: number; go: (i: number) => void; label: string }) {
   return (
-    <div className="dv-reel-steps">
-      {names.map((name, i) => <button key={name} type="button" aria-label={name} aria-current={i === active ? "step" : undefined} data-done={i <= active || undefined} onClick={() => go(i)} />)}
+    <div role="group" aria-label={label} className="dv-held-tabs">
+      {names.map((name, i) => <button key={name} type="button" className="press" aria-pressed={i === active} onClick={() => go(i)}><span>{name}</span></button>)}
     </div>
   );
 }
@@ -149,13 +151,16 @@ function StepMarks({ names, active, go }: { names: string[]; active: number; go:
 // scrolling into another step takes over again.
 export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
   const { root, active, setActive, pinned, go } = useHeldSteps(changes.length);
+  const locale = useLocale();
   return (
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
-        <ol className="dv-iter-steps">
-          {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
-        </ol>
-        {pinned && <StepMarks names={changes.map((c) => c.title)} active={active} go={go} />}
+        {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
+        <div className="dv-held-plate">
+          <ol className="dv-iter-steps">
+            {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => setActive((i + 1) % changes.length)} />)}
+          </ol>
+        </div>
       </div>
     </div>
   );
@@ -166,9 +171,12 @@ export function IterationCompare({ changes, labels }: { changes: Change[]; label
 type ScreenChange = { title: string; before: string; after: string; src: string; alt?: string; width?: number; height?: number };
 export function ScreenSteps({ changes, labels }: { changes: ScreenChange[]; labels: { asIs: string; toBe: string } }) {
   const { root, active, pinned, go } = useHeldSteps(changes.length);
+  const locale = useLocale();
   return (
     <div ref={root} className="dv-iter dv-screens-held" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
+        {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
+        <div className="dv-held-plate">
         <ol className="dv-iter-steps">
           {changes.map((c, i) => (
             <li key={c.title} className="dv-iter-step" data-on={i === active || undefined}>
@@ -181,7 +189,7 @@ export function ScreenSteps({ changes, labels }: { changes: ScreenChange[]; labe
             </li>
           ))}
         </ol>
-        {pinned && <StepMarks names={changes.map((c) => c.title)} active={active} go={go} />}
+        </div>
       </div>
     </div>
   );
@@ -351,6 +359,7 @@ const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduc
 // text at the right, and native scroll changes what's inside. The steps show where you are
 // and jump there. Elsewhere each feature is its own card, clip above its text.
 export function FeatureReels({ reels }: { reels: Reel[] }) {
+  const locale = useLocale();
   const track = useRef<HTMLDivElement>(null);
   const card = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
@@ -405,16 +414,12 @@ export function FeatureReels({ reels }: { reels: Reel[] }) {
   return (
     <div ref={track} className="dv-reels-track dv-gap-40" style={{ "--reels": reels.length } as CSSProperties}>
       <div ref={card} className="dv-reels-card">
-        <ul className="dv-reels">
-          {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
-        </ul>
-        {pinned && (
-          <div className="dv-reel-steps">
-            {reels.map((reel, index) => (
-              <button key={reel.id} type="button" aria-label={reel.name} aria-current={index === current ? "step" : undefined} data-done={index <= current || undefined} onClick={() => go(index)} />
-            ))}
-          </div>
-        )}
+        {pinned && <StepTabs names={reels.map((reel) => reel.name)} active={current} go={go} label={locale === "ko" ? "핵심 기능" : "Core features"} />}
+        <div className="dv-held-plate">
+          <ul className="dv-reels">
+            {reels.map((reel, index) => <FeatureReel key={reel.id} reel={reel} active={index === current} pinned={pinned} load={!pinned || index <= current + 1} />)}
+          </ul>
+        </div>
       </div>
     </div>
   );
