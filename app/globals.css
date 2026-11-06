@@ -5702,3 +5702,12 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
   .dv-spec-side .dv-spec-subs > .dv-spec-sub, .dv-spec-side .dv-spec-el { align-self: center; }
   .dv-spec-side .dv-spec-sub, .dv-spec-side .dv-spec-els { display: grid; }
 }
+/* Plate colour, third pass (owner: the charcoal read dull and the words didn't stand out): a deep,
+   saturated case colour instead of grey, dark enough for white words, with muted words cooled to
+   match. Light keeps its pale tint, a step stronger. */
+.case-study[data-project="devsign"] :is(.dv-cycle-plate, .dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step, .dv-evbox) {
+  --plate-a: light-dark(#f6f3ff, #1e1a3a); --plate-b: light-dark(#e6defe, #2c2460); --dv-muted: light-dark(#5b5670, #bcb6dc);
+}
+.case-study[data-project="gemini"] :is(.dv-cycle-plate, .dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step, .dv-evbox) {
+  --plate-a: light-dark(#f2f6ff, #151d36); --plate-b: light-dark(#dde8fd, #1d2d5e); --dv-muted: light-dark(#53607a, #b3c0dc);
+}
