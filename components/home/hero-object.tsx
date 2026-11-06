@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useEffect, useRef, useState } from "react";
 
 // The landing backdrop, after byotone.com: a few tens of thousands of still,
@@ -74,6 +75,8 @@ vec3 formOf(float n, vec2 uv) {
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
+      // The middle sinks, so the band reads as a soft bowl between the side ridges.
+      y -= 0.5 * exp(-x * x / 2.4);
       // Tilted towards the viewer, so the rows open out down the screen.
       p = vec3(x, y + (z + 0.9) * 0.42 + ground, z);
       loose *= 0.06;
@@ -256,8 +259,8 @@ void main() {
   vec2 gq = (p.xy - vec2(0.35, 0.4 + ground)) / vec2(4.5, 1.9);
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
-  vec3 arms = mix(mix(vec3(0.35, 0.55, 1.0), vec3(0.62, 0.38, 1.0), wave), vec3(0.3, 0.9, 0.82), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
-  arms = mix(arms, vec3(1.0, 0.55, 0.85), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
+  vec3 arms = mix(mix(vec3(0.38, 0.6, 1.0), vec3(0.56, 0.42, 1.0), wave), vec3(0.32, 0.86, 0.96), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
+  arms = mix(arms, vec3(0.82, 0.62, 1.0), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
   vec3 galaxyTint = mix(arms, vec3(1.0, 0.92, 0.88), exp(-gr * gr / 0.06));
   // Light theme: a brighter, sunnier palette on the pale page (sky blue,
   // violet, hot pink, coral, mint) with no grey core, so it reads as
@@ -339,8 +342,8 @@ void main() {
   // in brightness and matte, so the form reads by density alone.
   // Landing: the dust thins out with height above the landscape, so the
   // waves dissolve into the sky instead of a second field sitting on top.
-  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.8, s.y);
-  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.12, sky));
+  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.6, s.y);
+  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, 0.04, sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix);
@@ -407,7 +410,7 @@ void main() {
   float edge = smoothstep(0.0, 1.5, w.z) * (1.0 - smoothstep(10.0, 12.0, w.z));
   vA = edge * (0.35 + 0.65 * hs(i * 5.9)) * (0.8 + 0.2 * sin(time * (0.5 + hs(i * 7.1)) + i));
   // Landing: fewer and dimmer towards the top, with no bright ones up there.
-  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.8, s.y);
+  float sky = galaxy * smoothstep(skyFrom, skyFrom + 0.6, s.y);
   if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
   vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
@@ -859,7 +862,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.useProgram(pStar);
       gl.bindVertexArray(vaoDraw);
       gl.uniform1f(uniform(pStar, "aspect"), width / height); gl.uniform2f(uniform(pStar, "cam"), cam.x, cam.y); gl.uniform1f(uniform(pStar, "dpr"), dpr); gl.uniform1f(uniform(pStar, "time"), clock);
-      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.3);
+      gl.uniform1f(uniform(pStar, "approach"), approach); gl.uniform1f(uniform(pStar, "galaxy"), colours.galaxy); gl.uniform1f(uniform(pStar, "skyFrom"), 0.06);
       gl.uniform3f(uniform(pStar, "travel"), trip.travel[0] + trip.arrive[0] * e, trip.travel[1] + trip.arrive[1] * e, trip.travel[2] + trip.arrive[2] * e);
       // The portrait keeps only a few of the far stars.
       gl.drawArrays(gl.POINTS, 0, Math.round(4200 * (1 - 0.8 * portraitMix)));
@@ -867,7 +870,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.bindVertexArray(vaoDraw);
       bind(pDraw, "pos", 0, P[0].texture); bind(pDraw, "vel", 1, V[0].texture); bind(pDraw, "portrait", 2, portraitTarget.texture); bind(pDraw, "portraitColor", 3, portraitColor.texture);
       gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
-      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.3); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
+      gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.06); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
