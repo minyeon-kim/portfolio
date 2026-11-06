@@ -138,13 +138,11 @@ function Insights({ discover }: { discover: Study }) {
                 <Image key={t.src} src={withBase(t.src)} alt={t.alt} width={816} height={544} sizes="(max-width: 767px) 33vw, 240px" />
               ))}
             </div>
-            <figcaption>{interview.photo.caption}</figcaption>
           </figure>
         </div>
         <div className="dv-iv-claims">
           {interview.claims.map((c: { title: string; quotes: string[][] }) => (
             <div key={c.title} className="dv-iv-claim reveal">
-              <h4>{c.title}</h4>
               <ul>
                 {c.quotes.slice(0, 1).map(([quote, who]) => (
                   <li key={quote}><blockquote>“{quote}”</blockquote><span>{who}</span></li>

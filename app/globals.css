@@ -6002,4 +6002,9 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-figure.dv-board img { border-radius: 12px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-figure.dv-board > .dv-open-frame .dv-open-hint { right: 12px; bottom: 12px; }
 }
+/* Discover, calmer (owner: too much to look at): the Analysis steps are one line each, and the
+   interview claims are just their quotes under one hairline (titles and the photo caption off;
+   the blurred tile says it, and the alt text names it). */
+.case-study .dv .dv-flow p b { font-weight: 500; }
+.case-study .dv .dv-iv-claim blockquote { margin-top: 0; }
 
