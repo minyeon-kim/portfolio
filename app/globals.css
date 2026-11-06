@@ -6317,4 +6317,8 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-amap-cluster[data-on] circle { stroke-dashoffset: 0; }
 .dv-amap-legend { margin: 16px 0 0; color: var(--dv-muted); font-size: 16px; text-align: center; }
 @media (prefers-reduced-motion: reduce) { .dv-amap-note, .dv-amap-theme, .dv-amap-title, .dv-amap-line, .dv-amap-cluster circle { transition: none; } }
+/* Problem groups without circles (owner): a short colour bar under each title, the notes as a tight 2 x 2 group. */
+.dv-amap-bar { display: block; width: 40px; height: 3px; margin: 4px 0 12px; border-radius: 2px; opacity: 0; transform: scaleX(0); transition: opacity 300ms var(--ease) 600ms, transform 500ms var(--ease) 600ms; }
+.dv-amap-cluster[data-on] .dv-amap-bar { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .dv-amap-bar { transition: none; } }
 

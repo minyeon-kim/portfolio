@@ -847,7 +847,7 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
   const cc = w >= 1000 ? 4 : w >= 560 ? 2 : 1;
   const cw = (w - gap * (cc - 1)) / cc;
   const d = Math.min(cw - 8, 300);
-  const cn = d * 0.34;
+  const cn = d * 0.46;
   const titleH = 64;
   const lineH = 84;
   const clusterH = titleH + d + lineH;
@@ -881,9 +881,8 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
         {clusters.map((c, pi) => (
           <div key={c.title} className="dv-amap-cluster" data-on={phase === 2 || undefined} style={{ left: c.cx - cw / 2, top: c.top, width: cw } as CSSProperties}>
             <p className="dv-amap-title"><b>{pi + 1}</b>{c.title}</p>
-            <svg width={d + 24} height={d + 24} viewBox={`0 0 ${d + 24} ${d + 24}`} style={{ marginTop: titleH - 48 }}>
-              <circle cx={(d + 24) / 2} cy={(d + 24) / 2} r={d / 2 + 4} pathLength={1} style={{ stroke: AFF_RINGS[pi % 4] }} />
-            </svg>
+            <i className="dv-amap-bar" style={{ background: AFF_RINGS[pi % 4] }} />
+            <span style={{ display: "block", height: d - 4 }} />
             <p className="dv-amap-line">{c.body}</p>
           </div>
         ))}
