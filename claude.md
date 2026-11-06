@@ -1543,3 +1543,5 @@ Korean case summaries use the English labels, like the English pages (owner): Pr
 Korean survey chart tabs read as plain nouns: "AI 결과 신뢰도" / "가장 큰 불편" (were "AI를 믿을까" / "AI의 가장 큰 불만"). Figma not updated.
 
 Sketching lead (KO): "기능 후보 5개를 먼저 종이에 그려 봤다." (the "코드로 만들기 전에," opener read oddly). Figma not updated.
+
+Landing note: dust behind it thins to 25% (was 40%; clearRect slot 1 strength 0.75, was 0.6), at the owner's request for a little less behind the text. Wide screens only, as before.
