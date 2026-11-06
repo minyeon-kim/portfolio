@@ -630,8 +630,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-section-head">
           <h2 id="testing-title" className="dv-section-title reveal">Testing</h2>
         </div>
-        <p className="dv-headline dv-headline-plain reveal">{testing.lead}</p>
-        <div className="dv-gap-96">
+        {/* No stage line under the title: the usability finding opens the stage (owner: the text
+            read as too many separate pieces). `testing.lead` still feeds the diamond. */}
+        <div>
           {/* With a `protocol`: the result first (finding, who and how much, the
               scores, what they meant). */}
           {testing.usability.protocol ? <>
