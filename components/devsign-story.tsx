@@ -792,6 +792,116 @@ export function AffinityWall({ wall, problems, funnel }: { wall: WallData; probl
   );
 }
 
+// Affinity mapping after a sticky-note board (owner's reference): short notes, coloured by
+// participant, start mixed on the board, settle into the seven theme columns, then the notes behind
+// each problem gather into a circle with the problem's name above and one line under it. Notes are
+// shortened from real interview quotes. Plays once when in view and stays on the circles; reduced
+// motion shows the circles.
+const AFF_RINGS = ["#5b8def", "#e5674f", "#3fb37f", "#d9a23a"];
+const AFF_PEOPLE: Record<string, string> = { P01: "#9fe0c8", P02: "#f6a7b9", P03: "#c2b0f5", P04: "#ffe08a" };
+
+export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData & { short: string[]; legendNote: string }; problems: { title: string; body: string }[]; people: string[][]; funnel: [string, string][] }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [w, setW] = useState(1200);
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const resize = new ResizeObserver(([e]) => setW(e.contentRect.width || 1200));
+    resize.observe(el);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setPhase(2); return () => resize.disconnect(); }
+    const timers: number[] = [];
+    const seen = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      seen.disconnect();
+      timers.push(window.setTimeout(() => setPhase(1), 900), window.setTimeout(() => setPhase(2), 4600));
+    }, { threshold: 0.2 });
+    seen.observe(el);
+    return () => { resize.disconnect(); seen.disconnect(); timers.forEach((t) => window.clearTimeout(t)); };
+  }, []);
+  const notes = wall.notes.flatMap((group, theme) => group.map(([, who]) => ({ who, theme })));
+  const rand = (seed: number) => { const x = Math.sin(seed * 999.13) * 43758.5453; return x - Math.floor(x); };
+  const wide = w >= 1000;
+  const gap = wide ? 14 : 10;
+  const labelH = wide ? 56 : 48;
+  type At = { x: number; y: number; w: number; h: number; r: number; o: number };
+  // Board: theme columns.
+  const bc = w >= 1100 ? 7 : w >= 640 ? 4 : 2;
+  const bw = (w - gap * (bc - 1)) / bc;
+  const bh = wide ? 64 : 72;
+  const byTheme = wall.themes.map((_, t) => notes.flatMap((n, i) => (n.theme === t ? [i] : [])));
+  const bandRows: number[] = [];
+  byTheme.forEach((g, t) => { const b = Math.floor(t / bc); bandRows[b] = Math.max(bandRows[b] ?? 0, g.length); });
+  const bandTop = bandRows.map((_, b) => bandRows.slice(0, b).reduce((sum, n) => sum + labelH + n * (bh + 8) + 32, 0));
+  const board = new Map<number, At>();
+  const themeLabels = byTheme.map((g, t) => {
+    const x = (t % bc) * (bw + gap);
+    const y = bandTop[Math.floor(t / bc)];
+    g.forEach((i, k) => board.set(i, { x, y: y + labelH + k * (bh + 8), w: bw, h: bh, r: (rand(i + 3) - 0.5) * 3, o: 1 }));
+    return { x, y, w: bw };
+  });
+  const boardH = bandTop[bandTop.length - 1] + labelH + bandRows[bandRows.length - 1] * (bh + 8);
+  // Start: mixed over the same area, tilted.
+  const start = new Map<number, At>(notes.map((_, i) => [i, { x: rand(i + 17) * (w - bw), y: labelH + rand(i + 71) * Math.max(120, boardH - labelH - bh), w: bw, h: bh, r: (rand(i + 5) - 0.5) * 18, o: 1 }]));
+  // Circles: four clusters, notes 2 x 2 inside a ring, the problem above and one line under it.
+  const cc = w >= 1000 ? 4 : w >= 560 ? 2 : 1;
+  const cw = (w - gap * (cc - 1)) / cc;
+  const d = Math.min(cw - 8, 300);
+  const cn = d * 0.34;
+  const titleH = 64;
+  const lineH = 84;
+  const clusterH = titleH + d + lineH;
+  const clusters = problems.map((p, pi) => {
+    const cx = (pi % cc) * (cw + gap) + cw / 2;
+    const top = Math.floor(pi / cc) * (clusterH + 24);
+    return { ...p, cx, top, cy: top + titleH + d / 2 };
+  });
+  const circle = new Map<number, At>();
+  problems.forEach((_, pi) => {
+    const ids = wall.themes.flatMap(([, problem], t) => (problem === pi ? byTheme[t] : [])).slice(0, 4);
+    const { cx, cy } = clusters[pi];
+    ids.forEach((i, k) => circle.set(i, { x: cx - cn - 3 + (k % 2) * (cn + 6), y: cy - cn - 3 + Math.floor(k / 2) * (cn + 6), w: cn, h: cn, r: (rand(i + 9) - 0.5) * 4, o: 1 }));
+  });
+  // Notes behind no problem fade where they stood on the board.
+  notes.forEach((_, i) => { if (!circle.has(i)) { const at = board.get(i)!; circle.set(i, { ...at, o: 0 }); } });
+  const circlesH = Math.ceil(problems.length / cc) * (clusterH + 24);
+  const height = Math.max(boardH, circlesH);
+  const at = (i: number) => (phase === 0 ? start : phase === 1 ? board : circle).get(i)!;
+  const step = phase === 2 ? 2 : phase === 1 ? 1 : 0;
+  return (
+    <div className="dv-amap dv-gap-40">
+      <ol className="dv-wall-steps" aria-label={wall.steps.join(" → ")}>
+        {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined} data-done={i < step || undefined}><strong>{n}</strong><span>{label}</span></li>)}
+      </ol>
+      <div className="dv-amap-people">
+        {people.map(([id, role]) => <span key={id}><i style={{ background: AFF_PEOPLE[id] }} />{id} · {role}</span>)}
+      </div>
+      <div ref={root} className="dv-amap-stage" data-phase={phase} style={{ height }} aria-hidden="true">
+        {themeLabels.map((l, t) => <p key={t} className="dv-amap-theme" data-on={phase === 1 || undefined} style={{ left: l.x, top: l.y, width: l.w }}>{wall.themes[t][0]}</p>)}
+        {clusters.map((c, pi) => (
+          <div key={c.title} className="dv-amap-cluster" data-on={phase === 2 || undefined} style={{ left: c.cx - cw / 2, top: c.top, width: cw } as CSSProperties}>
+            <p className="dv-amap-title"><b>{pi + 1}</b>{c.title}</p>
+            <svg width={d + 24} height={d + 24} viewBox={`0 0 ${d + 24} ${d + 24}`} style={{ marginTop: titleH - 48 }}>
+              <circle cx={(d + 24) / 2} cy={(d + 24) / 2} r={d / 2 + 4} pathLength={1} style={{ stroke: AFF_RINGS[pi % 4] }} />
+            </svg>
+            <p className="dv-amap-line">{c.body}</p>
+          </div>
+        ))}
+        {notes.map((n, i) => {
+          const a = at(i);
+          return (
+            <div key={i} className="dv-amap-note" style={{ width: a.w, height: a.h, opacity: a.o, background: AFF_PEOPLE[n.who] ?? "#ddd", transform: `translate(${a.x}px, ${a.y}px) rotate(${a.r}deg)`, transitionDelay: `${Math.round(rand(i + 13) * 300)}ms` }}>
+              {wall.short[i]}
+            </div>
+          );
+        })}
+      </div>
+      <p className="dv-amap-legend">{wall.legendNote}</p>
+      <div className="sr-only"><ol>{problems.map((p, pi) => <li key={p.title}>{p.title}: {wall.themes.filter(([, x]) => x === pi).map(([name]) => name).join(", ")}</li>)}</ol></div>
+    </div>
+  );
+}
+
 // One screen of the spec as a still document part: the screenshot with numbered pins and, beside or
 // under it, the same numbers with element, behavior and states. Nothing plays by itself.
 function SpecShot({ screen, lit = -1, onPin }: { screen: SpecScreen; lit?: number; onPin?: (n: number) => void }) {
