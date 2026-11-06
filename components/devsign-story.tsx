@@ -89,14 +89,21 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
 // The holding card: it stays on screen (CSS sticky) and one step at a time crossfades inside it
 // as the page scrolls. Native scroll only. On phones and with reduced motion (CSS) each step is
 // its own card. A step mark scrolls to the middle of its step, and shows it at once.
-function useHeldSteps(count: number) {
+export const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
+const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
+
+export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  // The tallest the stage has been, so a step with a shorter stage doesn't shift it on screen.
+  const tallest = useRef(0);
   const measure = (el: HTMLElement) => {
-    const stage = (el.firstElementChild as HTMLElement).offsetHeight;
+    const now = (el.firstElementChild as HTMLElement).offsetHeight;
+    tallest.current = Math.max(tallest.current, now);
+    const stage = tallest.current;
     // Centred on the screen, below the header when the screen is short.
-    return { top: Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20), travel: el.offsetHeight - stage };
+    return { top: Math.max(76, Math.round((window.innerHeight - stage) / 2) + 20), travel: el.offsetHeight - now };
   };
   useEffect(() => {
     const el = root.current;
@@ -113,8 +120,8 @@ function useHeldSteps(count: number) {
       if (step !== scrollStep) { scrollStep = step; setActive(step); }
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
-    const query = window.matchMedia(REELS_PIN);
-    const sync = () => setPinned(query.matches);
+    const query = window.matchMedia(pinQuery);
+    const sync = () => { tallest.current = 0; setPinned(query.matches); };
     sync();
     read();
     query.addEventListener("change", sync);
@@ -126,7 +133,7 @@ function useHeldSteps(count: number) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [count]);
+  }, [count, pinQuery]);
   const go = (i: number) => {
     const el = root.current;
     if (!el) return;
@@ -361,7 +368,6 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
 }
 
 // Keep in step with the pinned rules at the end of globals.css.
-const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
 
 // On desktop one card holds still on the screen: the clip on its colour at the left, the
 // text at the right, and native scroll changes what's inside. The steps show where you are
@@ -371,10 +377,14 @@ const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduc
 // plays), and one wide frame at the right playing that feature's clip. When a clip ends the next
 // feature opens; pressing a name switches at once. Clips play only while the block is on screen;
 // with reduced motion nothing plays by itself and the clip shows its controls.
+// On a desktop with room and motion, the list and clip hold on screen while native scroll moves
+// through the features (the held-track pattern); a clip loops while its feature is current.
+// Elsewhere a clip that ends opens the next feature.
 export function FeatureList({ reels }: { reels: Reel[] }) {
+  const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length);
   const root = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
-  const [current, setCurrent] = useState(0);
+  const current = active;
   const [onScreen, setOnScreen] = useState(false);
   const [near, setNear] = useState(false);
   const [still, setStill] = useState(false);
@@ -392,6 +402,7 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
     return () => { nearby.disconnect(); seen.disconnect(); window.removeEventListener("pointerdown", retry); };
   }, [current, still]);
   useEffect(() => {
+    root.current?.style.setProperty("--fl-p", "0");
     videos.current.forEach((v, i) => {
       if (!v) return;
       if (i === current && onScreen && !still) {
@@ -407,11 +418,12 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
   const pick = (i: number) => {
     const v = videos.current[i];
     if (v) v.currentTime = 0;
-    root.current?.style.setProperty("--fl-p", "0");
-    setCurrent(i);
+    if (pinned) go(i);
+    else setActive(i);
   };
   return (
-    <div ref={root} className="dv-flist dv-gap-40">
+    <div ref={track} className="dv-held-track dv-flist-track dv-gap-40" style={{ "--n": reels.length } as CSSProperties}>
+    <div ref={root} className="dv-flist">
       <ol className="dv-flist-items">
         {reels.map((reel, i) => (
           <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined}>
@@ -437,6 +449,7 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
             poster={withBase(reel.clip.poster)}
             muted
             playsInline
+            loop={pinned}
             preload={near && i <= current + 1 ? "auto" : "none"}
             controls={(still || refused) && i === current}
             data-on={i === current || undefined}
@@ -444,10 +457,11 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
             aria-label={reel.alt ?? reel.name}
             onTimeUpdate={(e) => { if (i === current) root.current?.style.setProperty("--fl-p", String(e.currentTarget.duration ? e.currentTarget.currentTime / e.currentTarget.duration : 0)); }}
             onPlaying={() => setRefused(false)}
-            onEnded={() => { if (i === current) pick((i + 1) % reels.length); }}
+            onEnded={() => { if (i === current && !pinned) pick((i + 1) % reels.length); }}
           />
         ))}
       </div>
+    </div>
     </div>
   );
 }
@@ -806,13 +820,18 @@ const AFF_PEOPLE: Record<string, string> = { P01: "#9fe0c8", P02: "#f6a7b9", P03
 export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData & { short: string[]; legendNote: string }; problems: { title: string; body: string }[]; people: string[][]; funnel: [string, string][] }) {
   const root = useRef<HTMLDivElement>(null);
   const [w, setW] = useState(1200);
-  const [phase, setPhase] = useState(0);
+  const [timed, setPhase] = useState(0);
+  // With room and motion the map holds on screen and native scroll moves it from the mixed
+  // notes to the themes to the problems; elsewhere it plays once by itself.
+  const held = useHeldSteps(3);
+  const phase = held.pinned ? held.active : timed;
   useEffect(() => {
     const el = root.current;
     if (!el) return;
     const resize = new ResizeObserver(([e]) => setW(e.contentRect.width || 1200));
     resize.observe(el);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setPhase(2); return () => resize.disconnect(); }
+    if (window.matchMedia(REELS_PIN).matches) return () => resize.disconnect();
     const timers: number[] = [];
     const seen = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
@@ -868,11 +887,12 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
   // Notes behind no problem fade where they stood on the board.
   notes.forEach((_, i) => { if (!circle.has(i)) { const at = board.get(i)!; circle.set(i, { ...at, o: 0 }); } });
   const circlesH = Math.ceil(problems.length / cc) * (clusterH + 24);
-  const height = phase === 2 ? circlesH : Math.max(boardH, circlesH);
+  const height = phase === 2 && !held.pinned ? circlesH : Math.max(boardH, circlesH);
   const at = (i: number) => (phase === 0 ? start : phase === 1 ? board : circle).get(i)!;
   const step = phase === 2 ? 2 : phase === 1 ? 1 : 0;
   return (
-    <div className="dv-amap dv-gap-40">
+    <div ref={held.root} className="dv-held-track dv-amap-track dv-gap-40" style={{ "--n": 3 } as CSSProperties}>
+    <div className="dv-amap">
       <ol className="dv-wall-steps" aria-label={wall.steps.join(" → ")}>
         {funnel.map(([n, label], i) => <li key={label} data-on={i === step || undefined} data-done={i < step || undefined}><strong>{n}</strong><span>{label}</span></li>)}
       </ol>
@@ -898,6 +918,7 @@ export function AffinityMap({ wall, problems, people, funnel }: { wall: WallData
         {people.map(([id, role]) => <span key={id}><i style={{ background: AFF_PEOPLE[id] }} />{id} · {role}</span>)}
       </div>
       <div className="sr-only"><ol>{problems.map((p, pi) => <li key={p.title}>{p.title}: {wall.themes.filter(([, x]) => x === pi).map(([name]) => name).join(", ")}</li>)}</ol></div>
+    </div>
     </div>
   );
 }
@@ -933,11 +954,13 @@ function SpecRows({ screen, cols, lit = -1, onRow, brief }: { screen: SpecScreen
 // (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
 export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {
   const first = Math.max(0, spec.screens.findIndex((item) => item.id === screenId));
-  const [current, setCurrent] = useState(first);
+  const held = useHeldSteps(spec.screens.length, TALL_PIN);
+  const [chosen, setCurrent] = useState(first);
+  const current = held.pinned ? held.active : chosen;
   const [lit, setLit] = useState(-1);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const screen = spec.screens[current];
-  const pick = (i: number) => { setCurrent(i); setLit(-1); };
+  const pick = (i: number) => { if (held.pinned) held.go(i); else setCurrent(i); setLit(-1); };
   const onKeys = (event: React.KeyboardEvent) => {
     const last = spec.screens.length - 1;
     const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
@@ -948,6 +971,8 @@ export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecD
   };
   return (
     <div className="dv-hdoc-excerpt dv-gap-40 reveal">
+      <div ref={held.root} className="dv-held-track dv-held-tall" style={{ "--n": spec.screens.length } as CSSProperties}>
+      <div className="dv-hdoc-hold">
       <div className="dv-hdoc-tabs" role="tablist" aria-label={spec.labels.elements} onKeyDown={onKeys}>
         {spec.screens.map((item, i) => (
           <button key={item.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`hx-tab-${item.id}`} aria-selected={i === current} aria-controls="hx-panel" tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>
@@ -961,12 +986,14 @@ export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecD
           <SpecShot screen={screen} lit={lit} onPin={setLit} />
           <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} brief />
         </div>
-        <div className="dv-hdoc-cols">
+      </div>
+      </div>
+      </div>
+        <div className="dv-hdoc-cols" key={`cols-${screen.id}`}>
           <div><h4>{spec.labels.accept}</h4><ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul></div>
           <div><h4>{spec.labels.tokens}</h4><ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul></div>
           <div><h4>{spec.labels.code}</h4><ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul></div>
         </div>
-      </div>
       <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
     </div>
   );
