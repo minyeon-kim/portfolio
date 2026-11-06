@@ -5958,3 +5958,29 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-iv-tiles { gap: 8px; overflow: visible; border-radius: 0; }
 .dv-iv-tiles img { border-radius: 12px; }
 .case-study .dv .dv-iv-claim blockquote { font-size: clamp(20px, 1.8vw, 24px); line-height: 1.4; }
+
+/* Develop, Metalab rhythm (trial, owner chose to try it on one stage first; after metalab.com/work/ro):
+   one text column (same indent, 800px, findings at statement size) and media in one width only, edge
+   to edge with a 24px gutter, straight on the page with no plate. Desktop only. */
+@media (min-width: 64rem) {
+  .case-study[data-project="devsign"] .dv > #develop {
+    --txt-in: min(200px, 16.667%);
+    --bleed: calc(100vw - 2 * var(--edge-inset, 24px));
+  }
+  .case-study[data-project="devsign"] #develop :is(.dv-section-head, .dv-block, .dv-vpc-title, .dv-vpc-pairs) {
+    margin-left: var(--txt-in); max-width: 800px;
+  }
+  .case-study[data-project="devsign"] #develop .dv-section-head { max-width: none; }
+  .case-study[data-project="devsign"] #develop .dv-finding { font-size: var(--t-statement); font-weight: 400; letter-spacing: -0.015em; line-height: 1.25; }
+  .case-study[data-project="devsign"] #develop .dv-body { margin-top: 20px; }
+  .case-study[data-project="devsign"] #develop :is(.dv-vpc-view, .dv-cover, .dv-iaf, .dv-fc) {
+    width: var(--bleed); max-width: none; margin-left: calc(50% - var(--bleed) / 2);
+  }
+  .case-study[data-project="devsign"] #develop :is(.dv-vpc-view, .dv-vpc-view .dv-open-frame) { padding: 0; border-radius: 12px; background: none; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-view img { border-radius: 12px; }
+  .case-study[data-project="devsign"] #develop .dv-cover img { aspect-ratio: 21 / 9; border-radius: 12px; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-view { margin-top: 64px; }
+  .case-study[data-project="devsign"] #develop .dv-vpc-title { margin-top: 64px; }
+}
+
+@media (min-width: 64rem) { .case-study[data-project="devsign"] #develop :is(.dv-spec-more, .dv-fc-full) { display: block; width: fit-content; margin-inline: auto; } }
