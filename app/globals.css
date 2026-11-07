@@ -6865,3 +6865,14 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 
 /* Iteration 2 drops its outer card so the purple plate sits on the page, like the core features and handoff. */
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter:not(.dv-screens-held) .dv-held-plate { background: transparent; border: 0; padding: 0; }
+/* Affinity board as mini post-its (owner: the tiny squares felt poor). The tile text is a
+   deliberate exception to the 16px minimum: it only hints the statement, the full text comes up on press. */
+@media (min-width: 72rem) { .dv-ax-tiles .dv-ax-stage { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); } }
+.dv-ax-tiles .dv-ax-note:not([data-open]) { padding: 0 5px; border-radius: 3px; justify-content: center; box-shadow: 0 1px 1px rgb(0 0 0 / 0.14); }
+.dv-ax-tiles .dv-ax-note b { overflow: hidden; color: rgb(29 29 31 / 0.78); font-size: 12px; font-weight: 500; line-height: 1; white-space: nowrap; text-overflow: clip; animation: dv-ax-text 300ms both; }
+.dv-ax-tiles .dv-ax-note[data-pick]:hover { filter: none; box-shadow: 0 0 0 2px var(--ink); z-index: 2; }
+.dv-ax-tiles .dv-ax-ghost { border-width: 1.5px; border-style: dashed; background: transparent; }
+.dv-ax-tiles .dv-ax-col::before { inset: -10px -8px; }
+.dv-ax-tiles .dv-ax-col[data-on]::before { background: color-mix(in srgb, var(--case-accent, var(--accent)) 12%, transparent); }
+.dv-ax-tiles .dv-ax-col[data-on] .dv-ax-colname { font-size: 16px; }
+.dv-ax-tiles .dv-ax-insight span { color: var(--case-accent, var(--accent)); }
