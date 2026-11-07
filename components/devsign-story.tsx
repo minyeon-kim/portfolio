@@ -461,7 +461,7 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
     <div ref={root} className="dv-flist">
       <ol className="dv-flist-items">
         {reels.map((reel, i) => (
-          <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined}>
+          <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined} data-t={i % 4}>
             <button type="button" aria-expanded={i === current} onClick={() => pick(i)}>
               <b>{reel.kicker.split(" ")[0]}</b>
               <span>{reel.name}{reel.hook && <small>{reel.hook}</small>}</span>
@@ -475,7 +475,8 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
           </li>
         ))}
       </ol>
-      <div className="dv-flist-frame">
+      <div className="dv-flist-frame" data-tone={current % 4}>
+        {[0, 1, 2, 3].map((t) => <i key={`tone-${t}`} className="dv-flist-tone" data-t={t} data-on={current % 4 === t || undefined} aria-hidden="true" />)}
         {reels.map((reel, i) => (
           <video
             key={reel.id}
