@@ -7,7 +7,7 @@ import {
 import { AFF_NOTES } from "@/lib/devsign-affinity-notes";
 
 type Note = { theme: number; sub: number; type: string; who: string; k: number; i: number };
-type At = { x: number; y: number; w: number; h: number; o: number; open?: boolean };
+type At = { x: number; y: number; w: number; h: number; o: number; open?: boolean; pick?: boolean; slot?: { x: number; y: number } };
 type Label = { key: string; x: number; y: number; w: number; text: string; kind: "sub" | "insight" };
 
 // The affinity board from the real FigJam data, as one board: the 201 stickies (one per
@@ -21,6 +21,7 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
   const [w, setW] = useState(1200);
   const [sorted, setSorted] = useState(false);
   const [theme, setTheme] = useState(0);
+  const [picked, setPicked] = useState<Record<number, number[]>>({});
 
   useEffect(() => {
     const el = stage.current;
@@ -43,6 +44,14 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
     AFF_THEMES.forEach((t, ti) => { let i = 0; t.subs.forEach((s, si) => [...s.types].forEach((type, j) => all.push({ theme: ti, sub: si, type, who: s.people[j], k: all.length, i: i++ }))); });
     return all;
   }, []);
+  // The board's quoted stickies for a theme, matched to their place in the notes.
+  const defaultPicks = (t: number) => {
+    const list = AFF_NOTES.ko[t];
+    const found = AFF_THEMES[t].quotes.map((q) => list.findIndex((x) => x.replace(/\s/g, "").startsWith(q.text.ko.replace(/[\s"“”]/g, "").slice(0, 10)))).filter((i) => i >= 0);
+    const rest = list.map((_, i) => i).filter((i) => !found.includes(i));
+    return [...found, ...rest].slice(0, 4);
+  };
+  const pickNote = (i: number) => setPicked((p) => { const cur = p[theme] ?? defaultPicks(theme); return { ...p, [theme]: [i, ...cur.filter((x) => x !== i)].slice(0, 4) }; });
   const themeCount = AFF_THEMES.map((_, t) => notes.filter((n) => n.theme === t).length);
   const rand = (n: number) => { const x = Math.sin(n * 91.7 + 13.1) * 43758.5453; return x - Math.floor(x); };
 
@@ -61,23 +70,37 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
   // The open column's insight and post-its, laid out inside a box of width `ow` at (ox, oy).
   const labels: Label[] = [];
   const at = new Map<number, At>();
+  // The open column fits one screen: the insight, a row of readable post-its (the board's
+  // quoted stickies first; press any square to bring it up), then every sticky of the theme
+  // as a small square under its sub-group.
+  const featured = picked[theme] ?? defaultPicks(theme);
   const openNotes = (ox: number, oy: number, ow: number) => {
-    const fs = ow < 640 ? 20 : 22;
+    const fs = ow < 640 ? 18 : 20;
     const text = AFF_THEMES[theme].insight[locale];
     const lines = Math.ceil((text.length * fs * (locale === "ko" ? 0.95 : 0.5)) / ow);
     labels.push({ key: "insight", x: ox, y: oy, w: ow, text, kind: "insight" });
-    let y = oy + 28 + lines * fs * 1.4 + 32;
+    let y = oy + 26 + lines * fs * 1.45 + 40;
     const pg = 12;
-    const per = Math.max(1, Math.floor((ow + pg) / ((ow < 640 ? 150 : 176) + pg)));
+    const per = Math.max(1, Math.min(4, Math.floor((ow + pg) / ((ow < 640 ? 150 : 180) + pg))));
     const pw = (ow - pg * (per - 1)) / per;
     const ph = 188;
+    const shown = featured.slice(0, per);
+    shown.forEach((i, j) => {
+      const n = notes.find((m) => m.theme === theme && m.i === i);
+      if (n) at.set(n.k, { x: ox + j * (pw + pg), y, w: pw, h: ph, o: 1, open: true });
+    });
+    y += ph + 28;
+    const big = 14;
+    const bc = big + 4;
+    const rowPer = Math.max(1, Math.floor((ow + 4) / bc));
     AFF_THEMES[theme].subs.forEach((sub, si) => {
       labels.push({ key: `sub-${si}`, x: ox, y, w: ow, text: `${sub.name[locale]} ${sub.types.length}`, kind: "sub" });
-      y += 48;
+      y += 30;
       notes.filter((n) => n.theme === theme && n.sub === si).forEach((n, i) => {
-        at.set(n.k, { x: ox + (i % per) * (pw + pg), y: y + Math.floor(i / per) * (ph + pg), w: pw, h: ph, o: 1, open: true });
+        if (!at.has(n.k)) at.set(n.k, { x: ox + (i % rowPer) * bc, y: y + Math.floor(i / rowPer) * bc, w: big, h: big, o: 1, pick: true });
+        else at.set(n.k, { ...at.get(n.k)!, slot: { x: ox + (i % rowPer) * bc, y: y + Math.floor(i / rowPer) * bc } });
       });
-      y += Math.ceil(sub.types.length / per) * (ph + pg) + 20;
+      y += Math.ceil(sub.types.length / rowPer) * bc + 14;
     });
     return y;
   };
@@ -144,6 +167,10 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
             {l.kind === "insight" && <span>{ui.insight}</span>}{l.text}
           </p>
         ))}
+        {sorted && notes.map((n) => {
+          const sl = at.get(n.k)?.slot;
+          return sl ? <i key={`g${n.k}`} className="dv-ax-ghost" style={{ transform: `translate(${sl.x}px, ${sl.y}px)`, borderColor: AFF_TYPE_COLOR[n.type] }} /> : null;
+        })}
         {notes.map((n) => {
           const a = layout.get(n.k)!;
           const isOpen = !!a.open;
@@ -152,7 +179,9 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
               key={n.k}
               className="dv-ax-note"
               data-open={isOpen || undefined}
+              data-pick={a.pick || undefined}
               aria-hidden
+              onClick={a.pick ? () => pickNote(n.i) : undefined}
               style={{ width: a.w, height: a.h, background: AFF_TYPE_COLOR[n.type], opacity: a.o, transform: `translate(${a.x}px, ${a.y}px) rotate(${isOpen ? (rand(n.k) - 0.5) * 2 : 0}deg)`, transitionDelay: `${Math.round(isOpen ? n.i * 14 : rand(n.k + 7) * 200)}ms` } as CSSProperties}
               title={isOpen ? undefined : `${AFF_TYPE_NAME[n.type][locale]} · ${AFF_PEOPLE[n.who][locale]}: ${AFF_NOTES[locale][n.theme][n.i]}`}
             >
