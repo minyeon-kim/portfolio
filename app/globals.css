@@ -6886,3 +6886,28 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 /* UI details: the card grows with its cut-out, so a tall popover is never clipped. */
 .case-study .dv .dv-detail:not([data-wide]) .dv-detail-card { height: auto; min-height: clamp(360px, 44svh, 480px); }
 .case-study .dv .dv-detail:not([data-wide]) .dv-detail-card img { max-height: min(60svh, 560px); }
+
+/* Affinity as evidence + findings (owner: the keyword tiles said nothing; supersedes the tile board). */
+.dv-axe { display: grid; gap: 56px; }
+.dv-axe-board { position: relative; display: block; overflow: clip; border-radius: var(--dv-card-radius, 16px); background: #f4f4f6; color: inherit; }
+@media (min-width: 72rem) { .dv-axe-board { --ia-w: min(1640px, calc(100vw - 96px)); width: var(--ia-w); margin-left: calc(50% - var(--ia-w) / 2); } }
+.dv-axe-board img { display: block; width: 100%; height: auto; }
+.dv-axe-board:focus-visible { outline: 2px solid var(--case-accent, var(--accent)); outline-offset: 4px; }
+.dv-axe-col { position: absolute; top: 0; bottom: 0; border-radius: 12px; box-shadow: 0 0 0 9999px rgb(10 11 20 / 0); outline: 2px solid transparent; outline-offset: -2px; pointer-events: none; transition: box-shadow 250ms ease, outline-color 250ms ease; }
+.dv-axe-board[data-lit] .dv-axe-col[data-on] { box-shadow: 0 0 0 9999px rgb(10 11 20 / 0.62); outline-color: var(--case-accent, var(--accent)); z-index: 1; }
+.dv-axe-board .dv-open-hint { z-index: 2; }
+.dv-axe-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--dv-line, var(--line)); }
+.dv-axe-list li { display: grid; gap: 8px 40px; padding: 24px 0; border-bottom: 1px solid var(--dv-line, var(--line)); outline: none; transition: background-color 250ms ease; }
+@media (min-width: 64rem) { .dv-axe-list li { grid-template-columns: minmax(180px, 1fr) minmax(0, 2.2fr) minmax(0, 2fr); align-items: start; } }
+.dv-axe-list li[data-on] { background: color-mix(in srgb, var(--case-accent, var(--accent)) 7%, transparent); }
+.dv-axe-list li:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.dv-axe-name { margin: 0; display: flex; align-items: baseline; gap: 10px; }
+.dv-axe-name b { font-size: 20px; font-weight: 500; line-height: 1.3; }
+.dv-axe-name span { color: var(--dv-muted, var(--muted)); font-size: 16px; font-variant-numeric: tabular-nums; }
+.dv-axe-list li[data-on] .dv-axe-name b { color: var(--case-accent, var(--accent)); }
+.dv-axe-insight { margin: 0; font-size: 18px; line-height: 1.55; color: var(--ink); }
+.dv-axe-quote { margin: 0; padding-left: 14px; border-left: 2px solid color-mix(in srgb, var(--case-accent, var(--accent)) 50%, transparent); }
+.dv-axe-quote p { margin: 0; color: var(--dv-muted, var(--muted)); font-size: 16px; line-height: 1.55; }
+.dv-axe-quote cite { display: block; margin-top: 6px; color: var(--dv-muted, var(--muted)); font-size: 16px; font-style: normal; opacity: 0.8; }
+@media (min-width: 64rem) { .dv-axe-list li { padding-inline: 12px; margin-inline: -12px; border-radius: 0; } }
+.dv-axe-name span { white-space: nowrap; }
