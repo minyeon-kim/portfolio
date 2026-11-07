@@ -6983,3 +6983,21 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .case-study .dv .dv-flist { grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr); }
   .case-study .dv .dv-flist-frame { width: min(100%, calc((100svh - 160px) * 1.6)); }
 }
+
+/* Detail rows: each card gets its own colour and the rows alternate sides (owner, after
+   calendly.com: every feature card looked the same). Cycles through four tones. */
+.case-study .dv .dv-details-list > li { --c1: #7c62ff; --c2: #c084fc; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 2) { --c1: #38bdf8; --c2: #2dd4bf; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 3) { --c1: #f472b6; --c2: #fb923c; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 4) { --c1: #34d399; --c2: #a3e635; }
+.case-study .dv .dv-details-list > li .dv-detail-card {
+  background:
+    radial-gradient(110% 85% at 12% 0%, color-mix(in srgb, var(--c1) 55%, transparent), transparent 64%),
+    radial-gradient(100% 80% at 100% 100%, color-mix(in srgb, var(--c2) 45%, transparent), transparent 66%),
+    color-mix(in srgb, var(--c1) 14%, var(--bg));
+}
+.case-study .dv .dv-details-list > li .dv-detail-num { color: color-mix(in srgb, var(--c1) 80%, var(--ink)); }
+@media (min-width: 64rem) {
+  .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) .dv-detail-card { order: -1; }
+}
