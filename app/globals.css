@@ -7044,3 +7044,27 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-hdoc-one .dv-hdoc-purpose b { font-weight: 500; color: var(--ink); }
 .dv-hdoc-one .dv-hdoc-more { margin-top: 32px; }
 .dv-hdoc-one-purpose { display: block !important; }
+/* Iteration 1 pair in the detail-card language (owner): As-is a quiet grey gradient, To-be the
+   clear violet gradient of tone 01, both with the soft highlight; dark text in light, white in dark. */
+.case-study .dv .dv-iter-card { border-color: transparent; }
+.case-study .dv .dv-iter-card[data-side="a"] {
+  background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.4), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, #e4e4ea, #0a0b14 var(--g-depth, 0%) ), color-mix(in srgb, #c9c9d2, #0a0b14 calc(var(--g-depth, 0%) * 2.4)));
+}
+.case-study .dv .dv-iter-card[data-side="b"] {
+  background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
+}
+.case-study .dv .dv-iter-card[data-side="a"] .dv-iter-plate { background: none; }
+.case-study .dv .dv-iter-card figcaption { color: #16161c; }
+.case-study .dv .dv-iter-card figcaption span { color: rgb(22 22 28 / 0.62); }
+.case-study .dv .dv-iter-card[data-side="b"] figcaption { color: #16161c; }
+.case-study .dv .dv-iter-card[data-side="b"] figcaption span { color: rgb(22 22 28 / 0.66); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .case-study .dv .dv-iter-card :is(figcaption, figcaption span) { color: #fff; } :root:not([data-theme="light"]) .case-study .dv .dv-iter-card figcaption span { opacity: 0.78; } }
+:root[data-theme="dark"] .case-study .dv .dv-iter-card :is(figcaption, figcaption span) { color: #fff; }
+:root[data-theme="dark"] .case-study .dv .dv-iter-card figcaption span { opacity: 0.78; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { background: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] {
+  background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
+}
