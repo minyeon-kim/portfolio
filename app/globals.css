@@ -7210,3 +7210,9 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 20px 12px 12px !important; color: var(--dv-ink, var(--ink)) !important; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption span { color: var(--dv-muted, var(--muted)) !important; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption span { color: var(--case-accent) !important; }
+/* Iteration 1 like the UI details (owner chose it; supersedes the neutral card around the plate):
+   just the colour plate around each clip, the caption as page text under it. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] { padding: 0 !important; background: none !important; border-radius: 0 !important; overflow: visible; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { border-radius: var(--plate-radius) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 20px 4px 0 !important; }
