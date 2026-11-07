@@ -6829,3 +6829,16 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-ax-col[data-on] .dv-ax-colname { color: var(--case-accent, var(--accent)); font-size: 20px; }
 .dv-ax-col:not([data-on]):hover::before { background: color-mix(in srgb, var(--ink) 6%, transparent); }
 .dv-ax-col:not([data-on]):hover { color: var(--ink); }
+
+/* Held scroll stages wear the UI-details card: the clip or screen sits inside a soft
+   case-colour plate (core features, handoff excerpt, Iteration 2). */
+.case-study .dv :is(.dv-flist-frame, .dv-hdoc-excerpt .dv-hdoc-shot, .dv-iter .dv-iter-clip) {
+  background:
+    radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--dv-chart-fill) 45%, transparent), transparent 62%),
+    radial-gradient(100% 80% at 100% 100%, color-mix(in srgb, var(--case-accent) 35%, transparent), transparent 66%),
+    color-mix(in srgb, var(--dv-chart-fill) 14%, var(--bg));
+}
+.case-study .dv .dv-flist-frame video { inset: clamp(16px, 2.6vw, 36px); width: auto; height: auto; max-width: calc(100% - 2 * clamp(16px, 2.6vw, 36px)); max-height: calc(100% - 2 * clamp(16px, 2.6vw, 36px)); margin: auto; border-radius: 10px; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.case-study .dv .dv-hdoc-excerpt .dv-hdoc-shot { padding: clamp(16px, 2.4vw, 32px); }
+.case-study .dv .dv-hdoc-excerpt .dv-hdoc-lens { border-radius: 10px; overflow: hidden; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.case-study .dv .dv-iter .dv-iter-clip video { border-radius: 10px; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
