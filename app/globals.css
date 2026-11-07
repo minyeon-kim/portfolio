@@ -6820,3 +6820,12 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .about-contact-rows li { grid-template-columns: 1fr auto; gap: 4px 12px; padding-block: 16px; }
   .about-contact-label { grid-column: 1 / -1; }
 }
+
+/* Affinity board: one board, the open theme's stickies grow into post-its inside its column. */
+.dv-ax-note p { flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.dv-ax-note span { flex: none; }
+.dv-ax-col[data-on] { cursor: default; }
+.dv-ax-col[data-on]::before { background: transparent; }
+.dv-ax-col[data-on] .dv-ax-colname { color: var(--case-accent, var(--accent)); font-size: 20px; }
+.dv-ax-col:not([data-on]):hover::before { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.dv-ax-col:not([data-on]):hover { color: var(--ink); }

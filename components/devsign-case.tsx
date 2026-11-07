@@ -387,7 +387,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...define.affinity} ff={ff} />
           {/* The process first: how many statements became how many problems, and the board itself. */}
           {define.affinity.explorer
-            ? <AffinityExplorer locale={define.affinity.explorer} problems={define.problems.items} boardHref={withBase(define.affinity.board.src)} />
+            ? <AffinityExplorer locale={define.affinity.explorer} boardHref={withBase(define.affinity.board.src)} />
             : define.affinity.wall
             ? <AffinityMap wall={define.affinity.wall} problems={define.problems.items} people={discover.interview?.participants ?? []} funnel={define.affinity.funnel} />
             : <ol className="dv-funnel dv-gap-40 reveal">
