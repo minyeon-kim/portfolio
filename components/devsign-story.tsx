@@ -988,6 +988,24 @@ function SpecRows({ screen, cols, lit = -1, onRow, brief }: { screen: SpecScreen
   );
 }
 
+// The case page shows one screen of the spec with only its key elements (owner: four tabbed
+// screens with six rows each were too much); everything else is on the full spec page.
+export function HandoffOne({ spec, screenId, keep, more, moreHref }: { spec: SpecData; screenId: string; keep: number[]; more: string; moreHref: string }) {
+  const full = spec.screens.find((item) => item.id === screenId) ?? spec.screens[0];
+  const screen = { ...full, pins: keep.map((n) => full.pins[n]), rows: keep.map((n) => full.rows[n]) };
+  const [lit, setLit] = useState(-1);
+  return (
+    <div className="dv-hdoc-excerpt dv-hdoc-one dv-gap-40 reveal">
+      <p className="dv-hdoc-purpose dv-hdoc-one-purpose"><b>{full.tab}</b> — {full.purpose}</p>
+      <div className="dv-hdoc-pair">
+        <SpecShot screen={screen} lit={lit} onPin={setLit} />
+        <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+      </div>
+      <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
+    </div>
+  );
+}
+
 // The case page shows one screen of the handoff spec as an excerpt and links to the full document
 // (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
 export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {
