@@ -418,7 +418,7 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
 // On a desktop with room and motion, the list and clip hold on screen while native scroll moves
 // through the features (the held-track pattern); a clip loops while its feature is current.
 // Elsewhere a clip that ends opens the next feature.
-export function FeatureList({ reels }: { reels: Reel[] }) {
+export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }) {
   const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length);
   const root = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
@@ -461,7 +461,7 @@ export function FeatureList({ reels }: { reels: Reel[] }) {
   };
   return (
     <div ref={track} className="dv-held-track dv-flist-track dv-gap-40" style={{ "--n": reels.length } as CSSProperties}>
-    <div ref={root} className="dv-flist">
+    <div ref={root} className="dv-flist" data-phone={phone || undefined}>
       <ol className="dv-flist-items">
         {reels.map((reel, i) => (
           <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined} data-t={i % 4}>

@@ -7243,3 +7243,9 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .dv-axt { grid-template-columns: minmax(0, 4.2fr) minmax(0, 7.8fr); }
   .dv-axt-board { max-height: none; top: max(80px, calc(50svh - 46vw * 0.62)); }
 }
+/* Gemini flows: phone clips in the core-features list, the frame shaped for a phone. */
+.case-study .dv .dv-flist[data-phone] .dv-flist-frame { aspect-ratio: 5 / 4; }
+@media (min-width: 64rem) { .case-study .dv .dv-flist[data-phone] .dv-flist-frame { width: min(100%, calc((100svh - 200px) * 1.25)); } }
+.case-study .dv .dv-flist[data-phone] .dv-flist-frame video { object-fit: contain; box-shadow: none !important; border-radius: 0 !important; background: transparent; }
+/* The recorded phone keeps its own rounded corners (the crop's square corners are masked). */
+.case-study .dv .dv-flist[data-phone] .dv-flist-frame video { left: 50% !important; right: auto !important; width: auto !important; height: calc(100% - 2 * var(--plate-pad, 32px)) !important; translate: -50% 0; clip-path: inset(0 round 15.7% / 7.25%); }
