@@ -7113,3 +7113,16 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .intro-stage.home-stage .home-picks ol { gap: 14px !important; }
   .intro-stage.home-stage .home-pick { height: 44px !important; min-height: 44px; padding: 0 22px !important; font-size: 18px !important; font-weight: 500 !important; }
 }
+/* Landing case items (class feedback 2026-11-06: make the case studies bigger and more solid):
+   on 64rem and up each pick is a rounded item with a thumbnail, the name and its one line,
+   keeping the turning project-coloured border. Phones keep the plain pill. */
+.home-pick-thumb, .home-pick-cap { display: none; }
+.home-pick-text { display: contents; }
+@media (min-width: 64rem) {
+  .intro-stage.home-stage .home-pick { display: flex; align-items: center; gap: 14px; height: auto !important; min-height: 0; width: min(380px, 30vw); padding: 8px 20px 8px 8px !important; border-radius: 18px; text-align: left; }
+  .intro-stage.home-stage .home-pick-thumb { display: block; flex: none; width: 88px; height: 56px; border-radius: 10px; object-fit: cover; object-position: 50% 30%; }
+  .intro-stage.home-stage .home-pick-text { display: grid; gap: 2px; min-width: 0; }
+  .intro-stage.home-stage .home-pick-name { font-size: 18px; font-weight: 500; line-height: 1.3; }
+  .intro-stage.home-stage .home-pick-cap { display: block; overflow: hidden; color: var(--muted); font-size: 14px; font-weight: 400; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+  .intro-stage.home-stage .home-picks ol { gap: 12px !important; }
+}
