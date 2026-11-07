@@ -608,6 +608,25 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             />
           </div>
         )}
+        {/* Gemini: the prototype's two flows as recorded phone clips, in the core-features form. */}
+        {deliver.flows && (
+          <div className="dv-main-features dv-main-features-joined">
+            <FeatureList
+              phone
+              reels={deliver.flows.map((f: { id: string; kicker: string; name: string; hook?: string; solves?: string; solvesLabel?: string; alt?: string; clip: { src: string; poster: string } }) => ({
+                id: `flow-${f.id}`,
+                kicker: f.kicker,
+                name: f.name,
+                body: "",
+                hook: f.hook,
+                alt: f.alt,
+                points: [],
+                clip: { ...f.clip, marks: [] },
+                solves: f.solves && <span><b>{f.solvesLabel}</b>{f.solves}</span>,
+              }))}
+            />
+          </div>
+        )}
         {/* UI details: the small parts of a screen where a decision happens, cut out
             and set on a soft case-colour card, one per row, text beside it. */}
         {deliver.details && (

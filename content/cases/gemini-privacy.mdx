@@ -307,8 +307,13 @@ export const study = {
   deliver: {
     method: "Final design",
     title: "Prototype",
-    lead: "See, turn off and check, inside the answer.",
-    text: "Built in HTML/JS with moderator and participant modes that log every click.",
+    lead: "We built two flows: turn info off right from the answer, or ask in chat to clear it.",
+    text: "Both flows are the prototype we used in the usability test.",
+    link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=en", label: "Try the prototype ↗" },
+    flows: [
+      { id: "a", kicker: "01 · Flow A", name: "Turn it off from the answer", hook: "Tap the sources badge to see what this answer used, grouped by topic, and handle it right there.", solvesLabel: "Solves", solves: "Warnings alone don't lead to action", alt: "Screen recording: tapping the sources badge under a Gemini answer and handling the five items about Jeongmin", clip: { src: "/images/cases/gemini-privacy/clips/en-a.mp4", poster: "/images/cases/gemini-privacy/clips/en-a-poster.webp" } },
+      { id: "b", kicker: "02 · Flow B", name: "Ask in chat to clear it", hook: "Ask in plain words; Gemini lists what it found, then shows what was deleted and what is only left out of answers.", solvesLabel: "Solves", solves: "No way to check it's gone", alt: "Screen recording: asking in chat to stop using information about Jeongmin and reading the result card", clip: { src: "/images/cases/gemini-privacy/clips/en-b.mp4", poster: "/images/cases/gemini-privacy/clips/en-b-poster.webp" } },
+    ],
     details: {
       label: "UI details",
       lead: "The four places where the answer changed.",

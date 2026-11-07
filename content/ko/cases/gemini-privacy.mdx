@@ -306,8 +306,13 @@ export const study = {
   deliver: {
     method: "최종 디자인",
     title: "Prototype",
-    lead: "답변 안에서 보고, 끄고, 확인한다.",
-    text: "HTML/JS로 프로토타입을 만들었다. 진행자 모드와 참여자 모드가 있고, 모든 클릭을 기록한다.",
+    lead: "답변에서 바로 끄는 흐름과, 채팅으로 정리하는 흐름을 프로토타입으로 만들었다.",
+    text: "두 흐름 모두 실제 사용성 테스트에 쓴 프로토타입이다.",
+    link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=ko", label: "프로토타입 써 보기 ↗" },
+    flows: [
+      { id: "a", kicker: "01 · 흐름 A", name: "답변에서 바로 끄기", hook: "출처 배지를 누르면, 그 답변에 쓰인 정보를 주제별로 보고 그 자리에서 처리한다.", solvesLabel: "해결하는 문제", solves: "경고만으로는 움직이지 않는다", alt: "Gemini 답변 아래 출처 확인을 눌러 정민 관련 정보 5건을 골라 처리하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-a.mp4", poster: "/images/cases/gemini-privacy/clips/ko-a-poster.webp" } },
+      { id: "b", kicker: "02 · 흐름 B", name: "채팅으로 요청해 정리하기", hook: "평소 말로 요청하면 찾은 정보를 보여 주고, 처리 뒤 무엇이 지워지고 무엇이 답변에서만 빠지는지 알려 준다.", solvesLabel: "해결하는 문제", solves: "지워졌는지 확인할 방법이 없다", alt: "채팅으로 정민 관련 정보를 쓰지 말라고 요청하고, 처리 결과 카드를 확인하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-b.mp4", poster: "/images/cases/gemini-privacy/clips/ko-b-poster.webp" } },
+    ],
     details: {
       label: "UI details",
       lead: "답변 안에서 바뀐 네 곳.",
