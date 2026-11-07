@@ -7175,3 +7175,38 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption span { color: var(--muted-on) !important; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption span { color: var(--case-accent) !important; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] { border-radius: 24px; overflow: hidden; }
+
+/* One media plate across the case (owner: every box looked different). Every plate that holds a
+   screen or clip (UI details, core features, handoff, Iteration 1 and 2) shares one radius (24px),
+   one inner margin (clamp 24-40px), one gradient recipe (tone gradient with a soft top-left
+   highlight, deepened in dark), and the screen inside sits at 12px corners with the same shadow.
+   Plates without their own tone use tone 01 (violet). */
+.case-study .dv { --plate-pad: clamp(24px, 3vw, 40px); --plate-radius: 24px;
+  --plate-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.case-study .dv :is(.dv-hdoc-shot, .dv-iter-clip) { --g1: #8f7dff; --g2: #c9a8ff; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-detail-card, .dv-flist-frame, .dv-hdoc-one .dv-hdoc-shot, .dv-iter-clip, .dv-iter-card[data-side]) { border-radius: var(--plate-radius) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-detail-card, .dv-hdoc-one .dv-hdoc-shot, .dv-iter-clip) { padding: var(--plate-pad) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { padding: var(--plate-pad) var(--plate-pad) 0 !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 24px var(--plate-pad) 28px !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-hdoc-one .dv-hdoc-shot, .dv-iter-clip) {
+  background:
+    radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth, 0%))) !important;
+}
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-frame video { inset: var(--plate-pad) !important; max-width: calc(100% - 2 * var(--plate-pad)) !important; max-height: calc(100% - 2 * var(--plate-pad)) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-detail-card img, .dv-detail-card video, .dv-flist-frame video, .dv-hdoc-one .dv-hdoc-shot img, .dv-iter-clip video, .dv-iter-clip img, .dv-iter-card .dv-iter-view) { border-radius: 12px !important; box-shadow: var(--plate-shadow); }
+/* Iteration 1 without the fade (owner: the gradient fading under the caption looked off): each card
+   is one calm neutral surface; inside it the colour plate holds the clip (same recipe as every other
+   plate), and the caption sits on the neutral surface in the page's own ink. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] { padding: 12px !important; background: light-dark(#f2f2f5, #17181d) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { padding: var(--plate-pad) !important; border-radius: 16px; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="a"] .dv-iter-plate { --g1: #c9c9d2; --g2: #e4e4ea; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] .dv-iter-plate { --g1: #8f7dff; --g2: #c9a8ff; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] .dv-iter-plate {
+  background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth, 0%))) !important;
+}
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 20px 12px 12px !important; color: var(--dv-ink, var(--ink)) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption span { color: var(--dv-muted, var(--muted)) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption span { color: var(--case-accent) !important; }
