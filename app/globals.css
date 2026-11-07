@@ -7019,3 +7019,23 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-flist-items li[data-on] .dv-flist-bar > i { background: var(--c1); }
 @media (prefers-reduced-motion: reduce) { .dv-flist-tone { transition: none; } }
 .case-study .dv .dv-flist-items li[data-on] button small { color: color-mix(in srgb, var(--c1) 70%, var(--ink)); }
+/* Detail cards, second pass (owner: positions and colours looked off). Cards stay on the
+   right (no zigzag), and the tones are clear full gradients, after calendly.com, instead of
+   colour mixed into the dark page. Dark theme takes them a step deeper. */
+.case-study .dv .dv-details-list > li, .case-study .dv .dv-flist [data-t="0"] { --g1: #8f7dff; --g2: #c9a8ff; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 2), .case-study .dv .dv-flist [data-t="1"] { --g1: #4cc3f2; --g2: #43d9c2; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 3), .case-study .dv .dv-flist [data-t="2"] { --g1: #f38bbd; --g2: #fbb27c; }
+.case-study .dv .dv-details-list > li:nth-child(4n + 4), .case-study .dv .dv-flist [data-t="3"] { --g1: #4fd6a0; --g2: #b9e86a; }
+.case-study .dv { --g-depth: 0%; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .case-study .dv { --g-depth: 28%; } }
+:root[data-theme="dark"] .case-study .dv { --g-depth: 28%; }
+.case-study .dv .dv-details-list > li .dv-detail-card, .case-study .dv .dv-flist-tone {
+  background:
+    radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth)));
+}
+@media (min-width: 64rem) {
+  .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) .dv-detail-card { order: 0; }
+}
+.case-study .dv .dv-details-list > li .dv-detail-num { color: var(--case-accent); }
