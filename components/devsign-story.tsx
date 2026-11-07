@@ -1026,11 +1026,14 @@ export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecD
       </div>
       </div>
       </div>
-        <div className="dv-hdoc-cols" key={`cols-${screen.id}`}>
+        <details className="dv-hdoc-fold" key={`cols-${screen.id}`}>
+        <summary>{spec.labels.accept} · {spec.labels.tokens} · {spec.labels.code}</summary>
+        <div className="dv-hdoc-cols">
           <div><h4>{spec.labels.accept}</h4><ul>{screen.accept.map((item) => <li key={item}>{item}</li>)}</ul></div>
           <div><h4>{spec.labels.tokens}</h4><ul>{screen.tokens.map((item) => <li key={item}>{tokenText(item)}</li>)}</ul></div>
           <div><h4>{spec.labels.code}</h4><ul>{screen.code.map(([label, href]) => <li key={href}><a className="link" href={href} target="_blank" rel="noreferrer"><code>{label}</code> ↗</a></li>)}</ul></div>
         </div>
+        </details>
       <p className="dv-hdoc-more"><Link className="link" href={moreHref}>{more}</Link></p>
     </div>
   );

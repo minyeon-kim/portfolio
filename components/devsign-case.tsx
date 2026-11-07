@@ -532,9 +532,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div className="dv-gap-96">
           <Block {...develop.sketching} ff={ff} />
           {/* TODO: the photo here was only an example; an empty box until Minyeon adds the real sketches. */}
-          {develop.sketching.placeholder
-            ? <div className="dv-placeholder-box dv-gap-40 reveal" role="img" aria-label={develop.sketching.placeholder}><span>{develop.sketching.placeholder}</span></div>
-            : <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />}
+          {/* Until then the block is text only (no empty box on the page). */}
+          {!develop.sketching.placeholder && <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />}
         </div>
         {develop.selection && !ff && (
           <div className="dv-gap-96">
@@ -661,7 +660,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           </p>
           <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
-          {testing.usability.sheet && <Figure img={testing.usability.sheet} sizes="(max-width: 767px) 100vw, 1200px" className="dv-board dv-gap-40" open />}
+          {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>
           <Block {...testing.usability} ff={ff} />
           <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>

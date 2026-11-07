@@ -55,7 +55,7 @@ export const study = {
       items: [
         { tone: "red", label: "Problem", title: "Drafts and reasons get scattered", text: "Teams choose a version in chat, and differences from the design show up only after release." },
         { tone: "accent", label: "Solution", title: "One place, from comparing to recording", text: "Combine the best parts of several drafts, send each difference to the person who decides, and save the decision with its screen." },
-        { tone: "teal", label: "Impact", title: "Fewer questions about design vs. code: 5/5", text: "Both testers expected this. The revised screens aren’t retested yet." },
+        { tone: "teal", label: "Impact", title: "Expected fewer questions about design vs. code (5/5)", text: "Both testers expected this. The revised screens aren’t retested yet." },
       ],
     },
     headline: "In the AI era, the hard part is",
@@ -259,9 +259,9 @@ export const study = {
       lead: "The themes came down to four problems.",
       lowest: "Lowest point",
       items: [
+        { title: "Work status is scattered", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Tool sprawl", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
         { title: "Drafts can’t be combined", body: "There are several AI drafts, but no way to take the best part of each and put them together.", themes: ["Versions"], quote: ["They said there’s no such thing as saving a B option separately.", "P03"], role: "Designer", from: "Versions, options & finals (14)" },
         { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", themes: ["Role lines", "Manual review"], quote: ["On our team, developers hold most of the initiative.", "P03"], role: "Designer · PO", from: "Blurred role lines (28) · Manual review (28)", lowest: true },
-        { title: "Changes are scattered", body: "Where the work stands, and why things changed, is spread across Figma, Slack and GitHub.", themes: ["Tool sprawl", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
         { title: "Reasons get lost", body: "Why it changed, who decided, and whether the code was updated all live in different places.", themes: ["Shared context"], quote: ["If it seems too minor to mention, I sometimes find out about it later.", "P03"], role: "Designer · Developer", from: "Shared context (48)" },
       ],
     },
@@ -311,7 +311,7 @@ export const study = {
       label: "4 core features",
       solves: "Solves",
       items: [
-        { problem: "Changes are scattered", feature: "Live Workspace", from: "From directions D + E" },
+        { problem: "Work status is scattered", feature: "Live Workspace", from: "From directions D + E" },
         { problem: "Drafts can’t be combined", feature: "Merge Studio", from: "From direction C" },
         { problem: "No one knows who decides", feature: "Conflict Points", from: "From direction B" },
         { problem: "Reasons get lost", feature: "History", from: "From direction A" },
@@ -374,7 +374,7 @@ export const study = {
   deliver: {
     details: {
       label: "UI details",
-      lead: "Three moments: asking for a review, deciding, and keeping the record.",
+      lead: "Asking for a review, deciding and keeping the record each happen on one screen.",
       items: [
         { title: "Ask the right people, right where you combined it", body: "After combining drafts, the designer picks who should check the result and can add a note, without leaving the merge.", src: "/images/devsign/detail-request-en.webp", width: 852, height: 760, alt: "Select reviewers popover with Jordan checked, Alex unchecked, an optional note field and a Send review request button" },
         { title: "Both values side by side, and a reason before sending", body: "The designer sees the value in the code next to the value in the design. The reason field is required, so every decision says why.", src: "/images/devsign/detail-decide-en.webp", width: 926, height: 681, alt: "Decision panel showing height 40px kept against 44px in the design, background #7c3aed against color.primary, a required reason field and a Fix to the design Send button" },
@@ -462,14 +462,14 @@ export const study = {
         { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "Expected change in communication (1–5)"] },
       ],
       resultLead: "Help dropped sharply on the second try, but neither person finished the first try without help.",
-      sheet: { src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "All three pages of the usability test session sheet: for each scene of each scenario, the story read to the participant, the behavior to observe, the linked pain points and the questions to ask afterwards", caption: "The whole session sheet: for each scene, what we read aloud, what to observe and what to ask afterwards." },
+      sheet: { label: "See the whole session sheet ↗", src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "All three pages of the usability test session sheet: for each scene of each scenario, the story read to the participant, the behavior to observe, the linked pain points and the questions to ask afterwards", caption: "The whole session sheet: for each scene, what we read aloud, what to observe and what to ask afterwards." },
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
       charts: [
         {
           type: "pair",
           tab: "Help needed",
-          title: "Help per task dropped from 2.3 to 0.4 on the second try. Our goal was 1.5 or less.",
+          title: "Help per task dropped from 2.3 on the first try to 0.4 on the second. Our goal was 1.5 or less.",
           note: "Average across 7 tasks. 0 is on their own, 3 is told directly.",
           scale: 3, goal: 1.5, goalLabel: "Goal 1.5",
           items: [{ label: "First try", value: 2.3 }, { label: "Second try", value: 0.4, on: true }],
@@ -506,8 +506,8 @@ export const study = {
       method: "Iteration 2",
       title: "Co-design",
       label: "Iteration 2 · Live Workspace",
-      lead: "We co-designed with a working designer and removed the parts users had to stop and read.",
-      text: "We went through 5 screens one by one and agreed on what to remove.",
+      lead: "With a working designer, we removed the parts users had to stop and read.",
+      text: "In a co-design session we went through 5 screens one by one and agreed on what to remove.",
       photo: { src: "/images/devsign/codesign-session-blurred.webp", width: 1512, height: 688, alt: "Co-design session on a video call, reworking prototype screens together" },
       before: { src: "/images/devsign/iter2-as-is-en.webp", alt: "As-is: a four-panel developer layout", text: "A four-panel layout like a developer tool, showing everything at once." },
       after: { src: "/images/devsign/iter2-to-be-en.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "Three tabs and a board of app screens.", text: " The AI panel starts folded." },
@@ -525,7 +525,7 @@ export const study = {
     reviewItem: "Key learning",
     review: [
       { title: "The problem starts after AI makes something", body: "Teams get stuck after AI makes something, so all four features help with that step." },
-      { title: "We changed the structure after the test", body: "Both called the shared review screen “the other team’s tool,” so we split it in two." },
+      { title: "How people named a screen showed a structure problem", body: "“The other team’s tool” was a sign that one screen was trying to serve two roles." },
       { title: "Took things away instead of adding", body: "We tidied the workspace instead of adding features. The second version took two days." },
     ],
     next: {
@@ -541,6 +541,6 @@ export const study = {
 <TLDR>
 - **Problem** Designers and developers both use AI, but drafts and their reasons end up in different tools. Teams choose a version in chat, and differences from the design show up only after release.
 - **Solution** One workspace from comparing drafts to a recorded decision: combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen.
-- **Impact** Fewer questions about design vs. code: 5/5. Both testers expected this. The revised screens aren’t retested yet.
+- **Impact** Expected fewer questions about design vs. code (5/5). Both testers expected this. The revised screens aren’t retested yet.
 </TLDR>
 </DevsignCase>

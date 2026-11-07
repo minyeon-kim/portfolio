@@ -6962,3 +6962,17 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-fc-legend i[data-shape="decision"] { width: 14px; height: 14px; margin: 0 6px; border-radius: 1px; transform: rotate(45deg); }
 .dv-fc-legend i[data-shape="end"] { border-radius: 999px; }
 @media (max-width: 47.99rem) { .dv-fc-legend { display: none; } }
+/* Review pass: white boards sit a step down in the dark theme, so they don't glare. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.dv-axe-board img, .dv-vpc-view img) { filter: brightness(0.82); } }
+:root[data-theme="dark"] :is(.dv-axe-board img, .dv-vpc-view img) { filter: brightness(0.82); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-axe-board { background: #d0d0d4; } }
+:root[data-theme="dark"] .dv-axe-board { background: #d0d0d4; }
+/* Handoff: done-when, tokens and code fold under one line. */
+.dv-hdoc-fold { margin-top: 24px; border-top: 1px solid var(--dv-line, var(--line)); }
+.dv-hdoc-fold summary { display: flex; align-items: center; gap: 10px; min-height: 48px; color: var(--dv-muted, var(--muted)); font-size: 16px; cursor: pointer; list-style: none; }
+.dv-hdoc-fold summary::-webkit-details-marker { display: none; }
+.dv-hdoc-fold summary::after { content: "+"; margin-left: auto; font-size: 20px; transition: transform 250ms var(--ease); }
+.dv-hdoc-fold[open] summary::after { transform: rotate(45deg); }
+.dv-hdoc-fold summary:hover { color: var(--ink); }
+.dv-hdoc-fold summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dv-hdoc-fold .dv-hdoc-cols { margin-top: 8px; padding-bottom: 8px; }

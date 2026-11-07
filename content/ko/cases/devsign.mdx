@@ -58,7 +58,7 @@ export const study = {
       items: [
         { tone: "red", label: "Problem", title: "시안과 이유가 흩어진다", text: "어떤 안을 쓸지는 채팅에서 정하고, 디자인과 달라진 곳은 출시한 뒤에야 보인다." },
         { tone: "accent", label: "Solution", title: "비교부터 기록까지 한곳에서", text: "여러 시안의 좋은 부분만 골라 합치고, 달라진 곳은 정할 사람에게 보내고, 정한 내용은 그 화면과 함께 남긴다." },
-        { tone: "teal", label: "Impact", title: "디자인과 코드 차이를 덜 묻게 된다, 5/5", text: "참가자 2명 모두 이렇게 기대했다. 고친 화면은 아직 다시 테스트하지 않았다." },
+        { tone: "teal", label: "Impact", title: "디자인과 코드 차이를 묻는 일이 줄 거라 봤다 (5/5)", text: "참가자 2명 모두 이렇게 기대했다. 고친 화면은 아직 다시 테스트하지 않았다." },
       ],
     },
     headline: "AI 시대의 가장 큰 과제는",
@@ -262,9 +262,9 @@ export const study = {
       lead: "테마를 다시 묶으니 문제 네 가지가 남았다.",
       lowest: "Lowest point",
       items: [
+        { title: "작업 상태가 흩어져 있다", body: "진행 상황이 Figma·Slack·GitHub에 나뉘어 있어, 지금 어디까지 됐는지 한곳에서 볼 수 없다.", themes: ["도구 분산", "실시간 협업"], quote: ["저는 그 노션이랑 깃허브로 체크했어요.", "P01"], role: "개발자", from: "업무 툴 파편화 (37) · 실시간 협업/소통 (25)", lowest: true },
         { title: "시안을 합칠 수 없다", body: "AI 시안이 여러 개 있어도, 각 시안의 좋은 부분만 골라 하나로 합칠 방법이 없다.", themes: ["버전·최종본"], quote: ["B안을 따로 저장해놓고, 이런 거 자체가 없다고 하더라고요.", "P03"], role: "디자이너", from: "버전/시안/최종본 관리 (14)" },
         { title: "누가 결정할지 모른다", body: "실제 앱이 디자인과 다를 때마다, 누가 결정할지부터 채팅에서 다시 정해야 한다.", themes: ["역할 경계", "수동 검토"], quote: ["저희 팀의 주도권이 개발자한테 많이 가 있어요.", "P03"], role: "디자이너 · PO", from: "직군 간 경계 흐려짐 (28) · 수동 검토 (28)", lowest: true },
-        { title: "변경이 흩어져 있다", body: "작업 상태와 변경 이유가 Figma·Slack·GitHub에 흩어져 있다.", themes: ["도구 분산", "실시간 협업"], quote: ["저는 그 노션이랑 깃허브로 체크했어요.", "P01"], role: "개발자", from: "업무 툴 파편화 (37) · 실시간 협업/소통 (25)", lowest: true },
         { title: "이유가 사라진다", body: "왜 바꿨는지, 누가 정했는지, 코드에 반영됐는지가 따로따로 남아 한눈에 보이지 않는다.", themes: ["공유 맥락"], quote: ["너무 사소한 거여서 말 안 하면 제가 나중에 발견하기도 해요.", "P03"], role: "디자이너 · 개발자", from: "맥락 공유 (48)" },
       ],
     },
@@ -314,7 +314,7 @@ export const study = {
       label: "4 core features",
       solves: "해결하는 문제",
       items: [
-        { problem: "변경이 흩어져 있다", feature: "Live Workspace", from: "후보 D + E에서" },
+        { problem: "작업 상태가 흩어져 있다", feature: "Live Workspace", from: "후보 D + E에서" },
         { problem: "시안을 합칠 수 없다", feature: "Merge Studio", from: "후보 C에서" },
         { problem: "누가 결정할지 모른다", feature: "Conflict Points", from: "후보 B에서" },
         { problem: "이유가 사라진다", feature: "History", from: "후보 A에서" },
@@ -377,7 +377,7 @@ export const study = {
   deliver: {
     details: {
       label: "UI details",
-      lead: "검토를 요청하고, 결정하고, 기록으로 남기는 세 장면.",
+      lead: "검토 요청, 결정, 기록을 각각 한 화면에서 끝낸다.",
       items: [
         { title: "합친 자리에서 바로 검토를 요청한다", body: "시안을 합친 디자이너는 화면을 벗어나지 않고 결과를 확인할 사람을 고르고, 메모를 남겨 요청을 보낸다.", src: "/images/devsign/detail-request-ko.webp", width: 852, height: 760, alt: "Jordan이 선택되고 Alex는 선택되지 않은 검토자 선택 창, 메모 입력란과 검토 요청 보내기 버튼" },
         { title: "두 값을 나란히 보고, 이유를 써야 보낼 수 있다", body: "디자이너는 코드에 들어간 값과 디자인 값을 함께 본다. 이유는 필수라서, 모든 결정에 왜 그렇게 정했는지가 남는다.", src: "/images/devsign/detail-decide-ko.webp", width: 926, height: 601, alt: "높이 40px 유지와 디자인 44px, 배경 #7c3aed와 color.primary를 비교하고, 필수 이유 입력란과 원안으로 수정 보내기 버튼이 있는 결정 패널" },
@@ -465,14 +465,14 @@ export const study = {
         { label: "측정", chips: ["첫 시도에 필요했던 도움(0–3)", "SUS 사용성 점수", "커뮤니케이션 변화 기대(1–5)"] },
       ],
       resultLead: "두 번째 시도에서 도움은 크게 줄었지만, 첫 시도를 도움 없이 끝낸 사람은 없었다.",
-      sheet: { src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "사용성 테스트 세션 진행 시트 3쪽 전체: 시나리오의 장면마다 참가자에게 읽어 주는 이야기, 관찰할 행동, 연결된 페인포인트, 사후 질문을 정리한 표", caption: "세션 진행 시트 전체. 장면마다 읽어 주는 이야기, 관찰할 행동, 사후 질문을 정리했다." },
+      sheet: { label: "세션 진행 시트 전체 보기 ↗", src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "사용성 테스트 세션 진행 시트 3쪽 전체: 시나리오의 장면마다 참가자에게 읽어 주는 이야기, 관찰할 행동, 연결된 페인포인트, 사후 질문을 정리한 표", caption: "세션 진행 시트 전체. 장면마다 읽어 주는 이야기, 관찰할 행동, 사후 질문을 정리했다." },
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "사용성 테스트 중 노트북으로 프로토타입을 사용하는 참가자 두 명" },
       chartLabels: { charts: "테스트 결과", pause: "차트 일시정지", play: "차트 재생" },
       charts: [
         {
           type: "pair",
           tab: "필요했던 도움",
-          title: "과제당 도움은 두 번째 시도에서 2.3에서 0.4로 줄었다. 목표는 1.5 이하였다.",
+          title: "과제당 도움은 첫 시도 2.3에서 두 번째 시도 0.4로 줄었다. 목표는 1.5 이하였다.",
           note: "과제 7개 평균. 0은 혼자 해결, 3은 직접 알려 줌.",
           scale: 3, goal: 1.5, goalLabel: "목표 1.5",
           items: [{ label: "첫 시도", value: 2.3 }, { label: "두 번째 시도", value: 0.4, on: true }],
@@ -509,8 +509,8 @@ export const study = {
       method: "Iteration 2",
       title: "Co-design",
       label: "Iteration 2 · Live Workspace",
-      lead: "현업 디자이너와 함께 화면을 다시 디자인하며(코디자인), 사용자가 멈춰서 읽어야 했던 부분을 덜어냈다.",
-      text: "화면 5개를 하나씩 보며 무엇을 뺄지 정했다.",
+      lead: "현업 디자이너와 함께, 멈춰서 읽어야 했던 부분을 덜어냈다.",
+      text: "코디자인으로 화면 5개를 하나씩 보며 무엇을 뺄지 정했다.",
       photo: { src: "/images/devsign/codesign-session-blurred.webp", width: 1512, height: 688, alt: "화상 회의로 진행한 코디자인 세션: 프로토타입 화면을 함께 보며 고치는 모습" },
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: 개발 도구 같은 4분할 레이아웃", text: "개발 도구처럼 화면을 4분할해, 모든 것을 한 번에 보여 줬다." },
       after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: 탭 3개와 화면 보드, 접힌 AI 패널", lead: "탭 3개와 앱 화면 보드로 정리했다.", text: " AI 패널은 처음에 접어 두었다." },
@@ -527,7 +527,7 @@ export const study = {
     reviewTitle: "배운 점",
     review: [
       { title: "AI 시대의 문제는 만든 뒤에 생긴다", body: "팀이 막힌 곳은 만드는 단계가 아니라, AI 결과물을 확인하고 정하는 단계였다. 그래서 네 기능 모두 그 단계를 돕는다." },
-      { title: "테스트 결과에 맞춰 구조를 바꿨다", body: "둘 다 함께 쓰던 화면을 ‘상대 팀 도구’라고 불러서, 화면을 둘로 나눴다." },
+      { title: "사용자가 화면을 부르는 말에서 구조의 문제가 보였다", body: "‘상대 팀 도구’라는 말은, 한 화면에 두 역할을 담은 구조가 문제라는 신호였다." },
       { title: "기능을 더하기보다 덜어냈다", body: "기능을 더하는 대신 워크스페이스를 정리했다. 두 번째 버전은 이틀 만에 완성했다." },
     ],
     next: {
@@ -543,6 +543,6 @@ export const study = {
 <TLDR>
 - **Problem** 디자이너와 개발자 모두 AI로 일하지만, 시안과 이유는 다른 도구에 흩어진다. 어떤 안을 쓸지는 채팅에서 정하고, 디자인과 달라진 곳은 출시한 뒤에야 보인다.
 - **Solution** 시안 비교부터 결정 기록까지 한 워크스페이스에서. 시안은 영역별로 합치고, 차이는 결정권자 한 명에게 보내고, 결정은 화면과 함께 남긴다.
-- **Impact** 디자인과 코드 차이를 덜 묻게 된다, 5/5. 참가자 2명 모두 이렇게 기대했다. 고친 화면은 아직 다시 테스트하지 않았다.
+- **Impact** 디자인과 코드 차이를 묻는 일이 줄 거라 봤다 (5/5). 참가자 2명 모두 이렇게 기대했다. 고친 화면은 아직 다시 테스트하지 않았다.
 </TLDR>
 </DevsignCase>
