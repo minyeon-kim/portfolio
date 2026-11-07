@@ -7072,3 +7072,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
    Its caption no longer fades; its clip only darkens a little. */
 .case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) figcaption { opacity: 1; }
 .case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) video { opacity: 1; filter: brightness(0.72); }
+/* Overview summary: in the pinned stage the rows' hairlines broke into a dotted line under it. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-gs[data-pinned] .dv-gs-list > li { border: 0; padding: 0; }
+}
