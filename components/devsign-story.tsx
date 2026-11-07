@@ -93,7 +93,7 @@ export const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefer
 const HELD_TAIL = 0.5;
 const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
 
-const HOLD_ON_SCROLL = false;
+const HOLD_ON_SCROLL = true;
 export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);

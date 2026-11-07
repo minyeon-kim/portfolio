@@ -4131,7 +4131,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 @media (max-width: 47.99rem) { .dv-iter-sides { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
 /* Desktop: one card holds still and scroll changes what's inside, the same card as the core
    features. The travel is a block after it: sticky can't move into padding. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-iter { --reel-card: min(1640px, calc(100vw - 96px)); --reel-text: clamp(320px, 28vw, 420px); width: var(--reel-card); margin-left: calc(50% - var(--reel-card) / 2); }
   .dv-iter::after { content: ""; display: block; height: calc((var(--n) + 0.5) * 70svh); }
   .dv-iter-stage { position: sticky; top: var(--stage-top, 76px); overflow: hidden; border: 1px solid var(--dv-card-line); border-radius: 24px; background: light-dark(#ffffff, var(--dv-band-card-dark)); }
@@ -4731,7 +4731,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
    over it with native scroll. The travel is a block after the sheet, since sticky can't move
    into padding: one screen for Develop to cover it plus 30svh to read it first. Desktop with
    motion allowed; elsewhere the sheet falls into Develop as before. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv > #define:has(> .dv-core:last-child) { animation: dv-in linear both; animation-timeline: view(); animation-range: cover 0px cover 75vh; }
   .dv > #define:has(> .dv-core:last-child)::after { content: ""; position: static; display: block; height: 130svh; background: none; }
   .dv > section > .dv-core.dv-core:last-child { position: sticky; top: 0; min-height: 100svh; padding-block: 96px; border-radius: var(--dv-band-radius) var(--dv-band-radius) 0 0; background: radial-gradient(70% 60% at 50% 0%, #4a35c8 0%, transparent 100%), linear-gradient(180deg, #3a2aa0 0%, #2c2080 100%); }
@@ -4741,7 +4741,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 /* A sticky subject's cover range includes its stuck time, so the grow and the light-up are
    timed on the sheet's entry: finished by the moment it fills the screen. */
 @supports (animation-timeline: view()) {
-  @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+  @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
     .dv > #define > .dv-core.dv-core:last-child { view-timeline-name: --dv-sheet; animation-range: entry 0% entry 100%; }
     .dv > #define > .dv-core.dv-core:last-child > .dv-core-kicker { animation-timeline: --dv-sheet; animation-range: entry 0% entry 100%; }
     .dv > #define > .dv-core.dv-core:last-child > .dv-core-text { animation-timeline: --dv-sheet, --dv-sheet; animation-range: entry 20% entry 90%, entry 0% entry 100%; }
@@ -5239,7 +5239,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 /* Desktop: one card holds still and scroll changes what's inside (native scroll; the travel
    is the empty length of the track under it). All in one cell, so the card keeps one height.
    Wider than the column, the same width as the handoff spec. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-reels-track { --reel-card: min(1640px, calc(100vw - 96px)); --reel-text: clamp(320px, 28vw, 420px); width: var(--reel-card); margin-left: calc(50% - var(--reel-card) / 2); }
   /* A block, not padding: sticky can't move into padding. */
   .dv-reels-track::after { content: ""; display: block; height: calc((var(--reels) - 1) * 70svh); }
@@ -5338,7 +5338,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 .case-study .dv .dv-screen-line[data-side="b"] { color: var(--dv-ink); }
 .dv-screen-line span { display: block; margin-bottom: 4px; font-size: 16px; font-weight: 500; }
 .dv-screen-line[data-side="b"] span { color: var(--case-accent); }
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   /* A phone is narrow: more room for the words. Height, not width, sizes the screen. */
   .dv-screens-held { --reel-text: clamp(360px, 36vw, 560px); }
   .dv-screens-held .dv-iter-clip { height: min(calc(100svh - 120px), 640px); box-sizing: border-box; }
@@ -5688,7 +5688,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 :is(.dv-held-plate, .dv-spec-panel, .dv-reel, .dv-iter-step) { border: 0; background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
 .dv-screens-held .dv-iter-step { background: linear-gradient(115deg, var(--plate-a), var(--plate-b)); }
 .dv-spec-tabs { gap: 4px; }
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   :is(.dv-reels-card, .dv-iter-stage), .dv-screens-held .dv-iter-stage { overflow: visible; border: 0; border-radius: 0; background: none; }
   .dv-held-plate { overflow: hidden; border-radius: 24px; }
   :is(.dv-held-plate .dv-reel, .dv-held-plate .dv-iter-step) { background: none; }
@@ -6451,7 +6451,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 /* Held tracks (owner: scrolling should move to the next item, everywhere it steps): the stage
    sticks centred on the screen while native scroll moves through its steps, 70svh each.
    Same query as REELS_PIN in devsign-story.tsx; elsewhere the stage is a plain block. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-held-track::after { content: ""; display: block; height: calc((var(--n, 1) + 0.5) * 70svh); }
   .dv-held-track > :first-child { position: sticky; top: var(--stage-top, 76px); }
   .dv-held-track > .dv-cycle-stage { background: var(--dv-bg, var(--bg)); }
@@ -6473,7 +6473,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-gs-list > li .dv-gs-name { color: var(--tone, var(--dv-muted)); }
 .case-study .dv .dv-gs-title { margin: 12px 0 0; max-width: 900px; color: var(--dv-ink); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.3; word-break: keep-all; text-wrap: balance; }
 .case-study .dv .dv-gs-text { margin: 12px 0 0; max-width: 640px; color: var(--dv-muted); font-size: 18px; line-height: 1.6; word-break: keep-all; text-wrap: pretty; }
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-gs[data-pinned]::after { content: ""; display: block; height: calc((var(--n, 3) + 0.5) * 70svh); }
   .dv-gs[data-pinned] > .dv-gs-stage { position: sticky; top: var(--stage-top, 76px); padding-block: 8px; background: var(--dv-bg, var(--bg)); }
   .dv-gs[data-pinned] .dv-gs-list { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); grid-auto-rows: auto; column-gap: 48px; }
@@ -6514,7 +6514,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 .dv-journey-play[data-armed] .dv-journey-low { transition: opacity 400ms var(--ease), transform 400ms var(--ease); transition-delay: 0ms; opacity: 0; transform: scale(0.7); }
 .dv-journey-play[data-armed][data-shown] .dv-journey-low[data-on] { opacity: 1; transform: none; }
 /* Analysis holds and brings in one stage per scroll step (HeldFlow), 45svh apart. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-held-flow::after { height: calc((var(--n, 1) + 0.5) * 45svh); }
   .dv-held-flow > .dv-held-flow-stage { background: var(--dv-bg, var(--bg)); padding-block: 8px; }
   .dv-held-flow[data-pinned] .dv-flow-play ol.dv-flow > li { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1) !important; translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px) !important; transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
@@ -6522,7 +6522,7 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 }
 /* Key problems and the value proposition pairs come in one per scroll step (HeldFlow). A pair
    fills left to right: the pain heard, the idea that answers it, the feature it became. */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv-held-flow[data-pinned] .dv-step-item { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1); translate: 0 calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * 20px); transition: opacity 450ms var(--ease), translate 450ms var(--ease); }
   .dv-held-flow[data-pinned] .dv-vpc-row > * { opacity: clamp(0, (var(--held-step) - var(--i) + 1) * 100, 1); translate: calc(clamp(0, (var(--i) - var(--held-step)) * 100, 1) * -12px) 0; transition: opacity 400ms var(--ease), translate 400ms var(--ease); }
   .dv-held-flow[data-pinned] .dv-vpc-row > :nth-child(2) { transition-delay: 120ms; }
@@ -6879,7 +6879,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 
 /* Iteration 2 held card stays on the 1200 case column, the same left edge as its
    heading, line and photo (it had jumped out to the wide 1640 width). */
-@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) and (min-width: 99999px) {
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .case-study .dv .dv-iter { --reel-card: 100%; --reel-text: clamp(300px, 27vw, 380px); width: 100%; margin-left: 0; }
   .case-study .dv .dv-iter-duo { width: 100%; margin-left: 0; }
 }
@@ -7104,9 +7104,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { margin-bottom: 80px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-deliver-intro + * { margin-top: 64px; }
 }
-/* The held layouts above carry "and (min-width: 99999px)" so they never apply (class feedback
-   2026-11-06). Remove that clause from each, and set HOLD_ON_SCROLL in devsign-story.tsx, to
-   bring the pinned stages back. */
+/* Held layouts are back on (owner: without the scroll interactions the case lost its fun). */
 /* Landing case pills, class feedback 2026-11-06 (they floated small; with a border line they need
    more room between them): 44px, 0 22px, 18px Medium, 14px apart on 64rem and up. */
 @media (min-width: 64rem) {
