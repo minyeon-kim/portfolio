@@ -6842,3 +6842,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-hdoc-excerpt .dv-hdoc-shot { padding: clamp(16px, 2.4vw, 32px); }
 .case-study .dv .dv-hdoc-excerpt .dv-hdoc-lens { border-radius: 10px; overflow: hidden; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
 .case-study .dv .dv-iter .dv-iter-clip video { border-radius: 10px; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.dv-ax-note[data-pick] { cursor: pointer; }
+.dv-ax-note[data-pick]:hover { transform-origin: center; filter: brightness(1.12); box-shadow: 0 0 0 2px var(--ink); }
+.dv-ax-ghost { position: absolute; left: 0; top: 0; width: 14px; height: 14px; border: 2px solid; border-radius: 3px; box-sizing: border-box; transition: transform 600ms var(--ease-out-soft, var(--ease)); }
+.dv-ax-subhead { padding-bottom: 0; border-bottom: 0; font-size: 16px; color: var(--dv-muted, var(--muted)); }
