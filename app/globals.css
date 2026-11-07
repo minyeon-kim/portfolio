@@ -7219,3 +7219,27 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 /* About closing line in the site's sans (owner: the thin serif Korean looked odd): Bricolage /
    Pretendard-style regular at statement size, two or three lines. */
 .about-contact-line, .about-contact-line:lang(ko) { font-family: var(--font-display, inherit); font-size: clamp(30px, 3vw, 48px); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* Gemini affinity (AffinityThemes): the tall FigJam board beside its themes, one row of the board
+   per theme; pointing at a theme dims the board except that row. Stacks below 64rem. */
+.dv-axt { display: grid; gap: 40px; }
+@media (min-width: 64rem) { .dv-axt { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; } }
+.dv-axt-board { position: relative; display: block; overflow: clip; border-radius: var(--plate-radius, 24px); background: #fff; color: inherit; }
+@media (min-width: 64rem) { .dv-axt-board { position: sticky; top: 96px; max-height: calc(100svh - 128px); overflow: clip; } }
+.dv-axt-board img { display: block; width: 100%; height: auto; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-axt-board img { filter: brightness(0.86); } }
+:root[data-theme="dark"] .dv-axt-board img { filter: brightness(0.86); }
+.dv-axt-row { position: absolute; left: 0; right: 0; outline: 2px solid transparent; outline-offset: -2px; box-shadow: 0 0 0 9999px rgb(10 11 20 / 0); pointer-events: none; transition: box-shadow 250ms ease, outline-color 250ms ease; }
+.dv-axt-board[data-lit] .dv-axt-row[data-on] { box-shadow: 0 0 0 9999px rgb(10 11 20 / 0.6); outline-color: var(--case-accent, var(--accent)); z-index: 1; }
+.dv-axt-board .dv-open-hint { z-index: 2; }
+.dv-axt-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.dv-axt-list li { display: grid; gap: 8px; padding: 20px 24px; border-radius: 16px; background: color-mix(in srgb, var(--ink) 5%, transparent); outline: none; transition: box-shadow 250ms ease; }
+.dv-axt-list li[data-on] { box-shadow: inset 0 0 0 1.5px var(--case-accent, var(--accent)); }
+.dv-axt-list li[data-on] .dv-axe-name b { color: var(--case-accent, var(--accent)); }
+.dv-axt-list li:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.dv-axt-list li[data-out] { background: transparent; box-shadow: inset 0 0 0 1px var(--dv-line, var(--line)); }
+.dv-axt-list .dv-axe-name { justify-content: space-between; }
+@media (min-width: 64rem) {
+  .dv-axt { grid-template-columns: minmax(0, 4.2fr) minmax(0, 7.8fr); }
+  .dv-axt-board { max-height: none; top: max(80px, calc(50svh - 46vw * 0.62)); }
+}
