@@ -575,8 +575,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {/* Findings first: the four features one at a time, large, each playing
             its prototype clip and closing on the problem it answers. */}
         {ff && develop.selection && overview.features && (
-          <div className="dv-main-features">
-            <Block title={develop.selection.label} lead={overview.features.title} ff />
+          <div className="dv-main-features dv-main-features-joined">
+            {/* One block with the prototype heading above (owner): the features are what the prototype holds. */}
             <FeatureList
               reels={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string; flow?: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
