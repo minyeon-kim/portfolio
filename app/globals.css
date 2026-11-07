@@ -6882,3 +6882,6 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .case-study .dv .dv-iter { --reel-card: 100%; --reel-text: clamp(300px, 27vw, 380px); width: 100%; margin-left: 0; }
 }
+/* UI details: the card grows with its cut-out, so a tall popover is never clipped. */
+.case-study .dv .dv-detail:not([data-wide]) .dv-detail-card { height: auto; min-height: clamp(360px, 44svh, 480px); }
+.case-study .dv .dv-detail:not([data-wide]) .dv-detail-card img { max-height: min(60svh, 560px); }
