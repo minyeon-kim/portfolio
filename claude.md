@@ -1620,3 +1620,4 @@ Affinity themes are short cards (owner: the three-column rows were too busy; sup
 
 Gemini opener in a lower blue tone (owner): panel #080b13 / #eef1f7, the light behind the phone a muted navy (rgb 38 70 138 / 0.62 dark, rgb 58 92 160 / 0.26 light) with a dim indigo edge instead of bright blue and lavender, the title a quiet blue-grey gradient (#e3e9f5 / #b4c4e2 / #c6cbe6 dark, #1d2f5c to #3e4f86 light). Supersedes the brighter values in the note above. (The CSS landed inside 271f9c6.)
 Gemini opener phone is larger (owner): `.devsign-hero-phone` top 3%, height 132% of the media (150% on phones), so the screen reads at about 1.3x; it still runs past the fold and fades into the panel.
+Gemini opener light panel is the page colour (var(--bg)), so it reads as one ground with the top menu bar (owner: the bar's grey and the blue-grey panel clashed); the Gemini blue is only the light behind the phone and the title. Dark stays #080b13.

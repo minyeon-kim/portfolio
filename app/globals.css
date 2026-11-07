@@ -6919,7 +6919,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
    grid). The product canvas with dots and cursors belongs to Devsign. The phone stands
    on the panel in its own light instead of inside a dark box, and fades into the
    panel at the fold; the title carries the pale blue-lavender gradient. */
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(#eef1f7, #080b13); background-image: none; }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(var(--bg), #080b13); background-image: none; }
 .gemini-hero-aurora { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .gemini-hero-aurora::before, .gemini-hero-aurora::after { content: ""; position: absolute; border-radius: 50%; filter: blur(64px); }
 .gemini-hero-aurora::before { left: 50%; bottom: -8%; width: min(1040px, 86%); aspect-ratio: 1.35; translate: -50% 0;
