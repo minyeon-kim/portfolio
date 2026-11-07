@@ -6911,3 +6911,5 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-axe-quote cite { display: block; margin-top: 6px; color: var(--dv-muted, var(--muted)); font-size: 16px; font-style: normal; opacity: 0.8; }
 @media (min-width: 64rem) { .dv-axe-list li { padding-inline: 12px; margin-inline: -12px; border-radius: 0; } }
 .dv-axe-name span { white-space: nowrap; }
+/* Cut-outs carry their own rounded, transparent corners: the shadow follows the shape. */
+.case-study[data-project="devsign"] .dv .dv-detail-card img { box-shadow: none; border-radius: 0; filter: drop-shadow(0 24px 40px rgb(0 0 0 / 0.5)); }
