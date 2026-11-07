@@ -6919,19 +6919,35 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
    grid). The product canvas with dots and cursors belongs to Devsign. The phone stands
    on the panel in its own light instead of inside a dark box, and fades into the
    panel at the fold; the title carries the pale blue-lavender gradient. */
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(#f4f7ff, #0c0f16); background-image: none; }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel { background-color: light-dark(#eef1f7, #080b13); background-image: none; }
 .gemini-hero-aurora { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .gemini-hero-aurora::before, .gemini-hero-aurora::after { content: ""; position: absolute; border-radius: 50%; filter: blur(64px); }
 .gemini-hero-aurora::before { left: 50%; bottom: -8%; width: min(1040px, 86%); aspect-ratio: 1.35; translate: -50% 0;
-  background: radial-gradient(closest-side, light-dark(rgb(66 133 244 / 0.34), rgb(66 133 244 / 0.62)), light-dark(rgb(167 139 250 / 0.22), rgb(140 110 240 / 0.42)) 55%, transparent 100%); }
+  background: radial-gradient(closest-side, light-dark(rgb(58 92 160 / 0.26), rgb(38 70 138 / 0.62)), light-dark(rgb(92 104 160 / 0.14), rgb(44 54 104 / 0.4)) 55%, transparent 100%); }
 .gemini-hero-aurora::after { left: 50%; top: -30%; width: min(900px, 80%); aspect-ratio: 2.4; translate: -50% 0;
-  background: radial-gradient(closest-side, light-dark(rgb(157 190 255 / 0.32), rgb(66 133 244 / 0.18)), transparent 100%); }
+  background: radial-gradient(closest-side, light-dark(rgb(140 160 200 / 0.22), rgb(48 72 128 / 0.2)), transparent 100%); }
 @media (prefers-reduced-motion: no-preference) {
   .gemini-hero-aurora::before { animation: gemini-aurora 14s ease-in-out infinite alternate; }
 }
 @keyframes gemini-aurora { from { scale: 1; opacity: 0.85; } to { scale: 1.08; opacity: 1; } }
 .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel .devsign-hero-media { background: none; border: 0; border-radius: 0; box-shadow: none;
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent); mask-image: linear-gradient(to bottom, #000 72%, transparent); }
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-phone { filter: drop-shadow(0 32px 64px light-dark(rgb(36 92 192 / 0.22), rgb(66 133 244 / 0.3))); }
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-title { background: linear-gradient(100deg, light-dark(#1b3f94, #d6e2ff) 10%, light-dark(#245cc0, #9dbeff) 50%, light-dark(#6a4fc4, #d5c5ff) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
-.devsign-hero[data-project="gemini-privacy"] .devsign-hero-subtitle { color: light-dark(#3f4a63, rgb(214 226 255 / 0.72)); }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-phone { filter: drop-shadow(0 32px 64px light-dark(rgb(30 50 96 / 0.2), rgb(20 40 90 / 0.45))); }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-title { background: linear-gradient(100deg, light-dark(#1d2f5c, #e3e9f5) 10%, light-dark(#2c4a86, #b4c4e2) 50%, light-dark(#3e4f86, #c6cbe6) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.devsign-hero[data-project="gemini-privacy"] .devsign-hero-subtitle { color: light-dark(#454c5c, rgb(214 222 238 / 0.68)); }
+/* Seven themes as short cards (owner: the three-column rows were too busy). */
+.dv-axe-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 64rem) { .dv-axe-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } }
+@media (max-width: 30rem) { .dv-axe-grid { grid-template-columns: 1fr; } }
+.dv-axe-grid li { display: flex; flex-direction: column; gap: 10px; min-height: 128px; padding: 20px; border-radius: var(--dv-card-radius, 16px); background: var(--dv-surface, var(--surface)); outline: none; transition: background-color 250ms ease, box-shadow 250ms ease; }
+.dv-axe-grid li[data-on] { box-shadow: inset 0 0 0 1.5px var(--case-accent, var(--accent)); }
+.dv-axe-grid li:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.dv-axe-grid .dv-axe-name { justify-content: space-between; }
+.dv-axe-grid .dv-axe-name b { font-size: 18px; }
+.dv-axe-grid li[data-on] .dv-axe-name b { color: var(--case-accent, var(--accent)); }
+.dv-axe-short { margin: 0; color: var(--dv-muted, var(--muted)); font-size: 16px; line-height: 1.5; }
+.dv-axe-grid li[data-out] { background: transparent; box-shadow: inset 0 0 0 1px var(--dv-line, var(--line)); }
+.dv-axe-grid li[data-out] .dv-axe-name b { color: var(--dv-muted, var(--muted)); }
+.dv-axe-out { margin: auto 0 0; color: var(--dv-muted, var(--muted)); font-size: 16px; }
+.dv-axe-grid li { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.dv-axe-grid li[data-out] { background: transparent; }
