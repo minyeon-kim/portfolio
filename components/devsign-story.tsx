@@ -1,5 +1,7 @@
 "use client";
 
+import { playClip, toggleClip } from "@/lib/video";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
@@ -55,14 +57,14 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
     if (!wanted) { el.pause(); return; }
     // A clip that takes over starts from its As-is part.
     if (pinned) el.currentTime = 0;
-    el.play().then(() => setRefused(false)).catch(() => setRefused(true));
+    playClip(el);
   }, [wanted, pinned, near]);
   const seek = (to: "a" | "b") => {
     const el = video.current;
     if (!el) return;
     el.currentTime = to === "a" ? 0 : change.clip.cut;
     setPhase(to);
-    if (wanted) el.play().catch(() => {});
+    if (wanted) playClip(el);
   };
   const sides = [
     { key: "a", tag: labels.asIs, line: change.before },
@@ -72,7 +74,7 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
     <li className="dv-iter-step" data-on={active || undefined}>
       <h4 className="dv-iter-name"><b>{index + 1} / {total}</b>{change.title}</h4>
       <div className="dv-iter-clip">
-        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} controls={still || refused} onEnded={onEnd} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
+        <video ref={video} src={near ? withBase(change.clip.src) : undefined} poster={withBase(change.clip.poster)} muted loop playsInline preload={near ? "auto" : "none"} onClick={toggleClip} onEnded={onEnd} width={1600} height={1000} aria-label={`${change.title}. ${labels.asIs}: ${change.before} ${labels.toBe}: ${change.after}`}
           onTimeUpdate={(e) => setPhase(e.currentTarget.currentTime >= change.clip.cut ? "b" : "a")} />
       </div>
       <div className="dv-iter-sides">
@@ -308,7 +310,7 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
     if (manual) return;
     videos.current.forEach((v, i) => {
       if (!v) return;
-      if (i === turn && onScreen && near) { v.currentTime = 0; v.playbackRate = PAIR_RATE[i]; v.play().catch(() => setManual(true)); }
+      if (i === turn && onScreen && near) { v.currentTime = 0; v.playbackRate = PAIR_RATE[i]; playClip(v); }
       else { v.pause(); if (v.currentTime) v.currentTime = 0; }
     });
   }, [turn, onScreen, near, manual]);
@@ -322,7 +324,7 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
         <figure key={key} className="dv-iter-card" data-side={key} data-on={(!manual && turn === i && onScreen) || undefined}>
           <div className="dv-iter-plate">
             <div className="dv-iter-view">
-              <video ref={(el) => { videos.current[i] = el; }} src={near ? withBase(side.clip.src) : undefined} poster={withBase(side.clip.poster)} muted playsInline preload={near ? "auto" : "none"} controls={manual} width={1440} height={686} aria-label={`${side.alt ?? tag} ${side.text}`} onEnded={(e) => { if (i === turn) { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
+              <video ref={(el) => { videos.current[i] = el; }} src={near ? withBase(side.clip.src) : undefined} poster={withBase(side.clip.poster)} muted playsInline preload={near ? "auto" : "none"} onClick={toggleClip} width={1440} height={686} aria-label={`${side.alt ?? tag} ${side.text}`} onEnded={(e) => { if (i === turn) { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
             </div>
             {key === "b" && <span className="dv-iter-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>}
           </div>
@@ -358,7 +360,7 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
     const start = () => {
       if (!gate.current.onScreen || !gate.current.wanted) return;
       el.muted = true;
-      el.play().catch((error: Error) => { if (error.name === "NotAllowedError") setRefused(true); });
+      playClip(el);
     };
     startClip.current = start;
     // Coming back to the tab, or the first press, gets another try.
@@ -394,7 +396,7 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
   return (
     <li id={reel.id} className="dv-reel dv-link-target" data-on={active || undefined}>
       <div className="dv-reel-media">
-        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near && load ? "auto" : "none"} controls={still || refused} aria-label={reel.alt ?? reel.name} onPlaying={() => setRefused(false)} />
+        <video ref={video} src={withBase(reel.clip.src)} poster={withBase(reel.clip.poster)} muted loop playsInline preload={near && load ? "auto" : "none"} onClick={toggleClip} aria-label={reel.alt ?? reel.name} onPlaying={() => setRefused(false)} />
       </div>
       <div className="dv-reel-text">
         <p className="dv-reel-name"><b>{reel.kicker.split(" ")[0]}</b>{reel.name}<span>{reel.kicker.split(" ").slice(1).join(" ")}</span></p>
@@ -446,7 +448,7 @@ export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }
       if (i === current && onScreen && !still) {
         v.muted = true;
         v.playbackRate = PLAYBACK_RATE;
-        v.play().catch((error: Error) => { if (error.name === "NotAllowedError") setRefused(true); });
+        playClip(v);
       } else {
         v.pause();
         if (i !== current && v.currentTime) v.currentTime = 0;
@@ -490,7 +492,7 @@ export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }
             playsInline
             loop={pinned}
             preload={near && i <= current + 1 ? "auto" : "none"}
-            controls={(still || refused) && i === current}
+            onClick={toggleClip}
             data-on={i === current || undefined}
             aria-hidden={i !== current || undefined}
             aria-label={reel.alt ?? reel.name}
