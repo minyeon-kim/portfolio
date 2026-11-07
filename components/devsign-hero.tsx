@@ -26,7 +26,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
   return (
     <div className="devsign-hero" data-project={project}>
       <div className="devsign-hero-panel">
-      <HeroCanvas cursors={gemini ? undefined : ["Taylor", "Jordan"]} />
+      {gemini ? <span className="gemini-hero-aurora" aria-hidden="true" /> : <HeroCanvas cursors={["Taylor", "Jordan"]} />}
       <div className="devsign-hero-intro">
         <p className="devsign-hero-brand">
           {gemini
