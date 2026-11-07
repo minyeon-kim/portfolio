@@ -7157,3 +7157,21 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption span { color: var(--case-accent) !important; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .case-study .dv { --g-depth: 42%; } }
 :root[data-theme="dark"] .case-study .dv { --g-depth: 42%; }
+/* Iteration 1, text back inside the card (owner), readable in both themes: the card's colour sits
+   at the top behind the clip and fades into a calm base where the caption is: near-white with dark
+   words in light, near-black with white words in dark. Supersedes the caption under the card. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card { --base: light-dark(#f7f7fa, #14151c); --ink-on: light-dark(#16161c, #ffffff); --muted-on: light-dark(rgb(22 22 28 / 0.6), rgb(255 255 255 / 0.66)); overflow: hidden; border-radius: 24px; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="a"] { --t1: #c9c9d2; --t2: #e4e4ea; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] { --t1: #8f7dff; --t2: #c9a8ff; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] {
+  padding: 0;
+  background:
+    radial-gradient(90% 60% at 18% 0%, rgb(255 255 255 / 0.28), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--t1), var(--base) 10%) 0%, color-mix(in srgb, var(--t2), var(--base) 35%) 52%, var(--base) 82%);
+}
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { padding: clamp(20px, 2.4vw, 32px) clamp(20px, 2.4vw, 32px) 0; background: none !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 24px clamp(20px, 2.4vw, 32px) 28px; color: var(--ink-on) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption span { color: var(--muted-on) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption span { color: var(--case-accent) !important; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] { border-radius: 24px; overflow: hidden; }
