@@ -7068,3 +7068,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
     linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
 }
+/* Iteration 1: the waiting card stays readable on the new gradients (owner: it disappeared).
+   Its caption no longer fades; its clip only darkens a little. */
+.case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) figcaption { opacity: 1; }
+.case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) video { opacity: 1; filter: brightness(0.72); }
