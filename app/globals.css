@@ -6954,3 +6954,11 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 /* Gemini opener: a larger phone (owner), still fading into the panel at the fold. */
 .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel .devsign-hero-phone { top: 3%; height: 132%; }
 @media (max-width: 47.99rem) { .devsign-hero[data-project="gemini-privacy"] .devsign-hero-panel .devsign-hero-phone { height: 150%; } }
+/* User flow in the usual symbols: steps are rectangles, decisions diamonds, ends pills. */
+.dv-fc-end { fill: var(--fc-card); stroke: color-mix(in srgb, var(--dv-ink) 45%, transparent); stroke-width: 1.25; }
+.dv-fc-legend { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin: 24px 0 0; padding: 0; font-size: 16px; color: var(--dv-muted); }
+.dv-fc-legend li { display: inline-flex; align-items: center; gap: 10px; }
+.dv-fc-legend i { display: inline-block; width: 26px; height: 16px; border: 1.25px solid color-mix(in srgb, var(--dv-ink) 55%, transparent); border-radius: 3px; }
+.dv-fc-legend i[data-shape="decision"] { width: 14px; height: 14px; margin: 0 6px; border-radius: 1px; transform: rotate(45deg); }
+.dv-fc-legend i[data-shape="end"] { border-radius: 999px; }
+@media (max-width: 47.99rem) { .dv-fc-legend { display: none; } }

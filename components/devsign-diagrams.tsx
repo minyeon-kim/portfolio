@@ -76,6 +76,8 @@ export type FlowChartData = {
   who: { developer: string; decider: string };
   list: { title: string; items: string[] }[];
   full: { src: string; label: string };
+  // Names for the three user-flow symbols in the key under the chart.
+  legend?: { step: string; decision: string; end: string };
 };
 
 const FC_PAD = 32;
@@ -93,6 +95,8 @@ const fcLeft = (col: number) => FC_PAD + FC_STEP * col;
 const fcRight = (col: number) => fcLeft(col) + FC_W;
 const fcMid = (col: number) => fcLeft(col) + FC_W / 2;
 const mid = (row: number) => row + FC_H / 2;
+// Decisions are diamonds, taller than a step so two lines of text fit inside.
+const FC_DH = 52;
 
 type FcKind = "step" | "ask" | "key" | "store" | "result";
 const FC_NODES: { id: FlowNodeId; col: number; row: number; kind: FcKind }[] = [
@@ -117,7 +121,7 @@ const seq = (i: number) => ({ "data-seq": "", style: { "--i": i } as React.CSSPr
 const across = (row: number, col: number) => `M${fcRight(col) + 3} ${mid(row)}H${fcLeft(col + 1) - 3}`;
 const FC_EDGES = [across(ROW_A, 0), across(ROW_A, 1), across(ROW_A, 2), across(ROW_B, 0), across(ROW_B, 3)];
 // A's "no" leaves its box, runs down the left margin of B's and enters B's first step.
-const FC_HANDOFFS = [`M${fcMid(2)} ${ROW_A + FC_H + 3}V${(FC_BOX_A + FC_BOX_B) / 2}H14V${mid(ROW_B)}H${fcLeft(0) - 3}`, across(ROW_B, 1), across(ROW_B, 2)];
+const FC_HANDOFFS = [`M${fcMid(2)} ${mid(ROW_A) + FC_DH + 3}V${(FC_BOX_A + FC_BOX_B) / 2}H14V${mid(ROW_B)}H${fcLeft(0) - 3}`, across(ROW_B, 1), across(ROW_B, 2)];
 
 function FcLines({ lines, x, y, className }: { lines: string[]; x: number; y: number; className: string }) {
   return <>{lines.map((line, l) => <text key={line} x={x} y={y + l * 22} textAnchor="middle" className={className}>{line}</text>)}</>;
@@ -142,28 +146,35 @@ export function FlowChart({ chart }: { chart: FlowChartData }) {
           <text x={FC_PAD} y={FC_BOX_B + 74} className="dv-fc-when" {...seq(10)}>{chart.example}</text>
           {FC_EDGES.map((edge, i) => <path key={edge} d={edge} pathLength={1} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" {...seq(FC_EDGE_ORDER[i])} />)}
           {FC_HANDOFFS.map((edge, i) => <path key={edge} d={edge} pathLength={1} className="dv-fc-handoff" markerEnd="url(#dv-fc-arrow-strong)" data-long={i === 0 || undefined} {...seq(FC_HANDOFF_ORDER[i])} />)}
-          <path d={`M${fcMid(1)} ${ROW_B + FC_H + 3}V${ROW_C - 3}`} pathLength={1} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" {...seq(15)} />
+          <path d={`M${fcMid(1)} ${mid(ROW_B) + FC_DH + 3}V${ROW_C - 3}`} pathLength={1} className="dv-fc-line" markerEnd="url(#dv-fc-arrow)" {...seq(15)} />
           {FC_NODES.map(({ id, col, row, kind }) => {
             const x = fcLeft(col);
             const lines = nodes[id];
             return (
               <g key={id} {...seq(FC_ORDER[id])}>
                 {kind === "ask"
-                  ? <path className="dv-fc-ask" d={`M${x + 14} ${row}H${x + FC_W - 14}L${x + FC_W} ${mid(row)}L${x + FC_W - 14} ${row + FC_H}H${x + 14}L${x} ${mid(row)}Z`} />
-                  : <rect x={x} y={row} width={FC_W} height={FC_H} rx={12} className={kind === "result" ? "dv-fc-branchnode" : `dv-fc-${kind}`} />}
+                  ? <path className="dv-fc-ask" d={`M${fcMid(col)} ${mid(row) - FC_DH}L${x + FC_W} ${mid(row)}L${fcMid(col)} ${mid(row) + FC_DH}L${x} ${mid(row)}Z`} />
+                  : <rect x={x} y={row} width={FC_W} height={FC_H} rx={kind === "result" || kind === "store" ? FC_H / 2 : 8} className={kind === "result" ? "dv-fc-end" : `dv-fc-${kind}`} />}
                 <FcLines lines={lines} x={fcMid(col)} y={mid(row) + 6 - ((lines.length - 1) * 22) / 2} className={kind === "store" ? "dv-fc-text dv-fc-text-store" : kind === "result" ? "dv-fc-text dv-fc-text-branch" : "dv-fc-text"} />
               </g>
             );
           })}
           <text x={fcRight(2) + 20} y={mid(ROW_A) - 12} textAnchor="middle" className="dv-fc-when" {...seq(6)}>{chart.yes}</text>
-          <text x={fcMid(2) + 12} y={ROW_A + FC_H + 30} className="dv-fc-when" {...seq(8)}>{chart.no}</text>
+          <text x={fcMid(2) + 12} y={mid(ROW_A) + FC_DH + 22} className="dv-fc-when" {...seq(8)}>{chart.no}</text>
           <text x={fcRight(1) + 20} y={mid(ROW_B) - 12} textAnchor="middle" className="dv-fc-when" {...seq(15)}>{chart.yes}</text>
-          <text x={fcMid(1) + 12} y={ROW_B + FC_H + 34} className="dv-fc-when" {...seq(15)}>{chart.no}</text>
+          <text x={fcMid(1) + 12} y={mid(ROW_B) + FC_DH + 22} className="dv-fc-when" {...seq(15)}>{chart.no}</text>
           <text x={fcMid(0)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who" {...seq(12)}>{who.developer}</text>
           <text x={fcMid(2)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-meet" {...seq(16)}>{who.decider}</text>
           <text x={fcMid(3)} y={ROW_B + FC_H + 26} textAnchor="middle" className="dv-fc-who" {...seq(18)}>{who.developer}</text>
         </svg>
       </div>
+      {chart.legend && (
+        <ul className="dv-fc-legend" aria-hidden="true">
+          <li><i data-shape="step" />{chart.legend.step}</li>
+          <li><i data-shape="decision" />{chart.legend.decision}</li>
+          <li><i data-shape="end" />{chart.legend.end}</li>
+        </ul>
+      )}
       {/* Phones read it as a list; screen readers always get this list. */}
       <ol className="dv-fc-list">
         {chart.list.map((group) => (
