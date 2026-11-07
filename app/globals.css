@@ -7126,3 +7126,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .intro-stage.home-stage .home-pick-cap { display: block; overflow: hidden; color: var(--muted); font-size: 14px; font-weight: 400; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
   .intro-stage.home-stage .home-picks ol { gap: 12px !important; }
 }
+/* Case items without the thumbnail (owner): name and one line in the pill. */
+@media (min-width: 64rem) {
+  .intro-stage.home-stage .home-pick { width: auto; min-width: 300px; max-width: min(380px, 30vw); padding: 12px 24px !important; border-radius: 999px; }
+}
