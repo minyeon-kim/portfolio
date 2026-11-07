@@ -9,10 +9,9 @@ import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
 import { AffinityExplorer } from "@/components/affinity-explorer";
-import { CountUp, AffinityMotion, AffinityWall, AffinityMap, ScreenSteps, CanvasZoom, OpenFrame, ProblemPanels, HeldFlow } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffExcerpt, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
-import { DetailRows } from "@/components/detail-rows";
 
 // Card colour by who the card is about: designers in the case colour, developers
 // in the persona orange, anyone else in blue.
@@ -579,18 +578,24 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff && develop.selection && overview.features && (
           <div className="dv-main-features">
             <Block title={develop.selection.label} lead={overview.features.title} ff />
-            <DetailRows rows={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string }) => {
-              const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
-              const shown = deliver.features?.find((item: Study) => item.title === f.name);
-              return {
-                id: `feature-${slugOf(f.name)}`,
-                title: f.name,
-                body: f.hook ?? f.body,
-                lines: pick ? [[develop.selection.solves, pick.problem]] : undefined,
-                media: { clip: shown?.clip, alt: shown?.alt },
-                wide: true,
-              };
-            })} />
+            <FeatureList
+              reels={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string; flow?: string }) => {
+                const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
+                const shown = deliver.features?.find((item: Study) => item.title === f.name);
+                return {
+                  id: `feature-${slugOf(f.name)}`,
+                  kicker: f.kicker,
+                  name: f.name,
+                  body: f.body,
+                  hook: f.hook,
+                  flow: f.flow,
+                  alt: shown?.alt,
+                  points: shown?.points ?? [],
+                  clip: shown?.clip,
+                  solves: pick && <span><b>{develop.selection.solves}</b>{pick.problem}</span>,
+                };
+              })}
+            />
           </div>
         )}
         {/* UI details: the small parts of a screen where a decision happens, cut out
@@ -631,14 +636,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.spec && (
           <div className="dv-gap-96">
             <Block method={deliver.spec.label} title={deliver.spec.label} lead={deliver.spec.lead} ff={ff} />
-            <DetailRows rows={deliver.spec.screens.map((sc: { tab: string; purpose: string; src: string; alt: string; rows: string[][]; pins: [number, number][] }) => ({
-              title: sc.tab,
-              body: sc.purpose,
-              list: sc.rows.slice(0, 3).map((r) => ({ name: r[0], text: r[1] })),
-              media: { img: { src: sc.src, width: 2160, height: 1350, alt: sc.alt }, pins: sc.pins.slice(0, 3) },
-              wide: true,
-            }))} />
-            {deliver.spec.more && <p className="dv-detail-more reveal"><a className="press" href={withBase(deliver.spec.moreHref)}>{deliver.spec.more}</a></p>}
+            <HandoffExcerpt spec={deliver.spec} screenId="merge" more={deliver.spec.more} moreHref={deliver.spec.moreHref} />
           </div>
         )}
       </Section>
@@ -673,14 +671,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <Block {...testing.iteration1} text={ff ? undefined : testing.iteration1.text} ff={ff} />
           {ff && <p className="dv-iter-why reveal">{testing.iteration1.text}</p>}
           <div className="dv-gap-40">{ff
-            ? <DetailRows rows={[{
-                title: testing.iteration1.lead,
-                media: { pair: [
-                  { label: labels.asIs ?? "As-is", text: testing.iteration1.before.text, clip: { ...testing.iteration1.before.clip, rate: 2.5 } },
-                  { label: labels.toBe ?? "To-be", text: testing.iteration1.after.text, clip: { ...testing.iteration1.after.clip, rate: 1.6 }, accent: true },
-                ] },
-                wide: true,
-              }]} className="dv-details-solo" />
+            ? <IterationPair before={testing.iteration1.before} after={testing.iteration1.after} labels={labels} />
             : <DevsignCompare before={testing.iteration1.before} after={testing.iteration1.after} changes={testing.iteration1.changes} labels={labels} />}</div>
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
@@ -688,12 +679,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Block {...testing.iteration2} text={undefined} ff={ff} />
             <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
             {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-iter-photo" />}
-            <div className="dv-gap-40">{testing.iteration2.changesLead && <p className="dv-iter-lead reveal">{testing.iteration2.changesLead}</p>}<DetailRows rows={testing.iteration2.changes.map((c: { title: string; before: string; after: string; clip: { src: string; poster?: string } }) => ({
-              title: c.title,
-              lines: [[labels.asIs ?? "As-is", c.before], [labels.toBe ?? "To-be", c.after, true]],
-              media: { clip: c.clip },
-              wide: true,
-            }))} /></div>
+            <div className="dv-gap-40">{testing.iteration2.changesLead && <p className="dv-iter-lead reveal">{testing.iteration2.changesLead}</p>}<IterationCompare changes={testing.iteration2.changes} labels={labels} /></div>
           </> : <>
             <Block {...testing.iteration2} ff={ff} />
             <div className="dv-two dv-gap-40 dv-center">
