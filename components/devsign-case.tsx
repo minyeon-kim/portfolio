@@ -9,6 +9,7 @@ import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
 import { AffinityExplorer } from "@/components/affinity-explorer";
+import { AffinityThemes } from "@/components/affinity-themes";
 import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffOne, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
@@ -431,9 +432,18 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {define.affinity.funnel.map(([n, label]: [string, string]) => <li key={label}><strong>{n}</strong><span>{label}</span></li>)}
             </ol>
           )}
-          <Figure img={define.affinity.board} className="dv-board dv-gap-24" open />
+          {define.affinity.themes
+            ? <AffinityThemes board={{ ...define.affinity.board, src: withBase(define.affinity.board.src) }} rows={define.affinity.rows} themes={define.affinity.themes} label={define.affinity.themesLabel} />
+            : <Figure img={define.affinity.board} className="dv-board dv-gap-24" open />}
         </div>
 
+        {define.problems.panels ? (
+        <div className="dv-subsection">
+          <ProblemPanels items={define.problems.items}>
+            <Block {...define.problems} ff />
+          </ProblemPanels>
+        </div>
+        ) : (
         <div className="dv-subsection">
           <Block {...define.problems} ff />
           <table className="dv-found dv-found-pair dv-gap-40 reveal">
@@ -450,6 +460,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             </tbody>
           </table>
         </div>
+        )}
 
         <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
