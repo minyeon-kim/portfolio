@@ -6976,3 +6976,10 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-hdoc-fold summary:hover { color: var(--ink); }
 .dv-hdoc-fold summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .dv-hdoc-fold .dv-hdoc-cols { margin-top: 8px; padding-bottom: 8px; }
+/* Core features: the list starts level with the clip's top instead of floating at its middle,
+   and the clip is a step smaller so clip and list sit on one screen. */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-flist { align-items: start; }
+  .case-study .dv .dv-flist { grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr); }
+  .case-study .dv .dv-flist-frame { width: min(100%, calc((100svh - 160px) * 1.6)); }
+}
