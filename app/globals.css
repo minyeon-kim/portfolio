@@ -6846,3 +6846,6 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-ax-note[data-pick]:hover { transform-origin: center; filter: brightness(1.12); box-shadow: 0 0 0 2px var(--ink); }
 .dv-ax-ghost { position: absolute; left: 0; top: 0; width: 14px; height: 14px; border: 2px solid; border-radius: 3px; box-sizing: border-box; transition: transform 600ms var(--ease-out-soft, var(--ease)); }
 .dv-ax-subhead { padding-bottom: 0; border-bottom: 0; font-size: 16px; color: var(--dv-muted, var(--muted)); }
+
+/* Iteration 2 drops its outer card so the purple plate sits on the page, like the core features and handoff. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter:not(.dv-screens-held) .dv-held-plate { background: transparent; border: 0; padding: 0; }
