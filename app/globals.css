@@ -7076,3 +7076,17 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .case-study .dv .dv-gs[data-pinned] .dv-gs-list > li { border: 0; padding: 0; }
 }
+
+/* About closing after metalab.com: large serif line | rows of ways to reach out. */
+.about-contact-stage .about-contact { margin-top: 0; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 120px); align-items: start; }
+.about-contact-line { margin: 0; font-family: var(--font-headline); font-size: clamp(40px, 4.6vw, 80px); font-weight: 200; line-height: 1.08; letter-spacing: -0.012em; color: var(--ink); text-wrap: balance; word-break: keep-all; }
+.about-contact-rows { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--line); }
+.about-contact-rows li { display: block; min-height: 0; border-top: 1px solid var(--line); }
+.about-contact-rows a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; color: var(--ink); font-size: 18px; text-decoration: none; transition: color 150ms var(--ease); }
+.about-contact-rows a:hover, .about-contact-rows a:focus-visible { color: var(--accent); }
+.about-contact-arrow { padding: 0; color: var(--muted); font-size: 18px; transition: transform 250ms var(--ease), color 150ms var(--ease); }
+.about-contact-rows a:hover .about-contact-arrow, .about-contact-rows a:focus-visible .about-contact-arrow { color: currentColor; transform: translate(2px, -2px); }
+@media (max-width: 63.99rem) { .about-contact-stage .about-contact { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .about-contact-rows a:hover .about-contact-arrow { transform: none; } }
+.about-contact-line:lang(ko) { font-size: clamp(32px, 3.6vw, 60px); line-height: 1.25; text-wrap: pretty; }
+.about-contact-rows li { padding-block: 0; }

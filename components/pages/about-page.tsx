@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { AboutBridge, CopyButton } from "@/components/about-interactive";
+import { AboutBridge } from "@/components/about-interactive";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { SiteFooter } from "@/components/site-footer";
@@ -52,7 +52,7 @@ const copy = {
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
-    work: "Selected work", contact: "Contact", resume: "이력서 (PDF)", email: "이메일", copyEmail: "복사",
+    work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "복사",
     steps: "Then and now", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사됨", read: "케이스 보기",
   },
 };
@@ -84,7 +84,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   ];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
   const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
-  const total = 5;
+  const total = 4;
 
   return (
     <div data-about-page className="project-detail">
@@ -182,31 +182,20 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           </ul>
         </section>
 
-        <section className="about-close about-contact-stage">
-          <StageHead n={5} total={total} title={c.contact} />
+        {/* Closing after metalab.com's About: one large line at the left, the ways
+            to reach out as rows with an arrow at the right. No raw addresses. */}
+        <section className="about-close about-contact-stage" aria-labelledby="about-contact-title">
           <div className="about-contact">
-            <p className="about-statement reveal">{c.open}</p>
+            <h2 id="about-contact-title" className="about-contact-line reveal">{c.open}</h2>
             <ul className="about-contact-rows reveal">
               {site.email && (
-                <li>
-                  <span className="about-contact-label">{c.email}</span>
-                  <a href={`mailto:${site.email}`} className="about-contact-value">{site.email}</a>
-                  <CopyButton text={site.email} label={c.copyEmail} copied={c.copied} />
-                </li>
+                <li><a href={`mailto:${site.email}`}><span>{c.email}</span><span className="about-contact-arrow" aria-hidden="true">↗</span></a></li>
               )}
               {site.linkedinUrl && (
-                <li>
-                  <span className="about-contact-label">LinkedIn</span>
-                  <a href={site.linkedinUrl} className="about-contact-value">{site.linkedinUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a>
-                  <span className="about-contact-arrow" aria-hidden="true">↗</span>
-                </li>
+                <li><a href={site.linkedinUrl} target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span className="about-contact-arrow" aria-hidden="true">↗</span></a></li>
               )}
               {hasResume && (
-                <li>
-                  <span className="about-contact-label">{c.resume}</span>
-                  <a href={withBase(site.resumeUrl)} className="about-contact-value">PDF</a>
-                  <span className="about-contact-arrow" aria-hidden="true">↓</span>
-                </li>
+                <li><a href={withBase(site.resumeUrl)}><span>{c.resume}</span><span className="about-contact-arrow" aria-hidden="true">↓</span></a></li>
               )}
             </ul>
             {!hasResume && <Todo>add public/resume.pdf; the Resume row appears once it exists</Todo>}
