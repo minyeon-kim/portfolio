@@ -213,9 +213,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
                   onClick={() => open(c.slug)}
                 >
                   {c.slug !== "about" && <span className="home-pick-index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>}
-                  {/* Wide screens: the name and its one line (class feedback: the cases should read
-                      as solid pieces, not small floating pills). */}
-                  <span className="home-pick-text"><span className="home-pick-name">{c.name}</span>{c.caption && <small className="home-pick-cap">{c.caption}</small>}</span>
+                  {c.name}
                 </button>
               </li>
             ))}
