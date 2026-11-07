@@ -93,6 +93,7 @@ export const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefer
 const HELD_TAIL = 0.5;
 const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
 
+const HOLD_ON_SCROLL = false;
 export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
   const [active, setActive] = useState(0);
   const [pinned, setPinned] = useState(false);
@@ -125,7 +126,9 @@ export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     const query = window.matchMedia(pinQuery);
-    const sync = () => { tallest.current = 0; setPinned(query.matches); };
+    // Pinned scroll steps are off (class feedback 2026-11-06: content you have to scroll through to see
+    // goes unseen). Every held block shows its plain, unpinned form; flip HOLD_ON_SCROLL to restore them.
+    const sync = () => { tallest.current = 0; setPinned(HOLD_ON_SCROLL && query.matches); };
     sync();
     read();
     query.addEventListener("change", sync);
