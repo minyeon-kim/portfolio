@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { useHeldSteps } from "./devsign-story";
 
-type Item = { tone: string; label: string; title: string; text: string };
+type Item = { tone: string; label: string; title: string; text?: string };
 
 // The Overview summary as three steps read down, not three columns read across (owner).
 // On desktop the stage holds centred while native scroll moves Problem → Solution → Impact;
@@ -21,7 +21,7 @@ export function GlanceSteps({ items, label }: { items: Item[]; label: string }) 
               </button>
               <div className="dv-gs-body">
                 <p className="dv-gs-title">{item.title}</p>
-                <p className="dv-gs-text">{item.text}</p>
+                {item.text && <p className="dv-gs-text">{item.text}</p>}
               </div>
             </li>
           ))}
