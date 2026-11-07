@@ -7001,3 +7001,21 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) .dv-detail-card { order: -1; }
 }
+/* Core features: each feature has its own colour on the clip frame, crossfading as the
+   feature changes (same four tones as the detail rows). */
+.case-study .dv .dv-flist [data-t="0"] { --c1: #7c62ff; --c2: #c084fc; }
+.case-study .dv .dv-flist [data-t="1"] { --c1: #38bdf8; --c2: #2dd4bf; }
+.case-study .dv .dv-flist [data-t="2"] { --c1: #f472b6; --c2: #fb923c; }
+.case-study .dv .dv-flist [data-t="3"] { --c1: #34d399; --c2: #a3e635; }
+.case-study .dv .dv-flist-frame { background: color-mix(in srgb, var(--ink) 4%, var(--bg)); }
+.dv-flist-tone { position: absolute; inset: 0; opacity: 0; transition: opacity 400ms var(--ease);
+  background:
+    radial-gradient(110% 85% at 12% 0%, color-mix(in srgb, var(--c1) 55%, transparent), transparent 64%),
+    radial-gradient(100% 80% at 100% 100%, color-mix(in srgb, var(--c2) 45%, transparent), transparent 66%),
+    color-mix(in srgb, var(--c1) 14%, var(--bg)); }
+.dv-flist-tone[data-on] { opacity: 1; }
+.case-study .dv .dv-flist-frame video { z-index: 1; }
+.case-study .dv .dv-flist-items li[data-on] button b { color: color-mix(in srgb, var(--c1) 80%, var(--ink)); }
+.case-study .dv .dv-flist-items li[data-on] .dv-flist-bar > i { background: var(--c1); }
+@media (prefers-reduced-motion: reduce) { .dv-flist-tone { transition: none; } }
+.case-study .dv .dv-flist-items li[data-on] button small { color: color-mix(in srgb, var(--c1) 70%, var(--ink)); }
