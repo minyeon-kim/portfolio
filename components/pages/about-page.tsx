@@ -2,17 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { AboutBridge } from "@/components/about-interactive";
-import { DevsignLoop } from "@/components/devsign-loop";
-import { GeminiPhone } from "@/components/gemini-phone";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
 import * as ko from "@/content/ko/about.mdx";
 import { localize, type Locale } from "@/lib/i18n";
-import { getCases } from "@/lib/cases";
 import { shareMeta, site, withBase } from "@/lib/site";
 
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
@@ -83,8 +79,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
     [["laptop", 1800, 1200], ["hands", 1800, 1200], ["desk", 2400, 1500]],
   ];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
-  const work = (await getCases(locale)).filter((entry) => entry.meta.featured && !entry.meta.draft);
-  const total = 4;
+  const total = 3;
 
   return (
     <div data-about-page className="project-detail">
@@ -160,27 +155,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           </div>
         </section>
 
-        <section className="about-close">
-          <StageHead n={4} total={total} title={c.work} />
-          <ul className="about-projects">
-            {work.map((entry) => (
-              <li key={entry.slug} className="reveal">
-                <Link href={localize(`/work/${entry.slug}/`, locale)} className="about-project" data-project={entry.slug}>
-                  <span className="about-project-plate" data-project={entry.slug}>
-                    {entry.slug === "gemini-privacy"
-                      ? <span className="about-project-phone"><GeminiPhone alt="" /></span>
-                      : entry.slug === "devsign"
-                        ? <span className="about-project-app"><DevsignLoop alt="" /></span>
-                        : <Image src={withBase(`/og/${entry.slug}.png`)} alt="" fill sizes="(max-width: 767px) 100vw, 600px" className="object-cover" />}
-                  </span>
-                  <span className="about-project-meta">{(entry.meta.hero?.details[0]?.value ?? entry.meta.timeline ?? "").split(". ")[0]}</span>
-                  <span className="about-project-name">{entry.meta.short ?? entry.meta.title}<ArrowIcon /></span>
-                  <span className="about-project-text">{entry.meta.hook ?? entry.tldr.problem}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {/* No project cards on About (owner): the landing, the Menu and each case's Next project lead to the work. */}
 
         {/* Closing after metalab.com's About: one large line at the left, the ways
             to reach out as rows with an arrow at the right. No raw addresses. */}
