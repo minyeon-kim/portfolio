@@ -7039,3 +7039,5 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
   .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) .dv-detail-card { order: 0; }
 }
 .case-study .dv .dv-details-list > li .dv-detail-num { color: var(--case-accent); }
+/* Prototype + core features as one block: the list follows the prototype heading and link directly. */
+.case-study .dv .dv-main-features-joined { margin-top: 64px !important; }
