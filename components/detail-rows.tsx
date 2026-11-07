@@ -1,5 +1,7 @@
 "use client";
 
+import { playClip, toggleClip } from "@/lib/video";
+
 import Image from "next/image";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { withBase } from "@/lib/site";
@@ -37,7 +39,7 @@ function Clip({ clip, label }: { clip: DetailClip; label: string }) {
     v.playbackRate = clip.rate ?? 1;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { v.controls = true; return; }
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { v.playbackRate = clip.rate ?? 1; v.play().catch(() => { v.controls = true; }); }
+      if (e.isIntersecting) { v.playbackRate = clip.rate ?? 1; playClip(v); }
       else v.pause();
     }, { threshold: 0.4 });
     io.observe(v);
@@ -45,7 +47,7 @@ function Clip({ clip, label }: { clip: DetailClip; label: string }) {
   }, [clip.rate]);
   return (
     <video ref={ref} src={withBase(clip.src)} poster={clip.poster ? withBase(clip.poster) : undefined}
-      muted loop playsInline preload="metadata" aria-label={label} />
+      muted loop playsInline preload="metadata" aria-label={label} onClick={toggleClip} />
   );
 }
 
