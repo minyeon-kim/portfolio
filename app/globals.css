@@ -6876,3 +6876,9 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .dv-ax-tiles .dv-ax-col[data-on]::before { background: color-mix(in srgb, var(--case-accent, var(--accent)) 12%, transparent); }
 .dv-ax-tiles .dv-ax-col[data-on] .dv-ax-colname { font-size: 16px; }
 .dv-ax-tiles .dv-ax-insight span { color: var(--case-accent, var(--accent)); }
+
+/* Iteration 2 held card stays on the 1200 case column, the same left edge as its
+   heading, line and photo (it had jumped out to the wide 1640 width). */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-iter { --reel-card: 100%; --reel-text: clamp(300px, 27vw, 380px); width: 100%; margin-left: 0; }
+}
