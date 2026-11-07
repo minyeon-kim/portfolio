@@ -7249,3 +7249,26 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-flist[data-phone] .dv-flist-frame video { object-fit: contain; box-shadow: none !important; border-radius: 0 !important; background: transparent; }
 /* The recorded phone keeps its own rounded corners (the crop's square corners are masked). */
 .case-study .dv .dv-flist[data-phone] .dv-flist-frame video { left: 50% !important; right: auto !important; width: auto !important; height: calc(100% - 2 * var(--plate-pad, 32px)) !important; translate: -50% 0; clip-path: inset(0 round 15.7% / 7.25%); }
+/* About hero follows the theme (owner: the dark photo against the light page below was
+   too sharp a cut). Light: the photo keeps its own pale wall and washes into the page
+   colour, with ink words; dark: the grey photo takes the page's blue-black hue, so it
+   melts into the same ground. The drift no longer darkens it on the way out. */
+.about-hero { color: light-dark(#0e1111, #fff); }
+.about-hero-title { color: light-dark(#0e1111, #fff); }
+.about-hero-subtitle { color: light-dark(rgb(14 17 17 / 0.78), rgb(255 255 255 / 0.86)); }
+.about-hero-photo { background: light-dark(#e9eae8, #16171c); }
+.about-hero-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: light-dark(transparent, #262a42); mix-blend-mode: color; }
+.about-hero-photo::after { z-index: 2; background:
+  linear-gradient(180deg, light-dark(rgb(245 246 244 / 0.72), rgb(10 11 20 / 0.66)) 0%, light-dark(rgb(245 246 244 / 0.42), rgb(10 11 20 / 0.34)) 38%, light-dark(rgb(245 246 244 / 0.3), rgb(10 11 20 / 0.18)) 62%, light-dark(rgb(245 246 244 / 0.5), rgb(10 11 20 / 0.62)) 100%); }
+@media (min-width: 64rem) {
+  .about-hero-photo::after { background:
+    linear-gradient(90deg, light-dark(rgb(245 246 244 / 0), rgb(10 11 20 / 0.08)) 0%, light-dark(rgb(245 246 244 / 0.1), rgb(10 11 20 / 0.12)) 40%, light-dark(rgb(245 246 244 / 0.7), rgb(10 11 20 / 0.5)) 68%, light-dark(rgb(245 246 244 / 0.78), rgb(10 11 20 / 0.55)) 100%),
+    linear-gradient(180deg, light-dark(rgb(245 246 244 / 0.4), rgb(10 11 20 / 0.45)) 0%, transparent 22%, transparent 70%, light-dark(rgb(245 246 244 / 0.3), rgb(10 11 20 / 0.6)) 100%); }
+}
+.about-hero::after { height: 50%; background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--bg) 60%, transparent) 50%, var(--bg) 100%); }
+.about-hero-actions a { background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.16)); color: light-dark(#0e1111, #fff); }
+.about-hero-actions a:hover { background: light-dark(rgb(14 17 17 / 0.14), rgb(255 255 255 / 0.24)); }
+.about-hero-actions a[data-primary] { background: light-dark(#0e1111, #fff); color: light-dark(#fff, #0e1111); }
+.about-hero-actions a:focus-visible { outline-color: light-dark(#0e1111, #fff); }
+header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --muted: light-dark(#5b6461, rgb(255 255 255 / 0.78)); color: light-dark(#0e1111, #fff); }
+@keyframes about-hero-drift { to { scale: 1.06; translate: 0 14%; } }
