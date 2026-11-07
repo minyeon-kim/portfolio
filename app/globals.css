@@ -7041,3 +7041,6 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-details-list > li .dv-detail-num { color: var(--case-accent); }
 /* Prototype + core features as one block: the list follows the prototype heading and link directly. */
 .case-study .dv .dv-main-features-joined { margin-top: 64px !important; }
+.dv-hdoc-one .dv-hdoc-purpose b { font-weight: 500; color: var(--ink); }
+.dv-hdoc-one .dv-hdoc-more { margin-top: 32px; }
+.dv-hdoc-one-purpose { display: block !important; }
