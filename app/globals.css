@@ -7305,3 +7305,14 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section:is(#overview, #discover, #define, #develop, #deliver, #testing, #takeaway) { padding-top: 112px; padding-bottom: 112px; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > .dv-section-head + * { margin-top: 0; }
 }
+
+/* Iteration 1 captions sit in their own box under each plate (owner): neutral for As-is,
+   a light tint of the case colour for To-be. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption {
+  margin-top: 12px !important; padding: 16px 20px !important; border-radius: 16px !important;
+  background: color-mix(in srgb, var(--dv-ink, var(--ink)) 6%, transparent) !important;
+}
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption {
+  background: color-mix(in srgb, var(--case-accent) 12%, transparent) !important;
+}
