@@ -184,6 +184,8 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     Object.assign(target.style, { top: "0px", left: "0px", width: `${vw}px`, height: `${vh}px` });
     morph(target, boxOf(rect), FULL, [18, 0], { duration: grow, fill: "both" });
   };
+  let sceneCopy: HTMLElement | null = null;
+  let sceneFill = 1;
   if (zoom && !reduced) {
     const source = zoom.from;
     // The whole card, not just the window set into it: its plate is part of the picture.
@@ -201,6 +203,21 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // the layer's first frame is its bare background.
       copy.querySelectorAll("img").forEach((img) => { img.loading = "eager"; img.decoding = "sync"; });
       // Straight into the stage: moving it there later would restart its loops.
+      // A case card is a crop of the cover's own scene: the layer shows the whole scene
+      // at the cover's size, scaled to fill the screen, and only has to settle onto it.
+      if (source.matches(".dh-shot")) {
+        const phone = window.matchMedia("(max-width: 47.99rem)").matches;
+        const [x, y, w, h] = (source.dataset[phone ? "fullPhone" : "full"] ?? "").split(",").map(Number);
+        if (w > 0) {
+          const height = (vw * h) / w;
+          sceneFill = Math.max(1, vh / height);
+          Object.assign(copy.style, { inset: "auto", left: "0px", top: `${(vh - height) / 2}px`, width: `${vw}px`, height: `${height}px`, aspectRatio: "auto", scale: `${sceneFill}` });
+          for (const key of ["--shot-x", "--shot-x-p"]) copy.style.setProperty(key, `${-x}px`);
+          for (const key of ["--shot-y", "--shot-y-p"]) copy.style.setProperty(key, `${-y}px`);
+          copy.style.setProperty("--shot-k", String(vw / w));
+          sceneCopy = copy;
+        }
+      }
       stageOf(layer).appendChild(copy);
       // The card's own surface (e.g. Gemini's bright blue) laid under the
       // copy, fading into the layer's darker opener ground as it grows, so the
@@ -421,7 +438,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // picture blends away, so nothing is cut by its edge or seen doubled.
       const wait = layer ? Math.max(0, zoomStart + grow + hold - performance.now()) : 0;
       const timing = layer
-        ? { duration: settle * 0.3, delay: wait + settle * 0.6, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
+        ? { duration: settle * (sceneCopy ? 0.45 : 0.3), delay: wait + settle * (sceneCopy ? 0.2 : 0.6), easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode }
         : { duration: 800, delay: 160, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "both" as FillMode };
       if (snapshot) animations.push(snapshot.animate(
         [{ transform: "translate3d(0, 0, 0)", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(0, -2vh, 0)", opacity: 0, filter: "blur(6px)" }],
@@ -436,7 +453,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       animations.push(slide);
       let finished = slide.finished;
       if (layer && zoom) {
-        const target = incoming.querySelector<HTMLElement>(zoom.to);
+        const target = incoming.querySelector<HTMLElement>(sceneCopy ? "main .dh-shot" : zoom.to);
         const box = target?.getBoundingClientRect();
         const radius = target ? getComputedStyle(target).borderRadius : "14px";
         const settleTiming = { duration: settle, delay: wait, fill: "both" as FillMode };
@@ -449,6 +466,11 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         if (layerLoop && targetLoop) syncAnimations(layerLoop, targetLoop);
         if (box && box.width > 0) {
           animations.push(...morph(layer, FULL, boxOf(box), [0, parseFloat(radius) || 14], settleTiming));
+          // The scene ends exactly as the cover shows it.
+          if (sceneCopy) {
+            const cover = Math.max(box.width / vw, box.height / vh);
+            animations.push(sceneCopy.animate([{ scale: `${sceneFill}` }, { scale: `${box.width / (vw * cover)}` }], { ...settleTiming, easing: ZOOM_EASE }));
+          }
           // The layer's picture is laid out for the full screen and the opener's for its
           // frame, so they can differ a little. Steer it onto the opener's picture, or the
           // blend shows both. The anchor is what must line up: the phone's screen, or the

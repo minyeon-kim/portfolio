@@ -3,7 +3,8 @@ import { DevsignLoop } from "@/components/devsign-loop";
 import { HeroClip } from "@/components/hero-clip";
 import { HeroShot } from "@/components/hero-shot";
 import { GeminiPhone } from "@/components/gemini-phone";
-import { DEVSIGN_URL, withBase } from "@/lib/site";
+import { COVER_SCENES } from "@/lib/cover-scenes";
+import { withBase } from "@/lib/site";
 
 export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; clip?: { src: string; poster: string; label: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
@@ -17,6 +18,7 @@ export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: 
 // .devsign-hero-media stays the element the page transitions measure.
 export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroData; name: string; alt: string; project: string }) {
   const gemini = project === "gemini-privacy";
+  const scene = COVER_SCENES[project];
   return (
     <div className="devsign-hero dh-cover" data-project={project}>
       <div className="devsign-hero-intro">
@@ -41,8 +43,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
       </dl>
       <div className="dh-cover-plate">
         {gemini ? (
-          <HeroShot src={withBase("/images/cases/gemini-privacy/cover-hand.webp")} width={1536} height={864} alt="" mediaWidth={800} mediaHeight={1734} crop={[26, 0, 1484, 864]} cropPhone={[600, 0, 499, 864]}
-            matrix="matrix3d(0.408803461, -0.0429530057, 0, 3.23777877e-05, 0.0659493613, 0.374605389, 0, -2.07875042e-05, 0, 0, 1, 0, 624.291913, 115.680511, 0, 1)">
+          <HeroShot {...scene} src={withBase(scene.src)} alt="">
             <div className="devsign-hero-media">
               {hero.clip
                 ? <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} />
@@ -50,8 +51,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
             </div>
           </HeroShot>
         ) : (
-          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1440} height={838} alt="" mediaWidth={1343} mediaHeight={1000} cropPhone={[493, 0, 484, 838]}
-            matrix="matrix3d(0.386063256, -0.00403789807, 0, -5.14754927e-05, -0.038678209, 0.460135074, 0, -8.08801034e-06, 0, 0, 1, 0, 439.34355, 83.8615, 0, 1)">
+          <HeroShot {...scene} src={withBase(scene.src)} alt="">
             <div className="devsign-hero-media">
               <div className="devsign-hero-window">
                 <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>

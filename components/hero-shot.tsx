@@ -7,8 +7,8 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 // media sits under it, warped onto the screen with a matrix3d computed from the image's
 // own screen corners. Everything is laid out at the image's pixel size and scaled to
 // the cover's width, so the warp stays exact at any width.
-export function HeroShot({ src, width, height, alt, matrix, mediaWidth, mediaHeight, crop, cropPhone, children }: {
-  src: string; width: number; height: number; alt: string; matrix: string; mediaWidth: number; mediaHeight: number; crop?: [number, number, number, number]; cropPhone?: [number, number, number, number]; children: ReactNode;
+export function HeroShot({ src, width, height, alt, matrix, mediaWidth, mediaHeight, crop, cropPhone, full, fullPhone, children }: {
+  src: string; width: number; height: number; alt: string; matrix: string; mediaWidth: number; mediaHeight: number; crop?: [number, number, number, number]; cropPhone?: [number, number, number, number]; full?: [number, number, number, number]; fullPhone?: [number, number, number, number]; children: ReactNode;
 }) {
   // crop = [x, y, w, h] in image pixels: the part of the scene the cover shows.
   const [cx, cy, cw, ch] = crop ?? [0, 0, width, height];
@@ -26,7 +26,7 @@ export function HeroShot({ src, width, height, alt, matrix, mediaWidth, mediaHei
     return () => { watch.disconnect(); phone.removeEventListener("change", set); };
   }, [cw, pw]);
   return (
-    <div ref={ref} className="dh-shot" style={{ "--shot-a": `${cw} / ${ch}`, "--shot-a-p": `${pw} / ${ph}`, "--shot-x": `${-cx}px`, "--shot-y": `${-cy}px`, "--shot-x-p": `${-px}px`, "--shot-y-p": `${-py}px` } as CSSProperties}>
+    <div ref={ref} className="dh-shot" data-full={full?.join(",")} data-full-phone={fullPhone?.join(",")} style={{ "--shot-a": `${cw} / ${ch}`, "--shot-a-p": `${pw} / ${ph}`, "--shot-x": `${-cx}px`, "--shot-y": `${-cy}px`, "--shot-x-p": `${-px}px`, "--shot-y-p": `${-py}px` } as CSSProperties}>
       <div className="dh-shot-camera">
         <div className="dh-shot-stage" style={{ width, height }}>
           <div className="dh-shot-media" style={{ width: mediaWidth, height: mediaHeight, transform: matrix }}>{children}</div>
