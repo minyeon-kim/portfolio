@@ -13,8 +13,9 @@ type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] 
 type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
 type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
 type ScaleChart = Base & { type: "scale"; max: number; marks: { label: string; value: number }[]; items: { label: string; value: number }[] };
+type QuotesChart = Base & { type: "quotes"; items: { name: string; quote: string; source: string; sourceUrl?: string }[] };
 type TableChart = Base & { type: "table"; max: number; people: string[]; rows: { label: string; values: number[] }[] };
-export type StageChart = DonutChart | BarChart | PairChart | RingChart | ScaleChart | TableChart;
+export type StageChart = DonutChart | BarChart | PairChart | RingChart | ScaleChart | QuotesChart | TableChart;
 
 function ChartSource({ source }: { source?: Source }) {
   if (!source) return null;
@@ -208,6 +209,21 @@ function ScaleView({ data }: { data: ScaleChart }) {
   );
 }
 
+// Community posts as a chart-stage panel: each problem with one real quote and its source.
+function QuotesView({ data }: { data: QuotesChart }) {
+  return (
+    <ul className="dv-qv">
+      {data.items.map((item, i) => (
+        <li key={item.name} style={{ "--i": i } as React.CSSProperties}>
+          <strong>{item.name}</strong>
+          <blockquote>“{item.quote}”</blockquote>
+          <cite>{item.sourceUrl ? <a className="dv-source-link" href={item.sourceUrl} target="_blank" rel="noreferrer">{item.source}</a> : item.source}</cite>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function TableView({ data }: { data: TableChart }) {
   return (
     <table className="dv-score-table">
@@ -331,6 +347,7 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
                 {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
                 {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
                 {chart.type === "scale" && <ScaleView data={chart} />}
+                {chart.type === "quotes" && <QuotesView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
               </div>
             );

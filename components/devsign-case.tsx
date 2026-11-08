@@ -75,12 +75,20 @@ function Insights({ discover }: { discover: Study }) {
   return (
     <div className="dv-insights">
       <div>
-        {/* The block's heading rides in the held chart stage, so it stays with the chart. */}
+        {/* The block's heading rides in the held chart stage, so it stays with the chart. The
+            community posts are the stage's last tab when the case has `communityTab` (owner). */}
         <section className="dv-cycle-card">
-          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} head={<Block {...discover.desk} ff />} />
+          <SurveyCharts
+            charts={q1.communityTab ? [...q1.charts, {
+              type: "quotes", tab: q1.communityTab, title: `${q1.communityCount} ${q1.communityLead}`,
+              source: { label: q1.boardsLink.replace(/ ↗$/, ""), url: withBase(q1.boards.src) },
+              items: q1.groups,
+            }] : q1.charts}
+            labels={q1.chartLabels}
+            head={<Block {...discover.desk} ff />}
+          />
         </section>
-        {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
-        <section className="dv-posts">
+        {!q1.communityTab && <section className="dv-posts">
           <div className="dv-posts-head reveal">
             <p className="dv-posts-lead"><CountUp value={q1.communityCount} /> {q1.communityLead}</p>
             <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
@@ -94,7 +102,7 @@ function Insights({ discover }: { discover: Study }) {
               </li>
             ))}
           </ul>
-        </section>
+        </section>}
       </div>
 
       <div className="dv-subsection">

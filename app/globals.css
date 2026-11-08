@@ -7692,3 +7692,30 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: min(80%, 1200px); margin-top: 5.5%; }
 }
 @media (max-width: 47.99rem) { .dh-clip[data-phone] { border-width: 6px; border-radius: 30px; } .dh-clip[data-phone] video { border-radius: 24px; } }
+
+/* Interview evidence, short (supersedes the question cards): three large quotes under their
+   keyword, who said it under each, then the participants as one small line. */
+.dv-ivc-quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; margin: 0; padding: 0; list-style: none; }
+.dv-ivc-quotes li { display: flex; flex-direction: column; gap: 16px; padding-top: 20px; border-top: 2px solid var(--dv-line); outline: none; transition: border-color 250ms var(--ease); }
+.dv-ivc-quotes li:is(:hover, :focus-visible) { border-top-color: var(--case-accent); }
+.dv-ivc-quotes li:focus-visible { box-shadow: 0 0 0 2px var(--accent); border-radius: 4px; }
+.dv-ivc-quotes .dv-ivc-key { margin: 0; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-ivc-quotes blockquote { margin: 0; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 26px); font-weight: 400; line-height: 1.45; word-break: keep-all; text-wrap: pretty; }
+.dv-ivc-quotes .dv-ivc-who { margin: auto 0 0; padding-top: 8px; color: var(--dv-muted); font-size: 16px; }
+.dv-ivc-quotes .dv-ivc-who b { color: var(--dv-ink); font-weight: 500; }
+p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 56px 0 0; padding: 0; background: none; color: var(--dv-muted); font-size: 16px; }
+.dv-ivc-people-label { margin-right: 8px; color: var(--dv-muted); }
+.dv-ivc-chip { padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); color: var(--dv-ink); transition: background-color 250ms var(--ease), color 250ms var(--ease); }
+.dv-ivc-chip b { color: var(--case-accent); font-weight: 500; }
+.dv-ivc-chip[data-on] { background: color-mix(in srgb, var(--case-accent) 20%, transparent); }
+@media (max-width: 63.99rem) { .dv-ivc-quotes { grid-template-columns: 1fr; gap: 32px; } }
+.dv-ivc-quotes .dv-ivc-who { text-align: left; align-self: flex-start; }
+
+/* Community posts as the survey stage's third tab (owner). */
+.dv-qv { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; width: 100%; }
+.dv-qv li { padding: 20px 0; border-top: 1px solid var(--dv-line); }
+.dv-qv li:first-child { border-top: 0; padding-top: 0; }
+.dv-qv strong { display: block; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-qv blockquote { margin: 8px 0 0; color: var(--dv-muted); font-size: 18px; line-height: 1.55; word-break: keep-all; }
+.dv-qv cite { display: block; margin-top: 6px; color: var(--dv-muted); font-size: 16px; font-style: normal; }
+.dv-cycle-panel[data-phase="play"] .dv-qv li { animation: dv-chart-fade 500ms var(--ease) calc(var(--i) * 120ms) backwards; }
