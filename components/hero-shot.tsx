@@ -27,10 +27,12 @@ export function HeroShot({ src, width, height, alt, matrix, mediaWidth, mediaHei
   }, [cw, pw]);
   return (
     <div ref={ref} className="dh-shot" style={{ "--shot-a": `${cw} / ${ch}`, "--shot-a-p": `${pw} / ${ph}`, "--shot-x": `${-cx}px`, "--shot-y": `${-cy}px`, "--shot-x-p": `${-px}px`, "--shot-y-p": `${-py}px` } as CSSProperties}>
-      <div className="dh-shot-stage" style={{ width, height }}>
-        <div className="dh-shot-media" style={{ width: mediaWidth, height: mediaHeight, transform: matrix }}>{children}</div>
+      <div className="dh-shot-camera">
+        <div className="dh-shot-stage" style={{ width, height }}>
+          <div className="dh-shot-media" style={{ width: mediaWidth, height: mediaHeight, transform: matrix }}>{children}</div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="dh-shot-scene" src={src} width={width} height={height} alt={alt} decoding="async" />
+          <img className="dh-shot-scene" src={src} width={width} height={height} alt={alt} decoding="async" />
+        </div>
       </div>
     </div>
   );

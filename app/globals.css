@@ -7889,3 +7889,11 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .dh-shot .devsign-hero-screen > .devsign-loop { left: -320px; right: auto; width: 1600px !important; height: 1000px; }
 .dh-shot .devsign-loop-pin, .dh-shot .devsign-loop-approve { display: none; }
 .dh-shot .devsign-loop-panel { animation: none; transform: none; }
+/* The whole cover breathes like the video on metalab.com's case covers (read from a recording of it): one slow camera push in and back every 10s; the scene and its screen move as one. The Devsign screen is a whole-screen recording at the monitor's 1.28:1 (no crop, no camera in the clip). */
+.dh-shot-camera { position: absolute; inset: 0; transform-origin: 50% 58%; }
+@media (prefers-reduced-motion: no-preference) {
+  .dh-shot-camera { animation: dh-camera 10s ease-in-out infinite; will-change: transform; }
+  html[data-project-navigation] .dh-shot-camera { animation-play-state: paused; }
+}
+@keyframes dh-camera { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08) translateY(-0.6%); } }
+.devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { transform: none; object-fit: cover; }

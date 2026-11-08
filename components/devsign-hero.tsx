@@ -56,6 +56,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
               <div className="devsign-hero-window">
                 <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>
               </div>
+              {hero.clip && <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} />}
             </div>
           </HeroShot>
         )}

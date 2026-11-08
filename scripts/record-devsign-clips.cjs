@@ -14,10 +14,12 @@ const L = {
   ko: { closeNote: '알림 닫기', merge: 'Merge', send: '검토 요청 보내기', fix: '원안으로 수정', pin: 'PlaceOrderButton', history: '히스토리', conflict: '변경확인', tabs: ['헤더', '주문 요약', '결제 수단', '결제 바'] },
 }[lang];
 
+// The cover clip fills the 1.28:1 monitor on the case opener: taller viewport, no camera.
+const VH = only === 'cover' ? 1125 : 900;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function boot(browser) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, colorScheme: 'dark' });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: VH }, deviceScaleFactor: 2, colorScheme: 'dark' });
   const page = await ctx.newPage();
   await page.goto(`https://minyeon-kim.github.io/devsign/?lang=${lang}`, { waitUntil: 'networkidle' });
   await wait(1200);
@@ -99,7 +101,7 @@ async function cam(page, rect, hold = 300) {
   await page.evaluate((z) => { document.body.style.transform = `translate(${z.tx}px,${z.ty}px) scale(${z.s})`; }, next);
   Z = next;
   const p = scr(page0.x, page0.y);
-  const m = moveScreen(page, Math.max(4, Math.min(1436, p.x)), Math.max(4, Math.min(896, p.y)), 30);
+  const m = moveScreen(page, Math.max(4, Math.min(1436, p.x)), Math.max(4, Math.min(VH - 4, p.y)), 30);
   await Promise.all([m, wait(T)]);
   await wait(hold);
 }
@@ -174,6 +176,15 @@ const CLIPS = {
     }
   },
   // Decide: change list → the pin → its details → fix to the design.
+  // The whole screen with no camera move, for the case cover's monitor.
+  async cover(page, mark) {
+    await wait(900);
+    await click(page, '+4', { after: 1100 });
+    mark();
+    await click(page, L.pin, { after: 2200 });
+    mark();
+    await click(page, L.fix, { after: 2600 });
+  },
   async conflict(page, mark) {
     await click(page, '+4', { after: 700 });
     mark();
@@ -235,7 +246,7 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = 'fps=30,scale=1600:1000:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p';
+  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 1250}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '21', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
