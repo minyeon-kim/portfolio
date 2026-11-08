@@ -228,26 +228,58 @@ type CanvasArt = { src: string; width: number; height: number; painArea: Area; r
 
 // The canvas once, as one picture. Under it, in words, the key pains, what answers
 // each and the feature it became. The other candidates are for screen readers.
+// The canvas as evidence for the three key pairs (review: the whole board read as texture and
+// nothing tied it to the table). Two windows on the one image, the square of ideas and the circle
+// of pains, with the empty middle cut out; each key pair's pain and idea stickies carry the same
+// number as its table row. Pointing at a row or a number lights that pair and dims the rest.
+type Box = [number, number, number, number];
+function CanvasWindow({ src, alt, size, area, marks, active, onMark }: { src: string; alt: string; size: [number, number]; area: Box; marks: { n: number; box: Box }[]; active: number; onMark: (n: number) => void }) {
+  const [W, H] = size;
+  const [x, y] = area;
+  const w = Math.min(area[2], W - x);
+  const h = Math.min(area[3], H - y);
+  const pct = (v: number, of: number) => `${(v / of) * 100}%`;
+  return (
+    <div className="dv-vpc-win" style={{ aspectRatio: `${w} / ${h}` }} data-lit={active >= 0 || undefined}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} loading="lazy" decoding="async" style={{ width: pct(W, w), height: pct(H, h), left: pct(-x, w), top: pct(-y, h) }} />
+      {marks.map(({ n, box }) => (
+        <span key={n} className="dv-vpc-mark" data-on={active === n || undefined} onMouseEnter={() => onMark(n)} onMouseLeave={() => onMark(-1)}
+          style={{ left: pct(box[0] - x, w), top: pct(box[1] - y, h), width: pct(box[2], w), height: pct(box[3], h) }}>
+          <b>{n + 1}</b>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, featureLabel, overviewLabel, caption }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; painLabel: string; reliefLabel: string; featureLabel: string; overviewLabel: string; caption?: string }) {
   const rows = keyPairs.flatMap((id) => candidates.filter((c) => c.id === id));
   const others = candidates.filter((c) => !keyPairs.includes(c.id));
+  const [active, setActive] = useState(-1);
+  const src = withBase(art.src);
+  const size: [number, number] = [art.width, art.height];
   return (
-    <div className="dv-vpc">
+    <div className="dv-vpc" data-active={active >= 0 || undefined}>
       <div className="dv-vpc-view reveal">
-        <OpenFrame href={withBase(art.src)}>
-          <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
+        <OpenFrame href={src}>
+          <div className="dv-vpc-wins" style={{ gridTemplateColumns: `${Math.min(art.reliefArea[2], art.width - art.reliefArea[0]) / art.reliefArea[3]}fr ${Math.min(art.painArea[2], art.width - art.painArea[0]) / art.painArea[3]}fr` }}>
+            <CanvasWindow src={src} alt={art.alt} size={size} area={art.reliefArea as Box} active={active} onMark={setActive}
+              marks={rows.map((c, n) => ({ n, box: c.relief as Box }))} />
+            <CanvasWindow src={src} alt="" size={size} area={art.painArea as Box} active={active} onMark={setActive}
+              marks={rows.map((c, n) => ({ n, box: c.from as Box }))} />
+          </div>
         </OpenFrame>
       </div>
-      {/* Straight under the canvas, no scroll steps (owner: the gap cut it off from the board). */}
       {caption && <p className="dv-vpc-caption" aria-hidden="true">{caption}</p>}
-      {/* One row per pair, read left to right like a comparison table (owner: three cards read
-          top to bottom were awkward): the pain heard → the idea that answers it → the feature. */}
       <div className="dv-vpc-table reveal" role="table" aria-label={overviewLabel}>
         <div className="dv-vpc-head" role="row">
-          <span role="columnheader">{painLabel}</span><span aria-hidden="true" /><span role="columnheader">{reliefLabel}</span><span aria-hidden="true" /><span role="columnheader">{featureLabel}</span>
+          <span aria-hidden="true" /><span role="columnheader">{painLabel}</span><span aria-hidden="true" /><span role="columnheader">{reliefLabel}</span><span aria-hidden="true" /><span role="columnheader">{featureLabel}</span>
         </div>
         {rows.map((c, i) => (
-          <div key={c.id} className="dv-vpc-row" role="row" style={{ "--i": i } as CSSProperties}>
+          <div key={c.id} className="dv-vpc-row" role="row" tabIndex={0} data-on={active === i || undefined} style={{ "--i": i } as CSSProperties}
+            onMouseEnter={() => setActive(i)} onMouseLeave={() => setActive(-1)} onFocus={() => setActive(i)} onBlur={() => setActive(-1)}>
+            <b className="dv-vpc-num" aria-hidden="true">{i + 1}</b>
             <p role="cell" data-label={painLabel}>“{c.pain}”</p>
             <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
             <p role="cell" data-label={reliefLabel}>{c.name}</p>

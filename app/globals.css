@@ -7423,3 +7423,35 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 /* Stacked, the label and its line come first, so each clip is named before it plays. */
 .case-study .dv .dv-iter-duo.dv-iter-duo > .dv-iter-card { display: flex; flex-direction: column-reverse; }
 .case-study .dv .dv-iter-duo.dv-iter-duo > .dv-iter-card > figcaption { padding: 8px 12px 16px; }
+
+/* Value proposition canvas: two windows on the board (square of ideas | circle of pains, the empty
+   middle cut out), numbered key pairs that match the table rows. Pointing at a row or number
+   spotlights that pair (the rest of each window dims through the mark's spread shadow). */
+.dv-vpc-wins { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dv-vpc-win { position: relative; overflow: hidden; border-radius: 12px; background: #fbfbfb; }
+.dv-vpc-win > img { position: absolute; max-width: none; border-radius: 0 !important; }
+.dv-vpc-mark { position: absolute; z-index: 1; border-radius: 6px; outline: 3px solid var(--dv-chart-fill, var(--case-accent)); outline-offset: 2px; transition: box-shadow 250ms var(--ease), opacity 250ms var(--ease); }
+.dv-vpc-mark > b { position: absolute; top: -14px; left: -14px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--dv-deep, var(--case-accent)); color: #fff; font-size: 16px; font-weight: 600; line-height: 1; }
+.dv-vpc-win[data-lit] .dv-vpc-mark:not([data-on]) { opacity: 0.25; }
+.dv-vpc-mark[data-on] { box-shadow: 0 0 0 2000px rgb(10 11 20 / 0.55); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dv-vpc-win > img { filter: brightness(0.88); } }
+:root[data-theme="dark"] .dv-vpc-win > img { filter: brightness(0.88); }
+.case-study .dv .dv-vpc-view.dv-vpc-view { background: none; }
+.case-study .dv .dv-vpc-view .dv-open-hint { z-index: 2; }
+
+/* Table: number, then each cell with its arrow right after it (no wide gaps inside a row). */
+.case-study .dv .dv-vpc-head, .case-study .dv .dv-vpc-row { grid-template-columns: 28px minmax(0, 1.3fr) 20px minmax(0, 1fr) 20px minmax(0, 0.9fr); column-gap: 16px; }
+.case-study .dv .dv-vpc-head { color: var(--dv-ink); font-weight: 500; }
+.dv-vpc-num { display: grid; place-items: center; width: 28px; height: 28px; line-height: 1; font-variant-numeric: tabular-nums; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 600; transition: background-color 250ms var(--ease), color 250ms var(--ease); }
+.case-study .dv .dv-vpc-row { cursor: default; outline-offset: 4px; transition: opacity 250ms var(--ease); }
+.dv-vpc-row[data-on] .dv-vpc-num { background: var(--dv-deep, var(--case-accent)); color: #fff; }
+.case-study .dv .dv-vpc[data-active] .dv-vpc-row:not([data-on]) :is(p, b[role="cell"]) { color: var(--dv-muted); }
+.dv-vpc-row :is(p, b[role="cell"]) { transition: color 250ms var(--ease); }
+@media (max-width: 47.99rem) {
+  .dv-vpc-wins { grid-template-columns: 1fr !important; }
+  .case-study .dv .dv-vpc-row { grid-template-columns: 28px minmax(0, 1fr); }
+  .case-study .dv .dv-vpc-row > :not(.dv-vpc-num) { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-vpc-mark, .dv-vpc-num, .dv-vpc-row { transition: none; } }
+.case-study .dv .dv-vpc-row b.dv-vpc-num { color: var(--dv-ink); font-size: 16px; line-height: 1; }
+.case-study .dv .dv-vpc-row[data-on] b.dv-vpc-num { color: #fff; }
