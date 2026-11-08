@@ -62,25 +62,15 @@ export function aboutMetadata(locale: Locale): Metadata {
 // then the roles and the work. Photo spots are labelled placeholders until real
 // photos exist. The portrait's box is mirrored in lib/about-entrance.ts.
 export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
-  const { bio, bridge, cards, experience, headline, panels, skills } = locale === "ko" ? ko : en;
+  const { bio, bridge, cards, experience, headline, panels } = locale === "ko" ? ko : en;
   // The sheet over the three cards: the first sentence as the title, the rest under it.
   const [statementLead, ...statementRest] = bridge.statement.split(/(?<=\.)\s+/);
   const c = copy[locale];
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
-  // Photo spots show labelled boxes while writing; the live site leaves them out
-  // until the real files are in /public/images/about/.
-  const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
   const heroPhoto = "/images/about/hero-tall.webp";
-  // Photos from the Figma Photo page, in justified rows: each row keeps every photo
-  // whole at one height ([name, width, height]).
-  const photoRows: [string, number, number][][] = [
-    [["screen", 1280, 1600], ["laptop", 1800, 1200]],
-    [["side", 1800, 1547], ["talk", 1800, 1200], ["desk", 2400, 1500]],
-  ];
   // The two photos that appear beside the profile photo while scrolling (desktop); the gallery's own row of them hides there.
   const splitPhotos: [string, "left" | "right"][] = [["side", "left"], ["talk", "right"]];
-  const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
 
   return (
     <div data-about-page className="project-detail">
@@ -134,74 +124,30 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 </div>
               </article>
             ))}
-          </div>
-        </section>
-
-        {photos.length > 0 && (
-          <section className="about-gallery" aria-labelledby="about-at-work">
-            <StageHead title={c.atWork} id="about-at-work" />
-            {photos.map((row) => (
-              <div key={row[0][0]} className="about-gallery-row" data-split={row.some(([name]) => splitPhotos.some(([n]) => n === name)) || undefined}>
-                {row.map(([name, width, height]) => (
-                  <figure key={name} className="about-gallery-photo reveal" style={{ flexGrow: width / height }}>
-                    <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} width={width} height={height}
-                      sizes={row.length > 1 ? "(max-width: 767px) 100vw, 50vw" : "100vw"} />
-                  </figure>
-                ))}
+            <article className="about-panel about-panel-sheet">
+              <div className="about-panel-copy">
+                <h2>{c.experience}</h2>
+                <ol className="about-exp">
+                  {experience.map((item) => (
+                    <li key={item.title}><span>{item.label.split(" · ")[0]}</span><strong>{item.title}</strong></li>
+                  ))}
+                </ol>
               </div>
-            ))}
-          </section>
-        )}
-
-        <section className="about-band">
-          <div className="about-band-inner">
-            <StageHead title={c.experience} />
-            <ol className="about-timeline">
-              {experience.map((item) => (
-                <li key={item.title} className="reveal">
-                  <p className="about-timeline-label">{item.label}</p>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="about-skills reveal">
-              <h3 className="about-timeline-label">{c.skills}</h3>
-              <div className="about-skill-groups">
-                {([[c.research, skills.research], [c.build, skills.build]] as const).map(([name, list]) => (
-                  <div key={name}>
-                    <p>{name}</p>
-                    <ul>{list.map((skill) => <li key={skill}>{skill}</li>)}</ul>
-                  </div>
-                ))}
+            </article>
+            <article className="about-panel about-panel-contact" aria-labelledby="about-contact-title">
+              <Image src={withBase("/images/about/laptop.webp")} alt={c.photos.laptop} fill sizes="100vw" />
+              <div className="about-panel-copy">
+                <h2 id="about-contact-title">{c.open}</h2>
+                <p className="about-panel-actions">
+                  {site.email && <a href={`mailto:${site.email}`} className="press">{c.email}</a>}
+                  {site.linkedinUrl && <a href={site.linkedinUrl} target="_blank" rel="noopener noreferrer" className="link">LinkedIn</a>}
+                  {hasResume && <a href={withBase(site.resumeUrl)} className="link">{c.resume}</a>}
+                </p>
               </div>
-            </div>
+            </article>
           </div>
         </section>
 
-        {/* No project cards on About (owner): the landing, the Menu and each case's Next project lead to the work. */}
-
-        {/* Closing after metalab.com's About: one large line at the left, the ways
-            to reach out as rows with an arrow at the right. No raw addresses. */}
-        <section className="about-close about-contact-stage" aria-labelledby="about-contact-title">
-          <div className="about-contact">
-            <h2 id="about-contact-title" className="about-contact-line reveal">{c.open}</h2>
-            <ul className="about-contact-rows reveal">
-              {site.email && (
-                <li><a href={`mailto:${site.email}`}><span>{c.email}</span><span className="about-contact-arrow" aria-hidden="true">↗</span></a></li>
-              )}
-              {site.linkedinUrl && (
-                <li><a href={site.linkedinUrl} target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span className="about-contact-arrow" aria-hidden="true">↗</span></a></li>
-              )}
-              {hasResume && (
-                <li><a href={withBase(site.resumeUrl)}><span>{c.resume}</span><span className="about-contact-arrow" aria-hidden="true">↓</span></a></li>
-              )}
-            </ul>
-            {!hasResume && <Todo>add public/resume.pdf; the Resume row appears once it exists</Todo>}
-          </div>
-        </section>
         <SiteFooter />
       </article>
     </div>
