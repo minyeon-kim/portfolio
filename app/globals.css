@@ -7272,3 +7272,11 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .about-hero-actions a:focus-visible { outline-color: light-dark(#0e1111, #fff); }
 header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --muted: light-dark(#5b6461, rgb(255 255 255 / 0.78)); color: light-dark(#0e1111, #fff); }
 @keyframes about-hero-drift { to { scale: 1.06; translate: 0 14%; } }
+
+/* Affinity board, user flow and value proposition canvas sit in the 1200 text column (owner):
+   they no longer run past the text and cards above them. */
+@media (min-width: 64rem) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-vpc-view.dv-vpc-view, .dv-fc.dv-fc, .dv-axe-board.dv-axe-board) {
+    width: 100%; max-width: 100%; margin-left: 0;
+  }
+}
