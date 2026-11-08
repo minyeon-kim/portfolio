@@ -341,6 +341,12 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
   // The tool review reads capability by capability, with Devsign's column first.
 
+  const deliverIntro = (
+    <div className="dv-deliver-intro">
+      <Block {...deliver} ff={ff} />
+      {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
+    </div>
+  );
   return (
     <div className="dv">
 
@@ -580,16 +586,15 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       </Section>
 
       <Section id="deliver" title="Deliver">
-        <div className="dv-deliver-intro">
-          <Block {...deliver} ff={ff} />
-          {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
-        </div>
+        {/* The prototype heading and link ride in the core features' held stage when there is one. */}
+        {!((ff && develop.selection && overview.features) || deliver.flows) && deliverIntro}
         {/* Findings first: the four features one at a time, large, each playing
             its prototype clip and closing on the problem it answers. */}
         {ff && develop.selection && overview.features && (
           <div className="dv-main-features dv-main-features-joined">
             {/* One block with the prototype heading above (owner): the features are what the prototype holds. */}
             <FeatureList
+              head={deliverIntro}
               reels={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string; flow?: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
                 const shown = deliver.features?.find((item: Study) => item.title === f.name);
@@ -614,6 +619,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-main-features dv-main-features-joined">
             <FeatureList
               phone
+              head={deliverIntro}
               reels={deliver.flows.map((f: { id: string; kicker: string; name: string; hook?: string; solves?: string; solvesLabel?: string; alt?: string; clip: { src: string; poster: string } }) => ({
                 id: `flow-${f.id}`,
                 kicker: f.kicker,
@@ -695,7 +701,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <Block {...testing.iteration2} text={undefined} ff={ff} />
             <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
             {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-iter-photo" />}
-            <div className="dv-gap-40">{testing.iteration2.changesLead && <p className="dv-iter-lead reveal">{testing.iteration2.changesLead}</p>}<IterationCompare changes={testing.iteration2.changes} labels={labels} /></div>
+            <div className="dv-gap-40"><IterationCompare changes={testing.iteration2.changes} labels={labels} head={testing.iteration2.changesLead && <p className="dv-iter-lead">{testing.iteration2.changesLead}</p>} /></div>
           </> : <>
             <Block {...testing.iteration2} ff={ff} />
             <div className="dv-two dv-gap-40 dv-center">

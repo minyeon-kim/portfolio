@@ -4,7 +4,7 @@ import { playClip, toggleClip } from "@/lib/video";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { withBase } from "@/lib/site";
 import { useLocale } from "@/lib/use-locale";
@@ -176,12 +176,13 @@ function StepTabs({ names, active, go, label }: { names: string[]; active: numbe
 
 // A clip that ends hands over to the next, round to the first, without moving the page;
 // scrolling into another step takes over again.
-export function IterationCompare({ changes, labels }: { changes: Change[]; labels: { asIs: string; toBe: string } }) {
+export function IterationCompare({ changes, labels, head }: { changes: Change[]; labels: { asIs: string; toBe: string }; head?: ReactNode }) {
   const { root, active, setActive, pinned, go } = useHeldSteps(changes.length);
   const locale = useLocale();
   return (
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
+        {head && <div className="dv-iter-head">{head}</div>}
         {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
         <div className="dv-held-plate">
           <ol className="dv-iter-steps">
@@ -420,8 +421,9 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
 // On a desktop with room and motion, the list and clip hold on screen while native scroll moves
 // through the features (the held-track pattern); a clip loops while its feature is current.
 // Elsewhere a clip that ends opens the next feature.
-export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }) {
-  const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length);
+// `head` (the block's label, finding and link) rides in the held stage so it stays with the clip.
+export function FeatureList({ reels, phone, head }: { reels: Reel[]; phone?: boolean; head?: ReactNode }) {
+  const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length, head ? TALL_PIN : undefined);
   const root = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const current = active;
@@ -463,8 +465,9 @@ export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }
     setActive(i);
   };
   return (
-    <div ref={track} className="dv-held-track dv-flist-track dv-gap-40" style={{ "--n": reels.length } as CSSProperties}>
+    <div ref={track} className={`dv-held-track dv-flist-track${head ? " dv-held-tall" : " dv-gap-40"}`} style={{ "--n": reels.length } as CSSProperties}>
     <div ref={root} className="dv-flist" data-phone={phone || undefined}>
+      {head && <div className="dv-flist-head">{head}</div>}
       <ol className="dv-flist-items">
         {reels.map((reel, i) => (
           <li key={reel.id} id={reel.id} className="dv-link-target" data-on={i === current || undefined} data-t={i % 4}>

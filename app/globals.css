@@ -7546,3 +7546,11 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 
 /* The chart block's label and finding ride inside the held chart stage. */
 .dv-cycle-head { margin-bottom: 40px; }
+
+/* Core features and Iteration 2 keep their heading in the held stage. */
+.dv-flist-head { grid-column: 1 / -1; }
+.dv-flist-head .dv-deliver-intro { min-height: 0 !important; margin: 0 !important; }
+.dv-iter-head { padding: 0 0 24px; }
+.dv-iter-head .dv-iter-lead { margin: 0; }
+.dv-held-track > .dv-flist { background: var(--dv-bg, var(--bg)); }
+@media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist[data-phone] .dv-flist-frame { width: min(100%, calc((100svh - 400px) * 1.25)); } }
