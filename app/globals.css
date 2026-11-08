@@ -7745,3 +7745,53 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 @media (min-width: 64rem) { .case-study .dv .dv-hdoc-pair .dv-hdoc-shot { position: static; align-self: start; } }
 /* Light theme: the opener fades from the page grey into the white case sheet below. */
 .devsign-hero.dh-cover { background: linear-gradient(to bottom, light-dark(#f5f6f4, var(--bg)) 30%, light-dark(#ffffff, var(--bg))); }
+/* Cover as a studio scene after metalab.com/work/midjourney (owner: turned, a mockup, and
+   the space that holds it; the purple plate is gone): a full-width dark studio lit from
+   above, a pedestal (top, front and side faces) and the device standing on it, all in one
+   CSS 3D rig turned toward the viewer. Devsign: a desktop monitor (bezel, side, neck,
+   foot) whose screen is .devsign-hero-media, so the landing zoom still settles there.
+   Gemini: the phone recording standing on the pedestal. Sizes are in cqw of the plate. */
+.devsign-hero.dh-cover .dh-cover-plate,
+.devsign-hero.dh-cover[data-project] .dh-cover-plate { container-type: inline-size; width: 100%; aspect-ratio: 16 / 9.4; margin-top: clamp(40px, 6svh, 64px); border-radius: 0;
+  background: radial-gradient(55% 80% at 58% 8%, #4d4f54 0%, #2c2d31 34%, #151618 64%, #0b0b0c 100%) #0b0b0c; }
+.dh-scene { position: absolute; inset: 0; perspective: 170cqw; perspective-origin: 50% 20%; }
+.dh-rig { position: absolute; left: 50%; top: 29cqw; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(-13deg) rotateY(-24deg); }
+.dh-rig > *, .dh-device > * { position: absolute; }
+.dh-pedestal, .dh-device { left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+.dh-pedestal i { position: absolute; display: block; }
+.dh-pedestal [data-face="top"] { left: -27cqw; top: -14cqw; width: 54cqw; height: 28cqw; border-radius: 1.4cqw; transform: translate3d(0, 14cqw, 0) rotateX(90deg);
+  background: radial-gradient(34% 30% at 50% 38%, rgb(0 0 0 / 0.42), transparent 70%), linear-gradient(175deg, #7a7d82, #5a5d62 55%, #4b4e53); }
+.dh-pedestal [data-face="front"] { left: -27cqw; top: -7cqw; width: 54cqw; height: 14cqw; border-radius: 0 0 0.8cqw 0.8cqw; transform: translate3d(0, 21cqw, 14cqw); background: linear-gradient(180deg, #34363a, #1a1b1e 70%, #121315); }
+.dh-pedestal [data-face="side"] { left: -14cqw; top: -7cqw; width: 28cqw; height: 14cqw; transform: translate3d(27cqw, 21cqw, 0) rotateY(90deg); background: linear-gradient(90deg, #26282b, #3e4044); }
+/* Monitor */
+.dh-device-monitor .dh-monitor-screen { left: -25cqw; top: -15.9cqw; width: 50cqw; padding: 0.8cqw; border-radius: 1.3cqw; transform: translate3d(0, -9.9cqw, -3cqw);
+  background: linear-gradient(180deg, #1c1d21, #0c0d0f); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1), 0 4cqw 8cqw -2cqw rgb(0 0 0 / 0.55); backface-visibility: hidden; }
+.dh-device-monitor .dh-monitor-side { display: block; left: -0.8cqw; top: -15.9cqw; width: 1.6cqw; height: 31.85cqw; border-radius: 0.8cqw; transform: translate3d(25cqw, -9.9cqw, -3.8cqw) rotateY(90deg); background: linear-gradient(180deg, #45474c, #202124); }
+.dh-device-monitor .dh-monitor-neck { display: block; left: -1.8cqw; top: -5.25cqw; width: 3.6cqw; height: 10.5cqw; margin: 0; clip-path: none; transform: translate3d(0, 8.75cqw, -4.6cqw); background: linear-gradient(90deg, #141518, #34363b 50%, #141518); }
+.dh-device-monitor .dh-monitor-foot { display: block; left: -9cqw; top: -4.5cqw; width: 18cqw; height: 9cqw; margin: 0; border-radius: 1cqw; transform: translate3d(0, 13.95cqw, -4.6cqw) rotateX(90deg); background: linear-gradient(180deg, #3b3d42, #212226); }
+.dh-device-monitor .dh-monitor-foot::after { content: none; }
+.devsign-hero.dh-cover[data-project] .dh-cover-plate .dh-device .devsign-hero-media { position: relative; inset: auto; width: 100%; min-width: 0; aspect-ratio: 16 / 10; margin: 0; border: 0; border-radius: 0.5cqw; background: #1c1c1c; box-shadow: none; -webkit-mask-image: none; mask-image: none; }
+/* Phone (Gemini): the recording in its drawn bezel stands on the pedestal. */
+.dh-device-phone .dh-monitor-screen { left: -7.5cqw; top: -16.25cqw; width: 15cqw; padding: 0; background: none; transform: translate3d(0, -2.6cqw, 1cqw); }
+.devsign-hero.dh-cover[data-project] .dh-cover-plate .dh-device-phone .devsign-hero-media { aspect-ratio: 800 / 1734; background: none; border-radius: 0; overflow: visible; }
+.dh-device-phone .devsign-hero-phone { display: none; }
+.dh-device-phone .dh-clip, .dh-device-phone .dh-clip[data-phone] { inset: 0; left: 0; top: 0; height: 100%; width: 100%; translate: none; opacity: 1; pointer-events: auto; border-width: 0.7cqw; border-radius: 2.6cqw; box-shadow: 0 3cqw 6cqw -1cqw rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08); }
+.dh-device-phone .dh-clip[data-phone] video { border-radius: 2cqw; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-media:has(.dh-clip[data-ready]) .devsign-hero-phone { opacity: 1; }
+@media (max-width: 47.99rem) {
+  .devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate { aspect-ratio: 1 / 0.82; width: 100%; }
+  .dh-rig { top: 36cqw; transform: rotateX(-12deg) rotateY(-20deg) scale(1.25); }
+}
+/* Scene proportions: a longer lens so the pedestal doesn't balloon, and the whole
+   pedestal stays inside the plate. */
+.devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate { aspect-ratio: 16 / 9.8; }
+.dh-scene { perspective: 280cqw; perspective-origin: 50% 10%; }
+.dh-rig { top: 27cqw; }
+.dh-pedestal [data-face="top"] { left: -25cqw; top: -12cqw; width: 50cqw; height: 24cqw; transform: translate3d(0, 14cqw, 0) rotateX(90deg); }
+.dh-pedestal [data-face="front"] { left: -25cqw; top: -6cqw; width: 50cqw; height: 12cqw; transform: translate3d(0, 20cqw, 12cqw); }
+.dh-pedestal [data-face="side"] { left: -12cqw; top: -6cqw; width: 24cqw; height: 12cqw; transform: translate3d(25cqw, 20cqw, 0) rotateY(90deg); }
+.dh-cover-plate::after { content: ""; position: absolute; left: 20%; right: 20%; bottom: 3%; height: 10%; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), transparent); pointer-events: none; }
+.devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate { aspect-ratio: 16 / 10.6; }
+.dh-rig { top: 32cqw; }
+.dh-device-phone .dh-monitor-screen { left: -8.5cqw; top: -18.4cqw; width: 17cqw; transform: translate3d(0, -4.5cqw, 1cqw); }
+@media (max-width: 47.99rem) { .dh-rig { top: 38cqw; } }
