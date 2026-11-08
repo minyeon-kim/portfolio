@@ -35,15 +35,6 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
 
   return (
     <div className="dv-axe dv-gap-40">
-      <a className="dv-axe-board reveal" href={boardHref} target="_blank" rel="noreferrer" data-lit={on !== null || undefined}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={boardHref} width={7000} height={3022} loading="lazy" decoding="async" alt={locale === "ko" ? `어피니티 맵 원본 보드: 인터뷰 발화 ${total}개를 테마 7개로 묶음` : `The original affinity board: ${total} interview statements grouped into 7 themes`} />
-        {COLS.map(([l, w], i) => (
-          <i key={i} className="dv-axe-col" data-on={on === i || undefined} style={{ left: `${l}%`, width: `${w}%` }} aria-hidden />
-        ))}
-        <span className="dv-open-hint" aria-hidden>{ui.open}</span>
-      </a>
-
       <ol className="dv-axe-grid" aria-label={ui.list}>
         {AFF_THEMES.map((t, i) => {
           const count = t.subs.reduce((s, x) => s + x.types.length, 0);
@@ -58,6 +49,15 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
           );
         })}
       </ol>
+
+      <a className="dv-axe-board reveal" href={boardHref} target="_blank" rel="noreferrer" data-lit={on !== null || undefined}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={boardHref} width={7000} height={3022} loading="lazy" decoding="async" alt={locale === "ko" ? `어피니티 맵 원본 보드: 인터뷰 발화 ${total}개를 테마 7개로 묶음` : `The original affinity board: ${total} interview statements grouped into 7 themes`} />
+        {COLS.map(([l, w], i) => (
+          <i key={i} className="dv-axe-col" data-on={on === i || undefined} style={{ left: `${l}%`, width: `${w}%` }} aria-hidden />
+        ))}
+        <span className="dv-open-hint" aria-hidden>{ui.open}</span>
+      </a>
     </div>
   );
 }
