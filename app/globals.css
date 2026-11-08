@@ -7642,3 +7642,11 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .case-study .dv .dv-posts .dv-posts-list li cite { display: block; margin-top: 8px; padding: 0; font-size: 16px; }
 /* Overview photo after the summary. */
 .case-study .dv .dv-glance-block + .dv-me-photo { margin-top: 96px; }
+/* No floating card on the cover (owner: a separate modal-like panel read badly): the
+   product alone, centred on the plate. */
+.devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: 84%; margin-left: auto; margin-right: auto; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-phone { left: 50%; }
+@media (max-width: 47.99rem) {
+  .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: 92%; margin-left: auto; }
+  .devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-phone { left: 50%; }
+}
