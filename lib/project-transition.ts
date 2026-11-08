@@ -211,11 +211,16 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         if (w > 0) {
           const height = (vw * h) / w;
           sceneFill = Math.max(1, vh / height);
-          Object.assign(copy.style, { inset: "auto", left: "0px", top: `${(vh - height) / 2}px`, width: `${vw}px`, height: `${height}px`, aspectRatio: "auto", scale: `${sceneFill}` });
+          Object.assign(copy.style, { inset: "auto", left: "0px", top: `${(vh - height) / 2}px`, width: `${vw}px`, height: `${height}px`, aspectRatio: "auto" });
           for (const key of ["--shot-x", "--shot-x-p"]) copy.style.setProperty(key, `${-x}px`);
           for (const key of ["--shot-y", "--shot-y-p"]) copy.style.setProperty(key, `${-y}px`);
           copy.style.setProperty("--shot-k", String(vw / w));
           sceneCopy = copy;
+          // Start on exactly what the card shows, then ease to filling the screen.
+          const cardWidth = source.clientWidth / (parseFloat(source.style.getPropertyValue("--shot-k")) || 1);
+          const cover = Math.max(box.width / vw, box.height / vh);
+          const start = ((box.width / cover) * w) / (vw * cardWidth);
+          copy.animate([{ scale: `${start}` }, { scale: `${sceneFill}` }], { duration: grow, easing: ZOOM_EASE, fill: "both" });
         }
       }
       stageOf(layer).appendChild(copy);

@@ -7994,3 +7994,5 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 @media (max-width: 63.99rem) {
   .about-hero-copy { margin-top: auto; padding-top: 0; padding-bottom: clamp(32px, 6svh, 56px); }
 }
+/* Devsign's landing card has the size and framing of metalab.com's: 42.3vw wide, 1.66:1, showing the whole scene. */
+@media (min-width: 64rem) { .home-device[data-project="devsign"] { top: 11%; left: 50%; right: auto; width: 42.3vw; aspect-ratio: 1391 / 838; } }
