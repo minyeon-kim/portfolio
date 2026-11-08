@@ -11,8 +11,8 @@ const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "sw
 
 export type DevsignHeroData = { title: string; subtitle?: string; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
-// The case opener, laid out after railway.com's hero: one large framed panel,
-// inset from the screen edges, holding the brand, a centered question, one line
+// The case opener: one large framed panel, inset from the screen edges, holding
+// the brand, the question (left-aligned on the 1200 case column, like the body), one line
 // of what it is, the ways in, and the product itself running past the fold (the
 // prototype's screens as a loop, the same one the home card shows, so nothing
 // swaps after the page opens; its link is a small chip on the card). Project /

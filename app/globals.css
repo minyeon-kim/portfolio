@@ -7482,10 +7482,10 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 
 /* Opener facts close the panel (inside its frame) so they read as part of the
    opener, not of the Overview below. */
-.devsign-hero-panel > .devsign-hero-details { position: relative; width: min(100%, 1200px); margin: clamp(40px, 5svh, 64px) auto 0; }
+.devsign-hero .devsign-hero-panel > .devsign-hero-details.devsign-hero-details { position: relative; width: min(100%, 1200px); margin: clamp(40px, 5svh, 64px) auto 0; }
 .devsign-hero:has(> .devsign-hero-panel) { padding-bottom: 0; }
 .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: clamp(32px, 4svh, 48px); }
-@media (max-width: 47.99rem) { .devsign-hero-panel > .devsign-hero-details { margin-top: 32px; } .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: 32px; } }
+@media (max-width: 47.99rem) { .devsign-hero .devsign-hero-panel > .devsign-hero-details.devsign-hero-details { margin-top: 32px; } .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: 32px; } }
 
 /* Double Diamond, still (owner: too much moving): stage names never move, only
    their colour changes; the methods sit in their own reserved line under the
@@ -7524,3 +7524,11 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-cycle-panel[data-phase="wait"] :is(.dv-scale-dot, .dv-scale-mark) { opacity: 0; }
 @keyframes dv-scale-in { from { opacity: 0; translate: 0 12px; } }
 @media (prefers-reduced-motion: reduce) { .dv-cycle-panel[data-phase="play"] :is(.dv-scale-dot, .dv-scale-mark) { animation: none; } }
+
+/* Opener text left-aligned on the case column (owner, after metalab.com: only the
+   header sits on the centre line; the case reads from one left edge from the
+   opener down). Devsign and Gemini; About has its own opener. */
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-intro { position: relative; width: min(100%, 1200px); margin-inline: auto; align-items: flex-start; text-align: left; }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-title { max-width: 20ch; margin-inline: 0; text-align: left; }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-subtitle { margin-inline: 0; text-align: left; }
+.devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-actions { justify-content: flex-start; }
