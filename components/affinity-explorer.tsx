@@ -16,13 +16,13 @@ const UI = {
 
 // One line per theme, shortened from the board's insight (the full insight stays for screen readers).
 const SHORT: { ko: string; en: string }[] = [
-  { ko: "피드백과 결정이 작업과 따로 흩어진다", en: "Feedback and decisions scatter away from the work" },
-  { ko: "왜 이 버전이 최종인지가 남지 않는다", en: "Why a version became final isn't kept" },
-  { ko: "더 많은 정보보다, 함께 보는 기준이 필요하다", en: "Teams need one shared reference, not more information" },
-  { ko: "AI에 판단을 맡기기보다, 사람이 볼 부분을 줄이고 싶다", en: "People want less to judge, not to hand judgment off" },
-  { ko: "역할은 겹치는데 책임 기준은 그대로다", en: "Roles overlap, but ownership rules haven't caught up" },
-  { ko: "AI 도구가 늘수록 맥락이 쪼개진다", en: "More AI tools, more scattered context" },
-  { ko: "반복 작업은 빠르지만, 예외는 결국 사람이 본다", en: "AI is fast on routine work; people still check the exceptions" },
+  { ko: "피드백과 결정이 작업과 따로 흩어집니다", en: "Feedback and decisions scatter away from the work" },
+  { ko: "왜 이 버전이 최종인지가 남지 않습니다", en: "Why a version became final isn't kept" },
+  { ko: "더 많은 정보보다, 함께 보는 기준이 필요합니다", en: "Teams need one shared reference, not more information" },
+  { ko: "AI에 판단을 맡기기보다, 사람이 볼 부분을 줄이고 싶어 합니다", en: "People want less to judge, not to hand judgment off" },
+  { ko: "역할은 겹치는데 책임 기준은 그대로입니다", en: "Roles overlap, but ownership rules haven't caught up" },
+  { ko: "AI 도구가 늘수록 맥락이 쪼개집니다", en: "More AI tools, more scattered context" },
+  { ko: "반복 작업은 빠르지만, 예외는 결국 사람이 봅니다", en: "AI is fast on routine work; people still check the exceptions" },
 ];
 
 // The affinity mapping as evidence, then what it found: the real FigJam board as one image
