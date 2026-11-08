@@ -1,0 +1,34 @@
+<!doctype html><script type="importmap">{"imports":{"three":"./three/package/build/three.module.js","three/addons/":"./three/package/examples/jsm/"}}</script>
+<canvas id=o></canvas>
+<script type=module>
+import * as THREE from 'three';
+import {mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const P=window.PARAMS,W=P.w,H=Math.round(W*838/1440),L=1440/W;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});r.setSize(W,H,false);r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;r.toneMapping=THREE.NoToneMapping;
+const s=new THREE.Scene();s.background=new THREE.Color(P.bg);s.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.08).texture;s.environmentIntensity=P.env;
+const cam=new THREE.PerspectiveCamera(P.fov,W/H,.1,100);cam.position.set(0,0,P.dist);cam.lookAt(0,0,0);cam.updateMatrixWorld();
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(60,40),new THREE.MeshStandardMaterial({color:P.bg,roughness:.9}));wall.position.z=-2.6;wall.receiveShadow=true;s.add(wall);
+// The Devsign bolt, softened: every corner rounded, then a deep round bevel.
+const pts=[[140,0],[565,0],[460,205],[660,225],[340,625],[325,440],[125,415],[240,220],[0,205]].map(([x,y])=>new THREE.Vector2((x-330)/625,(312-y)/625));
+const shp=new THREE.Shape();const R=P.R;
+pts.forEach((p,i)=>{const a=pts[(i+pts.length-1)%pts.length],b=pts[(i+1)%pts.length];const m1=p.clone().lerp(a,R),m2=p.clone().lerp(b,R);if(i==0)shp.moveTo(m1.x,m1.y);else shp.lineTo(m1.x,m1.y);shp.quadraticCurveTo(p.x,p.y,m2.x,m2.y)});shp.closePath();
+let geo=new THREE.ExtrudeGeometry(shp,{depth:.2,bevelEnabled:true,bevelThickness:.16,bevelSize:.075,bevelSegments:24,curveSegments:32});geo.center();
+geo.deleteAttribute('normal');geo.deleteAttribute('uv');geo=mergeVertices(geo,1e-4);geo.computeVertexNormals();
+const mat=new THREE.MeshPhysicalMaterial({color:P.obj,roughness:.5,sheen:.3,sheenRoughness:.6,sheenColor:new THREE.Color(P.sheen)});
+for(const [x,y,z,sc,rx,ry,rz] of P.bolts){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.scale.setScalar(sc);m.rotation.set(rx,ry,rz);m.castShadow=m.receiveShadow=true;s.add(m)}
+const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.set(P.tilt,P.yaw,0);s.add(mon);
+const sw=P.sw,sh=sw/1.343,bz=sw*.012,th=sw*.03,black=new THREE.MeshStandardMaterial({color:'#050506',roughness:.35}),silver=new THREE.MeshStandardMaterial({color:'#c8ccd0',roughness:.35,metalness:.35});
+const box=(w,h,d,m,z)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.z=z;o.castShadow=o.receiveShadow=true;mon.add(o)};
+box(sw+bz*2+.03,sh+bz*2+.03,th,silver,-th/2-.008);box(sw+bz*2,sh+bz*2,.012,black,0);
+const key=new THREE.DirectionalLight('#fff',P.key);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-11,right:11,top:7,bottom:-7,near:.1,far:40});key.shadow.bias=-.0004;key.shadow.normalBias=.03;s.add(key,key.target);
+const fill=new THREE.DirectionalLight(P.fillc,P.fill);fill.position.set(4,-4,6);s.add(fill);
+s.add(new THREE.HemisphereLight('#ffffff',P.ground,P.hemi));
+s.updateMatrixWorld(true);
+const corners=[[-1,1],[1,1],[1,-1],[-1,-1]].map(([x,y])=>{const v=mon.localToWorld(new THREE.Vector3(x*sw/2,y*sh/2,.007)).project(cam);return[(v.x+1)/2*1440,(1-v.y)/2*838]});window.CORNERS=corners;
+const n=P.n,gl=r.getContext(),acc=new Float32Array(W*H*4),buf=new Uint8Array(W*H*4),rnd=(()=>{let a=7;return()=>(a=(a*16807)%2147483647)/2147483647})();
+for(let i=0;i<n;i++){cam.setViewOffset(W,H,i?rnd()-.5:0,i?rnd()-.5:0,W,H);const q=()=>(rnd()-.5)*P.soft;key.position.set(P.keyp[0]+q(),P.keyp[1]+q(),P.keyp[2]+q());r.render(s,cam);gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,buf);for(let k=0;k<buf.length;k++)acc[k]+=buf[k];if(i%8==7)await new Promise(x=>setTimeout(x));}
+const c=document.getElementById('o');c.width=W;c.height=H;const x=c.getContext('2d'),out=x.createImageData(W,H),e=out.data;
+for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W+xx)*4,nz=(Math.random()-.5)*1.6;for(let k=0;k<3;k++)e[o+k]=Math.max(0,Math.min(255,acc[i+k]/n+nz));e[o+3]=255}
+x.putImageData(out,0,0);x.globalCompositeOperation='destination-out';x.beginPath();corners.forEach(([a,b],i)=>{const px=a/L,py=b/L;i?x.lineTo(px,py):x.moveTo(px,py)});x.closePath();x.fill();window.DONE=true;
+</script>
