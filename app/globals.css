@@ -7920,11 +7920,13 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
     .about-gallery-row[data-split] { display: none; }
     .about-hero-track {
-      /* c = the final card; f = the frame on the photo: source x 2-34%, from 30% down, of a 2:3 photo at its hero crop. */
-      --c-h: min(68svh, 44vw); --c-w: calc(var(--c-h) * 0.75);
+      /* c = the final card; f = the line on the photo: the middle 30% of a 16:10 photo that covers the stage (hero-center.webp, centred on her), 8% down. */
+      --c-h: min(62svh, 40vw); --c-w: calc(var(--c-h) * 0.75);
       --c-t: calc((100svh - var(--c-h)) / 2); --c-l: calc((100vw - var(--c-w)) / 2);
       --c-gap: clamp(16px, 2vw, 32px);
-      --f-w: 32vw; --f-h: calc(32vw / 0.75); --f-l: 2vw; --f-t: calc((100svh - 150vw) * 0.31 + 45vw); --f-gap: clamp(16px, 2vw, 32px);
+      --img-w: max(100vw, 160svh); --img-h: calc(var(--img-w) * 0.625);
+      --f-w: calc(var(--img-w) * 0.3); --f-h: calc(var(--f-w) / 0.75); --f-l: calc((100vw - var(--f-w)) / 2);
+      --f-t: calc((100svh - var(--img-h)) * 0.4 + var(--img-h) * 0.08); --f-gap: clamp(16px, 2vw, 32px);
       height: 300svh; margin-top: -64px; view-timeline: --about-split block;
     }
     .about-hero-track + .about-body .about-bridge { padding-top: clamp(48px, 6vw, 96px); }
@@ -7944,8 +7946,9 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     .about-split-card[data-side="left"] { --dir: -1; }
     .about-split-card[data-side="right"] { --dir: 1; }
     .about-split-card img { object-fit: cover; object-position: 44% 50%; animation-name: about-split-card-photo; animation-timeline: --about-split; animation-range: contain 0% contain 100%; animation-fill-mode: both; animation-timing-function: linear; }
+    .about-split-card[data-side="left"] img { object-position: 66% 50%; }
     .about-split-portrait { z-index: 3; animation-name: about-split-portrait, about-split-box; }
-    .about-split-portrait img { position: absolute; left: -6.25%; top: -105.47%; width: 312.5%; max-width: none; height: auto; }
+    .about-split-portrait img { position: absolute; left: -116.67%; top: -12.5%; width: 333.33%; max-width: none; height: auto; }
     .about-split-frame { z-index: 4; box-shadow: inset 0 0 0 1.5px #fff; animation-name: about-split-frame, about-split-box; }
     .about-split-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.5px #fff; animation: about-split-card-line linear both; animation-timeline: --about-split; animation-range: contain 0% contain 100%; }
   }
@@ -7964,10 +7967,30 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 @keyframes about-split-frame { 0% { opacity: 0.6; } 24%, 68% { opacity: 1; } 76%, 100% { opacity: 0; } }
 /* The two side frames stay glued to the middle one and end a step smaller. */
 @keyframes about-split-card {
-  0%, 16% { opacity: 0; left: calc(var(--f-l) + var(--dir) * (var(--f-w) + var(--f-gap))); top: var(--f-t); width: var(--f-w); height: var(--f-h); transform: scale(0.92); }
-  26% { opacity: 1; }
+  0%, 20% { opacity: 0; left: calc(var(--f-l) + var(--dir) * (var(--f-w) + var(--f-gap))); top: var(--f-t); width: var(--f-w); height: var(--f-h); transform: scale(0.92); }
+  28% { opacity: 1; }
   34% { left: calc(var(--f-l) + var(--dir) * (var(--f-w) + var(--f-gap))); top: var(--f-t); width: var(--f-w); height: var(--f-h); transform: scale(0.92); }
   68%, 100% { opacity: 1; left: calc(var(--c-l) + var(--dir) * (var(--c-w) + var(--c-gap))); top: var(--c-t); width: var(--c-w); height: var(--c-h); transform: scale(0.92); }
 }
 @keyframes about-split-card-photo { 0%, 34% { opacity: 0.32; } 66%, 100% { opacity: 1; } }
 @keyframes about-split-card-line { 0%, 66% { opacity: 1; } 76%, 100% { opacity: 0; } }
+/* Landing case cards are a crop of the cover's own scene, so opening a case is one picture: the card grows to the screen and settles onto the cover. */
+.home-device:has(> .dh-shot) { background: none; }
+.home-device > .dh-shot { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+.home-device .dh-shot-camera, .project-zoom .dh-shot-camera { animation: none; }
+.dh-shot-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.home-device[data-project="devsign"] .dh-shot-poster, .project-zoom[data-project="devsign"] .dh-shot-poster { filter: brightness(1.32) contrast(1.05) saturate(1.1); }
+.project-zoom:has(.dh-shot) { background: #0a0322; }
+.project-zoom[data-project="gemini-privacy"]:has(.dh-shot) { background: #1c1a24; }
+
+/* The hero photo is centred on her: the line starts in the middle of the screen, the copy keeps to the plain right side,
+   and on narrow screens it sits below her. */
+.about-hero-photo img { object-position: 50% 40%; }
+@media (min-width: 64rem) {
+  .about-hero-copy { width: 30vw; margin: auto 0 auto calc(65vw + clamp(16px, 2vw, 32px)); }
+  .about-hero-title { font-size: clamp(32px, min(3.1vw, 6svh), 60px); line-height: 1.08; }
+  .about-hero-subtitle { font-size: 16px; }
+}
+@media (max-width: 63.99rem) {
+  .about-hero-copy { margin-top: auto; padding-top: 0; padding-bottom: clamp(32px, 6svh, 56px); }
+}

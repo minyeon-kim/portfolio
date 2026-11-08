@@ -7,6 +7,8 @@ import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "rea
 import { site, withBase } from "@/lib/site";
 import { useRouter } from "next/navigation";
 import { revealNextProject } from "@/lib/project-transition";
+import { COVER_SCENES } from "@/lib/cover-scenes";
+import { HeroShot } from "@/components/hero-shot";
 import { enterAbout, portraitBox } from "@/lib/about-entrance";
 import { ScrambleHeadline } from "@/components/scramble-headline";
 import { DevsignLoop } from "@/components/devsign-loop";
@@ -126,7 +128,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const stacked = useSyncExternalStore(subscribeStacked, () => window.matchMedia(STACKED).matches, () => false);
   const previewed = shown ?? (stacked && hover !== "about" ? projects[0] : null);
   useEffect(() => {
-    const src = withBase("/images/about/hero.webp");
+    const src = withBase("/images/about/hero-center.webp");
     const aboutLink = (target: EventTarget | null) => (target as Element | null)?.closest?.<HTMLAnchorElement>(".home-about") ?? null;
     const onClick = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -169,17 +171,18 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <Fragment key={p.slug}>
             {/* A pointer shortcut only: the backdrop is aria-hidden and the pills are the real controls. */}
             <div className="home-device" data-project={p.slug} data-active={previewed?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
-              {p.slug === "devsign"
-                ? <div className="home-device-window"><DevsignLoop alt="" preload={p.slug === projects[0]?.slug} /></div>
-                : p.slug === "gemini-privacy"
-                  ? <div className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></div>
-                  : null}
+              {COVER_SCENES[p.slug] && (
+                <HeroShot {...COVER_SCENES[p.slug]} src={withBase(COVER_SCENES[p.slug].src)} alt="" crop={COVER_SCENES[p.slug].card} cropPhone={COVER_SCENES[p.slug].cardPhone} full={COVER_SCENES[p.slug].crop ?? [0, 0, COVER_SCENES[p.slug].width, COVER_SCENES[p.slug].height]} fullPhone={COVER_SCENES[p.slug].cropPhone}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {p.hero?.clip && <img className="dh-shot-poster" src={withBase(p.hero.clip.poster)} alt="" />}
+                </HeroShot>
+              )}
             </div>
           </Fragment>
         ))}
         {/* About's card: the portrait, a pointer shortcut like the case cards. */}
         <div className="home-device" data-project="about" data-active={world?.slug === "about" || undefined} onClick={() => open("about")}>
-          <img src={withBase("/images/about/portrait.webp")} alt="" />
+          <img src={withBase("/images/about/hero-center.webp")} alt="" />
         </div>
       </div>
       <div className="intro-surface home-grid">

@@ -70,16 +70,16 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   // Photo spots show labelled boxes while writing; the live site leaves them out
   // until the real files are in /public/images/about/.
   const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
-  const heroPhoto = "/images/about/hero.webp";
+  const heroPhoto = "/images/about/hero-center.webp";
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
-    [["side", 1800, 1547], ["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
+    [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
     [["screen", 1280, 1600], ["laptop", 1800, 1200], ["hands", 1800, 1200]],
-    [["talk", 1800, 1200], ["desk", 2400, 1500]],
+    [["side", 1800, 1547], ["talk", 1800, 1200], ["desk", 2400, 1500]],
   ];
   // The two photos that appear beside the profile photo while scrolling (desktop); the gallery's own row of them hides there.
-  const splitPhotos: [string, "left" | "right"][] = [["desk", "left"], ["talk", "right"]];
+  const splitPhotos: [string, "left" | "right"][] = [["side", "left"], ["talk", "right"]];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
 
   return (
@@ -100,7 +100,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         </div>
         {/* The part of the photo inside the line: it lifts off the photo and glides to the middle. */}
         <div className="about-split-portrait" aria-hidden="true">
-          <Image src={withBase(heroPhoto)} alt="" width={2000} height={3000} sizes="100vw" />
+          <Image src={withBase(heroPhoto)} alt="" width={2160} height={1350} sizes="100vw" />
         </div>
         <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
