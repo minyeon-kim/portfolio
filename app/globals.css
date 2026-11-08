@@ -7287,3 +7287,7 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .dv-gs-list > li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: 48px; align-items: baseline; }
   .case-study .dv .dv-gs-list .dv-gs-title { margin-top: 0; }
 }
+
+/* Value proposition pairs follow the canvas directly, with a caption tying them to it (owner). */
+.case-study .dv .dv-vpc-caption { margin: 0; padding-top: 24px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.case-study .dv .dv-vpc-caption + .dv-vpc-table { margin-top: 16px; }

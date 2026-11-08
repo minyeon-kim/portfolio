@@ -228,7 +228,7 @@ type CanvasArt = { src: string; width: number; height: number; painArea: Area; r
 
 // The canvas once, as one picture. Under it, in words, the key pains, what answers
 // each and the feature it became. The other candidates are for screen readers.
-export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, featureLabel, overviewLabel }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; painLabel: string; reliefLabel: string; featureLabel: string; overviewLabel: string }) {
+export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, featureLabel, overviewLabel, caption }: { art: CanvasArt; candidates: Candidate[]; keyPairs: string[]; painLabel: string; reliefLabel: string; featureLabel: string; overviewLabel: string; caption?: string }) {
   const rows = keyPairs.flatMap((id) => candidates.filter((c) => c.id === id));
   const others = candidates.filter((c) => !keyPairs.includes(c.id));
   return (
@@ -238,7 +238,8 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
           <Image src={withBase(art.src)} alt={art.alt} width={art.width} height={art.height} sizes="(max-width: 767px) 100vw, 1200px" />
         </OpenFrame>
       </div>
-      <HeldFlow count={rows.length}>
+      {/* Straight under the canvas, no scroll steps (owner: the gap cut it off from the board). */}
+      {caption && <p className="dv-vpc-caption" aria-hidden="true">{caption}</p>}
       {/* One row per pair, read left to right like a comparison table (owner: three cards read
           top to bottom were awkward): the pain heard → the idea that answers it → the feature. */}
       <div className="dv-vpc-table reveal" role="table" aria-label={overviewLabel}>
@@ -255,7 +256,6 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
           </div>
         ))}
       </div>
-      </HeldFlow>
       <ul className="sr-only">
         {others.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>

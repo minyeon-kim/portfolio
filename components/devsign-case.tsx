@@ -525,7 +525,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {ff ? <div className="dv-gap-96">
           <Block {...develop.canvas} ff={ff} />
           <div className="dv-gap-40 reveal">
-            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} keyPairs={develop.canvas.keyPairs} painLabel={develop.canvas.painLabel} reliefLabel={develop.canvas.reliefLabel} featureLabel={develop.canvas.featureLabel} overviewLabel={develop.canvas.candidatesLabel} />
+            <CanvasZoom art={develop.canvas.zoom} candidates={develop.canvas.candidates} keyPairs={develop.canvas.keyPairs} painLabel={develop.canvas.painLabel} reliefLabel={develop.canvas.reliefLabel} featureLabel={develop.canvas.featureLabel} overviewLabel={develop.canvas.candidatesLabel} caption={develop.canvas.pairsCaption} />
           </div>
         </div> : <div className="dv-split dv-gap-96">
           <Figure img={develop.canvas.image} sizes="(max-width: 767px) 100vw, 55vw" className="dv-canvas-img" />
