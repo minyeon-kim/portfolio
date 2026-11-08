@@ -16,9 +16,9 @@ const add=(g,m,p,par=rig)=>{const o=new THREE.Mesh(g,m);o.position.set(...p);o.c
 const pl=P.pl;
 {const sh2=new THREE.Shape(),w=pl[0]/2,d=pl[2]/2,c=.2;sh2.moveTo(-w+c,-d);sh2.lineTo(w-c,-d);sh2.quadraticCurveTo(w,-d,w,-d+c);sh2.lineTo(w,d-c);sh2.quadraticCurveTo(w,d,w-c,d);sh2.lineTo(-w+c,d);sh2.quadraticCurveTo(-w,d,-w,d-c);sh2.lineTo(-w,-d+c);sh2.quadraticCurveTo(-w,-d,-w+c,-d);
 const g=new THREE.ExtrudeGeometry(sh2,{depth:pl[1],bevelEnabled:true,bevelThickness:.012,bevelSize:.012,bevelSegments:4,curveSegments:32});g.rotateX(Math.PI/2);
-const o=new THREE.Mesh(g,[M(P.plc,.55),M(P.pls,.7)]);o.position.y=P.py;o.castShadow=o.receiveShadow=true;rig.add(o);}
+const o=new THREE.Mesh(g,[M(P.plc,.55),M(P.pls,.7)]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.castShadow=o.receiveShadow=true;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
-const sw=1.92,sh=1.5,bz=.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
+const sw=1.92,sh=1.43,bz=.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
 const black=M('#050506',.35),silver=M('#c8ccd0',.38,.35);
 add(new THREE.BoxGeometry(bw+.012,bh+.012,th),silver,[0,0,-th/2-.006],mon);
 add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
@@ -27,7 +27,7 @@ const footY=.011;add(new RB(P.fs[0],.022,P.fs[1],6,.01),silver,[P.foot[0],P.py+f
 add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+.036,P.foot[1]]);
 // neck joins foot to the monitor
 const nb=mon.localToWorld(new THREE.Vector3(0,-sh*.43,-.14));s.updateMatrixWorld(true);
-const neck=add(new THREE.BoxGeometry(.56,1,.08),black,[0,0,0]);
+const neck=add(new THREE.BoxGeometry(.46,1,.08),black,[0,0,0]);
 {const a=rig.worldToLocal(mon.localToWorld(new THREE.Vector3(0,-sh*.42,-.13))),b=new THREE.Vector3(P.foot[0],P.py+.03,P.foot[1]-.1);neck.position.copy(a.clone().add(b).multiplyScalar(.5));neck.scale.y=a.distanceTo(b);neck.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),a.clone().sub(b).normalize());}
 const key=new THREE.DirectionalLight('#fff',P.key);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:.1,far:30});key.shadow.bias=-.0004;key.shadow.normalBias=.02;s.add(key,key.target);
 const fill=new THREE.DirectionalLight('#fff',P.fill);fill.position.set(-1,10,1.5);s.add(fill);
@@ -39,7 +39,7 @@ const n=P.n,gl=r.getContext(),acc=new Float32Array(W*H*4),buf=new Uint8Array(W*H
 for(let i=0;i<n;i++){const j=i?[rnd()-.5,rnd()-.5]:[0,0];cam.setViewOffset(W,H,j[0],j[1],W,H);const q=()=>(rnd()-.5)*P.soft;key.position.set(P.keyp[0]+q(),P.keyp[1]+q(),P.keyp[2]+q());r.render(s,cam);gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,buf);for(let k=0;k<buf.length;k++)acc[k]+=buf[k];if(i%8==7)await new Promise(x=>setTimeout(x));}
 const c=document.getElementById('o');c.width=W;c.height=H;const x=c.getContext('2d');
 // Backdrop: light on the left wall, black in the middle, a second glow low on the right.
-const bg=document.createElement('canvas');bg.width=W;bg.height=H;const b=bg.getContext('2d');b.fillStyle='#000';b.fillRect(0,0,W,H);b.scale(1/L,1/L);
+const bg=document.createElement('canvas');bg.width=W;bg.height=H;const b=bg.getContext('2d');b.fillStyle=P.base;b.fillRect(0,0,W,H);b.scale(1/L,1/L);
 const glow=(cx,cy,rx,ry,col)=>{b.save();b.translate(cx,cy);b.scale(rx,ry);const g=b.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,col);g.addColorStop(.35,col.replace(/[\d.]+\)$/,m=>parseFloat(m)*.68+')'));g.addColorStop(.7,col.replace(/[\d.]+\)$/,m=>parseFloat(m)*.18+')'));g.addColorStop(1,col.replace(/[\d.]+\)$/,'0)'));b.fillStyle=g;b.fillRect(-1,-1,2,2);b.restore()};
 for(const g of P.glows)glow(...g);
 b.setTransform(1,0,0,1,0,0);

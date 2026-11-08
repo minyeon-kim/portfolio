@@ -14,8 +14,8 @@ const L = {
   ko: { closeNote: '알림 닫기', merge: 'Merge', send: '검토 요청 보내기', fix: '원안으로 수정', pin: 'PlaceOrderButton', history: '히스토리', conflict: '변경확인', tabs: ['헤더', '주문 요약', '결제 수단', '결제 바'] },
 }[lang];
 
-// The cover clip fills the 1.28:1 monitor on the case opener: taller viewport, no camera.
-const VH = only === 'cover' ? 1125 : 900;
+// The cover clip fills the 1.34:1 monitor on the case opener: taller viewport, no camera.
+const VH = only === 'cover' ? 1072 : 900;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function boot(browser) {
@@ -270,7 +270,7 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 1250}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 1192}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '21', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
