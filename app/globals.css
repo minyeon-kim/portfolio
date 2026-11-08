@@ -8068,3 +8068,5 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 :is(.devsign-hero.dh-cover[data-project="gemini-privacy"], .home-device[data-project="gemini-privacy"], .project-zoom[data-project="gemini-privacy"]) :is(.dh-clip video, .dh-shot-poster) { filter: brightness(0.93) contrast(1.03); }
 /* The case's question, under the project name. */
 .devsign-hero.dh-cover .devsign-hero-question { max-width: 32ch; margin: clamp(20px, 2vw, 32px) 0 0; color: var(--ink); font-size: clamp(24px, 2.5vw, 36px); font-weight: 400; line-height: 1.25; letter-spacing: -0.02em; text-wrap: balance; }
+/* The case's question, under the project name. */
+.devsign-hero.dh-cover .devsign-hero-question { max-width: 32ch; margin: clamp(20px, 2vw, 32px) 0 0; color: var(--ink); font-size: clamp(24px, 2.5vw, 36px); font-weight: 400; line-height: 1.25; letter-spacing: -0.02em; text-wrap: balance; }
