@@ -27,11 +27,11 @@
 /* Dark: follow the system unless the user picked light in the header toggle. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0a0b14;
+    --bg: #0c0c0e;
     --surface: #17181d;
     --ink: #e8ecea;
     --muted: #8e9895;
-    --line: #2a2c3c;
+    --line: #2a2a2f;
     --accent: #7f93ff;
 
     color-scheme: dark;
@@ -39,11 +39,11 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0a0b14;
+  --bg: #0c0c0e;
   --surface: #17181d;
   --ink: #e8ecea;
   --muted: #8e9895;
-  --line: #2a2c3c;
+  --line: #2a2a2f;
   --accent: #7f93ff;
 
   color-scheme: dark;
@@ -200,14 +200,14 @@ details[open]::details-content {
  * either theme, so light text reads on a darkened image.
  */
 :root {
-  --media-bg: #0a0b14;
+  --media-bg: #0c0c0e;
 }
 @utility on-media {
   --bg: var(--media-bg);
   --surface: #17181d;
   --ink: #e8ecea;
   --muted: #8e9895;
-  --line: #2a2c3c;
+  --line: #2a2a2f;
   --accent: #7f93ff;
   color-scheme: dark;
   color: var(--ink);
@@ -889,7 +889,7 @@ details[open]::details-content {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  html, body, body * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230a0b14' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12, auto; }
+  html, body, body * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230c0c0e' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12, auto; }
   body :is(a, button, [role="tab"], summary, input[type="range"]),
   body :is(a, button, [role="tab"], summary) * {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='white'/%3E%3C/svg%3E") 16 16, pointer;
@@ -937,8 +937,8 @@ details[open]::details-content {
     --canvas-dot: rgb(255 255 255 / 0.09);
     --gemini-canvas: #0c0f16;
     --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
-    --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230a0b14' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12;
-    --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='none' stroke='%230a0b14' stroke-opacity='.45'/%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%237F93FF' stroke-width='1.5'/%3E%3C/svg%3E") 16 16;
+    --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230c0c0e' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12;
+    --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='none' stroke='%230c0c0e' stroke-opacity='.45'/%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%237F93FF' stroke-width='1.5'/%3E%3C/svg%3E") 16 16;
   }
 }
 :root[data-theme="dark"] {
@@ -958,8 +958,8 @@ details[open]::details-content {
   --canvas-dot: rgb(255 255 255 / 0.09);
   --gemini-canvas: #0c0f16;
   --gemini-title: linear-gradient(105deg, #d6e2ff, #9dbeff 50%, #d5c5ff);
-  --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230a0b14' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12;
-  --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='none' stroke='%230a0b14' stroke-opacity='.45'/%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%237F93FF' stroke-width='1.5'/%3E%3C/svg%3E") 16 16;
+  --cursor-base: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='white' stroke='%230c0c0e' stroke-opacity='.6'/%3E%3C/svg%3E") 12 12;
+  --cursor-action: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='none' stroke='%230c0c0e' stroke-opacity='.45'/%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%237F93FF' stroke-width='1.5'/%3E%3C/svg%3E") 16 16;
 }
 .intro-stage { background: var(--intro-canvas); }
 .intro-name, .intro-headline, .project-prompt input, .project-suggestion,
@@ -2974,7 +2974,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
    so the deck and the footer read as one closing zone. The deck keeps its
    cards; tokens are switched to the dark band locally. */
 .case-study .more-work {
-  --bg: light-dark(#0e1111, #0a0b14); --ink: #e8ecea; --muted: #8e9895;
+  --bg: light-dark(#0e1111, #0c0c0e); --ink: #e8ecea; --muted: #8e9895;
   --devsign-title: #b3a5ff;
   --gemini-title: linear-gradient(90deg, #d6e2ff, #9dbeff 55%, #d5c5ff);
   margin: clamp(64px, 8vw, 128px) calc(-1 * var(--project-text-inset)) 0;
@@ -3560,7 +3560,7 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
 .devsign-hero-visit { white-space: nowrap; }
 @media (max-width: 47.99rem) { .devsign-hero-visit { display: block; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; line-height: 28px; } }
 
-/* Dark surfaces as steps: page #0a0b14, surface #17181d (banded stages, opener panel), card #25262c on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
+/* Dark surfaces as steps: page #0c0c0e, surface #17181d (banded stages, opener panel), card #25262c on it. Problem statement is emphasis, not a higher level: more of the case colour rather than more light. Gemini has the same steps in blue. Light theme unchanged. */
 .dv { --dv-band-dark: #17181d; --dv-band-card-dark: #25262c; --dv-tint-core: light-dark(#f4edff, #1f1a38); }
 .case-study[data-project="gemini"] .dv { --dv-band-dark: #17181d; --dv-band-card-dark: #25262c; --dv-tint-core: light-dark(#eef3fd, #16203a); }
 .devsign-hero-panel { background: light-dark(color-mix(in srgb, var(--dh-glow) 4%, #f6f6f8), #17181d); }
@@ -4891,7 +4891,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 .dv-spec-panel[data-on] { visibility: visible; }
 .dv-spec-shot { position: relative; line-height: 0; }
 .dv-spec-shot img { display: block; width: 100%; height: auto; border-radius: var(--dv-card-radius); }
-.dv-spec-pin { position: absolute; display: grid; place-items: center; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); box-shadow: 0 0 0 2px light-dark(#ffffff, #0a0b14); font-size: 16px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; transition: transform 150ms var(--ease); }
+.dv-spec-pin { position: absolute; display: grid; place-items: center; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; background: var(--case-accent); color: light-dark(#ffffff, #120f24); box-shadow: 0 0 0 2px light-dark(#ffffff, #0c0c0e); font-size: 16px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; transition: transform 150ms var(--ease); }
 .dv-spec-pin[data-lit] { transform: scale(1.25); }
 .dv-spec-rows { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .dv-spec-rows li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 10px 12px; border-radius: 12px; transition: background-color 150ms var(--ease); }
@@ -5213,7 +5213,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
 .dv-spec-rows { gap: 2px; }
 .dv-spec-rows li { grid-template-columns: 20px minmax(0, 1fr); gap: 10px; padding: 8px; margin-inline: -8px; }
 .dv-spec-rows b, .dv-spec-pin { width: 20px; height: 20px; font-size: 12px; font-weight: 600; }
-.dv-spec-pin { margin: -10px 0 0 -10px; box-shadow: 0 0 0 1.5px light-dark(#ffffff, #0a0b14); }
+.dv-spec-pin { margin: -10px 0 0 -10px; box-shadow: 0 0 0 1.5px light-dark(#ffffff, #0c0c0e); }
 .case-study .dv .dv-spec-rows h4 { margin: 0 0 2px; line-height: 20px; }
 .case-study .dv .dv-spec-rows .dv-spec-state { color: var(--dv-muted); }
 .dv-spec-detail { display: block; padding-top: 0; border-top: 0; }
@@ -7032,7 +7032,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-details-list > li .dv-detail-card, .case-study .dv .dv-flist-tone {
   background:
     radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth)));
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0c0c0e var(--g-depth)), color-mix(in srgb, var(--g2), #0c0c0e var(--g-depth)));
 }
 @media (min-width: 64rem) {
   .case-study .dv .dv-details-list > li:not([data-wide]):nth-child(even) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
@@ -7049,11 +7049,11 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study .dv .dv-iter-card { border-color: transparent; }
 .case-study .dv .dv-iter-card[data-side="a"] {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.4), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, #e4e4ea, #0a0b14 var(--g-depth, 0%) ), color-mix(in srgb, #c9c9d2, #0a0b14 calc(var(--g-depth, 0%) * 2.4)));
+    linear-gradient(150deg, color-mix(in srgb, #e4e4ea, #0c0c0e var(--g-depth, 0%) ), color-mix(in srgb, #c9c9d2, #0c0c0e calc(var(--g-depth, 0%) * 2.4)));
 }
 .case-study .dv .dv-iter-card[data-side="b"] {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
+    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0c0c0e var(--g-depth, 0%)));
 }
 .case-study .dv .dv-iter-card[data-side="a"] .dv-iter-plate { background: none; }
 .case-study .dv .dv-iter-card figcaption { color: #16161c; }
@@ -7066,7 +7066,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { background: none; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
+    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0c0c0e var(--g-depth, 0%)));
 }
 /* Iteration 1: the waiting card stays readable on the new gradients (owner: it disappeared).
    Its caption no longer fades; its clip only darkens a little. */
@@ -7145,11 +7145,11 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { padding: clamp(20px, 2.4vw, 32px); border-radius: var(--dv-card-radius, 16px); }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="a"] .dv-iter-plate {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.4), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, #e4e4ea, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9c9d2, #0a0b14 var(--g-depth, 0%)));
+    linear-gradient(150deg, color-mix(in srgb, #e4e4ea, #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, #c9c9d2, #0c0c0e var(--g-depth, 0%)));
 }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] .dv-iter-plate {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0a0b14 var(--g-depth, 0%)));
+    linear-gradient(150deg, color-mix(in srgb, #8f7dff, #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, #c9a8ff, #0c0c0e var(--g-depth, 0%)));
 }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 20px 4px 0; color: var(--dv-ink, var(--ink)) !important; opacity: 1; }
@@ -7191,7 +7191,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-hdoc-one .dv-hdoc-shot, .dv-iter-clip) {
   background:
     radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth, 0%))) !important;
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0c0c0e var(--g-depth, 0%))) !important;
 }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-frame video { inset: var(--plate-pad) !important; max-width: calc(100% - 2 * var(--plate-pad)) !important; max-height: calc(100% - 2 * var(--plate-pad)) !important; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-detail-card img, .dv-detail-card video, .dv-flist-frame video, .dv-hdoc-one .dv-hdoc-shot img, .dv-iter-clip video, .dv-iter-clip img, .dv-iter-card .dv-iter-view) { border-radius: 12px !important; box-shadow: var(--plate-shadow); }
@@ -7204,7 +7204,7 @@ header[data-photo]:not([data-compact]) { --ink: #fff; --muted: rgb(255 255 255 /
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] .dv-iter-plate { --g1: #8f7dff; --g2: #c9a8ff; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side] .dv-iter-plate {
   background: radial-gradient(90% 70% at 18% 8%, rgb(255 255 255 / 0.32), transparent 60%),
-    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0a0b14 var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0a0b14 var(--g-depth, 0%))) !important;
+    linear-gradient(150deg, color-mix(in srgb, var(--g1), #0c0c0e var(--g-depth, 0%)), color-mix(in srgb, var(--g2), #0c0c0e var(--g-depth, 0%))) !important;
 }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption { padding: 20px 12px 12px !important; color: var(--dv-ink, var(--ink)) !important; }
@@ -7561,4 +7561,75 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .case-study .dv .dv-gs-list > li .dv-gs-name { color: var(--case-accent); }
 @media (min-width: 64rem) {
   .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { grid-template-columns: 160px minmax(0, 1fr); column-gap: 32px; }
+}
+
+/* Case opener after metalab.com's case covers (replaces the framed panel with the dot
+   canvas and live cursors): brand and question on the page, then one cover plate in the
+   project's colour holding the product, cut off by the plate's bottom edge, and one
+   cut-out of the moment the case is about over its lower right (Devsign: the decision
+   with its reason; Gemini: the information used in an answer). The facts follow under
+   the plate. The plate keeps its colour in both themes. */
+.devsign-hero.dh-cover { --dh-col: min(1200px, calc(100% - 2 * var(--project-text-inset, 16px))); padding: clamp(32px, 5svh, 56px) 0 0; background: none; overflow: visible; }
+.selected-stage-hero .devsign-hero.dh-cover { padding-top: clamp(104px, 14svh, 136px); }
+.devsign-hero.dh-cover::before { content: none; }
+.devsign-hero.dh-cover[data-project="devsign"] { --dh-plate-a: #4a2fc4; --dh-plate-b: #9d86ff; --dh-plate-shadow: rgb(26 12 80 / 0.5); }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] { --dh-plate-a: #2456c4; --dh-plate-b: #9a8cf0; --dh-plate-shadow: rgb(12 26 70 / 0.45); }
+.devsign-hero.dh-cover .devsign-hero-intro { width: var(--dh-col); margin-inline: auto; align-items: flex-start; gap: 0; text-align: left; }
+.devsign-hero.dh-cover .devsign-hero-brand { gap: 10px; margin-bottom: 24px; font-size: 20px; }
+.devsign-hero.dh-cover .devsign-hero-brand img { width: 26px; height: 25px; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-brand img { width: 26px; height: 26px; }
+.devsign-hero.dh-cover .devsign-hero-title { max-width: 20ch; margin: 0; font-size: clamp(34px, 3.75vw, 54px); line-height: 1.12; letter-spacing: -0.035em; text-align: left; }
+.devsign-hero.dh-cover .devsign-hero-subtitle { max-width: 58ch; margin: 20px 0 0; text-align: left; }
+.devsign-hero.dh-cover .devsign-hero-actions { justify-content: flex-start; }
+.dh-cover-plate { position: relative; isolation: isolate; width: var(--dh-col); aspect-ratio: 16 / 9; margin: clamp(40px, 6svh, 64px) auto 0; overflow: hidden; border-radius: var(--dv-band-radius, 32px);
+  background: radial-gradient(70% 60% at 18% 0%, rgb(255 255 255 / 0.22), transparent 70%), linear-gradient(150deg, var(--dh-plate-a), var(--dh-plate-b)); }
+.devsign-hero.dh-cover .dh-cover-plate .devsign-hero-media { --dh-media-h: auto; position: relative; width: 84%; min-width: 0; aspect-ratio: 16 / 10; margin: 6.5% auto 0; overflow: hidden; border: 0; border-radius: 14px; background: #1c1c1c; box-shadow: 0 40px 90px -20px var(--dh-plate-shadow), 0 0 0 1px rgb(255 255 255 / 0.08); -webkit-mask-image: none; mask-image: none; }
+.devsign-hero.dh-cover .dh-cover-plate .devsign-hero-media .devsign-loop { margin-top: 0; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-media { position: absolute; inset: 0; width: 100%; aspect-ratio: auto; margin: 0; border-radius: 0; background: none; box-shadow: none; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-phone { top: 9%; left: 40%; height: 118%; filter: drop-shadow(0 40px 70px var(--dh-plate-shadow)); }
+.dh-cover-card { position: absolute; right: 4%; bottom: 7%; z-index: 2; width: 34%; height: auto; filter: drop-shadow(0 28px 48px rgb(0 0 0 / 0.42)); }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-card { right: 9%; bottom: 10%; width: 28%; border-radius: 22px; filter: none; box-shadow: 0 32px 64px -12px var(--dh-plate-shadow), 0 0 0 1px rgb(0 0 0 / 0.06); }
+.devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { width: var(--dh-col); margin: clamp(32px, 4svh, 48px) auto 0; }
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  .dh-cover-plate { view-timeline: --dh-plate block; }
+  .dh-cover-card { animation: dh-card-lag linear both; animation-timeline: --dh-plate; animation-range: cover 0% cover 70%; }
+  @keyframes dh-card-lag { from { translate: 0 56px; } to { translate: 0 -24px; } }
+} }
+@media (max-width: 47.99rem) {
+  .selected-stage-hero .devsign-hero.dh-cover { padding-top: 104px; }
+  .dh-cover-plate { aspect-ratio: 4 / 3.4; border-radius: 20px; }
+  .devsign-hero.dh-cover .dh-cover-plate .devsign-hero-media { width: 92%; margin-top: 8%; border-radius: 10px; }
+  .dh-cover-card { right: 4%; bottom: 5%; width: 56%; }
+  .devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-phone { left: 34%; height: 112%; }
+  .devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-card { right: 5%; bottom: 6%; width: 46%; border-radius: 16px; }
+}
+/* Devsign cover: the window sits left of centre so the decision card overlaps its
+   right edge and the plate, instead of covering the window's own review panel. */
+.devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: 78%; margin-left: 5.5%; }
+.devsign-hero.dh-cover[data-project="devsign"] .dh-cover-card { right: 3.5%; bottom: 9%; width: 33%; }
+.devsign-hero.dh-cover .devsign-hero-visit { display: none; }
+@media (max-width: 47.99rem) {
+  .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: 88%; margin-left: 4%; }
+  .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-card { right: 3%; bottom: 5%; width: 54%; }
+}
+
+/* Double Diamond, still and in columns (owner: names, methods and outcomes read as
+   separate pieces): stage names in a row above the diagram (case accent, numbered),
+   the methods inside each half (no hover swap, no scroll stepping), the outcome under
+   the same half on the same centre line. */
+.dv-dd-heads { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 0 20px; padding: 0; list-style: none; color: var(--dv-ink); font-size: 18px; font-weight: 500; }
+.dv-dd-heads li { display: flex; gap: 8px; justify-content: center; align-items: baseline; }
+.dv-dd-heads li:nth-child(odd) { padding-left: 22%; }
+.dv-dd-heads li:nth-child(even) { padding-right: 22%; }
+.dv-dd-heads b { color: var(--case-accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-dd-stage-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.dv-dd.dv-dd.dv-dd .dv-dd-name > span.dv-dd-inside { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 1 !important; transform: none !important; color: var(--dv-ink); font-size: 18px; font-weight: 400; line-height: 1.35; text-align: center; }
+.dv-dd.dv-dd.dv-dd .dv-dd-stages a:hover .dv-dd-inside { color: var(--case-accent); }
+.dv-dd.dv-dd.dv-dd .dv-dd-outcome { order: 0; margin-top: 20px; color: var(--dv-muted); }
+.dv-dd.dv-dd.dv-dd .dv-dd-stages li:nth-child(n) .dv-dd-name { color: inherit; }
+@media (max-width: 47.99rem) {
+  .dv-dd-heads { display: none; }
+  .dv-dd-stage-name { position: static; width: auto; height: auto; clip: auto; display: block; color: var(--case-accent); font-size: 18px; font-weight: 500; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-name > span.dv-dd-inside { flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: flex-start; gap: 4px 12px; margin-top: 6px; text-align: left; font-size: 16px; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li:nth-child(n) .dv-dd-name { display: block; padding: 0; text-align: left; justify-items: start; }
 }

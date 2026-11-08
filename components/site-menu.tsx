@@ -83,7 +83,7 @@ export function SiteMenu({ contact, cases }: Props) {
     if (!mounted) return;
     const html = document.documentElement;
     const main = document.querySelector("main");
-    const opener = main?.querySelector(".devsign-hero-panel");
+    const opener = main?.querySelector(".devsign-hero-panel, .dh-cover-plate");
     const openerTop = opener ? opener.getBoundingClientRect().top + window.scrollY : 0;
     const place = () => {
       const height = window.innerHeight;
