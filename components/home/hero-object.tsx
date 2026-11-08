@@ -712,13 +712,12 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         clear[4] = ((note.left - c.left) / c.width) * 2 - 1; clear[6] = ((note.right - c.left) / c.width) * 2 - 1;
         clear[5] = 1 - ((note.bottom - c.top) / c.height) * 2; clear[7] = 1 - ((note.top - c.top) / c.height) * 2;
       } else clear.fill(9, 4, 8);
-      // Nothing shown yet: the headline and the links keep clear of the dust too.
+      // Nothing shown yet: the headline keeps clear of the dust too.
       const put = (at: number, box?: DOMRect) => {
         if (!box || !box.width) { clear.fill(9, at, at + 4); return; }
         clear[at] = ((box.left - c.left) / c.width) * 2 - 1; clear[at + 2] = ((box.right - c.left) / c.width) * 2 - 1;
         clear[at + 1] = 1 - ((box.bottom - c.top) / c.height) * 2; clear[at + 3] = 1 - ((box.top - c.top) / c.height) * 2;
       };
-      if (clear[8] === 9) put(8, wideStage() ? document.querySelector<HTMLElement>(".home-picks")?.getBoundingClientRect() : undefined);
       if (!boxes.length) { put(0, wideStage() ? document.querySelector<HTMLElement>(".home-tagline-wrap")?.getBoundingClientRect() : undefined); return; }
       clear[0] = ((Math.min(...boxes.map((r) => r.left)) - c.left) / c.width) * 2 - 1; clear[2] = ((Math.max(...boxes.map((r) => r.right)) - c.left) / c.width) * 2 - 1;
       clear[1] = 1 - ((Math.max(...boxes.map((r) => r.bottom)) - c.top) / c.height) * 2; clear[3] = 1 - ((Math.min(...boxes.map((r) => r.top)) - c.top) / c.height) * 2;
@@ -905,7 +904,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       bind(pDither, "scene", 0, scene.texture); bind(pDither, "photo", 1, photoTexture);
       gl.uniform1f(uniform(pDither, "photoMix"), photoMix); gl.uniform2f(uniform(pDither, "photoScale"), photoScale[0], photoScale[1]); gl.uniform2f(uniform(pDither, "photoCentre"), photoCentre[0], photoCentre[1]); gl.uniform2f(uniform(pDither, "cssSize"), width / dpr, height / dpr);
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
-      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt, colours.galaxy * 0.9));
+      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt, colours.galaxy * 0.3));
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
       gl.uniform1f(uniform(pDither, "halo"), colours.light * (1 - portraitMix));
