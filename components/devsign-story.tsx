@@ -1010,6 +1010,42 @@ export function HandoffOne({ spec, screenId, keep, more, moreHref }: { spec: Spe
   );
 }
 
+// The case page shows the spec screen by screen under tabs (owner: tabs per screen, no separate
+// page). No scroll steps or autoplay: a tab picks the screen, pins and rows light each other.
+export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: number }) {
+  const [current, setCurrent] = useState(first);
+  const [lit, setLit] = useState(-1);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const screen = spec.screens[current];
+  const pick = (i: number) => { setCurrent(i); setLit(-1); };
+  const onKeys = (event: React.KeyboardEvent) => {
+    const last = spec.screens.length - 1;
+    const next = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    pick(next);
+    tabs.current[next]?.focus();
+  };
+  return (
+    <div className="dv-hdoc-excerpt dv-hdoc-one dv-gap-40 reveal">
+      <div className="dv-hdoc-tabs" role="tablist" aria-label={spec.labels.elements} onKeyDown={onKeys}>
+        {spec.screens.map((item, i) => (
+          <button key={item.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`ht-tab-${item.id}`} aria-selected={i === current} aria-controls="ht-panel" tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>
+            <b>{i + 1}</b>{item.tab}
+          </button>
+        ))}
+      </div>
+      <div id="ht-panel" role="tabpanel" aria-labelledby={`ht-tab-${screen.id}`} className="dv-hdoc-panel" key={screen.id}>
+        <p className="dv-hdoc-purpose dv-hdoc-one-purpose">{screen.purpose}</p>
+        <div className="dv-hdoc-pair">
+          <SpecShot screen={screen} lit={lit} onPin={setLit} />
+          <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // The case page shows one screen of the handoff spec as an excerpt and links to the full document
 // (owner: the auto-playing card was slow and busy; the whole spec belongs on its own page).
 export function HandoffExcerpt({ spec, screenId, more, moreHref }: { spec: SpecData; screenId: string; more: string; moreHref: string }) {

@@ -10,7 +10,7 @@ import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
 import { AffinityExplorer } from "@/components/affinity-explorer";
 import { AffinityThemes } from "@/components/affinity-themes";
-import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffOne, HeldFlow } from "@/components/devsign-story";
+import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffTabs, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
 import { withBase } from "@/lib/site";
 
@@ -665,7 +665,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.spec && (
           <div className="dv-gap-96">
             <Block method={deliver.spec.label} title={deliver.spec.label} lead={deliver.spec.lead} ff={ff} />
-            <HandoffOne spec={deliver.spec} screenId="decide" keep={[1, 2, 5]} more={deliver.spec.more} moreHref={deliver.spec.moreHref} />
+            <HandoffTabs spec={deliver.spec} />
           </div>
         )}
       </Section>
