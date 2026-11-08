@@ -15,8 +15,9 @@ export type DevsignHeroData = { title: string; subtitle?: string; actions?: { la
 // inset from the screen edges, holding the brand, a centered question, one line
 // of what it is, the ways in, and the product itself running past the fold (the
 // prototype's screens as a loop, the same one the home card shows, so nothing
-// swaps after the page opens; its link is a small chip on the card). Duration /
-// Team / Role / Tools follow under the panel.
+// swaps after the page opens; its link is a small chip on the card). Project /
+// Team / Role / Tools close the panel, under the product, so the opener ends
+// as one unit before the case body starts.
 // Behind it the product's dot canvas (HeroCanvas, with live cursors on Devsign)
 // and a light from behind the product.
 // Gemini uses the same layout with its own sparkle, phone loop and no cursors.
@@ -54,7 +55,6 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
               <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
             </div>}
       </div>
-      </div>
       <dl className="devsign-hero-details">
         {hero.details.map(({ label, value }) => (
           <div key={label}>
@@ -63,6 +63,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
           </div>
         ))}
       </dl>
+      </div>
     </div>
   );
 }

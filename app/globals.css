@@ -7479,3 +7479,10 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .case-study .dv .dv-cycle-tabs[data-stats] button:hover .dv-cycle-stat { color: var(--dv-ink); }
 .case-study .dv .dv-cycle-tabs[data-stats] .dv-cycle-timer { inset: -2px 0 auto; height: 2px; background: var(--dv-chart-fill, var(--case-accent)); }
 @media (max-width: 47.99rem) { .case-study .dv .dv-cycle-tabs[data-stats] { grid-template-columns: 1fr; gap: 0; } .case-study .dv .dv-cycle-tabs[data-stats] button { padding: 14px 0; } }
+
+/* Opener facts close the panel (inside its frame) so they read as part of the
+   opener, not of the Overview below. */
+.devsign-hero-panel > .devsign-hero-details { position: relative; width: min(100%, 1200px); margin: clamp(40px, 5svh, 64px) auto 0; }
+.devsign-hero:has(> .devsign-hero-panel) { padding-bottom: 0; }
+.devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: clamp(32px, 4svh, 48px); }
+@media (max-width: 47.99rem) { .devsign-hero-panel > .devsign-hero-details { margin-top: 32px; } .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: 32px; } }
