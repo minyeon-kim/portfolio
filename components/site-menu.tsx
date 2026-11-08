@@ -224,7 +224,7 @@ export function SiteMenu({ contact, cases }: Props) {
               </Link>
             ))}
             <Link href={targetOf("about")} tabIndex={-1} className="menu-card" aria-current={path === "/about/" ? "page" : undefined} data-project="about" data-on={shown === "about" || undefined}>
-              <Image src={withBase("/images/about/hero-center.webp")} alt="" fill sizes="30vw" />
+              <Image src={withBase("/images/about/hero-tall.webp")} alt="" fill sizes="30vw" />
             </Link>
             {!shown && <button type="button" tabIndex={-1} className="menu-card-close" onClick={() => end()} />}
             {/* The dust alone reads as an empty box, so the landing's line goes into the card with it. */}

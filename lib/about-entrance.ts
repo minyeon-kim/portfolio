@@ -12,7 +12,7 @@ export function portraitBox(): Box {
 }
 
 // The hero's crop of the same photo; the landing card shows it from 50% 28%.
-const HERO_POSITION = "50% 40%";
+const HERO_POSITION = "50% 0%";
 
 const FADE = 240, SETTLE = 720;
 
