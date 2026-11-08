@@ -7719,3 +7719,29 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .dv-qv blockquote { margin: 8px 0 0; color: var(--dv-muted); font-size: 18px; line-height: 1.55; word-break: keep-all; }
 .dv-qv cite { display: block; margin-top: 6px; color: var(--dv-muted); font-size: 16px; font-style: normal; }
 .dv-cycle-panel[data-phase="play"] .dv-qv li { animation: dv-chart-fade 500ms var(--ease) calc(var(--i) * 120ms) backwards; }
+/* After metalab.com/work/midjourney: the brand, the question and the facts start on the
+   wide cover's left edge (the screen's edge inset), not on the 1200 body column, and the
+   Devsign recording plays inside a desktop monitor standing on the plate. Gemini keeps
+   its phone. Below 64rem the cover keeps the column and the monitor drops its stand. */
+.dh-monitor { position: relative; width: 58%; margin: 6% auto 0; }
+.dh-monitor-screen { padding: 12px; border-radius: 20px; background: linear-gradient(180deg, #1b1c20, #0d0e10); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 48px 90px -24px var(--dh-plate-shadow), 0 18px 36px -18px rgb(0 0 0 / 0.5); }
+.devsign-hero.dh-cover .dh-monitor .devsign-hero-media { width: 100%; min-width: 0; margin: 0; border-radius: 8px; box-shadow: none; }
+.dh-monitor-neck { display: block; width: 11%; height: clamp(40px, 5.5vw, 84px); margin: 0 auto; background: linear-gradient(90deg, #1a1b1f, #34363c 45%, #1a1b1f); clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%); }
+.dh-monitor-foot { position: relative; display: block; width: 30%; height: 12px; margin: 0 auto; border-radius: 4px 4px 10px 10px; background: linear-gradient(180deg, #3a3c42, #1c1d21); }
+.dh-monitor-foot::after { content: ""; position: absolute; left: -30%; right: -30%; top: 6px; height: 36px; border-radius: 50%; background: radial-gradient(closest-side, rgb(10 6 30 / 0.45), transparent); z-index: -1; }
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover { --dh-col: min(1640px, calc(100% - 2 * var(--edge-inset, 24px))); }
+  .devsign-hero.dh-cover .dh-cover-plate { width: var(--dh-col); }
+}
+@media (max-width: 63.99rem) {
+  .dh-monitor { width: 86%; margin-top: 7%; }
+  .dh-monitor-screen { padding: 6px; border-radius: 12px; }
+}
+@media (max-width: 47.99rem) { .dh-monitor-neck { height: 28px; } .dh-monitor-foot { height: 8px; } }
+.devsign-hero.dh-cover[data-project] .dh-cover-plate .dh-monitor .devsign-hero-media { width: 100%; margin: 0; }
+
+/* Handoff screen stays put beside its rows (owner: the sticky screen sliding down with the
+   scroll didn't help); it sits at the top of its row group. */
+@media (min-width: 64rem) { .case-study .dv .dv-hdoc-pair .dv-hdoc-shot { position: static; align-self: start; } }
+/* Light theme: the opener fades from the page grey into the white case sheet below. */
+.devsign-hero.dh-cover { background: linear-gradient(to bottom, light-dark(#f5f6f4, var(--bg)) 30%, light-dark(#ffffff, var(--bg))); }
