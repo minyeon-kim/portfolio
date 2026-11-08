@@ -7835,6 +7835,8 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     radial-gradient(60% 70% at 30% 34%, rgb(120 124 132 / 0.08), transparent 70%),
     linear-gradient(180deg, light-dark(#202124, var(--bg)) 0%, #222326 24%, #1b1c1f 52%, #121315 74%, light-dark(#0c0c0e, var(--bg)) 100%); }
 @media (max-width: 47.99rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; margin-top: 28px; } .devsign-hero.dh-cover .devsign-hero-details dd { font-size: 16px; } }
+/* Facts: columns size to their words, so the visible gaps between them are equal, flush to both edges of the cover. */
+@media (min-width: 64rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, auto); justify-content: space-between; column-gap: 32px; } }
 /* Cover as a photographed mockup (HeroShot; supersedes the CSS 3D studio): a generated
    still scene (Devsign: monitor on a plinth in a dark studio; Gemini: a hand holding the
    phone in a bright cafe, after metalab.com/work/the-atlantic) with its screen keyed out,
@@ -7866,3 +7868,6 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 /* The photo starts and ends as a plain rectangle, like metalab.com's cover (no fade into the page). */
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot { -webkit-mask-image: none; mask-image: none; }
 .devsign-hero.dh-cover { background: none; }
+/* Facts after metalab.com: the label in ink, the value muted, both 16–18px, no caps. */
+.devsign-hero.dh-cover .devsign-hero-details dt { color: var(--dh-ink, var(--ink)); font-size: 16px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.devsign-hero.dh-cover .devsign-hero-details dd { margin-top: 4px; color: var(--dh-muted, var(--muted)); font-size: 16px; font-weight: 400; }
