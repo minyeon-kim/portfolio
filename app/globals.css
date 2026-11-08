@@ -7320,3 +7320,8 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption {
   margin: 0 !important; padding: 16px 12px 8px !important; border-radius: 0 !important; background: none !important;
 }
+
+/* Iteration 1, simpler (owner: drop the frame around the screen): no gradient plate or hairline,
+   the screen sits straight in the card with its caption under it. */
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card { border: 0 !important; padding: 16px !important; }
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { padding: 0 !important; background: none !important; border-radius: 12px !important; }
