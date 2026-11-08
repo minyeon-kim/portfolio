@@ -7332,15 +7332,15 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-dscroll { margin-top: 48px; }
 .dv-dscroll-text { margin: 0; padding: 0; list-style: none; display: grid; gap: 64px; }
 .dv-dscroll-text .dv-detail-title { margin-top: 8px; }
-.dv-dscroll .dv-detail-card { display: grid; place-items: center; padding: clamp(24px, 4vw, 48px); border-radius: 24px;
+.case-study .dv .dv-dscroll .dv-detail-card { display: grid; place-items: center; padding: clamp(24px, 4vw, 48px); border-radius: 24px;
   background:
     radial-gradient(110% 85% at 12% 0%, color-mix(in srgb, var(--c1) 55%, transparent), transparent 64%),
     radial-gradient(100% 80% at 100% 100%, color-mix(in srgb, var(--c2) 45%, transparent), transparent 66%),
     color-mix(in srgb, var(--c1) 14%, var(--bg)); }
-.dv-dscroll [data-t="0"] { --c1: #7c62ff; --c2: #c084fc; }
-.dv-dscroll [data-t="1"] { --c1: #38bdf8; --c2: #2dd4bf; }
-.dv-dscroll [data-t="2"] { --c1: #f472b6; --c2: #fb923c; }
-.dv-dscroll [data-t="3"] { --c1: #34d399; --c2: #a3e635; }
+.case-study .dv .dv-dscroll [data-t="0"] { --c1: #7c62ff; --c2: #c084fc; }
+.case-study .dv .dv-dscroll [data-t="1"] { --c1: #38bdf8; --c2: #2dd4bf; }
+.case-study .dv .dv-dscroll [data-t="2"] { --c1: #f472b6; --c2: #fb923c; }
+.case-study .dv .dv-dscroll [data-t="3"] { --c1: #34d399; --c2: #a3e635; }
 .dv-dscroll .dv-detail-card img { display: block; width: min(100%, calc(var(--dw) * 1px)); height: auto; max-height: min(52svh, 480px); object-fit: contain; filter: drop-shadow(0 18px 40px rgb(0 0 0 / 0.35)); }
 .dv-dscroll-inline { margin-top: 24px; }
 .dv-dscroll-stage { display: none; }
@@ -7355,3 +7355,12 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .dv-dscroll-stage > .dv-detail-card { grid-area: 1 / 1; opacity: 0; transition: opacity 400ms var(--ease), transform 400ms var(--ease); transform: translateY(12px); }
   .dv-dscroll-stage > .dv-detail-card[data-on] { opacity: 1; transform: none; }
 }
+/* DetailScroll fixes: the inline cards stay hidden on desktop (the plate rules outranked them), and
+   each card takes its own tone through the shared plate variables. */
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-dscroll .dv-dscroll-inline { display: none !important; }
+}
+.case-study .dv .dv-dscroll [data-t="0"] { --g1: #8f7dff; --g2: #c9a8ff; }
+.case-study .dv .dv-dscroll [data-t="1"] { --g1: #4cc3f2; --g2: #43d9c2; }
+.case-study .dv .dv-dscroll [data-t="2"] { --g1: #f38bbd; --g2: #fbb27c; }
+.case-study .dv .dv-dscroll [data-t="3"] { --g1: #4fd6a0; --g2: #b9e86a; }
