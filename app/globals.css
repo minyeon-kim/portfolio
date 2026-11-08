@@ -7554,3 +7554,11 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-iter-head .dv-iter-lead { margin: 0; }
 .dv-held-track > .dv-flist { background: var(--dv-bg, var(--bg)); }
 @media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist[data-phone] .dv-flist-frame { width: min(100%, calc((100svh - 400px) * 1.25)); } }
+
+/* Overview summary, easier to read (owner): one label colour (the case accent),
+   the label column narrow so each label sits right beside its sentence, and one
+   short sentence per row. */
+.case-study .dv .dv-gs-list > li .dv-gs-name { color: var(--case-accent); }
+@media (min-width: 64rem) {
+  .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { grid-template-columns: 160px minmax(0, 1fr); column-gap: 32px; }
+}
