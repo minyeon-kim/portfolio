@@ -7837,6 +7837,8 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 @media (max-width: 47.99rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; margin-top: 28px; } .devsign-hero.dh-cover .devsign-hero-details dd { font-size: 16px; } }
 /* Facts: columns size to their words, so the visible gaps between them are equal, flush to both edges of the cover. */
 @media (min-width: 64rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, auto); justify-content: space-between; column-gap: 32px; } }
+/* Facts: columns size to their words, so the visible gaps between them are equal, flush to both edges of the cover. */
+@media (min-width: 64rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, auto); justify-content: space-between; column-gap: 32px; } }
 /* Cover as a photographed mockup (HeroShot; supersedes the CSS 3D studio): a generated
    still scene (Devsign: monitor on a plinth in a dark studio; Gemini: a hand holding the
    phone in a bright cafe, after metalab.com/work/the-atlantic) with its screen keyed out,
