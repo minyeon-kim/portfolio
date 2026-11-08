@@ -12,8 +12,9 @@ type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; seg
 type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
 type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
 type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
+type ScaleChart = Base & { type: "scale"; max: number; marks: { label: string; value: number }[]; items: { label: string; value: number }[] };
 type TableChart = Base & { type: "table"; max: number; people: string[]; rows: { label: string; values: number[] }[] };
-export type StageChart = DonutChart | BarChart | PairChart | RingChart | TableChart;
+export type StageChart = DonutChart | BarChart | PairChart | RingChart | ScaleChart | TableChart;
 
 function ChartSource({ source }: { source?: Source }) {
   if (!source) return null;
@@ -186,6 +187,27 @@ function Rings({ data, animate }: { data: RingChart; animate: boolean }) {
   );
 }
 
+// One 0–max line with the reference marks (goal, usual average) and a dot per
+// person, so the chart shows where each score sits instead of repeating it.
+function ScaleView({ data }: { data: ScaleChart }) {
+  const at = (v: number) => ({ "--x": `${(v / data.max) * 100}%` }) as React.CSSProperties;
+  return (
+    <div className="dv-scale">
+      <div className="dv-scale-line">
+        <span className="dv-scale-end">0</span>
+        {data.marks.map((m) => <span key={m.label} className="dv-scale-mark" style={at(m.value)}><b>{m.label}</b></span>)}
+        {data.items.map((item, i) => (
+          <span key={item.label} className="dv-scale-dot" style={{ ...at(item.value), "--i": i } as React.CSSProperties}>
+            <i aria-hidden="true" />
+            <b>{item.label}</b><small>{item.value}</small>
+          </span>
+        ))}
+        <span className="dv-scale-end" data-end>{data.max}</span>
+      </div>
+    </div>
+  );
+}
+
 function TableView({ data }: { data: TableChart }) {
   return (
     <table className="dv-score-table">
@@ -305,6 +327,7 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
                 {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
                 {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
                 {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
+                {chart.type === "scale" && <ScaleView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
               </div>
             );
