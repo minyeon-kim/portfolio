@@ -13,9 +13,28 @@ export function SiteFooter() {
   const t = useStrings();
   const locale = useLocale();
   const year = new Date().getFullYear();
+  // Our own eased scroll, not behavior: "smooth": on a case opened from the
+  // landing something cancels the browser's smooth scroll after one step and the
+  // button seemed to do nothing. A wheel or touch stops it.
   const toTop = () => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "instant" : "smooth" });
+    const from = window.scrollY;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || from < 2) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      return;
+    }
+    const duration = Math.min(1200, 500 + from / 60);
+    const start = performance.now();
+    let frame = 0;
+    const stop = () => { cancelAnimationFrame(frame); window.removeEventListener("wheel", stop); window.removeEventListener("touchstart", stop); };
+    window.addEventListener("wheel", stop, { passive: true });
+    window.addEventListener("touchstart", stop, { passive: true });
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      window.scrollTo({ top: Math.round(from * (1 - e)), behavior: "instant" });
+      if (t < 1) frame = requestAnimationFrame(step); else stop();
+    };
+    frame = requestAnimationFrame(step);
   };
   return (
     <footer className="site-footer">
