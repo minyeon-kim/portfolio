@@ -43,6 +43,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         )}
       </div>
       <div className="dh-cover-plate">
+        {(() => { const media = (
         <div className="devsign-hero-media">
           {gemini
             ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} preload /></span>
@@ -51,7 +52,14 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
                 <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
               </div>}
           {hero.clip && <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} phone={gemini} />}
-        </div>
+        </div>);
+          return gemini ? media : (
+            <div className="dh-monitor">
+              <div className="dh-monitor-screen">{media}</div>
+              <i className="dh-monitor-neck" aria-hidden="true" />
+              <i className="dh-monitor-foot" aria-hidden="true" />
+            </div>
+          ); })()}
         {hero.card && (
           // eslint-disable-next-line @next/next/no-img-element
           <img className="dh-cover-card" src={withBase(hero.card.src)} width={hero.card.width} height={hero.card.height} alt={hero.card.alt} decoding="async" />
