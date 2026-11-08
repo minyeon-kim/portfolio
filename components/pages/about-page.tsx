@@ -79,7 +79,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
     [["laptop", 1800, 1200], ["hands", 1800, 1200], ["desk", 2400, 1500]],
   ];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
-  const total = 3;
 
   return (
     <div data-about-page className="project-detail">
@@ -106,14 +105,14 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
 
         <section className="about-bridge">
-          <StageHead n={1} total={total} title={c.steps} />
+          <StageHead title={c.steps} />
           <p className="about-statement reveal">{bridge.statement}</p>
           <AboutBridge rows={bridge.rows} then={bridge.then} now={bridge.now} label={c.steps} />
         </section>
 
         {photos.length > 0 && (
           <section className="about-gallery" aria-labelledby="about-at-work">
-            <StageHead n={2} total={total} title={c.atWork} id="about-at-work" />
+            <StageHead title={c.atWork} id="about-at-work" />
             {photos.map((row) => (
               <div key={row[0][0]} className="about-gallery-row">
                 {row.map(([name, width, height]) => (
@@ -129,7 +128,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
         <section className="about-band">
           <div className="about-band-inner">
-            <StageHead n={3} total={total} title={c.experience} />
+            <StageHead title={c.experience} />
             <ol className="about-timeline">
               {experience.map((item) => (
                 <li key={item.title} className="reveal">
@@ -182,12 +181,11 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   );
 }
 
-// A section title in the case pages' form: display size, light, with its n / total counter.
-function StageHead({ n, total, title, id }: { n: number; total: number; title: string; id?: string }) {
+// A section title in the case pages' form: display size, light, without a counter.
+function StageHead({ title, id }: { title: string; id?: string }) {
   return (
     <div className="about-stage-head reveal">
       <h2 id={id}>{title}</h2>
-      <span aria-hidden="true">{String(n).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
     </div>
   );
 }
