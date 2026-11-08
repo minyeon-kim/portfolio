@@ -239,7 +239,6 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
         </OpenFrame>
       </div>
       <HeldFlow count={rows.length}>
-      <p className="dv-vpc-title reveal">{overviewLabel}</p>
       {/* One row per pair, read left to right like a comparison table (owner: three cards read
           top to bottom were awkward): the pain heard → the idea that answers it → the feature. */}
       <div className="dv-vpc-table reveal" role="table" aria-label={overviewLabel}>
