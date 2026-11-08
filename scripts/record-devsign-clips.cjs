@@ -178,6 +178,30 @@ const CLIPS = {
   // Decide: change list → the pin → its details → fix to the design.
   // The whole screen with no camera move, for the case cover's monitor.
   async cover(page, mark) {
+    // A second person on the same screen: Jordan's cursor, a copy of the prototype's own
+    // cursor in Jordan's colour, moving on a fixed path while the real mouse drives Taylor.
+    await page.evaluate(() => {
+      const j = document.createElement('div');
+      j.dataset.cover = 'jordan';
+      j.style.cssText = 'position:fixed;left:420px;top:640px;z-index:2147483646;pointer-events:none;';
+      j.innerHTML = `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" fill="#0ea5e9" stroke="rgba(0,0,0,.25)" stroke-width="1" stroke-linejoin="round"/></svg><span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;border-radius:999px;padding:2px 8px;font-size:10px;line-height:1;font-weight:500;color:#fff;white-space:nowrap;background:#0ea5e9">Jordan</span>`;
+      document.body.appendChild(j);
+      // Time (s), x, y on the 1440x1125 screen.
+      const path = [[0, 420, 640], [1.6, 470, 760], [3.2, 520, 640], [5.0, 470, 610], [6.8, 1130, 400], [9.5, 1150, 420]];
+      const ease = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+      const t0 = performance.now();
+      const tick = (now) => {
+        const t = (now - t0) / 1000; let i = 0;
+        while (i < path.length - 2 && t > path[i + 1][0]) i++;
+        const [a, ax, ay] = path[i]; const [b, bx, by] = path[i + 1];
+        const k = ease(Math.min(1, Math.max(0, (t - a) / (b - a))));
+        j.style.left = `${ax + (bx - ax) * k}px`; j.style.top = `${ay + (by - ay) * k}px`;
+        // The prototype's own resting "Jordan" presence would be a second copy.
+        document.querySelectorAll('body *').forEach((e) => { if (e.children.length === 0 && e.textContent.trim() === 'Jordan' && !j.contains(e) && e.offsetWidth < 90) { const box = e.parentElement; if (box && getComputedStyle(box).position === 'absolute') box.style.visibility = 'hidden'; } });
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
     await wait(900);
     await click(page, '+4', { after: 1100 });
     mark();
