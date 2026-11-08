@@ -20,7 +20,7 @@ const tex=(n,draw)=>{const c=document.createElement('canvas');c.width=c.height=n
 const grain=tex(1024,(x,n)=>{const d=x.createImageData(n,n);for(let i=0;i<d.data.length;i+=4){const v=118+Math.random()*20;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0)});grain.repeat.set(1.2,1.2);
 const yb=g.attributes.position,col=new Float32Array(yb.count*3),uv=g.attributes.uv;let miny=1e9,maxy=-1e9;for(let i=0;i<yb.count;i++){const y=yb.getY(i);miny=Math.min(miny,y);maxy=Math.max(maxy,y)}
 for(let i=0;i<yb.count;i++){const t=(yb.getY(i)-miny)/(maxy-miny),x=yb.getX(i)/pl[0]+.5,z=yb.getZ(i)/pl[2]+.5;const v=t>.999?(.58+.72*x-.2*z):Math.pow(t,7)*.85+.12;col[i*3]=col[i*3+1]=col[i*3+2]=v}g.setAttribute('color',new THREE.BufferAttribute(col,3));
-const topm=M(P.plc,.62),sidem=M(P.pls,.72);for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=.35;m.roughnessMap=grain}
+const topm=M(P.plc,1),sidem=M(P.pls,1);for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=.1;m.envMapIntensity=0}
 const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=o.receiveShadow=true;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
@@ -39,6 +39,7 @@ const ng=new THREE.ExtrudeGeometry(ns,{depth:.07,bevelEnabled:false});ng.transla
 const neck=add(ng,black,[0,0,0]);
 {const a=rig.worldToLocal(mon.localToWorld(new THREE.Vector3(P.nx,-sh*.42,-.13))),b=new THREE.Vector3(P.foot[0],P.py+.03,P.foot[1]-.1);neck.position.copy(a.clone().add(b).multiplyScalar(.5));neck.scale.y=a.distanceTo(b);neck.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),a.clone().sub(b).normalize());}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,20,256,256,256);g2.addColorStop(0,'rgba(8,4,40,.75)');g2.addColorStop(.45,'rgba(8,4,40,.34)');g2.addColorStop(1,'rgba(8,4,40,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(P.fs[0]*2.1,P.fs[1]*3.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(P.foot[0],P.py+.016,P.foot[1]);rig.add(m)}
+{const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,10,256,256,256);g2.addColorStop(0,'rgba(200,190,255,'+P.spill+')');g2.addColorStop(1,'rgba(200,190,255,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));m.rotation.x=-Math.PI/2;m.position.set(0,P.py+.018,.55);rig.add(m)}
 const key=new THREE.DirectionalLight('#fff',P.key);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:.1,far:30});key.shadow.bias=-.0004;key.shadow.normalBias=.02;s.add(key,key.target);
 const fill=new THREE.DirectionalLight('#fff',P.fill);fill.position.set(-1,10,1.5);s.add(fill);
 const rim=new THREE.DirectionalLight('#fff',P.rim);rim.position.set(...P.rimp);s.add(rim);
@@ -57,7 +58,7 @@ const bi=b.getImageData(0,0,W,H),d=bi.data,out=x.createImageData(W,H),e=out.data
 for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W+xx)*4,a=acc[i+3]/n/255,nz=(Math.random()-.5)*2.2;for(let k=0;k<3;k++)e[o+k]=Math.max(0,Math.min(255,acc[i+k]/n+d[o+k]*(1-a)+nz));e[o+3]=255}
 x.putImageData(out,0,0);
 {const hi=document.createElement('canvas');hi.width=W;hi.height=H;const hx=hi.getContext('2d'),hd=hx.createImageData(W,H);for(let i=0;i<e.length;i+=4){const l=(e[i]+e[i+1]+e[i+2])/3,k=Math.max(0,l-105)/150;hd.data[i]=e[i]*k;hd.data[i+1]=e[i+1]*k;hd.data[i+2]=e[i+2]*k;hd.data[i+3]=255}hx.putImageData(hd,0,0);
-x.globalCompositeOperation='lighter';x.filter=`blur(${W/90}px)`;x.globalAlpha=.4;x.drawImage(hi,0,0);x.filter='none';x.globalAlpha=1;x.globalCompositeOperation='source-over';
+x.globalCompositeOperation='lighter';x.filter=`blur(${W/90}px)`;x.globalAlpha=P.bloom;x.drawImage(hi,0,0);x.filter='none';x.globalAlpha=1;x.globalCompositeOperation='source-over';
 const v=x.createRadialGradient(W*.52,H*.46,W*.3,W*.52,H*.46,W*.75);v.addColorStop(0,'rgba(10,4,50,0)');v.addColorStop(1,'rgba(6,2,36,.62)');x.fillStyle=v;x.fillRect(0,0,W,H);
 const id=x.getImageData(0,0,W,H);for(let i=0;i<id.data.length;i+=4){const n=((Math.random()+Math.random())-1)*P.grain;id.data[i]+=n;id.data[i+1]+=n;id.data[i+2]+=n}x.putImageData(id,0,0)}
 // Screen hole, antialiased.
