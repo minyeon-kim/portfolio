@@ -31,7 +31,7 @@ export async function HomePage({ locale = "en" }: { locale?: Locale }) {
           concept: meta.concept,
           hero: meta.hero,
         }))}
-        about={{ headline: about.headline.join(" "), emphasis: about.headlineEmphasis, bio: about.bio[0] }}
+        about={{ headline: about.headline.join(" "), emphasis: about.headlineEmphasis, bio: about.hook }}
       />
       <CasePanels>
         {bodies.map(({ slug, meta, Content }, i) => {

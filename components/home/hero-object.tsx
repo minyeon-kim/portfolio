@@ -223,7 +223,7 @@ void main() {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[4]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
+uniform float formDim; uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[4]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
 uniform float keep;  // the share of the simulation drawn
 uniform float portraitMix; uniform sampler2D portrait; uniform sampler2D portraitColor;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
@@ -313,8 +313,8 @@ void main() {
   vFaint = mix(mix(mix(1.1, 1.15, dark), 0.95, fine), 1.5, star) * 2.0 * mix(1.0, 1.7, step(0.5, symbol));
   // A case's form is the backdrop: its colour stays, but it sits well below the
   // card, which is the brightest thing on the stage (metalab.com).
-  vFaint *= mix(1.0, mix(0.6, 0.55, light), max(spectrum, bolt));
-  vTint = mix(vTint, vec3(dot(vTint, vec3(0.3, 0.6, 0.1))), 0.15 * max(spectrum, bolt));
+  vFaint *= mix(1.0, mix(0.6, 0.55, light), formDim);
+  vTint = mix(vTint, vec3(dot(vTint, vec3(0.3, 0.6, 0.1))), 0.15 * formDim);
   // In the dark the landing galaxy shines brighter than any project's form.
   vFaint *= 1.0 + 0.7 * galaxy * (1.0 - light);
   // Light theme: ink on a pale page needs a little more body to read.
@@ -684,7 +684,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: start.symbol > 0 ? 1 : 0.85, spectrum: 0, bolt: 0, galaxy: start.symbol === 0 ? 1 : 0 };
+    const colours = { calm: [...start.calm], fast: [...start.fast], accent: [...start.accent], light: lightTarget, focus: start.symbol > 0 ? 1 : 0.85, spectrum: 0, bolt: 0, about: 0, galaxy: start.symbol === 0 ? 1 : 0 };
     let visible = true;
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
     io.observe(el);
@@ -795,6 +795,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       colours.light += (lightTarget - colours.light) * k;
       colours.spectrum += ((target.symbol === 1 ? 1 : 0) - colours.spectrum) * k;
       colours.bolt += ((target.symbol === 2 ? 1 : 0) - colours.bolt) * k;
+      colours.about += ((state.current === "about" ? 1 : 0) - colours.about) * k;
       colours.galaxy += ((target.symbol === 0 ? 1 : 0) - colours.galaxy) * k;
       const toPortrait = target.symbol === 4;
       portraitMix += ((toPortrait ? 1 : 0) - portraitMix) * k;
@@ -887,6 +888,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
+      gl.uniform1f(uniform(pDraw, "formDim"), Math.max(colours.spectrum, colours.bolt, colours.about));
       gl.uniform1f(uniform(pDraw, "bolt"), colours.bolt);
       gl.uniform1f(uniform(pDraw, "galaxy"), colours.galaxy);
       if (clearTick++ % 10 === 0) readClear();
@@ -904,7 +906,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       bind(pDither, "scene", 0, scene.texture); bind(pDither, "photo", 1, photoTexture);
       gl.uniform1f(uniform(pDither, "photoMix"), photoMix); gl.uniform2f(uniform(pDither, "photoScale"), photoScale[0], photoScale[1]); gl.uniform2f(uniform(pDither, "photoCentre"), photoCentre[0], photoCentre[1]); gl.uniform2f(uniform(pDither, "cssSize"), width / dpr, height / dpr);
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
-      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt, colours.galaxy * 0.3));
+      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt, colours.about, colours.galaxy * 0.3));
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
       gl.uniform1f(uniform(pDither, "halo"), colours.light * (1 - portraitMix));
