@@ -7442,7 +7442,7 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .case-study .dv .dv-vpc-view .dv-open-hint { z-index: 2; }
 
 /* Table: number, then each cell with its arrow right after it (no wide gaps inside a row). */
-.case-study .dv .dv-vpc-head, .case-study .dv .dv-vpc-row { grid-template-columns: 28px minmax(0, 1.3fr) 20px minmax(0, 1fr) 20px minmax(0, 0.9fr); column-gap: 16px; }
+.case-study .dv .dv-vpc-head, .case-study .dv .dv-vpc-row { grid-template-columns: minmax(0, 1.3fr) 20px minmax(0, 1fr) 20px minmax(0, 0.9fr); column-gap: 16px; }
 .case-study .dv .dv-vpc-head { color: var(--dv-ink); font-weight: 500; }
 .dv-vpc-num { display: grid; place-items: center; width: 28px; height: 28px; line-height: 1; font-variant-numeric: tabular-nums; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 600; transition: background-color 250ms var(--ease), color 250ms var(--ease); }
 .case-study .dv .dv-vpc-row { cursor: default; outline-offset: 4px; transition: opacity 250ms var(--ease); }
@@ -7451,8 +7451,6 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-vpc-row :is(p, b[role="cell"]) { transition: color 250ms var(--ease); }
 @media (max-width: 47.99rem) {
   .dv-vpc-wins { grid-template-columns: 1fr !important; }
-  .case-study .dv .dv-vpc-row { grid-template-columns: 28px minmax(0, 1fr); }
-  .case-study .dv .dv-vpc-row > :not(.dv-vpc-num) { grid-column: 2; }
 }
 @media (prefers-reduced-motion: reduce) { .dv-vpc-mark, .dv-vpc-num, .dv-vpc-row { transition: none; } }
 .case-study .dv .dv-vpc-row b.dv-vpc-num { color: var(--dv-ink); font-size: 16px; line-height: 1; }
