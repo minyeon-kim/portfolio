@@ -94,7 +94,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         {splitPhotos.map(([name, side]) => (
           <figure key={name} className="about-split-card" data-side={side}>
             <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
-            <PhotoTag {...cards[side]} />
+            <p className="about-split-tag">{cards[side]}</p>
           </figure>
         ))}
         <div className="about-hero-photo">
@@ -103,7 +103,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         {/* The part of the photo inside the line: it lifts off the photo and glides to the middle. */}
         <div className="about-split-portrait" aria-hidden="true">
           <Image src={withBase(heroPhoto)} alt="" width={2160} height={1700} sizes="100vw" />
-          <PhotoTag {...cards.center} />
         </div>
         <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
@@ -132,10 +131,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 <div className="about-panel-copy">
                   <h3>{row.title}</h3>
                   <p className="about-panel-lead">{row.body}</p>
-                  <p className="about-panel-then">{bridge.then}: {row.then}{"note" in row && row.note ? ` ${row.note}` : ""}</p>
-                </div>
-                <div className="about-panel-card" aria-hidden="true">
-                  <PhotoTag label={panels[i].label} value={panels[i].value} pill={panels[i].pill} />
                 </div>
               </article>
             ))}
@@ -214,18 +209,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 }
 
 // A section title in the case pages' form: display size, light, without a counter.
-// A keyword on a photo, after revolut.com's cards: small label, large value, pill, optional white strip.
-function PhotoTag({ label, value, pill, chip }: { label: string; value: string; pill: string; chip?: string[] }) {
-  return (
-    <div className="about-split-tag">
-      <p className="about-tag-label">{label}</p>
-      <p className="about-tag-value">{value}</p>
-      <p className="about-tag-pill">{pill}</p>
-      {chip && <p className="about-tag-chip">{chip.map((item) => <span key={item}>{item}</span>)}</p>}
-    </div>
-  );
-}
-
 function StageHead({ title, id }: { title: string; id?: string }) {
   return (
     <div className="about-stage-head reveal">

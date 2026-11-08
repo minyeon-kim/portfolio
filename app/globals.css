@@ -8006,7 +8006,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   .about-hero-line { display: block; }
   .about-hero-line:first-child { margin-bottom: 12px; font-size: clamp(48px, min(5.2vw, 9.4svh), 104px); font-weight: 500; line-height: 1.02; letter-spacing: -0.04em; }
   html:lang(ko) .about-hero-line:first-child { font-size: clamp(40px, min(4.2vw, 8svh), 84px); }
-  .about-hero-subtitle { max-width: 24vw; margin: clamp(20px, 3svh, 32px) 0 0; color: #fff; font-size: 16px; line-height: 1.4; }
+  .about-hero-subtitle { display: none; max-width: 24vw; margin: clamp(20px, 3svh, 32px) 0 0; color: #fff; font-size: 16px; line-height: 1.4; }
   .about-hero-actions { justify-content: flex-start; }
   .about-hero-actions a { background: rgb(255 255 255 / 0.18); color: #fff; text-shadow: none; }
   .about-hero-actions a:hover { background: rgb(255 255 255 / 0.28); }
@@ -8019,14 +8019,9 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 /* Devsign's landing card has the size and framing of metalab.com's: 42.3vw wide, 1.66:1, showing the whole scene. */
 @media (min-width: 64rem) { .home-device[data-project="devsign"] { top: 11%; left: 50%; right: auto; width: 42.3vw; aspect-ratio: 1391 / 838; } }
 
-/* Keywords on photos (hero cards, panels), sized to their card. */
+/* One short word on each side card, low on the picture, only what the headline does not already say. */
 .about-split-tag { display: none; }
-.about-split-card .about-split-tag, .about-split-portrait .about-split-tag, .about-panel-card .about-split-tag { display: flex; position: absolute; inset: 54% 5cqw 5cqw; flex-direction: column; align-items: center; color: #fff; text-align: center; text-shadow: 0 1px 16px rgb(0 0 0 / 0.45); }
-.about-split-tag p { margin: 0; }
-.about-tag-label { font-size: max(12px, 4.6cqw); }
-.about-tag-value { margin-top: 1cqw !important; font-size: 11.5cqw; font-weight: 600; line-height: 1.1; letter-spacing: -0.03em; white-space: nowrap; }
-.about-tag-pill { margin-top: 3cqw !important; padding: 1.6cqw 4cqw; border-radius: 999px; background: #fff; color: #191c1f; font-size: max(11px, 4.2cqw); font-weight: 500; text-shadow: none; white-space: nowrap; }
-.about-tag-chip { display: flex; justify-content: space-around; gap: 2cqw; width: 100%; margin-top: auto !important; padding: 3.4cqw 3cqw; border-radius: 3cqw; background: #fff; color: #191c1f; font-size: max(11px, 4cqw); font-weight: 500; text-shadow: none; white-space: nowrap; }
+.about-split-card .about-split-tag { display: block; position: absolute; inset: auto 6cqw 7cqw; margin: 0; color: #fff; font-size: max(16px, 7cqw); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; text-align: center; text-shadow: 0 1px 16px rgb(0 0 0 / 0.5); }
 
 /* Below the hero: one large photo per point, each sliding over the last with native scroll (after revolut.com). */
 .about-panels { width: 100vw; margin-inline: calc(50% - 50vw); }
@@ -8038,9 +8033,6 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .about-panel-copy { position: relative; z-index: 1; width: min(900px, calc(100vw - 32px)); padding-top: clamp(96px, 12svh, 136px); }
 .about-panel-copy h3 { margin: 0; color: #fff; font-size: clamp(38px, min(4.4vw, 8svh), 84px); font-weight: 500; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; }
 .about-panel-lead { margin: 16px auto 0; max-width: 640px; color: #fff; font-size: clamp(18px, 1.4vw, 22px); line-height: 1.35; text-wrap: balance; }
-.about-panel-then { margin: 12px auto 0; max-width: 620px; color: rgb(255 255 255 / 0.86); font-size: 16px; line-height: 1.45; text-wrap: pretty; }
-.about-panel-card { position: relative; z-index: 1; container-type: inline-size; width: min(300px, 62vw); height: min(380px, 40svh); margin-top: auto; margin-bottom: clamp(32px, 7svh, 72px); border-radius: 20px; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.8); }
-.about-panel-card .about-split-tag { inset: 30% 5cqw 5cqw; }
 @media (min-width: 64rem) {
   .about-panels { position: relative; }
   .about-panel { position: sticky; top: 0; }
