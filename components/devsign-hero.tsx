@@ -2,13 +2,14 @@ import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLoop } from "@/components/devsign-loop";
+import { HeroClip } from "@/components/hero-clip";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DEVSIGN_URL, withBase } from "@/lib/site";
 
 // Devsign wordmark face, as in the Figma hero.
 const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "swap" });
 
-export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
+export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; clip?: { src: string; poster: string; label: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
 // The case opener, after metalab.com's case covers: the brand and the question on the
 // page itself (left-aligned on the 1200 case column), then one cover plate in the
@@ -49,6 +50,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
                 <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>
                 <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
               </div>}
+          {hero.clip && <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} phone={gemini} />}
         </div>
         {hero.card && (
           // eslint-disable-next-line @next/next/no-img-element

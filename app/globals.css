@@ -7678,3 +7678,17 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .dv-ivc-cards li { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; }
   .dv-ivc-who { align-self: end; }
 }
+/* Cover clip (HeroClip): a real prototype recording over the opener's loop, fading in once
+   it can play and no page transition runs. The cover plate reaches toward the screen
+   edges (after metalab.com's case heroes); the text above stays on the 1200 column. */
+.dh-clip { position: absolute; inset: 0; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
+.dh-clip[data-ready] { opacity: 1; pointer-events: auto; }
+.dh-clip video { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+.dh-clip[data-phone] { inset: auto; left: 50%; top: 8%; height: 104%; aspect-ratio: 800 / 1734; translate: -50% 0; overflow: hidden; border: 10px solid #101114; border-radius: 52px; background: #101114; box-shadow: 0 40px 80px -10px var(--dh-plate-shadow); }
+.dh-clip[data-phone] video { object-fit: cover; object-position: top; border-radius: 42px; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-media:has(.dh-clip[data-ready]) .devsign-hero-phone { opacity: 0; transition: opacity 600ms var(--ease); }
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover .dh-cover-plate { width: min(1640px, calc(100% - 2 * var(--edge-inset, 24px))); aspect-ratio: 16 / 8.6; }
+  .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: min(80%, 1200px); margin-top: 5.5%; }
+}
+@media (max-width: 47.99rem) { .dh-clip[data-phone] { border-width: 6px; border-radius: 30px; } .dh-clip[data-phone] video { border-radius: 24px; } }
