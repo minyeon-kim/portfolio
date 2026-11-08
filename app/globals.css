@@ -7543,3 +7543,6 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > * > * + *:has(.dv-block) { margin-top: 176px !important; }
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-posts.dv-posts { margin-top: 112px !important; }
 }
+
+/* The chart block's label and finding ride inside the held chart stage. */
+.dv-cycle-head { margin-bottom: 40px; }

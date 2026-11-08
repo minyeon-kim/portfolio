@@ -74,10 +74,9 @@ function Insights({ discover }: { discover: Study }) {
   return (
     <div className="dv-insights">
       <div>
-        <Block {...discover.desk} ff />
-        {/* Two sources, two boxes: each holds its own heading, source and evidence. */}
-        <section className="dv-cycle-card dv-gap-40">
-          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
+        {/* The block's heading rides in the held chart stage, so it stays with the chart. */}
+        <section className="dv-cycle-card">
+          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} head={<Block {...discover.desk} ff />} />
         </section>
         {/* A count, then the posts themselves: what people actually wrote is the evidence here. */}
         <section className="dv-posts">
@@ -213,9 +212,8 @@ function SourceInsights({ discover }: { discover: Study }) {
   return (
     <div className="dv-insights">
       <div>
-        <Block title={desk.title} lead={q1.answer} text={desk.text} ff />
-        <section className="dv-cycle-card dv-gap-40">
-          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} />
+        <section className="dv-cycle-card">
+          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} head={<Block title={desk.title} lead={q1.answer} text={desk.text} ff />} />
         </section>
         <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
       </div>
@@ -673,16 +671,16 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.protocol ? <>
           {/* The finding is the block's heading; each chart's own sentence is a smaller caption
               (owner: without the heading the block had no hierarchy). */}
-          <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
-          <p className="dv-body dv-ut-summary reveal">
-            {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
-          </p>
-          <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<>
+            <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
+            <p className="dv-body dv-ut-summary reveal">
+              {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
+            </p>
+          </>} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>
-          <Block {...testing.usability} ff={ff} />
-          <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<Block {...testing.usability} ff={ff} />} /></section>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { useHeldSteps } from "@/components/devsign-story";
+import { TALL_PIN, useHeldSteps } from "@/components/devsign-story";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
 type Source = { label: string; url?: string; detail?: string };
@@ -232,7 +232,9 @@ function TableView({ data }: { data: TableChart }) {
 // focus holds it, the button stops it, tabs pick a chart. Every panel stays in one grid cell, so
 // the box keeps the height of the tallest and nothing below it moves. With reduced motion or no
 // JS the first chart stands complete and the tabs still work.
-export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels: { charts: string; pause: string; play: string } }) {
+// `head` (the block's label and finding) sits inside the held stage, so it stays on
+// screen with the chart while scroll changes the chart (owner: the title scrolled away).
+export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; labels: { charts: string; pause: string; play: string }; head?: React.ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const [motion, setMotion] = useState(false);
@@ -244,7 +246,7 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
   const [current, setCurrent] = useState(0);
   const [round, setRound] = useState(0);
   // With room and motion the stage holds on screen and native scroll picks the chart (no timer).
-  const held = useHeldSteps(charts.length);
+  const held = useHeldSteps(charts.length, head ? TALL_PIN : undefined);
   const scrolled = held.pinned;
 
   useEffect(() => {
@@ -282,7 +284,7 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
   const running = motion && inView && !hold && !stopped && !leaving && !scrolled;
 
   return (
-    <div ref={held.root} className="dv-held-track dv-cycle-track" style={{ "--n": charts.length } as React.CSSProperties}>
+    <div ref={held.root} className={`dv-held-track dv-cycle-track${head ? " dv-held-tall" : ""}`} style={{ "--n": charts.length } as React.CSSProperties}>
     <div
       ref={root}
       className="dv-cycle-stage"
@@ -294,6 +296,7 @@ export function SurveyCharts({ charts, labels }: { charts: StageChart[]; labels:
       onFocusCapture={() => setHold(true)}
       onBlurCapture={() => setHold(false)}
     >
+      {head && <div className="dv-cycle-head">{head}</div>}
       <div className="dv-cycle-nav">
         <div role="group" aria-label={labels.charts} className="dv-cycle-tabs" data-stats={charts.some((c) => c.stat) || undefined}>
           {charts.map((chart, i) => (

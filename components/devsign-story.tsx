@@ -93,7 +93,7 @@ function IterationStep({ change, index, total, pinned, active, labels, onEnd }: 
 // its own card. A step mark scrolls to the middle of its step, and shows it at once.
 export const REELS_PIN = "(min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
 const HELD_TAIL = 0.5;
-const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
+export const TALL_PIN = "(min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference)";
 
 const HOLD_ON_SCROLL = true;
 export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
