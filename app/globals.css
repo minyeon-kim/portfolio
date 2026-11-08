@@ -7969,3 +7969,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   66%, 100% { opacity: 1; transform: translateX(calc(var(--dir) * (var(--c-w) + var(--c-gap)))) scale(0.92); }
 }
 @keyframes about-split-swap { 0%, 66% { opacity: 0; } 76%, 100% { opacity: 1; } }
+
+/* Gemini opener: the name on two lines at Devsign's size, and a dark room where the phone is the only light (privacy: only you see the screen). */
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(64px, 8.4vw, 168px); line-height: .95; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-shot .dh-clip video { transform: none; }

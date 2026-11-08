@@ -20,7 +20,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
   return (
     <div className="devsign-hero dh-cover" data-project={project}>
       <div className="devsign-hero-intro">
-        <h1 tabIndex={-1} className="devsign-hero-title" translate="no">{name}</h1>
+        <h1 tabIndex={-1} className="devsign-hero-title" translate="no">{gemini ? <>Gemini<br />privacy revamp</> : name}</h1>
         {hero.actions && (
           <p className="devsign-hero-actions">
             {hero.actions.map((a) => (
@@ -42,7 +42,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
       <div className="dh-cover-plate">
         {gemini ? (
           <HeroShot src={withBase("/images/cases/gemini-privacy/cover-hand.webp")} width={1536} height={864} alt="" mediaWidth={800} mediaHeight={1734} crop={[26, 0, 1484, 864]} cropPhone={[600, 0, 499, 864]}
-            matrix="matrix3d(0.429803949, -0.0179177791, 0, 4.05424448e-05, 0.0685022387, 0.388183516, 0, -2.13469489e-05, 0, 0, 1, 0, 615.983241, 94.0695278, 0, 1)">
+            matrix="matrix3d(0.408803461, -0.0429530057, 0, 3.23777877e-05, 0.0659493613, 0.374605389, 0, -2.07875042e-05, 0, 0, 1, 0, 624.291913, 115.680511, 0, 1)">
             <div className="devsign-hero-media">
               {hero.clip
                 ? <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} />
