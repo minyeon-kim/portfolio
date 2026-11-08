@@ -7650,3 +7650,31 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .devsign-hero.dh-cover[data-project="devsign"] .dh-cover-plate .devsign-hero-media { width: 92%; margin-left: auto; }
   .devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-cover-plate .devsign-hero-phone { left: 50%; }
 }
+
+/* Interview: participants as a compact row, then one card per question with what we heard. */
+.dv-ivc { margin-top: 64px; }
+.dv-ivc-label { margin: 0 0 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-ivc-people { margin-bottom: 72px; }
+.dv-ivc-people ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.dv-ivc-people li { display: grid; gap: 2px; padding: 16px 18px; border-radius: 16px; background: color-mix(in srgb, var(--dv-ink) 5%, transparent); transition: background-color 250ms var(--ease), opacity 250ms var(--ease); }
+.dv-ivc-people li b { color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-ivc-people li span { color: var(--dv-ink); font-size: 18px; font-weight: 500; }
+.dv-ivc-people li small { color: var(--dv-muted); font-size: 16px; }
+.dv-ivc-people li[data-on] { background: color-mix(in srgb, var(--case-accent) 18%, transparent); }
+.dv-ivc-people li[data-dim] { opacity: 0.45; }
+.dv-ivc-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-ivc-cards li { display: flex; flex-direction: column; padding: 28px; border-radius: 16px; background: color-mix(in srgb, var(--dv-ink) 5%, transparent); outline: none; transition: background-color 250ms var(--ease), translate 250ms var(--ease); }
+.dv-ivc-cards li:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--case-accent) 10%, transparent); translate: 0 -2px; }
+.dv-ivc-cards li:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.dv-ivc-num { margin: 0; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.dv-ivc-key { margin: 12px 0 0; color: var(--dv-ink); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.25; word-break: keep-all; }
+.dv-ivc-q { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-ivc-answer { margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-ivc-quote { margin: 12px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.55; word-break: keep-all; }
+.dv-ivc-who { margin: auto 0 0; padding-top: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+@media (max-width: 63.99rem) { .dv-ivc-cards { grid-template-columns: 1fr; } .dv-ivc-people ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .dv-ivc-cards li:hover { translate: none; } }
+@media (min-width: 64rem) {
+  .dv-ivc-cards li { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; }
+  .dv-ivc-who { align-self: end; }
+}

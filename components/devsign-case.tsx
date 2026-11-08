@@ -2,6 +2,7 @@ import Image from "next/image";
 import { GlanceSteps } from "./glance-steps";
 import type { CSSProperties, ReactNode } from "react";
 import { SurveyCharts } from "@/components/devsign-survey-charts";
+import { InterviewCards } from "@/components/interview-cards";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
@@ -142,7 +143,9 @@ function Insights({ discover }: { discover: Study }) {
             </div>
           </figure>
         </div>
-        {/* What we wanted to learn and who we met; the insights live in Define (owner). */}
+        {interview.answers ? (
+          <InterviewCards keys={interview.questionKeys} questions={interview.questions} answers={interview.answers} participants={interview.participants} peopleLabel={interview.peopleLabel} questionsLabel={interview.answersLabel ?? interview.questionsLabel} />
+        ) : (
         <div className="dv-iv-rows">
           <section className="dv-iv-row reveal">
             <h4 className="dv-iv-rowlabel">{interview.questionsLabel}</h4>
@@ -161,6 +164,7 @@ function Insights({ discover }: { discover: Study }) {
             </ul>
           </section>
         </div>
+        )}
       </div>
     </div>
   );
