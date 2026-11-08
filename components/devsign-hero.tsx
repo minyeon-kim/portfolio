@@ -1,14 +1,9 @@
-import Image from "next/image";
-import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { HeroClip } from "@/components/hero-clip";
 import { HeroShot } from "@/components/hero-shot";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DEVSIGN_URL, withBase } from "@/lib/site";
-
-// Devsign wordmark face, as in the Figma hero.
-const wordmark = Space_Grotesk({ weight: "700", subsets: ["latin"], display: "swap" });
 
 export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; clip?: { src: string; poster: string; label: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
@@ -25,14 +20,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
   return (
     <div className="devsign-hero dh-cover" data-project={project}>
       <div className="devsign-hero-intro">
-        <p className="devsign-hero-brand">
-          {gemini
-            ? <Image src={withBase("/images/cases/gemini-privacy/gemini-logo.png")} alt="" width={40} height={40} />
-            : <Image src={withBase("/images/devsign/devsign-logo.svg")} alt="" width={42} height={40} />}
-          <span className={gemini ? undefined : wordmark.className}>{name}</span>
-        </p>
-        <h1 tabIndex={-1} className="devsign-hero-title">{hero.title}</h1>
-        {hero.subtitle && <p className="devsign-hero-subtitle">{hero.subtitle}</p>}
+        <h1 tabIndex={-1} className="devsign-hero-title" translate="no">{name}</h1>
         {hero.actions && (
           <p className="devsign-hero-actions">
             {hero.actions.map((a) => (
