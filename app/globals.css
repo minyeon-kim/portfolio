@@ -7904,5 +7904,3 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li .dv-gs-name { color: var(--dv-muted); font-size: 16px; font-weight: 400; }
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: 20px; letter-spacing: -0.01em; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-headline, .dv-finding) { letter-spacing: -0.02em; }
-/* The Devsign monitor sits near the top of its photo, so its camera push grows from there and doesn't cut the display. */
-.devsign-hero.dh-cover[data-project="devsign"] .dh-shot-camera { transform-origin: 50% 6%; }

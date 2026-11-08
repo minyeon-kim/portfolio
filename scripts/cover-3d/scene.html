@@ -18,7 +18,7 @@ const pl=P.pl;
 const g=new THREE.ExtrudeGeometry(sh2,{depth:pl[1],bevelEnabled:true,bevelThickness:.012,bevelSize:.012,bevelSegments:4,curveSegments:32});g.rotateX(Math.PI/2);
 const o=new THREE.Mesh(g,[M(P.plc,.55),M(P.pls,.7)]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=o.receiveShadow=true;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
-const sw=1.92,sh=1.43,bz=.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
+const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
 const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.glow*.8;}
 add(new THREE.BoxGeometry(bw+.012,bh+.012,th),silver,[0,0,-th/2-.006],mon);
 add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
