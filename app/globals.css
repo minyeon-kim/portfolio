@@ -7486,3 +7486,22 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .devsign-hero:has(> .devsign-hero-panel) { padding-bottom: 0; }
 .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: clamp(32px, 4svh, 48px); }
 @media (max-width: 47.99rem) { .devsign-hero-panel > .devsign-hero-details { margin-top: 32px; } .devsign-hero-panel:has(> .devsign-hero-details) { padding-bottom: 32px; } }
+
+/* Double Diamond, still (owner: too much moving): stage names never move, only
+   their colour changes; the methods sit in their own reserved line under the
+   diagram, above the outcome, and only fade in. The tint changes in 400ms. */
+@media (min-width: 90rem) and (hover: hover) {
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages a { display: flex; flex-direction: column; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-name > span,
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li[data-show] .dv-dd-name > span,
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages a:is(:hover, :focus-visible) .dv-dd-name > span { opacity: 1; transform: none; transition: none; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-methods { position: static; order: 2; aspect-ratio: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 4px 14px; min-height: 76px; height: auto; margin: 20px 0 0; white-space: normal; font-size: 16px; line-height: 1.4; opacity: 0; transform: none; transition: opacity 250ms var(--ease); }
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li:nth-child(odd) .dv-dd-methods { padding: 0 2% 0 22%; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li:nth-child(even) .dv-dd-methods { padding: 0 22% 0 2%; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-outcome { order: 3; margin-top: 8px; }
+  .dv-dd.dv-dd.dv-dd .dv-dd-pivot { order: 4; }
+  .dv-dd.dv-dd.dv-dd:not([data-held]) .dv-dd-stages li[data-show] .dv-dd-methods,
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages a:is(:hover, :focus-visible) .dv-dd-methods { opacity: 1; }
+  .dv-dd .dv-dd-half { transition: fill 400ms var(--ease), opacity 700ms var(--ease) 700ms; }
+}
+@media (prefers-reduced-motion: reduce) { .dv-dd.dv-dd.dv-dd .dv-dd-methods { transition: none; } }
