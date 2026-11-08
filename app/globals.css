@@ -7857,3 +7857,9 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: 22px; font-weight: 400; line-height: 1.45; }
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-name { font-size: 18px; }
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { padding-block: 24px; align-items: baseline; }
+
+/* Interview quotes, calmer (owner: still looked off): quote 20px, who right under it, no
+   participant chip row (the line under the heading says who was interviewed). */
+.dv-ivc-quotes blockquote { font-size: 20px; line-height: 1.6; }
+.dv-ivc-quotes .dv-ivc-who { margin: 0; padding-top: 0; }
+.dv-ivc-quotes li { gap: 12px; }
