@@ -590,7 +590,6 @@ type Problem = { title: string; body: string };
 export function ProblemPanels({ items, children }: { items: Problem[]; children?: React.ReactNode }) {
   return (
     <div className="dv-panels-wrap">
-      <HeldFlow count={items.length}>
       {children}
       <ol className="dv-panels reveal">
         {items.map((item, i) => (
@@ -603,7 +602,6 @@ export function ProblemPanels({ items, children }: { items: Problem[]; children?
           </li>
         ))}
       </ol>
-      </HeldFlow>
     </div>
   );
 }
