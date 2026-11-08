@@ -7449,6 +7449,13 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 @media (prefers-reduced-motion: reduce) { .dv-vpc-mark, .dv-vpc-num, .dv-vpc-row { transition: none; } }
 .case-study .dv .dv-vpc-row b.dv-vpc-num { color: var(--dv-ink); font-size: 16px; line-height: 1; }
 .case-study .dv .dv-vpc-row[data-on] b.dv-vpc-num { color: #fff; }
+/* Key pairs read as a plain table: three equal columns on one text size; the headers already say the order, so no arrows. */
+@media (min-width: 48rem) {
+  .case-study .dv .dv-vpc-head, .case-study .dv .dv-vpc-row { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 48px; align-items: start; }
+  .case-study .dv .dv-vpc-head { color: var(--dv-muted); font-weight: 400; }
+  .case-study .dv .dv-vpc-row .dv-vpc-arrow, .case-study .dv .dv-vpc-head [aria-hidden="true"]:empty { display: none; }
+  .case-study .dv .dv-vpc-row :is(p, b[role="cell"]) { font-size: 18px; line-height: 1.5; }
+}
 
 /* Iteration 1: the clip that isn't playing steps back (dimmed, grey, muted caption), so the one
    playing, To-be once As-is has run, is what the eye lands on. */
