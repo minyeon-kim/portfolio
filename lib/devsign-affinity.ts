@@ -35,7 +35,7 @@ export const AFF_PEOPLE: Record<string, L> = {
 
 export const AFF_THEMES: AffTheme[] = [
   {
-    name: { ko: "실시간 협업/소통", en: "Real-time collaboration" },
+    name: { ko: "실시간 협업", en: "Real-time collaboration" },
     insight: {
       ko: "협업의 문제는 단순히 실시간 소통이 부족해서가 아니라, 피드백·정보·의사결정이 작업 맥락과 연결되지 않은 채 분산되는 데 있다.",
       en: "Collaboration breaks not from too little real-time talk, but because feedback, information and decisions scatter, cut off from the work.",
@@ -52,7 +52,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "버전/시안/최종본 관리", en: "Versions, options & finals" },
+    name: { ko: "버전·최종본", en: "Versions, options & finals" },
     insight: {
       ko: "버전 관리의 핵심은 파일을 저장하는 것이 아니라 ‘어떤 버전이 왜 최종 선택되었는지’를 관리하는 것이다.",
       en: "Version control isn't about saving files. It's about managing which version was chosen as final, and why.",
@@ -94,7 +94,7 @@ export const AFF_THEMES: AffTheme[] = [
     },
     subs: [
       { name: { ko: "인간의 최종 검증·판단 필요", en: "A person still has to check" }, types: "aaatataptttntp", people: "22222244124124" },
-      { name: { ko: "AI 정확도·복잡한 상황 처리의 한계", en: "AI accuracy in complex cases" }, types: "tfapa", people: "22244" },
+      { name: { ko: "AI의 한계", en: "AI accuracy in complex cases" }, types: "tfapa", people: "22244" },
       { name: { ko: "반복 수정·수동 작업 부담", en: "Repeated fixes by hand" }, types: "pppppftap", people: "311122221" },
     ],
     quotes: [
@@ -104,7 +104,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "직군 간 경계 흐려짐", en: "Blurred role lines" },
+    name: { ko: "역할 경계", en: "Blurred role lines" },
     insight: {
       ko: "AI로 직군 간 실행 영역은 빠르게 겹치고 있지만, 역할과 책임 기준은 이를 따라가지 못하면서 협업 과정의 충돌과 재작업이 발생하고 있다.",
       en: "Roles overlap fast, but ownership hasn't caught up, causing conflicts and rework.",
@@ -121,7 +121,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "업무 툴 파편화", en: "Tool sprawl" },
+    name: { ko: "도구 분산", en: "Tool sprawl" },
     insight: {
       ko: "AI 도구는 이미 업무 전반에 빠르게 확산됐지만, 목적별로 분산 사용되면서 오히려 협업 맥락과 업무 흐름의 파편화를 심화시키고 있다.",
       en: "AI tools scattered by purpose actually break collaboration context and workflow further.",
@@ -137,13 +137,13 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "AI 사용 한계", en: "AI limits" },
+    name: { ko: "AI의 한계", en: "AI limits" },
     insight: {
       ko: "AI는 반복적이고 명확한 작업에서는 효율적이지만, 복잡한 맥락·예외 상황을 안정적으로 처리하지 못해 결국 사람의 검토와 수정이 필요하다. 비용까지 누적되면서 선택적으로 활용된다.",
       en: "AI works for repetitive, clear tasks, but people still review complex cases. With cost on top, it's used selectively.",
     },
     subs: [
-      { name: { ko: "AI 사용 한계", en: "Limits of AI output" }, types: "paptptppppaptpt", people: "441412214344434" },
+      { name: { ko: "AI의 한계", en: "Limits of AI output" }, types: "paptptppppaptpt", people: "441412214344434" },
       { name: { ko: "AI 비용 문제", en: "AI cost" }, types: "pppppt", people: "221112" },
     ],
     quotes: [

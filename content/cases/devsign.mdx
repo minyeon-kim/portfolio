@@ -53,8 +53,8 @@ export const study = {
       label: "At a glance",
       items: [
         { tone: "red", label: "Problem", title: "Teams pick a draft in chat, and differences from the design show up only after release." },
-        { tone: "accent", label: "Solution", title: "One place to combine the best parts of several drafts, send each difference to the person who decides, and save the decision with its screen." },
-        { tone: "teal", label: "Impact", title: "Both testers expected fewer questions about design vs. code (5/5)." },
+        { tone: "accent", label: "Solution", title: "One place to combine the best parts of several drafts, send each difference from the design to the decision-maker (the person who signs off on that change, usually the designer), and save the decision with its screen." },
+        { tone: "teal", label: "Impact", title: "Both testers gave 5 out of 5 to “we’ll ask less often why design and code differ.”" },
       ],
     },
     headline: "AI made making faster,",
@@ -65,7 +65,7 @@ export const study = {
       stages: [
         { name: "Discover", outcome: "AI sped up the work, but the reasons behind decisions weren’t kept.", methods: ["Secondary research", "Comparative", "Interviews"] },
         { name: "Define", outcome: "We narrowed it to four key problems.", methods: ["Affinity map", "Personas", "Journey map"] },
-        { name: "Develop", outcome: "We cut 5 feature candidates to 4.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
+        { name: "Develop", outcome: "We grouped ideas into 5 feature candidates, then cut them to 4.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
         { name: "Deliver", outcome: "A prototype, changed twice after a test and a co-design.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
     },
@@ -85,7 +85,7 @@ export const study = {
     desk: {
       method: "Secondary research",
       title: "Secondary research",
-      lead: "The slow part is no longer making things. It’s checking them.",
+      lead: "AI made making faster, but checking the result now takes even more time.",
     },
     q1: {
       chartLabels: { charts: "Survey charts", pause: "Pause charts", play: "Play charts" },
@@ -106,7 +106,7 @@ export const study = {
         {
           type: "bars",
           tab: "Biggest frustration",
-          title: "Developers’ top frustration: AI output that looks right but has small mistakes hidden in it. Finding them means checking everything again.",
+          title: "Developers’ top frustration: AI output that looks right but is wrong in places (66%).",
           bars: [
             { label: "Looks right, but has hidden mistakes", value: 66 },
             { label: "Fixing AI code takes longer", value: 45.2 },
@@ -133,7 +133,7 @@ export const study = {
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
       rows: [
-        { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs" },
+        { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs from the design" },
         { type: "Design vs build", tools: "OverlayQA, Uiprobe", solves: "Finding where they differ", gap: "The decision after finding it" },
         { type: "Review and approval", tools: "Chromatic, GitHub", solves: "Approving changes, checking before code is merged", gap: "Checking against what the design meant" },
         { type: "AI generation and shared work", tools: "Magic Patterns, Framer", solves: "Making drafts, merging branches", gap: "Combining drafts area by area, with the reason kept on the screen" },
@@ -143,9 +143,9 @@ export const study = {
       label: "Analysis",
       title: "AI sped up the work, but the reasons behind decisions weren’t kept.",
       rows: [
-        { stage: "Plan", gap: "AI drafts come before the need is decided." },
+        { stage: "Plan", gap: "AI drafts get made before anyone decides what’s needed." },
         { stage: "Design", gap: "No one records why one option was picked." },
-        { stage: "Build", gap: "The reason for a change isn’t kept." },
+        { stage: "Build", gap: "When the code drifts from the design, no one records why." },
         { stage: "Ship", gap: "Mismatches surface after launch." },
       ],
     },
@@ -184,7 +184,7 @@ export const study = {
     personas: {
       method: "User definition",
       title: "Persona & user journey map",
-      lead: "Designers and developers get stuck at different moments, but for the same reason.",
+      lead: "Designers and developers get stuck at different moments, for the same reason: no one knows why things changed.",
       people: [
         {
           role: "Designer",
@@ -227,7 +227,7 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       label: "Affinity mapping",
-      lead: "What teams agreed on in chat never stayed with the work.",
+      lead: "What teams agreed on in chat never made it into the actual work (design and code).",
       funnel: [["201", "interview quotes"], ["7", "themes"], ["4", "problems"]],
       themesLabel: "Themes",
       groups: [["Real-time collaboration", "#ffafa3", 8], ["Versions & finals", "#ffe299", 5], ["Shared context", "#b3efbd", 12], ["Manual review", "#a6ece4", 7], ["Blurred role lines", "#a8daff", 7], ["Tool sprawl", "#d3bdff", 9], ["AI limits", "#ffb6d9", 6]],
@@ -258,7 +258,7 @@ export const study = {
       lead: "Sorting the seven themes left four core problems.",
       lowest: "Lowest point",
       items: [
-        { title: "Work status is scattered", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Tool sprawl", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
+        { title: "Work status is scattered across tools", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Tool sprawl", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
         { title: "Drafts can’t be combined", body: "There are several AI drafts, but no way to take the best part of each and put them together.", themes: ["Versions"], quote: ["They said there’s no such thing as saving a B option separately.", "P03"], role: "Designer", from: "Versions, options & finals (14)" },
         { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", themes: ["Role lines", "Manual review"], quote: ["On our team, developers hold most of the initiative.", "P03"], role: "Designer · PO", from: "Blurred role lines (28) · Manual review (28)", lowest: true },
         { title: "Reasons get lost", body: "Why it changed, who decided, and whether the code was updated all live in different places.", themes: ["Shared context"], quote: ["If it seems too minor to mention, I sometimes find out about it later.", "P03"], role: "Designer · Developer", from: "Shared context (48)" },
@@ -281,8 +281,8 @@ export const study = {
     canvas: {
       method: "Ideation",
       title: "Value proposition canvas",
-      lead: "We matched each idea to a pain from the interviews and merged those that solved the same one, leaving five feature candidates.",
-      pairsCaption: "↑ Three key pairs from the canvas, and the features they became",
+      lead: "We paired each idea with one pain from the interviews, then grouped ideas that solved the same pain into five feature candidates.",
+      pairsCaption: "↑ The three pairs from the canvas that became features",
       candidatesLabel: "Feature candidates and the pain points they address",
       candidates: [
         { id: "A", name: "Decision log & history", kind: "Pain", pain: "The reasons behind results get lost.", to: "History", from: [3964, 1687, 323, 186], relief: [852, 1904, 240, 240] },
@@ -310,7 +310,7 @@ export const study = {
       label: "4 core features",
       solves: "Solves",
       items: [
-        { problem: "Work status is scattered", feature: "Live Workspace", from: "From directions D + E" },
+        { problem: "Work status is scattered across tools", feature: "Live Workspace", from: "From directions D + E" },
         { problem: "Drafts can’t be combined", feature: "Merge Studio", from: "From direction C" },
         { problem: "No one knows who decides", feature: "Conflict Points", from: "From direction B" },
         { problem: "Reasons get lost", feature: "History", from: "From direction A" },
@@ -320,7 +320,7 @@ export const study = {
       method: "Structure",
       title: "Information architecture",
       lead: "All the work in one workspace, with decisions in a panel beside it.",
-      text: "The views are Preview, Screens and Code. Merging and decisions open beside them, and every decision is saved in History.",
+      text: "Work is viewed in three tabs: Preview, Screens and Code. Merging and decisions open beside them, and every decision is saved in History.",
       more: "See the full structure",
       moreHref: "/work/devsign/handoff/#ia",
       fullTitle: "Information architecture, in full",
@@ -342,7 +342,7 @@ export const study = {
       method: "Structure",
       title: "User flow",
       lead: "Who does what, in two situations.",
-      text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker decides. All three see the same change request screen.",
+      text: "The designer combines drafts, the developer fixes or asks for a decision, and the decision-maker makes the final call. All three work in the same change review screen.",
       chart: {
         label: "User flow. When the designer combines AI drafts: compare the drafts and pick each area; if it fits the design rules it is saved or sent for review, if not it goes to the developer's change review. When the build differs from the design: the developer writes a fix; if it isn't a design decision they fix it directly; if it is, the decision-maker compares and decides on the same screen, the developer applies and verifies it, and it stays in History. The steps are in the list below.",
         a: "A. When the designer combines AI drafts",
@@ -373,10 +373,10 @@ export const study = {
   deliver: {
     details: {
       label: "UI details",
-      lead: "Up close, asking for a review, deciding and keeping the record each happen on one screen.",
+      lead: "Asking for a review, deciding and keeping the record each happen on one screen, without switching.",
       items: [
         { title: "Ask the right people, right where you combined it", body: "After combining drafts, the designer picks who should check the result and can add a note, without leaving the merge.", src: "/images/devsign/detail-request-en.webp", width: 852, height: 760, alt: "Select reviewers popover with Jordan checked, Alex unchecked, an optional note field and a Send review request button" },
-        { title: "Both values side by side, and a reason before sending", body: "The designer sees the value in the code next to the value in the design. The reason field is required, so every decision says why.", src: "/images/devsign/detail-decide-en.webp", width: 926, height: 681, alt: "Decision panel showing height 40px kept against 44px in the design, background #7c3aed against color.primary, a required reason field and a Fix to the design Send button" },
+        { title: "Both values side by side, and a reason before sending", body: "The designer sees the current code value (40px) next to the design value (44px). The reason field is required, so every decision says why.", src: "/images/devsign/detail-decide-en.webp", width: 926, height: 681, alt: "Decision panel showing height 40px kept against 44px in the design, background #7c3aed against color.primary, a required reason field and a Fix to the design Send button" },
         { title: "The decision goes into History", body: "It lands at the top of History with who made it and when, above the edits that led to it.", src: "/images/devsign/detail-history-en.webp", width: 408, height: 616, alt: "History list with Design decision: Fix to the design at the top, then earlier edits by Jordan, Devsign auto-fix and Alex" },
       ],
     },
@@ -409,7 +409,7 @@ export const study = {
         kicker: "Feature 03 · Developer → decision-maker",
         title: "Conflict Points",
         clip: { src: "/images/devsign/clips/en-conflict.mp4", poster: "/images/devsign/clips/en-conflict-poster.jpg", marks: [1.22, 2.76, 3.98] },
-        body: "Points out where the app differs from the design, and who decides.",
+        body: "A pin marks where the build differs from the design, and the decision-maker picks which to keep.",
         points: ["A pin on every changed spot", "The developer asks, with a reason", "Compare with the design, then decide"],
         src: "/images/devsign/screen-conflict-points.webp", width: 1280, height: 800,
         alt: "Conflict Points: a flagged difference between design and build, with the developer's reason and decision controls",
@@ -426,7 +426,7 @@ export const study = {
         areas: [[4, 15, 21.5, 42], [31.5, 16.5, 41, 5], [47.5, 13.5, 9.5, 3.5]],
       },
     ],
-    spec: {"more":"Read the full handoff spec →","moreHref":"/work/devsign/handoff/","label":"Handoff spec","lead":"For each screen, we wrote down what every control does and when it’s disabled.","screensLabel":"Screen by screen","cols":{"name":"Element","does":"Behavior","state":"States and exceptions"},"shared":"Shared: controls 32px tall, card corners 12px, primary button #5EEAB5 with #0A0A0A text, 12px between regions.","open":"Still open: the prototype runs on fake data, so how it looks while loading, when sending fails, or on narrow screens isn’t decided yet.","screens":[{"id":"merge","tab":"Merge Studio","alt":"Merge Studio: the checkout screen on the canvas, region tabs and draft cards on the right, the merge request button at the bottom","rows":[["Region tabs","Press to show that region's drafts.","A picked region shows its draft letter (A–D) beside the name."],["Draft cards","Hover to preview on the canvas, press to apply.","The applied card shows “In use” and a mint outline."],["Selected region on canvas","Tagged with its name and draft letter. The tools beside it reorder, duplicate and delete.","Moving past the end is disabled. Duplicate ⌘D, delete ⌫."],["Undo and redo","Step back or forward through the mix.","Disabled when there's nothing to undo or redo."],["Compare all drafts","Switches from picking by region to comparing whole drafts.","-"],["Count and Merge request","Press to open the review request.","Disabled (40% opacity) until every region is picked. “4/4 Select” and any remaining checks sit to its left."]],"src":"/images/devsign/handoff-merge-en.webp","pins":[[65.6,20.8],[65.6,30],[30.6,56],[44.2,95.1],[96.5,16],[87.8,96]],"purpose":"Combine several AI drafts into one screen, region by region.","accept":["Merge request can’t be pressed until every region has a draft.","Pressing a draft card applies it to the canvas and marks it “In use”.","The picked count is announced to screen readers as it changes."],"tokens":["Controls `--ds-control-height` 32px","Main button `--ds-primary` #5EEAB5, text #0A0A0A","Disabled at 40% opacity"],"code":[["MergeStudioWorkspace.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MergeStudioWorkspace.jsx"],["BlockDeckPanel.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/BlockDeckPanel.jsx"],["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L5-L30"]]},{"id":"request","tab":"Review request","alt":"The review request popover above the merge request button: reviewer checkboxes, a note and a send button","rows":[["Reviewers","Pick with checkboxes.","Jordan is on by default. It can't be sent with nobody picked."],["Note","A message for the reviewer.","Optional."],["Send review request","Sends the request and closes the popover.","Disabled with no reviewer. Remaining checks show as a warning but don't block it. Afterwards the button becomes “Merge requested”."]],"src":"/images/devsign/handoff-request-en.webp","pins":[[77.2,71.6],[77.2,82.6],[77.2,90.5]],"purpose":"Send the combined screen to a reviewer.","accept":["It can’t be sent with no reviewer.","Remaining checks show as a warning and don’t block sending.","Sending closes the popover and the button becomes “Merge requested”."],"tokens":["Controls `--ds-control-height` 32px","Main button `--ds-primary` #5EEAB5, text #0A0A0A","Disabled at 40% opacity"],"code":[["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L19-L28"]]},{"id":"decide","tab":"Conflict Points decision","alt":"The change detail for the order button: the request, current and design values, a reason field and decision buttons","rows":[["The request","Shows who asked for what, and why.","Read only."],["Current and design values","Each property's code value beside its design token.","For example height 40px, design 44px (button.height.lg)."],["Reason","Why this decision was made.","Required for Ask for changes and Fix to the design; if empty, “Enter a reason” sits beside Send. Approve goes in one press with no reason."],["Ask for changes, Fix to the design","Press to select, press again to clear. Ask for changes requests another fix from the requester; Fix to the design fixes the code to match.","With neither selected, the button on the right is Approve."],["Apply later","Pick before release or next version.","Not offered for Ask for changes."],["Send","Passes the decision to the requester and saves it to the approval history.","Its label follows the choice. Afterwards the flow moves on to Fix · Verify."]],"src":"/images/devsign/handoff-decide-en.webp","pins":[[14.7,45],[13.6,68.5],[14.7,88],[14.7,94.6],[68.9,94.6],[90.6,94.6]],"purpose":"When the built app differs from the design, decide which one stays, and keep why.","accept":["With nothing selected the button is Approve, and it sends in one press.","Ask for changes and Fix to the design can’t be sent with an empty reason; spaces alone count as empty.","Pressing a selected choice again clears it.","Apply later isn’t offered for Ask for changes."],"tokens":["Controls `--ds-control-height` 32px","Main button `bg-emerald-400`, text `slate-950`. It differs from `--ds-primary` and should move to it","Other buttons white 6%, selected white 16%"],"code":[["DesignDecisionFlow.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/conflicts/DesignDecisionFlow.jsx#L1100-L1177"],["designDecisions.js","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/lib/designDecisions.js#L4"]]},{"id":"history","tab":"History","alt":"History: the version list with the new decision on top, and that version's screen with playback controls on the right","rows":[["Version entry","Press to open that version on the right.","The decision just sent lands on top, with title, person, kind and time."],["Search and filters","Search, or narrow by kind or file.","Playback narrows with them."],["Check change, Details","Check change opens the evidence; Details unfolds the reason.","-"],["View and compare","Switch between Screen, Code or both, and pick what to compare with.","Compares with the previous version by default."],["Restore this version","Opens the restore dialog.","Disabled on the current version. Restoring erases nothing: it lands as a new version."],["Playback","Play through versions or step one at a time.","← and → work too. Previous and Next are disabled at the ends."]],"src":"/images/devsign/handoff-history-en.webp","pins":[[4,20],[2.9,11.7],[33.7,13],[24.6,17],[81.8,9.8],[51.2,95]],"purpose":"Find what was decided, by whom and why, and go back to it.","accept":["A decision just sent appears at the top of the list.","The current version can’t be restored.","Restoring erases nothing: it lands as a new version."],"tokens":["Controls `--ds-control-height` 32px","Panels `--ds-surface-card` #121212","Card corners `--ds-radius-card` 12px"],"code":[["HistoryOverlay.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryOverlay.jsx"],["HistoryTimeline.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryTimeline.jsx"],["HistoryCompare.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryCompare.jsx"],["RollbackCheckpointModal.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/RollbackCheckpointModal.jsx"]]}],"pageLead":"For whoever builds this next. Written from the prototype as it stands, not from the early planning documents.","back":"← Back to the Devsign case","basis":["Based on prototype commit 1fc6ef5 (2026-10-29). If this page and the code disagree, the code is right. The code runs on mock data, so use it as a reference for behavior, not as production code.","See the commit","https://github.com/minyeon-kim/devsign/tree/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c","design.md (tokens)","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/design.md"],"labels":{"play":"Play","pause":"Pause","accept":"Done when","tokens":"Tokens","code":"Code","elements":"Behavior","dev":"Tokens & code","states":"States"}},
+    spec: {"more":"Read the full handoff spec →","moreHref":"/work/devsign/handoff/","label":"Handoff spec","lead":"So developers could build it straight away, we wrote down what each control does and when it’s disabled, screen by screen.","screensLabel":"Screen by screen","cols":{"name":"Element","does":"Behavior","state":"States and exceptions"},"shared":"Shared: controls 32px tall, card corners 12px, primary button #5EEAB5 with #0A0A0A text, 12px between regions.","open":"Still open: the prototype runs on fake data, so how it looks while loading, when sending fails, or on narrow screens isn’t decided yet.","screens":[{"id":"merge","tab":"Merge Studio","alt":"Merge Studio: the checkout screen on the canvas, region tabs and draft cards on the right, the merge request button at the bottom","rows":[["Region tabs","Press to show that region's drafts.","A picked region shows its draft letter (A–D) beside the name."],["Draft cards","Hover to preview on the canvas, press to apply.","The applied card shows “In use” and a mint outline."],["Selected region on canvas","Tagged with its name and draft letter. The tools beside it reorder, duplicate and delete.","Moving past the end is disabled. Duplicate ⌘D, delete ⌫."],["Undo and redo","Step back or forward through the mix.","Disabled when there's nothing to undo or redo."],["Compare all drafts","Switches from picking by region to comparing whole drafts.","-"],["Count and Merge request","Press to open the review request.","Disabled (40% opacity) until every region is picked. “4/4 Select” and any remaining checks sit to its left."]],"src":"/images/devsign/handoff-merge-en.webp","pins":[[65.6,20.8],[65.6,30],[30.6,56],[44.2,95.1],[96.5,16],[87.8,96]],"purpose":"Combine several AI drafts into one screen, region by region.","accept":["Merge request can’t be pressed until every region has a draft.","Pressing a draft card applies it to the canvas and marks it “In use”.","The picked count is announced to screen readers as it changes."],"tokens":["Controls `--ds-control-height` 32px","Main button `--ds-primary` #5EEAB5, text #0A0A0A","Disabled at 40% opacity"],"code":[["MergeStudioWorkspace.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MergeStudioWorkspace.jsx"],["BlockDeckPanel.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/BlockDeckPanel.jsx"],["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L5-L30"]]},{"id":"request","tab":"Review request","alt":"The review request popover above the merge request button: reviewer checkboxes, a note and a send button","rows":[["Reviewers","Pick with checkboxes.","Jordan is on by default. It can't be sent with nobody picked."],["Note","A message for the reviewer.","Optional."],["Send review request","Sends the request and closes the popover.","Disabled with no reviewer. Remaining checks show as a warning but don't block it. Afterwards the button becomes “Merge requested”."]],"src":"/images/devsign/handoff-request-en.webp","pins":[[77.2,71.6],[77.2,82.6],[77.2,90.5]],"purpose":"Send the combined screen to a reviewer.","accept":["It can’t be sent with no reviewer.","Remaining checks show as a warning and don’t block sending.","Sending closes the popover and the button becomes “Merge requested”."],"tokens":["Controls `--ds-control-height` 32px","Main button `--ds-primary` #5EEAB5, text #0A0A0A","Disabled at 40% opacity"],"code":[["MixFinishFooter.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/mergestudio/MixFinishFooter.jsx#L19-L28"]]},{"id":"decide","tab":"Conflict Points decision","alt":"The change detail for the order button: the request, current and design values, a reason field and decision buttons","rows":[["The request","Shows who asked for what, and why.","Read only."],["Current and design values","Each property's code value beside its design token.","For example height 40px, design 44px (button.height.lg)."],["Reason","Why this decision was made.","Required for Ask for changes and Fix to the design; if empty, “Enter a reason” sits beside Send. Approve goes in one press with no reason."],["Ask for changes, Fix to the design","Press to select, press again to clear. Ask for changes requests another fix from the requester; Fix to the design fixes the code to match.","With neither selected, the button on the right is Approve."],["Apply later","Pick before release or next version.","Not offered for Ask for changes."],["Send","Passes the decision to the requester and saves it to the approval history.","Its label follows the choice. Afterwards the flow moves on to Fix · Verify."]],"src":"/images/devsign/handoff-decide-en.webp","pins":[[14.7,45],[13.6,68.5],[14.7,88],[14.7,94.6],[68.9,94.6],[90.6,94.6]],"purpose":"When the built app differs from the design, decide which one stays, and keep why.","accept":["With nothing selected the button is Approve, and it sends in one press.","Ask for changes and Fix to the design can’t be sent with an empty reason; spaces alone count as empty.","Pressing a selected choice again clears it.","Apply later isn’t offered for Ask for changes."],"tokens":["Controls `--ds-control-height` 32px","Main button `bg-emerald-400`, text `slate-950`. It differs from `--ds-primary` and should move to it","Other buttons white 6%, selected white 16%"],"code":[["DesignDecisionFlow.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/conflicts/DesignDecisionFlow.jsx#L1100-L1177"],["designDecisions.js","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/lib/designDecisions.js#L4"]]},{"id":"history","tab":"History","alt":"History: the version list with the new decision on top, and that version's screen with playback controls on the right","rows":[["Version entry","Press to open that version on the right.","The decision just sent lands on top, with title, person, kind and time."],["Search and filters","Search, or narrow by kind or file.","Playback narrows with them."],["Check change, Details","Check change opens the evidence; Details unfolds the reason.","-"],["View and compare","Switch between Screen, Code or both, and pick what to compare with.","Compares with the previous version by default."],["Restore this version","Opens the restore dialog.","Disabled on the current version. Restoring erases nothing: it lands as a new version."],["Playback","Play through versions or step one at a time.","← and → work too. Previous and Next are disabled at the ends."]],"src":"/images/devsign/handoff-history-en.webp","pins":[[4,20],[2.9,11.7],[33.7,13],[24.6,17],[81.8,9.8],[51.2,95]],"purpose":"Find what was decided, by whom and why, and go back to it.","accept":["A decision just sent appears at the top of the list.","The current version can’t be restored.","Restoring erases nothing: it lands as a new version."],"tokens":["Controls `--ds-control-height` 32px","Panels `--ds-surface-card` #121212","Card corners `--ds-radius-card` 12px"],"code":[["HistoryOverlay.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryOverlay.jsx"],["HistoryTimeline.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryTimeline.jsx"],["HistoryCompare.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/HistoryCompare.jsx"],["RollbackCheckpointModal.jsx","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/src/components/history/RollbackCheckpointModal.jsx"]]}],"pageLead":"For whoever builds this next. Written from the prototype as it stands, not from the early planning documents.","back":"← Back to the Devsign case","basis":["Based on prototype commit 1fc6ef5 (2026-10-29). If this page and the code disagree, the code is right. The code runs on mock data, so use it as a reference for behavior, not as production code.","See the commit","https://github.com/minyeon-kim/devsign/tree/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c","design.md (tokens)","https://github.com/minyeon-kim/devsign/blob/1fc6ef562a083f4336ccb1b4a34a606e7a18b25c/design.md"],"labels":{"play":"Play","pause":"Pause","accept":"Done when","tokens":"Tokens","code":"Code","elements":"Behavior","dev":"Tokens & code","states":"States"}},
     handoff: {
       method: "Wireflow",
       title: "Wireflow",
@@ -450,7 +450,7 @@ export const study = {
     usability: {
       method: "Testing",
       title: "Usability test",
-      lead: "We tested the main tasks with one designer and one developer.",
+      lead: "One designer and one developer each did 7 tasks, twice.",
       processLabel: "Protocol",
       methodLabel: "How we ran the test",
       protocol: [
@@ -476,7 +476,7 @@ export const study = {
         {
           type: "rings",
           tab: "Usability score",
-          title: "The usability score (SUS, out of 100) came in at 55 and 75, both above our 51.7 goal.",
+          title: "Usability scores (SUS, out of 100) were 55 for the designer and 75 for the developer, both above our goal of 51.7. The usual average is 68.",
           items: [{ label: "Designer", value: 55 }, { label: "Developer", value: 75 }],
         },
         {
@@ -496,25 +496,25 @@ export const study = {
       method: "Iteration 1",
       title: "Split by role",
       label: "Iteration 1 · Conflict Points",
-      lead: "We split the review screen: one for designers, one for developers.",
-      text: "Both participants called the shared screen “the other team’s tool.”",
-      before: { src: "/images/devsign/iter1-as-is-en.webp", alt: "As-is: one review screen shared by the designer and the developer", text: "Both read numbers and code names to choose.", clip: { src: "/images/devsign/clips/iter1-en-asis.mp4", poster: "/images/devsign/clips/iter1-en-asis-poster.jpg" } },
+      lead: "We split the change review screen: one for designers, one for developers.",
+      text: "Both participants said the shared screen felt like “the other team’s tool.” They needed different information.",
+      before: { src: "/images/devsign/iter1-as-is-en.webp", alt: "As-is: one change review screen shared by the designer and the developer", text: "Even the designer had to read numbers and code names to choose.", clip: { src: "/images/devsign/clips/iter1-en-asis.mp4", poster: "/images/devsign/clips/iter1-en-asis-poster.jpg" } },
       after: { src: "/images/devsign/iter1-to-be-en.webp", alt: "To-be: a decision screen for the designer, separate from the developer's fix flow", text: "The designer compares pictures and picks one.", clip: { src: "/images/devsign/clips/iter1-en-tobe.mp4", poster: "/images/devsign/clips/iter1-en-tobe-poster.jpg" } },
     },
     iteration2: {
       method: "Iteration 2",
       title: "Co-design",
       label: "Iteration 2 · Live Workspace",
-      lead: "With a working designer, we removed the parts users had to stop and read.",
-      text: "In a co-design session we went through 5 screens one by one and agreed on what to remove.",
+      lead: "With a working designer, we removed the parts that only made sense after reading.",
+      text: "In a co-design session (fixing screens together with a working designer) we went through 5 screens one by one and agreed on what to remove.",
       photo: { src: "/images/devsign/codesign-session-blurred.webp", width: 1512, height: 688, alt: "Co-design session on a video call, reworking prototype screens together" },
       before: { src: "/images/devsign/iter2-as-is-en.webp", alt: "As-is: a four-panel developer layout", text: "A four-panel layout like a developer tool, showing everything at once." },
       after: { src: "/images/devsign/iter2-to-be-en.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "Three tabs and a board of app screens.", text: " The AI panel starts folded." },
-      changesLead: "The three changes we made.",
+      changesLead: "We changed three things.",
       changes: [
         { title: "Three tabs instead of four panels", before: "File tree, tabs and canvas all open at once.", after: "Preview, Screens and Code tabs; code is one tap away.", clip: { src: "/images/devsign/clips/iter-en-tabs.mp4", poster: "/images/devsign/clips/iter-en-tabs-poster.jpg", cut: 5.18 } },
         { title: "Every screen in flow order", before: "One screen on the canvas at a time.", after: "Every screen on one board, changes marked.", clip: { src: "/images/devsign/clips/iter-en-board.mp4", poster: "/images/devsign/clips/iter-en-board-poster.jpg", cut: 3.48 } },
-        { title: "AI when you ask for it", before: "The AI chat panel takes a third of the screen.", after: "Folded into one button at the top right.", clip: { src: "/images/devsign/clips/iter-en-ai.mp4", poster: "/images/devsign/clips/iter-en-ai-poster.jpg", cut: 4.35 } },
+        { title: "AI when you ask for it", before: "The AI chat panel takes a third of the screen.", after: "Folded by default; one button at the top right opens it.", clip: { src: "/images/devsign/clips/iter-en-ai.mp4", poster: "/images/devsign/clips/iter-en-ai-poster.jpg", cut: 4.35 } },
       ],
     },
   },
@@ -525,12 +525,12 @@ export const study = {
     review: [
       { title: "The problem starts after AI makes something", body: "Teams get stuck after AI makes something, so all four features help with that step." },
       { title: "How people named a screen showed a structure problem", body: "“The other team’s tool” was a sign that one screen was trying to serve two roles." },
-      { title: "Took things away instead of adding", body: "We tidied the workspace instead of adding features. The second version took two days." },
+      { title: "Took things away instead of adding", body: "We removed screens instead of adding features, which is why the second version took only two days." },
     ],
     next: {
       label: "Next step",
       title: "Run a second usability test on the revised screens.",
-      text: "Success goal 2, “every decision keeps its reason,” wasn’t measured in the first test. This one checks it.",
+      text: "The first test couldn’t check one goal, “does every decision keep its reason?” This one does.",
       chips: ["Checks the UI-only scope", "Uses real team data", "Measures success goal 2"],
     },
   },
@@ -540,6 +540,6 @@ export const study = {
 <TLDR>
 - **Problem** Designers and developers both use AI, but drafts and their reasons end up in different tools. Teams choose a version in chat, and differences from the design show up only after release.
 - **Solution** One workspace from comparing drafts to a recorded decision: combine drafts by area, send each mismatch to one decision-maker, and save each decision with its screen.
-- **Impact** Expected fewer questions about design vs. code (5/5). Both testers expected this. The revised screens aren’t retested yet.
+- **Impact** Both testers gave 5 out of 5 to “we’ll ask less often why design and code differ.”
 </TLDR>
 </DevsignCase>
