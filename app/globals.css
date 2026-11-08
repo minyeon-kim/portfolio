@@ -7897,3 +7897,5 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 }
 @keyframes dh-camera { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08) translateY(-0.6%); } }
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { transform: none; object-fit: cover; }
+/* Cover images are 2x with an alpha edge keyed at 4x, so the screen's slanted edges stay smooth while the camera moves. */
+.dh-shot-camera { will-change: auto; }
