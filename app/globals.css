@@ -7421,7 +7421,7 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
    clip about 660px, was 560) so the pair fits one screen and the UI still reads; label and line
    above each clip. Phones keep them stacked. */
 @media (min-width: 64rem) {
-  .case-study .dv .dv-iter-duo.dv-iter-duo { --duo-w: min(1640px, calc(100vw - 96px)); width: var(--duo-w); max-width: none; margin-left: calc(50% - var(--duo-w) / 2); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .case-study .dv .dv-iter-duo.dv-iter-duo { width: 100%; max-width: 1200px; margin-left: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 }
 .case-study .dv .dv-iter-duo.dv-iter-duo > .dv-iter-card { display: flex; flex-direction: column-reverse; justify-content: flex-end; }
 .case-study .dv .dv-iter-duo.dv-iter-duo > .dv-iter-card > figcaption { padding: 8px 12px 16px; }
