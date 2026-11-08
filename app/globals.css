@@ -7922,11 +7922,11 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     .about-gallery-row[data-split], .about-bridge > .about-statement { display: none; }
     .about-hero-track {
       /* c = final middle card; f = the line on the photo: middle 30% of the photo covering the stage, from just above her head (27% down). */
-      --c-h: min(44svh, 31vw); --c-w: calc(var(--c-h) * 0.72);
+      --c-h: min(44svh, 31vw); --c-w: calc(var(--c-h) * 0.8);
       --c-t: 40svh; --c-l: calc((100vw - var(--c-w)) / 2);
       --c-gap: clamp(8px, 0.9vw, 16px);
       --img-w: max(100vw, 127.06svh); --img-h: calc(var(--img-w) * 0.787);
-      --f-w: calc(var(--img-w) * 0.3); --f-h: calc(var(--f-w) / 0.72); --f-l: calc((100vw - var(--f-w)) / 2);
+      --f-w: calc(var(--img-w) * 0.3); --f-h: calc(var(--f-w) / 0.8); --f-l: calc((100vw - var(--f-w)) / 2);
       --f-t: calc(var(--img-h) * 0.27); --f-gap: clamp(16px, 2vw, 32px);
       height: 250svh; margin-top: -64px; view-timeline: --about-split block;
     }
@@ -7965,8 +7965,8 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 }
 /* The picture inside the middle card: exactly the hero's picture at rest, the wider crop that shows her whole at the end. */
 @keyframes about-split-window {
-  0%, 20% { left: -116.67%; top: -51%; width: 333.33%; }
-  70%, 100% { left: -69.05%; top: -35.08%; width: 238.1%; }
+  0%, 20% { left: -116.67%; top: -56.66%; width: 333.33%; }
+  70%, 100% { left: -69.05%; top: -38.98%; width: 238.1%; }
 }
 @keyframes about-split-frame {
   0% { opacity: 1; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.75); }
