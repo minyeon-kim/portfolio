@@ -62,7 +62,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
             </div>
           </HeroShot>
         ) : (
-          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1536} height={864} alt="" mediaWidth={1600} mediaHeight={1000}
+          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1536} height={864} alt="" mediaWidth={1600} mediaHeight={1000} crop={[250, 40, 1060, 560]}
             matrix="matrix3d(0.227428509, -0.0446161299, 0, -0.000139906447, 0.00190323839, 0.360608816, 0, 4.22661452e-06, 0, 0, 1, 0, 450.29855, 130.924427, 0, 1)">
             <div className="devsign-hero-media">
               <div className="devsign-hero-window">
