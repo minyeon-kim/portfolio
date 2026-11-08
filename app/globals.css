@@ -7863,3 +7863,6 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .dv-ivc-quotes blockquote { font-size: 20px; line-height: 1.6; }
 .dv-ivc-quotes .dv-ivc-who { margin: 0; padding-top: 0; }
 .dv-ivc-quotes li { gap: 12px; }
+/* The photo starts and ends as a plain rectangle, like metalab.com's cover (no fade into the page). */
+.devsign-hero.dh-cover[data-project="devsign"] .dh-shot { -webkit-mask-image: none; mask-image: none; }
+.devsign-hero.dh-cover { background: none; }
