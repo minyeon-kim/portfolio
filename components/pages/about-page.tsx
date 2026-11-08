@@ -74,12 +74,12 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
-    [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
+    [["side", 1800, 1547], ["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
     [["screen", 1280, 1600], ["laptop", 1800, 1200], ["hands", 1800, 1200]],
-    [["side", 1800, 1547], ["talk", 1800, 1200], ["desk", 2400, 1500]],
+    [["talk", 1800, 1200], ["desk", 2400, 1500]],
   ];
-  // The three photos the hero divides into while scrolling (desktop); the gallery's own row of them hides there.
-  const splitPhotos: [string, "left" | "center" | "right"][] = [["desk", "left"], ["side", "center"], ["talk", "right"]];
+  // The two photos that appear beside the profile photo while scrolling (desktop); the gallery's own row of them hides there.
+  const splitPhotos: [string, "left" | "right"][] = [["desk", "left"], ["talk", "right"]];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
 
   return (
@@ -90,19 +90,19 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
       <div className="about-hero-track">
       <header className="about-hero">
         <div className="about-split-sheet" aria-hidden="true" />
-        {splitPhotos.filter(([, side]) => side !== "center").map(([name, side]) => (
+        {splitPhotos.map(([name, side]) => (
           <figure key={name} className="about-split-card" data-side={side}>
             <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
           </figure>
         ))}
         <div className="about-hero-photo">
           <Image src={withBase(heroPhoto)} alt={c.portrait} fill sizes="100vw" priority />
-          {splitPhotos.filter(([, side]) => side === "center").map(([name]) => (
-            <figure key={name} className="about-split-center" data-photo={name}>
-              <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
-            </figure>
-          ))}
         </div>
+        {/* The part of the photo inside the line: it lifts off the photo and glides to the middle. */}
+        <div className="about-split-portrait" aria-hidden="true">
+          <Image src={withBase(heroPhoto)} alt="" width={2000} height={3000} sizes="100vw" />
+        </div>
+        <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
           <h1 tabIndex={-1} className="about-hero-title">
             {headline.map((line) => <span key={line} className="about-hero-line">{line} </span>)}

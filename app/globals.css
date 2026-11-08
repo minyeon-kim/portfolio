@@ -7907,69 +7907,67 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 /* The Devsign screen is the brightest thing on the cover (owner): the recording of a dark app is lifted a little. */
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { filter: brightness(1.32) contrast(1.05) saturate(1.1); }
 
-/* About hero divides into three photos with native scroll (after a Revolut reference): the stage holds while the
-   photo closes to a centre card, a page-coloured sheet rises behind it and two cards slide out from behind.
-   Desktop, motion allowed, scroll timelines only; everywhere else the plain hero, and the photos stay in the gallery. */
-.about-split-sheet, .about-split-card, .about-split-center { display: none; }
+/* Gemini opener: the name on two lines at Devsign's size, and a dark room where the phone is the only light (privacy: only you see the screen). */
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(64px, 8.4vw, 168px); line-height: .95; }
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-shot .dh-clip video { transform: none; }
+
+/* About hero divides with native scroll (after a Revolut reference). A thin line frames the face on the photo; two more
+   frames appear beside it; a page-coloured sheet rises over the photo while the framed part glides to the middle as
+   the centre of three cards. Desktop, motion allowed, scroll timelines only; elsewhere the plain hero and full gallery. */
+.about-split-sheet, .about-split-card, .about-split-portrait, .about-split-frame { display: none; }
 .about-hero-track + .about-body .about-bridge { padding-top: clamp(24px, 3vw, 48px); }
 @supports (animation-timeline: view()) {
   @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
     .about-gallery-row[data-split] { display: none; }
     .about-hero-track {
+      /* c = the final card; f = the frame on the photo: source x 2-34%, from 30% down, of a 2:3 photo at its hero crop. */
       --c-h: min(68svh, 44vw); --c-w: calc(var(--c-h) * 0.75);
       --c-t: calc((100svh - var(--c-h)) / 2); --c-l: calc((100vw - var(--c-w)) / 2);
       --c-gap: clamp(16px, 2vw, 32px);
-      height: 280svh; margin-top: -64px; view-timeline: --about-split block;
+      --f-w: 32vw; --f-h: calc(32vw / 0.75); --f-l: 2vw; --f-t: calc((100svh - 150vw) * 0.31 + 45vw); --f-gap: clamp(16px, 2vw, 32px);
+      height: 300svh; margin-top: -64px; view-timeline: --about-split block;
     }
     .about-hero-track + .about-body .about-bridge { padding-top: clamp(48px, 6vw, 96px); }
     .about-hero-track > .about-hero { position: sticky; top: 0; margin-top: 0; view-timeline: none; }
     .about-hero-track > .about-hero::after { display: none; }
-    .about-hero-track :is(.about-hero-photo, .about-hero-photo > img, .about-hero-copy, .about-split-sheet, .about-split-card, .about-split-center), .about-hero-track .about-hero-photo::before, .about-hero-track .about-hero-photo::after {
+    .about-hero-track .about-hero-photo img { animation: none; }
+    .about-hero-track :is(.about-hero-copy, .about-split-sheet, .about-split-card, .about-split-portrait, .about-split-frame), .about-hero-track .about-hero-photo::before, .about-hero-track .about-hero-photo::after {
       animation-timeline: --about-split; animation-range: contain 0% contain 100%; animation-fill-mode: both; animation-timing-function: linear;
     }
-    .about-hero-track .about-hero-copy { position: relative; z-index: 4; animation-name: about-split-copy; }
-    .about-hero-track .about-hero-photo { z-index: 3; overflow: hidden; animation-name: about-split-clip; }
+    .about-hero-track .about-hero-copy { position: relative; z-index: 6; animation-name: about-split-copy; }
+    .about-hero-track .about-hero-photo { z-index: 0; }
     .about-hero-track .about-hero-photo::before, .about-hero-track .about-hero-photo::after { animation-name: about-split-scrim; }
-    /* The whole picture at its hero crop, so it can keep moving past the screen's edge. Same crop as object-position 22% 31%. */
-    .about-hero-track .about-hero-photo > img {
-      right: auto !important; bottom: auto !important; height: auto !important; aspect-ratio: 2 / 3; object-fit: fill; object-position: 0 0;
-      animation-name: about-split-image;
-    }
     .about-split-sheet { display: block; position: absolute; inset: 0; z-index: 1; background: var(--bg); animation-name: about-split-sheet; }
-    .about-split-card, .about-split-center { display: block; position: absolute; margin: 0; overflow: hidden; }
-    .about-split-card { z-index: 2; left: var(--c-l); top: var(--c-t); width: var(--c-w); height: var(--c-h); border-radius: 24px; }
-    .about-split-card[data-side="left"] { --dir: -1; animation-name: about-split-out; }
-    .about-split-card[data-side="right"] { --dir: 1; animation-name: about-split-out; }
-    .about-split-center { z-index: 3; left: var(--c-l); top: var(--c-t); width: var(--c-w); height: var(--c-h); animation-name: about-split-swap; }
-    .about-split-card img, .about-split-center img { object-fit: cover; animation: none; }
-    .about-hero-track .about-split-center img { animation: none; }
-    .about-split-card[data-side="left"] img { object-position: 44% 50%; }
-    .about-split-card[data-side="right"] img { object-position: 44% 50%; }
-    .about-split-center img { object-position: 66% 50%; }
+    .about-split-card, .about-split-portrait, .about-split-frame { display: block; position: absolute; margin: 0; border-radius: 24px; }
+    .about-split-card, .about-split-portrait { overflow: hidden; }
+    .about-split-card { z-index: 2; animation-name: about-split-card; }
+    .about-split-card[data-side="left"] { --dir: -1; }
+    .about-split-card[data-side="right"] { --dir: 1; }
+    .about-split-card img { object-fit: cover; object-position: 44% 50%; animation-name: about-split-card-photo; animation-timeline: --about-split; animation-range: contain 0% contain 100%; animation-fill-mode: both; animation-timing-function: linear; }
+    .about-split-portrait { z-index: 3; animation-name: about-split-portrait, about-split-box; }
+    .about-split-portrait img { position: absolute; left: -6.25%; top: -105.47%; width: 312.5%; max-width: none; height: auto; }
+    .about-split-frame { z-index: 4; box-shadow: inset 0 0 0 1.5px #fff; animation-name: about-split-frame, about-split-box; }
+    .about-split-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.5px #fff; animation: about-split-card-line linear both; animation-timeline: --about-split; animation-range: contain 0% contain 100%; }
   }
 }
-@keyframes about-split-copy { 0%, 4% { opacity: 1; translate: 0 0; } 30%, 100% { opacity: 0; translate: 0 -8svh; } }
-@keyframes about-split-scrim { 0%, 10% { opacity: 1; } 45%, 100% { opacity: 0; } }
-@keyframes about-split-clip {
-  0%, 8% { clip-path: inset(0 0 0 0 round 0); }
-  58%, 100% { clip-path: inset(var(--c-t) var(--c-l) var(--c-t) var(--c-l) round 24px); }
-}
-/* Ends with the left 55% of the photo filling the card, so her face sits inside it. */
-@keyframes about-split-image {
-  0%, 8% { left: 0; top: calc((100svh - 150vw) * 0.31); width: 100vw; }
-  58%, 100% { left: var(--c-l); top: calc(var(--c-t) - 0.3 * var(--c-w) / 0.55 * 1.5 * 0.667); width: calc(var(--c-w) / 0.55); }
-}
+@keyframes about-split-copy { 0%, 3% { opacity: 1; translate: 0 0; } 22%, 100% { opacity: 0; translate: 0 -8svh; } }
+@keyframes about-split-scrim { 0%, 4% { opacity: 1; } 26%, 100% { opacity: 0; } }
 @keyframes about-split-sheet {
-  0%, 22% { clip-path: inset(100% 12% 0 12% round 32px 32px 0 0); }
-  62%, 100% { clip-path: inset(0 0 0 0 round 0); }
+  0%, 34% { clip-path: inset(100% 12% 0 12% round 32px 32px 0 0); }
+  68%, 100% { clip-path: inset(0 0 0 0 round 0); }
 }
-@keyframes about-split-out {
-  0%, 34% { opacity: 0; transform: translateX(0) scale(0.92); }
-  40% { opacity: 1; }
-  66%, 100% { opacity: 1; transform: translateX(calc(var(--dir) * (var(--c-w) + var(--c-gap)))) scale(0.92); }
+@keyframes about-split-box {
+  0%, 34% { left: var(--f-l); top: var(--f-t); width: var(--f-w); height: var(--f-h); }
+  68%, 100% { left: var(--c-l); top: var(--c-t); width: var(--c-w); height: var(--c-h); }
 }
-@keyframes about-split-swap { 0%, 66% { opacity: 0; } 76%, 100% { opacity: 1; } }
-
-/* Gemini opener: the name on two lines at Devsign's size, and a dark room where the phone is the only light (privacy: only you see the screen). */
-.devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(64px, 8.4vw, 168px); line-height: .95; }
-.devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-shot .dh-clip video { transform: none; }
+@keyframes about-split-portrait { 0%, 26% { opacity: 0; } 32%, 100% { opacity: 1; } }
+@keyframes about-split-frame { 0% { opacity: 0.6; } 24%, 68% { opacity: 1; } 76%, 100% { opacity: 0; } }
+/* The two side frames stay glued to the middle one and end a step smaller. */
+@keyframes about-split-card {
+  0%, 16% { opacity: 0; left: calc(var(--f-l) + var(--dir) * (var(--f-w) + var(--f-gap))); top: var(--f-t); width: var(--f-w); height: var(--f-h); transform: scale(0.92); }
+  26% { opacity: 1; }
+  34% { left: calc(var(--f-l) + var(--dir) * (var(--f-w) + var(--f-gap))); top: var(--f-t); width: var(--f-w); height: var(--f-h); transform: scale(0.92); }
+  68%, 100% { opacity: 1; left: calc(var(--c-l) + var(--dir) * (var(--c-w) + var(--c-gap))); top: var(--c-t); width: var(--c-w); height: var(--c-h); transform: scale(0.92); }
+}
+@keyframes about-split-card-photo { 0%, 34% { opacity: 0.32; } 66%, 100% { opacity: 1; } }
+@keyframes about-split-card-line { 0%, 66% { opacity: 1; } 76%, 100% { opacity: 0; } }
