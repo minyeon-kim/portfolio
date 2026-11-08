@@ -262,8 +262,8 @@ void main() {
   vec3 arms = mix(mix(vec3(0.38, 0.6, 1.0), vec3(0.56, 0.42, 1.0), wave), vec3(0.32, 0.86, 0.96), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
   arms = mix(arms, vec3(0.82, 0.62, 1.0), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
   // A step towards ice: silver white and pale blue mixed into the arms.
-  arms = mix(arms, mix(vec3(0.62, 0.74, 1.0), vec3(0.9, 0.94, 1.0), wave), 0.4);
-  vec3 galaxyTint = mix(arms, vec3(0.96, 0.95, 1.0), exp(-gr * gr / 0.06));
+  arms = mix(arms, mix(vec3(0.62, 0.74, 1.0), vec3(0.9, 0.94, 1.0), wave), 0.12);
+  vec3 galaxyTint = mix(arms, vec3(0.96, 0.95, 1.0), exp(-gr * gr / 0.06) * 0.3);
   // Light theme: a brighter, sunnier palette on the pale page (sky blue,
   // violet, hot pink, coral, mint) with no grey core, so it reads as
   // glitter rather than ink.
@@ -352,9 +352,9 @@ void main() {
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix);
   vFlake = flake;
-  vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky);
+  vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky) * mix(1.0, 0.7, flake * galaxy * (1.0 - light));
   float bigger = 1.0 - max(portraitMix, halo);
-  px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger), flake) * dpr;
+  px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger) * mix(1.0, 0.58, galaxy * (1.0 - light)), flake) * dpr;
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
   // The portrait: grains are brighter where the photo is.
@@ -712,7 +712,14 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         clear[4] = ((note.left - c.left) / c.width) * 2 - 1; clear[6] = ((note.right - c.left) / c.width) * 2 - 1;
         clear[5] = 1 - ((note.bottom - c.top) / c.height) * 2; clear[7] = 1 - ((note.top - c.top) / c.height) * 2;
       } else clear.fill(9, 4, 8);
-      if (!boxes.length) { clear.fill(9, 0, 4); return; }
+      // Nothing shown yet: the headline and the links keep clear of the dust too.
+      const put = (at: number, box?: DOMRect) => {
+        if (!box || !box.width) { clear.fill(9, at, at + 4); return; }
+        clear[at] = ((box.left - c.left) / c.width) * 2 - 1; clear[at + 2] = ((box.right - c.left) / c.width) * 2 - 1;
+        clear[at + 1] = 1 - ((box.bottom - c.top) / c.height) * 2; clear[at + 3] = 1 - ((box.top - c.top) / c.height) * 2;
+      };
+      if (clear[8] === 9) put(8, wideStage() ? document.querySelector<HTMLElement>(".home-picks")?.getBoundingClientRect() : undefined);
+      if (!boxes.length) { put(0, wideStage() ? document.querySelector<HTMLElement>(".home-tagline-wrap")?.getBoundingClientRect() : undefined); return; }
       clear[0] = ((Math.min(...boxes.map((r) => r.left)) - c.left) / c.width) * 2 - 1; clear[2] = ((Math.max(...boxes.map((r) => r.right)) - c.left) / c.width) * 2 - 1;
       clear[1] = 1 - ((Math.max(...boxes.map((r) => r.bottom)) - c.top) / c.height) * 2; clear[3] = 1 - ((Math.min(...boxes.map((r) => r.top)) - c.top) / c.height) * 2;
     };
@@ -898,7 +905,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       bind(pDither, "scene", 0, scene.texture); bind(pDither, "photo", 1, photoTexture);
       gl.uniform1f(uniform(pDither, "photoMix"), photoMix); gl.uniform2f(uniform(pDither, "photoScale"), photoScale[0], photoScale[1]); gl.uniform2f(uniform(pDither, "photoCentre"), photoCentre[0], photoCentre[1]); gl.uniform2f(uniform(pDither, "cssSize"), width / dpr, height / dpr);
       gl.uniform1f(uniform(pDither, "dpr"), dpr);
-      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt));
+      gl.uniform1f(uniform(pDither, "caseDim"), Math.max(colours.spectrum, colours.bolt, colours.galaxy * 0.9));
       gl.uniform1f(uniform(pDither, "grainTime"), Math.floor(now / 125) % 1024);
       gl.uniform1f(uniform(pDither, "time"), clock); gl.uniform1f(uniform(pDither, "light"), colours.light);
       gl.uniform1f(uniform(pDither, "halo"), colours.light * (1 - portraitMix));
