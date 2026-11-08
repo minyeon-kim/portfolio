@@ -13,8 +13,8 @@ export const COVER_SCENES: Record<string, CoverScene> = {
   },
   "gemini-privacy": {
     src: "/images/cases/gemini-privacy/cover-hand.webp",
-    width: 1536, height: 864, mediaWidth: 800, mediaHeight: 1734,
-    matrix: "matrix3d(0.408803461, -0.0429530057, 0, 3.23777877e-05, 0.0659493613, 0.374605389, 0, -2.07875042e-05, 0, 0, 1, 0, 624.291913, 115.680511, 0, 1)",
-    crop: [26, 0, 1484, 864], cropPhone: [600, 0, 499, 864], card: [444, 0, 648, 864], cardPhone: [77, 0, 1382, 864],
+    width: 1772, height: 864, mediaWidth: 800, mediaHeight: 1734,
+    matrix: "matrix3d(0.399313394, -0.099076807, 0, 0.0000140911643, 0.0984747639, 0.384047689, 0, -0.0000295637161, 0, 0, 1, 0, 695.750504, 103.599083, 0, 1)",
+    crop: [190, 0, 1484, 864], cropPhone: [712, 0, 499, 864], card: [638, 0, 648, 864], cardPhone: [271, 0, 1382, 864],
   },
 };
