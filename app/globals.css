@@ -7633,3 +7633,12 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .dv-dd.dv-dd.dv-dd .dv-dd-name > span.dv-dd-inside { flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: flex-start; gap: 4px 12px; margin-top: 6px; text-align: left; font-size: 16px; }
   .dv-dd.dv-dd.dv-dd .dv-dd-stages li:nth-child(n) .dv-dd-name { display: block; padding: 0; text-align: left; justify-items: start; }
 }
+
+/* Community posts read top to bottom (owner: three columns were hard to read): the problem
+   is the item's heading in ink, the quote under it in a quieter tone, the source last. */
+.case-study .dv .dv-posts .dv-posts-list li { display: block; }
+.case-study .dv .dv-posts .dv-posts-list li strong { display: block; padding: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-posts .dv-posts-list li blockquote { margin: 10px 0 0; color: var(--dv-muted); font-size: 18px; line-height: 1.55; }
+.case-study .dv .dv-posts .dv-posts-list li cite { display: block; margin-top: 8px; padding: 0; font-size: 16px; }
+/* Overview photo after the summary. */
+.case-study .dv .dv-glance-block + .dv-me-photo { margin-top: 96px; }

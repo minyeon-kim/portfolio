@@ -354,13 +354,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <p className="dv-headline reveal">
           {overview.headline} <span>{overview.headlineAccent}</span>
         </p>
-        {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         {overview.summary ? (
           <section className="dv-glance-block" aria-labelledby="tldr">
             <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
             <div className="reveal"><GlanceSteps items={overview.summary.items} label={overview.summary.label} /></div>
           </section>
         ) : <div className="dv-psi">{children}</div>}
+        {/* The photo follows the summary (owner: under the content, not between headline and summary). */}
+        {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
