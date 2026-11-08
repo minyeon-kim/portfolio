@@ -364,7 +364,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
       <Section id="overview" title="Overview">
         <p className="dv-headline reveal">
-          {overview.headline} <span>{overview.headlineAccent}</span>
+          {overview.headline} <span>{overview.headlineAccent}</span>{overview.headlineAfter}
         </p>
         {overview.summary ? (
           <section className="dv-glance-block" aria-labelledby="tldr">

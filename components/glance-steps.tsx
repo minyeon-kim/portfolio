@@ -6,9 +6,9 @@ export function GlanceSteps({ items, label }: { items: Item[]; label: string }) 
   return (
     <div className="dv-gs">
       <ol className="dv-gs-list" aria-label={label}>
-        {items.map((item, i) => (
+        {items.map((item) => (
           <li key={item.label} data-tone={item.tone} data-on>
-            <p className="dv-gs-name"><b>{String(i + 1).padStart(2, "0")}</b>{item.label}</p>
+            <p className="dv-gs-name">{item.label}</p>
             <div className="dv-gs-body">
               <p className="dv-gs-title">{item.title}</p>
               {item.text && <p className="dv-gs-text">{item.text}</p>}

@@ -7899,3 +7899,8 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { transform: none; object-fit: cover; }
 /* Cover images are 2x with an alpha edge keyed at 4x, so the screen's slanted edges stay smooth while the camera moves. */
 .dh-shot-camera { will-change: auto; }
+
+/* Overview hierarchy: one direction, title > statement > sentence > quiet label. Accent on the key phrase only. */
+.case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li .dv-gs-name { color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+.case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: 20px; letter-spacing: -0.01em; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-headline, .dv-finding) { letter-spacing: -0.02em; }
