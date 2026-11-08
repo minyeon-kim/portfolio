@@ -20,9 +20,11 @@ const g=new THREE.ExtrudeGeometry(sh2,{depth:pl[1],bevelEnabled:true,bevelThickn
 const tex=(n,draw)=>{const c=document.createElement('canvas');c.width=c.height=n;draw(c.getContext('2d'),n);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t};
 const grain=tex(1024,(x,n)=>{const d=x.createImageData(n,n);for(let i=0;i<d.data.length;i+=4){const v=118+Math.random()*20;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0)});grain.repeat.set(1.2,1.2);
 const yb=g.attributes.position,col=new Float32Array(yb.count*3),uv=g.attributes.uv;let miny=1e9,maxy=-1e9;for(let i=0;i<yb.count;i++){const y=yb.getY(i);miny=Math.min(miny,y);maxy=Math.max(maxy,y)}
-for(let i=0;i<yb.count;i++){const t=(yb.getY(i)-miny)/(maxy-miny),x=yb.getX(i)/pl[0]+.5,z=yb.getZ(i)/pl[2]+.5;const v=t>.999?(.58+.72*x-.2*z):Math.pow(t,7)*.85+.12;col[i*3]=col[i*3+1]=col[i*3+2]=v}g.setAttribute('color',new THREE.BufferAttribute(col,3));
-const topm=M(P.plc,1),sidem=M(P.pls,1);for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=.1;m.envMapIntensity=0}
-const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=o.receiveShadow=true;s.add(o);}
+for(let i=0;i<yb.count;i++){const t=(yb.getY(i)-miny)/(maxy-miny),x=yb.getX(i)/pl[0]+.5,z=yb.getZ(i)/pl[2]+.5;const v=t>.999?1:Math.pow(t,7)*.85+.12;col[i*3]=col[i*3+1]=col[i*3+2]=v}g.setAttribute('color',new THREE.BufferAttribute(col,3));
+const topm=M(P.plc,1),sidem=M(P.pls,1);
+topm.map=tex(1024,(x,n)=>{const g=x.createLinearGradient(0,0,n,0);g.addColorStop(0,'rgb(92,92,92)');g.addColorStop(.5,'rgb(168,168,168)');g.addColorStop(1,'rgb(255,255,255)');x.fillStyle=g;x.fillRect(0,0,n,n);const d=x.createRadialGradient(n*.52,n*.82,0,n*.52,n*.82,n*.5);d.addColorStop(0,'rgba(0,0,0,.55)');d.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=d;x.fillRect(0,0,n,n)});topm.map.colorSpace=THREE.SRGBColorSpace;topm.map.repeat.set(1/pl[0],1/pl[2]);topm.map.offset.set(.5,.5);
+for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=.1;m.envMapIntensity=0}
+const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=false;o.receiveShadow=false;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
 const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.edgeGlow??P.glow*.8;}
