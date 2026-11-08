@@ -746,7 +746,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <h3 className="dv-tk-label">{takeaway.next.label}</h3>
             <div>
               <p className="dv-tk-next-title">{takeaway.next.title}</p>
-              <p className="dv-body">{takeaway.next.text}</p>
+              {takeaway.next.text && <p className="dv-body">{takeaway.next.text}</p>}
               {!ff && <>
                 <ul className="dv-tk-chips">
                   {takeaway.next.chips.map((chip: string) => <li key={chip}>{chip}</li>)}
