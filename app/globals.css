@@ -8056,7 +8056,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .about-exp li { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 24px; align-items: baseline; padding-block: clamp(20px, 3svh, 32px); border-top: 1px solid rgb(14 17 17 / 0.14); }
 .about-exp span { color: #5b6461; font-size: 18px; }
 .about-exp strong { font-size: clamp(22px, 2vw, 32px); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; }
-.about-panel-contact > img { object-fit: cover; object-position: 50% 0%; }
+.about-panel-contact > img { object-fit: cover; object-position: 50% 40%; }
+/* The words sit low on the left, where there are no faces. */
+.about-panel-contact::after { inset: auto 0 0; height: 58%; background: linear-gradient(0deg, rgb(10 11 14 / 0.72), rgb(10 11 14 / 0)); }
+.about-panel-contact .about-panel-copy { width: min(820px, calc(100vw - 32px)); margin-top: auto; margin-inline: clamp(16px, 5vw, 96px) auto; padding-top: 0; padding-bottom: clamp(40px, 8svh, 88px); text-align: left; }
+.about-panel-contact .about-panel-copy h2 { font-size: clamp(36px, min(3.8vw, 7svh), 72px); }
+.about-panel-contact .about-panel-actions { justify-content: flex-start; }
 .about-panel-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; margin: 32px 0 0; }
 .about-panel-actions a { color: #fff; font-size: 18px; }
 .about-panel-actions a.press { display: inline-flex; align-items: center; min-height: 48px; padding: 0 28px; border-radius: 999px; background: #fff; color: #191c1f; font-weight: 500; }
