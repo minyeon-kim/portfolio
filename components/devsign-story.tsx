@@ -232,7 +232,6 @@ type CanvasArt = { src: string; width: number; height: number; painArea: Area; r
 // nothing tied it to the table). Two windows on the one image, the square of ideas and the circle
 // of pains, with the empty middle cut out; each key pair's pain and idea stickies carry the same
 // number as its table row. Pointing at a row or a number lights that pair and dims the rest.
-type Box = [number, number, number, number];
 function CanvasWindow({ src, alt, size, area, marks, active, onMark }: { src: string; alt: string; size: [number, number]; area: Box; marks: { n: number; box: Box }[]; active: number; onMark: (n: number) => void }) {
   const [W, H] = size;
   const [x, y] = area;
