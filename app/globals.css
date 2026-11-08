@@ -7457,3 +7457,13 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 @media (prefers-reduced-motion: reduce) { .dv-vpc-mark, .dv-vpc-num, .dv-vpc-row { transition: none; } }
 .case-study .dv .dv-vpc-row b.dv-vpc-num { color: var(--dv-ink); font-size: 16px; line-height: 1; }
 .case-study .dv .dv-vpc-row[data-on] b.dv-vpc-num { color: #fff; }
+
+/* Iteration 1: the clip that isn't playing steps back (dimmed, grey, muted caption), so the one
+   playing, To-be once As-is has run, is what the eye lands on. */
+.case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) video { filter: grayscale(1) brightness(0.5); }
+.case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) figcaption { color: var(--dv-muted); }
+.case-study .dv .dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) figcaption span { color: var(--dv-muted); }
+.case-study .dv .dv-iter-card video { transition: filter 400ms var(--ease); }
+@media (prefers-reduced-motion: reduce) { .case-study .dv .dv-iter-card video { transition: none; } }
+.case-study .dv .dv-iter-duo.dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card.dv-iter-card:not([data-on]) figcaption { color: var(--dv-muted) !important; }
+.case-study .dv .dv-iter-card figcaption { transition: color 400ms var(--ease); }

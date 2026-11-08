@@ -312,22 +312,20 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
     if (!el) return;
     setManual(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     const nearby = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); nearby.disconnect(); } }, { rootMargin: "100% 0px" });
-    const half = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.4 });
+    const half = new IntersectionObserver(([e]) => { setOnScreen(e.isIntersecting); if (e.isIntersecting) setTurn(0); }, { threshold: 0.4 });
     nearby.observe(el);
     half.observe(el);
-    // The scroll picks whose turn it is (owner: scrolling on brings the next motion): As-is while
-    // the pair rises into the lower half of the screen, To-be once its middle passes the middle.
-    // Stacked on a phone, the card nearer the middle plays.
+    // Side by side (owner: To-be never played and should stand out): the pair plays as one beat,
+    // As-is once, then To-be, which keeps looping as the answer; the turn moves on when As-is
+    // ends (see onEnded), and re-entering the screen starts from As-is. Stacked on a phone, the
+    // card nearer the middle of the screen plays.
     let frame = 0;
     const read = () => {
       frame = 0;
       const cards = [...el.querySelectorAll<HTMLElement>(".dv-iter-card")].map((c) => c.getBoundingClientRect());
-      if (cards.length < 2) return;
+      if (cards.length < 2 || Math.abs(cards[0].top - cards[1].top) < 12) return;
       const mid = window.innerHeight / 2;
-      const next = Math.abs(cards[0].top - cards[1].top) < 12
-        ? (cards[0].top + cards[0].height / 2 < mid + window.innerHeight * 0.08 ? 1 : 0)
-        : (Math.abs(cards[1].top + cards[1].height / 2 - mid) < Math.abs(cards[0].top + cards[0].height / 2 - mid) ? 1 : 0);
-      setTurn(next);
+      setTurn(Math.abs(cards[1].top + cards[1].height / 2 - mid) < Math.abs(cards[0].top + cards[0].height / 2 - mid) ? 1 : 0);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -344,6 +342,10 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
       else { v.pause(); if (v.currentTime) v.currentTime = 0; }
     });
   }, [turn, onScreen, near, manual]);
+  const sideBySide = () => {
+    const cards = root.current ? [...root.current.querySelectorAll<HTMLElement>(".dv-iter-card")].map((c) => c.getBoundingClientRect().top) : [];
+    return cards.length === 2 && Math.abs(cards[0] - cards[1]) < 12;
+  };
   const sides = [
     { key: "a", tag: labels.asIs, side: before },
     { key: "b", tag: labels.toBe, side: after },
@@ -354,7 +356,7 @@ export function IterationPair({ before, after, labels }: { before: PairSide; aft
         <figure key={key} className="dv-iter-card" data-side={key} data-on={(!manual && turn === i && onScreen) || undefined}>
           <div className="dv-iter-plate">
             <div className="dv-iter-view">
-              <video ref={(el) => { videos.current[i] = el; }} src={near ? withBase(side.clip.src) : undefined} poster={withBase(side.clip.poster)} muted playsInline preload={near ? "auto" : "none"} onClick={toggleClip} width={1440} height={686} aria-label={`${side.alt ?? tag} ${side.text}`} onEnded={(e) => { if (i === turn) { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
+              <video ref={(el) => { videos.current[i] = el; }} src={near ? withBase(side.clip.src) : undefined} poster={withBase(side.clip.poster)} muted playsInline preload={near ? "auto" : "none"} onClick={toggleClip} width={1440} height={686} aria-label={`${side.alt ?? tag} ${side.text}`} onEnded={(e) => { if (i !== turn) return; if (i === 0 && sideBySide()) setTurn(1); else { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
             </div>
             {key === "b" && <span className="dv-iter-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>}
           </div>
