@@ -42,6 +42,14 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
           </p>
         )}
       </div>
+      <dl className="devsign-hero-details">
+        {hero.details.map(({ label, value }) => (
+          <div key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
       <div className="dh-cover-plate">
         <div className="dh-scene">
           <div className="dh-rig">
@@ -71,14 +79,6 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
           <img className="dh-cover-card" src={withBase(hero.card.src)} width={hero.card.width} height={hero.card.height} alt={hero.card.alt} decoding="async" />
         )}
       </div>
-      <dl className="devsign-hero-details">
-        {hero.details.map(({ label, value }) => (
-          <div key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
   );
 }

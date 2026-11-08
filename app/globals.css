@@ -7795,3 +7795,43 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .dh-rig { top: 32cqw; }
 .dh-device-phone .dh-monitor-screen { left: -8.5cqw; top: -18.4cqw; width: 17cqw; transform: translate3d(0, -4.5cqw, 1cqw); }
 @media (max-width: 47.99rem) { .dh-rig { top: 38cqw; } }
+/* Facts sit under the question, before the cover (owner). */
+.devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { margin: clamp(32px, 4svh, 48px) auto 0; }
+.devsign-hero.dh-cover { padding-bottom: 0; }
+
+/* Studio scene, refined after metalab.com (owner: it looked like a raw 3D turn): a calmer
+   angle, a studio backdrop with a lit back wall falling to a darker floor and a vignette,
+   film grain over everything, soft matte faces with lit edges on the pedestal, and an
+   aluminium edge and soft contact shadows on the device. */
+.devsign-hero.dh-cover { --dh-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate {
+  background:
+    radial-gradient(70% 60% at 50% 115%, rgb(0 0 0 / 0.55), transparent 70%),
+    radial-gradient(45% 55% at 66% 12%, rgb(255 255 255 / 0.13), transparent 70%),
+    radial-gradient(60% 70% at 30% 30%, rgb(120 124 132 / 0.08), transparent 70%),
+    linear-gradient(180deg, #26272b 0%, #1b1c1f 52%, #121315 72%, #0c0c0e 100%); }
+.dh-cover-plate::before { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background-image: var(--dh-grain); background-size: 160px; opacity: 0.07; mix-blend-mode: overlay; }
+.dh-cover-plate::after { left: 14%; right: 14%; bottom: 6%; height: 14%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), transparent); filter: blur(8px); }
+.dh-scene { perspective: 320cqw; perspective-origin: 50% 0%; }
+.dh-rig { transform: rotateX(-9deg) rotateY(-17deg); }
+.dh-pedestal [data-face="top"] { border-radius: 1.6cqw;
+  background: radial-gradient(28% 26% at 50% 40%, rgb(0 0 0 / 0.5), transparent 75%), radial-gradient(80% 90% at 70% 0%, rgb(255 255 255 / 0.08), transparent 70%), linear-gradient(178deg, #6f7277, #55585c 50%, #45484c);
+  box-shadow: inset 0 -0.25cqw 0 rgb(255 255 255 / 0.22), inset 0.2cqw 0 0 rgb(255 255 255 / 0.06); }
+.dh-pedestal [data-face="front"] { border-radius: 0 0 1cqw 1cqw; background: linear-gradient(180deg, #3a3c40 0%, #26272b 18%, #1a1b1e 60%, #131416); box-shadow: inset 0 0.18cqw 0 rgb(255 255 255 / 0.16); }
+.dh-pedestal [data-face="side"] { background: linear-gradient(90deg, #1f2023, #33353a 70%, #3d3f44); box-shadow: inset 0 0.18cqw 0 rgb(255 255 255 / 0.1); }
+.dh-pedestal i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: var(--dh-grain); background-size: 120px; opacity: 0.12; mix-blend-mode: overlay; }
+.dh-device-monitor .dh-monitor-screen { padding: 0.55cqw; border-radius: 1.1cqw; background: linear-gradient(160deg, #222327, #0b0b0d 40%, #101113); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), inset 0 1px 0 rgb(255 255 255 / 0.18), 0 3cqw 6cqw -2cqw rgb(0 0 0 / 0.6); }
+.dh-device-monitor .dh-monitor-side { width: 1.2cqw; left: -0.6cqw; background: linear-gradient(180deg, #8a8d93, #5a5d63 30%, #3a3c41 70%, #2a2b2f); }
+.dh-device-monitor .dh-monitor-neck { background: linear-gradient(90deg, #1b1c1f, #4a4c52 45%, #2a2b2f 60%, #16171a); }
+.dh-device-monitor .dh-monitor-foot { background: radial-gradient(70% 90% at 50% 20%, rgb(255 255 255 / 0.1), transparent 70%), linear-gradient(180deg, #34363b, #1d1e21); box-shadow: 0 0 2cqw 0.6cqw rgb(0 0 0 / 0.4); }
+.dh-device-phone .dh-clip, .dh-device-phone .dh-clip[data-phone] { border-color: #17181b; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 0 0 1px rgb(255 255 255 / 0.1), 0 3cqw 5cqw -1cqw rgb(0 0 0 / 0.6); }
+@media (max-width: 47.99rem) { .dh-rig { transform: rotateX(-8deg) rotateY(-15deg) scale(1.25); } }
+@media (max-width: 47.99rem) { .devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate { aspect-ratio: 1 / 0.82; } }
+/* The studio rises out of the page in dark (no hard top edge); in light it stays a dark room. */
+.devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate {
+  background:
+    radial-gradient(70% 60% at 50% 115%, rgb(0 0 0 / 0.55), transparent 70%),
+    radial-gradient(45% 55% at 66% 18%, rgb(255 255 255 / 0.12), transparent 70%),
+    radial-gradient(60% 70% at 30% 34%, rgb(120 124 132 / 0.08), transparent 70%),
+    linear-gradient(180deg, light-dark(#202124, var(--bg)) 0%, #222326 24%, #1b1c1f 52%, #121315 74%, light-dark(#0c0c0e, var(--bg)) 100%); }
+@media (max-width: 47.99rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; margin-top: 28px; } .devsign-hero.dh-cover .devsign-hero-details dd { font-size: 16px; } }
