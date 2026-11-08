@@ -7868,6 +7868,5 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 /* Opener title after metalab.com: only the project name, very large thin serif, plain ink. */
 .devsign-hero.dh-cover .devsign-hero-title, .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { max-width: none; margin: 0; background: none; color: var(--ink); -webkit-text-fill-color: currentColor; font-family: var(--font-headline); font-size: clamp(64px, 12vw, 216px); font-weight: 200; line-height: 1; letter-spacing: -0.025em; }
 .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { margin-top: clamp(40px, 5svh, 64px); }
-/* Gemini's longer name stays on one line; the facts keep four equal columns. */
+/* Gemini's longer name stays on one line. */
 .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(56px, 10vw, 180px); }
-@media (min-width: 64rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; } }
