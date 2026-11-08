@@ -3,6 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { HeroClip } from "@/components/hero-clip";
+import { HeroShot } from "@/components/hero-shot";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { DEVSIGN_URL, withBase } from "@/lib/site";
 
@@ -51,29 +52,25 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         ))}
       </dl>
       <div className="dh-cover-plate">
-        <div className="dh-scene">
-          <div className="dh-rig">
-            <div className="dh-pedestal" aria-hidden="true"><i data-face="top" /><i data-face="front" /><i data-face="side" /></div>
-            <div className={gemini ? "dh-device dh-device-phone" : "dh-device dh-device-monitor"}>
-              <div className="dh-monitor-screen">
-                <div className="devsign-hero-media">
-                  {gemini
-                    ? <span className="devsign-hero-phone"><GeminiPhone alt={alt} preload /></span>
-                    : <div className="devsign-hero-window">
-                        <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>
-                        <a className="devsign-hero-visit" href={DEVSIGN_URL} target="_blank" rel="noreferrer">minyeon-kim.github.io/devsign ↗</a>
-                      </div>}
-                  {hero.clip && <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} phone={gemini} />}
-                </div>
-              </div>
-              {!gemini && <>
-                <i className="dh-monitor-side" aria-hidden="true" />
-                <i className="dh-monitor-neck" aria-hidden="true" />
-                <i className="dh-monitor-foot" aria-hidden="true" />
-              </>}
+        {gemini ? (
+          <HeroShot src={withBase("/images/cases/gemini-privacy/cover-hand.webp")} width={1536} height={864} alt="" mediaWidth={800} mediaHeight={1734}
+            matrix="matrix3d(0.429803949, -0.0179177791, 0, 4.05424448e-05, 0.0685022387, 0.388183516, 0, -2.13469489e-05, 0, 0, 1, 0, 615.983241, 94.0695278, 0, 1)">
+            <div className="devsign-hero-media">
+              {hero.clip
+                ? <HeroClip src={withBase(hero.clip.src)} poster={withBase(hero.clip.poster)} label={hero.clip.label} />
+                : <span className="devsign-hero-phone"><GeminiPhone alt={alt} preload /></span>}
             </div>
-          </div>
-        </div>
+          </HeroShot>
+        ) : (
+          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1536} height={864} alt="" mediaWidth={1600} mediaHeight={1000}
+            matrix="matrix3d(0.202360033, -0.0393569535, 0, -0.000118392152, 0, 0.294288989, 0, 0, 0, 0, 1, 0, 494.946, 148.681124, 0, 1)">
+            <div className="devsign-hero-media">
+              <div className="devsign-hero-window">
+                <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>
+              </div>
+            </div>
+          </HeroShot>
+        )}
         {hero.card && (
           // eslint-disable-next-line @next/next/no-img-element
           <img className="dh-cover-card" src={withBase(hero.card.src)} width={hero.card.width} height={hero.card.height} alt={hero.card.alt} decoding="async" />

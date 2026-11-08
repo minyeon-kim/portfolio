@@ -7835,3 +7835,19 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     radial-gradient(60% 70% at 30% 34%, rgb(120 124 132 / 0.08), transparent 70%),
     linear-gradient(180deg, light-dark(#202124, var(--bg)) 0%, #222326 24%, #1b1c1f 52%, #121315 74%, light-dark(#0c0c0e, var(--bg)) 100%); }
 @media (max-width: 47.99rem) { .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; margin-top: 28px; } .devsign-hero.dh-cover .devsign-hero-details dd { font-size: 16px; } }
+/* Cover as a photographed mockup (HeroShot; supersedes the CSS 3D studio): a generated
+   still scene (Devsign: monitor on a plinth in a dark studio; Gemini: a hand holding the
+   phone in a bright cafe, after metalab.com/work/the-atlantic) with its screen keyed out,
+   and the live media warped under it onto the screen with matrix3d. Full width. */
+.devsign-hero.dh-cover .dh-cover-plate, .devsign-hero.dh-cover[data-project] .dh-cover-plate { aspect-ratio: auto; width: 100%; border-radius: 0; background: none; overflow: visible; container-type: normal; }
+.dh-cover-plate::before, .dh-cover-plate::after { content: none; }
+.dh-shot { position: relative; width: 100%; overflow: hidden; }
+.dh-shot-stage { position: absolute; top: 0; left: 0; transform-origin: 0 0; transform: scale(var(--shot-k, 1)); }
+.dh-shot-media { position: absolute; top: 0; left: 0; transform-origin: 0 0; overflow: hidden; background: #111; }
+.dh-shot-scene { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+.devsign-hero.dh-cover[data-project] .dh-cover-plate .dh-shot .devsign-hero-media { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; aspect-ratio: auto; margin: 0; border: 0; border-radius: 0; background: #1c1c1c; box-shadow: none; overflow: hidden; -webkit-mask-image: none; mask-image: none; }
+.dh-shot .devsign-hero-window, .dh-shot .devsign-hero-screen { height: 100%; }
+.dh-shot .devsign-loop { margin: 0 !important; width: 100%; }
+.dh-shot .dh-clip { inset: 0; opacity: 1; pointer-events: auto; border: 0; border-radius: 0; box-shadow: none; translate: none; }
+.dh-shot .dh-clip video { border-radius: 0; transform: scale(1.04); }
+.devsign-hero.dh-cover[data-project="devsign"] .dh-shot { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent); }
