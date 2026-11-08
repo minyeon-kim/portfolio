@@ -7934,16 +7934,21 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     .about-hero-track > .about-hero { position: sticky; top: 0; margin-top: 0; view-timeline: none; }
     .about-hero-track > .about-hero::after { display: none; }
     .about-hero-track .about-hero-photo img { animation: none; }
-    .about-hero-track :is(.about-hero-copy, .about-split-sheet, .about-split-title, .about-split-card, .about-split-card img, .about-split-portrait, .about-split-portrait img, .about-split-frame) {
+    .about-hero-track :is(.about-hero-copy, .about-split-sheet, .about-split-title, .about-split-card, .about-split-card img, .about-split-card .about-split-tag, .about-split-portrait, .about-split-portrait img, .about-split-frame) {
       animation-timeline: --about-split; animation-range: contain 0% contain 100%; animation-fill-mode: both; animation-timing-function: linear;
     }
     .about-hero-track .about-hero-photo { z-index: 0; }
     .about-hero-track .about-hero-copy { position: relative; z-index: 1; animation-name: about-split-copy; }
     .about-split-sheet { display: block; position: absolute; inset: 0; z-index: 2; background: var(--bg); animation-name: about-split-sheet; }
-    .about-split-title { display: block; position: absolute; z-index: 3; left: 50%; top: 17svh; width: min(860px, 80vw); margin: 0; color: var(--ink); font-size: clamp(28px, 2.5vw, 40px); font-weight: 400; line-height: 1.25; letter-spacing: -0.02em; text-align: center; text-wrap: balance; transform: translateX(-50%); animation-name: about-split-title; }
+    .about-split-title { display: block; position: absolute; z-index: 3; left: 50%; top: 10svh; width: min(1120px, 84vw); margin: 0; color: var(--ink); text-align: center; transform: translateX(-50%); animation-name: about-split-title; }
+    .about-split-title p { margin: 0; text-wrap: balance; }
+    .about-split-title p:first-child { font-size: clamp(36px, min(3.9vw, 7svh), 72px); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
+    .about-split-title p:last-child { margin-top: 16px; font-size: clamp(18px, 1.4vw, 22px); font-weight: 400; line-height: 1.4; }
     .about-split-card, .about-split-portrait, .about-split-frame { display: block; position: absolute; margin: 0; border-radius: 20px; }
     .about-split-card, .about-split-portrait { overflow: hidden; }
     .about-split-card { z-index: 3; animation-name: about-split-card; }
+    .about-split-card, .about-split-portrait { container-type: inline-size; }
+    .about-split-card .about-split-tag { animation-name: about-split-card-photo; }
     .about-split-card[data-side="left"] { --dir: -1; }
     .about-split-card[data-side="right"] { --dir: 1; }
     .about-split-card img { object-fit: cover; object-position: 44% 50%; animation-name: about-split-card-photo; }
@@ -7996,9 +8001,11 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   .about-hero-photo::after { display: none; }
   .about-hero { color: #fff; }
   /* After revolut.com: a large tight headline across the top, the short text and a dark pill left of the line. */
-  .about-hero-copy { width: 64vw; margin: clamp(96px, 12svh, 136px) 0 auto 10vw; padding-top: 0; text-align: left; text-shadow: 0 1px 24px rgb(0 0 0 / 0.32); }
-  .about-hero-title { color: #fff; font-family: var(--font-geist-sans); font-size: clamp(40px, min(4.1vw, 7.4svh), 84px); font-weight: 500; line-height: 1.04; letter-spacing: -0.035em; }
-  .about-hero-line { display: inline; }
+  .about-hero-copy { width: 80vw; margin: clamp(96px, 12svh, 136px) 0 auto 10vw; padding-top: 0; text-align: left; text-shadow: 0 1px 24px rgb(0 0 0 / 0.32); }
+  .about-hero-title { color: #fff; font-family: var(--font-geist-sans); font-size: clamp(22px, 1.6vw, 28px); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; }
+  .about-hero-line { display: block; }
+  .about-hero-line:first-child { margin-bottom: 12px; font-size: clamp(48px, min(5.2vw, 9.4svh), 104px); font-weight: 500; line-height: 1.02; letter-spacing: -0.04em; }
+  html:lang(ko) .about-hero-line:first-child { font-size: clamp(40px, min(4.2vw, 8svh), 84px); }
   .about-hero-subtitle { max-width: 24vw; margin: clamp(20px, 3svh, 32px) 0 0; color: #fff; font-size: 16px; line-height: 1.4; }
   .about-hero-actions { justify-content: flex-start; }
   .about-hero-actions a { background: rgb(255 255 255 / 0.18); color: #fff; text-shadow: none; }
@@ -8011,3 +8018,36 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 }
 /* Devsign's landing card has the size and framing of metalab.com's: 42.3vw wide, 1.66:1, showing the whole scene. */
 @media (min-width: 64rem) { .home-device[data-project="devsign"] { top: 11%; left: 50%; right: auto; width: 42.3vw; aspect-ratio: 1391 / 838; } }
+
+/* Keywords on photos (hero cards, panels), sized to their card. */
+.about-split-tag { display: none; }
+.about-split-card .about-split-tag, .about-split-portrait .about-split-tag, .about-panel-card .about-split-tag { display: flex; position: absolute; inset: 54% 5cqw 5cqw; flex-direction: column; align-items: center; color: #fff; text-align: center; text-shadow: 0 1px 16px rgb(0 0 0 / 0.45); }
+.about-split-tag p { margin: 0; }
+.about-tag-label { font-size: max(12px, 4.6cqw); }
+.about-tag-value { margin-top: 1cqw !important; font-size: 11.5cqw; font-weight: 600; line-height: 1.1; letter-spacing: -0.03em; white-space: nowrap; }
+.about-tag-pill { margin-top: 3cqw !important; padding: 1.6cqw 4cqw; border-radius: 999px; background: #fff; color: #191c1f; font-size: max(11px, 4.2cqw); font-weight: 500; text-shadow: none; white-space: nowrap; }
+.about-tag-chip { display: flex; justify-content: space-around; gap: 2cqw; width: 100%; margin-top: auto !important; padding: 3.4cqw 3cqw; border-radius: 3cqw; background: #fff; color: #191c1f; font-size: max(11px, 4cqw); font-weight: 500; text-shadow: none; white-space: nowrap; }
+
+/* Below the hero: one large photo per point, each sliding over the last with native scroll (after revolut.com). */
+.about-panels { width: 100vw; margin-inline: calc(50% - 50vw); }
+.about-panel { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 100svh; overflow: hidden; background: #16171c; color: #fff; text-align: center; }
+.about-panel > img { object-fit: cover; }
+.about-panel > img[data-photo="board-bw"] { object-position: 50% 30%; }
+.about-panel > img[data-photo="board-wide"] { object-position: 40% 40%; }
+.about-panel::after { content: ""; position: absolute; inset: 0 0 auto; height: 62%; background: linear-gradient(180deg, rgb(10 11 14 / 0.62), rgb(10 11 14 / 0)); pointer-events: none; }
+.about-panel-copy { position: relative; z-index: 1; width: min(900px, calc(100vw - 32px)); padding-top: clamp(96px, 12svh, 136px); }
+.about-panel-copy h3 { margin: 0; color: #fff; font-size: clamp(38px, min(4.4vw, 8svh), 84px); font-weight: 500; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; }
+.about-panel-lead { margin: 16px auto 0; max-width: 640px; color: #fff; font-size: clamp(18px, 1.4vw, 22px); line-height: 1.35; text-wrap: balance; }
+.about-panel-then { margin: 12px auto 0; max-width: 620px; color: rgb(255 255 255 / 0.86); font-size: 16px; line-height: 1.45; text-wrap: pretty; }
+.about-panel-card { position: relative; z-index: 1; container-type: inline-size; width: min(300px, 62vw); height: min(380px, 40svh); margin-top: auto; margin-bottom: clamp(32px, 7svh, 72px); border-radius: 20px; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.8); }
+.about-panel-card .about-split-tag { inset: 30% 5cqw 5cqw; }
+@media (min-width: 64rem) {
+  .about-panels { position: relative; }
+  .about-panel { position: sticky; top: 0; }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .about-hero-track + .about-body .about-bridge { padding-block: clamp(48px, 6vw, 96px) 0; }
+  }
+}
+.about-bridge:has(.about-panels) { width: auto; max-width: none; }

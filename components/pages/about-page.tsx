@@ -3,7 +3,6 @@ import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { AboutBridge } from "@/components/about-interactive";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
 import * as en from "@/content/about.mdx";
@@ -63,7 +62,9 @@ export function aboutMetadata(locale: Locale): Metadata {
 // then the roles and the work. Photo spots are labelled placeholders until real
 // photos exist. The portrait's box is mirrored in lib/about-entrance.ts.
 export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
-  const { bio, bridge, experience, headline, skills } = locale === "ko" ? ko : en;
+  const { bio, bridge, cards, experience, headline, panels, skills } = locale === "ko" ? ko : en;
+  // The sheet over the three cards: the first sentence as the title, the rest under it.
+  const [statementLead, ...statementRest] = bridge.statement.split(/(?<=\.)\s+/);
   const c = copy[locale];
   // Only link the resume once the PDF actually exists in /public.
   const hasResume = fs.existsSync(path.join(process.cwd(), "public", site.resumeUrl));
@@ -74,8 +75,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
-    [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
-    [["screen", 1280, 1600], ["laptop", 1800, 1200], ["hands", 1800, 1200]],
+    [["screen", 1280, 1600], ["laptop", 1800, 1200]],
     [["side", 1800, 1547], ["talk", 1800, 1200], ["desk", 2400, 1500]],
   ];
   // The two photos that appear beside the profile photo while scrolling (desktop); the gallery's own row of them hides there.
@@ -90,10 +90,11 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
       <div className="about-hero-track">
       <header className="about-hero">
         <div className="about-split-sheet" aria-hidden="true" />
-        <p className="about-split-title">{bridge.statement}</p>
+        <div className="about-split-title"><p>{statementLead}</p><p>{statementRest.join(" ")}</p></div>
         {splitPhotos.map(([name, side]) => (
           <figure key={name} className="about-split-card" data-side={side}>
             <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
+            <PhotoTag {...cards[side]} />
           </figure>
         ))}
         <div className="about-hero-photo">
@@ -102,11 +103,12 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         {/* The part of the photo inside the line: it lifts off the photo and glides to the middle. */}
         <div className="about-split-portrait" aria-hidden="true">
           <Image src={withBase(heroPhoto)} alt="" width={2160} height={1700} sizes="100vw" />
+          <PhotoTag {...cards.center} />
         </div>
         <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
           <h1 tabIndex={-1} className="about-hero-title">
-            {headline.map((line) => <span key={line} className="about-hero-line">{line} </span>)}
+            {headline.map((line, i) => <span key={line} className="about-hero-line">{i === 0 ? line.replace(/,$/, "") : line} </span>)}
           </h1>
           <p className="about-hero-subtitle">{bio[0]}</p>
           <p className="about-hero-actions">
@@ -121,9 +123,23 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
 
         <section className="about-bridge">
-          <StageHead title={c.steps} />
+          <h2 className="sr-only">{c.steps}</h2>
           <p className="about-statement reveal">{bridge.statement}</p>
-          <AboutBridge rows={bridge.rows} then={bridge.then} now={bridge.now} label={c.steps} />
+          <div className="about-panels">
+            {bridge.rows.map((row, i) => (
+              <article key={row.title} className="about-panel">
+                <Image src={withBase(`/images/about/${panels[i].photo}.webp`)} alt={c.photos[panels[i].photo]} fill sizes="100vw" data-photo={panels[i].photo} />
+                <div className="about-panel-copy">
+                  <h3>{row.title}</h3>
+                  <p className="about-panel-lead">{row.body}</p>
+                  <p className="about-panel-then">{bridge.then}: {row.then}{"note" in row && row.note ? ` ${row.note}` : ""}</p>
+                </div>
+                <div className="about-panel-card" aria-hidden="true">
+                  <PhotoTag label={panels[i].label} value={panels[i].value} pill={panels[i].pill} />
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
 
         {photos.length > 0 && (
@@ -198,6 +214,18 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 }
 
 // A section title in the case pages' form: display size, light, without a counter.
+// A keyword on a photo, after revolut.com's cards: small label, large value, pill, optional white strip.
+function PhotoTag({ label, value, pill, chip }: { label: string; value: string; pill: string; chip?: string[] }) {
+  return (
+    <div className="about-split-tag">
+      <p className="about-tag-label">{label}</p>
+      <p className="about-tag-value">{value}</p>
+      <p className="about-tag-pill">{pill}</p>
+      {chip && <p className="about-tag-chip">{chip.map((item) => <span key={item}>{item}</span>)}</p>}
+    </div>
+  );
+}
+
 function StageHead({ title, id }: { title: string; id?: string }) {
   return (
     <div className="about-stage-head reveal">
