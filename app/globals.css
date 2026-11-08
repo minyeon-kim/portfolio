@@ -7465,3 +7465,17 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 @media (prefers-reduced-motion: reduce) { .case-study .dv .dv-iter-card video { transition: none; } }
 .case-study .dv .dv-iter-duo.dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card.dv-iter-card:not([data-on]) figcaption { color: var(--dv-muted) !important; }
 .case-study .dv .dv-iter-card figcaption { transition: color 400ms var(--ease); }
+
+/* Chart tabs that carry their result (`stat`): three number cards instead of word pills, so the
+   result is always visible and nothing above repeats the chart. The current card is lit; the
+   timer fills along its top edge. */
+.case-study .dv .dv-cycle-nav:has(.dv-cycle-tabs[data-stats]) { flex: 1; }
+.case-study .dv .dv-cycle-tabs[data-stats] { display: grid; flex: 1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.case-study .dv .dv-cycle-tabs[data-stats] button { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-height: 0; padding: 20px 0 4px; border-radius: 0; border-top: 2px solid var(--dv-line); background: none; text-align: left; }
+.case-study .dv .dv-cycle-tabs[data-stats] button:hover { background: none; }
+.case-study .dv .dv-cycle-tabs[data-stats] .dv-cycle-stat { position: relative; color: var(--dv-muted); font-size: var(--t-statement, 36px); font-weight: 300; line-height: 1.1; font-variant-numeric: tabular-nums; transition: color 250ms var(--ease); }
+.case-study .dv .dv-cycle-tabs[data-stats] button[aria-pressed="true"] { border-top-color: var(--dv-chart-fill, var(--case-accent)); background: none; }
+.case-study .dv .dv-cycle-tabs[data-stats] button[aria-pressed="true"] .dv-cycle-stat { color: var(--case-accent); }
+.case-study .dv .dv-cycle-tabs[data-stats] button:hover .dv-cycle-stat { color: var(--dv-ink); }
+.case-study .dv .dv-cycle-tabs[data-stats] .dv-cycle-timer { inset: -2px 0 auto; height: 2px; background: var(--dv-chart-fill, var(--case-accent)); }
+@media (max-width: 47.99rem) { .case-study .dv .dv-cycle-tabs[data-stats] { grid-template-columns: 1fr; gap: 0; } .case-study .dv .dv-cycle-tabs[data-stats] button { padding: 14px 0; } }

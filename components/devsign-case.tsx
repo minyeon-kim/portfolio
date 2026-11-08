@@ -677,15 +677,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-body dv-ut-summary reveal">
             {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
           </p>
-          {/* The three results that matter stay on screen; the charts under them give the detail
-              and still change with the scroll (owner: results shouldn't hide behind tabs). */}
-          {testing.usability.keyNumbers && (
-            <dl className="dv-keynums dv-gap-40 reveal">
-              {testing.usability.keyNumbers.map((k: { value: string; label: string }) => (
-                <div key={k.value}><dt>{k.label}</dt><dd>{k.value}</dd></div>
-              ))}
-            </dl>
-          )}
           <section className="dv-cycle-card dv-gap-40"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}

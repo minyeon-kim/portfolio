@@ -452,11 +452,6 @@ export const study = {
         { label: "Session", steps: ["Brief", "First try", "Second try", "Survey", "Interview"] },
         { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "Expected change in communication (1–5)"] },
       ],
-      keyNumbers: [
-        { value: "2.3 → 0.4", label: "Help per task, first try → second try (goal: 1.5 or less)" },
-        { value: "55 · 75", label: "Usability score, designer · developer (goal 51.7, usual average 68)" },
-        { value: "5 / 5", label: "“Less asking where design and code differ”, from both" },
-      ],
       resultLead: "Help dropped sharply on the second try, but neither person finished the first try without help.",
       sheet: { label: "See the whole session sheet ↗", src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "All three pages of the usability test session sheet: for each scene of each scenario, the story read to the participant, the behavior to observe, the linked pain points and the questions to ask afterwards", caption: "The whole session sheet: for each scene, what we read aloud, what to observe and what to ask afterwards." },
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
@@ -465,6 +460,7 @@ export const study = {
         {
           type: "pair",
           tab: "Help needed",
+          stat: "2.3 → 0.4",
           title: "Help per task dropped from 2.3 on the first try to 0.4 on the second. Our goal was 1.5 or less.",
           note: "Average across 7 tasks. 0 is on their own, 3 is told directly.",
           scale: 3, goal: 1.5, goalLabel: "Goal 1.5",
@@ -473,12 +469,14 @@ export const study = {
         {
           type: "rings",
           tab: "Usability score",
+          stat: "55 · 75",
           title: "Usability scores (SUS, out of 100) were 55 for the designer and 75 for the developer, both above our goal of 51.7. The usual average is 68.",
           items: [{ label: "Designer", value: 55 }, { label: "Developer", value: 75 }],
         },
         {
           type: "table",
           tab: "Expectations",
+          stat: "5 / 5",
           title: "Both expect less asking about differences. On communication overall, they split.",
           max: 5, people: ["Designer", "Developer"],
           rows: [
