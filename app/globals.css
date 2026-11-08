@@ -7388,3 +7388,19 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 @media (max-width: 47.99rem) { .devsign-hero-visit { display: none; } }
 /* The "solves" label follows the current feature tone too, so a feature reads in one colour. */
 .case-study .dv .dv-flist-items li[data-on] .dv-flist-solves b { color: color-mix(in srgb, var(--c1) 70%, var(--ink)); }
+
+/* Usability key numbers: three results that stay on screen above the stepping charts. */
+.dv-keynums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 32px 0 0; border-top: 1px solid var(--dv-line); }
+.dv-keynums > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; }
+.dv-keynums dd { margin: 0; color: var(--case-accent); font-size: var(--t-statement, 36px); font-weight: 300; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.dv-keynums dt { color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (max-width: 47.99rem) { .dv-keynums { grid-template-columns: 1fr; gap: 24px; } }
+
+/* IA: the whole product tree folds open under the workspace tree, inside the case column. */
+.dv-ia-fold { margin-top: 32px; }
+.dv-ia-fold > summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; cursor: pointer; list-style: none; }
+.dv-ia-fold > summary::-webkit-details-marker { display: none; }
+.dv-ia-fold > summary::after { content: "+"; font-size: 18px; line-height: 1; transition: transform 250ms var(--ease); }
+.dv-ia-fold[open] > summary::after { transform: rotate(45deg); }
+.dv-ia-fold > summary:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
+.case-study .dv .dv-ia-fold .dv-ia { width: 100% !important; max-width: 100% !important; margin: 40px 0 0 !important; }

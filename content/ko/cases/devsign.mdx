@@ -374,15 +374,6 @@ export const study = {
     },
   },
   deliver: {
-    details: {
-      label: "UI details",
-      lead: "검토 요청, 결정, 기록은 각각 화면을 옮기지 않고 한 화면에서 끝난다.",
-      items: [
-        { title: "합친 자리에서 바로 검토를 요청한다", body: "시안을 합친 디자이너는 화면을 벗어나지 않고 결과를 확인할 사람을 고르고, 메모를 남겨 요청을 보낸다.", src: "/images/devsign/detail-request-ko.webp", width: 852, height: 760, alt: "Jordan이 선택되고 Alex는 선택되지 않은 검토자 선택 창, 메모 입력란과 검토 요청 보내기 버튼" },
-        { title: "두 값을 나란히 보고, 이유를 써야 보낼 수 있다", body: "디자이너는 지금 코드 값(40px)과 디자인 값(44px)을 나란히 본다. 이유는 필수라서, 모든 결정에 왜 그렇게 정했는지가 남는다.", src: "/images/devsign/detail-decide-ko.webp", width: 926, height: 601, alt: "높이 40px 유지와 디자인 44px, 배경 #7c3aed와 color.primary를 비교하고, 필수 이유 입력란과 원안으로 수정 보내기 버튼이 있는 결정 패널" },
-        { title: "정한 내용은 History에 남는다", body: "누가 언제 정했는지가 History 맨 위에 쌓이고, 그 결정에 이른 수정 기록이 아래에 이어진다.", src: "/images/devsign/detail-history-ko.webp", width: 408, height: 616, alt: "맨 위에 디자인 결정: 원안으로 수정 항목이 있고, 그 아래 Jordan과 Devsign 자동 수정, Alex의 이전 기록이 이어지는 History 목록" },
-      ],
-    },
     method: "Final design",
     title: "Prototype",
     lead: "핵심 문제 네 가지에 기능을 하나씩 만들어, 한곳에서 써 볼 수 있는 프로토타입으로 묶었다.",
@@ -462,6 +453,11 @@ export const study = {
         { label: "시나리오", value: "시안 합치기, 변경 요청 결정, 모바일 화면 수정" },
         { label: "진행", steps: ["과제 안내", "1차 수행", "두 번째 시도", "설문", "인터뷰"] },
         { label: "측정", chips: ["첫 시도에 필요했던 도움(0–3)", "SUS 사용성 점수", "커뮤니케이션 변화 기대(1–5)"] },
+      ],
+      keyNumbers: [
+        { value: "2.3 → 0.4", label: "과제당 필요했던 도움, 첫 시도 → 두 번째 시도 (목표 1.5 이하)" },
+        { value: "55 · 75", label: "사용성 점수, 디자이너 · 개발자 (목표 51.7, 평균 68)" },
+        { value: "5 / 5", label: "‘디자인과 코드 차이를 묻는 일이 줄어든다’, 두 명 모두" },
       ],
       resultLead: "두 번째 시도에서 도움은 크게 줄었지만, 첫 시도를 도움 없이 끝낸 사람은 없었다.",
       sheet: { label: "세션 진행 시트 전체 보기 ↗", src: "/images/devsign/ut-session-sheet.webp", width: 2400, height: 604, alt: "사용성 테스트 세션 진행 시트 3쪽 전체: 시나리오의 장면마다 참가자에게 읽어 주는 이야기, 관찰할 행동, 연결된 페인포인트, 사후 질문을 정리한 표", caption: "세션 진행 시트 전체. 장면마다 읽어 주는 이야기, 관찰할 행동, 사후 질문을 정리했다." },
