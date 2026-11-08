@@ -8043,3 +8043,6 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   }
 }
 .about-bridge:has(.about-panels) { width: auto; max-width: none; }
+
+/* Home to About: the landing's words leave as the photo starts to grow. */
+html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]) { opacity: 0; transition: opacity 240ms ease; }

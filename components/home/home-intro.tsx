@@ -129,6 +129,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
   const previewed = shown ?? (stacked && hover !== "about" ? projects[0] : null);
   useEffect(() => {
     const src = withBase("/images/about/hero-tall.webp");
+    router.prefetch(localize("/about/", locale));
     const aboutLink = (target: EventTarget | null) => (target as Element | null)?.closest?.<HTMLAnchorElement>(".home-about") ?? null;
     const onClick = (event: MouseEvent) => {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -139,7 +140,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
       event.preventDefault();
       event.stopPropagation();
       const from = card?.getBoundingClientRect();
-      enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector("main [data-about-page]")),
+      enterAbout(portraitBox(), src, () => router.push(localize("/about/", locale), { scroll: false }), () => Boolean(document.querySelector<HTMLImageElement>("main [data-about-page] .about-hero-photo img")?.complete),
         from ? { left: from.left, top: from.top, width: from.width, height: from.height } : undefined);
     };
     document.addEventListener("click", onClick, true);
