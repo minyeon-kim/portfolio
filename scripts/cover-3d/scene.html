@@ -19,11 +19,11 @@ const g=new THREE.ExtrudeGeometry(sh2,{depth:pl[1],bevelEnabled:true,bevelThickn
 const o=new THREE.Mesh(g,[M(P.plc,.55),M(P.pls,.7)]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=o.receiveShadow=true;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
-const black=M('#050506',.35),silver=M('#c8ccd0',.38,.35);
+const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.glow*.8;}
 add(new THREE.BoxGeometry(bw+.012,bh+.012,th),silver,[0,0,-th/2-.006],mon);
 add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
-add(new THREE.CylinderGeometry(.052,.052,.02,48),M('#08080a',.4),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
-add(new THREE.TorusGeometry(.052,.0035,10,48,Math.PI),M('#dfe2e5',.3,.2),[P.nx,-sh*.5+.004,-.037],mon).rotation.z=Math.PI;
+add(new THREE.CylinderGeometry(.052,.052,.02,48),(P.body?black:M('#08080a',.4)),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
+add(new THREE.TorusGeometry(.052,.0035,10,48,Math.PI),M(P.body?'#9a9ca0':'#dfe2e5',.3,.2),[P.nx,-sh*.5+.004,-.037],mon).rotation.z=Math.PI;
 const footY=.011,fy=P.pyaw-P.yaw;
 add(new RB(P.fs[0],.022,P.fs[1],6,.01),silver,[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
 add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+.036,P.foot[1]]).rotation.y=fy;
