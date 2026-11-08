@@ -7306,13 +7306,17 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > .dv-section-head + * { margin-top: 0; }
 }
 
-/* Iteration 1 captions sit in their own box under each plate (owner): neutral for As-is,
-   a light tint of the case colour for To-be. */
+/* Iteration 1: one card wraps the screen plate and its caption (owner: not a separate caption box).
+   The card is a quiet surface with a hairline; the caption sits inside it under the plate. */
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card {
+  padding: 12px !important; border: 1px solid var(--dv-line, var(--line)) !important; border-radius: 28px !important;
+  background: color-mix(in srgb, var(--dv-ink, var(--ink)) 4%, transparent) !important;
+}
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] {
+  border-color: color-mix(in srgb, var(--case-accent) 40%, transparent) !important;
+  background: color-mix(in srgb, var(--case-accent) 8%, transparent) !important;
+}
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption,
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card figcaption {
-  margin-top: 12px !important; padding: 16px 20px !important; border-radius: 16px !important;
-  background: color-mix(in srgb, var(--dv-ink, var(--ink)) 6%, transparent) !important;
-}
-:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card[data-side="b"] figcaption {
-  background: color-mix(in srgb, var(--case-accent) 12%, transparent) !important;
+  margin: 0 !important; padding: 16px 12px 8px !important; border-radius: 0 !important; background: none !important;
 }
