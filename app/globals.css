@@ -7885,3 +7885,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   .dh-shot-stage { translate: calc(var(--shot-x-p, 0px) * var(--shot-k, 1)) calc(var(--shot-y-p, 0px) * var(--shot-k, 1)); }
 }
 .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(56px, 10vw, 168px); }
+/* Devsign cover (compared with metalab.com/work/midjourney): the screen is about 1.28:1, so the 16:10 loop keeps its proportions and is anchored right (the decision panel stays whole). Nothing on the cover scales or slides in a repeat: the review panel stays open and only its state crossfades. */
+.dh-shot .devsign-hero-screen > .devsign-loop { left: -320px; right: auto; width: 1600px !important; height: 1000px; }
+.dh-shot .devsign-loop-pin, .dh-shot .devsign-loop-approve { display: none; }
+.dh-shot .devsign-loop-panel { animation: none; transform: none; }
