@@ -7532,3 +7532,14 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-panel .devsign-hero-title { max-width: 20ch; margin-inline: 0; text-align: left; }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-subtitle { margin-inline: 0; text-align: left; }
 .devsign-hero:is([data-project="devsign"], [data-project="gemini-privacy"]) .devsign-hero-actions { justify-content: flex-start; }
+
+/* Spacing hierarchy (owner: the survey chart and the community posts sat too
+   close while other gaps were wide; blocks were 96px apart, the same as parts
+   inside a block, so nothing grouped). Desktop: blocks (a label + finding and
+   what follows) 176px apart, parts inside a block 112px, heading to its content
+   48px as before. */
+@media (min-width: 64rem) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > :not(.dv-section-head) + *:has(.dv-block),
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > * > * + *:has(.dv-block) { margin-top: 176px !important; }
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-posts.dv-posts { margin-top: 112px !important; }
+}
