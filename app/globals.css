@@ -7280,3 +7280,10 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
     width: 100%; max-width: 100%; margin-left: 0;
   }
 }
+
+/* Overview summary shows all three at once (owner): label | sentence rows on desktop. */
+.dv-gs-name { margin: 0; }
+@media (min-width: 64rem) {
+  .dv-gs-list > li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: 48px; align-items: baseline; }
+  .case-study .dv .dv-gs-list .dv-gs-title { margin-top: 0; }
+}
