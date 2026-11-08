@@ -10,7 +10,7 @@ const ACTIVE = "(min-width: 64rem) and (hover: hover)";
 // Slow paths in the panel's right half, clear of the left-aligned title.
 const paths = [
   (t: number, w: number) => [w * (0.66 + 0.04 * Math.sin(t * 0.37)), 150 + 30 * Math.sin(t * 0.53 + 1)],
-  (t: number, w: number) => [w * (0.86 + 0.04 * Math.sin(t * 0.31 + 2)), 330 + 30 * Math.cos(t * 0.43)],
+  (t: number, w: number) => [w * (0.86 + 0.04 * Math.sin(t * 0.31 + 2)), 250 + 30 * Math.cos(t * 0.43)],
 ];
 const CURSOR_COLORS = ["#7c5cff", "#0b7f56"];
 
