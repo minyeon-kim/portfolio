@@ -74,10 +74,12 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
   // Photos from the Figma Photo page, in justified rows: each row keeps every photo
   // whole at one height ([name, width, height]).
   const photoRows: [string, number, number][][] = [
-    [["side", 1800, 1547], ["talk", 1800, 1200], ["screen", 1280, 1600]],
     [["board-wide", 1800, 962], ["board-bw", 1800, 1200]],
-    [["laptop", 1800, 1200], ["hands", 1800, 1200], ["desk", 2400, 1500]],
+    [["screen", 1280, 1600], ["laptop", 1800, 1200], ["hands", 1800, 1200]],
+    [["side", 1800, 1547], ["talk", 1800, 1200], ["desk", 2400, 1500]],
   ];
+  // The three photos the hero divides into while scrolling (desktop); the gallery's own row of them hides there.
+  const splitPhotos: [string, "left" | "center" | "right"][] = [["desk", "left"], ["side", "center"], ["talk", "right"]];
   const photos = photoRows.map((row) => row.filter(([name]) => inPublic(`/images/about/${name}.webp`))).filter((row) => row.length);
 
   return (
@@ -85,9 +87,21 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
       {/* After superhuman.com's hero: the photo fills the screen, the headline and actions
           sit centred over it, and a few glass cards float on the plain wall at the right.
           The photo's crop is mirrored in lib/about-entrance.ts (aboutHeroPosition). */}
+      <div className="about-hero-track">
       <header className="about-hero">
+        <div className="about-split-sheet" aria-hidden="true" />
+        {splitPhotos.filter(([, side]) => side !== "center").map(([name, side]) => (
+          <figure key={name} className="about-split-card" data-side={side}>
+            <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
+          </figure>
+        ))}
         <div className="about-hero-photo">
           <Image src={withBase(heroPhoto)} alt={c.portrait} fill sizes="100vw" priority />
+          {splitPhotos.filter(([, side]) => side === "center").map(([name]) => (
+            <figure key={name} className="about-split-center" data-photo={name}>
+              <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} fill sizes="34vw" />
+            </figure>
+          ))}
         </div>
         <div className="about-hero-copy">
           <h1 tabIndex={-1} className="about-hero-title">
@@ -101,6 +115,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           </p>
         </div>
       </header>
+      </div>
       <article className="about-body">
         <Todo>add where you are based and whether you are open to relocation or remote roles</Todo>
 
@@ -114,7 +129,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
           <section className="about-gallery" aria-labelledby="about-at-work">
             <StageHead title={c.atWork} id="about-at-work" />
             {photos.map((row) => (
-              <div key={row[0][0]} className="about-gallery-row">
+              <div key={row[0][0]} className="about-gallery-row" data-split={row.some(([name]) => splitPhotos.some(([n]) => n === name)) || undefined}>
                 {row.map(([name, width, height]) => (
                   <figure key={name} className="about-gallery-photo reveal" style={{ flexGrow: width / height }}>
                     <Image src={withBase(`/images/about/${name}.webp`)} alt={c.photos[name]} width={width} height={height}
