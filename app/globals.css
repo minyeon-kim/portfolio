@@ -7364,3 +7364,27 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .case-study .dv .dv-dscroll [data-t="1"] { --g1: #4cc3f2; --g2: #43d9c2; }
 .case-study .dv .dv-dscroll [data-t="2"] { --g1: #f38bbd; --g2: #fbb27c; }
 .case-study .dv .dv-dscroll [data-t="3"] { --g1: #4fd6a0; --g2: #b9e86a; }
+
+/* Handoff tabs keep one height: every screen sits in one grid cell, only the current one shows. */
+.dv-hdoc-stack { display: grid; }
+.dv-hdoc-stack > .dv-hdoc-panel { grid-area: 1 / 1; min-width: 0; }
+.dv-hdoc-stack > .dv-hdoc-panel:not([data-on]) { visibility: hidden; }
+.dv-hdoc-stack > .dv-hdoc-panel { transition: opacity 250ms var(--ease); }
+.dv-hdoc-stack > .dv-hdoc-panel:not([data-on]) { opacity: 0; }
+
+/* Double Diamond: the stage name stays when its methods show (it vanished, leaving three names);
+   the name moves up and the methods sit under it, in the same spot inside the diamond. */
+@media (min-width: 90rem) and (hover: hover) {
+  .dv-dd-name > span { display: inline-block; transition: transform 250ms var(--ease), opacity 200ms var(--ease); }
+  .dv-dd-methods { transition: transform 250ms var(--ease), opacity 200ms var(--ease); }
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li[data-show] .dv-dd-name > span,
+  .dv-dd .dv-dd-stages a:is(:hover, :focus-visible) .dv-dd-name > span { opacity: 1; transform: translateY(-36px); }
+  .dv-dd.dv-dd.dv-dd .dv-dd-stages li[data-show] .dv-dd-methods,
+  .dv-dd .dv-dd-stages a:is(:hover, :focus-visible) .dv-dd-methods { transform: translateY(28px); }
+}
+@media (prefers-reduced-motion: reduce) { .dv-dd-name > span, .dv-dd-methods { transition: none; } }
+
+/* Phones: the opener already has its "Try the prototype" button; the cut-off address pill on the screen is hidden. */
+@media (max-width: 47.99rem) { .devsign-hero-visit { display: none; } }
+/* The "solves" label follows the current feature tone too, so a feature reads in one colour. */
+.case-study .dv .dv-flist-items li[data-on] .dv-flist-solves b { color: color-mix(in srgb, var(--c1) 70%, var(--ink)); }

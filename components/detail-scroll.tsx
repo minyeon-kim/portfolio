@@ -14,15 +14,20 @@ export function DetailScroll({ items, asIs }: { items: Item[]; asIs: string }) {
   const [active, setActive] = useState(0);
   const refs = useRef<(HTMLLIElement | null)[]>([]);
   useEffect(() => {
-    // The text whose box holds the middle of the screen is current (plain scroll listener, so it
-    // also works where observers are throttled).
+    // The text whose words sit nearest the middle of the screen, where the card is centred, is
+    // current. Measured on the words, not the row box: the words are centred in a tall row, so
+    // the row box crossed the middle a third of a screen before its words reached the card.
+    // Plain scroll listener, so it also works where observers are throttled.
     const read = () => {
       const mid = window.innerHeight / 2;
       let best = 0, dist = Infinity;
       refs.current.forEach((el, i) => {
         if (!el) return;
-        const r = el.getBoundingClientRect();
-        const d = r.top <= mid && r.bottom >= mid ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+        const words = [...el.children].filter((c) => !c.classList.contains("dv-dscroll-inline"));
+        if (!words.length) return;
+        const top = words[0].getBoundingClientRect().top;
+        const bottom = words[words.length - 1].getBoundingClientRect().bottom;
+        const d = Math.abs((top + bottom) / 2 - mid);
         if (d < dist) { dist = d; best = i; }
       });
       setActive(best);

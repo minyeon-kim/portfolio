@@ -457,8 +457,9 @@ export function FeatureList({ reels, phone }: { reels: Reel[]; phone?: boolean }
   const pick = (i: number) => {
     const v = videos.current[i];
     if (v) v.currentTime = 0;
-    if (pinned) go(i);
-    else setActive(i);
+    // Pressing a feature swaps the clip in place; it no longer scrolls the page to that step
+    // (it jumped up to 1,400px). The next scroll into another step takes over again.
+    setActive(i);
   };
   return (
     <div ref={track} className="dv-held-track dv-flist-track dv-gap-40" style={{ "--n": reels.length } as CSSProperties}>
@@ -1014,7 +1015,6 @@ export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: numbe
   const [current, setCurrent] = useState(first);
   const [lit, setLit] = useState(-1);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const screen = spec.screens[current];
   const pick = (i: number) => { setCurrent(i); setLit(-1); };
   const onKeys = (event: React.KeyboardEvent) => {
     const last = spec.screens.length - 1;
@@ -1033,12 +1033,18 @@ export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: numbe
           </button>
         ))}
       </div>
-      <div id="ht-panel" role="tabpanel" aria-labelledby={`ht-tab-${screen.id}`} className="dv-hdoc-panel" key={screen.id}>
-        <p className="dv-hdoc-purpose dv-hdoc-one-purpose">{screen.purpose}</p>
-        <div className="dv-hdoc-pair">
-          <SpecShot screen={screen} lit={lit} onPin={setLit} />
-          <SpecRows screen={screen} cols={spec.cols} lit={lit} onRow={setLit} />
-        </div>
+      {/* Every screen is laid out in one grid cell and only the current one shows, so the block
+          keeps the height of its tallest screen and nothing below moves when a tab changes. */}
+      <div className="dv-hdoc-stack">
+        {spec.screens.map((item, i) => (
+          <div key={item.id} id={i === current ? "ht-panel" : undefined} role={i === current ? "tabpanel" : undefined} aria-labelledby={i === current ? `ht-tab-${item.id}` : undefined} aria-hidden={i === current ? undefined : true} inert={i !== current} data-on={i === current || undefined} className="dv-hdoc-panel">
+            <p className="dv-hdoc-purpose dv-hdoc-one-purpose">{item.purpose}</p>
+            <div className="dv-hdoc-pair">
+              <SpecShot screen={item} lit={i === current ? lit : -1} onPin={setLit} />
+              <SpecRows screen={item} cols={spec.cols} lit={i === current ? lit : -1} onRow={setLit} />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
