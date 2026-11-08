@@ -41,7 +41,7 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
           const out = i === AFF_LEFT_OUT;
           return (
             <li key={t.name.ko} className="reveal" tabIndex={0} data-on={on === i || undefined} data-out={out || undefined} onMouseEnter={() => setOn(i)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(i)} onBlur={() => setOn(null)}>
-              <p className="dv-axe-name"><b>{t.name[locale]}</b><span>{count}</span></p>
+              <p className="dv-axe-name"><b>{t.name[locale]}</b><span>{locale === "ko" ? `발화 ${count}개` : `${count} statements`}</span></p>
               <p className="dv-axe-short">{SHORT[i][locale]}</p>
               {out && <p className="dv-axe-out">{ui.out}</p>}
               <span className="sr-only">{t.insight[locale]}</span>

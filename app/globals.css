@@ -7404,3 +7404,15 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-ia-fold[open] > summary::after { transform: rotate(45deg); }
 .dv-ia-fold > summary:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
 .case-study .dv .dv-ia-fold .dv-ia { width: 100% !important; max-width: 100% !important; margin: 40px 0 0 !important; }
+
+/* Journey: what the curve's height means, beside the two people. */
+.dv-journey-axis { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.dv-journey-axis::before { content: "↕"; color: var(--dv-ink); }
+@media (max-width: 47.99rem) { .dv-journey-axis { margin-left: 0; flex-basis: 100%; } }
+
+/* Phones: links that stand on their own line ("view the full board", guide, flow, session sheet)
+   and the footer row links get a 44px touch target; inline links inside sentences stay as text. */
+@media (max-width: 47.99rem) {
+  .case-study :is(.dv-source-link, .dv-iv-guide, .dv-fc-full, .dv-aff-foot > a.link, p > a.link:only-child) { display: inline-flex !important; align-items: center; min-height: 44px; }
+  .site-footer :is(li, p) > a { display: inline-flex; align-items: center; min-height: 44px; }
+}

@@ -278,6 +278,8 @@ function Journey({ journey, wide }: { journey: Study; wide?: boolean }) {
       <div className="dv-journey-legend">
         <button type="button" data-line="designer">{journey.designer}</button>
         <button type="button" data-line="developer">{journey.developer}</button>
+        {/* What up and down mean, so the curve reads without guessing (review: no axis). */}
+        {journey.axis && <span className="dv-journey-axis">{journey.axis}</span>}
       </div>
       <svg viewBox="0 0 1376 340" role="img" aria-label={`${journey.steps.join(" → ")}. ${journey.developer}: ${journey.developerLow}. ${journey.designer}: ${journey.designerLow}.`}>
         {xs.map((x, i) => (
