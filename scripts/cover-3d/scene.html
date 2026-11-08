@@ -12,6 +12,7 @@ const s=new THREE.Scene();const pm=new THREE.PMREMGenerator(r);s.environment=pm.
 const cam=new THREE.PerspectiveCamera(P.fov,W/H,.1,100);cam.position.set(...P.cam);cam.lookAt(...P.look);cam.updateMatrixWorld();
 const rig=new THREE.Group();rig.rotation.y=P.yaw;s.add(rig);
 const M=(c,ro,me=0)=>new THREE.MeshStandardMaterial({color:c,roughness:ro,metalness:me});
+const paint=(g,fn)=>{g.computeBoundingBox();const b=g.boundingBox,p=g.attributes.position,c=new Float32Array(p.count*3),dk=new THREE.Color('#07060f'),br=new THREE.Color('#f4f5fb'),t=new THREE.Color();for(let i=0;i<p.count;i++){const x=(p.getX(i)-b.min.x)/(b.max.x-b.min.x),y=(p.getY(i)-b.min.y)/(b.max.y-b.min.y),z=(p.getZ(i)-b.min.z)/(b.max.z-b.min.z||1);t.copy(dk).lerp(br,Math.min(1,Math.max(0,fn(x,y,z))));c[i*3]=t.r;c[i*3+1]=t.g;c[i*3+2]=t.b}g.setAttribute('color',new THREE.BufferAttribute(c,3));return new THREE.MeshBasicMaterial({vertexColors:true})};
 const add=(g,m,p,par=rig)=>{const o=new THREE.Mesh(g,m);o.position.set(...p);o.castShadow=o.receiveShadow=true;par.add(o);return o};
 const pl=P.pl;
 {const sh2=new THREE.Shape(),w=pl[0]/2,d=pl[2]/2,c=.3;sh2.moveTo(-w+c,-d);sh2.lineTo(w-c,-d);sh2.quadraticCurveTo(w,-d,w,-d+c);sh2.lineTo(w,d-c);sh2.quadraticCurveTo(w,d,w-c,d);sh2.lineTo(-w+c,d);sh2.quadraticCurveTo(-w,d,-w,d-c);sh2.lineTo(-w,-d+c);sh2.quadraticCurveTo(-w,-d,-w+c,-d);
@@ -25,18 +26,18 @@ const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.ro
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
 const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.edgeGlow??P.glow*.8;}
-add(new THREE.BoxGeometry(bw+.012,bh+.012,th),silver,[0,0,-th/2-.006],mon);
+{const g=new THREE.BoxGeometry(bw+.012,bh+.012,th,80,80,1);add(g,paint(g,(x,y)=>Math.pow(x,14)*(.28+.72*Math.pow(y,1.4))+Math.pow(y,60)*Math.pow(x,2)*.75),[0,0,-th/2-.006],mon);}
 add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
 add(new THREE.CylinderGeometry(.052,.052,.02,48),(P.body?black:M('#08080a',.4)),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
 add(new THREE.TorusGeometry(.052,.0035,10,48,Math.PI),M(P.body?'#9a9ca0':'#dfe2e5',.3,.2),[P.nx,-sh*.5+.004,-.037],mon).rotation.z=Math.PI;
 const footY=.011,fy=P.pyaw-P.yaw;
-add(new RB(P.fs[0],.022,P.fs[1],6,.01),silver,[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
+const fg=new RB(P.fs[0],.022,P.fs[1],6,.01);add(fg,paint(fg,(x,y,z)=>Math.pow(x,1.2)*(z>.5?1:.25)),[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
 add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+.036,P.foot[1]]).rotation.y=fy;
 // neck joins foot to the monitor
 const nb=mon.localToWorld(new THREE.Vector3(0,-sh*.43,-.14));s.updateMatrixWorld(true);
 const ns=new THREE.Shape();ns.moveTo(-P.nb/2,-.5);ns.lineTo(P.nb/2,-.5);ns.lineTo(P.nt/2,.5);ns.lineTo(-P.nt/2,.5);ns.closePath();
 const ng=new THREE.ExtrudeGeometry(ns,{depth:.07,bevelEnabled:false});ng.translate(0,0,-.035);
-const neck=add(ng,[black,silver],[0,0,0]);
+const neck=add(ng,[black,paint(ng,(x,y)=>Math.pow(x,8)*(.25+.75*(1-y)))],[0,0,0]);
 {const a=rig.worldToLocal(mon.localToWorld(new THREE.Vector3(P.nx,-sh*.42,-.13))),b=new THREE.Vector3(P.foot[0],P.py+.03,P.foot[1]-.1);neck.position.copy(a.clone().add(b).multiplyScalar(.5));neck.scale.y=a.distanceTo(b);neck.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),a.clone().sub(b).normalize());}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,20,256,256,256);g2.addColorStop(0,'rgba(8,4,40,.75)');g2.addColorStop(.45,'rgba(8,4,40,.34)');g2.addColorStop(1,'rgba(8,4,40,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(P.fs[0]*2.1,P.fs[1]*3.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(P.foot[0],P.py+.016,P.foot[1]);rig.add(m)}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,10,256,256,256);g2.addColorStop(0,'rgba(200,190,255,'+P.spill+')');g2.addColorStop(1,'rgba(200,190,255,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));m.rotation.x=-Math.PI/2;m.position.set(0,P.py+.018,.55);rig.add(m)}
