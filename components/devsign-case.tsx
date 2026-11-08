@@ -9,6 +9,7 @@ import { Wireflow } from "@/components/devsign-wireflow";
 import { FlowChart, IaFocusTree } from "@/components/devsign-diagrams";
 import { FlowPlay } from "@/components/flow-play";
 import { AffinityExplorer } from "@/components/affinity-explorer";
+import { DetailScroll } from "@/components/detail-scroll";
 import { AffinityThemes } from "@/components/affinity-themes";
 import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffTabs, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
@@ -632,21 +633,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.details && (
           <div className="dv-details">
             <Block title={deliver.details.label} lead={deliver.details.lead} ff={ff} />
-            <ol className="dv-details-list">
-              {deliver.details.items.map((d: { title: string; body: string; src: string; width: number; height: number; alt: string; wide?: boolean; before?: string }, i: number) => (
-                <li key={d.title} className="dv-detail reveal" data-reveal-group="" data-wide={d.wide ? "" : undefined}>
-                  <div className="dv-detail-text">
-                    <span className="dv-detail-num">{String(i + 1).padStart(2, "0")}</span>
-                    <h4 className="dv-detail-title">{d.title}</h4>
-                    <p className="dv-detail-body">{d.body}</p>
-                    {d.before && <p className="dv-detail-before"><span>{labels.asIs ?? "As-is"}</span>{d.before}</p>}
-                  </div>
-                  <div className="dv-detail-card">
-                    <Image src={withBase(d.src)} alt={d.alt} width={d.width} height={d.height} sizes="(max-width: 1023px) 90vw, 560px" style={{ "--dw": d.width * 0.75 } as CSSProperties} />
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <DetailScroll items={deliver.details.items} asIs={labels.asIs ?? "As-is"} />
           </div>
         )}
         {!ff && !deliver.details && (
