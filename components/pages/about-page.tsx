@@ -135,7 +135,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
               </div>
             </article>
             <article className="about-panel about-panel-contact" aria-labelledby="about-contact-title">
-              <Image src={withBase("/images/about/laptop.webp")} alt={c.photos.laptop} fill sizes="100vw" />
+              <Image src={withBase("/images/about/side.webp")} alt={c.photos.side} fill sizes="100vw" />
               <div className="about-panel-copy">
                 <h2 id="about-contact-title">{c.open}</h2>
                 <p className="about-panel-actions">
