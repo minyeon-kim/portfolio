@@ -50,8 +50,8 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
             </div>
           </HeroShot>
         ) : (
-          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1440} height={838} alt="" mediaWidth={1343} mediaHeight={1000} cropPhone={[493, 0, 484, 838]}
-            matrix="matrix3d(0.386063256, -0.00403789807, 0, -5.14754927e-05, -0.038678209, 0.460135074, 0, -8.08801034e-06, 0, 0, 1, 0, 439.34355, 83.8615, 0, 1)">
+          <HeroShot src={withBase("/images/devsign/cover-studio.webp")} width={1536} height={864} alt="" mediaWidth={1700} mediaHeight={1000} crop={[26, 0, 1484, 864]} cropPhone={[465, 0, 499, 864]}
+            matrix="matrix3d(0.284441227, -0.0561181688, 0, -0.000142085808, -0.0402729698, 0.40231146, 0, -1.53728953e-05, 0, 0, 1, 0, 356.647485, 113.410835, 0, 1)">
             <div className="devsign-hero-media">
               <div className="devsign-hero-window">
                 <div className="devsign-hero-screen"><DevsignLoop alt={alt} preload /></div>

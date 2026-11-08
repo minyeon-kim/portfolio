@@ -14,8 +14,8 @@ const L = {
   ko: { closeNote: '알림 닫기', merge: 'Merge', send: '검토 요청 보내기', fix: '원안으로 수정', pin: 'PlaceOrderButton', history: '히스토리', conflict: '변경확인', tabs: ['헤더', '주문 요약', '결제 수단', '결제 바'] },
 }[lang];
 
-// The cover clip fills the 1.34:1 monitor on the case opener: taller viewport, no camera.
-const VH = only === 'cover' ? 1072 : 900;
+// The cover clip fills the 1.7:1 monitor on the case opener: taller viewport, no camera.
+const VH = only === 'cover' ? 847 : 900;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function boot(browser) {
@@ -183,11 +183,11 @@ const CLIPS = {
     await page.evaluate(() => {
       const j = document.createElement('div');
       j.dataset.cover = 'jordan';
-      j.style.cssText = 'position:fixed;left:420px;top:640px;z-index:2147483646;pointer-events:none;';
+      j.style.cssText = 'position:fixed;left:420px;top:505px;z-index:2147483646;pointer-events:none;';
       j.innerHTML = `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" fill="#0ea5e9" stroke="rgba(0,0,0,.25)" stroke-width="1" stroke-linejoin="round"/></svg><span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;border-radius:999px;padding:2px 8px;font-size:10px;line-height:1;font-weight:500;color:#fff;white-space:nowrap;background:#0ea5e9">Jordan</span>`;
       document.body.appendChild(j);
-      // Time (s), x, y on the 1440x1125 screen.
-      const path = [[0, 420, 640], [1.6, 470, 760], [3.2, 520, 640], [5.0, 470, 610], [6.8, 1130, 400], [9.5, 1150, 420]];
+      // Time (s), x, y on the cover screen.
+      const path = [[0, 420, 505], [1.6, 470, 600], [3.2, 520, 505], [5.0, 470, 480], [6.8, 1130, 330], [9.5, 1150, 345]];
       const ease = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
       const t0 = performance.now();
       const tick = (now) => {
@@ -205,9 +205,12 @@ const CLIPS = {
     await wait(900);
     await click(page, '+4', { after: 1100 });
     mark();
-    await click(page, L.pin, { after: 2200 });
+    await click(page, L.pin, { after: 1500 });
     mark();
-    await click(page, L.fix, { after: 2600 });
+    await moveScreen(page, 1190, 560);
+    await page.mouse.wheel(0, 300);
+    await wait(700);
+    await click(page, L.fix, { after: 2400 });
   },
   async conflict(page, mark) {
     await click(page, '+4', { after: 700 });
@@ -270,7 +273,7 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 1192}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 942}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '21', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
