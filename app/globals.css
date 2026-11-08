@@ -7870,3 +7870,11 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .devsign-hero.dh-cover .devsign-hero-details.devsign-hero-details { margin-top: clamp(40px, 5svh, 64px); }
 /* Gemini's longer name stays on one line. */
 .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(56px, 10vw, 180px); }
+/* Cover height measured from metalab.com's case covers: width / 1.718 on desktop (838px at 1440, 1069 at 1836), 390 x 675 on phones. HeroShot passes the crop as custom properties so the first paint is right. */
+.dh-shot { aspect-ratio: var(--shot-a); }
+.dh-shot-stage { translate: calc(var(--shot-x, 0px) * var(--shot-k, 1)) calc(var(--shot-y, 0px) * var(--shot-k, 1)); }
+@media (max-width: 47.99rem) {
+  .dh-shot { aspect-ratio: var(--shot-a-p); }
+  .dh-shot-stage { translate: calc(var(--shot-x-p, 0px) * var(--shot-k, 1)) calc(var(--shot-y-p, 0px) * var(--shot-k, 1)); }
+}
+.devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(56px, 10vw, 168px); }
