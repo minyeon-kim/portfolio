@@ -24,7 +24,7 @@ const topm=M(P.plc,1),sidem=M(P.pls,1);for(const m of [topm,sidem]){m.vertexColo
 const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=o.receiveShadow=true;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
-const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.glow*.8;}
+const black=M(P.body||'#050506',.42,P.body?.25:0),silver=M(P.edge||'#c8ccd0',.38,.35);if(P.body){black.emissive=new THREE.Color('#ffffff');black.emissiveIntensity=P.glow;silver.emissive=new THREE.Color('#ffffff');silver.emissiveIntensity=P.edgeGlow??P.glow*.8;}
 add(new THREE.BoxGeometry(bw+.012,bh+.012,th),silver,[0,0,-th/2-.006],mon);
 add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
 add(new THREE.CylinderGeometry(.052,.052,.02,48),(P.body?black:M('#08080a',.4)),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
@@ -36,7 +36,7 @@ add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+.036,P.foo
 const nb=mon.localToWorld(new THREE.Vector3(0,-sh*.43,-.14));s.updateMatrixWorld(true);
 const ns=new THREE.Shape();ns.moveTo(-P.nb/2,-.5);ns.lineTo(P.nb/2,-.5);ns.lineTo(P.nt/2,.5);ns.lineTo(-P.nt/2,.5);ns.closePath();
 const ng=new THREE.ExtrudeGeometry(ns,{depth:.07,bevelEnabled:false});ng.translate(0,0,-.035);
-const neck=add(ng,black,[0,0,0]);
+const neck=add(ng,[black,silver],[0,0,0]);
 {const a=rig.worldToLocal(mon.localToWorld(new THREE.Vector3(P.nx,-sh*.42,-.13))),b=new THREE.Vector3(P.foot[0],P.py+.03,P.foot[1]-.1);neck.position.copy(a.clone().add(b).multiplyScalar(.5));neck.scale.y=a.distanceTo(b);neck.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),a.clone().sub(b).normalize());}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,20,256,256,256);g2.addColorStop(0,'rgba(8,4,40,.75)');g2.addColorStop(.45,'rgba(8,4,40,.34)');g2.addColorStop(1,'rgba(8,4,40,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(P.fs[0]*2.1,P.fs[1]*3.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(P.foot[0],P.py+.016,P.foot[1]);rig.add(m)}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,10,256,256,256);g2.addColorStop(0,'rgba(200,190,255,'+P.spill+')');g2.addColorStop(1,'rgba(200,190,255,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));m.rotation.x=-Math.PI/2;m.position.set(0,P.py+.018,.55);rig.add(m)}
@@ -59,7 +59,7 @@ for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W
 x.putImageData(out,0,0);
 {const hi=document.createElement('canvas');hi.width=W;hi.height=H;const hx=hi.getContext('2d'),hd=hx.createImageData(W,H);for(let i=0;i<e.length;i+=4){const l=(e[i]+e[i+1]+e[i+2])/3,k=Math.max(0,l-105)/150;hd.data[i]=e[i]*k;hd.data[i+1]=e[i+1]*k;hd.data[i+2]=e[i+2]*k;hd.data[i+3]=255}hx.putImageData(hd,0,0);
 x.globalCompositeOperation='lighter';x.filter=`blur(${W/90}px)`;x.globalAlpha=P.bloom;x.drawImage(hi,0,0);x.filter='none';x.globalAlpha=1;x.globalCompositeOperation='source-over';
-const v=x.createRadialGradient(W*.52,H*.46,W*.3,W*.52,H*.46,W*.75);v.addColorStop(0,'rgba(10,4,50,0)');v.addColorStop(1,'rgba(6,2,36,.62)');x.fillStyle=v;x.fillRect(0,0,W,H);
+const v=x.createRadialGradient(W*.52,H*.46,W*.3,W*.52,H*.46,W*.75);v.addColorStop(0,'rgba(10,4,50,0)');v.addColorStop(1,'rgba(4,1,26,.78)');x.fillStyle=v;x.fillRect(0,0,W,H);
 const id=x.getImageData(0,0,W,H);for(let i=0;i<id.data.length;i+=4){const n=((Math.random()+Math.random())-1)*P.grain;id.data[i]+=n;id.data[i+1]+=n;id.data[i+2]+=n}x.putImageData(id,0,0)}
 // Screen hole, antialiased.
 x.fillStyle='#000';x.globalCompositeOperation='destination-out';x.beginPath();corners.forEach(([a,bb],i)=>{const px=a/L,py=bb/L;i?x.lineTo(px,py):x.moveTo(px,py)});x.closePath();x.fill();
