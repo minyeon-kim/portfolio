@@ -8454,3 +8454,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > .dv-section-head { margin-bottom: 96px; }
 }
 .case-study .dv .dv-cycle-plate .dv-cycle-foot p:first-child, .case-study .dv .dv-cycle-foot .dv-chart-source { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; }
+
+/* One flat colour for the large emphasis surfaces (owner: the light in the Problem statement drew
+   the eye away from its sentence, and the big purple areas each had their own gradient). The cover
+   keeps its light, because that is a lit 3D scene and not a surface. */
+.case-study[data-project="devsign"] { --dv-solid: #2c2460; }
+.case-study[data-project="gemini"] { --dv-solid: #1d2d5e; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-core.dv-core.dv-core { background: var(--dv-solid); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-flist-frame.dv-flist-frame { background: var(--dv-solid); }
