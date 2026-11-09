@@ -183,13 +183,11 @@ function StepTabs({ names, active, go, label }: { names: string[]; active: numbe
 // A clip that ends hands over to the next, round to the first, without moving the page;
 // scrolling into another step takes over again.
 export function IterationCompare({ changes, labels, head }: { changes: Change[]; labels: { asIs: string; toBe: string }; head?: ReactNode }) {
-  const { root, active, setActive, pinned, go } = useHeldSteps(changes.length);
-  const locale = useLocale();
+  const { root, active, setActive, pinned } = useHeldSteps(changes.length);
   return (
     <div ref={root} className="dv-iter" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
         {head && <div className="dv-iter-head">{head}</div>}
-        {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
         <div className="dv-held-plate">
           <ol className="dv-iter-steps">
             {changes.map((c, i) => <IterationStep key={c.title} change={c} index={i} total={changes.length} pinned={pinned} active={i === active} labels={labels} onEnd={() => {}} />)}
@@ -204,12 +202,10 @@ export function IterationCompare({ changes, labels, head }: { changes: Change[];
 // what changed beside it. The As-is line has no screen of its own, so it isn't a switch.
 type ScreenChange = { title: string; before: string; after: string; src: string; alt?: string; width?: number; height?: number };
 export function ScreenSteps({ changes, labels }: { changes: ScreenChange[]; labels: { asIs: string; toBe: string } }) {
-  const { root, active, pinned, go } = useHeldSteps(changes.length);
-  const locale = useLocale();
+  const { root, active, pinned } = useHeldSteps(changes.length);
   return (
     <div ref={root} className="dv-iter dv-screens-held" style={{ "--n": changes.length } as CSSProperties}>
       <div className="dv-iter-stage">
-        {pinned && <StepTabs names={changes.map((c) => c.title)} active={active} go={go} label={locale === "ko" ? "바꾼 점" : "Changes"} />}
         <div className="dv-held-plate">
         <ol className="dv-iter-steps">
           {changes.map((c, i) => (
