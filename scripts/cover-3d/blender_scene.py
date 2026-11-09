@@ -139,12 +139,12 @@ def shade_around_foot(m):
     mul = nt.nodes.new('ShaderNodeVectorMath'); mul.operation = 'SCALE'
     mul.inputs[0].default_value = b.inputs['Base Color'].default_value[:3]
     nt.links.new(rng.outputs[0], mul.inputs['Scale'])
-    # The sides are a greyer, less blue violet than the lit top.
+    # The sides share the top's violet; only the light differs.
     sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Normal'], sep.inputs[0])
     up = nt.nodes.new('ShaderNodeMath'); up.operation = 'GREATER_THAN'; up.inputs[1].default_value = 0.9
     nt.links.new(sep.outputs['Z'], up.inputs[0])
     mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
-    mix.inputs['A'].default_value = srgb('#5e5868')
+    mix.inputs['A'].default_value = srgb('#4d3a9c')
     nt.links.new(up.outputs[0], mix.inputs['Factor'])
     nt.links.new(mul.outputs[0], mix.inputs['B'])
     nt.links.new(mix.outputs['Result'], b.inputs['Base Color'])
@@ -233,7 +233,7 @@ area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 150)
 area('edge', (9.0, 0.6, -3.7), (0, 0.8, -0.3), 5, 12, 62)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 # Low behind the set: what the mirror-dark foot picks up on its left.
-area('foot', (-1.6, 1.5, -10.5), (-0.6, 0.27, -0.6), 2.9, 1.6, 120)
+area('foot', (-1.6, 1.5, -10.5), (-0.6, 0.27, -0.6), 2.9, 1.6, 40)
 area('left', (-9, 0.6, -6), (0, 0.4, -0.8), 3, 6, 70)
 area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 34)
 
