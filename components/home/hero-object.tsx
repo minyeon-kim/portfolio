@@ -82,7 +82,7 @@ vec3 formOf(float n, vec2 uv) {
       y -= 0.5 * exp(-x * x / 2.4);
       // Tilted towards the viewer, so the rows open out down the screen.
       p = vec3(x, y + (z + 0.9) * (symbol < 0.5 ? 0.55 : 0.42) + ground, z);
-      loose *= symbol < 0.5 ? 0.07 : 0.06;
+      loose *= symbol < 0.5 ? 0.1 : 0.06;
     } else {
       float col = floor(b * 46.0);
       p = vec3((col / 46.0 - 0.5) * 6.0 + (h1(n * 6.1) - 0.5) * 0.35, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
@@ -125,7 +125,7 @@ vec3 formOf(float n, vec2 uv) {
   // the widest third stays out as haze.
   // A case's form keeps only a thin haze round it, so the shape reads.
   loose *= mix(1.0, mix(0.22, symbol > 0.5 ? 0.7 : 0.35, step(0.8, g)), focus);
-  return p * 1.6 + j * loose * vec3(1.6, 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
+  return p * 1.6 + j * loose * vec3(1.6, symbol < 0.5 ? 2.6 : 1.35, 1.0) + vec3(0.35, mix(-0.05, 0.12, focus), 0.0);
 }
 // Where each particle leans.
 vec3 homeOf(vec2 uv) {
