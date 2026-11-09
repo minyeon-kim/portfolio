@@ -8122,8 +8122,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Gemini cover: the hand casts its shadow on the screen, and the photo holds still (only the recording moves), since a hand holding a phone doesn't zoom. */
 .dh-shot-shadow { position: absolute; z-index: 1; pointer-events: none; user-select: none; }
 .devsign-hero.dh-cover[data-project="gemini-privacy"] .dh-shot-camera { animation: none; }
-/* The push grows from the monitor's top edge, so the top is never cut. */
-.devsign-hero.dh-cover[data-project="devsign"] .dh-shot-camera { transform-origin: 50% 8%; }
 
 /* Case opener: the question leads, the project name is its label. */
 @media (min-width: 64rem) {
