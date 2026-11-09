@@ -200,6 +200,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
               onBlur={() => setHover(null)}
             >{t.about}</Link></li>
             <li><a href={`mailto:${site.email}`}>{t.getInTouch}</a></li>
+            {site.linkedinUrl && <li><a href={site.linkedinUrl}>LinkedIn</a></li>}
           </ul>
           <p className="home-picks-label">{t.caseStudiesLabel}</p>
           <ol>
