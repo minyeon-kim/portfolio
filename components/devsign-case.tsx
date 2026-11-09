@@ -263,12 +263,12 @@ function SourceInsights({ discover }: { discover: Study }) {
   );
 }
 
-export function Section({ id, title, band, children }: { id: string; title: string; band?: boolean; children: ReactNode }) {
+export function Section({ id, title, band, noHead, children }: { id: string; title: string; band?: boolean; noHead?: boolean; children: ReactNode }) {
   return (
     <section id={id} className={band ? "dv-section dv-band" : "dv-section"} aria-labelledby={`${id}-title`}>
-      <div className="dv-section-head">
+      {!noHead && <div className="dv-section-head">
         <h2 id={`${id}-title`} className="dv-section-title reveal">{title}</h2>
-      </div>
+      </div>}
       {children}
     </section>
   );
@@ -354,6 +354,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
   const deliverIntro = (
     <div className="dv-deliver-intro">
+      {/* The chapter title rides in the held stage, so it stays while the features step. */}
+      <div className="dv-section-head"><h2 id="deliver-title" className="dv-section-title reveal">Deliver</h2></div>
       <Block {...deliver} ff={ff} />
       {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
     </div>
@@ -601,7 +603,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </>}
       </Section>
 
-      <Section id="deliver" title="Deliver">
+      <Section id="deliver" title="Deliver" noHead>
         {/* The prototype heading and link ride in the core features' held stage when there is one. */}
         {!((ff && develop.selection && overview.features) || deliver.flows) && deliverIntro}
         {/* Findings first: the four features one at a time, large, each playing

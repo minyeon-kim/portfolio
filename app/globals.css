@@ -7508,7 +7508,7 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .dv-iter-head { padding: 0 0 24px; }
 .dv-iter-head .dv-iter-lead { margin: 0; }
 .dv-held-track > .dv-flist { background: var(--dv-bg, var(--bg)); }
-@media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist[data-phone] .dv-flist-frame { width: min(100%, calc((100svh - 400px) * 1.25)); } }
+@media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist[data-phone] .dv-flist-frame { width: min(100%, calc((100svh - 592px) * 1.25)); } }
 
 /* Overview summary, easier to read (owner): one label colour (the case accent),
    the label column narrow so each label sits right beside its sentence, and one
@@ -8288,3 +8288,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* A block with only its label stays close to what it labels. */
 .case-study .dv .dv-block:not(:has(.dv-finding)) + * { margin-top: 24px !important; }
+
+/* Iteration 2 heading runs the full column while it has no session photo. */
+@media (min-width: 64rem) { :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iv-top.dv-iter-top:not(:has(figure)) { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist:not([data-phone]) .dv-flist-frame { width: min(100%, calc((100svh - 400px) * 1.6)); } }
