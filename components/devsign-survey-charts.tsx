@@ -226,32 +226,23 @@ function QuotesView({ data }: { data: QuotesChart }) {
 // Each question is one line from 1 to the top score with both people placed on it, so agreeing
 // and splitting read at a glance. The same score is one pill.
 function TableView({ data }: { data: TableChart }) {
-  const both = useLocale() === "ko" ? "둘 다" : "Both";
-  const at = (v: number) => (v - 1) / (data.max - 1);
+  // One plain bar per person under each statement: longer means they agreed more.
   return (
     <div className="dv-dumb">
-      <p className="dv-dumb-legend" aria-hidden="true">{data.people.map((person, who) => <span key={person} data-who={who}><i />{person}</span>)}</p>
       <ul>
-        {data.rows.map((row, i) => {
-          const [a, b] = row.values;
-          const same = a === b;
-          return (
-            <li key={row.label} style={{ "--i": i } as React.CSSProperties}>
-              <p>{row.label}<span className="sr-only">{` ${data.people[0]} ${a}, ${data.people[1]} ${b}`}</span></p>
-              <div className="dv-dumb-line" aria-hidden="true">
-                <div className="dv-dumb-rail">
-                  {Array.from({ length: data.max }, (_, t) => <em key={t} style={{ "--x": t / (data.max - 1) } as React.CSSProperties} />)}
-                  {!same && <b style={{ "--from": at(Math.min(a, b)), "--to": at(Math.max(a, b)) } as React.CSSProperties} />}
-                  {same
-                    ? <strong className="dv-dumb-both" style={{ "--x": at(a) } as React.CSSProperties}>{both} {a}</strong>
-                    : row.values.map((v, who) => <strong key={who} data-who={who} style={{ "--x": at(v) } as React.CSSProperties}>{v}</strong>)}
-                </div>
+        {data.rows.map((row, i) => (
+          <li key={row.label} style={{ "--i": i } as React.CSSProperties}>
+            <p>{row.label}</p>
+            {row.values.map((value, who) => (
+              <div key={who} className="dv-agree" data-who={who}>
+                <span>{data.people[who]}</span>
+                <span className="dv-agree-track" aria-hidden="true"><i style={{ width: `${(value / data.max) * 100}%` }} /></span>
+                <strong>{value}<small> / {data.max}</small></strong>
               </div>
-            </li>
-          );
-        })}
+            ))}
+          </li>
+        ))}
       </ul>
-      <div className="dv-dumb-scale" aria-hidden="true"><div className="dv-dumb-rail">{Array.from({ length: data.max }, (_, t) => <span key={t} style={{ "--x": t / (data.max - 1) } as React.CSSProperties}>{t + 1}</span>)}</div></div>
     </div>
   );
 }

@@ -8183,21 +8183,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 }
 
 /* Expectations: both people placed on one line per question. */
-.dv-dumb { --pad: 44px; width: 100%; }
-.dv-dumb-legend { display: flex; gap: 24px; margin: 0 0 24px; color: var(--dv-muted); font-size: 16px; }
-.dv-dumb-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.dv-dumb-legend i { width: 12px; height: 12px; border-radius: 50%; background: var(--dv-chart-fill); }
-.dv-dumb-legend [data-who="1"] i { background: var(--dv-ink); }
-.dv-dumb ul { display: grid; gap: 24px; margin: 0; padding: 0; list-style: none; }
-.dv-dumb li p { margin: 0 0 12px; color: var(--dv-ink); font-size: 18px; line-height: 1.4; }
-.dv-dumb-line { height: 32px; padding-inline: var(--pad); }
-.dv-dumb-rail { position: relative; height: 100%; }
-.dv-dumb-rail::before { content: ""; position: absolute; inset: 15px 0 auto; height: 2px; background: color-mix(in srgb, var(--dv-ink) 12%, transparent); }
-.dv-dumb-rail em { position: absolute; top: 12px; left: calc(var(--x) * 100%); width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 24%, var(--bg)); transform: translateX(-50%); }
-.dv-dumb-rail b { position: absolute; top: 14px; left: calc(var(--from) * 100%); width: calc((var(--to) - var(--from)) * 100%); height: 4px; background: var(--dv-chart-fill); }
-.dv-dumb-rail strong { position: absolute; top: 0; left: calc(var(--x) * 100%); display: grid; place-items: center; min-width: 32px; height: 32px; padding-inline: 10px; border-radius: 999px; background: var(--dv-ink); color: var(--bg); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; box-sizing: border-box; transform: translateX(-50%); }
-.dv-dumb-rail strong[data-who="0"], .dv-dumb-rail .dv-dumb-both { background: var(--dv-chart-fill); color: #fff; }
-.dv-dumb-rail strong[data-who] { padding-inline: 0; }
-.dv-dumb-scale { height: 24px; margin-top: 12px; padding-inline: var(--pad); }
-.dv-dumb-scale span { position: absolute; left: calc(var(--x) * 100%); color: var(--dv-muted); font-size: 16px; line-height: 1.5; transform: translateX(-50%); }
-.dv-dumb-scale .dv-dumb-rail::before { display: none; }
+
+/* Agreement chart: one bar per person under each statement. */
+.dv-dumb { width: 100%; }
+.dv-dumb ul { display: grid; gap: 28px; margin: 0; padding: 0; list-style: none; }
+.case-study .dv .dv-dumb li > p { margin: 0 0 12px; color: var(--dv-ink); font-size: 18px; line-height: 1.4; word-break: keep-all; }
+.dv-agree { display: grid; grid-template-columns: 72px minmax(0, 1fr) 56px; align-items: center; gap: 12px; color: var(--dv-muted); font-size: 16px; line-height: 28px; }
+.dv-agree-track { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); overflow: hidden; }
+.dv-agree-track i { display: block; height: 100%; border-radius: inherit; background: var(--dv-chart-fill); }
+.dv-agree[data-who="1"] .dv-agree-track i { background: var(--dv-ink); }
+.dv-agree strong { color: var(--dv-ink); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.dv-agree small { color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+.dv-cycle-panel[data-phase="play"] .dv-agree-track i { animation: dv-agree-grow 800ms var(--ease-reveal) calc(var(--i) * 140ms + 150ms) backwards; }
+.dv-cycle-panel[data-phase="wait"] .dv-agree-track i { width: 0 !important; }
+@keyframes dv-agree-grow { from { width: 0; } }
+@media (prefers-reduced-motion: reduce) { .dv-cycle-panel[data-phase="play"] .dv-agree-track i { animation: none; } }
