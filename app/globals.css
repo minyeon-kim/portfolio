@@ -8270,3 +8270,9 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-iter-head:has(.dv-iter-top) { padding-bottom: 16px; }
   .case-study .dv .dv-iter-head .dv-iter-top .dv-iter-photo { padding-top: 0; }
 }
+
+/* Chapter titles differ from block headings by form, not distance: the headline serif over a line. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { padding-bottom: 24px; border-bottom: 1px solid var(--dv-line); }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title { font-family: var(--font-serif); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; font-optical-sizing: auto; }
+@media (min-width: 64rem) { .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --sp-head: 48px; } }
+@media (max-width: 47.99rem) { .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { padding-bottom: 16px; } .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title { font-size: 40px; } }
