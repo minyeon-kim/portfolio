@@ -139,16 +139,16 @@ export const study = {
       headers: ["유형", "대표 도구", "해결하는 것", "찾지 못한 것"],
       map: {
         xTitle: "변경을 어디까지 다루는가", yTitle: "결정에 대해 무엇이 남는가",
-        xLabels: ["만들기·전달", "차이 찾기·승인", "통째로 합치기", "영역별로 골라 합치기"], yLabels: ["변경 이력", "승인·댓글", "결정과 이유"],
+        xLabels: ["만들기·전달", "차이 찾기·승인", "브랜치·프롬프트로 합치기", "화면에서 영역별로 고르기"], yLabels: ["변경 이력", "승인·댓글", "결정과 이유"],
         tools: [
           { name: "Design Log 등 Figma 플러그인", icon: "figma", x: 0, y: 2 },
-          { name: "Figma Dev Mode", icon: "figma", x: 0, y: 1 }, { name: "Zeplin", icon: "zeplin", x: 0, y: 1 }, { name: "Magic Patterns", icon: "magicpatterns", x: 0, y: 1 },
-          { name: "Chromatic", icon: "chromatic", x: 1, y: 1 }, { name: "Percy", icon: "percy", x: 1, y: 1 }, { name: "Applitools", icon: "applitools", x: 1, y: 1 },
-          { name: "GitHub", icon: "github", x: 2, y: 1 }, { name: "Figma 브랜치", icon: "figma", x: 2, y: 1 },
-          { name: "OverlayQA", icon: "overlayqa", x: 1, y: 0 }, { name: "Uiprobe", icon: "uiprobe", x: 1, y: 0 },
-          { name: "Framer", icon: "framer", x: 2, y: 0 }, { name: "v0", icon: "v0", x: 2, y: 0 },
+          { name: "Figma Dev Mode", icon: "figma", x: 0, y: 1 }, { name: "Zeplin", icon: "zeplin", x: 0, y: 1 },
+          { name: "Chromatic", icon: "chromatic", x: 1, y: 1 }, { name: "Percy", icon: "percy", x: 1, y: 1 }, { name: "Applitools", icon: "applitools", x: 1, y: 1 }, { name: "OverlayQA", icon: "overlayqa", x: 1, y: 1 },
+          { name: "GitHub", icon: "github", x: 2, y: 1 }, { name: "Figma 브랜치", icon: "figma", x: 2, y: 1 }, { name: "Framer", icon: "framer", x: 2, y: 1 }, { name: "v0", icon: "v0", x: 2, y: 1 }, { name: "Magic Patterns", icon: "magicpatterns", x: 2, y: 1 },
+          { name: "Uiprobe", icon: "uiprobe", x: 1, y: 0 },
         ],
-        empty: "Devsign이 노린 자리",
+        empty: "빈 영역",
+        emptyNote: "Devsign이 시험한 가설",
         note: "공식 문서와 제품 소개 기준으로, 기능이 있는지에 따라 나눈 것입니다(2026년 11월). 도구의 수준을 잰 값은 아닙니다.",
       },
       rows: [

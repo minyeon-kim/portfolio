@@ -6,7 +6,7 @@ import { withBase } from "@/lib/site";
 // so the cells are fixed criteria. Sources for every placement: docs/tool-research.md.
 // Colour marks are each product's own icon, from its official site.
 type Tool = { name: string; icon?: string; x: number; y: number };
-export type ToolMapData = { xTitle: string; yTitle: string; xLabels: string[]; yLabels: string[]; tools: Tool[]; empty: string; note: string };
+export type ToolMapData = { xTitle: string; yTitle: string; xLabels: string[]; yLabels: string[]; tools: Tool[]; empty: string; emptyNote?: string; note: string };
 
 export function ToolMap({ map }: { map: ToolMapData }) {
   const ys = [2, 1, 0];
@@ -20,7 +20,7 @@ export function ToolMap({ map }: { map: ToolMapData }) {
             <p className="dv-tm-ylabel">{map.yLabels[y]}</p>
             {xs.map((x) => {
               const tools = map.tools.filter((t) => t.x === x && t.y === y);
-              if (x === 3 && y === 2) return <div key={x} className="dv-tm-cell" data-empty=""><span>{map.empty}</span></div>;
+              if (x === 3 && y === 2) return <div key={x} className="dv-tm-cell" data-empty=""><span>{map.empty}{map.emptyNote && <small>{map.emptyNote}</small>}</span></div>;
               return (
                 <ul key={x} className="dv-tm-cell">
                   {tools.map((t) => (

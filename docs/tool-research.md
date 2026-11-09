@@ -1,6 +1,23 @@
 # Comparative analysis: tool research (November 2026)
 
 Basis for the map in the Devsign case. Vendor pages unless noted; not tried hands-on.
+Columns: make or hand off / find and approve / merge by branch or prompt / pick areas on screen.
+Rows: change history / approvals and comments / decision and reason.
+
+Second pass (official docs), which changed these:
+
+| Tool | Now | Why | Source |
+|---|---|---|---|
+| Framer | Merge, Approvals and comments | Review Changes shows a diff, then the branch is applied to main; pinned threaded comments that resolve. Partial apply not documented. | [Branches](https://www.framer.com/help/articles/how-to-use-branches-in-framer/), [Collaborate](https://www.framer.com/collaborate/) |
+| v0 | Merge, Approvals and comments | Each chat gets a working branch; publishing creates and merges a pull request; required GitHub reviews still apply. Comments inside v0 not found. | [GitHub docs](https://v0.app/docs/github) |
+| Magic Patterns | Merge, Approvals and comments | Official "Merging Designs": reference other designs with @ in a prompt. So it combines designs by prompt, without picking areas on screen. Version history is official; inline comments come from vendor pages and Liveblocks. | [Merging](https://www.magicpatterns.com/docs/documentation/editor/merging-designs) |
+| OverlayQA | Find and approve, Approvals and comments | Issue statuses, comments, client approve or request changes. | [Bulk actions](https://overlayqa.com/docs/bulk-actions/), [Site](https://overlayqa.com/) |
+| Uiprobe | Find and approve, Change history (confirmed) | Docs say probe versions are not a task history or approval flow; markers carry no status. | [Probe versions](https://www.uiprobe.io/help-articles/probe-versions), [Markers](https://www.uiprobe.io/help-articles/markers) |
+
+A search for picking regions from several generated variants found no mainstream design tool doing it (Midjourney Vary Region edits one output). This is still "not found", not proof.
+
+First pass:
+
 Columns: what the tool does with a change. Rows: what it keeps about the decision.
 
 | Tool | Column | Row | What the source says | Source |
@@ -21,7 +38,7 @@ Columns: what the tool does with a change. Rows: what it keeps about the decisio
 
 Also looked at, not on the map: Subframe, Builder.io Visual Copilot (design to code, no review or merge found), Onlook (too little found), Lovable, Bolt (Git workflow, third-party only), FigLog, Dcyde, ADR/Assist (more decision loggers).
 
-Least certain: Framer and v0 rows, Magic Patterns column, OverlayQA row (its issues live in other trackers).
+Least certain now: Magic Patterns comments (vendor sources), whether Framer can apply part of a branch (not documented either way). The first-pass rows below for Framer, v0, Magic Patterns and OverlayQA are replaced by the second-pass table.
 The "Pick by area" column stays empty as "not found", not proof that none exists.
 
 Icons in public/images/tools come from each product's own site icon (favicon or touch icon).
