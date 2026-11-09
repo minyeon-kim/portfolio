@@ -8610,35 +8610,34 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair) p.dv-flow-pair { max-width: none; width: 100%; }
 }
 
-/* Comparative analysis: coverage across the steps of the work. Colour only on Devsign's row. */
-.dv-cv { margin: 48px 0 0; }
-.dv-cv-scroll { overflow-x: auto; }
-.dv-cv table { width: 100%; min-width: 880px; border-collapse: collapse; }
-.dv-cv thead th { padding: 0 8px 16px; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.4; text-align: center; word-break: keep-all; }
-.dv-cv tbody tr { border-top: 1px solid var(--dv-line); }
-.dv-cv tbody th { width: 38%; padding: 24px 24px 24px 0; text-align: left; font-weight: 400; }
-.dv-cv tbody th b { display: block; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
-.dv-cv tbody th ul { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 8px 0 0; padding: 0; list-style: none; }
-.dv-cv tbody th li { display: flex; align-items: center; gap: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; white-space: nowrap; }
-.dv-cv td { padding: 16px 8px; text-align: center; vertical-align: middle; }
-.dv-cv td small { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; line-height: 1.3; word-break: keep-all; }
-.dv-cv-mark { display: inline-block; width: 16px; height: 16px; border-radius: 50%; vertical-align: middle; }
-.dv-cv-mark[data-v="0"] { width: 8px; height: 2px; border-radius: 1px; background: var(--dv-line); }
-.dv-cv-mark[data-v="1"] { border: 1.5px solid var(--dv-ink); background: linear-gradient(90deg, var(--dv-ink) 50%, transparent 50%); }
-.dv-cv-mark[data-v="2"] { background: var(--dv-ink); }
-.dv-cv tr[data-self] { border-top: 0; background: color-mix(in srgb, var(--case-accent) 12%, transparent); }
-.dv-cv tr[data-self] th { padding-left: 24px; border-radius: 16px 0 0 16px; }
-.dv-cv tr[data-self] td:last-child { border-radius: 0 16px 16px 0; }
-.dv-cv tr[data-self] b { color: var(--case-accent); }
-.dv-cv tr[data-self] em { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-style: normal; }
-.dv-cv tr[data-self] .dv-cv-mark { background: var(--dv-chart-fill); }
-.dv-cv tr[data-self] small { color: var(--dv-ink); }
-.dv-cv-legend { display: flex; gap: 24px; margin: 24px 0 0; color: var(--dv-muted); font-size: 16px; }
-.dv-cv-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.dv-cv-summary { max-width: 740px; margin: 32px 0 0; color: var(--dv-ink); font-size: var(--t-item, 20px); line-height: 1.5; word-break: keep-all; }
-.dv-cv-note { margin: 16px 0 0; color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; word-break: keep-all; }
-.dv-cv-scroll { position: relative; }
-.dv-cv table { table-layout: fixed; }
-.dv-cv thead td { width: 38%; }
 .dv-tm-icon { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: #fff; overflow: hidden; box-shadow: inset 0 0 0 1px rgb(14 17 17 / 0.08); }
 .dv-tm-icon img { display: block; width: 18px; height: 18px; object-fit: contain; }
+
+/* Comparative analysis: how tools handle the two steps that matter, against Devsign. */
+.dv-cmp { margin: 48px 0 0; }
+.dv-cmp-lead { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-bottom: 48px; }
+.dv-cmp-lead p { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-cmp-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0; padding: 0; list-style: none; }
+.dv-cmp-tools li { display: flex; align-items: center; gap: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; white-space: nowrap; }
+.dv-cmp table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.dv-cmp thead td { width: 14%; }
+.dv-cmp thead th { padding: 16px 24px; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.4; text-align: left; }
+.dv-cmp thead th[data-self] { width: 30%; border-radius: 16px 16px 0 0; background: color-mix(in srgb, var(--case-accent) 12%, transparent); color: var(--case-accent); font-weight: 500; }
+.dv-cmp thead small { display: block; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+.dv-cmp tbody th { padding: 32px 24px 32px 0; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; text-align: left; vertical-align: top; word-break: keep-all; }
+.dv-cmp tbody td { padding: 32px 24px; border-top: 1px solid var(--dv-line); vertical-align: top; }
+.dv-cmp tbody td[data-self] { background: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+.dv-cmp tbody tr:last-child td[data-self] { border-radius: 0 0 16px 16px; }
+.dv-cmp tbody td[data-self] p { margin: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-cmp-way + .dv-cmp-way { margin-top: 24px; }
+.dv-cmp-way p { margin: 0 0 8px; color: var(--dv-ink); font-size: var(--t-item, 20px); line-height: 1.4; word-break: keep-all; }
+.dv-cmp .dv-cv-note, .dv-cv-note { margin: 24px 0 0; color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; word-break: keep-all; }
+@media (max-width: 47.99rem) {
+  .dv-cmp table, .dv-cmp tbody, .dv-cmp tr, .dv-cmp tbody th, .dv-cmp tbody td { display: block; width: auto; }
+  .dv-cmp thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dv-cmp tbody th { padding: 24px 0 16px; }
+  .dv-cmp tbody td { padding: 0 0 24px; border-top: 0; }
+  .dv-cmp tbody td::before { content: attr(data-label); display: block; margin-bottom: 12px; color: var(--dv-muted); font-size: 16px; }
+  .dv-cmp tbody td[data-self] { padding: 16px; border-radius: 16px; }
+  .dv-cmp tbody td[data-self]::before { color: var(--case-accent); margin-bottom: 4px; }
+}

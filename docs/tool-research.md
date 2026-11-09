@@ -6,6 +6,18 @@ Rows: change history / approvals and comments / decision and reason.
 
 The site now shows this as coverage by step (make or hand off, find differences, approve or comment, combine, record why), grouped by tool type. The placement tables below use the earlier map's names but are the evidence for it.
 
+Fourth pass, looking only for tools that combine selectively (the site now shows the two-row comparison):
+
+- Webflow page branching: conflicts on classes, components and the like are resolved one by one before merging; other changes merge as a whole ([Help](https://help.webflow.com/hc/en-us/articles/46651751861139-Page-branching)). "Choosing only where it conflicts".
+- Penpot: per-element conflict resolution is described in an open GitHub issue, so planned, not shipped ([#12214](https://github.com/penpot/penpot/issues/12214)). Not listed.
+- Cursor: accept or reject per file, code only; per-hunk comments are a feature request (forum, staff replies) ([Forum](https://forum.cursor.com/t/allow-commenting-diffs-when-reviewing-changes/163482)). Not listed.
+- Google Stitch: up to five variants; annotate a region to change it. Changes one output, does not combine variants (secondary guides). Not listed.
+- Banani: regenerate a section; Superdesign: pick a whole variant; Figma agent: variations side by side. No combining across variants found.
+- Abstract, Kactus, Plant: Sketch version control, sources dated 2018 and later; merges resolve conflicts, not areas across drafts.
+- Prototype-level ways of mixing by prompt exist (Magic Patterns, community Claude Code skills).
+
+"None of the 20+ reviewed" is a claim about this set, from docs and product pages. It is not a claim about the whole market, and most were not tried hands-on.
+
 Third pass:
 
 - Magic Patterns inline comments: confirmed in official docs ([Inline Comments](https://www.magicpatterns.com/docs/documentation/collaboration/inline-comments)).
