@@ -53,8 +53,13 @@ PURPLE = mat('plinth', '#4d3a9c', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#050506', 0.3, metal=1)
 NECKM = mat('neck', '#020203', 0.45, spec=0.0)
-STRIP = mat('strip', '#a4a8ae', 0.5, spec=0.3)
-FOOTM = mat('foot', '#60626a', 0.16, metal=1)
+STRIP = mat('strip', '#000000', 0.5, spec=0.0)
+STRIP.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value = (0.42, 0.44, 0.46, 1)
+STRIP.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.42
+CRESCENT = mat('crescent', '#000000', 0.5, spec=0.0)
+CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value = (1, 1, 1, 1)
+CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.9
+FOOTM = mat('foot', '#60626a', 0.22, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
 def rounded(w, d, r, seg=24):
@@ -118,6 +123,8 @@ bw, bh = SW + BZ * 2, SH + BZ * 2
 solid('shell', rounded(bw + 0.012, bh + 0.012, 0.012), -TH - 0.006, -0.006, MONM, SILVER, bevel=0.003)
 solid('bezel', rounded(bw, bh, 0.008), -0.006, 0.006, MONM, GLASS, bevel=0.0012)
 
+solid('underside', rounded(bw + 0.016, 0.004, 0), -TH - 0.008, 0.008, MONM @ T(0, -(bh + 0.012) / 2 - 0.0005, 0), NECKM)
+
 # Hinge crescent, on the back of the monitor above the neck.
 mid_top = Vector([(a + b) / 2 for a, b in zip(NECK_TOP[0], NECK_TOP[1])])
 hx = (MONM.inverted() @ mid_top).x
@@ -128,20 +135,22 @@ for i, p in enumerate(sp.points):
     t = math.pi * 1.08 + math.pi * 0.84 * i / 32
     v = w @ Vector((0.031 * math.cos(t), 0.031 * math.sin(t), 0))
     p.co = (v.x, v.y, v.z, 1)
-cu.materials.append(SILVER)
+cu.materials.append(CRESCENT)
 scene.collection.objects.link(bpy.data.objects.new('crescent', cu))
 
 # Foot: a thin mirror-dark plate lying on the plinth.
-solid('foot', rounded(FW, FD, 0.012, 8), PY - 0.002, PY + 0.017, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, FOOTM, bevel=0.002, bseg=3)
+solid('foot', rounded(FW, FD, 0.012, 8), PY - 0.002, PY + 0.0165, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, NECKM, bevel=0.0015, bseg=2)
+solid('foot_top', rounded(FW - 0.003, FD - 0.003, 0.011, 8), PY + 0.0165, PY + 0.0172, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, FOOTM)
 
 # Neck: the four corners read from the reference, 0.03 thick behind that face.
-n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.03
+n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.018
 a, b, c, d = [Vector(q) for q in (NECK_BASE[0], NECK_BASE[1], NECK_TOP[1], NECK_TOP[0])]
 a.y = b.y = PY + 0.012  # sunk into the foot, so the two meet with no gap
+c, d = c + (c - b) * 0.45, d + (d - a) * 0.45  # runs up behind the monitor, so no gap shows
 hexa('neck', [a, b, c, d, a + n, b + n, c + n, d + n], NECKM)
 # The neck's base stops just behind the plate's back edge at its left end: fill that sliver.
 fw = -n * 1.6
-ft, fb = PY + 0.0165, PY + 0.0005
+ft, fb = PY + 0.0172, PY + 0.0005
 al = a + (b - a) * 0.055 + fw  # kept under the neck, so it never shows past its left edge
 qs = [Vector((q.x, ft, q.z)) for q in (a, b, b + fw, al)] + [Vector((q.x, fb, q.z)) for q in (a, b, b + fw, al)]
 hexa('neck_seat', qs, FOOTM)
