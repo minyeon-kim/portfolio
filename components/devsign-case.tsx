@@ -110,10 +110,6 @@ function Insights({ discover }: { discover: Study }) {
         {q2.map ? <div className="dv-tm">
           <Block title={q2.title} lead={q2.answer} ff />
           <ToolMap map={q2.map} />
-          <dl className="dv-tm-gaps reveal">
-            <p className="dv-tm-gaps-label">{q2.headers[3]}</p>
-            {q2.rows.map((row: Study) => <div key={row.type}><dt>{row.type}</dt><dd>{row.gap}</dd></div>)}
-          </dl>
         </div> : <>
         <Block title={q2.title} lead={q2.answer} ff />
         <p className="dv-caps dv-gap-40 reveal">{q2.auditLabel}</p>

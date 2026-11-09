@@ -4,6 +4,19 @@ Basis for the map in the Devsign case. Vendor pages unless noted; not tried hand
 Columns: make or hand off / find and approve / merge by branch or prompt / pick areas on screen.
 Rows: change history / approvals and comments / decision and reason.
 
+The site now shows this as coverage by step (make or hand off, find differences, approve or comment, combine, record why), grouped by tool type. The placement tables below use the earlier map's names but are the evidence for it.
+
+Third pass:
+
+- Magic Patterns inline comments: confirmed in official docs ([Inline Comments](https://www.magicpatterns.com/docs/documentation/collaboration/inline-comments)).
+- Chromatic UI Review: threaded discussions on changes, assigned reviewers must approve ([Review](https://www.chromatic.com/docs/review/)).
+- GitHub: comment, approve, request changes, required reviews ([Docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews)).
+- Framer: Review Changes then Apply; no partial apply documented, only advice to keep branches narrow ([Help](https://www.framer.com/help/articles/how-to-use-branches-in-framer/)).
+- Lovable: version history, element comments and annotations; no branching found ([History](https://docs.lovable.dev/features/projects/history), [Changelog](https://docs.lovable.dev/changelog)). Its AI-builder row marks merging as partial because of Magic Patterns, not Lovable.
+- Figma Make: versions, point and edit, annotate for agent; no compare or merge found ([Edit](https://help.figma.com/hc/en-us/articles/42009840449175-Edit-a-Figma-Make-file)). Not on the table.
+- Bolt: version history; points to GitHub for branching and review ([Support](https://support.bolt.new/concepts/version-history-github)). Not on the table.
+- Claude Design: only a community guide describes remixing the strongest parts of variations; no official source, so not on the table ([XDA](https://www.xda-developers.com/set-up-claude-design-the-way-its-creator-does/)). Prompt-based mixing exists, so Devsign's difference is picking on screen and keeping the reason.
+
 Second pass (official docs), which changed these:
 
 | Tool | Now | Why | Source |

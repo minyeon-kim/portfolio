@@ -8591,64 +8591,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Facts gather under the question instead of spreading to the screen edges. */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: 100%; justify-content: center !important; gap: clamp(32px, 6.7vw, 96px) !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
 
-/* Comparative analysis as a 3 x 3 map. The only coloured cell is the empty one. */
-.dv-tm-gaps { margin: 48px 0 0; }
-.dv-tm-gaps-label { margin: 0 0 16px; color: var(--dv-muted); font-size: 16px; }
-.dv-tm-gaps > div { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid var(--dv-line); }
-.dv-tm-gaps dt { color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; }
-.dv-tm-gaps dd { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
-.dv-tm-map { margin: 48px 0 0; }
-.dv-tm-axis { margin: 0 0 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; }
-.dv-tm-axis[data-x] { margin: 8px 0 0; text-align: right; }
-.dv-tm-grid { display: grid; gap: 8px; }
-.dv-tm-row { display: grid; grid-template-columns: 104px repeat(3, minmax(0, 1fr)); gap: 8px; }
-.dv-tm-ylabel { align-self: center; margin: 0; color: var(--dv-ink); font-size: 16px; line-height: 1.4; word-break: keep-all; }
-.dv-tm-cell { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-height: 136px; margin: 0; padding: 16px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 4%, transparent); list-style: none; }
-.dv-tm-cell li { display: flex; align-items: center; gap: 8px; color: var(--dv-ink); font-size: 16px; line-height: 1.3; }
-.dv-tm-icon { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 13px; font-weight: 500; line-height: 1; }
-.dv-tm-icon svg { width: 14px; height: 14px; }
-.dv-tm-cell[data-empty] { align-items: center; border: 1.5px dashed var(--case-accent); background: color-mix(in srgb, var(--case-accent) 10%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; text-align: center; word-break: keep-all; }
-.dv-tm-xrow p { margin: 0; color: var(--dv-ink); font-size: 16px; line-height: 1.4; text-align: center; word-break: keep-all; }
-.dv-tm-note { margin-top: 24px; color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; word-break: keep-all; }
-@media (min-width: 64rem) {
-  .dv-tm { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 64px; align-items: start; }
-  .dv-tm-map { margin-top: 0; }
-}
-@media (max-width: 47.99rem) {
-  .dv-tm-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .dv-tm-ylabel { grid-column: 1 / -1; margin-top: 8px; }
-  .dv-tm-xrow > span { display: none; }
-  .dv-tm-cell { min-height: 112px; padding: 8px; }
-  .dv-tm-cell li { flex-direction: column; align-items: flex-start; gap: 4px; word-break: break-word; }
-}
-
-/* Tool map at the full column: four columns, colour marks on a white tile (several are black). */
-.dv-tm-scroll { overflow-x: auto; }
-.dv-tm-row { grid-template-columns: 136px repeat(4, minmax(0, 1fr)); }
-.dv-tm-icon { background: #fff; color: #0e1111; overflow: hidden; }
-.dv-tm-icon img { display: block; width: 18px; height: 18px; object-fit: contain; }
-.dv-tm-cell { min-height: 144px; }
-@media (min-width: 64rem) {
-  .dv-tm { display: block; }
-  .dv-tm-map { margin-top: 48px; }
-  .dv-tm-gaps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 32px; margin-top: 64px; }
-  .dv-tm-gaps-label { grid-column: 1 / -1; }
-}
-@media (max-width: 47.99rem) {
-  .dv-tm-grid { min-width: 720px; }
-  .dv-tm-row { grid-template-columns: 96px repeat(4, minmax(0, 1fr)); }
-  .dv-tm-ylabel { grid-column: auto; margin-top: 0; }
-  .dv-tm-xrow > span { display: block; }
-  .dv-tm-cell li { flex-direction: row; align-items: center; gap: 8px; }
-}
-.dv-tm-cell li { word-break: keep-all; }
 
 /* Analysis: what each stage lost is the large line; the sentence explains it quietly. */
 .case-study .dv ol.dv-flow p.dv-flow-pair { display: grid; gap: 8px; }
 .case-study .dv ol.dv-flow p.dv-flow-pair strong { color: var(--dv-ink); font-size: var(--t-statement, 36px); font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; word-break: keep-all; }
 .case-study .dv ol.dv-flow p.dv-flow-pair span { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
 @media (min-width: 64rem) { :root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair)::before { top: calc(44px + 0.62em); } }
-.dv-tm-cell[data-empty] small { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
 
 /* Analysis rows use the whole column: lost phrase in the case colour, its sentence beside it at 20. */
 :root .case-study .dv ol.dv-flow p.dv-flow-pair strong { color: var(--case-accent); }
@@ -8661,3 +8609,36 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study .dv ol.dv-flow:has(.dv-flow-pair), :root .case-study .dv .dv-flow-play:has(.dv-flow-pair) { width: 100%; max-width: none; }
   :root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair) p.dv-flow-pair { max-width: none; width: 100%; }
 }
+
+/* Comparative analysis: coverage across the steps of the work. Colour only on Devsign's row. */
+.dv-cv { margin: 48px 0 0; }
+.dv-cv-scroll { overflow-x: auto; }
+.dv-cv table { width: 100%; min-width: 880px; border-collapse: collapse; }
+.dv-cv thead th { padding: 0 8px 16px; color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.4; text-align: center; word-break: keep-all; }
+.dv-cv tbody tr { border-top: 1px solid var(--dv-line); }
+.dv-cv tbody th { width: 38%; padding: 24px 24px 24px 0; text-align: left; font-weight: 400; }
+.dv-cv tbody th b { display: block; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
+.dv-cv tbody th ul { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 8px 0 0; padding: 0; list-style: none; }
+.dv-cv tbody th li { display: flex; align-items: center; gap: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; white-space: nowrap; }
+.dv-cv td { padding: 16px 8px; text-align: center; vertical-align: middle; }
+.dv-cv td small { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; line-height: 1.3; word-break: keep-all; }
+.dv-cv-mark { display: inline-block; width: 16px; height: 16px; border-radius: 50%; vertical-align: middle; }
+.dv-cv-mark[data-v="0"] { width: 8px; height: 2px; border-radius: 1px; background: var(--dv-line); }
+.dv-cv-mark[data-v="1"] { border: 1.5px solid var(--dv-ink); background: linear-gradient(90deg, var(--dv-ink) 50%, transparent 50%); }
+.dv-cv-mark[data-v="2"] { background: var(--dv-ink); }
+.dv-cv tr[data-self] { border-top: 0; background: color-mix(in srgb, var(--case-accent) 12%, transparent); }
+.dv-cv tr[data-self] th { padding-left: 24px; border-radius: 16px 0 0 16px; }
+.dv-cv tr[data-self] td:last-child { border-radius: 0 16px 16px 0; }
+.dv-cv tr[data-self] b { color: var(--case-accent); }
+.dv-cv tr[data-self] em { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-style: normal; }
+.dv-cv tr[data-self] .dv-cv-mark { background: var(--dv-chart-fill); }
+.dv-cv tr[data-self] small { color: var(--dv-ink); }
+.dv-cv-legend { display: flex; gap: 24px; margin: 24px 0 0; color: var(--dv-muted); font-size: 16px; }
+.dv-cv-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.dv-cv-summary { max-width: 740px; margin: 32px 0 0; color: var(--dv-ink); font-size: var(--t-item, 20px); line-height: 1.5; word-break: keep-all; }
+.dv-cv-note { margin: 16px 0 0; color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; word-break: keep-all; }
+.dv-cv-scroll { position: relative; }
+.dv-cv table { table-layout: fixed; }
+.dv-cv thead td { width: 38%; }
+.dv-tm-icon { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: #fff; overflow: hidden; box-shadow: inset 0 0 0 1px rgb(14 17 17 / 0.08); }
+.dv-tm-icon img { display: block; width: 18px; height: 18px; object-fit: contain; }

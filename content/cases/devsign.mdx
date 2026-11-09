@@ -131,23 +131,10 @@ export const study = {
     },
     q2: {
       title: "Comparative analysis",
-      answer: "No tool we found combines AI drafts and keeps why each decision was made.",
+      answer: "No tool we found lets you pick areas on screen to combine and keeps why.",
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
-      map: {
-        xTitle: "How far it goes with a change", yTitle: "What’s kept about a decision",
-        xLabels: ["Make or hand off", "Find and approve", "Merge by branch or prompt", "Pick areas on screen"], yLabels: ["Change history", "Approvals and comments", "Decision and reason"],
-        tools: [
-          { name: "Design Log and other Figma plugins", icon: "figma", x: 0, y: 2 },
-          { name: "Figma Dev Mode", icon: "figma", x: 0, y: 1 }, { name: "Zeplin", icon: "zeplin", x: 0, y: 1 },
-          { name: "Chromatic", icon: "chromatic", x: 1, y: 1 }, { name: "Percy", icon: "percy", x: 1, y: 1 }, { name: "Applitools", icon: "applitools", x: 1, y: 1 }, { name: "OverlayQA", icon: "overlayqa", x: 1, y: 1 },
-          { name: "GitHub", icon: "github", x: 2, y: 1 }, { name: "Figma branching", icon: "figma", x: 2, y: 1 }, { name: "Framer", icon: "framer", x: 2, y: 1 }, { name: "v0", icon: "v0", x: 2, y: 1 }, { name: "Magic Patterns", icon: "magicpatterns", x: 2, y: 1 },
-          { name: "Uiprobe", icon: "uiprobe", x: 1, y: 0 },
-        ],
-        empty: "Empty space",
-        emptyNote: "The hypothesis Devsign tested",
-        note: "Sorted by whether the feature exists, from official docs and product pages (November 2026). Not a measure of how good a tool is.",
-      },
+      map: {"label": "How far each type of tool covers the steps of the work", "steps": ["Make or hand off", "Find differences", "Approve or comment", "Combine", "Record why"], "full": "Dedicated feature", "partial": "Partly, or free text", "none": "None", "summary": "Most steps already have tools. Combining worked only by whole branch or by prompt, and the reason for a decision stayed in comments or a separate plugin.", "note": "Sorted by whether the feature exists, from official docs and product pages (November 2026). Not a measure of how good a tool is.", "groups": [{"name": "Handoff", "tools": [{"name": "Figma Dev Mode", "icon": "figma"}, {"name": "Zeplin", "icon": "zeplin"}], "cells": [2, 2, 2, 0, 1]}, {"name": "Design QA", "tools": [{"name": "OverlayQA", "icon": "overlayqa"}, {"name": "Uiprobe", "icon": "uiprobe"}], "cells": [0, 2, 1, 0, 0]}, {"name": "Visual review", "tools": [{"name": "Chromatic", "icon": "chromatic"}, {"name": "Percy", "icon": "percy"}, {"name": "Applitools", "icon": "applitools"}], "cells": [0, 2, 2, 0, 1]}, {"name": "Branch merge", "tools": [{"name": "GitHub", "icon": "github"}, {"name": "Figma branching", "icon": "figma"}, {"name": "Framer", "icon": "framer"}, {"name": "v0", "icon": "v0"}], "cells": [1, 2, 2, 1, 1], "notes": {"3": "Whole branch"}}, {"name": "AI builders", "tools": [{"name": "Magic Patterns", "icon": "magicpatterns"}, {"name": "Lovable", "icon": "lovable"}], "cells": [2, 1, 1, 1, 0], "notes": {"3": "By prompt"}}, {"name": "Decision logs", "tools": [{"name": "Design Log and other plugins", "icon": "figma"}], "cells": [0, 0, 0, 0, 2]}], "self": {"name": "Devsign", "tag": "The hypothesis we tested", "cells": [2, 2, 2, 2, 2], "notes": {"3": "By area, on screen"}}},
       rows: [
         { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs from the design" },
         { type: "Design vs build", tools: "OverlayQA, Uiprobe", solves: "Finding where they differ", gap: "The decision after finding it" },
