@@ -8466,3 +8466,10 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Theme cards hold a name and a count now; they hug that. */
 :root .case-study .dv .dv-axe-grid li { min-height: 0; align-content: start; gap: 8px; }
+
+/* Case corners after Metalab: 0 on anything edge to edge, 8 on media and cards, pills stay. */
+.case-study:is([data-project="devsign"], [data-project="gemini"]) { --dv-band-radius: 0px; --dv-card-radius: 8px; }
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-section, .more-work) { border-radius: 0 !important; }
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-figure img, .dv-iv-tiles img, .dv-dd-stages a, .dv-bar-track i, .dv-axe-grid li, .dv-axe-board, .dv-axe-col, .dv-axt-board, .dv-axt-list li, .dv-vpc-view, .dv-open-frame, .dv-open-frame img, .dv-fit, .dv-fit img, .dv-vpf li > p, .dv-flist-frame, .dv-flist-frame video, .dv-hdoc-lens, .dv-hdoc-lens img, .dv-iter-card, .dv-iter-plate, .dv-iter-view, .dv-held-plate, .dv-iter-clip, .dv-iter-clip video, .dv-detail-card, .dv-detail-card img, .dv-dscroll-inline img, .dv-tk-next) { border-radius: 8px !important; }
+:root .case-study[data-project="gemini"] .dv .dv-core.dv-core.dv-core { border-radius: 8px !important; }
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.more-work-hit, .more-work-cover, .more-work-app) { border-radius: 8px !important; }
