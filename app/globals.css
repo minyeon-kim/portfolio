@@ -5368,6 +5368,7 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .header-menu-trigge
    because Geist at 12 reads thin here. A deliberate exception to the 16px minimum. */
 .header-menu-trigger, .lang-link, .site-header-bar .header-cta { font-size: 13px; font-weight: 400; letter-spacing: -0.01em; }
 .header-name { font-size: 16px; }
+@media (min-width: 48rem) { .header-name { font-size: 22px; letter-spacing: -0.02em; } }
 .site-header-bar .header-menu-trigger.theme-toggle svg { width: 14px; height: 14px; }
 /* Fade the fill and the blur by the fold, not with opacity: opacity on a backdrop-filter mixes
    the sharp page back in, so everything behind read crisp through the half-folded pill. */
