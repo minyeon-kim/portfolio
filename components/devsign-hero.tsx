@@ -23,6 +23,7 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
     <div className="devsign-hero dh-cover" data-project={project}>
       <div className="devsign-hero-intro">
         <h1 tabIndex={-1} className="devsign-hero-title" translate="no">{gemini ? <>Gemini <br />privacy revamp</> : name}</h1>
+        <p className="devsign-hero-question">{hero.title}</p>
         {hero.actions && (
           <p className="devsign-hero-actions">
             {hero.actions.map((a) => (
@@ -34,7 +35,6 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
         )}
       </div>
       <div className="dh-lead">
-        <p className="devsign-hero-question">{hero.title}</p>
         <dl className="devsign-hero-details">
         {hero.details.map(({ label, value }) => (
           <div key={label}>
