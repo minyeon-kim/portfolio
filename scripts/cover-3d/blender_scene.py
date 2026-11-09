@@ -13,7 +13,7 @@ H = round(W * 838 / 1440)
 FOV, CAM, LOOK = 12.85, (0, 2.0, 11), (0, 1.0, 0)
 YAW, TILT, MON = -0.43, -0.17, (-0.01, 1.228, -0.02)
 PL, PC, PY, PX, PYAW, PTILT = (2.38, 3, 1.96), 0.13, 0.195, 0.07, -0.53, -0.036
-FOOT, FS, NB, NT, NX = (0.09, 0.05), (0.62, 0.44), 0.52, 0.45, 0.12
+FOOT, FS, NB, NT, NX = (0.075, 0.06), (0.56, 0.58), 0.52, 0.45, 0.12
 SW, SH, BZ, TH = 2.12, 1.325, 0.024, 0.085
 
 C = Matrix.Rotation(math.radians(90), 4, 'X')  # three (y up) to Blender (z up)
@@ -48,7 +48,7 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
 PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#0b0b0d', 0.3, metal=1)
-FOOTM = mat('foot', '#101012', 0.2, metal=1)
+FOOTM = mat('foot', '#141416', 0.42, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
 def rounded(w, d, r, seg=24):
@@ -116,11 +116,12 @@ solid('foot', rounded(FS[0], FS[1], 0.012, 8), -0.008, 0.008, RIG @ T(FOOT[0], P
 
 # Neck: between the back of the monitor and the foot.
 pa = RIG.inverted() @ MONM @ Vector((NX, -SH * 0.42, -0.13))
-pb = Vector((FOOT[0], PY + 0.03, FOOT[1] - 0.1))
+pb = Vector((0.09, PY + 0.022, -0.03))
 d = pa - pb
-q = Vector((0, 1, 0)).rotation_difference(d.normalized())
-nm = RIG @ T(*((pa + pb) / 2)) @ q.to_matrix().to_4x4() @ Matrix.Diagonal((1, d.length, 1, 1))
-solid('neck', [(-NB/2, -0.5), (NB/2, -0.5), (NT/2, 0.5), (-NT/2, 0.5)], -0.035, 0.035, nm, BLACKM, bevel=0.003, bseg=2)
+yy = d.normalized(); zz = Vector((1, 0, 0)).cross(yy).normalized(); xx = yy.cross(zz)
+q = Matrix((xx, yy, zz)).transposed()
+nm = RIG @ T(*((pa + pb) / 2)) @ q.to_4x4() @ Matrix.Diagonal((1, d.length, 1, 1))
+solid('neck', [(-NB/2, -0.5), (NB/2, -0.5), (NT/2, 0.5), (-NT/2, 0.5)], -0.02, 0.02, nm, BLACKM, bevel=0.003, bseg=2)
 
 # Camera
 cd = bpy.data.cameras.new('cam'); cd.sensor_fit = 'VERTICAL'; cd.angle = math.radians(FOV)
@@ -140,7 +141,8 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     o.rotation_euler = (C @ Vector(target) - o.location).to_track_quat('-Z', 'Y').to_euler()
     return o
 
-area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 720)
+area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 480)
+area('over', (0.4, 7.0, -0.5), (0.3, 0.2, -0.4), 5, 1.4, 280)
 area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 26)
 area('edge', (6.2, 0.5, -6.6), (0.6, 0.5, 0), 5, 12, 170)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
