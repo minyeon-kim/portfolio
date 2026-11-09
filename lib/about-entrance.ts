@@ -30,10 +30,10 @@ export function enterAbout(box: Box, src: string, go: () => void, ready: () => b
   const photo = document.createElement("img");
   photo.src = src;
   photo.alt = "";
-  // The hero photo is dimmed 25% in the dark theme, so the photo arrives at that brightness.
+  // The hero photo is dimmed 35% in the dark theme, so the photo arrives at that brightness.
   const theme = root.dataset.theme;
   const dark = theme === "dark" || (theme !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  const target = { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "0px", objectPosition: HERO_POSITION, filter: `brightness(${dark ? 0.75 : 1})` };
+  const target = { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px`, borderRadius: "0px", objectPosition: HERO_POSITION, filter: `brightness(${dark ? 0.65 : 1})` };
   Object.assign(photo.style, target);
   if (from) layer.dataset.card = "";
   layer.append(photo);

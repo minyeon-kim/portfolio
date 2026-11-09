@@ -8132,14 +8132,14 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover[data-project] .dh-cover-plate { margin-top: clamp(48px, 6.5svh, 72px); }
 }
 
-/* About photos are dimmed in the dark theme so they sit with the near-black sheets. Same 25% as the entrance layer in lib/about-entrance.ts. */
-.about-hero-photo::before { display: block; background: light-dark(transparent, rgb(0 0 0 / 0.25)); mix-blend-mode: normal; }
-.about-panel::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: light-dark(transparent, rgb(0 0 0 / 0.25)); }
+/* About photos are dimmed in the dark theme so they sit with the near-black sheets. Same 35% as the entrance layer in lib/about-entrance.ts. */
+.about-hero-photo::before { display: block; background: light-dark(transparent, rgb(0 0 0 / 0.35)); mix-blend-mode: normal; }
+.about-panel::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: light-dark(transparent, rgb(0 0 0 / 0.35)); }
 .about-panel-sheet::before { display: none; }
 @supports (animation-timeline: view()) {
   @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
     /* The framed part of the photo starts dimmed like the photo around it and clears as it becomes a card. */
-    .about-split-portrait::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: light-dark(transparent, rgb(0 0 0 / 0.25)); animation: about-split-dim linear both; animation-timeline: --about-split; animation-range: contain 0% contain 100%; }
+    .about-split-portrait::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: light-dark(transparent, rgb(0 0 0 / 0.35)); animation: about-split-dim linear both; animation-timeline: --about-split; animation-range: contain 0% contain 100%; }
   }
 }
 @keyframes about-split-dim { 0%, 20% { opacity: 1; } 70%, 100% { opacity: 0; } }
