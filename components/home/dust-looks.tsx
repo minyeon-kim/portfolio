@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 // Remove it, with the `look` uniform in hero-object.tsx, once a form is chosen.
 export const DUST_LOOK_EVENT = "dust-look";
 const KEY = "dust-look";
-const LOOKS = ["Now", "Horizon", "B1", "B2"];
+const LOOKS = ["Now", "Horizon", "B1", "B2", "C1", "C2", "C3", "C4"];
 
 export function readDustLook() {
-  try { const v = Number(sessionStorage.getItem(KEY)); return v >= 0 && v <= 3 ? Math.floor(v) : 0; } catch { return 0; }
+  try { const v = Number(sessionStorage.getItem(KEY)); return v >= 0 && v <= 7 ? Math.floor(v) : 0; } catch { return 0; }
 }
 
 export function DustLooks() {
@@ -22,7 +22,7 @@ export function DustLooks() {
   };
   return (
     <div className="menu-dust" role="group" aria-label="Landing particle options">
-      {LOOKS.map((name, i) => <button key={name} type="button" aria-pressed={look === i} onClick={() => pick(i)}>{name}</button>)}
+      {LOOKS.map((name, i) => name === "C1" ? null : <button key={name} type="button" aria-pressed={look === i} onClick={() => pick(i)}>{name}</button>)}
     </div>
   );
 }

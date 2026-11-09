@@ -81,7 +81,7 @@ vec3 formOf(float n, vec2 uv) {
     // rising into ridges at the sides, with faint, loose streams of data
     // falling behind it.
     // The landing keeps almost everything on the surface, so the wave reads as one form.
-    if (a < (symbol < 0.5 ? 0.92 : 0.82)) {
+    if (a < (symbol < 0.5 ? (look > 3.5 ? 1.0 : 0.92) : 0.82)) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       // Temporary draft B2: the same wave, narrower, so it reads as one form.
       float x = (gp.x - 0.5) * (symbol < 0.5 && look > 2.5 ? 4.4 : 6.4), z = (gp.y - 0.5) * (symbol < 0.5 && look > 2.5 ? 3.0 : 4.0) - 0.9;
@@ -93,6 +93,28 @@ vec3 formOf(float n, vec2 uv) {
       y -= 0.5 * exp(-x * x / 2.4);
       // Tilted towards the viewer, so the rows open out down the screen.
       p = vec3(x, y + (z + 0.9) * (symbol < 0.5 ? 0.55 : 0.42) + ground, z);
+      // Temporary drafts C1–C4 (Menu row): other forms for the landing.
+      if (symbol < 0.5 && look > 3.5) {
+        float u = gp.x, v = gp.y;
+        if (look < 4.5) {
+          // C1: a low dune along the bottom of the stage.
+          float dx = (u - 0.5) * 7.0, dz = (v - 0.5) * 3.0;
+          p = vec3(dx, 0.28 * sin(dx * 0.9 + time * 0.2) * cos(dz * 1.3 - time * 0.15) + 0.08 * sin(dx * 3.1 + dz * 2.2 + time * 0.4) + dz * 0.35 - 0.75, dz);
+        } else if (look < 5.5) {
+          // C2: an upright curtain of dust at the right, rippling.
+          p = vec3(1.7 + (u - 0.5) * 0.9 + 0.32 * sin(v * 6.0 + time * 0.3) + 0.22 * sin(u * 3.0 + time * 0.2), (v - 0.5) * 3.1, (u - 0.5) * 2.0);
+        } else if (look < 6.5) {
+          // C3: two streams of dust meeting right of centre (two drafts becoming one).
+          float lane = step(0.5, v), s = fract(v * 2.0), e = smoothstep(0.0, 1.0, u);
+          float sx = mix(mix(-2.6, 3.4, lane), 0.9, e), sy = mix(mix(0.9, -0.8, lane), 0.0, e) + 0.12 * sin(u * 7.0 + time * 0.5 + lane * 2.0);
+          p = vec3(sx, sy + (s - 0.5) * 1.3 * (1.0 - 0.5 * e), (s - 0.5) * 1.4 * (1.0 - 0.5 * e));
+        } else {
+          // C4: one sheet with a single soft fold, compact, right of centre.
+          float dx = (u - 0.5) * 4.0, dz = (v - 0.5) * 2.8;
+          p = vec3(dx + 0.9, 0.5 * sin(dx * 0.8 + time * 0.25) + dz * (0.55 + 0.5 * sin(dx * 0.7 - 0.6 + time * 0.15)), dz);
+        }
+        loose = 0.03;
+      }
       loose *= symbol < 0.5 ? 0.1 : 0.06;
     } else {
       float col = floor(b * 46.0);
