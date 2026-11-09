@@ -341,7 +341,11 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
         <div className="dv-cycle-stack dv-cycle-texts">
           {charts.map((chart, i) => (
             <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
-              <p>{chart.title}</p>
+              <p className="sr-only">{chart.title}</p>
+              {(chart.note || chart.source) && <div className="dv-cycle-foot">
+                {chart.note && <p className="dv-chart-source">{chart.note}</p>}
+                <ChartSource source={chart.source} />
+              </div>}
             </div>
           ))}
         </div>
@@ -357,10 +361,6 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
                 {chart.type === "scale" && <ScaleView data={chart} />}
                 {chart.type === "quotes" && <QuotesView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
-                {(chart.note || chart.source) && <div className="dv-cycle-foot">
-                  {chart.note && <p className="dv-chart-source">{chart.note}</p>}
-                  <ChartSource source={chart.source} />
-                </div>}
               </div>
             );
           })}
