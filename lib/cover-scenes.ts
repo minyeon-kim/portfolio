@@ -9,8 +9,8 @@ export type CoverScene = { src: string; width: number; height: number; mediaWidt
 export const COVER_SCENES: Record<string, CoverScene> = {
   devsign: {
     src: "/images/devsign/cover-studio.webp",
-    width: 1440, height: 838, mediaWidth: 1343, mediaHeight: 1000,
-    matrix: "matrix3d(0.386063256, -0.00403789807, 0, -5.14754927e-05, -0.038678209, 0.460135074, 0, -8.08801034e-06, 0, 0, 1, 0, 439.34355, 83.8615, 0, 1)",
+    width: 1440, height: 838, mediaWidth: 1444, mediaHeight: 1000,
+    matrix: "matrix3d(0.371547375, -0.00400613653, 0, -4.98509653e-05, -0.0373170443, 0.442870764, 0, -7.91595545e-06, 0, 0, 1, 0, 440.5, 99.7, 0, 1)",
     cropPhone: [330, 30, 800, 780], card: [24.5, 0, 1391, 838], cardPhone: [49.5, 0, 1341, 838],
   },
   "gemini-privacy": {

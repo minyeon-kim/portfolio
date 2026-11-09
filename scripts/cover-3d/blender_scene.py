@@ -11,10 +11,10 @@ H = round(W * 838 / 1440)
 
 # scene.html's numbers
 FOV, CAM, LOOK = 12.85, (0, 2.0, 11), (0, 1.0, 0)
-YAW, TILT, MON = -0.43, -0.17, (-0.05, 1.28, -0.02)
+YAW, TILT, MON = -0.43, -0.17, (-0.01, 1.258, -0.02)
 PL, PC, PY, PX, PYAW, PTILT = (2.42, 3, 2.02), 0.14, 0.16, 0.07, -0.53, -0.036
 FOOT, FS, NB, NT, NX = (0.09, 0.05), (0.62, 0.44), 0.52, 0.45, 0.12
-SW, SH, BZ, TH = 1.92, 1.43, 0.024, 0.085
+SW, SH, BZ, TH = 2.0, 1.385, 0.024, 0.085
 
 C = Matrix.Rotation(math.radians(90), 4, 'X')  # three (y up) to Blender (z up)
 def Rx(t): return Matrix.Rotation(t, 4, 'X')
@@ -142,7 +142,7 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
 
 area('top', (3.4, 4.2, -0.9), (0.7, 0.2, 0), 3.4, 3.4, 150)
 area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 42)
-area('edge', (6.2, 1.6, -6.6), (0.6, 1.3, 0), 3.2, 6, 120)
+area('edge', (6.2, 1.6, -6.6), (0.6, 1.3, 0), 3.2, 6, 75)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 26)
 area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 5)
@@ -176,4 +176,5 @@ for x, y in ((-1, 1), (1, 1), (1, -1), (-1, -1)):
     c = world_to_camera_view(scene, cam, C @ MONM @ Vector((x * SW / 2, y * SH / 2, 0.007)))
     pts.append([round(c.x * 1440, 1), round((1 - c.y) * 838, 1)])
 print('CORNERS', pts)
+if SAMPLES == 0: sys.exit(0)
 bpy.ops.render.render(write_still=True)
