@@ -20,10 +20,10 @@ const g=new THREE.ExtrudeGeometry(sh2,{depth:pl[1],bevelEnabled:true,bevelThickn
 const tex=(n,draw)=>{const c=document.createElement('canvas');c.width=c.height=n;draw(c.getContext('2d'),n);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t};
 const grain=tex(1024,(x,n)=>{const d=x.createImageData(n,n);for(let i=0;i<d.data.length;i+=4){const v=118+Math.random()*20;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0)});grain.repeat.set(1.2,1.2);
 const yb=g.attributes.position,col=new Float32Array(yb.count*3),uv=g.attributes.uv;let miny=1e9,maxy=-1e9;for(let i=0;i<yb.count;i++){const y=yb.getY(i);miny=Math.min(miny,y);maxy=Math.max(maxy,y)}
-for(let i=0;i<yb.count;i++){const t=(yb.getY(i)-miny)/(maxy-miny),x=yb.getX(i)/pl[0]+.5,z=yb.getZ(i)/pl[2]+.5;const v=t>.999?1:Math.pow(t,7)*.85+.12;col[i*3]=col[i*3+1]=col[i*3+2]=v}g.setAttribute('color',new THREE.BufferAttribute(col,3));
+for(let i=0;i<yb.count;i++){const t=(yb.getY(i)-miny)/(maxy-miny),x=yb.getX(i)/pl[0]+.5,z=yb.getZ(i)/pl[2]+.5;const v=t>.999?1:Math.pow(t,7)*(P.bevel??.85)+.12;col[i*3]=col[i*3+1]=col[i*3+2]=v}g.setAttribute('color',new THREE.BufferAttribute(col,3));
 const topm=M(P.plc,1),sidem=M(P.pls,1);
-topm.map=tex(1024,(x,n)=>{const g=x.createLinearGradient(0,0,n,0);g.addColorStop(0,'rgb(128,128,128)');g.addColorStop(.5,'rgb(186,186,186)');g.addColorStop(1,'rgb(255,255,255)');x.fillStyle=g;x.fillRect(0,0,n,n);const d=x.createRadialGradient(n*.52,n*.82,0,n*.52,n*.82,n*.42);d.addColorStop(0,'rgba(0,0,0,.3)');d.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=d;x.fillRect(0,0,n,n)});topm.map.colorSpace=THREE.SRGBColorSpace;topm.map.repeat.set(1/pl[0],1/pl[2]);topm.map.offset.set(.5,.5);
-for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=.1;m.envMapIntensity=0}
+topm.map=tex(1024,(x,n)=>{const g=x.createLinearGradient(0,0,n,0);g.addColorStop(0,`rgb(${P.tl??128},${P.tl??128},${P.tl??128})`);g.addColorStop(.5,`rgb(${P.tm??186},${P.tm??186},${P.tm??186})`);g.addColorStop(1,'rgb(255,255,255)');x.fillStyle=g;x.fillRect(0,0,n,n);const d=x.createRadialGradient(n*(P.cx??.52),n*(P.cy??.82),0,n*(P.cx??.52),n*(P.cy??.82),n*(P.cr??.42));d.addColorStop(0,`rgba(0,0,0,${P.contact??.3})`);d.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=d;x.fillRect(0,0,n,n);if(P.front){const f=x.createLinearGradient(0,0,0,n);f.addColorStop(0,`rgba(0,0,0,${P.front})`);f.addColorStop(.55,'rgba(0,0,0,0)');f.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=f;x.fillRect(0,0,n,n)}});topm.map.colorSpace=THREE.SRGBColorSpace;topm.map.repeat.set(1/pl[0],1/pl[2]);topm.map.offset.set(.5,.5);
+for(const m of [topm,sidem]){m.vertexColors=true;m.bumpMap=grain;m.bumpScale=P.bump??.1;m.envMapIntensity=0}
 const o=new THREE.Mesh(g,[topm,sidem]);o.position.set(P.px||0,P.py,P.pz||0);o.rotation.y=P.pyaw;o.rotation.x=P.ptilt;o.castShadow=false;o.receiveShadow=false;s.add(o);}
 const mon=new THREE.Group();mon.position.set(...P.mon);mon.rotation.x=P.tilt;rig.add(mon);
 const sw=1.92,sh=1.43,bz=P.bz||.022,th=.085,bw=sw+bz*2,bh=sh+bz*2;
@@ -33,8 +33,8 @@ add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
 add(new THREE.CylinderGeometry(.052,.052,.02,48),(P.body?black:M('#08080a',.4)),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
 add(new THREE.TorusGeometry(.052,.0035,10,48,Math.PI),M(P.body?'#9a9ca0':'#dfe2e5',.3,.2),[P.nx,-sh*.5+.004,-.037],mon).rotation.z=Math.PI;
 const footY=.011,fy=P.pyaw-P.yaw;
-const fg=new RB(P.fs[0],.022,P.fs[1],6,.01);add(fg,paint(fg,(x,y,z)=>Math.pow(x,1.2)*(z>.5?1:.25)),[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
-add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+.036,P.foot[1]]).rotation.y=fy;
+const fg=new RB(P.fs[0],P.ft||.022,P.fs[1],6,Math.min(.01,(P.ft||.022)*.45));add(fg,paint(fg,(x,y,z)=>Math.pow(x,1.2)*(z>.5?1:.25)),[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
+add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+(P.ftop||.036),P.foot[1]]).rotation.y=fy;
 // neck joins foot to the monitor
 const nb=mon.localToWorld(new THREE.Vector3(0,-sh*.43,-.14));s.updateMatrixWorld(true);
 const ns=new THREE.Shape();ns.moveTo(-P.nb/2,-.5);ns.lineTo(P.nb/2,-.5);ns.lineTo(P.nt/2,.5);ns.lineTo(-P.nt/2,.5);ns.closePath();
@@ -58,7 +58,7 @@ const glow=(cx,cy,rx,ry,col)=>{b.save();b.translate(cx,cy);b.scale(rx,ry);const 
 for(const g of P.glows)glow(...g);
 b.setTransform(1,0,0,1,0,0);
 const bi=b.getImageData(0,0,W,H),d=bi.data,out=x.createImageData(W,H),e=out.data;
-for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W+xx)*4,a=acc[i+3]/n/255,nz=(Math.random()-.5)*2.2;for(let k=0;k<3;k++)e[o+k]=Math.max(0,Math.min(255,acc[i+k]/n+d[o+k]*(1-a)+nz));e[o+3]=255}
+for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W+xx)*4,a=acc[i+3]/n/255,nz=(Math.random()-.5)*(P.nz??2.2);for(let k=0;k<3;k++)e[o+k]=Math.max(0,Math.min(255,acc[i+k]/n+d[o+k]*(1-a)+nz));e[o+3]=255}
 x.putImageData(out,0,0);
 {const hi=document.createElement('canvas');hi.width=W;hi.height=H;const hx=hi.getContext('2d'),hd=hx.createImageData(W,H);for(let i=0;i<e.length;i+=4){const l=(e[i]+e[i+1]+e[i+2])/3,k=Math.max(0,l-105)/150;hd.data[i]=e[i]*k;hd.data[i+1]=e[i+1]*k;hd.data[i+2]=e[i+2]*k;hd.data[i+3]=255}hx.putImageData(hd,0,0);
 x.globalCompositeOperation='lighter';x.filter=`blur(${W/90}px)`;x.globalAlpha=P.bloom;x.drawImage(hi,0,0);x.filter='none';x.globalAlpha=1;x.globalCompositeOperation='source-over';
