@@ -725,7 +725,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               <div className="dv-iv-top dv-iter-top">
                 <div>
                   <Block {...testing.iteration2} text={undefined} ff={ff} />
-                  <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
+                  {testing.iteration2.text && <p className="dv-iter-why reveal">{testing.iteration2.text}</p>}
                 </div>
                 {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 480px" className="dv-iter-photo" />}
               </div>
