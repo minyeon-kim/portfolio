@@ -8459,7 +8459,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
    the eye away from its sentence, and the big purple areas each had their own gradient). The cover
    keeps its light, because that is a lit 3D scene and not a surface. */
 .case-study[data-project="devsign"] { --dv-solid: #5b3fd6; }
-.case-study[data-project="gemini"] { --dv-solid: #1d2d5e; }
+.case-study[data-project="gemini"] { --dv-solid: #245cc0; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-core.dv-core.dv-core { background: var(--dv-solid); }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-flist-frame.dv-flist-frame { background: var(--dv-solid); }
 @media (min-width: 48rem) { .case-study .dv .dv-ut-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
