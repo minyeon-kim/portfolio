@@ -8110,3 +8110,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { row-gap: 14px; }
   .devsign-hero.dh-cover[data-project] .dh-cover-plate { margin-top: clamp(32px, 4svh, 48px); }
 }
+
+/* Case opener reads straight down: name, question right under it, then the facts in one row. */
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover .dh-lead { display: block; margin-top: clamp(10px, 1vw, 16px); }
+  .devsign-hero.dh-cover .devsign-hero-question { max-width: none; text-wrap: pretty; }
+  .devsign-hero.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, auto); justify-content: space-between; column-gap: 32px; margin-top: clamp(28px, 3.5svh, 40px); }
+  .devsign-hero.dh-cover .dh-lead .devsign-hero-details dd { max-width: 32ch; }
+}
