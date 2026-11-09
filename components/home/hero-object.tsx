@@ -68,18 +68,7 @@ vec3 formOf(float n, vec2 uv) {
   vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   // Temporary: the landing form options, picked from the hidden row in the Menu.
-  // Temporary drafts A1–A3: the landing wave gathered into one form with depth.
-  if (symbol < 0.5 && look > 1.5) {
-    vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
-    float big = step(2.5, look) * step(look, 3.5), high = step(3.5, look);
-    float W = mix(3.6, 5.6, big), D = mix(2.6, 3.4, big + high);
-    float x = (gp.x - 0.5) * W, z = (gp.y - 0.5) * D;
-    float y = 0.36 * sin(x * 1.6 + time * 0.35) * cos(z * 2.0 - time * 0.25) + 0.12 * sin(x * 4.3 + z * 3.1 + time * 0.5);
-    float tilt = mix(0.5, 1.0, high);
-    p = vec3(x + mix(1.3, 2.1, big), y + z * tilt + mix(0.1, -0.15, big), z);
-    return p * 1.6 + j * (g > 0.97 ? 0.5 : 0.03) + vec3(0.35, 0.0, 0.0);
-  }
-  if (symbol < 0.5 && look > 0.5) {
+  if (symbol < 0.5 && look > 0.5 && look < 1.5) {
     float th = (b - 0.5) * 1.75 + time * 0.012;
     float d = -log(1.0 - c * 0.995) * 0.13;
     float R = 4.6 - d;
@@ -94,7 +83,8 @@ vec3 formOf(float n, vec2 uv) {
     // The landing keeps almost everything on the surface, so the wave reads as one form.
     if (a < (symbol < 0.5 ? 0.92 : 0.82)) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
-      float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
+      // Temporary draft B2: the same wave, narrower, so it reads as one form.
+      float x = (gp.x - 0.5) * (symbol < 0.5 && look > 2.5 ? 4.4 : 6.4), z = (gp.y - 0.5) * (symbol < 0.5 && look > 2.5 ? 3.0 : 4.0) - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
       // The landing: one slow extra bend so the curve isn't a clean sine, a little taller.
@@ -393,7 +383,7 @@ void main() {
   // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
   float standout = pow(fract(vSeed * 37.7), 5.0);
   vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + mix(2.0, 0.8, light) * standout) * mix(0.75, 1.0, smoothstep(-0.9, 0.1, s.x)) * (1.0 + mix(2.2, 0.7, light) * lead), galaxy);
-  // Drafts A1–A3: depth (near grains larger and brighter) and soft edges, so the form has one focus.
+  // Drafts B1–B2: the current wave with depth (near grains larger and brighter) and soft edges.
   float draft = step(1.5, look) * galaxy;
   vec2 eu = (uv - 0.5) * vec2(1.0, 1.25);
   float edge = 1.0 - smoothstep(0.26, 0.5, length(eu));

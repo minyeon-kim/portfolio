@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 // Remove it, with the `look` uniform in hero-object.tsx, once a form is chosen.
 export const DUST_LOOK_EVENT = "dust-look";
 const KEY = "dust-look";
-const LOOKS = ["Now", "Horizon", "A1", "A2", "A3"];
+const LOOKS = ["Now", "Horizon", "B1", "B2"];
 
 export function readDustLook() {
-  try { const v = Number(sessionStorage.getItem(KEY)); return v >= 0 && v <= 4 ? Math.floor(v) : 0; } catch { return 0; }
+  try { const v = Number(sessionStorage.getItem(KEY)); return v >= 0 && v <= 3 ? Math.floor(v) : 0; } catch { return 0; }
 }
 
 export function DustLooks() {
