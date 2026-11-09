@@ -19,7 +19,7 @@ const copy = {
     atWork: "At work",
     photos: {
       "panel-wall": "Minyeon laughing with a teammate at the table",
-      side: "Minyeon laughing during a team discussion",
+      side: "Minyeon at a sticky-note wall, in black and white",
       talk: "Minyeon looking over a screen with a teammate",
       "panel-talk": "Minyeon smiling as she talks at the table",
       laptop: "Minyeon going through a design on a laptop with a teammate",
@@ -38,7 +38,7 @@ const copy = {
     atWork: "At work",
     photos: {
       "panel-wall": "테이블에서 팀원과 함께 웃는 김민연",
-      side: "팀 논의 중에 웃고 있는 김민연",
+      side: "포스트잇 벽 앞에 선 김민연, 흑백",
       talk: "팀원과 함께 화면을 살펴보는 김민연",
       "panel-talk": "테이블에서 웃으며 이야기하는 김민연",
       laptop: "노트북으로 팀원과 디자인을 함께 보는 김민연",
