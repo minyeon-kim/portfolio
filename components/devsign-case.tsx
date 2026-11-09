@@ -141,7 +141,6 @@ function Insights({ discover }: { discover: Study }) {
         <div className="dv-iv-top">
           <div>
             <Block {...interview} ff />
-            <a className="dv-iv-guide reveal" href={withBase(interview.photo.guide.src)} target="_blank" rel="noreferrer">{interview.photo.guide.label}</a>
           </div>
           <figure className="reveal">
             <div className="dv-iv-tiles">
