@@ -13,9 +13,7 @@ export type IaTreeData = { root: string; groups: IaGroup[] };
 
 // The case page's form: only the main group, as on the original board: the group, its
 // items, their children. The whole product is on the spec page.
-// With `fullLabel`, the whole product tree folds open under it on the same page (owner: no
-// trip to a separate page); `more` + `moreHref` still link out where a page wants that.
-export function IaFocusTree({ tree, more, moreHref, fullLabel }: { tree: IaTreeData; more?: string; moreHref?: string; fullLabel?: string }) {
+export function IaFocusTree({ tree, more, moreHref }: { tree: IaTreeData; more?: string; moreHref?: string }) {
   const main = tree.groups.find((group) => group.main);
   if (!main) return null;
   return (
@@ -29,12 +27,7 @@ export function IaFocusTree({ tree, more, moreHref, fullLabel }: { tree: IaTreeD
           </li>
         ))}
       </ul>
-      {fullLabel
-        ? <details className="dv-ia-fold">
-            <summary className="press">{fullLabel}</summary>
-            <IaTree tree={tree} />
-          </details>
-        : more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
+      {more && moreHref && <p className="dv-spec-more"><Link className="link" href={moreHref}>{more} →</Link></p>}
     </div>
   );
 }

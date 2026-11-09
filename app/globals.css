@@ -7366,13 +7366,6 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 @media (max-width: 47.99rem) { .dv-keynums { grid-template-columns: 1fr; gap: 24px; } }
 
 /* IA: the whole product tree folds open under the workspace tree, inside the case column. */
-.dv-ia-fold { margin-top: 32px; }
-.dv-ia-fold > summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; font-weight: 500; cursor: pointer; list-style: none; }
-.dv-ia-fold > summary::-webkit-details-marker { display: none; }
-.dv-ia-fold > summary::after { content: "+"; font-size: 18px; line-height: 1; transition: transform 250ms var(--ease); }
-.dv-ia-fold[open] > summary::after { transform: rotate(45deg); }
-.dv-ia-fold > summary:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
-.case-study .dv .dv-ia-fold .dv-ia { width: 100% !important; max-width: 100% !important; margin: 40px 0 0 !important; }
 
 /* Journey: what the curve's height means, beside the two people. */
 .dv-journey-axis { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }

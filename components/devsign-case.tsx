@@ -582,7 +582,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
         <div className="dv-subsection">
           <Block {...develop.ia} text={ff ? undefined : develop.ia.text} ff={ff} />
-          <IaFocusTree tree={develop.ia.tree} fullLabel={develop.ia.more} />
+          <IaFocusTree tree={develop.ia.tree} />
           <div className="dv-gap-96">
             <Block {...develop.flow} text={ff ? undefined : develop.flow.text} ff={ff} />
             <FlowChart chart={develop.flow.chart} />
