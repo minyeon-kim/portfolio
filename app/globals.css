@@ -8285,3 +8285,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li:first-child { padding-top: 0; border-top: 0; }
 .case-study .dv .dv-glance-block { margin-top: 0 !important; }
 @media (max-width: 47.99rem) { .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: var(--t-item, 20px); } .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { padding-block: 24px; } }
+
+/* A block with only its label stays close to what it labels. */
+.case-study .dv .dv-block:not(:has(.dv-finding)) + * { margin-top: 24px !important; }
