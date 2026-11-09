@@ -59,7 +59,10 @@ STRIP.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_val
 CRESCENT = mat('crescent', '#000000', 0.5, spec=0.0)
 CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value = (1, 1, 1, 1)
 CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.7
-FOOTM = mat('foot', '#60626a', 0.22, metal=1)
+FOOTM = mat('foot', '#18181c', 0.22, metal=1)
+FOOTSIDE = mat('footside', '#000000', 0.5, spec=0.0)
+FOOTSIDE.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value = (0.42, 0.44, 0.46, 1)
+FOOTSIDE.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.07
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
 def rounded(w, d, r, seg=24):
@@ -180,7 +183,7 @@ def fp(lx, y, lz):
     return Vector((q.x + FX, q.y, q.z + FZ))
 fr = FW / 2 + 0.0004
 fq = FD / 2 - 0.01
-hexa('foot_side', [fp(fr, PY, fq), fp(fr, PY, -fq), fp(fr, PY + 0.0168, -fq), fp(fr, PY + 0.0168, fq), fp(fr + 0.0012, PY, fq), fp(fr + 0.0012, PY, -fq), fp(fr + 0.0012, PY + 0.0168, -fq), fp(fr + 0.0012, PY + 0.0168, fq)], STRIP)
+hexa('foot_side', [fp(fr, PY, fq), fp(fr, PY, -fq), fp(fr, PY + 0.0168, -fq), fp(fr, PY + 0.0168, fq), fp(fr + 0.0012, PY, fq), fp(fr + 0.0012, PY, -fq), fp(fr + 0.0012, PY + 0.0168, -fq), fp(fr + 0.0012, PY + 0.0168, fq)], FOOTSIDE)
 
 # Neck: the four corners read from the reference, 0.03 thick behind that face.
 n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.018
