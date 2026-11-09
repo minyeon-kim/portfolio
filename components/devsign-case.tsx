@@ -380,7 +380,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
         </div>
         {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
-        {overview.features && !(ff && develop.selection) && (
+        {overview.features && !(ff && develop.selection) && !deliver.flows && (
           <div className="dv-main-features">
             <Block title={overview.features.method} lead={overview.features.title} ff />
             <ul className={`dv-features dv-gap-40${ff ? " dv-features-shots" : ""}`} style={{ "--n": overview.features.items.length } as CSSProperties}>
@@ -561,12 +561,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             ))}
           </ul>
         </div>}
+        {!develop.sketching.placeholder && (
         <div className="dv-gap-96">
           <Block {...develop.sketching} ff={ff} />
           {/* TODO: the photo here was only an example; an empty box until Minyeon adds the real sketches. */}
           {/* Until then the block is text only (no empty box on the page). */}
           {!develop.sketching.placeholder && <Figure img={develop.sketching.image} className="dv-cover dv-gap-40" />}
         </div>
+        )}
         {develop.selection && !ff && (
           <div className="dv-gap-96">
             <p className="dv-caps dv-accent reveal">{develop.selection.label}</p>
