@@ -347,14 +347,22 @@ void main() {
   // Only the middle of the sky thins early; the sides keep their ridges as before.
   float side = smoothstep(0.25, 0.7, abs(s.x));
   float sky = galaxy * smoothstep(mix(skyFrom, 0.3, side), mix(skyFrom, 0.3, side) + mix(0.6, 0.8, side), s.y);
-  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky));
+  // Landing: slow patches of dense and thin dust drifting over the surface,
+  // so the field gathers and opens instead of lying as one even sheet.
+  float patchy = sin(p.x * 1.7 + p.z * 2.3 + time * 0.07) * sin(p.x * 3.9 - p.z * 1.4 + 1.3 - time * 0.05) + 0.5 * sin(p.x * 7.1 + p.z * 5.3 + time * 0.09);
+  float dense = smoothstep(-0.6, 0.8, patchy);
+  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense), galaxy));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy * (1.0 - light));
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky) * mix(1.0, 0.7, flake * galaxy * (1.0 - light));
+  // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
+  float standout = pow(fract(vSeed * 37.7), 5.0);
+  vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + 2.0 * standout), galaxy);
   float bigger = 1.0 - max(portraitMix, halo);
   px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger) * mix(1.0, 0.58, galaxy * (1.0 - light)), flake) * dpr;
+  px *= mix(1.0, 0.72 + 0.55 * standout, galaxy * (1.0 - light));
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
   // The portrait: grains are brighter where the photo is.
