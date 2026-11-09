@@ -8377,3 +8377,4 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-flist-open .dv-flist-more { display: none; }
   .case-study .dv .dv-flist-open .dv-flist-bar { position: absolute; top: -1px; left: 0; right: 0; bottom: auto; }
 }
+@media (min-width: 64rem) { :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-track.dv-flist-open .dv-flist .dv-flist-frame { border-radius: 0 !important; } }
