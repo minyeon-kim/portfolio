@@ -15,7 +15,7 @@ YAW, TILT, MON = -0.5903, -0.1270, (-0.0065, 1.1862, -0.02)
 BODY_W, BODY_H, TH = 1.6651, 1.07, 0.055
 BZ = 0.012
 SW, SH = BODY_W - 0.012 - 2 * BZ, BODY_H - 0.012 - 2 * BZ
-PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.8825, 1.8531, 0.0763, -0.8232, 0.2444, 0.085
+PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.9816, 1.9506, 0.0763, -0.8232, 0.2444, 0.07
 FYAW, FW, FD, FX, FZ, FY = -0.5710, 0.4143, 0.4616, 0.0236, -0.6270, 0.2684
 NECK_BASE = [[-0.0739, 0.2684, -0.9427], [0.284, 0.2684, -0.7442]]
 NECK_TOP = [[-0.0988, 0.6188, -0.1215], [0.2212, 0.6409, 0.0895]]
@@ -91,7 +91,10 @@ def solid(name, outline, z0, z1, M, material, bevel=0.0, bseg=4):
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     for f in bm.faces: f.smooth = True
     for e in bm.edges:
-        if len(e.link_faces) == 2 and e.calc_face_angle() > math.radians(32):
+        # Below 30 degrees only: a smooth rim would tilt the normals of the tall side faces upward.
+        if len(e.link_faces) != 2: continue
+        flat = abs(e.verts[0].co.z - e.verts[1].co.z) < 1e-4  # a horizontal rim edge
+        if e.calc_face_angle() > math.radians(26) or (flat and e.calc_face_angle() > math.radians(5)):
             e.smooth = False
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me); bm.free()
@@ -167,7 +170,7 @@ u = (b - a).normalized() * 0.003
 hexa('neck_side', [b, c, c + n, b + n, b + u, c + u, c + n + u, b + n + u], STRIP)
 
 # The monitor casts no shadow, or its edge draws a straight line across the plinth.
-for name in ('shell', 'bezel'):
+for name in ('shell', 'bezel', 'underside', 'neck', 'neck_side', 'crescent'):
     bpy.data.objects[name].visible_shadow = False
 
 # Camera
@@ -190,15 +193,17 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     return o
 
 # This one comes from behind the monitor; its shadow would lay a hard band across the plinth.
-area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 350).data.use_shadow = False
-area('over', (0.4, 7.0, -0.5), (0.3, 0.2, -0.4), 5, 1.4, 145)
-area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 15)
+area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 70).data.use_shadow = False
+# Straight down: lights the plinth's top evenly from edge to edge and leaves its sides alone.
+sun_d = bpy.data.lights.new('sun', 'SUN'); sun_d.energy = 4.8; sun_d.angle = math.radians(0.4)
+sun = bpy.data.objects.new('sun', sun_d); scene.collection.objects.link(sun); sun.rotation_euler = (0, 0, 0)
+area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 120)
 area('edge', (9.0, 0.6, -3.7), (0, 0.8, -0.3), 5, 12, 62)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 # Low behind the set: what the mirror-dark foot picks up on its left.
 area('foot', (-1.6, 1.5, -10.5), (-0.6, 0.27, -0.6), 2.9, 1.6, 120)
-area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 26)
-area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 0.5)
+area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 3)
+area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 3)
 
 w = bpy.data.worlds.new('w'); scene.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs[0].default_value = (0.012, 0.009, 0.03, 1)
