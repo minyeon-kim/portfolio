@@ -3245,8 +3245,6 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   .home-picks-label { margin-bottom: 8px; }
   /* The column has the page links, so the intro's header drops its button. */
   header[data-intro] .header-cta { display: none; }
-  /* The column already lists the pages, so the intro drops the Menu button too (owner). */
-  header[data-intro] .header-menu { visibility: hidden; }
   .home-picks ol { flex-direction: column; align-items: flex-start; gap: 6px; }
   .home-pick { min-height: 32px; padding: 0 16px; font-size: 16px; font-weight: 400; }
   /* Each case's hover, in metalab.com's own proportions. Gemini follows its The Atlantic
