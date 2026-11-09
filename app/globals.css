@@ -8621,3 +8621,24 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .dv-tm-cell { min-height: 112px; padding: 8px; }
   .dv-tm-cell li { flex-direction: column; align-items: flex-start; gap: 4px; word-break: break-word; }
 }
+
+/* Tool map at the full column: four columns, colour marks on a white tile (several are black). */
+.dv-tm-scroll { overflow-x: auto; }
+.dv-tm-row { grid-template-columns: 136px repeat(4, minmax(0, 1fr)); }
+.dv-tm-icon { background: #fff; color: #0e1111; overflow: hidden; }
+.dv-tm-icon img { display: block; width: 18px; height: 18px; object-fit: contain; }
+.dv-tm-cell { min-height: 144px; }
+@media (min-width: 64rem) {
+  .dv-tm { display: block; }
+  .dv-tm-map { margin-top: 48px; }
+  .dv-tm-gaps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 32px; margin-top: 64px; }
+  .dv-tm-gaps-label { grid-column: 1 / -1; }
+}
+@media (max-width: 47.99rem) {
+  .dv-tm-grid { min-width: 720px; }
+  .dv-tm-row { grid-template-columns: 96px repeat(4, minmax(0, 1fr)); }
+  .dv-tm-ylabel { grid-column: auto; margin-top: 0; }
+  .dv-tm-xrow > span { display: block; }
+  .dv-tm-cell li { flex-direction: row; align-items: center; gap: 8px; }
+}
+.dv-tm-cell li { word-break: keep-all; }
