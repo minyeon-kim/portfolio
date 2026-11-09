@@ -58,7 +58,7 @@ STRIP.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value 
 STRIP.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.42
 CRESCENT = mat('crescent', '#000000', 0.5, spec=0.0)
 CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Color'].default_value = (1, 1, 1, 1)
-CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.9
+CRESCENT.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].default_value = 0.7
 FOOTM = mat('foot', '#60626a', 0.22, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
@@ -128,11 +128,11 @@ solid('underside', rounded(bw + 0.016, 0.004, 0), -TH - 0.008, 0.008, MONM @ T(0
 # Hinge crescent, on the back of the monitor above the neck.
 mid_top = Vector([(a + b) / 2 for a, b in zip(NECK_TOP[0], NECK_TOP[1])])
 hx = (MONM.inverted() @ mid_top).x
-cu = bpy.data.curves.new('crescent', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0034; cu.bevel_resolution = 3
+cu = bpy.data.curves.new('crescent', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0016; cu.bevel_resolution = 3
 sp = cu.splines.new('POLY'); sp.points.add(32)
 w = C @ MONM @ T(hx, -SH * 0.5 - 0.004, 0.012)
 for i, p in enumerate(sp.points):
-    t = math.pi * 1.08 + math.pi * 0.84 * i / 32
+    t = math.pi * 1.24 + math.pi * 0.52 * i / 32
     v = w @ Vector((0.031 * math.cos(t), 0.031 * math.sin(t), 0))
     p.co = (v.x, v.y, v.z, 1)
 cu.materials.append(CRESCENT)
