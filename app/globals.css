@@ -8649,3 +8649,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv ol.dv-flow p.dv-flow-pair span { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
 @media (min-width: 64rem) { :root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair)::before { top: calc(44px + 0.62em); } }
 .dv-tm-cell[data-empty] small { display: block; margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+
+/* Analysis rows use the whole column: lost phrase in the case colour, its sentence beside it at 20. */
+:root .case-study .dv ol.dv-flow p.dv-flow-pair strong { color: var(--case-accent); }
+:root .case-study .dv ol.dv-flow p.dv-flow-pair span { color: var(--dv-ink); font-size: 20px; line-height: 1.4; }
+:root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair) .dv-flow-stage { color: var(--dv-muted); }
+@media (min-width: 64rem) {
+  :root .case-study .dv ol.dv-flow p.dv-flow-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-items: baseline; }
+}
+@media (min-width: 64rem) {
+  :root .case-study .dv ol.dv-flow:has(.dv-flow-pair), :root .case-study .dv .dv-flow-play:has(.dv-flow-pair) { width: 100%; max-width: none; }
+  :root .case-study .dv ol.dv-flow > li:has(.dv-flow-pair) p.dv-flow-pair { max-width: none; width: 100%; }
+}
