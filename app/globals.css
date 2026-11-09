@@ -5554,24 +5554,12 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-trust-legend button { align-items: center; min-height: 44px; font-size: 18px; }
 .dv-trust-legend b { font-size: var(--t-item); font-weight: 500; }
 
-.dv-pair { display: grid; gap: 12px; width: min(100%, 460px); margin-inline: auto; --h: 300px; }
-.dv-pair-plot { position: relative; display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 32px; height: var(--h); }
-.dv-pair-bar { display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; height: 100%; }
-.dv-pair-bar strong { color: var(--dv-muted); font-size: var(--t-display); font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1; text-align: center; }
-.dv-pair-bar i { display: block; height: calc((var(--h) - 76px) * var(--r)); border-radius: var(--dv-card-radius); transform-origin: bottom; background: linear-gradient(to bottom, color-mix(in srgb, var(--dv-ink) 26%, transparent), color-mix(in srgb, var(--dv-ink) 7%, transparent)); }
-.dv-pair-bar[data-on] strong { color: var(--case-accent); }
-.dv-pair-bar[data-on] i { background: linear-gradient(to bottom, var(--case-accent), color-mix(in srgb, var(--case-accent) 30%, transparent)); box-shadow: 0 0 28px light-dark(transparent, color-mix(in srgb, var(--case-accent) 45%, transparent)); }
-.dv-pair-goal { position: absolute; z-index: 1; inset-inline: -16px; bottom: calc((var(--h) - 76px) * var(--goal)); border-top: 1px dashed color-mix(in srgb, var(--dv-ink) 60%, transparent); pointer-events: none; }
-.dv-pair-goal b { position: absolute; right: 0; bottom: 4px; padding: 0 4px; color: var(--dv-ink); font-size: 16px; font-weight: 400; line-height: 1.4; }
-.dv-pair-labels { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; color: var(--dv-muted); font-size: 18px; text-align: center; }
-.dv-pair-labels [data-on] { color: var(--dv-ink); }
-.dv-cycle-panel[data-phase="wait"] :is(.dv-pair-bar strong, .dv-sus-ring strong) { opacity: 0; }
-.dv-cycle-panel[data-phase="wait"] .dv-pair-bar i { scale: 1 0; }
+.dv-cycle-panel[data-phase="wait"] :is(.dv-hbar strong, .dv-sus-ring strong) { opacity: 0; }
+.dv-cycle-panel[data-phase="wait"] .dv-hbar-fill { scale: 0 1; }
 .dv-cycle-panel[data-phase="wait"] .dv-sus-value { stroke-dasharray: 0 100; }
 .dv-cycle-panel[data-phase="wait"] .dv-score-table tbody tr { opacity: 0; }
-.dv-cycle-panel[data-phase="play"] .dv-pair-bar i { animation: dv-bar-rise 900ms var(--ease-reveal) calc(var(--i) * 200ms) backwards; }
-.dv-cycle-panel[data-phase="play"] .dv-pair-bar[data-on] i { animation: dv-bar-rise 900ms var(--ease-reveal) 200ms backwards, dv-glow-breathe 2.4s ease-in-out 1.4s infinite; }
-.dv-cycle-panel[data-phase="play"] .dv-pair-goal { animation: dv-chart-fade 400ms var(--ease) 800ms backwards; }
+.dv-cycle-panel[data-phase="play"] .dv-hbar-fill { animation: dv-hbar-grow 900ms var(--ease-reveal) calc(var(--i) * 200ms) backwards; }
+.dv-cycle-panel[data-phase="play"] .dv-hbar-goal { animation: dv-chart-fade 400ms var(--ease) 800ms backwards; }
 .dv-cycle-panel[data-phase="play"] .dv-sus-value { animation: dv-sus-fill 1100ms var(--ease) calc(var(--i, 0) * 150ms) backwards; }
 .dv-cycle-panel[data-phase="play"] .dv-score-table tbody tr { animation: dv-chart-rise 500ms var(--ease) calc(var(--i) * 140ms + 150ms) backwards; }
 
@@ -5588,10 +5576,6 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-score-table strong { color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; }
 .dv-score-table small { font-size: 16px; }
 @media (max-width: 47.99rem) {
-  .dv-pair { --h: 240px; }
-  .dv-pair-bar strong { font-size: 40px; }
-  .dv-pair-bar i { height: calc((var(--h) - 56px) * var(--r)); }
-  .dv-pair-goal { inset-inline: 0; bottom: calc((var(--h) - 56px) * var(--goal)); }
   .dv-score-table tbody th { font-size: 16px; }
 }
 
@@ -5660,13 +5644,12 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
    be dimmer than body text). Cards step clearly off the section; charts are flat, with no glow or fade; posts are
    columns, not cards inside a card. */
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --dv-band-card-dark: #2a2b32; --dv-muted: light-dark(#5e5e63, #a3adaa); --dv-chart-fill: light-dark(#5b3fd6, #7c62ff); --dv-chart-rest: color-mix(in srgb, var(--dv-ink) 40%, light-dark(#ffffff, #2a2b32)); }
-.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bar-track i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-pair-bar i { background: var(--dv-chart-rest); box-shadow: none; }
-.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bars-chart li[data-top] i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-pair-bar[data-on] i { background: var(--dv-chart-fill); box-shadow: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bar-track i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-hbar-fill { background: var(--dv-chart-rest); box-shadow: none; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-bars-chart li[data-top] i, .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-hbar-row[data-on] .dv-hbar-fill { background: var(--dv-chart-fill); box-shadow: none; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-trust-seg[data-on], .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-sus-value { stroke: var(--dv-chart-fill); filter: none; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-trust-flash { stroke: var(--dv-chart-fill); }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-trust-seg[data-on] { animation: none; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-bars-chart li[data-top] i { animation: dv-bar-rise 900ms var(--ease-reveal) backwards; }
-.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-cycle-panel[data-phase="play"] .dv-pair-bar[data-on] i { animation: dv-bar-rise 900ms var(--ease-reveal) 200ms backwards; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list li { padding: 4px 24px; border-left: 1px solid var(--dv-line); border-radius: 0; background: none; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv-posts-list li:first-child { padding-left: 0; border-left: 0; }
 @media (max-width: 47.99rem) {
@@ -8195,3 +8178,20 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card figcaption { padding: 0 4px 20px !important; }
   :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iv-top.dv-iter-top { grid-template-columns: minmax(0, 1fr) 320px; gap: 96px; }
 }
+
+/* Help needed: two thin bars on one 0–3 axis, so the scale reads without a footnote. */
+.dv-hbar { --name: 136px; --gap: 24px; width: min(100%, 560px); margin-inline: auto; }
+.dv-hbar-plot { position: relative; display: grid; gap: 28px; padding-top: 44px; }
+.dv-hbar-row { display: grid; grid-template-columns: var(--name) minmax(0, 1fr); gap: var(--gap); align-items: center; }
+.dv-hbar-name { display: grid; gap: 2px; }
+.dv-hbar-name span { color: var(--dv-muted); font-size: 16px; line-height: 1.4; }
+.dv-hbar-name strong { color: var(--dv-muted); font-size: var(--t-statement); font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.dv-hbar-row[data-on] .dv-hbar-name span { color: var(--dv-ink); }
+.dv-hbar-row[data-on] .dv-hbar-name strong { color: var(--case-accent); }
+.dv-hbar-track { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); }
+.dv-hbar-fill { display: block; width: calc(var(--r) * 100%); height: 100%; border-radius: 999px; transform-origin: left; }
+.dv-hbar-goal { position: absolute; z-index: 1; top: 28px; bottom: -8px; left: calc(var(--name) + var(--gap) + (100% - var(--name) - var(--gap)) * var(--goal)); border-left: 1px solid var(--dv-ink); pointer-events: none; }
+.dv-hbar-goal b { position: absolute; bottom: 100%; left: 0; padding-bottom: 4px; color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; white-space: nowrap; transform: translateX(-50%); }
+.dv-hbar-axis { display: flex; justify-content: space-between; margin-top: 16px; padding-left: calc(var(--name) + var(--gap)); color: var(--dv-muted); font-size: 16px; line-height: 1.4; }
+@keyframes dv-hbar-grow { from { scale: 0 1; } }
+@media (max-width: 47.99rem) { .dv-hbar { --name: 96px; --gap: 16px; } }

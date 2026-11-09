@@ -8,7 +8,7 @@ type Source = { label: string; url?: string; detail?: string };
 type Base = { tab: string; title: string; note?: string; source?: Source };
 type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; segments: Segment[] };
 type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
-type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
+type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; low: string; high: string; items: { label: string; value: number; on?: boolean }[] };
 type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
 type ScaleChart = Base & { type: "scale"; max: number; marks: { label: string; value: number }[]; items: { label: string; value: number }[] };
 type QuotesChart = Base & { type: "quotes"; items: { name: string; quote: string; source: string; sourceUrl?: string }[] };
@@ -152,17 +152,17 @@ function Bars({ data, animate }: { data: BarChart; animate: boolean }) {
 
 function Pair({ data, animate }: { data: PairChart; animate: boolean }) {
   return (
-    <div className="dv-pair" style={{ "--goal": data.goal / data.scale } as React.CSSProperties}>
-      <div className="dv-pair-plot">
-        <span className="dv-pair-goal"><b>{data.goalLabel}</b></span>
+    <div className="dv-hbar" style={{ "--goal": data.goal / data.scale } as React.CSSProperties}>
+      <div className="dv-hbar-plot">
+        <span className="dv-hbar-goal"><b>{data.goalLabel}</b></span>
         {data.items.map((item, i) => (
-          <div key={item.label} className="dv-pair-bar" data-on={item.on || undefined} style={{ "--i": i, "--r": item.value / data.scale } as React.CSSProperties}>
-            <strong><Count value={item.value} animate={animate} delay={i * 200} suffix="" /></strong>
-            <i aria-hidden="true" />
+          <div key={item.label} className="dv-hbar-row" data-on={item.on || undefined} style={{ "--i": i, "--r": item.value / data.scale } as React.CSSProperties}>
+            <div className="dv-hbar-name"><span>{item.label}</span><strong><Count value={item.value} animate={animate} delay={i * 200} suffix="" /></strong></div>
+            <div className="dv-hbar-track"><i className="dv-hbar-fill" aria-hidden="true" /></div>
           </div>
         ))}
       </div>
-      <div className="dv-pair-labels">{data.items.map((item) => <span key={item.label} data-on={item.on || undefined}>{item.label}</span>)}</div>
+      <div className="dv-hbar-axis"><span>{`0 · ${data.low}`}</span><span>{`${data.scale} · ${data.high}`}</span></div>
     </div>
   );
 }
