@@ -232,7 +232,12 @@ function TableView({ data }: { data: TableChart }) {
         {data.rows.map((row, i) => (
           <tr key={row.label} style={{ "--i": i } as React.CSSProperties}>
             <th scope="row">{row.label}</th>
-            {row.values.map((value, who) => <td key={who}><strong>{value}</strong><small> / {data.max}</small></td>)}
+            {row.values.map((value, who) => <td key={who}>
+              <span className="dv-score-cell">
+                <span className="dv-score-dots" aria-hidden="true">{Array.from({ length: data.max }, (_, d) => <i key={d} data-on={d < value || undefined} />)}</span>
+                <span><strong>{value}</strong><small> / {data.max}</small></span>
+              </span>
+            </td>)}
           </tr>
         ))}
       </tbody>
