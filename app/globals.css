@@ -8391,3 +8391,4 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study .dv .dv-flist-open .dv-flist-frame video { top: 64px !important; }
   :root .case-study .dv .dv-flist-open .dv-flist-items { margin-top: 48px; }
 }
+@media (min-width: 64rem) { :root .case-study .dv .dv-flist-open .dv-deliver-intro { padding-bottom: 0; border-bottom: 0; } }
