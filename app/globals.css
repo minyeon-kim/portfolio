@@ -4058,7 +4058,7 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
 }
 @keyframes dv-sheet-grow {
   from { clip-path: inset(0 var(--dv-sheet-inset) 0 var(--dv-sheet-inset) round var(--dv-card-radius)); }
-  to { clip-path: inset(0 0 0 0 round var(--dv-band-radius) var(--dv-band-radius) 0 0); }
+  to { clip-path: inset(0 0 0 0 round 0); }
 }
 @keyframes dv-sheet-text { from { scale: 0.86; } to { scale: 1; } }
 
@@ -8139,4 +8139,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .menu-picks a { min-height: 44px; padding: 0 22px; font-size: 18px; font-weight: 500; line-height: 1.4; }
   html:has(header[data-intro]) .menu-column { translate: none; opacity: 0; transition: opacity 250ms ease; }
   html[data-menu="open"]:has(header[data-intro]) .menu-column { opacity: 1; transition-delay: 150ms; }
+}
+
+/* The Problem statement sheet reaches the screen's edges: no page-coloured strips beside it,
+   and square corners while it fills the screen. Develop, which rises over it, is as wide. */
+.case-study .dv { --dv-edge: 0px; }
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .dv > section > .dv-core.dv-core:last-child { border-radius: 0; }
 }
