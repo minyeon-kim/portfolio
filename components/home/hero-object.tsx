@@ -2,6 +2,7 @@
 
 
 import { useEffect, useRef, useState } from "react";
+import { DUST_LOOK_EVENT, readDustLook } from "@/components/home/dust-looks";
 
 // The landing backdrop, after byotone.com: a few tens of thousands of still,
 // matte, off-white grains drifting slowly in a soft flow, gathered loosely
@@ -60,11 +61,37 @@ bool inBolt(vec2 q) {
 }
 const float BOLT_SCALE = 1.7;
 const vec2 BOLT_AT = vec2(-1.42, -0.19);
+uniform float look;
 // Where point n of the form leans: the form, with a wide halo of dust.
 vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
   vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
+  // Temporary: the landing form options, picked from the hidden row in the Menu.
+  if (symbol < 0.5 && look > 0.5) {
+    if (look < 1.5) {
+      float x = (b - 0.5) * 6.6, z = (c - 0.5) * 1.3 - 0.3;
+      float y = 0.34 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.1 * sin(x * 4.1 + z * 3.3 + time * 0.5) + 0.16 * sin(x * 0.73 + z * 2.1 + 1.7 + time * 0.11);
+      p = vec3(x, y + z * 0.3 + 0.02, z);
+      return p * 1.6 + j * 0.05 * (g > 0.9 ? 8.0 : 1.0) + vec3(0.35, 0.05, 0.0);
+    } else if (look < 2.5) {
+      vec2 q = vec2(0.0);
+      if (a < 0.1) { float t = b * 6.2831853, r = sqrt(c) * 0.263; q = vec2(0.947, 0.842) + vec2(cos(t), sin(t)) * r; }
+      else for (int i = 0; i < 24; i++) {
+        float t = hq(n, 20u + uint(i) * 2u) * 6.2831853, r = sqrt(hq(n, 21u + uint(i) * 2u));
+        vec2 s = vec2(cos(t), sin(t)) * r;
+        if (length(s - vec2(0.474, 0.526)) > 0.842) { q = s; break; }
+      }
+      p = vec3(q * 0.92 + vec2(0.75, 0.0), (hq(n, 17u) - 0.5) * 0.2);
+      return p * 1.6 + j * (g > 0.82 ? 0.7 : 0.09) + vec3(0.35, 0.05, 0.0);
+    } else {
+      float th = (b - 0.5) * 1.75 + time * 0.012;
+      float d = -log(1.0 - c * 0.995) * 0.13;
+      float R = 4.6 - d;
+      p = vec3(0.45 + sin(th) * R, -4.72 + cos(th) * R, (hq(n, 17u) - 0.5) * 0.4);
+      return p * 1.6 + j * (g > 0.88 ? 0.5 : 0.035) + vec3(0.35, 0.05, 0.0);
+    }
+  }
   if (symbol > 2.5 || symbol < 0.5) {
     // The landing (and About): a landscape of dots, seen low from the front,
     // spread across the whole stage: a regular grid rolling into slow waves,
@@ -226,7 +253,7 @@ void main() {
 
 const drawVertex = `#version 300 es
 precision highp float;
-uniform float formDim; uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[4]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
+uniform float look; uniform float formDim; uniform sampler2D pos; uniform sampler2D vel; uniform float SIZE; uniform float aspect; uniform float symbol; uniform float time; uniform vec2 mouse; uniform float spectrum; uniform float bolt; uniform float galaxy; uniform float light; uniform float dpr; uniform vec4 clearRect[4]; uniform vec2 cam; uniform float skyFrom; uniform float ground;
 uniform float keep;  // the share of the simulation drawn
 uniform float portraitMix; uniform sampler2D portrait; uniform sampler2D portraitColor;
 uniform float halo;  // the light theme: grains drawn larger as a glow (bright core, soft coloured halo)
@@ -362,6 +389,7 @@ void main() {
   float lead = exp(-dot(fromLead, fromLead));
   float dense = max(smoothstep(-0.6, 0.8, patchy), lead);
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead) * smoothstep(-0.8, -0.32, s.y), galaxy));
+  if (look > 0.5 && galaxy > 0.5) kept = 1.0;
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy);
@@ -564,6 +592,14 @@ export function HeroObject({ variant = "default", active = true, portrait, class
   const canvas = useRef<HTMLCanvasElement>(null);
   const state = useRef(variant);
   useEffect(() => { state.current = variant; }, [variant]);
+  // Temporary: which landing form option is on (see DustLooks in the Menu).
+  const look = useRef(0);
+  useEffect(() => {
+    look.current = readDustLook();
+    const onLook = (e: Event) => { look.current = (e as CustomEvent<number>).detail; };
+    window.addEventListener(DUST_LOOK_EVENT, onLook);
+    return () => window.removeEventListener(DUST_LOOK_EVENT, onLook);
+  }, []);
   const running = useRef(active);
   const idleSince = useRef<number | null>(null);
   useEffect(() => { running.current = active; idleSince.current = active ? null : performance.now(); }, [active]);
@@ -649,7 +685,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
     };
     const bind = (p: WebGLProgram, name: string, unit: number, texture: WebGLTexture) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, texture); gl.uniform1i(uniform(p, name), unit); };
     const start = OBJECT_STATES[state.current] ?? OBJECT_STATES.default;
-    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); gl.uniform1f(uniform(pInit, "ground"), landHeight()); gl.uniform1f(uniform(pInit, "focus"), start.symbol > 0 ? 1 : 0.85); }));
+    [P[0], V[0]].forEach((to, which) => pass(pInit, to, () => { gl.uniform1f(uniform(pInit, "which"), which); gl.uniform1f(uniform(pInit, "look"), look.current); gl.uniform1f(uniform(pInit, "SIZE"), SIZE); gl.uniform1f(uniform(pInit, "symbol"), start.symbol); gl.uniform1f(uniform(pInit, "ground"), landHeight()); gl.uniform1f(uniform(pInit, "focus"), start.symbol > 0 ? 1 : 0.85); }));
 
     const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : scheme.matches; };
@@ -864,7 +900,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       mouse.px = mouse.x; mouse.py = mouse.y;
       pass(pVel, V[1], () => {
         bind(pVel, "pos", 0, P[0].texture); bind(pVel, "vel", 1, V[0].texture); bind(pVel, "portrait", 2, portraitTarget.texture);
-        gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "ground"), landHeight()); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
+        gl.uniform1f(uniform(pVel, "look"), look.current); gl.uniform1f(uniform(pVel, "dt"), dt); gl.uniform1f(uniform(pVel, "time"), clock); gl.uniform1f(uniform(pVel, "symbol"), target.symbol); gl.uniform1f(uniform(pVel, "ground"), landHeight()); gl.uniform1f(uniform(pVel, "SIZE"), SIZE);
         gl.uniform2f(uniform(pVel, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pVel, "move"), move[0], move[1], move[2]); gl.uniform1f(uniform(pVel, "approach"), approach); gl.uniform3f(uniform(pVel, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pVel, "hold"), hold);
         gl.uniform2f(uniform(pVel, "mouse"), toPortrait ? 9 : mouse.x, toPortrait ? 9 : mouse.y); gl.uniform2f(uniform(pVel, "mouseVel"), vx, vy); gl.uniform1f(uniform(pVel, "aspect"), width / height);
         gl.uniform1f(uniform(pVel, "gather"), toPortrait ? 0 : logo ? 4.6 : 1.15 + 3.45 * early); gl.uniform1f(uniform(pVel, "damp"), toPortrait ? 10 : logo ? 6.5 : 2.4 + 4.1 * early); gl.uniform1f(uniform(pVel, "focus"), colours.focus); gl.uniform1f(uniform(pVel, "lightTheme"), lightTarget); gl.uniform1f(uniform(pVel, "stir"), toPortrait ? 0 : logo ? 0.6 : 0.18 - 0.14 * colours.galaxy);
@@ -874,7 +910,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
         bind(pPos, "pos", 0, P[0].texture); bind(pPos, "vel", 1, V[0].texture); bind(pPos, "portrait", 2, portraitTarget.texture); gl.uniform1f(uniform(pPos, "dt"), dt);
         gl.uniform1f(uniform(pPos, "catchUp"), 1 - Math.exp(-elapsed * 6)); gl.uniform3f(uniform(pPos, "shift"), shift[0], shift[1], shift[2]); gl.uniform1f(uniform(pPos, "travelling"), travelling ? 1 : 0);
         gl.uniform3f(uniform(pPos, "move"), move[0], move[1], move[2]); gl.uniform3f(uniform(pPos, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]);
-        gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "ground"), landHeight()); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
+        gl.uniform1f(uniform(pPos, "look"), look.current); gl.uniform1f(uniform(pPos, "time"), clock); gl.uniform1f(uniform(pPos, "symbol"), target.symbol); gl.uniform1f(uniform(pPos, "ground"), landHeight()); gl.uniform1f(uniform(pPos, "SIZE"), SIZE); gl.uniform1f(uniform(pPos, "focus"), colours.focus); gl.uniform1f(uniform(pPos, "lightTheme"), lightTarget);
       });
       P.reverse();
 
@@ -900,7 +936,7 @@ export function HeroObject({ variant = "default", active = true, portrait, class
       gl.uniform1f(uniform(pDraw, "portraitMix"), portraitMix);
       gl.uniform1f(uniform(pDraw, "SIZE"), SIZE); gl.uniform1f(uniform(pDraw, "aspect"), width / height); gl.uniform1f(uniform(pDraw, "symbol"), target.symbol); gl.uniform1f(uniform(pDraw, "skyFrom"), 0.06); gl.uniform1f(uniform(pDraw, "ground"), landHeight());
       gl.uniform3f(uniform(pDraw, "arrive"), trip.arrive[0], trip.arrive[1], trip.arrive[2]); gl.uniform1f(uniform(pDraw, "approach"), approach);
-      gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
+      gl.uniform1f(uniform(pDraw, "look"), look.current); gl.uniform1f(uniform(pDraw, "time"), clock); gl.uniform2f(uniform(pDraw, "mouse"), mouse.x, mouse.y); gl.uniform2f(uniform(pDraw, "cam"), cam.x, cam.y); gl.uniform3f(uniform(pDraw, "move"), move[0], move[1], move[2]);
       gl.uniform1f(uniform(pDraw, "light"), colours.light);
       gl.uniform1f(uniform(pDraw, "spectrum"), colours.spectrum);
       gl.uniform1f(uniform(pDraw, "formDim"), Math.max(colours.spectrum, colours.bolt, colours.about));
