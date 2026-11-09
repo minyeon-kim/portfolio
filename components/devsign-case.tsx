@@ -88,7 +88,7 @@ function Insights({ discover }: { discover: Study }) {
             head={<Block {...discover.desk} ff />}
           />
         </section>
-        {!q1.communityTab && <section className="dv-posts">
+        {!q1.communityTab && !q1.hideCommunity && <section className="dv-posts">
           <div className="dv-posts-head reveal">
             <p className="dv-posts-lead"><CountUp value={q1.communityCount} /> {q1.communityLead}</p>
             <a className="dv-source-link" href={withBase(q1.boards.src)} target="_blank" rel="noreferrer">{q1.boardsLink}</a>
