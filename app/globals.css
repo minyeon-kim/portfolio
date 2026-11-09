@@ -8292,3 +8292,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Iteration 2 heading runs the full column while it has no session photo. */
 @media (min-width: 64rem) { :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iv-top.dv-iter-top:not(:has(figure)) { grid-template-columns: minmax(0, 1fr); } }
 @media (min-width: 64rem) { .case-study .dv .dv-flist-track.dv-held-tall .dv-flist:not([data-phone]) .dv-flist-frame { width: min(100%, calc((100svh - 400px) * 1.6)); } }
+
+/* The prototype link is a quiet control: the page's one solid black pill outweighed the chapter title. */
+.case-study .dv .dv-try-link a { height: 40px; padding: 0 16px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-ink); font-size: 16px; }
+.case-study .dv .dv-try-link a:hover { background: color-mix(in srgb, var(--dv-ink) 14%, transparent); }
