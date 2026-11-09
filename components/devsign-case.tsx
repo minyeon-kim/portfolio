@@ -140,8 +140,8 @@ function Insights({ discover }: { discover: Study }) {
         <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
-          {synthesis.rows.map((row: { stage: string; before?: string; gap: string }, i: number) => (
-            <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p></li>
+          {synthesis.rows.map((row: { stage: string; before?: string; lost?: string; gap: string }, i: number) => (
+            <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span>{row.lost ? <p className="dv-flow-pair"><strong>{row.lost}</strong><span>{row.gap}</span></p> : <p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p>}</li>
           ))}
         </ol></FlowPlay>
         </HeldFlow>
