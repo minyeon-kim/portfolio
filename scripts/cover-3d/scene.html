@@ -33,13 +33,13 @@ add(new THREE.BoxGeometry(bw,bh,.012),black,[0,0,.0],mon);
 add(new THREE.CylinderGeometry(.052,.052,.02,48),(P.body?black:M('#08080a',.4)),[P.nx,-sh*.5+.004,-.05],mon).rotation.x=Math.PI/2;
 add(new THREE.TorusGeometry(.052,.0035,10,48,Math.PI),M(P.body?'#9a9ca0':'#dfe2e5',.3,.2),[P.nx,-sh*.5+.004,-.037],mon).rotation.z=Math.PI;
 const footY=.011,fy=P.pyaw-P.yaw;
-const fg=new RB(P.fs[0],P.ft||.022,P.fs[1],6,Math.min(.01,(P.ft||.022)*.45));add(fg,paint(fg,(x,y,z)=>Math.pow(x,1.2)*(z>.5?1:.25)),[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
-add(new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005),black,[P.foot[0],P.py+(P.ftop||.036),P.foot[1]]).rotation.y=fy;
+const fg=new RB(P.fs[0],P.ft||.022,P.fs[1],6,Math.min(.01,(P.ft||.022)*.45));add(fg,paint(fg,(x,y,z)=>Math.pow(x,P.fp||1.2)*(z>.5?1:.25)),[P.foot[0],P.py+footY+.012,P.foot[1]]).rotation.y=fy;
+{const tg=new RB(P.fs[0]-.01,.012,P.fs[1]-.01,6,.005);var footTop=P.footGloss?paint(tg,(x)=>(P.footBase??.05)+P.footGloss*Math.pow(x,3)+P.footGloss*.7*Math.pow(1-x,10)):black;var footG=tg}add(footG,footTop,[P.foot[0],P.py+(P.ftop||.036),P.foot[1]]).rotation.y=fy;
 // neck joins foot to the monitor
 const nb=mon.localToWorld(new THREE.Vector3(0,-sh*.43,-.14));s.updateMatrixWorld(true);
 const ns=new THREE.Shape();ns.moveTo(-P.nb/2,-.5);ns.lineTo(P.nb/2,-.5);ns.lineTo(P.nt/2,.5);ns.lineTo(-P.nt/2,.5);ns.closePath();
 const ng=new THREE.ExtrudeGeometry(ns,{depth:.07,bevelEnabled:false});ng.translate(0,0,-.035);
-const neck=add(ng,[black,paint(ng,(x,y)=>Math.pow(x,8)*(.25+.75*(1-y)))],[0,0,0]);
+const neck=add(ng,[black,paint(ng,(x,y)=>Math.pow(x,8)*(.25+.75*(1-y))*(P.neckLit??1))],[0,0,0]);
 {const a=rig.worldToLocal(mon.localToWorld(new THREE.Vector3(P.nx,-sh*.42,-.13))),b=new THREE.Vector3(P.foot[0],P.py+.03,P.foot[1]-.1);neck.position.copy(a.clone().add(b).multiplyScalar(.5));neck.scale.y=a.distanceTo(b);neck.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),a.clone().sub(b).normalize());}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,20,256,256,256);g2.addColorStop(0,'rgba(8,4,40,.75)');g2.addColorStop(.45,'rgba(8,4,40,.34)');g2.addColorStop(1,'rgba(8,4,40,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(P.fs[0]*2.1,P.fs[1]*3.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(P.foot[0],P.py+.016,P.foot[1]);/*planes cut the tilted plinth*/}
 {const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');const g2=x.createRadialGradient(256,256,10,256,256,256);g2.addColorStop(0,'rgba(200,190,255,'+P.spill+')');g2.addColorStop(1,'rgba(200,190,255,0)');x.fillStyle=g2;x.fillRect(0,0,512,512);const m=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));m.rotation.x=-Math.PI/2;m.position.set(0,P.py+.018,.55);/*planes cut the tilted plinth*/}

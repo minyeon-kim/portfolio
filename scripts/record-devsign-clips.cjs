@@ -19,7 +19,7 @@ const VH = only === 'cover' ? 1072 : 900;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function boot(browser) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: VH }, deviceScaleFactor: 2, colorScheme: 'dark' });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: VH }, colorScheme: 'dark' });
   const page = await ctx.newPage();
   await page.goto(`https://minyeon-kim.github.io/devsign/?lang=${lang}`, { waitUntil: 'networkidle' });
   await wait(1200);
@@ -251,7 +251,7 @@ async function record(browser, name) {
     cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
   });
   const t0 = Date.now() / 1000;
-  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 2880, maxHeight: 1800, everyNthFrame: 1 });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 100, maxWidth: 2880, maxHeight: VH * 2, everyNthFrame: 1 });
   const marks = [];
   await wait(200);
   try {
@@ -270,17 +270,17 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = `fps=30,scale=1600:${VH === 900 ? 1000 : 1192}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,scale=${VH === 900 ? '2400:1500' : '1440:1072'}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '21', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '2', `${base}-poster.jpg`]);
   const duration = +(frames[frames.length - 1].t - start + 0.5).toFixed(2);
   console.log(JSON.stringify({ name, lang, frames: frames.length, duration, marks: marks.map((m) => +(m - (start - t0)).toFixed(2)), size: fs.statSync(`${base}.mp4`).size }));
 }
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ channel: 'chrome', args: ['--force-device-scale-factor=2'] });
   for (const name of Object.keys(CLIPS)) {
     if (only && only !== name) continue;
     await record(browser, name);

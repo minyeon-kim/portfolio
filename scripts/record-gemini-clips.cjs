@@ -68,11 +68,11 @@ const FLOWS = {
 };
 
 async function record(browser, name) {
-  const ctx = await browser.newContext({ viewport: { width: 2400, height: 2000 }, deviceScaleFactor: 1 });
+  const ctx = await browser.newContext({ viewport: { width: 1800, height: 1500 } });
   const page = await ctx.newPage();
   const order = name === 'B' ? '&order=ba' : '';
   await page.goto(`https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=${lang}${order}`, { waitUntil: 'networkidle' });
-  await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
+  await page.evaluate(() => { document.documentElement.style.zoom = '1.5'; });
   await wait(300);
   await page.click('input[type=checkbox]');
   await page.click('#startBtn');
@@ -82,7 +82,7 @@ async function record(browser, name) {
     const d = document.createElement('div');
     d.style.cssText = 'position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(66,133,244,.28);box-shadow:0 0 0 2px rgba(66,133,244,.55);pointer-events:none;z-index:2147483647;transition:transform 120ms ease,background 120ms ease;';
     document.documentElement.appendChild(d);
-    addEventListener('mousemove', (e) => { d.style.left = e.clientX / 2 + 'px'; d.style.top = e.clientY / 2 + 'px'; }, true);
+    addEventListener('mousemove', (e) => { d.style.left = e.clientX / 1.5 + 'px'; d.style.top = e.clientY / 1.5 + 'px'; }, true);
     addEventListener('mousedown', () => { d.style.transform = 'scale(.78)'; d.style.background = 'rgba(66,133,244,.45)'; }, true);
     addEventListener('mouseup', () => { d.style.transform = ''; d.style.background = 'rgba(66,133,244,.28)'; }, true);
   });
@@ -105,7 +105,7 @@ async function record(browser, name) {
     cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
   });
   const t0 = Date.now() / 1000;
-  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 2400, maxHeight: 2000, everyNthFrame: 1 });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 100, maxWidth: 3600, maxHeight: 3000, everyNthFrame: 1 });
   const marks = [];
   await wait(300);
   try {
@@ -123,9 +123,9 @@ async function record(browser, name) {
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
   const s = frames.length ? 2 : 2;
-  const vf = `fps=30,crop=${crop.w}:${crop.h}:${crop.x}:${crop.y},scale=800:-2:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,crop=${crop.w * 2}:${crop.h * 2}:${crop.x * 2}:${crop.y * 2},scale=1200:-2:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '21', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.6', '-i', `${base}.mp4`, '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
   const duration = +(frames[frames.length - 1].t - start + 0.5).toFixed(2);
   console.log(JSON.stringify({ name, lang, frames: frames.length, duration, marks: marks.map((m) => +(m - (start - t0)).toFixed(2)), size: fs.statSync(`${base}.mp4`).size }));
@@ -133,7 +133,7 @@ async function record(browser, name) {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ channel: 'chrome', args: ['--force-device-scale-factor=2'] });
   for (const name of Object.keys(FLOWS)) {
     if (only && only !== name) continue;
     await record(browser, name);
