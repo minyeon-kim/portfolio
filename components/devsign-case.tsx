@@ -362,8 +362,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
     <div className="dv-deliver-intro">
       {/* The chapter title rides in the held stage, so it stays while the features step. */}
       <ChapterHead id="deliver" title="Deliver" />
-      <Block {...deliver} ff={ff} />
-      {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
+      {/* With no finding under the label, the label and the link share one line. */}
+      <div className={deliver.lead || deliver.text ? undefined : "dv-deliver-row"}>
+        <Block {...deliver} ff={ff} />
+        {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
+      </div>
     </div>
   );
   return (
