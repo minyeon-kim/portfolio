@@ -11,11 +11,11 @@ H = round(W * 838 / 1440)
 
 # Fitted to a frame of the reference by least squares on its corners (mean error 0.26px).
 FOV, CAM, LOOK = 9.2078, (0, 1.7816, 11), (0, 1.0, 0)
-YAW, TILT, MON = -0.5903, -0.1270, (-0.0065, 1.2049, -0.02)
-BODY_W, BODY_H, TH = 1.6651, 1.1075, 0.055
+YAW, TILT, MON = -0.5903, -0.1270, (-0.0065, 1.1862, -0.02)
+BODY_W, BODY_H, TH = 1.6651, 1.07, 0.055
 BZ = 0.012
 SW, SH = BODY_W - 0.012 - 2 * BZ, BODY_H - 0.012 - 2 * BZ
-PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.9816, 1.9506, 0.0763, -0.8232, 0.2444, 0.085
+PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.8825, 1.8531, 0.0763, -0.8232, 0.2444, 0.085
 FYAW, FW, FD, FX, FZ, FY = -0.5710, 0.4143, 0.4616, 0.0236, -0.6270, 0.2684
 NECK_BASE = [[-0.0739, 0.2684, -0.9427], [0.284, 0.2684, -0.7442]]
 NECK_TOP = [[-0.0988, 0.6188, -0.1215], [0.2212, 0.6409, 0.0895]]
@@ -141,6 +141,14 @@ scene.collection.objects.link(bpy.data.objects.new('crescent', cu))
 # Foot: a thin mirror-dark plate lying on the plinth.
 solid('foot', rounded(FW, FD, 0.012, 8), PY - 0.002, PY + 0.0165, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, NECKM, bevel=0.0015, bseg=2)
 solid('foot_top', rounded(FW - 0.003, FD - 0.003, 0.011, 8), PY + 0.0165, PY + 0.0172, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, FOOTM)
+
+# The foot's right side catches the light: a thin neutral face.
+def fp(lx, y, lz):
+    q = Ry(FYAW) @ Vector((lx, y, lz))
+    return Vector((q.x + FX, q.y, q.z + FZ))
+fr = FW / 2 + 0.0004
+fq = FD / 2 - 0.01
+hexa('foot_side', [fp(fr, PY, fq), fp(fr, PY, -fq), fp(fr, PY + 0.0168, -fq), fp(fr, PY + 0.0168, fq), fp(fr + 0.0012, PY, fq), fp(fr + 0.0012, PY, -fq), fp(fr + 0.0012, PY + 0.0168, -fq), fp(fr + 0.0012, PY + 0.0168, fq)], STRIP)
 
 # Neck: the four corners read from the reference, 0.03 thick behind that face.
 n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.018
