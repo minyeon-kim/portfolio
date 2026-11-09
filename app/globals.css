@@ -8204,4 +8204,4 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* The prototype button belongs to its heading; the feature player starts well clear of it. */
 .case-study .dv .dv-block + p.dv-try-link { margin-top: 24px; }
-@media (min-width: 64rem) { .dv-flist-head { margin-bottom: 32px; } }
+@media (min-width: 64rem) { .case-study .dv .dv-flist:has(> .dv-flist-head) { row-gap: 0; } .case-study .dv .dv-flist > .dv-flist-head { margin-bottom: 0 !important; padding-bottom: 48px; } }
