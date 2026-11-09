@@ -19,7 +19,7 @@ export type StageChart = DonutChart | BarChart | PairChart | RingChart | ScaleCh
 function ChartSource({ source }: { source?: Source }) {
   if (!source) return null;
   return (
-    <p className="dv-chart-source">
+    <p className="dv-chart-source dv-chart-cite">
       {source.url ? <a className="dv-source-link" href={source.url} target="_blank" rel="noreferrer">{source.label}</a> : source.label}
       {source.detail ? ` · ${source.detail}` : ""}
     </p>
