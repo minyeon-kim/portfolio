@@ -8520,3 +8520,22 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-texts { margin-top: 24px; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-marks { margin-top: 8px; }
 }
+
+/* Chart stage in one place (owner: the eye went back and forth, and the left column was crowded).
+   Left: label and finding, never changing. Right: sentence, chart, then marks and source on one
+   line. Every chart gets the same box, so nothing jumps between steps. */
+@media (min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-cycle-track { --ring: min(360px, calc(100svh - 500px)); }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) { grid-template-rows: auto auto minmax(0, 1fr); }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-row: 2 / span 2; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-texts { grid-column: 2; grid-row: 2; margin-top: 0; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 2; grid-row: 3; align-self: stretch; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-marks { grid-column: 2; grid-row: 3; align-self: end; z-index: 1; height: 21px; margin-top: 0; align-items: center; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-panel { display: flex; flex-direction: column; align-self: stretch; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-foot { justify-content: flex-end; margin-top: auto; padding: 32px 0 0 104px; text-align: right; }
+  .case-study .dv .dv-cycle-plate .dv-cycle-text p.dv-cycle-line { color: var(--dv-ink); }
+  .case-study .dv .dv-cycle-track .dv-trust { width: var(--ring); margin-inline: 0; align-self: flex-start; justify-self: start; }
+  .case-study .dv .dv-cycle-track .dv-trust-wrap { justify-items: start; align-items: flex-start; margin-inline: 0; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend { justify-content: flex-start; }
+  .case-study .dv .dv-cycle-track .dv-bars-chart { height: calc(var(--ring) + 68px); }
+}
