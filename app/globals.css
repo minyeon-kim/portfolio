@@ -8128,7 +8128,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover .devsign-hero-title, .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(30px, 2.8vw, 44px); line-height: 1.1; }
   .devsign-hero.dh-cover .devsign-hero-title br { display: none; }
   .devsign-hero.dh-cover .dh-lead { margin-top: clamp(20px, 2vw, 32px); }
-  .devsign-hero.dh-cover .devsign-hero-question { max-width: 22em; font-size: clamp(38px, 4.2vw, 68px); line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
+  .devsign-hero.dh-cover .devsign-hero-question { max-width: 18.5em; font-size: clamp(38px, 4.2vw, 68px); line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
   .devsign-hero.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { margin-top: clamp(40px, 5.5svh, 64px); }
   .devsign-hero.dh-cover[data-project] .dh-cover-plate { margin-top: clamp(48px, 6.5svh, 72px); }
 }
