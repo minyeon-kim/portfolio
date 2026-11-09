@@ -68,6 +68,17 @@ vec3 formOf(float n, vec2 uv) {
   vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   // Temporary: the landing form options, picked from the hidden row in the Menu.
+  // Temporary drafts A1–A3: the landing wave gathered into one form with depth.
+  if (symbol < 0.5 && look > 1.5) {
+    vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
+    float big = step(2.5, look) * step(look, 3.5), high = step(3.5, look);
+    float W = mix(3.6, 5.6, big), D = mix(2.6, 3.4, big + high);
+    float x = (gp.x - 0.5) * W, z = (gp.y - 0.5) * D;
+    float y = 0.36 * sin(x * 1.6 + time * 0.35) * cos(z * 2.0 - time * 0.25) + 0.12 * sin(x * 4.3 + z * 3.1 + time * 0.5);
+    float tilt = mix(0.5, 1.0, high);
+    p = vec3(x + mix(1.3, 2.1, big), y + z * tilt + mix(0.1, -0.15, big), z);
+    return p * 1.6 + j * (g > 0.97 ? 0.5 : 0.03) + vec3(0.35, 0.0, 0.0);
+  }
   if (symbol < 0.5 && look > 0.5) {
     float th = (b - 0.5) * 1.75 + time * 0.012;
     float d = -log(1.0 - c * 0.995) * 0.13;
@@ -373,6 +384,7 @@ void main() {
   float dense = max(smoothstep(-0.6, 0.8, patchy), lead);
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead) * smoothstep(-0.8, -0.32, s.y), galaxy));
   if (look > 0.5 && galaxy > 0.5) kept = 1.0;
+  sky *= 1.0 - step(1.5, look);
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy);
@@ -381,9 +393,15 @@ void main() {
   // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
   float standout = pow(fract(vSeed * 37.7), 5.0);
   vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + mix(2.0, 0.8, light) * standout) * mix(0.75, 1.0, smoothstep(-0.9, 0.1, s.x)) * (1.0 + mix(2.2, 0.7, light) * lead), galaxy);
+  // Drafts A1–A3: depth (near grains larger and brighter) and soft edges, so the form has one focus.
+  float draft = step(1.5, look) * galaxy;
+  vec2 eu = (uv - 0.5) * vec2(1.0, 1.25);
+  float edge = 1.0 - smoothstep(0.26, 0.5, length(eu));
+  vFaint = mix(vFaint, vFaint * mix(0.25, 1.7, vDepth) * edge, draft);
   float bigger = 1.0 - max(portraitMix, halo);
   px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger) * mix(1.0, 0.58, galaxy * (1.0 - light)), flake) * dpr;
   px *= mix(1.0, 0.72 + 0.55 * standout, galaxy * (1.0 - light));
+  px *= mix(1.0, mix(0.7, 1.9, vDepth), draft);
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
   // The portrait: grains are brighter where the photo is.
