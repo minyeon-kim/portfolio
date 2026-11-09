@@ -123,7 +123,7 @@ async function record(browser, name) {
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
   const s = frames.length ? 2 : 2;
-  const vf = `fps=30,crop=${crop.w * 2}:${crop.h * 2}:${crop.x * 2}:${crop.y * 2},scale=1200:-2:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,crop=${crop.w * 2}:${crop.h * 2}:${crop.x * 2}:${crop.y * 2},scale=1200:-2:flags=lanczos+accurate_rnd+full_chroma_inp+full_chroma_int:in_range=pc:out_range=tv:in_color_matrix=bt601:out_color_matrix=bt709,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.6', '-i', `${base}.mp4`, '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);

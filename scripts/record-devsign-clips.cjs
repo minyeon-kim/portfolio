@@ -270,7 +270,7 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = `fps=30,scale=${VH === 900 ? '2400:1500' : '1440:1072'}:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+  const vf = `fps=30,scale=${VH === 900 ? '2400:1500' : '1440:1072'}:flags=lanczos+accurate_rnd+full_chroma_inp+full_chroma_int:in_range=pc:out_range=tv:in_color_matrix=bt601:out_color_matrix=bt709,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '2', `${base}-poster.jpg`]);
