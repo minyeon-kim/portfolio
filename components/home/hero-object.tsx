@@ -263,6 +263,10 @@ void main() {
   // Dark: one hue, deep periwinkle in the troughs rising to ice on the crests,
   // so brightness draws the wave instead of a mix of colours.
   vec3 arms = mix(vec3(0.26, 0.34, 0.92), vec3(0.84, 0.89, 1.0), smoothstep(-0.7, 0.9, p.y - ground));
+  // Most of the way back to the earlier blue, violet and teal, keeping a little of the lit crests.
+  vec3 mixedArms = mix(mix(vec3(0.38, 0.6, 1.0), vec3(0.56, 0.42, 1.0), wave), vec3(0.32, 0.86, 0.96), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
+  mixedArms = mix(mixedArms, vec3(0.82, 0.62, 1.0), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
+  arms = mix(arms, mixedArms, 0.65);
   vec3 galaxyTint = mix(arms, vec3(0.96, 0.95, 1.0), exp(-gr * gr / 0.06) * 0.3);
   // Light theme: a brighter, sunnier palette on the pale page (sky blue,
   // violet, hot pink, coral, mint) with no grey core, so it reads as
