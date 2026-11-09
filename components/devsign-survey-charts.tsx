@@ -270,7 +270,8 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
   const [current, setCurrent] = useState(0);
   const [round, setRound] = useState(0);
   // With room and motion the stage holds on screen and native scroll picks the chart (no timer).
-  const held = useHeldSteps(charts.length, head ? TALL_PIN : undefined);
+  const single = charts.length === 1;
+  const held = useHeldSteps(charts.length, single ? "(min-width: 99999px)" : head ? TALL_PIN : undefined);
   const scrolled = held.pinned;
 
   useEffect(() => {
@@ -305,10 +306,10 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
   }, [held.active, scrolled]);
 
   const phase = !motion ? "final" : seen ? "play" : "wait";
-  const running = motion && inView && !hold && !stopped && !leaving && !scrolled;
+  const running = motion && inView && !hold && !stopped && !leaving && !scrolled && !single;
 
   return (
-    <div ref={held.root} className={`dv-held-track dv-cycle-track${head ? " dv-held-tall" : ""}`} style={{ "--n": charts.length } as React.CSSProperties}>
+    <div ref={held.root} className={`dv-held-track dv-cycle-track${head ? " dv-held-tall" : ""}${single ? " dv-cycle-single" : ""}`} style={{ "--n": charts.length } as React.CSSProperties}>
     <div
       ref={root}
       className="dv-cycle-stage"

@@ -8331,3 +8331,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-vpf li > :is(p, b)::before { content: attr(data-label); display: block; margin-bottom: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
   .dv-vpf-arrow { justify-items: start; padding-left: 16px; rotate: 90deg; justify-content: center; width: 20px; margin-left: 16px; padding: 0; }
 }
+
+/* A chart stage with one chart: no tabs or pin, the chart across the column, its note under it. */
+.dv-cycle-single::after { display: none; }
+.dv-cycle-single > :first-child { position: static; }
+.case-study .dv .dv-cycle-single .dv-cycle-plate { grid-template-columns: minmax(0, 1fr); padding-top: 16px; }
+.dv-cycle-single .dv-cycle-texts { display: none; }
+.case-study .dv .dv-ut-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 64px 0 0; }
+.case-study .dv .dv-ut-facts > div { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--dv-line); }
+.case-study .dv .dv-ut-facts dd { margin: 0; color: var(--dv-ink); font-size: var(--t-statement, 36px); font-weight: 400; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-ut-facts dt { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.5; word-break: keep-all; }
+@media (max-width: 47.99rem) { .case-study .dv .dv-ut-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 40px; } }
+.dv-cycle-single :is(.dv-cycle-tabs, .dv-cycle-stop) { display: none; }
