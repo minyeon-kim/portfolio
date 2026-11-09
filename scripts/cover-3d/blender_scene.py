@@ -48,7 +48,7 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
 PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#0b0b0d', 0.3, metal=1)
-FOOTM = mat('foot', '#141416', 0.42, metal=1)
+FOOTM = mat('foot', '#0a0a0c', 0.55, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
 def rounded(w, d, r, seg=24):
@@ -111,12 +111,12 @@ cu.materials.append(SILVER)
 scene.collection.objects.link(bpy.data.objects.new('crescent', cu))
 
 # Foot: a thin plate, edges sharp enough to catch one line of light.
-fy = PYAW - YAW
+fy = 0.0  # the foot's edges run parallel to the neck's base, as on the reference
 solid('foot', rounded(FS[0], FS[1], 0.012, 8), -0.008, 0.008, RIG @ T(FOOT[0], PY + 0.014, FOOT[1]) @ Ry(fy) @ XZ, FOOTM, bevel=0.0025, bseg=3)
 
 # Neck: between the back of the monitor and the foot.
 pa = RIG.inverted() @ MONM @ Vector((NX, -SH * 0.42, -0.13))
-pb = Vector((0.09, PY + 0.022, -0.03))
+pb = Vector((0.09, PY + 0.016, -0.03))
 d = pa - pb
 yy = d.normalized(); zz = Vector((1, 0, 0)).cross(yy).normalized(); xx = yy.cross(zz)
 q = Matrix((xx, yy, zz)).transposed()
@@ -141,7 +141,8 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     o.rotation_euler = (C @ Vector(target) - o.location).to_track_quat('-Z', 'Y').to_euler()
     return o
 
-area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 480)
+# This one comes from behind the monitor; its shadow would lay a hard band across the plinth.
+area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 480).data.use_shadow = False
 area('over', (0.4, 7.0, -0.5), (0.3, 0.2, -0.4), 5, 1.4, 280)
 area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 26)
 area('edge', (6.2, 0.5, -6.6), (0.6, 0.5, 0), 5, 12, 170)
