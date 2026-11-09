@@ -135,11 +135,27 @@ function Insights({ discover }: { discover: Study }) {
       <div className="dv-subsection">
         <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
+        {synthesis.rows[0]?.kept ? (
+        <FlowPlay className="dv-flow-play dv-gap-40 reveal">
+          <p className="dv-kl-head" aria-hidden="true"><span /><span>{synthesis.keptLabel}</span><span /><span>{synthesis.lostLabel}</span></p>
+          <ol className="dv-flow dv-kl">
+          {synthesis.rows.map((row: { stage: string; kept: string; lost: string }, i: number) => (
+            <li key={row.stage} style={{ "--i": i } as CSSProperties}>
+              <span className="dv-kl-stage">{row.stage}</span>
+              <span className="dv-kl-kept"><span className="sr-only">{synthesis.keptLabel}: </span>{row.kept}</span>
+              <svg className="dv-kl-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              <span className="dv-kl-lost"><span className="sr-only">{synthesis.lostLabel}: </span>{row.lost}</span>
+            </li>
+          ))}
+          </ol>
+        </FlowPlay>
+        ) : (
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; before?: string; lost?: string; gap: string }, i: number) => (
             <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span>{row.lost ? <p className="dv-flow-pair"><strong>{row.lost}</strong><span>{row.gap}</span></p> : <p>{row.before && <>{row.before} </>}<b>{row.gap}</b></p>}</li>
           ))}
         </ol></FlowPlay>
+        )}
         </HeldFlow>
       </div>
 

@@ -144,12 +144,14 @@ export const study = {
     },
     synthesis: {
       label: "Analysis",
+      keptLabel: "What stays",
+      lostLabel: "What’s lost",
       title: "AI sped up each stage, but no stage could pass its reasons on to the next.",
       rows: [
-        { stage: "Plan", lost: "What’s actually needed", gap: "AI drafts get made before anyone decides." },
-        { stage: "Design", lost: "Why one option was picked", gap: "There are many options, but no record of the choice." },
-        { stage: "Build", lost: "Why the code changed", gap: "When it drifts from the design, no one records why." },
-        { stage: "Ship", lost: "Where it no longer matches", gap: "Mismatches surface only after launch." },
+        { stage: "Plan", kept: "AI draft", lost: "Why it’s needed" },
+        { stage: "Design", kept: "Picked option", lost: "Why it was picked" },
+        { stage: "Build", kept: "Changed code", lost: "Why it changed" },
+        { stage: "Ship", kept: "Shipped screen", lost: "Where it differs from the design" },
       ],
     },
     interview: {

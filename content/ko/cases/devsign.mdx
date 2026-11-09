@@ -147,12 +147,14 @@ export const study = {
     },
     synthesis: {
       label: "Analysis",
+      keptLabel: "남는 것",
+      lostLabel: "사라지는 것",
       title: "AI는 단계마다 빨랐지만, 다음 단계로 넘길 근거가 없었습니다.",
       rows: [
-        { stage: "기획", lost: "무엇이 필요한지", gap: "정하기 전에 AI 초안부터 만듭니다." },
-        { stage: "디자인", lost: "여러 시안 중 고른 이유", gap: "시안은 많아도 왜 그걸 골랐는지 남지 않습니다." },
-        { stage: "개발", lost: "디자인과 달라진 이유", gap: "코드가 바뀌어도 왜 바꿨는지 남지 않습니다." },
-        { stage: "배포", lost: "디자인과 달라진 곳", gap: "뒤늦게야 알게 됩니다." },
+        { stage: "기획", kept: "AI 초안", lost: "왜 필요한지" },
+        { stage: "디자인", kept: "고른 시안", lost: "고른 이유" },
+        { stage: "개발", kept: "바뀐 코드", lost: "바꾼 이유" },
+        { stage: "배포", kept: "출시된 화면", lost: "디자인과 다른 곳" },
       ],
     },
     interview: {

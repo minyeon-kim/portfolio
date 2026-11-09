@@ -8691,3 +8691,26 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Interview question cards: one icon each instead of a diagram. */
 :root .dv-ivc2-asks svg { width: 32px; height: 32px; margin-bottom: 32px; stroke: var(--case-accent); stroke-width: 1.5; }
+
+/* Analysis as kept → lost: what each stage keeps on a quiet fill, what it loses in a dashed case-colour box. */
+.dv-kl-head { display: grid; grid-template-columns: 120px minmax(0, 1fr) 40px minmax(0, 1fr); gap: 16px; margin: 0 0 16px; font-size: 16px; color: var(--dv-muted); }
+.dv-kl-head span:last-child { color: var(--case-accent); }
+:root .case-study .dv ol.dv-flow.dv-kl { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+:root .case-study .dv ol.dv-flow.dv-kl::after, :root .case-study .dv ol.dv-flow.dv-kl::before, :root .case-study .dv ol.dv-flow.dv-kl > li::before { display: none !important; content: none !important; }
+:root .case-study .dv ol.dv-flow.dv-kl > li { display: grid; grid-template-columns: 120px minmax(0, 1fr) 40px minmax(0, 1fr); align-items: center; gap: 16px; padding: 0; border: 0; }
+.dv-kl-stage { color: var(--dv-muted); font-size: 20px; line-height: 1.4; }
+.dv-kl-kept, .dv-kl-lost { padding: 16px 24px; border-radius: 8px; font-size: 20px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-kl-kept { background: color-mix(in srgb, var(--dv-ink) 6%, transparent); color: var(--dv-ink); }
+.dv-kl-lost { padding: 14px 22px; border: 2px dashed color-mix(in srgb, var(--case-accent) 70%, transparent); color: var(--case-accent); }
+.dv-kl-arrow { width: 24px; height: 24px; justify-self: center; fill: none; stroke: var(--dv-muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 47.99rem) {
+  .dv-kl-head { display: none; }
+  :root .case-study .dv ol.dv-flow.dv-kl > li { grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr); gap: 8px; }
+  .dv-kl-stage { grid-column: 1 / -1; font-size: 16px; }
+  .dv-kl-kept, .dv-kl-lost { padding: 12px 16px; font-size: 16px; }
+  .dv-kl-lost { padding: 10px 14px; }
+}
+:root .case-study .dv ol.dv-flow.dv-kl { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none !important; grid-auto-flow: row !important; width: 100%; max-width: none; }
+:root .case-study .dv ol.dv-flow.dv-kl > li { display: grid !important; grid-column: auto !important; grid-row: auto !important; grid-template-columns: 120px minmax(0, 1fr) 40px minmax(0, 1fr) !important; }
+@media (max-width: 47.99rem) { :root .case-study .dv ol.dv-flow.dv-kl > li { grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) !important; } }
+:root .case-study .dv .dv-flow-play:has(.dv-kl) { width: 100%; max-width: none; }
