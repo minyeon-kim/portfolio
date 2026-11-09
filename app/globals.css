@@ -8560,3 +8560,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @media (max-width: 47.99rem) { .dv-ut-rows dt span { display: block; margin-left: 0; } }
 .case-study .dv .dv-cycle-single .dv-cycle-stage .dv-cycle-foot { justify-content: flex-start; margin-top: 24px; padding: 0; text-align: left; }
 .case-study .dv .dv-cycle-single .dv-cycle-panel .dv-cycle-foot p.dv-chart-source { color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; }
+
+/* Room between the opener's name and its question. */
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { gap: 32px; } }
