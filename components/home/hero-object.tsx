@@ -70,9 +70,13 @@ vec3 formOf(float n, vec2 uv) {
   // Temporary: the landing form options, picked from the hidden row in the Menu.
   if (symbol < 0.5 && look > 0.5) {
     if (look < 1.5) {
-      float x = (b - 0.5) * 6.6, z = (c - 0.5) * 1.3 - 0.3;
-      float y = 0.34 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.1 * sin(x * 4.1 + z * 3.3 + time * 0.5) + 0.16 * sin(x * 0.73 + z * 2.1 + 1.7 + time * 0.11);
-      p = vec3(x, y + z * 0.3 + 0.02, z);
+      // A ribbon that starts right of the Menu column and swings across the stage, twisting as it goes.
+      float t = b, v = (c - 0.5) * 2.0;
+      float x = mix(-1.05, 3.2, t);
+      float wide = 0.1 + 0.36 * pow(0.5 + 0.5 * sin(t * 8.5 + 0.8 + time * 0.14), 2.0);
+      float turn = t * 10.0 + time * 0.2;
+      float y = -0.1 + 0.62 * sin(t * 6.4 - 0.9 + time * 0.1) + 0.13 * sin(t * 15.0 + time * 0.26) + v * wide * cos(turn);
+      p = vec3(x, y, -0.3 + v * wide * sin(turn));
       return p * 1.6 + j * 0.05 * (g > 0.9 ? 8.0 : 1.0) + vec3(0.35, 0.05, 0.0);
     } else if (look < 2.5) {
       vec2 q = vec2(0.0);
