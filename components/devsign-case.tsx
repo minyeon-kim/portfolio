@@ -181,7 +181,7 @@ function Block({ method, title, lead, text, id, label, ff, meta }: Lead & { id?:
   if (ff || lead) return (
     <div className="dv-block">
       <p className="dv-label reveal">{label ?? title}{meta && <span className="dv-label-meta">{meta}</span>}</p>
-      <h3 id={id} className="dv-finding reveal">{lead}</h3>
+      {lead && <h3 id={id} className="dv-finding reveal">{lead}</h3>}
       {text && <p className="dv-body reveal">{text}</p>}
     </div>
   );
