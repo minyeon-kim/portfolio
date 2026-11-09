@@ -356,16 +356,15 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
                 {chart.type === "scale" && <ScaleView data={chart} />}
                 {chart.type === "quotes" && <QuotesView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
+                {(chart.note || chart.source) && <div className="dv-cycle-foot">
+                  {chart.note && <p className="dv-chart-source">{chart.note}</p>}
+                  <ChartSource source={chart.source} />
+                </div>}
               </div>
             );
           })}
         </div>
       </div>
-      {/* The note and the source sit small under the chart, not beside the finding (owner). */}
-      {(charts[current].note || charts[current].source) && <div className="dv-cycle-foot">
-        {charts[current].note && <p className="dv-chart-source">{charts[current].note}</p>}
-        <ChartSource source={charts[current].source} />
-      </div>}
     </div>
     </div>
   );

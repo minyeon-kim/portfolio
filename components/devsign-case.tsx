@@ -177,10 +177,10 @@ function Insights({ discover }: { discover: Study }) {
   );
 }
 
-function Block({ method, title, lead, text, id, label, ff }: Lead & { id?: string; label?: string; ff?: boolean }) {
+function Block({ method, title, lead, text, id, label, ff, meta }: Lead & { id?: string; label?: string; ff?: boolean; meta?: string }) {
   if (ff || lead) return (
     <div className="dv-block">
-      <p className="dv-label reveal">{label ?? title}</p>
+      <p className="dv-label reveal">{label ?? title}{meta && <span className="dv-label-meta">{meta}</span>}</p>
       <h3 id={id} className="dv-finding reveal">{lead}</h3>
       {text && <p className="dv-body reveal">{text}</p>}
     </div>
@@ -689,12 +689,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.protocol ? <>
           {/* The finding is the block's heading; each chart's own sentence is a smaller caption
               (owner: without the heading the block had no hierarchy). */}
-          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<>
-            <Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} />
-            <p className="dv-body dv-ut-summary reveal">
-              {testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")}
-            </p>
-          </>} /></section>
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} meta={testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")} />} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>

@@ -8222,3 +8222,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-qv-wrap { width: 100%; }
 .case-study .dv .dv-qv li:first-child { padding-top: 20px; border-top: 1px solid var(--dv-line); }
 @media (max-width: 63.99rem) { .case-study .dv .dv-qv-title { font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; } }
+
+/* Chart blocks in fewer layers: no rules, the chart right under its tabs, its note right under it. */
+.dv-label-meta { margin-left: 12px; color: var(--dv-muted); font-weight: 400; }
+.case-study .dv .dv-cycle-plate { align-items: start; padding-top: 24px; border-top: 0; }
+.case-study .dv .dv-cycle-foot { margin-top: 20px; padding-top: 0; border-top: 0; }
+.case-study .dv .dv-cycle-panel { align-self: start; }
+.case-study .dv .dv-cycle-charts { min-height: 0; }
+.case-study .dv .dv-cycle-head { margin-bottom: 16px; }
+@media (min-width: 64rem) {
+  .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --sp-head: 56px; }
+}
+@media (max-width: 47.99rem) { .dv-label-meta { display: block; margin: 4px 0 0; } }
