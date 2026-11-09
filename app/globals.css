@@ -7854,7 +7854,7 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
     .about-split-title p { margin: 0; text-wrap: balance; }
     .about-split-title p:first-child { font-size: clamp(36px, min(3.9vw, 7svh), 72px); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
     .about-split-title p:last-child { margin-top: 16px; font-size: clamp(18px, 1.4vw, 22px); font-weight: 400; line-height: 1.4; }
-    .about-split-card, .about-split-portrait, .about-split-frame { display: block; position: absolute; margin: 0; border-radius: 24px; }
+    .about-split-card, .about-split-portrait, .about-split-frame { display: block; position: absolute; margin: 0; border-radius: 8px; }
     .about-split-card, .about-split-portrait { overflow: hidden; }
     .about-split-card { z-index: 3; animation-name: about-split-card; }
     .about-split-card, .about-split-portrait { container-type: inline-size; }
