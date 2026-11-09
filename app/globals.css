@@ -8589,7 +8589,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @media (max-width: 74.99rem) { .dv-dd-point-line { display: none; } }
 
 /* Facts gather under the question instead of spreading to the screen edges. */
-@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: 100%; justify-content: center !important; gap: clamp(32px, 6.7vw, 96px) !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: min(1200px, 100%); margin-inline: auto; justify-content: space-between !important; gap: 32px !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
 
 
 /* Analysis: what each stage lost is the large line; the sentence explains it quietly. */
