@@ -242,20 +242,17 @@ export function CanvasZoom({ art, candidates, keyPairs, painLabel, reliefLabel, 
         </OpenFrame>
       </div>
       {caption && <p className="dv-vpc-caption" aria-hidden="true">{caption}</p>}
-      <div className="dv-vpc-table reveal" role="table" aria-label={overviewLabel}>
-        <div className="dv-vpc-head" role="row">
-          <span role="columnheader">{painLabel}</span><span aria-hidden="true" /><span role="columnheader">{reliefLabel}</span><span aria-hidden="true" /><span role="columnheader">{featureLabel}</span>
-        </div>
-        {rows.map((c, i) => (
-          <div key={c.id} className="dv-vpc-row" role="row" style={{ "--i": i } as CSSProperties}>
-            <p role="cell" data-label={painLabel}>“{c.pain}”</p>
-            <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
-            <p role="cell" data-label={reliefLabel}>{c.name}</p>
-            <span className="dv-vpc-arrow" aria-hidden="true"><ArrowIcon size={20} /></span>
-            <b role="cell" data-label={featureLabel}>{c.to}</b>
-          </div>
+      <ul className="dv-vpf reveal" aria-label={overviewLabel}>
+        {rows.map((c) => (
+          <li key={c.id}>
+            <b><span className="sr-only">{featureLabel}: </span>{c.to}</b>
+            <div>
+              <p><span className="sr-only">{painLabel}: </span>“{c.pain}”</p>
+              <p className="dv-vpf-idea">{reliefLabel} · {c.name}</p>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
       <ul className="sr-only">
         {others.map((c) => <li key={c.id}>{c.name}: {c.pain} → {c.to}</li>)}
       </ul>

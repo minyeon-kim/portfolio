@@ -8205,3 +8205,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* The prototype button belongs to its heading; the feature player starts well clear of it. */
 .case-study .dv .dv-block + p.dv-try-link { margin-top: 24px; }
 @media (min-width: 64rem) { .case-study .dv .dv-flist:has(> .dv-flist-head) { row-gap: 0; } .case-study .dv .dv-flist > .dv-flist-head { margin-bottom: 0 !important; padding-bottom: 48px; } }
+
+/* Value proposition pairs: the feature leads, the pain and idea it came from sit beside it. */
+.case-study .dv .dv-vpc-caption + .dv-vpf { margin-top: 16px; }
+.case-study .dv .dv-vpf { margin-inline: 0; margin-bottom: 0; padding: 0; list-style: none; border-top: 1px solid var(--dv-line); }
+.dv-vpf li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 48px; align-items: baseline; padding: 32px 0; border-bottom: 1px solid var(--dv-line); }
+.dv-vpf b { color: var(--case-accent); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
+.case-study .dv .dv-vpf p { margin: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); line-height: 1.45; word-break: keep-all; text-wrap: pretty; }
+.case-study .dv .dv-vpf p.dv-vpf-idea { margin-top: 6px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+@media (max-width: 47.99rem) { .dv-vpf li { grid-template-columns: minmax(0, 1fr); row-gap: 10px; padding: 24px 0; } }
