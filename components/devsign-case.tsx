@@ -702,10 +702,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.protocol ? <>
           {/* The finding is the block's heading; each chart's own sentence is a smaller caption
               (owner: without the heading the block had no hierarchy). */}
-          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.facts ? testing.usability.charts.slice(0, 1) : testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} meta={testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")} /></>} /></section>
-          {testing.usability.facts && <dl className="dv-ut-facts reveal">
-            {testing.usability.facts.map((fact: { value: string; label: string }) => <div key={fact.label}><dd>{fact.value}</dd><dt>{fact.label}</dt></div>)}
-          </dl>}
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.facts ? testing.usability.charts.slice(0, 1) : testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} /></>} below={testing.usability.facts && <dl className="dv-ut-rows">
+            {testing.usability.facts.map((fact: { value: string; label: string; hint?: string }) => <div key={fact.label}><dt>{fact.label}{fact.hint && <span>{fact.hint}</span>}</dt><dd>{fact.value}</dd></div>)}
+          </dl>} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>

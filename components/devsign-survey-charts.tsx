@@ -9,7 +9,7 @@ type Source = { label: string; url?: string; detail?: string };
 type Base = { tab: string; title: string; note?: string; source?: Source };
 type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; segments: Segment[] };
 type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
-type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
+type PairChart = Base & { low?: string; high?: string; type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
 type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
 type ScaleChart = Base & { type: "scale"; max: number; marks: { label: string; value: number }[]; items: { label: string; value: number }[] };
 type QuotesChart = Base & { type: "quotes"; items: { name: string; quote: string; source: string; sourceUrl?: string }[] };
@@ -163,6 +163,7 @@ function Pair({ data, animate }: { data: PairChart; animate: boolean }) {
           </div>
         ))}
       </div>
+      {data.low && <div className="dv-hbar-axis"><span>{data.low}</span><span>{data.high}</span></div>}
     </div>
   );
 }
@@ -257,7 +258,7 @@ function TableView({ data }: { data: TableChart }) {
 // JS the first chart stands complete and the tabs still work.
 // `head` (the block's label and finding) sits inside the held stage, so it stays on
 // screen with the chart while scroll changes the chart (owner: the title scrolled away).
-export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; labels: { charts: string; pause: string; play: string }; head?: React.ReactNode }) {
+export function SurveyCharts({ charts, labels, head, below }: { charts: StageChart[]; labels: { charts: string; pause: string; play: string }; head?: React.ReactNode; below?: React.ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const [motion, setMotion] = useState(false);
@@ -342,6 +343,7 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
                 {chart.type === "scale" && <ScaleView data={chart} />}
                 {chart.type === "quotes" && <QuotesView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
+                {below}
                 {(chart.note || chart.source) && <div className="dv-cycle-foot">
                   {chart.note && <p className="dv-chart-source">{chart.note}</p>}
                   <ChartSource source={chart.source} />

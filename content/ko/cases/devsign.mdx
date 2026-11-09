@@ -462,13 +462,15 @@ export const study = {
       resultLead: "두 번째 시도에서 도움은 크게 줄었지만, 첫 시도를 도움 없이 끝낸 사람은 없었습니다.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "사용성 테스트 중 노트북으로 프로토타입을 사용하는 참가자 두 명" },
       chartLabels: { charts: "테스트 결과", pause: "차트 일시정지", play: "차트 재생" },
-      facts: [{ value: "55 · 75", label: "사용성 점수 (SUS, 디자이너 · 개발자). 목표 51.7, 일반 평균 68" }, { value: "5 / 5", label: "둘 다 디자인과 코드 차이를 묻는 일이 줄 것이라 답함" }],
+      facts: [{ value: "55 · 75", label: "사용성 점수(SUS)", hint: "디자이너 · 개발자. 목표 51.7, 일반 평균 68" }, { value: "5 / 5", label: "디자인과 코드 차이를 묻는 일이 줄 것이라는 기대", hint: "2명 모두" }],
       charts: [
         {
           type: "pair",
           tab: "필요했던 도움",
           title: "같은 과제를 반복해, 익숙해진 영향도 있습니다.",
-          note: "0 혼자 해결 · 3 직접 알려 줌 · 과제 7개 평균. 같은 과제를 반복해 익숙해진 영향도 있습니다.",
+          note: "2명, 과제 7개를 2회씩, 평균. 같은 과제를 반복해 익숙해진 영향도 있습니다.",
+          low: "0 혼자 해결",
+          high: "3 직접 알려 줌",
           scale: 3, goal: 1.5, goalLabel: "목표 1.5",
           items: [{ label: "첫 시도", value: 2.3 }, { label: "두 번째 시도", value: 0.4, on: true }],
         },

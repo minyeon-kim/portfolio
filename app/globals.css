@@ -8539,3 +8539,24 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-cycle-track .dv-trust-legend { justify-content: flex-start; }
   .case-study .dv .dv-cycle-track .dv-bars-chart { height: calc(var(--ring) + 68px); }
 }
+
+/* Usability result (owner: too much at one weight): the chart leads, with the label and finding at
+   the left. Under it two small rows for the other figures, then one footnote for who and how. */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto minmax(0, 1fr); column-gap: 64px; align-items: start; }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head, .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-plate { display: contents; }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-section-head { grid-column: 1 / -1; grid-row: 1; }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-column: 1; grid-row: 2; margin: 0; }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 2; grid-row: 2; align-self: start; }
+}
+.case-study .dv .dv-cycle-single .dv-hbar-plot { padding-top: 32px; }
+.case-study .dv .dv-hbar-axis { padding-right: calc(var(--gap) + var(--val)); }
+.case-study .dv .dv-cycle-single .dv-hbar-axis { margin-top: 12px; }
+.dv-ut-rows { display: grid; gap: 16px; margin: 40px 0 0; padding-top: 24px; border-top: 1px solid var(--dv-line); }
+.dv-ut-rows > div { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
+.dv-ut-rows dt { color: var(--dv-ink); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-ut-rows dt span { margin-left: 8px; color: var(--dv-muted); }
+.dv-ut-rows dd { flex: none; margin: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.4; }
+@media (max-width: 47.99rem) { .dv-ut-rows dt span { display: block; margin-left: 0; } }
+.case-study .dv .dv-cycle-single .dv-cycle-stage .dv-cycle-foot { justify-content: flex-start; margin-top: 24px; padding: 0; text-align: left; }
+.case-study .dv .dv-cycle-single .dv-cycle-panel .dv-cycle-foot p.dv-chart-source { color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; }

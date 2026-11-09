@@ -459,13 +459,15 @@ export const study = {
       resultLead: "Help dropped sharply on the second try, but neither person finished the first try without help.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
-      facts: [{ value: "55 · 75", label: "Usability score (SUS, designer · developer). Goal 51.7, usual average 68" }, { value: "5 / 5", label: "Both expect fewer questions about design vs. code" }],
+      facts: [{ value: "55 · 75", label: "Usability score (SUS)", hint: "Designer · developer. Goal 51.7, usual average 68" }, { value: "5 / 5", label: "Expect fewer questions about design vs. code", hint: "Both" }],
       charts: [
         {
           type: "pair",
           tab: "Help needed",
           title: "The same tasks twice, so familiarity played a part.",
-          note: "0 on their own · 3 told directly · average of 7 tasks. The same tasks twice, so familiarity played a part.",
+          note: "2 people, 7 tasks twice, averaged. The same tasks twice, so familiarity played a part.",
+          low: "0 on their own",
+          high: "3 told directly",
           scale: 3, goal: 1.5, goalLabel: "Goal 1.5",
           items: [{ label: "First try", value: 2.3 }, { label: "Second try", value: 0.4, on: true }],
         },
