@@ -8261,3 +8261,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-iaf-items { gap: 16px; }
 .case-study .dv .dv-hbar-name { gap: 0; }
 @media (min-width: 64rem) { .dv > section > .dv-core.dv-core:last-child { padding-top: 144px !important; } }
+
+/* Iteration 2 holds its heading while the changes step through, so the clip gives up the height. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-iter:has(.dv-iter-top) { width: 100%; margin-left: 0; }
+  .case-study .dv .dv-iter:has(.dv-iter-top) .dv-iter-clip { padding: 16px; }
+  .case-study .dv .dv-iter:has(.dv-iter-top) .dv-iter-clip video { width: min(100%, calc((100svh - 448px) * 1.6)); }
+  .case-study .dv .dv-iter-head:has(.dv-iter-top) { padding-bottom: 16px; }
+  .case-study .dv .dv-iter-head .dv-iter-top .dv-iter-photo { padding-top: 0; }
+}
