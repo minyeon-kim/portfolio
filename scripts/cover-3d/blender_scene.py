@@ -53,7 +53,7 @@ PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#050506', 0.3, metal=1)
 NECKM = mat('neck', '#020203', 0.45, spec=0.0)
-STRIP = mat('strip', '#7c8288', 0.34, metal=1)
+STRIP = mat('strip', '#70747a', 0.5, spec=0.3)
 FOOTM = mat('foot', '#60626a', 0.16, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
@@ -111,7 +111,7 @@ def hexa(name, pts, material):
     o = bpy.data.objects.new(name, me); scene.collection.objects.link(o); return o
 
 # Plinth: top at height 0, running down 3 units.
-solid('plinth', rounded(PW, PD, PC, 32), -3, 0, T(PX, PY, PZ) @ Ry(PYAW) @ XZ, PURPLE, bevel=0.01)
+solid('plinth', rounded(PW, PD, PC, 32), -3, 0, T(PX, PY, PZ) @ Ry(PYAW) @ XZ, PURPLE, bevel=0.0035, bseg=3)
 
 # Monitor: an aluminium shell, the black glass front a hair proud of it.
 bw, bh = SW + BZ * 2, SH + BZ * 2
@@ -139,6 +139,11 @@ n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.03
 a, b, c, d = [Vector(q) for q in (NECK_BASE[0], NECK_BASE[1], NECK_TOP[1], NECK_TOP[0])]
 a.y = b.y = PY + 0.012  # sunk into the foot, so the two meet with no gap
 hexa('neck', [a, b, c, d, a + n, b + n, c + n, d + n], NECKM)
+# The neck's base stops just behind the plate's back edge at its left end: fill that sliver.
+fw = -n * 1.6
+ft, fb = PY + 0.0165, PY + 0.0005
+qs = [Vector((q.x, ft, q.z)) for q in (a, b, b + fw, a + fw)] + [Vector((q.x, fb, q.z)) for q in (a, b, b + fw, a + fw)]
+hexa('neck_seat', qs, FOOTM)
 # The neck's right side: the thin lit strip on the reference.
 u = (b - a).normalized() * 0.003
 hexa('neck_side', [b, c, c + n, b + n, b + u, c + u, c + n + u, b + n + u], STRIP)
@@ -189,6 +194,7 @@ for dev in prefs.devices: dev.use = True
 scene.cycles.device = 'GPU'
 scene.cycles.samples = SAMPLES
 scene.cycles.use_denoising = True
+scene.cycles.filter_width = 0.9  # default 1.5 softens every edge
 scene.cycles.max_bounces = 8
 scene.render.film_transparent = True
 scene.render.resolution_x, scene.render.resolution_y = W, H
