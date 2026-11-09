@@ -711,9 +711,13 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>}
         {testing.iteration2 && <div className="dv-subsection-120">
           {ff ? <>
-            <Block {...testing.iteration2} text={undefined} ff={ff} />
-            <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
-            {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-iter-photo" />}
+            <div className="dv-iv-top dv-iter-top">
+              <div>
+                <Block {...testing.iteration2} text={undefined} ff={ff} />
+                <p className="dv-iter-why reveal">{testing.iteration2.text}</p>
+              </div>
+              {testing.iteration2.photo && <Figure img={testing.iteration2.photo} sizes="(max-width: 1023px) 100vw, 480px" className="dv-iter-photo" />}
+            </div>
             <div className="dv-gap-40"><IterationCompare changes={testing.iteration2.changes} labels={labels} head={testing.iteration2.changesLead && <p className="dv-iter-lead">{testing.iteration2.changesLead}</p>} /></div>
           </> : <>
             <Block {...testing.iteration2} ff={ff} />

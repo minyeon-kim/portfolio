@@ -8139,3 +8139,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, minmax(0, 1fr)); justify-content: stretch; column-gap: 32px; margin-top: clamp(40px, 6svh, 72px); }
   .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { max-width: 34ch; }
 }
+
+/* Iteration 2: the session photo is small evidence beside the heading (as in the interview), so
+   the recordings below are the only large picture, with real space before them. */
+.case-study .dv .dv-iter-top .dv-iter-photo { width: 100%; max-width: none; margin: 0; padding-top: 40px; }
+.case-study .dv .dv-iter-top + .dv-gap-40 { margin-top: 160px !important; }
+.case-study .dv .dv-iter-lead { font-size: var(--t-item, 20px); line-height: 1.4; }
+@media (max-width: 63.99rem) {
+  .case-study .dv .dv-iter-top .dv-iter-photo { padding-top: 0; }
+  .case-study .dv .dv-iter-top + .dv-gap-40 { margin-top: 72px !important; }
+}
