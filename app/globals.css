@@ -8658,3 +8658,4 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Opener facts: label and value with no gap between their lines (Metalab measured 0). */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dt, :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { margin: 0; line-height: 1.4; } }
+.about-bridge > .about-statement { width: min(1200px, calc(100% - 2 * var(--edge-inset, 16px))); margin-inline: auto; }
