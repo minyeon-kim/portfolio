@@ -8143,3 +8143,14 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   }
 }
 @keyframes about-split-dim { 0%, 20% { opacity: 1; } 70%, 100% { opacity: 0; } }
+
+/* The Menu's left column is the landing's left column (owner: nothing should change when it opens):
+   same pill size, spacing and vertical centre; on the landing it appears in place instead of sliding in. */
+@media (min-width: 64rem) {
+  .menu-sheet { padding-block: 32px; }
+  .menu-label { line-height: 1.5; }
+  .menu-picks { gap: 14px; }
+  .menu-picks a { min-height: 44px; padding: 0 22px; font-size: 18px; font-weight: 500; line-height: 1.4; }
+  html:has(header[data-intro]) .menu-column { translate: none; opacity: 0; transition: opacity 250ms ease; }
+  html[data-menu="open"]:has(header[data-intro]) .menu-column { opacity: 1; transition-delay: 150ms; }
+}
