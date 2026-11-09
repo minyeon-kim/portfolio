@@ -5557,26 +5557,18 @@ header[data-compact] :is(.header-name, .header-menu-trigger, .lang-link) { text-
 .dv-cycle-panel[data-phase="wait"] :is(.dv-hbar strong, .dv-sus-ring strong) { opacity: 0; }
 .dv-cycle-panel[data-phase="wait"] .dv-hbar-fill { scale: 0 1; }
 .dv-cycle-panel[data-phase="wait"] .dv-sus-value { stroke-dasharray: 0 100; }
-.dv-cycle-panel[data-phase="wait"] .dv-score-table tbody tr { opacity: 0; }
+.dv-cycle-panel[data-phase="wait"] .dv-dumb li { opacity: 0; }
 .dv-cycle-panel[data-phase="play"] .dv-hbar-fill { animation: dv-hbar-grow 900ms var(--ease-reveal) calc(var(--i) * 200ms) backwards; }
 .dv-cycle-panel[data-phase="play"] .dv-hbar-goal { animation: dv-chart-fade 400ms var(--ease) 800ms backwards; }
 .dv-cycle-panel[data-phase="play"] .dv-sus-value { animation: dv-sus-fill 1100ms var(--ease) calc(var(--i, 0) * 150ms) backwards; }
-.dv-cycle-panel[data-phase="play"] .dv-score-table tbody tr { animation: dv-chart-rise 500ms var(--ease) calc(var(--i) * 140ms + 150ms) backwards; }
+.dv-cycle-panel[data-phase="play"] .dv-dumb li { animation: dv-chart-rise 500ms var(--ease) calc(var(--i) * 140ms + 150ms) backwards; }
 
 .dv-sus { justify-content: center; gap: clamp(24px, 4vw, 56px); }
 .dv-sus li { flex: 0 1 230px; font-size: 18px; }
 .dv-sus-ring strong { font-size: var(--t-display); font-weight: 300; }
 .dv-sus-track, .dv-sus-value { stroke-width: 7; }
 
-.dv-score-table { width: 100%; border-collapse: collapse; }
-.dv-score-table thead th { padding: 0 0 16px 16px; color: var(--dv-muted); font-size: 16px; font-weight: 400; text-align: right; white-space: nowrap; }
-.dv-score-table tbody th { padding: 18px 16px 18px 0; color: var(--dv-ink); font-size: 18px; font-weight: 400; line-height: 1.4; text-align: left; word-break: keep-all; }
-.dv-score-table tbody td { padding: 18px 0 18px 16px; color: var(--dv-muted); text-align: right; white-space: nowrap; }
-.dv-score-table tbody tr + tr > * { border-top: 1px solid var(--dv-line); }
-.dv-score-table strong { color: var(--dv-ink); font-size: var(--t-statement); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; }
-.dv-score-table small { font-size: 16px; }
 @media (max-width: 47.99rem) {
-  .dv-score-table tbody th { font-size: 16px; }
 }
 
 /* Word tabs on top, then one plate: finding at the left, chart at the right. The tabs say what can
@@ -8154,20 +8146,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .menu-dust button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Score table: each score sits right by its question, as dots you can compare at a glance. */
-.case-study .dv .dv-score-table { table-layout: fixed; }
-.case-study .dv .dv-score-table thead th { width: 176px; padding: 0 0 12px 24px; text-align: left; }
-.case-study .dv .dv-score-table tbody td { padding: 20px 0 20px 24px; text-align: left; }
-.case-study .dv .dv-score-table tbody th { padding-block: 20px; }
-.case-study .dv .dv-score-table strong { font-size: var(--t-item); font-weight: 500; line-height: 1.4; }
-.dv-score-cell { display: flex; align-items: center; gap: 12px; }
-.dv-score-dots { display: flex; gap: 4px; }
-.dv-score-dots i { width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 16%, transparent); }
-.dv-score-dots i[data-on] { background: var(--dv-chart-fill); }
 @media (max-width: 63.99rem) {
-  .case-study .dv .dv-score-table thead th { width: 96px; padding-left: 12px; }
-  .case-study .dv .dv-score-table tbody td { padding-left: 12px; }
-  .dv-score-cell { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .dv-score-dots i { width: 8px; height: 8px; }
 }
 
 /* Iteration 1 and 2: big screens back to back need more room than the usual block gap. */
@@ -8195,3 +8174,30 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-hbar-axis { display: flex; justify-content: space-between; margin-top: 16px; padding-left: calc(var(--name) + var(--gap)); color: var(--dv-muted); font-size: 16px; line-height: 1.4; }
 @keyframes dv-hbar-grow { from { scale: 0 1; } }
 @media (max-width: 47.99rem) { .dv-hbar { --name: 96px; --gap: 16px; } }
+
+/* Iteration 2: tabs and the screen start on the column edge, right under the intro. */
+@media (min-width: 64rem) {
+  :root .case-study:is([data-project="devsign"]) .dv .dv-iter-top + .dv-gap-40.dv-gap-40 { margin-top: 96px !important; }
+  .case-study[data-project="devsign"] .dv .dv-iter:not(.dv-screens-held) .dv-iter-step { padding: 0; }
+  .case-study[data-project="devsign"] .dv .dv-iter:not(.dv-screens-held) .dv-iter-steps .dv-iter-name { padding-left: 40px; }
+}
+
+/* Expectations: both people placed on one line per question. */
+.dv-dumb { --pad: 44px; width: 100%; }
+.dv-dumb-legend { display: flex; gap: 24px; margin: 0 0 24px; color: var(--dv-muted); font-size: 16px; }
+.dv-dumb-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.dv-dumb-legend i { width: 12px; height: 12px; border-radius: 50%; background: var(--dv-chart-fill); }
+.dv-dumb-legend [data-who="1"] i { background: var(--dv-ink); }
+.dv-dumb ul { display: grid; gap: 24px; margin: 0; padding: 0; list-style: none; }
+.dv-dumb li p { margin: 0 0 12px; color: var(--dv-ink); font-size: 18px; line-height: 1.4; }
+.dv-dumb-line { height: 32px; padding-inline: var(--pad); }
+.dv-dumb-rail { position: relative; height: 100%; }
+.dv-dumb-rail::before { content: ""; position: absolute; inset: 15px 0 auto; height: 2px; background: color-mix(in srgb, var(--dv-ink) 12%, transparent); }
+.dv-dumb-rail em { position: absolute; top: 12px; left: calc(var(--x) * 100%); width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--dv-ink) 24%, var(--bg)); transform: translateX(-50%); }
+.dv-dumb-rail b { position: absolute; top: 14px; left: calc(var(--from) * 100%); width: calc((var(--to) - var(--from)) * 100%); height: 4px; background: var(--dv-chart-fill); }
+.dv-dumb-rail strong { position: absolute; top: 0; left: calc(var(--x) * 100%); display: grid; place-items: center; min-width: 32px; height: 32px; padding-inline: 10px; border-radius: 999px; background: var(--dv-ink); color: var(--bg); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; box-sizing: border-box; transform: translateX(-50%); }
+.dv-dumb-rail strong[data-who="0"], .dv-dumb-rail .dv-dumb-both { background: var(--dv-chart-fill); color: #fff; }
+.dv-dumb-rail strong[data-who] { padding-inline: 0; }
+.dv-dumb-scale { height: 24px; margin-top: 12px; padding-inline: var(--pad); }
+.dv-dumb-scale span { position: absolute; left: calc(var(--x) * 100%); color: var(--dv-muted); font-size: 16px; line-height: 1.5; transform: translateX(-50%); }
+.dv-dumb-scale .dv-dumb-rail::before { display: none; }

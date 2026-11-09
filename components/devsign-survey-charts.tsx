@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { TALL_PIN, useHeldSteps } from "@/components/devsign-story";
+import { useLocale } from "@/lib/use-locale";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
 type Source = { label: string; url?: string; detail?: string };
@@ -222,26 +223,36 @@ function QuotesView({ data }: { data: QuotesChart }) {
   );
 }
 
+// Each question is one line from 1 to the top score with both people placed on it, so agreeing
+// and splitting read at a glance. The same score is one pill.
 function TableView({ data }: { data: TableChart }) {
+  const both = useLocale() === "ko" ? "둘 다" : "Both";
+  const at = (v: number) => (v - 1) / (data.max - 1);
   return (
-    <table className="dv-score-table">
-      <thead>
-        <tr><td />{data.people.map((person) => <th key={person} scope="col">{person}</th>)}</tr>
-      </thead>
-      <tbody>
-        {data.rows.map((row, i) => (
-          <tr key={row.label} style={{ "--i": i } as React.CSSProperties}>
-            <th scope="row">{row.label}</th>
-            {row.values.map((value, who) => <td key={who}>
-              <span className="dv-score-cell">
-                <span className="dv-score-dots" aria-hidden="true">{Array.from({ length: data.max }, (_, d) => <i key={d} data-on={d < value || undefined} />)}</span>
-                <span><strong>{value}</strong><small> / {data.max}</small></span>
-              </span>
-            </td>)}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="dv-dumb">
+      <p className="dv-dumb-legend" aria-hidden="true">{data.people.map((person, who) => <span key={person} data-who={who}><i />{person}</span>)}</p>
+      <ul>
+        {data.rows.map((row, i) => {
+          const [a, b] = row.values;
+          const same = a === b;
+          return (
+            <li key={row.label} style={{ "--i": i } as React.CSSProperties}>
+              <p>{row.label}<span className="sr-only">{` ${data.people[0]} ${a}, ${data.people[1]} ${b}`}</span></p>
+              <div className="dv-dumb-line" aria-hidden="true">
+                <div className="dv-dumb-rail">
+                  {Array.from({ length: data.max }, (_, t) => <em key={t} style={{ "--x": t / (data.max - 1) } as React.CSSProperties} />)}
+                  {!same && <b style={{ "--from": at(Math.min(a, b)), "--to": at(Math.max(a, b)) } as React.CSSProperties} />}
+                  {same
+                    ? <strong className="dv-dumb-both" style={{ "--x": at(a) } as React.CSSProperties}>{both} {a}</strong>
+                    : row.values.map((v, who) => <strong key={who} data-who={who} style={{ "--x": at(v) } as React.CSSProperties}>{v}</strong>)}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="dv-dumb-scale" aria-hidden="true"><div className="dv-dumb-rail">{Array.from({ length: data.max }, (_, t) => <span key={t} style={{ "--x": t / (data.max - 1) } as React.CSSProperties}>{t + 1}</span>)}</div></div>
+    </div>
   );
 }
 
