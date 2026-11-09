@@ -8098,3 +8098,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --sp-stage: 56px; --sp-head: 40px; --sp-block: 80px; }
   .case-study .dv > section:is(#overview) { padding-top: 48px; }
 }
+
+/* Case opener: lighter top, so the cover starts earlier on the first screen. */
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover { padding-top: clamp(16px, 3svh, 32px); }
+  .selected-stage-hero .devsign-hero.dh-cover { padding-top: clamp(80px, 10svh, 100px); }
+  .devsign-hero.dh-cover .devsign-hero-title, .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(56px, 6.3vw, 126px); }
+  .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(52px, 5.2vw, 104px); }
+  .devsign-hero.dh-cover .dh-lead { margin-top: clamp(16px, 1.8vw, 28px); }
+  .devsign-hero.dh-cover .devsign-hero-question { font-size: clamp(20px, 1.7vw, 26px); }
+  .devsign-hero.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { row-gap: 14px; }
+  .devsign-hero.dh-cover[data-project] .dh-cover-plate { margin-top: clamp(32px, 4svh, 48px); }
+}
