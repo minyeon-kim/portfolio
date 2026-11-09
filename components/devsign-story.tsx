@@ -428,8 +428,8 @@ function FeatureReel({ reel, active, pinned, load }: { reel: Reel; active: boole
 // through the features (the held-track pattern); a clip loops while its feature is current.
 // Elsewhere a clip that ends opens the next feature.
 // `head` (the block's label, finding and link) rides in the held stage so it stays with the clip.
-export function FeatureList({ reels, phone, head }: { reels: Reel[]; phone?: boolean; head?: ReactNode }) {
-  const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length, head ? TALL_PIN : undefined);
+export function FeatureList({ reels, phone, head, open }: { reels: Reel[]; phone?: boolean; head?: ReactNode; open?: boolean }) {
+  const { root: track, active, setActive, pinned, go } = useHeldSteps(reels.length, open ? "(min-width: 99999px)" : head ? TALL_PIN : undefined);
   const root = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const current = active;
@@ -471,7 +471,7 @@ export function FeatureList({ reels, phone, head }: { reels: Reel[]; phone?: boo
     setActive(i);
   };
   return (
-    <div ref={track} className={`dv-held-track dv-flist-track${head ? " dv-held-tall" : " dv-gap-40"}`} style={{ "--n": reels.length } as CSSProperties}>
+    <div ref={track} className={`dv-held-track dv-flist-track${head ? " dv-held-tall" : " dv-gap-40"}${open ? " dv-flist-open" : ""}`} style={{ "--n": reels.length } as CSSProperties}>
     <div ref={root} className="dv-flist" data-phone={phone || undefined}>
       {head && <div className="dv-flist-head">{head}</div>}
       <ol className="dv-flist-items">

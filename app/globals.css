@@ -8349,3 +8349,31 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-deliver-row > .dv-block { margin: 0; min-height: 0 !important; }
 .case-study .dv .dv-deliver-row > .dv-block .dv-label { margin: 0; }
 .case-study .dv .dv-deliver-row > .dv-block + p.dv-try-link { margin: 0 !important; flex: none; }
+
+/* Deliver as a scene (owner chose B, after metalab.com's case covers): the chapter name large,
+   the product on a full-width colour field, the four features under it. Not held on the scroll. */
+.dv-flist-open::after { display: none; }
+.dv-flist-open > :first-child { position: static; }
+@media (min-width: 64rem) {
+  .case-study .dv .dv-flist-open .dv-flist { display: flex !important; flex-direction: column; width: 100vw !important; max-width: none !important; margin-left: calc(50% - 50vw) !important; }
+  .case-study .dv .dv-flist-open .dv-flist-head { order: 0; }
+  .case-study .dv .dv-flist-open .dv-flist-frame { order: 1 !important; }
+  .case-study .dv .dv-flist-open .dv-flist-items { order: 2 !important; }
+  .case-study .dv .dv-flist-open :is(.dv-flist-head, .dv-flist-items) { width: min(1200px, calc(100vw - 112px)); margin-inline: auto; }
+  .case-study .dv .dv-flist-open .dv-deliver-intro { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: end; column-gap: 48px; }
+  .case-study .dv .dv-flist-open .dv-deliver-intro .dv-section-head { grid-row: 1 / span 2; padding-bottom: 0 !important; margin-bottom: 0 !important; border-bottom: 0 !important; }
+  .case-study:is([data-project="devsign"]) .dv .dv-flist-open .dv-section-title { font-size: clamp(88px, 11.7vw, 168px); line-height: 1; }
+  .case-study .dv .dv-flist-open .dv-flist-head { margin-bottom: 64px !important; padding-bottom: 0 !important; }
+  .case-study .dv .dv-flist-open .dv-flist-frame { position: relative; width: 100% !important; max-width: none !important; height: min(780px, 88svh); aspect-ratio: auto; border-radius: 0 !important; padding: 0; background: linear-gradient(150deg, #3b2a9a, #6a53d8); box-shadow: none; }
+  .case-study .dv .dv-flist-open .dv-flist-tone { display: none; }
+  .case-study .dv .dv-flist-open .dv-flist-frame video { inset: 80px auto auto 50% !important; width: min(1200px, calc(100vw - 112px)) !important; height: auto !important; max-width: none !important; max-height: none !important; translate: -50% 0 !important; margin: 0 !important; border-radius: 16px 16px 0 0; object-fit: cover; }
+  .case-study .dv .dv-flist-open .dv-flist-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 64px; }
+  .case-study .dv .dv-flist-open .dv-flist-items li { position: relative; padding: 16px 0 0; border: 0; border-top: 1px solid var(--dv-line); }
+  .case-study .dv .dv-flist-open .dv-flist-items button { display: block; padding: 0; text-align: left; }
+  .case-study .dv .dv-flist-open .dv-flist-items button b { display: block; margin-bottom: 8px; }
+  .case-study .dv .dv-flist-open .dv-flist-items button > span { display: block; color: var(--dv-muted); }
+  .case-study .dv .dv-flist-open .dv-flist-items li[data-on] button > span { color: var(--dv-ink); }
+  .case-study .dv .dv-flist-open .dv-flist-items button small { display: block; margin-top: 8px; color: var(--dv-muted); }
+  .case-study .dv .dv-flist-open .dv-flist-more { display: none; }
+  .case-study .dv .dv-flist-open .dv-flist-bar { position: absolute; top: -1px; left: 0; right: 0; bottom: auto; }
+}

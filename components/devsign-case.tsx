@@ -621,6 +621,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-main-features dv-main-features-joined">
             {/* One block with the prototype heading above (owner): the features are what the prototype holds. */}
             <FeatureList
+              open
               head={deliverIntro}
               reels={overview.features.items.map((f: { kicker: string; name: string; body: string; hook?: string; flow?: string }) => {
                 const pick = develop.selection.items.find((item: { feature: string }) => item.feature === f.name);
