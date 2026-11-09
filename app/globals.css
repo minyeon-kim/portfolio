@@ -8421,3 +8421,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { flex-direction: column; align-items: flex-start; gap: 16px; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { flex: 0 0 auto; margin-left: 64px; }
 }
+
+/* Overview summary lines are items, not headings: one step under the block findings. */
+:root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: var(--t-item, 20px); line-height: 1.4; letter-spacing: 0; }
+:root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { padding-block: 24px; }
+:root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li:first-child { padding-top: 0; }
