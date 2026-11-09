@@ -368,7 +368,7 @@ void main() {
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky) * mix(1.0, 0.7, flake * galaxy * (1.0 - light));
   // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
   float standout = pow(fract(vSeed * 37.7), 5.0);
-  vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + 2.0 * standout) * mix(0.75, 1.0, smoothstep(-0.9, 0.1, s.x)) * (1.0 + mix(2.2, 0.7, light) * lead), galaxy);
+  vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + mix(2.0, 0.8, light) * standout) * mix(0.75, 1.0, smoothstep(-0.9, 0.1, s.x)) * (1.0 + mix(2.2, 0.7, light) * lead), galaxy);
   float bigger = 1.0 - max(portraitMix, halo);
   px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger) * mix(1.0, 0.58, galaxy * (1.0 - light)), flake) * dpr;
   px *= mix(1.0, 0.72 + 0.55 * standout, galaxy * (1.0 - light));
@@ -514,7 +514,7 @@ void main() {
   // Light theme: the grains glow instead of being printed. The ground steps
   // down from white to a dawn gradient (peach below, lilac middle, pale sky
   // above) so light can rise above it; each halo tints the ground towards its pastel
-  // colour, and dense, bright spots burn through to a near-white core.
+  // colour. Nothing burns to white: a pale centre on one grain reads as a hollow ring.
   if (halo > 0.001) {
     vec3 dawn = mix(vec3(0.965, 0.894, 0.855), vec3(0.855, 0.902, 0.965), smoothstep(0.0, 1.0, v.y));
     dawn = mix(dawn, vec3(0.918, 0.886, 0.957), exp(-pow((v.y - 0.5) / 0.22, 2.0)) * 0.5);
@@ -522,7 +522,6 @@ void main() {
     paper += (hash(cell + vec2(grainTime * 7.0, grainTime * 3.0)) - 0.5) * 0.012;
     float aura = 1.0 - exp(-lum * 1.4);
     vec3 col = mix(paper, vivid, aura * 0.9);
-    col = mix(col, mix(vivid, vec3(1.0), 0.7), smoothstep(1.0, 2.6, lum) * 0.85);
     o = vec4(mix(o.rgb, col, halo), 1.0);
   }
   // The portrait across the whole stage: the photo in round coloured dots on a
