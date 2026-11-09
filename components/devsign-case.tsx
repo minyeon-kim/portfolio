@@ -537,8 +537,8 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         </div>
 
         {!ff && <div className="dv-hmw">
-          <p className="dv-label reveal">{define.hmw.title}</p>
-          <p className="dv-hmw-question reveal">{define.hmw.question}</p>
+          {define.hmw.question && <p className="dv-label reveal">{define.hmw.title}</p>}
+          {define.hmw.question && <p className="dv-hmw-question reveal">{define.hmw.question}</p>}
           <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
           <ol className="dv-checks">
             {define.hmw.success.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
@@ -754,11 +754,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <div className="dv-tk-part reveal">
             <h3 className="dv-tk-label">{takeaway.reviewTitle}</h3>
             <ol className="dv-tk-cards">
-              {takeaway.review.map((item: { title: string; body: string }, i: number) => (
+              {takeaway.review.map((item: { title: string; body?: string }, i: number) => (
                 <li key={item.title}>
                   <b aria-hidden="true">{pad(i + 1)}</b>
                   <h4>{item.title}</h4>
-                  <p>{item.body}</p>
+                  {item.body && <p>{item.body}</p>}
                 </li>
               ))}
             </ol>

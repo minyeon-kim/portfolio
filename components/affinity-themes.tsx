@@ -24,7 +24,7 @@ export function AffinityThemes({ board, rows, themes, label }: { board: Board; r
         {themes.map((t, i) => (
           <li key={t.name} className="reveal" tabIndex={0} data-on={on === i || undefined} data-out={t.out ? "" : undefined} onMouseEnter={() => setOn(i)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(i)} onBlur={() => setOn(null)}>
             <p className="dv-axe-name"><b>{t.name}</b><span>{t.count}</span></p>
-            <p className="dv-axe-short">{t.short}</p>
+            <p className="sr-only">{t.short}</p>
             {t.out && <p className="dv-axe-out">{t.out}</p>}
           </li>
         ))}

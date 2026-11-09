@@ -63,9 +63,9 @@ export const study = {
     summary: {
       label: "At a glance",
       items: [
-        { tone: "red", label: "Problem", title: "It reads your data but doesn’t say what it used", text: "Since Personal Intelligence launched in January 2026, answers don’t say which data they used. The off switches sit in two places, and you can’t check that something was deleted." },
-        { tone: "accent", label: "Solution", accent: "right in the answer", title: "Manage it right in the answer", text: "See the source, switch it off in place, and check the result." },
-        { tone: "teal", label: "Expected", title: "One toggle instead of two settings trips", text: "Instead of a promise that it was deleted, you can check the result yourself. The usability test will show whether that builds trust." },
+        { tone: "red", label: "Problem", title: "It reads your data but doesn’t say what it used" },
+        { tone: "accent", label: "Solution", accent: "right in the answer", title: "Manage it right in the answer" },
+        { tone: "teal", label: "Expected", title: "One toggle instead of two settings trips" },
       ],
     },
     headline: "Connecting took one tap. Cleaning up took",
@@ -252,7 +252,6 @@ export const study = {
     hmw: {
       method: "Design challenge",
       title: "How might we",
-      question: "How might Gemini users see where the personal data in an answer came from, and turn it off or delete it right there, with a result they can trust?",
       successLabel: "Success looks like",
       success: ["People find the source and the switch without hints", "People can explain blocking vs. deleting in their own words"],
     },
@@ -281,28 +280,11 @@ export const study = {
         ],
       },
       {
-        method: "Selection",
-        title: "Features from gaps",
-        lead: "Each feature answers one gap from Discover, and all three live on the answer itself.",
-        featuresLabel: "3 core features",
-        features: [
-          { name: "Source badge", solves: "Solves: Can't tell where it came from" },
-          { name: "In-place switches", solves: "Solves: The off switch is far away" },
-          { name: "Delete by asking", solves: "Solves: Can't trust that it's gone" },
-        ],
-      },
-      {
         rule: true,
         method: "Structure",
         title: "Two rules behind the screens",
         lead: "Show what each source allows, and reveal it one step at a time.",
         text: "Memory can be deleted; Gmail and Calendar can only be blocked.",
-      },
-      {
-        method: "Structure",
-        title: "User flow",
-        lead: "Two scenarios from Yuna's day.",
-        text: "A: she switches a source off from the answer. B: she asks Gemini to forget, then checks.",
       },
     ],
   },
@@ -310,7 +292,6 @@ export const study = {
     method: "Final design",
     title: "Prototype",
     lead: "We built two flows: turn info off right from the answer, or ask in chat to clear it.",
-    text: "Both flows are the prototype we used in the usability test.",
     link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=en", label: "Try the prototype ↗" },
     flows: [
       { id: "a", kicker: "01 · Flow A", name: "Turn it off from the answer", hook: "Tap the sources badge to see what this answer used, grouped by topic, and handle it right there.", solvesLabel: "Solves", solves: "Warnings alone don't lead to action", alt: "Screen recording: tapping the sources badge under a Gemini answer and handling the five items about Jeongmin", clip: { src: "/images/cases/gemini-privacy/clips/en-a.mp4", poster: "/images/cases/gemini-privacy/clips/en-a-poster.webp" } },
@@ -367,19 +348,16 @@ export const study = {
     review: [
       { title: "Principles became requirements", body: "The difference between deleting and blocking is shown in the screen itself, not hidden in help text." },
       { title: "Re-clustered to reduce bias", body: "Removed the labels and regrouped 79 quotes, so the first grouping didn't steer the result." },
-      { title: "A prototype built to be tested", body: "It logs clicks, misclicks and time to find the badge, so every session turns into behavioral data." },
     ],
     limitationsTitle: "Limitations",
     limitations: [
       { lead: "Only 2 external interviews", text: "Two of the four people were on the team, so we used them only to try out the questions." },
       { lead: "Only 2 of 5 sessions so far", text: "The results are only a trend, and the remaining sessions are still to come." },
-      { lead: "Fixed flows", text: "Free-form requests in chat are untested." },
     ],
     next: {
       label: "Next step",
-      title: "Finish the usability test, then design how people discover deleting from chat, retention by category, and the risk when several sources combine.",
-      text: "This is where success goal 2, explaining blocking vs. deleting in their own words, gets measured.",
-      chips: ["Measures trust", "Tests discoverability", "Shows combined-data risk"],
+      title: "Finish the usability test, then design how people discover deleting from chat.",
+      chips: ["Measures trust", "Tests discoverability"],
     },
   },
 };

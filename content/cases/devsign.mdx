@@ -62,10 +62,10 @@ export const study = {
     process: {
       title: "Process · Double Diamond",
       stages: [
-        { name: "Discover", outcome: "AI sped up the work, but the reasons behind decisions weren’t kept.", methods: ["Secondary research", "Comparative", "Interviews"] },
-        { name: "Define", outcome: "We narrowed it to four key problems.", methods: ["Affinity map", "Personas", "Journey map"] },
-        { name: "Develop", outcome: "We grouped ideas into 5 feature candidates, then cut them to 4.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
-        { name: "Deliver", outcome: "A prototype, changed twice after a test and a co-design.", methods: ["AI prototype", "Usability test", "Co-design"] },
+        { name: "Discover", methods: ["Secondary research", "Comparative", "Interviews"] },
+        { name: "Define", methods: ["Affinity map", "Personas", "Journey map"] },
+        { name: "Develop", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
+        { name: "Deliver", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
     },
     features: {
@@ -152,7 +152,7 @@ export const study = {
     interview: {
       method: "Primary research",
       title: "Primary research · In-depth interview",
-      lead: "Everyone re-checked AI output, but no one was set to make the call.",
+      lead: "When design and code differed, no one was set to decide which to follow.",
       text: "4 practitioners · 1:1 remote interviews · 60 min each",
       questionsLabel: "What we wanted to learn",
       questionKeys: ["Where it gets stuck", "Who decides", "Where the reason goes"],
@@ -459,7 +459,7 @@ export const study = {
       resultLead: "Help dropped sharply on the second try, but neither person finished the first try without help.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
-      facts: [{ value: "55 · 75", label: "Usability score (SUS, designer · developer). Goal 51.7, usual average 68" }, { value: "5 / 5", label: "Both expect fewer questions about design vs. code" }, { value: "1 · 5", label: "Split on whether communication overall will drop (designer · developer)" }],
+      facts: [{ value: "55 · 75", label: "Usability score (SUS, designer · developer). Goal 51.7, usual average 68" }, { value: "5 / 5", label: "Both expect fewer questions about design vs. code" }],
       charts: [
         {
           type: "pair",
@@ -518,8 +518,8 @@ export const study = {
     reviewTitle: "Key learnings",
     reviewItem: "Key learning",
     review: [
-      { title: "How people named a screen showed a structure problem", body: "“The other team’s tool” was a sign that one screen was trying to serve two roles." },
-      { title: "Took things away instead of adding", body: "We removed screens instead of adding features, which is why the second version took only two days." },
+      { title: "How people named a screen showed a structure problem" },
+      { title: "Took things away instead of adding" },
     ],
     next: {
       label: "Next step",

@@ -62,9 +62,9 @@ export const study = {
     summary: {
       label: "At a glance",
       items: [
-        { tone: "red", label: "Problem", title: "내 정보를 읽지만, 무엇을 썼는지 말하지 않습니다", text: "2026년 1월 Personal Intelligence 기능이 나온 뒤로, 답변은 어떤 정보를 썼는지 말하지 않습니다. 끄는 스위치는 두 곳에 나뉘어 있고, 지워졌는지도 확인할 수 없습니다." },
-        { tone: "accent", label: "Solution", accent: "답변에서 바로", title: "답변에서 바로 관리합니다", text: "출처를 보고, 그 자리에서 끄고, 결과를 확인합니다." },
-        { tone: "teal", label: "Expected", title: "설정 화면 두 번 대신 토글 하나로", text: "‘지웠다’는 말 대신, 지워진 결과를 직접 확인할 수 있습니다. 이것이 믿음으로 이어지는지는 사용성 테스트로 확인합니다." },
+        { tone: "red", label: "Problem", title: "내 정보를 읽지만, 무엇을 썼는지 말하지 않습니다" },
+        { tone: "accent", label: "Solution", accent: "답변에서 바로", title: "답변에서 바로 관리합니다" },
+        { tone: "teal", label: "Expected", title: "설정 화면 두 번 대신 토글 하나로" },
       ],
     },
     headline: "연결은 한 번의 탭. 정리는",
@@ -251,7 +251,6 @@ export const study = {
     hmw: {
       method: "디자인 챌린지",
       title: "How might we",
-      question: "Gemini 사용자가 답변 속 개인 정보가 어디서 왔는지 보고, 그 자리에서 끄거나 삭제하고, 그 결과를 믿을 수 있게 하려면 어떻게 해야 할까?",
       successLabel: "성공의 기준",
       success: ["힌트 없이 출처와 스위치를 찾습니다", "차단과 삭제의 차이를 자기 말로 설명합니다"],
     },
@@ -280,28 +279,11 @@ export const study = {
         ],
       },
       {
-        method: "선별",
-        title: "Features from gaps",
-        lead: "기능마다 Discover에서 찾은 빈틈 하나에 답하고, 세 기능 모두 답변에서 바로 씁니다.",
-        featuresLabel: "핵심 기능 3개",
-        features: [
-          { name: "출처 배지", solves: "해결: 어디서 왔는지 알 수 없습니다" },
-          { name: "바로 끄기", solves: "해결: 끄는 스위치가 멉니다" },
-          { name: "요청해서 삭제", solves: "해결: 사라졌는지 믿을 수 없습니다" },
-        ],
-      },
-      {
         rule: true,
         method: "구조",
         title: "Two rules behind the screens",
         lead: "출처마다 할 수 있는 일을 보여 주고, 한 단계씩 펼칩니다.",
         text: "Memory는 삭제할 수 있고, Gmail과 Calendar는 차단만 됩니다.",
-      },
-      {
-        method: "구조",
-        title: "User flow",
-        lead: "유나의 하루에서 나온 두 시나리오.",
-        text: "A: 답변에서 바로 출처를 끕니다. B: Gemini에게 잊어 달라고 한 뒤 확인합니다.",
       },
     ],
   },
@@ -309,7 +291,6 @@ export const study = {
     method: "최종 디자인",
     title: "Prototype",
     lead: "답변에서 바로 끄는 흐름과, 채팅으로 정리하는 흐름을 프로토타입으로 만들었습니다.",
-    text: "두 흐름 모두 실제 사용성 테스트에 쓴 프로토타입입니다.",
     link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=ko", label: "프로토타입 써 보기 ↗" },
     flows: [
       { id: "a", kicker: "01 · 흐름 A", name: "답변에서 바로 끄기", hook: "출처 배지를 누르면, 그 답변에 쓰인 정보를 주제별로 보고 그 자리에서 처리합니다.", solvesLabel: "해결하는 문제", solves: "경고만으로는 움직이지 않습니다", alt: "Gemini 답변 아래 출처 확인을 눌러 정민 관련 정보 5건을 골라 처리하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-a.mp4", poster: "/images/cases/gemini-privacy/clips/ko-a-poster.webp" } },
@@ -366,19 +347,16 @@ export const study = {
     review: [
       { title: "원칙이 요구사항이 됐습니다", body: "‘지우기’와 ‘쓰지 못하게 막기’의 차이를 도움말이 아니라 화면 구조로 보여 줬습니다." },
       { title: "편향을 줄이려고 다시 묶었습니다", body: "라벨을 지우고 인용 79개를 다시 묶어, 처음 나눈 방식에 결과가 끌려가지 않게 했습니다." },
-      { title: "테스트를 위해 만든 프로토타입", body: "클릭, 잘못된 클릭, 배지를 찾는 시간을 기록해 모든 세션이 행동 데이터가 됩니다." },
     ],
     limitationsTitle: "한계",
     limitations: [
       { lead: "외부 인터뷰는 2명뿐", text: "4명 중 2명은 팀원이라 질문지를 점검하는 데만 썼습니다." },
       { lead: "5회 중 2회만 진행", text: "결과는 경향으로만 볼 수 있고, 나머지 테스트는 진행 중입니다." },
-      { lead: "고정된 흐름", text: "채팅의 자유로운 요청은 테스트하지 않았습니다." },
     ],
     next: {
       label: "Next step",
-      title: "사용성 테스트를 마치고, 채팅에서 삭제를 어떻게 발견하게 할지, 카테고리별 보관 기간, 여러 출처가 합쳐질 때의 위험을 디자인합니다.",
-      text: "성공 기준 2(차단과 삭제를 자기 말로 설명하기)를 여기서 측정합니다.",
-      chips: ["신뢰 측정", "발견 가능성 테스트", "합쳐진 데이터의 위험 표시"],
+      title: "사용성 테스트를 마치고, 채팅에서 삭제를 어떻게 발견하게 할지 디자인합니다.",
+      chips: ["신뢰 측정", "발견 가능성 테스트"],
     },
   },
 };

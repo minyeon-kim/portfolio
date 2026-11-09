@@ -1021,7 +1021,13 @@ export function HandoffOne({ spec, screenId, keep, more, moreHref }: { spec: Spe
 
 // The case page shows the spec screen by screen under tabs (owner: tabs per screen, no separate
 // page). No scroll steps or autoplay: a tab picks the screen, pins and rows light each other.
-export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: number }) {
+// Rows the case page shows per screen; every row stays on the full spec page.
+const CASE_ROWS: Record<string, number[]> = { merge: [1, 2, 5], decide: [1, 2, 5], history: [0, 3, 4] };
+export function HandoffTabs({ spec: full, first = 0 }: { spec: SpecData; first?: number }) {
+  const spec = { ...full, screens: full.screens.map((s) => {
+    const keep = CASE_ROWS[s.id] ?? [0, 1, 2];
+    return { ...s, pins: keep.map((n) => s.pins[n]), rows: keep.map((n) => s.rows[n]) };
+  }) };
   const [current, setCurrent] = useState(first);
   const [lit, setLit] = useState(-1);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
