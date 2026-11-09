@@ -8563,3 +8563,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Room between the opener's name and its question. */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { gap: 32px; } }
+
+/* Opener reads on one centre axis: name, question and the facts inside their columns. */
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details, :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { text-align: center; } }
