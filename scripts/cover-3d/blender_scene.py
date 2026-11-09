@@ -45,7 +45,7 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
     b.inputs['Coat Roughness'].default_value = 0.08
     return m
 
-PURPLE = mat('plinth', '#5a2ee6', 0.55, spec=0.18)
+PURPLE = mat('plinth', '#6a4bc4', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#0b0b0d', 0.3, metal=1)
 FOOTM = mat('foot', '#101012', 0.2, metal=1)
@@ -140,12 +140,12 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     o.rotation_euler = (C @ Vector(target) - o.location).to_track_quat('-Z', 'Y').to_euler()
     return o
 
-area('top', (3.4, 4.2, -0.9), (0.7, 0.2, 0), 3.4, 3.4, 150)
-area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 42)
+area('top', (4.0, 3.6, -0.9), (1.0, 0.2, 0), 2.6, 3.0, 200)
+area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 14)
 area('edge', (6.2, 1.6, -6.6), (0.6, 1.3, 0), 3.2, 6, 75)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 26)
-area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 5)
+area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 1.5)
 
 w = bpy.data.worlds.new('w'); scene.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs[0].default_value = (0.012, 0.009, 0.03, 1)
