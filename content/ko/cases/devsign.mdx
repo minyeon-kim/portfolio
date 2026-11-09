@@ -137,6 +137,17 @@ export const study = {
       answer: "AI 시안을 합치고 결정 이유까지 남기는 도구는 찾지 못했습니다.",
       auditLabel: "도구 10여 개, 유형별",
       headers: ["유형", "대표 도구", "해결하는 것", "찾지 못한 것"],
+      map: {
+        xTitle: "도구가 어디까지 다루는가", yTitle: "결정에 대해 무엇이 남는가",
+        xLabels: ["전달·생성", "찾기·승인", "골라 합치기"], yLabels: ["기록 없음", "누가·언제 기록", "이유까지 남김"],
+        tools: [
+          { name: "Magic Patterns", x: 0, y: 0 }, { name: "Figma Dev Mode", icon: "figma", x: 0, y: 1 }, { name: "Zeplin", x: 0, y: 1 },
+          { name: "OverlayQA", x: 1, y: 0 }, { name: "Uiprobe", x: 1, y: 0 }, { name: "Chromatic", icon: "chromatic", x: 1, y: 1 }, { name: "GitHub", icon: "github", x: 1, y: 1 },
+          { name: "Framer", icon: "framer", x: 2, y: 1 },
+        ],
+        empty: "Devsign이 노린 자리",
+        note: "도구 10여 개 중 유형별 대표 도구입니다. 공개 자료와 직접 살펴본 내용을 기준으로 배치했으며 측정값은 아닙니다.",
+      },
       rows: [
         { type: "개발 전달", tools: "Figma Dev Mode, Zeplin", solves: "스펙 전달, 버전 비교", gap: "디자인과 구현이 다를 때 누가 정하는지" },
         { type: "디자인·구현 비교", tools: "OverlayQA, Uiprobe", solves: "어긋난 곳 찾기", gap: "찾은 뒤의 결정" },

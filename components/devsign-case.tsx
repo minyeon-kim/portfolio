@@ -14,6 +14,7 @@ import { DetailScroll } from "@/components/detail-scroll";
 import { AffinityThemes } from "@/components/affinity-themes";
 import { CountUp, AffinityMotion, AffinityWall, AffinityMap, FeatureList, ScreenSteps, IterationCompare, IterationPair, CanvasZoom, OpenFrame, ProblemPanels, HandoffTabs, HeldFlow } from "@/components/devsign-story";
 import { DoubleDiamond } from "@/components/double-diamond";
+import { ToolMap } from "@/components/tool-map";
 import { withBase } from "@/lib/site";
 
 // Card colour by who the card is about: designers in the case colour, developers
@@ -106,6 +107,16 @@ function Insights({ discover }: { discover: Study }) {
       </div>
 
       <div className="dv-subsection">
+        {q2.map ? <div className="dv-tm">
+          <div>
+            <Block title={q2.title} lead={q2.answer} ff />
+            <dl className="dv-tm-gaps reveal">
+              <p className="dv-tm-gaps-label">{q2.headers[3]}</p>
+              {q2.rows.map((row: Study) => <div key={row.type}><dt>{row.type}</dt><dd>{row.gap}</dd></div>)}
+            </dl>
+          </div>
+          <ToolMap map={q2.map} />
+        </div> : <>
         <Block title={q2.title} lead={q2.answer} ff />
         <p className="dv-caps dv-gap-40 reveal">{q2.auditLabel}</p>
         <table className="dv-tool-gaps dv-gap-16 reveal">
@@ -124,6 +135,7 @@ function Insights({ discover }: { discover: Study }) {
             ))}
           </tbody>
         </table>
+        </>}
       </div>
 
       <div className="dv-subsection">

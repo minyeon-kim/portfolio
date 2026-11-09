@@ -134,6 +134,17 @@ export const study = {
       answer: "No tool we found combines AI drafts and keeps why each decision was made.",
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
+      map: {
+        xTitle: "How far the tool goes", yTitle: "What’s kept about a decision",
+        xLabels: ["Hand off or generate", "Find or approve", "Pick and combine"], yLabels: ["No record", "Who and when", "Why it was decided"],
+        tools: [
+          { name: "Magic Patterns", x: 0, y: 0 }, { name: "Figma Dev Mode", icon: "figma", x: 0, y: 1 }, { name: "Zeplin", x: 0, y: 1 },
+          { name: "OverlayQA", x: 1, y: 0 }, { name: "Uiprobe", x: 1, y: 0 }, { name: "Chromatic", icon: "chromatic", x: 1, y: 1 }, { name: "GitHub", icon: "github", x: 1, y: 1 },
+          { name: "Framer", icon: "framer", x: 2, y: 1 },
+        ],
+        empty: "Where Devsign aimed",
+        note: "Representative tools from 10+ reviewed. Placed from public material and our own look at them, not measured.",
+      },
       rows: [
         { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs from the design" },
         { type: "Design vs build", tools: "OverlayQA, Uiprobe", solves: "Finding where they differ", gap: "The decision after finding it" },

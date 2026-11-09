@@ -8590,3 +8590,34 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Facts gather under the question instead of spreading to the screen edges. */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: 100%; justify-content: center !important; gap: clamp(40px, 5vw, 80px) !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
+
+/* Comparative analysis as a 3 x 3 map. The only coloured cell is the empty one. */
+.dv-tm-gaps { margin: 48px 0 0; }
+.dv-tm-gaps-label { margin: 0 0 16px; color: var(--dv-muted); font-size: 16px; }
+.dv-tm-gaps > div { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid var(--dv-line); }
+.dv-tm-gaps dt { color: var(--dv-ink); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-tm-gaps dd { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-tm-map { margin: 48px 0 0; }
+.dv-tm-axis { margin: 0 0 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.4; }
+.dv-tm-axis[data-x] { margin: 8px 0 0; text-align: right; }
+.dv-tm-grid { display: grid; gap: 8px; }
+.dv-tm-row { display: grid; grid-template-columns: 104px repeat(3, minmax(0, 1fr)); gap: 8px; }
+.dv-tm-ylabel { align-self: center; margin: 0; color: var(--dv-ink); font-size: 16px; line-height: 1.4; word-break: keep-all; }
+.dv-tm-cell { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-height: 136px; margin: 0; padding: 16px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 4%, transparent); list-style: none; }
+.dv-tm-cell li { display: flex; align-items: center; gap: 8px; color: var(--dv-ink); font-size: 16px; line-height: 1.3; }
+.dv-tm-icon { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 13px; font-weight: 500; line-height: 1; }
+.dv-tm-icon svg { width: 14px; height: 14px; }
+.dv-tm-cell[data-empty] { align-items: center; border: 1.5px dashed var(--case-accent); background: color-mix(in srgb, var(--case-accent) 10%, transparent); color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; text-align: center; word-break: keep-all; }
+.dv-tm-xrow p { margin: 0; color: var(--dv-ink); font-size: 16px; line-height: 1.4; text-align: center; word-break: keep-all; }
+.dv-tm-note { margin-top: 24px; color: light-dark(#6e6e73, #84898a); font-size: 14px; line-height: 1.5; word-break: keep-all; }
+@media (min-width: 64rem) {
+  .dv-tm { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 64px; align-items: start; }
+  .dv-tm-map { margin-top: 0; }
+}
+@media (max-width: 47.99rem) {
+  .dv-tm-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dv-tm-ylabel { grid-column: 1 / -1; margin-top: 8px; }
+  .dv-tm-xrow > span { display: none; }
+  .dv-tm-cell { min-height: 112px; padding: 8px; }
+  .dv-tm-cell li { flex-direction: column; align-items: flex-start; gap: 4px; word-break: break-word; }
+}
