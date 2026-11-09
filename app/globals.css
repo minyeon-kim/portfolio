@@ -8186,3 +8186,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .dv-score-cell { flex-direction: column; align-items: flex-start; gap: 4px; }
   .dv-score-dots i { width: 8px; height: 8px; }
 }
+
+/* Iteration 1 and 2: big screens back to back need more room than the usual block gap. */
+@media (min-width: 64rem) {
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-subsection-120.dv-subsection-120:has(.dv-iter-top) { margin-top: 280px !important; }
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-why + .dv-gap-40.dv-gap-40 { margin-top: 72px !important; }
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card { padding: 28px !important; }
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card figcaption { padding: 0 4px 20px !important; }
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iv-top.dv-iter-top { grid-template-columns: minmax(0, 1fr) 320px; gap: 96px; }
+}
