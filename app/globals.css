@@ -7969,8 +7969,8 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 .about-panels { width: 100vw; margin-inline: calc(50% - 50vw); }
 .about-panel { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 100svh; overflow: hidden; background: #16171c; color: #fff; text-align: center; }
 .about-panel > img { object-fit: cover; }
-.about-panel > img[data-photo="panel-talk"] { object-position: 60% 0%; }
-.about-panel > img[data-photo="panel-wall"] { object-position: 72% 100%; }
+.about-panel > img[data-photo="panel-talk"] { object-position: 48% 0%; }
+.about-panel > img[data-photo="panel-wall"] { object-position: 62% 8%; }
 .about-panel::after { content: ""; position: absolute; inset: 0 0 auto; height: 62%; background: linear-gradient(180deg, rgb(10 11 14 / 0.62), rgb(10 11 14 / 0)); pointer-events: none; }
 .about-panel-copy { position: relative; z-index: 1; width: min(900px, calc(100vw - 32px)); padding-top: clamp(96px, 12svh, 136px); }
 .about-panel-copy h3 { margin: 0; color: #fff; font-size: clamp(38px, min(4.4vw, 8svh), 84px); font-weight: 500; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; }
