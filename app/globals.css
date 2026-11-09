@@ -8214,3 +8214,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-vpf p { margin: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); line-height: 1.45; word-break: keep-all; text-wrap: pretty; }
 .case-study .dv .dv-vpf p.dv-vpf-idea { margin-top: 6px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
 @media (max-width: 47.99rem) { .dv-vpf li { grid-template-columns: minmax(0, 1fr); row-gap: 10px; padding: 24px 0; } }
+
+/* Community posts read straight down: the sentence on top, the posts under it, no left column. */
+.case-study .dv .dv-cycle-plate[data-kind="quotes"] { grid-template-columns: minmax(0, 1fr); }
+.dv-cycle-plate[data-kind="quotes"] .dv-cycle-texts { display: none; }
+.case-study .dv .dv-qv-title { margin: 0 0 20px; color: var(--dv-ink); font-size: var(--t-heading, 28px); font-weight: 400; line-height: 1.3; word-break: keep-all; }
+.dv-qv-wrap { width: 100%; }
+.case-study .dv .dv-qv li:first-child { padding-top: 20px; border-top: 1px solid var(--dv-line); }
+@media (max-width: 63.99rem) { .case-study .dv .dv-qv-title { font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; } }

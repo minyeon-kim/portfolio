@@ -211,6 +211,8 @@ function ScaleView({ data }: { data: ScaleChart }) {
 // Community posts as a chart-stage panel: each problem with one real quote and its source.
 function QuotesView({ data }: { data: QuotesChart }) {
   return (
+    <div className="dv-qv-wrap">
+    <p className="dv-qv-title">{data.title}</p>
     <ul className="dv-qv">
       {data.items.map((item, i) => (
         <li key={item.name} style={{ "--i": i } as React.CSSProperties}>
@@ -220,6 +222,7 @@ function QuotesView({ data }: { data: QuotesChart }) {
         </li>
       ))}
     </ul>
+    </div>
   );
 }
 
@@ -333,7 +336,7 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
           </button>
         )}
       </div>
-      <div className="dv-cycle-plate">
+      <div className="dv-cycle-plate" data-kind={charts[current].type}>
         <div className="dv-cycle-stack dv-cycle-texts">
           {charts.map((chart, i) => (
             <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
