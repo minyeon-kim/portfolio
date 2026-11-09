@@ -7959,8 +7959,8 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 }
 @keyframes about-split-copy { 0%, 6% { opacity: 1; translate: 0 0; } 34% { opacity: 1; } 56%, 100% { opacity: 0; translate: 0 -34svh; } }
 @keyframes about-split-sheet {
-  0%, 26% { clip-path: inset(100% 36% 0 36% round 28px 28px 0 0); }
-  70%, 100% { clip-path: inset(0 0 0 0 round 0); }
+  0%, 22% { opacity: 0; }
+  64%, 100% { opacity: 1; }
 }
 @keyframes about-split-title { 0%, 58% { opacity: 0; } 72%, 100% { opacity: 1; } }
 @keyframes about-split-box {
