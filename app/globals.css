@@ -8655,3 +8655,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-cmp .dv-cv-note { margin-top: 32px; color: var(--dv-muted); font-size: 16px; }
 .case-study .dv .dv-cmp tbody th { vertical-align: baseline; }
 @media (max-width: 63.99rem) { .case-study .dv .dv-cmp tbody th { padding: 24px 0 8px; } .case-study .dv .dv-cmp tbody td { padding: 0 0 16px; } }
+
+/* Opener facts: label and value with no gap between their lines (Metalab measured 0). */
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dt, :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { margin: 0; line-height: 1.4; } }
