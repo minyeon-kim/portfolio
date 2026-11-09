@@ -363,7 +363,7 @@ void main() {
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead), galaxy));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
-  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy * (1.0 - light));
+  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy);
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky) * mix(1.0, 0.7, flake * galaxy * (1.0 - light));
   // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
