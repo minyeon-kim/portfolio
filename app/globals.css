@@ -4057,7 +4057,8 @@ details.dv-handoff-spec.dv-gap-32, .dv-subsection-120 > details.dv-handoff-spec 
   }
 }
 @keyframes dv-sheet-grow {
-  from { clip-path: inset(0 var(--dv-sheet-inset) 0 var(--dv-sheet-inset) round var(--dv-card-radius)); }
+  from { clip-path: inset(0 var(--dv-sheet-inset) 0 var(--dv-sheet-inset) round var(--dv-band-radius) var(--dv-band-radius) 0 0); }
+  65%, 88% { clip-path: inset(0 0 0 0 round var(--dv-band-radius) var(--dv-band-radius) 0 0); }
   to { clip-path: inset(0 0 0 0 round 0); }
 }
 @keyframes dv-sheet-text { from { scale: 0.86; } to { scale: 1; } }
