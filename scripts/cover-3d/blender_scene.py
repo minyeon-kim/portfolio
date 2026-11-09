@@ -15,7 +15,7 @@ YAW, TILT, MON = -0.5903, -0.1270, (-0.0065, 1.1862, -0.02)
 BODY_W, BODY_H, TH = 1.6651, 1.07, 0.055
 BZ = 0.012
 SW, SH = BODY_W - 0.012 - 2 * BZ, BODY_H - 0.012 - 2 * BZ
-PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.9816, 1.9506, 0.0763, -0.8232, 0.2444, 0.07
+PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.9816, 1.9506, 0.0763, -0.8232, 0.2444, 0.13
 FYAW, FW, FD, FX, FZ, FY = -0.5710, 0.4143, 0.4616, 0.0236, -0.6270, 0.2684
 NECK_BASE = [[-0.0739, 0.2684, -0.9427], [0.284, 0.2684, -0.7442]]
 NECK_TOP = [[-0.0988, 0.6188, -0.1215], [0.2212, 0.6409, 0.0895]]
@@ -118,6 +118,35 @@ def hexa(name, pts, material):
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free(); me.materials.append(material)
     o = bpy.data.objects.new(name, me); scene.collection.objects.link(o); return o
 
+# A soft pool of shade on the plinth around the foot: what the monitor above takes from the light.
+def shade_around_foot(m):
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    geo = nt.nodes.new('ShaderNodeNewGeometry')
+    centre = C @ Vector((FX, PY, FZ + 0.08))
+    sub = nt.nodes.new('ShaderNodeVectorMath'); sub.operation = 'SUBTRACT'; sub.inputs[1].default_value = centre
+    nt.links.new(geo.outputs['Position'], sub.inputs[0])
+    sc = nt.nodes.new('ShaderNodeVectorMath'); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = (1 / 0.62, 1 / 0.5, 0)
+    nt.links.new(sub.outputs[0], sc.inputs[0])
+    ln = nt.nodes.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'
+    nt.links.new(sc.outputs[0], ln.inputs[0])
+    rng = nt.nodes.new('ShaderNodeMapRange'); rng.interpolation_type = 'SMOOTHSTEP'
+    rng.inputs['From Min'].default_value = 0.35; rng.inputs['From Max'].default_value = 1.0
+    rng.inputs['To Min'].default_value = 0.42; rng.inputs['To Max'].default_value = 1.0
+    nt.links.new(ln.outputs['Value'], rng.inputs['Value'])
+    mul = nt.nodes.new('ShaderNodeVectorMath'); mul.operation = 'SCALE'
+    mul.inputs[0].default_value = b.inputs['Base Color'].default_value[:3]
+    nt.links.new(rng.outputs[0], mul.inputs['Scale'])
+    # The sides are a greyer, less blue violet than the lit top.
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Normal'], sep.inputs[0])
+    up = nt.nodes.new('ShaderNodeMath'); up.operation = 'GREATER_THAN'; up.inputs[1].default_value = 0.9
+    nt.links.new(sep.outputs['Z'], up.inputs[0])
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
+    mix.inputs['A'].default_value = srgb('#5e5868')
+    nt.links.new(up.outputs[0], mix.inputs['Factor'])
+    nt.links.new(mul.outputs[0], mix.inputs['B'])
+    nt.links.new(mix.outputs['Result'], b.inputs['Base Color'])
+shade_around_foot(PURPLE)
+
 # Plinth: top at height 0, running down 3 units.
 solid('plinth', rounded(PW, PD, PC, 32), -3, 0, T(PX, PY, PZ) @ Ry(PYAW) @ XZ, PURPLE, bevel=0.0035, bseg=3)
 
@@ -197,13 +226,13 @@ area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 70).data.use_shadow = Fa
 # Straight down: lights the plinth's top evenly from edge to edge and leaves its sides alone.
 sun_d = bpy.data.lights.new('sun', 'SUN'); sun_d.energy = 4.8; sun_d.angle = math.radians(0.4)
 sun = bpy.data.objects.new('sun', sun_d); scene.collection.objects.link(sun); sun.rotation_euler = (0, 0, 0)
-area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 120)
+area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 150)
 area('edge', (9.0, 0.6, -3.7), (0, 0.8, -0.3), 5, 12, 62)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 # Low behind the set: what the mirror-dark foot picks up on its left.
 area('foot', (-1.6, 1.5, -10.5), (-0.6, 0.27, -0.6), 2.9, 1.6, 120)
-area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 3)
-area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 3)
+area('left', (-9, 0.6, -6), (0, 0.4, -0.8), 3, 6, 70)
+area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 34)
 
 w = bpy.data.worlds.new('w'); scene.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs[0].default_value = (0.012, 0.009, 0.03, 1)
