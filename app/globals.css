@@ -8417,3 +8417,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { flex-direction: row; align-items: baseline; justify-content: flex-start; gap: 32px; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { flex: 0 1 400px; }
 }
+@media (min-width: 64rem) {
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { flex-direction: column; align-items: flex-start; gap: 16px; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { flex: 0 0 auto; margin-left: calc((100% + 32px) / 4); }
+}
