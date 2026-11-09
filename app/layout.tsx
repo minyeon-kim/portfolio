@@ -2,7 +2,7 @@ import { StyleRetry } from "@/components/style-retry";
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
-import { Bricolage_Grotesque, Geist, Geist_Mono, Noto_Serif_Display, Noto_Serif_KR } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono, Noto_Serif_KR, Roboto_Serif } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SmoothScroll } from "@/components/smooth-scroll";
@@ -29,9 +29,10 @@ const display = Bricolage_Grotesque({
 });
 
 // The landing statement: a thin display serif, after Metalab's PP Eiko.
-const serif = Noto_Serif_Display({
+const serif = Roboto_Serif({
   subsets: ["latin"],
-  weight: ["300"],
+  weight: "variable",
+  axes: ["opsz"],
   variable: "--font-serif",
   display: "swap",
 });
