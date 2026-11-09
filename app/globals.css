@@ -8426,3 +8426,9 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 :root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: var(--t-item, 20px); line-height: 1.4; letter-spacing: 0; }
 :root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li { padding-block: 24px; }
 :root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li:first-child { padding-top: 0; }
+
+/* Case opener: name and question centred on the page. */
+@media (min-width: 64rem) {
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { align-items: center; text-align: center; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { margin-left: 0; text-align: center; }
+}
