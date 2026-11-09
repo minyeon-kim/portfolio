@@ -7991,7 +7991,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .home-device .dh-shot-camera, .project-zoom .dh-shot-camera { animation: none; }
 .dh-shot-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .home-device[data-project="devsign"] .dh-shot-poster, .project-zoom[data-project="devsign"] .dh-shot-poster { filter: brightness(1.32) contrast(1.05) saturate(1.1); }
-.project-zoom:has(.dh-shot) { background: #0a0322; }
+.project-zoom:has(.dh-shot) { background: #0c0c0e; }
 .project-zoom[data-project="gemini-privacy"]:has(.dh-shot) { background: #1c1a24; }
 
 /* The hero photo is centred on her and keeps its own colours: no tint at any width, and no scrim beside the line on desktop. */

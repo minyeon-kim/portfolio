@@ -62,7 +62,7 @@ for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=((H-1-yy)*W+xx)*4,o=(yy*W
 x.putImageData(out,0,0);
 {const hi=document.createElement('canvas');hi.width=W;hi.height=H;const hx=hi.getContext('2d'),hd=hx.createImageData(W,H);for(let i=0;i<e.length;i+=4){const l=(e[i]+e[i+1]+e[i+2])/3,k=Math.max(0,l-105)/150;hd.data[i]=e[i]*k;hd.data[i+1]=e[i+1]*k;hd.data[i+2]=e[i+2]*k;hd.data[i+3]=255}hx.putImageData(hd,0,0);
 x.globalCompositeOperation='lighter';x.filter=`blur(${W/90}px)`;x.globalAlpha=P.bloom;x.drawImage(hi,0,0);x.filter='none';x.globalAlpha=1;x.globalCompositeOperation='source-over';
-const v=x.createRadialGradient(W*.52,H*.46,W*.3,W*.52,H*.46,W*.75);v.addColorStop(0,'rgba(10,4,50,0)');v.addColorStop(1,'rgba(4,1,26,.78)');x.fillStyle=v;x.fillRect(0,0,W,H);
+const v=x.createRadialGradient(W*.52,H*.46,W*.3,W*.52,H*.46,W*.75);v.addColorStop(0,P.vig0||'rgba(10,4,50,0)');v.addColorStop(1,P.vig1||'rgba(4,1,26,.78)');x.fillStyle=v;x.fillRect(0,0,W,H);
 const id=x.getImageData(0,0,W,H);for(let i=0;i<id.data.length;i+=4){const n=((Math.random()+Math.random())-1)*P.grain;id.data[i]+=n;id.data[i+1]+=n;id.data[i+2]+=n}x.putImageData(id,0,0)}
 // Screen hole, antialiased.
 x.fillStyle='#000';x.globalCompositeOperation='destination-out';x.beginPath();corners.forEach(([a,bb],i)=>{const px=a/L,py=bb/L;i?x.lineTo(px,py):x.moveTo(px,py)});x.closePath();x.fill();
