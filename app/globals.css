@@ -8201,3 +8201,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-hbar-row[data-on] .dv-hbar-value { color: var(--case-accent); }
 .case-study .dv .dv-hbar-goal { bottom: 0; left: calc(var(--name) + var(--gap) + (100% - var(--name) - var(--gap) * 2 - var(--val)) * var(--goal)); }
 .case-study .dv .dv-hbar-goal b { font-weight: 400; color: var(--dv-muted); }
+
+/* The prototype button belongs to its heading; the feature player starts well clear of it. */
+.case-study .dv .dv-block + p.dv-try-link { margin-top: 24px; }
+@media (min-width: 64rem) { .dv-flist-head { margin-bottom: 32px; } }
