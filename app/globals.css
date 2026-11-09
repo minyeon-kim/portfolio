@@ -8673,3 +8673,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-cmp2 .dv-cv-note { margin-top: 24px; color: var(--dv-muted); font-size: 16px; }
 @media (max-width: 47.99rem) { .dv-cmp2-panels { grid-template-columns: minmax(0, 1fr); } .dv-cmp2-panels section { padding: 24px; } }
 
+
+/* Interview: questions as three diagram cards, participants as four small cards. */
+.dv-ivc2-asks, .dv-ivc2-people { display: grid; gap: 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.dv-ivc2-asks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dv-ivc2-people { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.dv-ivc2-asks li, .dv-ivc2-people li { display: flex; flex-direction: column; padding: 24px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); }
+.dv-ivc2-asks svg { width: 160px; height: 64px; margin-bottom: 24px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dv-ivc2-asks svg .q { stroke: var(--dv-muted); }
+.dv-ivc2-asks svg .on { stroke: var(--case-accent); }
+.dv-ivc2-asks svg .d { stroke-dasharray: 4 5; }
+.dv-ivc2-asks strong, .dv-ivc2-people strong { color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-ivc2-asks p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+.dv-ivc2-people b { margin-bottom: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
+.dv-ivc2-people span { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
+@media (max-width: 63.99rem) { .dv-ivc2-asks { grid-template-columns: minmax(0, 1fr); } .dv-ivc2-people { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
