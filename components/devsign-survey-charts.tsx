@@ -5,9 +5,7 @@ import { TALL_PIN, useHeldSteps } from "@/components/devsign-story";
 
 type Segment = { label: string; value: number; on?: boolean; rest?: boolean };
 type Source = { label: string; url?: string; detail?: string };
-// `stat`: the chart's one number, shown in its tab so the result stays visible (owner: a
-// separate number row above repeated the charts).
-type Base = { tab: string; stat?: string; title: string; note?: string; source?: Source };
+type Base = { tab: string; title: string; note?: string; source?: Source };
 type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; segments: Segment[] };
 type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
 type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
@@ -314,11 +312,10 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
     >
       {head && <div className="dv-cycle-head">{head}</div>}
       <div className="dv-cycle-nav">
-        <div role="group" aria-label={labels.charts} className="dv-cycle-tabs" data-stats={charts.some((c) => c.stat) || undefined}>
+        <div role="group" aria-label={labels.charts} className="dv-cycle-tabs">
           {charts.map((chart, i) => (
             <button key={chart.tab} type="button" className="press" aria-pressed={i === current} onClick={() => { if (scrolled) held.go(i); else if (i !== current) go(() => i); }}>
               {i === current && motion && !scrolled && <i key={round} className="dv-cycle-timer" aria-hidden="true" onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />}
-              {chart.stat && <b className="dv-cycle-stat">{chart.stat}</b>}
               <span>{chart.tab}</span>
             </button>
           ))}
