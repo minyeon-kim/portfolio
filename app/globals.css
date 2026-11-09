@@ -8589,7 +8589,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @media (max-width: 74.99rem) { .dv-dd-point-line { display: none; } }
 
 /* Facts gather under the question instead of spreading to the screen edges. */
-@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: 100%; justify-content: center !important; gap: clamp(40px, 5vw, 80px) !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex !important; width: 100%; justify-content: center !important; gap: clamp(32px, 6.7vw, 96px) !important; } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
 
 /* Comparative analysis as a 3 x 3 map. The only coloured cell is the empty one. */
 .dv-tm-gaps { margin: 48px 0 0; }
