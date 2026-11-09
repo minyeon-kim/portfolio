@@ -8125,7 +8125,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Case opener: the question leads, the project name is its label. */
 @media (min-width: 64rem) {
-  .devsign-hero.dh-cover .devsign-hero-title, .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(30px, 2.8vw, 44px); line-height: 1.1; }
+  .devsign-hero.dh-cover .devsign-hero-title, .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-family: var(--font-sans); font-size: clamp(20px, 1.7vw, 26px); font-weight: 500; line-height: 1.2; letter-spacing: -0.015em; }
   .devsign-hero.dh-cover .devsign-hero-title br { display: none; }
   .devsign-hero.dh-cover .dh-lead { margin-top: clamp(20px, 2vw, 32px); }
   .devsign-hero.dh-cover .devsign-hero-question { max-width: 18.5em; font-size: clamp(38px, 4.2vw, 68px); line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
