@@ -27,7 +27,6 @@ function ChartSource({ source }: { source?: Source }) {
 }
 
 const GAP = 0.7; // Between ring segments, in hundredths of the ring.
-const SHOW_MS = 4500; // How long each chart stays; the progress ring on its tab is the timer.
 const LEAVE_MS = 280;
 
 // Counts up from 0 while its chart plays. The final value is what renders otherwise.
@@ -263,9 +262,6 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
   const timer = useRef<number | undefined>(undefined);
   const [motion, setMotion] = useState(false);
   const [seen, setSeen] = useState(false);
-  const [inView, setInView] = useState(false);
-  const [hold, setHold] = useState(false);
-  const [stopped, setStopped] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [current, setCurrent] = useState(0);
   const [round, setRound] = useState(0);
@@ -280,10 +276,11 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
     setMotion(true);
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setInView(entry.isIntersecting);
-        if (entry.isIntersecting) setSeen(true);
+        // A stacked list can be taller than the screen, so 40% of it may never be visible.
+        const need = entry.boundingClientRect.height > window.innerHeight * 0.9 ? 0.15 : 0.4;
+        if (entry.intersectionRatio >= need) setSeen(true);
       },
-      { threshold: 0.4 },
+      { threshold: [0, 0.15, 0.4] },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -306,54 +303,38 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
   }, [held.active, scrolled]);
 
   const phase = !motion ? "final" : seen ? "play" : "wait";
-  const running = motion && inView && !hold && !stopped && !leaving && !scrolled && !single;
 
   return (
     <div ref={held.root} className={`dv-held-track dv-cycle-track${head ? " dv-held-tall" : ""}${single ? " dv-cycle-single" : ""}`} style={{ "--n": charts.length } as React.CSSProperties}>
     <div
       ref={root}
       className="dv-cycle-stage"
-      data-run={running || undefined}
       data-leaving={leaving || undefined}
-      style={{ "--show-ms": `${SHOW_MS}ms` } as React.CSSProperties}
-      onMouseEnter={() => setHold(true)}
-      onMouseLeave={() => setHold(false)}
-      onFocusCapture={() => setHold(true)}
-      onBlurCapture={() => setHold(false)}
+      role="group"
+      aria-label={labels.charts}
     >
       {head && <div className="dv-cycle-head">{head}</div>}
-      <div className="dv-cycle-nav">
-        <div role="group" aria-label={labels.charts} className="dv-cycle-tabs">
-          {charts.map((chart, i) => (
-            <button key={chart.tab} type="button" className="press" aria-pressed={i === current} onClick={() => { if (scrolled) held.go(i); else if (i !== current) go(() => i); }}>
-              {i === current && motion && !scrolled && <i key={round} className="dv-cycle-timer" aria-hidden="true" onAnimationEnd={() => go((c) => (c + 1) % charts.length)} />}
-              <span>{chart.tab}</span>
-            </button>
-          ))}
+      {!single && (
+        <div className="dv-cycle-marks" aria-hidden="true">
+          {charts.map((chart, i) => <i key={chart.tab} data-on={i === current || undefined} />)}
         </div>
-        {motion && !scrolled && (
-          <button type="button" className="dv-cycle-stop" aria-label={stopped ? labels.play : labels.pause} onClick={() => setStopped((v) => !v)}>
-            <svg viewBox="0 0 20 20" aria-hidden="true">{stopped ? <path d="M7 4.5v11l9-5.5z" fill="currentColor" /> : <path d="M7 4.5v11M13 4.5v11" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />}</svg>
-          </button>
-        )}
-      </div>
+      )}
       <div className="dv-cycle-plate" data-kind={charts[current].type}>
         <div className="dv-cycle-stack dv-cycle-texts">
-          {charts.map((chart, i) => (
-            <div key={i} className="dv-cycle-text" data-on={i === current || undefined} aria-hidden={i !== current || undefined} inert={i !== current || undefined}>
-              <p className="sr-only">{chart.title}</p>
-              {(chart.note || chart.source) && <div className="dv-cycle-foot">
-                {chart.note && <p className="dv-chart-source">{chart.note}</p>}
-                <ChartSource source={chart.source} />
-              </div>}
-            </div>
-          ))}
+          {charts.map((chart, i) => {
+            const hidden = scrolled && i !== current;
+            return (
+              <div key={i} className="dv-cycle-text" style={{ "--i": i } as React.CSSProperties} data-on={i === current || undefined} aria-hidden={hidden || undefined} inert={hidden || undefined}>
+                <p className="dv-cycle-line">{chart.title}</p>
+              </div>
+            );
+          })}
         </div>
         <div className="dv-cycle-stack dv-cycle-charts">
           {charts.map((chart, i) => {
-            const on = i === current;
+            const on = i === current || !scrolled;
             return (
-              <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
+              <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" style={{ "--i": i } as React.CSSProperties} data-kind={chart.type} data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
                 {chart.type === "donut" && <Donut data={chart} animate={on && phase === "play"} />}
                 {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
                 {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
@@ -361,6 +342,10 @@ export function SurveyCharts({ charts, labels, head }: { charts: StageChart[]; l
                 {chart.type === "scale" && <ScaleView data={chart} />}
                 {chart.type === "quotes" && <QuotesView data={chart} />}
                 {chart.type === "table" && <TableView data={chart} />}
+                {(chart.note || chart.source) && <div className="dv-cycle-foot">
+                  {chart.note && <p className="dv-chart-source">{chart.note}</p>}
+                  <ChartSource source={chart.source} />
+                </div>}
               </div>
             );
           })}

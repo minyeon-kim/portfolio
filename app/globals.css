@@ -8441,15 +8441,17 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-trust-legend li:has(button[data-on]) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .case-study .dv .dv-cycle-foot { margin-top: 0; }
 .case-study .dv .dv-cycle-text p.sr-only { position: absolute; }
-@media (min-width: 64rem) {
+@media (min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto auto auto 1fr; column-gap: 64px; row-gap: 32px; align-items: start; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head { display: contents; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-section-head { grid-column: 1 / -1; grid-row: 1; margin-bottom: 32px !important; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-column: 1; grid-row: 2; margin: 0; max-width: none; }
-  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-nav { grid-column: 1; grid-row: 3; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-marks { grid-column: 1; grid-row: 4; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-plate { display: contents; }
-  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-texts { grid-column: 1; grid-row: 4; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-texts { grid-column: 1; grid-row: 3; }
   .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 2; grid-row: 2 / span 3; }
+}
+@media (min-width: 64rem) {
   /* Room between a chapter title and what follows. */
   .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section > .dv-section-head { margin-bottom: 96px; }
 }
@@ -8475,3 +8477,33 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.more-work-hit, .more-work-cover, .more-work-app) { border-radius: 8px !important; }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --dv-band-radius: 0px; --dv-card-radius: 8px; }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { border-radius: 8px !important; }
+
+/* Chart stages without tabs (owner): scrolling already moves between charts, so the place of the
+   tabs holds the sentence for the current chart, with two thin marks for where you are. The source
+   sits under its chart, and the ring is larger with a smaller number inside. */
+.case-study .dv .dv-cycle-plate .dv-cycle-text p.dv-cycle-line { margin: 0; color: var(--dv-ink); font-size: var(--t-item); font-weight: 400; line-height: 1.4; word-break: keep-all; }
+.dv-cycle-marks { display: flex; gap: 8px; }
+.dv-cycle-marks i { width: 32px; height: 2px; border-radius: 2px; background: var(--dv-line); transition: background-color 250ms var(--ease); }
+.dv-cycle-marks i[data-on] { background: var(--dv-chart-fill); }
+.case-study .dv .dv-cycle-track .dv-trust { width: min(100%, 360px); }
+.case-study .dv .dv-cycle-track .dv-trust-wrap { gap: 24px; }
+.case-study .dv .dv-cycle-track .dv-trust-center strong { font-size: 48px; }
+.case-study .dv .dv-cycle-panel .dv-cycle-foot { margin-top: 24px; }
+.dv-cycle-panel[data-kind="donut"] .dv-cycle-foot { justify-content: center; text-align: center; }
+/* Where the scroll can't step through them, every chart is shown, one under another. */
+@media (max-width: 63.99rem), (max-height: 819.98px), (prefers-reduced-motion: reduce) {
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-marks { display: none; }
+  .dv-cycle-track:not(.dv-cycle-single)::after { display: none; }
+  .dv-cycle-track:not(.dv-cycle-single) > .dv-cycle-stage { position: static; }
+  .case-study .dv .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-plate { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .case-study .dv .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-stack { display: contents; }
+  .dv-cycle-track:not(.dv-cycle-single) :is(.dv-cycle-text, .dv-cycle-panel) { visibility: visible; grid-area: auto; grid-column: 1; }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-text { grid-row: calc(var(--i) * 2 + 1); }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-panel { grid-row: calc(var(--i) * 2 + 2); }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-text:not(:first-child) { margin-top: 56px; }
+}
+@media (min-width: 64rem) and (max-height: 819.98px), (min-width: 64rem) and (prefers-reduced-motion: reduce) {
+  .case-study .dv .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-plate { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-text { grid-row: calc(var(--i) + 1); margin-top: 0 !important; }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-panel { grid-column: 2; grid-row: calc(var(--i) + 1); }
+}
