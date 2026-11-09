@@ -71,28 +71,18 @@ vec3 formOf(float n, vec2 uv) {
     // rising into ridges at the sides, with faint, loose streams of data
     // falling behind it.
     // The landing keeps almost everything on the surface, so the wave reads as one form.
-    if (symbol < 0.5 && a < 0.9) {
-      // The landing: broad, soft currents instead of a surface. Six of them
-      // drift across the stage, close up right of centre and open out again.
-      float x = (b - 0.5) * 7.6;
-      float band = floor(c * 6.0);
-      float f = (band + 0.5) / 6.0 - 0.5;
-      float open = mix(0.16, 1.0, smoothstep(0.0, 3.0, abs(x - 1.1)));
-      float bend = 0.62 * sin(x * 0.62 + 1.1 + f * 1.5 + time * 0.1) + 0.36 * sin(x * 1.37 - 2.0 + f * 5.0 - time * 0.13);
-      float width = mix(0.045, 0.17, 0.5 + 0.5 * sin(x * 2.1 + f * 7.0 + time * 0.15)) * mix(0.7, 1.0, open);
-      float across = (j.x + j.y + j.z) * 1.15;
-      p = vec3(x, bend + f * 2.5 * open + across * width + ground + 0.12, f * 1.3 - 0.7 + j.z * 0.5);
-      loose *= 0.018;
-    } else if (a < 0.82) {
+    if (a < (symbol < 0.5 ? 0.92 : 0.82)) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
+      // The landing: one slow extra bend so the curve isn't a clean sine, a little taller.
+      if (symbol < 0.5) y = y * 1.1 + 0.2 * sin(x * 0.73 + z * 2.1 + 1.7 + time * 0.11);
       // The middle sinks, so the band reads as a soft bowl between the side ridges.
       y -= 0.5 * exp(-x * x / 2.4);
       // Tilted towards the viewer, so the rows open out down the screen.
-      p = vec3(x, y + (z + 0.9) * 0.42 + ground, z);
-      loose *= 0.06;
+      p = vec3(x, y + (z + 0.9) * (symbol < 0.5 ? 0.55 : 0.42) + ground, z);
+      loose *= symbol < 0.5 ? 0.07 : 0.06;
     } else {
       float col = floor(b * 46.0);
       p = vec3((col / 46.0 - 0.5) * 6.0 + (h1(n * 6.1) - 0.5) * 0.35, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
@@ -368,10 +358,10 @@ void main() {
   float patchy = sin(p.x * 1.7 + p.z * 2.3 + time * 0.07) * sin(p.x * 3.9 - p.z * 1.4 + 1.3 - time * 0.05) + 0.5 * sin(p.x * 7.1 + p.z * 5.3 + time * 0.09);
   // One lead area right of centre, where the wave turns: packed and bright,
   // the dust scattering and dimming away from it towards the left.
-  vec2 fromLead = (s - vec2(0.36, -0.22)) / vec2(0.62, 0.52);
+  vec2 fromLead = (s - vec2(0.36, -0.22)) / vec2(0.55, 0.46);
   float lead = exp(-dot(fromLead, fromLead));
   float dense = max(smoothstep(-0.6, 0.8, patchy), lead);
-  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead), galaxy));
+  float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead) * smoothstep(-0.8, -0.32, s.y), galaxy));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy);
