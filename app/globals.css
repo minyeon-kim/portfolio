@@ -6404,23 +6404,23 @@ header.group\/header[data-hide]:not(:focus-within) { translate: 0 calc(-100% - 2
 /* Takeaway with room (owner: too cramped; after Metalab's Outcomes and Linear's long reads):
    the statement, a clear gap, learnings as stacked rows (number | title and one line),
    then the next step on its own tinted panel. Nothing sits side by side to be read across. */
-.case-study .dv .dv-tk .dv-headline { max-width: 900px; font-size: var(--t-statement, 36px); line-height: 1.3; }
+.case-study .dv .dv-tk .dv-headline { max-width: 900px; font-size: var(--t-heading, 28px); font-weight: 400; line-height: 1.35; }
 .case-study .dv .dv-tk-part { margin-top: clamp(96px, 14svh, 144px); }
 .case-study .dv .dv-tk-part .dv-tk-label { margin-bottom: 8px; }
 .case-study .dv :is(.dv-tk-cards, .dv-tk-limits) { display: block; max-width: 900px; }
-.case-study .dv :is(.dv-tk-cards, .dv-tk-limits) li { display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: 24px; padding: 40px 0; border-radius: 0; background: none; border-top: 1px solid var(--dv-line); }
+.case-study .dv :is(.dv-tk-cards, .dv-tk-limits) li { display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: 16px; padding: 28px 0; border-radius: 0; background: none; border-top: 1px solid var(--dv-line); }
 .case-study .dv :is(.dv-tk-cards, .dv-tk-limits) li:last-child { border-bottom: 1px solid var(--dv-line); }
-.case-study .dv .dv-tk-cards li > b { grid-row: span 2; margin: 0; color: var(--case-accent); font-size: var(--t-heading, 28px); font-weight: 300; line-height: 1.2; }
+.case-study .dv .dv-tk-cards li > b { grid-row: span 2; margin: 0; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.75; font-variant-numeric: tabular-nums; }
 .case-study .dv .dv-tk-limits li > * { grid-column: 2; }
-.case-study .dv .dv-tk :is(.dv-tk-cards, .dv-tk-limits) h4 { font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.3; text-wrap: pretty; }
-.case-study .dv .dv-tk :is(.dv-tk-cards, .dv-tk-limits) p { margin-top: 12px; max-width: 640px; font-size: 18px; line-height: 1.6; }
-.case-study .dv .dv-tk-next { display: block; max-width: 900px; margin-top: clamp(96px, 14svh, 144px); padding: clamp(32px, 4vw, 48px); border-radius: var(--dv-card-radius); background: color-mix(in srgb, var(--case-accent) 10%, var(--dv-bg, var(--bg))); }
-.case-study .dv .dv-tk-next .dv-tk-label { margin: 0 0 16px; }
-.case-study .dv .dv-tk-next-title { font-size: var(--t-heading, 28px); font-weight: 500; }
+.case-study .dv .dv-tk :is(.dv-tk-cards, .dv-tk-limits) h4 { font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; text-wrap: pretty; }
+.case-study .dv .dv-tk :is(.dv-tk-cards, .dv-tk-limits) p { margin-top: 6px; max-width: 640px; font-size: 16px; line-height: 1.6; }
+.case-study .dv .dv-tk-next { display: block; max-width: 900px; margin-top: clamp(96px, 14svh, 144px); padding: 24px 32px; border-radius: var(--dv-card-radius); background: color-mix(in srgb, var(--case-accent) 10%, var(--dv-bg, var(--bg))); }
+.case-study .dv .dv-tk-next .dv-tk-label { margin: 0 0 6px; }
+.case-study .dv .dv-tk-next-title { font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
 .case-study .dv .dv-tk-next .dv-body { margin-top: 12px; max-width: 640px; color: var(--dv-muted); }
 @media (max-width: 47.99rem) {
   .case-study .dv :is(.dv-tk-cards, .dv-tk-limits) li { grid-template-columns: minmax(0, 1fr); padding: 28px 0; }
-  .case-study .dv .dv-tk-cards li > b { grid-row: auto; margin-bottom: 8px; font-size: 20px; }
+  .case-study .dv .dv-tk-cards li > b { grid-row: auto; margin-bottom: 8px; font-size: 16px; }
   .case-study .dv .dv-tk-limits li > * { grid-column: 1; }
 }
 /* Value proposition pairs as a table read left to right (owner: the three vertical cards were
