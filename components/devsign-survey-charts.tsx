@@ -9,7 +9,7 @@ type Source = { label: string; url?: string; detail?: string };
 type Base = { tab: string; title: string; note?: string; source?: Source };
 type DonutChart = Base & { type: "donut"; value: string; valueLabel: string; segments: Segment[] };
 type BarChart = Base & { type: "bars"; bars: { label: string; value: number }[] };
-type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; low: string; high: string; items: { label: string; value: number; on?: boolean }[] };
+type PairChart = Base & { type: "pair"; scale: number; goal: number; goalLabel: string; items: { label: string; value: number; on?: boolean }[] };
 type RingChart = Base & { type: "rings"; items: { label: string; value: number }[] };
 type ScaleChart = Base & { type: "scale"; max: number; marks: { label: string; value: number }[]; items: { label: string; value: number }[] };
 type QuotesChart = Base & { type: "quotes"; items: { name: string; quote: string; source: string; sourceUrl?: string }[] };
@@ -158,12 +158,12 @@ function Pair({ data, animate }: { data: PairChart; animate: boolean }) {
         <span className="dv-hbar-goal"><b>{data.goalLabel}</b></span>
         {data.items.map((item, i) => (
           <div key={item.label} className="dv-hbar-row" data-on={item.on || undefined} style={{ "--i": i, "--r": item.value / data.scale } as React.CSSProperties}>
-            <div className="dv-hbar-name"><span>{item.label}</span><strong><Count value={item.value} animate={animate} delay={i * 200} suffix="" /></strong></div>
+            <span className="dv-hbar-name">{item.label}</span>
             <div className="dv-hbar-track"><i className="dv-hbar-fill" aria-hidden="true" /></div>
+            <strong className="dv-hbar-value"><Count value={item.value} animate={animate} delay={i * 200} suffix="" /></strong>
           </div>
         ))}
       </div>
-      <div className="dv-hbar-axis"><span>{`0 · ${data.low}`}</span><span>{`${data.scale} · ${data.high}`}</span></div>
     </div>
   );
 }

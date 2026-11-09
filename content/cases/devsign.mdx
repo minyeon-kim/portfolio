@@ -454,7 +454,6 @@ export const study = {
       protocol: [
         { label: "Participants", big: "2", value: "1 designer, 1 developer" },
         { label: "Tasks", big: "7 × 2", value: "7 tasks, each done twice" },
-        { label: "Scenarios", value: "Combine two drafts, decide a change request, fix a mobile screen" },
         { label: "Session", steps: ["Brief", "First try", "Second try", "Survey", "Interview"] },
         { label: "Measures", chips: ["Help needed on the first try (0–3)", "SUS usability score", "Expected change in communication (1–5)"] },
       ],
@@ -466,9 +465,9 @@ export const study = {
         {
           type: "pair",
           tab: "Help needed",
-          title: "The second try repeated the same tasks, so familiarity is part of the drop.",
-          note: "Average across 7 tasks.",
-          scale: 3, goal: 1.5, goalLabel: "Goal 1.5", low: "on their own", high: "told directly",
+          title: "The same tasks twice, so familiarity played a part.",
+          note: "0 on their own · 3 told directly · average of 7 tasks",
+          scale: 3, goal: 1.5, goalLabel: "Goal 1.5",
           items: [{ label: "First try", value: 2.3 }, { label: "Second try", value: 0.4, on: true }],
         },
         {
