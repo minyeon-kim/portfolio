@@ -8030,8 +8030,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @media (max-width: 47.99rem) {
   .devsign-hero.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { grid-template-columns: 1fr; gap: 0; margin-top: 28px; border-top: 1px solid var(--line); }
   .devsign-hero.dh-cover .dh-lead .devsign-hero-details > div { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 16px; align-items: baseline; padding-block: 12px; border-bottom: 1px solid var(--line); }
-  .devsign-hero.dh-cover .dh-lead .devsign-hero-details dt { color: var(--muted); font-size: 15px; font-weight: 400; letter-spacing: 0; text-transform: none; }
-  .devsign-hero.dh-cover .dh-lead .devsign-hero-details dd { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.45; }
+  .devsign-hero.dh-cover .dh-lead .devsign-hero-details dt { color: var(--ink); font-size: 16px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .devsign-hero.dh-cover .dh-lead .devsign-hero-details dd { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
   .devsign-hero.dh-cover[data-project] .dh-cover-plate { margin-top: 40px; }
 
   .site-header-bar::before { background: light-dark(rgb(255 255 255 / calc(0.72 * var(--fold, 0))), rgb(18 18 20 / calc(0.62 * var(--fold, 0)))); }
@@ -8138,12 +8138,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 48px; }
   .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { padding-top: clamp(24px, 6svh, 72px); }
   .devsign-hero.dh-cover.dh-cover .dh-lead { display: block; margin-top: clamp(48px, 9svh, 96px); }
-  .devsign-hero.dh-cover.dh-cover[data-project] .dh-cover-plate { margin-top: clamp(24px, 3.6svh, 40px); }
+  .devsign-hero.dh-cover.dh-cover[data-project] .dh-cover-plate { margin-top: 24px; }
   .devsign-hero.dh-cover.dh-cover .devsign-hero-question { flex: 0 1 460px; min-width: 0; max-width: none; margin: 0 0 0.3em; font-size: 20px; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; word-break: keep-all; }
   .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details.devsign-hero-details { grid-template-columns: repeat(4, minmax(0, 1fr)); justify-content: stretch; column-gap: 32px; margin-top: 0; }
   .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { max-width: 34ch; }
-  .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dt { color: var(--muted); font-weight: 400; }
-  .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { color: var(--ink); }
+  .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dt { color: var(--ink); font-weight: 500; }
+  .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { color: var(--muted); }
 }
 
 /* Iteration 2: the session photo is small evidence beside the heading (as in the interview), so
