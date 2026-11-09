@@ -9,12 +9,16 @@ a = sys.argv[sys.argv.index('--') + 1:]
 OUT, W, SAMPLES = a[0], int(a[1]), int(a[2])
 H = round(W * 838 / 1440)
 
-# scene.html's numbers
-FOV, CAM, LOOK = 12.85, (0, 2.0, 11), (0, 1.0, 0)
-YAW, TILT, MON = -0.43, -0.17, (-0.01, 1.228, -0.02)
-PL, PC, PY, PX, PYAW, PTILT = (2.38, 3, 1.96), 0.13, 0.195, 0.07, -0.53, -0.036
-FOOT, FS, NB, NT, NX = (0.1, 0.06), (0.68, 0.58), 0.52, 0.45, 0.12
-SW, SH, BZ, TH = 2.12, 1.325, 0.024, 0.085
+# Fitted to a frame of the reference by least squares on its corners (mean error 0.26px).
+FOV, CAM, LOOK = 9.2078, (0, 1.7816, 11), (0, 1.0, 0)
+YAW, TILT, MON = -0.5903, -0.1270, (-0.0065, 1.2049, -0.02)
+BODY_W, BODY_H, TH = 1.6651, 1.1075, 0.055
+BZ = 0.012
+SW, SH = BODY_W - 0.012 - 2 * BZ, BODY_H - 0.012 - 2 * BZ
+PYAW, PW, PD, PX, PZ, PY, PC = -0.5884, 1.9816, 1.9506, 0.0763, -0.8232, 0.2444, 0.085
+FYAW, FW, FD, FX, FZ, FY = -0.5710, 0.4143, 0.4616, 0.0236, -0.6270, 0.2684
+NECK_BASE = [[-0.0739, 0.2684, -0.9427], [0.284, 0.2684, -0.7442]]
+NECK_TOP = [[-0.0988, 0.6188, -0.1215], [0.2212, 0.6409, 0.0895]]
 
 C = Matrix.Rotation(math.radians(90), 4, 'X')  # three (y up) to Blender (z up)
 def Rx(t): return Matrix.Rotation(t, 4, 'X')
@@ -48,7 +52,9 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
 PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#050506', 0.3, metal=1)
-FOOTM = mat('foot', '#020203', 0.5, spec=0.06)
+NECKM = mat('neck', '#020203', 0.45, spec=0.0)
+STRIP = mat('strip', '#7c8288', 0.34, metal=1)
+FOOTM = mat('foot', '#60626a', 0.16, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 
 def rounded(w, d, r, seg=24):
@@ -89,44 +95,57 @@ def solid(name, outline, z0, z1, M, material, bevel=0.0, bseg=4):
     scene.collection.objects.link(o)
     return o
 
+def hexa(name, pts, material):
+    """A closed six-sided solid from 8 corners in three space: 0-3 one face, 4-7 the opposite."""
+    bm = bmesh.new()
+    v = [bm.verts.new(C @ Vector(p)) for p in pts]
+    for f in ((0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)):
+        bm.faces.new([v[i] for i in f])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bmesh.ops.bevel(bm, geom=list(bm.edges), offset=0.0018, segments=2, profile=0.5, affect='EDGES', clamp_overlap=True)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    for f in bm.faces: f.smooth = True
+    for e in bm.edges:
+        if len(e.link_faces) == 2 and e.calc_face_angle() > math.radians(32): e.smooth = False
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free(); me.materials.append(material)
+    o = bpy.data.objects.new(name, me); scene.collection.objects.link(o); return o
+
 # Plinth: top at height 0, running down 3 units.
-solid('plinth', rounded(PL[0], PL[2], PC, 32), -PL[1], 0, T(PX, PY, 0) @ Rx(PTILT) @ Ry(PYAW) @ XZ, PURPLE, bevel=0.012)
+solid('plinth', rounded(PW, PD, PC, 32), -3, 0, T(PX, PY, PZ) @ Ry(PYAW) @ XZ, PURPLE, bevel=0.01)
 
 # Monitor: an aluminium shell, the black glass front a hair proud of it.
 bw, bh = SW + BZ * 2, SH + BZ * 2
-solid('shell', rounded(bw + 0.012, bh + 0.012, 0.014), -TH - 0.006, -0.006, MONM, SILVER, bevel=0.004)
-solid('bezel', rounded(bw, bh, 0.01), -0.006, 0.006, MONM, GLASS, bevel=0.0015)
+solid('shell', rounded(bw + 0.012, bh + 0.012, 0.012), -TH - 0.006, -0.006, MONM, SILVER, bevel=0.003)
+solid('bezel', rounded(bw, bh, 0.008), -0.006, 0.006, MONM, GLASS, bevel=0.0012)
 
-# Hinge: a dark barrel with a thin bright crescent.
-hm = MONM @ T(NX, -SH * 0.5 + 0.004, -0.05)
-solid('barrel', rounded(0.104, 0.104, 0.05), -0.01, 0.01, hm, BLACKM)
-cu = bpy.data.curves.new('crescent', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0035; cu.bevel_resolution = 3
+# Hinge crescent, on the back of the monitor above the neck.
+mid_top = Vector([(a + b) / 2 for a, b in zip(NECK_TOP[0], NECK_TOP[1])])
+hx = (MONM.inverted() @ mid_top).x
+cu = bpy.data.curves.new('crescent', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0034; cu.bevel_resolution = 3
 sp = cu.splines.new('POLY'); sp.points.add(32)
-w = C @ MONM @ T(NX, -SH * 0.5 + 0.004, -0.037)
+w = C @ MONM @ T(hx, -SH * 0.5 - 0.004, 0.012)
 for i, p in enumerate(sp.points):
-    t = math.pi + math.pi * i / 32
-    v = w @ Vector((0.052 * math.cos(t), 0.052 * math.sin(t), 0))
+    t = math.pi * 1.08 + math.pi * 0.84 * i / 32
+    v = w @ Vector((0.031 * math.cos(t), 0.031 * math.sin(t), 0))
     p.co = (v.x, v.y, v.z, 1)
 cu.materials.append(SILVER)
 scene.collection.objects.link(bpy.data.objects.new('crescent', cu))
 
-# Foot: a thin plate, edges sharp enough to catch one line of light.
-fy = 0.0  # the foot's edges run parallel to the neck's base, as on the reference
-solid('foot', rounded(FS[0], FS[1], 0.012, 8), -0.008, 0.008, RIG @ T(FOOT[0], PY + 0.014, FOOT[1]) @ Ry(fy) @ XZ, FOOTM, bevel=0.0025, bseg=3)
+# Foot: a thin mirror-dark plate lying on the plinth.
+solid('foot', rounded(FW, FD, 0.012, 8), PY - 0.002, PY + 0.017, T(FX, 0, FZ) @ Ry(FYAW) @ XZ, FOOTM, bevel=0.002, bseg=3)
 
-# Neck: between the back of the monitor and the foot.
-pa = RIG.inverted() @ MONM @ Vector((NX, -SH * 0.42, -0.13))
-pb = Vector((0.09, PY + 0.016, -0.03))
-d = pa - pb
-yy = d.normalized(); zz = Vector((1, 0, 0)).cross(yy).normalized(); xx = yy.cross(zz)
-q = Matrix((xx, yy, zz)).transposed()
-nm = RIG @ T(*((pa + pb) / 2)) @ q.to_4x4() @ Matrix.Diagonal((1, d.length, 1, 1))
-# The base flares further to the right, as on the reference.
-solid('neck', [(-NT/2 * 1.044, -0.5), (NT/2 * 1.273, -0.5), (NT/2, 0.5), (-NT/2, 0.5)], -0.02, 0.02, nm, BLACKM, bevel=0.003, bseg=2)
+# Neck: the four corners read from the reference, 0.03 thick behind that face.
+n = (MONM.to_3x3() @ Vector((0, 0, -1))).normalized() * 0.03
+a, b, c, d = [Vector(q) for q in (NECK_BASE[0], NECK_BASE[1], NECK_TOP[1], NECK_TOP[0])]
+a.y = b.y = PY + 0.012  # sunk into the foot, so the two meet with no gap
+hexa('neck', [a, b, c, d, a + n, b + n, c + n, d + n], NECKM)
+# The neck's right side: the thin lit strip on the reference.
+u = (b - a).normalized() * 0.003
+hexa('neck_side', [b, c, c + n, b + n, b + u, c + u, c + n + u, b + n + u], STRIP)
 
 # The monitor casts no shadow, or its edge draws a straight line across the plinth.
-for n in ('shell', 'bezel', 'barrel'):
-    bpy.data.objects[n].visible_shadow = False
+for name in ('shell', 'bezel'):
+    bpy.data.objects[name].visible_shadow = False
 
 # Camera
 cd = bpy.data.cameras.new('cam'); cd.sensor_fit = 'VERTICAL'; cd.angle = math.radians(FOV)
@@ -142,22 +161,25 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     l = bpy.data.lights.new(name, 'AREA'); l.shape = 'RECTANGLE'; l.size = size; l.size_y = size_y
     l.energy = power; l.color = color
     o = bpy.data.objects.new(name, l); scene.collection.objects.link(o)
+    o.visible_camera = False
     o.location = C @ Vector(loc)
     o.rotation_euler = (C @ Vector(target) - o.location).to_track_quat('-Z', 'Y').to_euler()
     return o
 
 # This one comes from behind the monitor; its shadow would lay a hard band across the plinth.
-area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 480).data.use_shadow = False
-area('over', (0.4, 7.0, -0.5), (0.3, 0.2, -0.4), 5, 1.4, 190)
-area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 26)
-area('edge', (6.2, 0.5, -6.6), (0.6, 0.5, 0), 5, 12, 170)
+area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 350).data.use_shadow = False
+area('over', (0.4, 7.0, -0.5), (0.3, 0.2, -0.4), 5, 1.4, 145)
+area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 15)
+area('edge', (9.0, 0.6, -3.7), (0, 0.8, -0.3), 5, 12, 62)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
+# Low behind the set: what the mirror-dark foot picks up on its left.
+area('foot', (-1.6, 1.5, -10.5), (-0.6, 0.27, -0.6), 2.9, 1.6, 120)
 area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 26)
-area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 1.2)
+area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 0.5)
 
 w = bpy.data.worlds.new('w'); scene.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs[0].default_value = (0.012, 0.009, 0.03, 1)
-w.node_tree.nodes['Background'].inputs[1].default_value = 0.15
+w.node_tree.nodes['Background'].inputs[1].default_value = 0.04
 
 # Render
 scene.render.engine = 'CYCLES'
