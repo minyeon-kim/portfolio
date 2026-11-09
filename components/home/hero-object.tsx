@@ -69,32 +69,29 @@ vec3 formOf(float n, vec2 uv) {
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
   // Temporary: the landing form options, picked from the hidden row in the Menu.
   if (symbol < 0.5 && look > 0.5) {
+    vec3 at = vec3(1.33, 0.15, 0.0);
+    vec3 q;
     if (look < 1.5) {
-      // A ribbon that starts right of the Menu column and swings across the stage, twisting as it goes.
-      float t = b, v = (c - 0.5) * 2.0;
-      float x = mix(-1.05, 3.2, t);
-      float wide = 0.1 + 0.36 * pow(0.5 + 0.5 * sin(t * 8.5 + 0.8 + time * 0.14), 2.0);
-      float turn = t * 10.0 + time * 0.2;
-      float y = -0.1 + 0.62 * sin(t * 6.4 - 0.9 + time * 0.1) + 0.13 * sin(t * 15.0 + time * 0.26) + v * wide * cos(turn);
-      p = vec3(x, y, -0.3 + v * wide * sin(turn));
-      return p * 1.6 + j * 0.05 * (g > 0.9 ? 8.0 : 1.0) + vec3(0.35, 0.05, 0.0);
+      // A knot of dust: the complexity in the headline, as one continuous line.
+      float t = b * 6.2831853;
+      vec3 k = vec3(sin(t) + 2.0 * sin(2.0 * t), cos(t) - 2.0 * cos(2.0 * t), -sin(3.0 * t)) * 0.55;
+      float th = hq(n, 17u) * 6.2831853, ph = acos(2.0 * c - 1.0);
+      q = k + vec3(sin(ph) * cos(th), sin(ph) * sin(th), cos(ph)) * (g > 0.9 ? 0.32 : 0.17);
     } else if (look < 2.5) {
-      vec2 q = vec2(0.0);
-      if (a < 0.1) { float t = b * 6.2831853, r = sqrt(c) * 0.263; q = vec2(0.947, 0.842) + vec2(cos(t), sin(t)) * r; }
-      else for (int i = 0; i < 24; i++) {
-        float t = hq(n, 20u + uint(i) * 2u) * 6.2831853, r = sqrt(hq(n, 21u + uint(i) * 2u));
-        vec2 s = vec2(cos(t), sin(t)) * r;
-        if (length(s - vec2(0.474, 0.526)) > 0.842) { q = s; break; }
-      }
-      p = vec3(q * 0.92 + vec2(0.75, 0.0), (hq(n, 17u) - 0.5) * 0.2);
-      return p * 1.6 + j * (g > 0.82 ? 0.7 : 0.09) + vec3(0.35, 0.05, 0.0);
+      // A Moebius strip, a surface that closes on itself.
+      float u = b * 6.2831853 + time * 0.04, v = (c - 0.5) * 1.05;
+      float r = 1.0 + v * cos(u * 0.5);
+      q = vec3(r * cos(u), r * sin(u), v * sin(u * 0.5)) * 1.45;
+      q = vec3(q.x, q.y * 0.72 - q.z * 0.69, q.y * 0.69 + q.z * 0.72);
     } else {
-      float th = (b - 0.5) * 1.75 + time * 0.012;
-      float d = -log(1.0 - c * 0.995) * 0.13;
-      float R = 4.6 - d;
-      p = vec3(0.45 + sin(th) * R, -4.72 + cos(th) * R, (hq(n, 17u) - 0.5) * 0.4);
-      return p * 1.6 + j * (g > 0.88 ? 0.5 : 0.035) + vec3(0.35, 0.05, 0.0);
+      // A globe of latitude lines.
+      float lon = b * 6.2831853, lat = floor(c * 15.0) / 14.0 * 3.1415927;
+      lat += (hq(n, 17u) - 0.5) * 0.05;
+      q = vec3(sin(lat) * cos(lon), cos(lat), sin(lat) * sin(lon)) * 1.75;
     }
+    float s = time * 0.09;
+    q = vec3(q.x * cos(s) + q.z * sin(s), q.y, -q.x * sin(s) + q.z * cos(s));
+    return q + at + j * (g > 0.92 ? 0.5 : 0.04);
   }
   if (symbol > 2.5 || symbol < 0.5) {
     // The landing (and About): a landscape of dots, seen low from the front,
