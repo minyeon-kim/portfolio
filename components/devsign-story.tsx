@@ -130,7 +130,13 @@ export function useHeldSteps(count: number, pinQuery: string = REELS_PIN) {
     const query = window.matchMedia(pinQuery);
     // Pinned scroll steps are off (class feedback 2026-11-06: content you have to scroll through to see
     // goes unseen). Every held block shows its plain, unpinned form; flip HOLD_ON_SCROLL to restore them.
-    const sync = () => { tallest.current = 0; setPinned(HOLD_ON_SCROLL && query.matches); };
+    const sync = () => {
+      tallest.current = 0;
+      // A stage taller than the screen would cut its own end off while held, so it stays in the flow.
+      const tooTall = pinQuery === TALL_PIN && (el.firstElementChild as HTMLElement).offsetHeight > window.innerHeight - 92;
+      el.toggleAttribute("data-too-tall", tooTall);
+      setPinned(HOLD_ON_SCROLL && query.matches && !tooTall);
+    };
     sync();
     read();
     query.addEventListener("change", sync);

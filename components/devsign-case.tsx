@@ -85,7 +85,7 @@ function Insights({ discover }: { discover: Study }) {
               items: q1.groups,
             }] : q1.charts}
             labels={q1.chartLabels}
-            head={<Block {...discover.desk} ff />}
+            head={<><ChapterHead id="discover" title="Discover" /><Block {...discover.desk} ff /></>}
           />
         </section>
         {!q1.communityTab && !q1.hideCommunity && <section className="dv-posts">
@@ -224,7 +224,7 @@ function SourceInsights({ discover }: { discover: Study }) {
     <div className="dv-insights">
       <div>
         <section className="dv-cycle-card">
-          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} head={<Block title={desk.title} lead={q1.answer} text={desk.text} ff />} />
+          <SurveyCharts charts={q1.charts} labels={q1.chartLabels} head={<><ChapterHead id="discover" title="Discover" /><Block title={desk.title} lead={q1.answer} text={desk.text} ff /></>} />
         </section>
         <EvidenceColumns label={q1.communityLabel} groups={q1.groups} />
       </div>
@@ -261,6 +261,12 @@ function SourceInsights({ discover }: { discover: Study }) {
       </div>
     </div>
   );
+}
+
+// The chapter title, for a chapter whose first block holds on the scroll: it rides in the held
+// stage so it stays with the block instead of scrolling away first (owner).
+function ChapterHead({ id, title }: { id: string; title: string }) {
+  return <div className="dv-section-head"><h2 id={`${id}-title`} className="dv-section-title reveal">{title}</h2></div>;
 }
 
 export function Section({ id, title, band, noHead, children }: { id: string; title: string; band?: boolean; noHead?: boolean; children: ReactNode }) {
@@ -355,7 +361,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
   const deliverIntro = (
     <div className="dv-deliver-intro">
       {/* The chapter title rides in the held stage, so it stays while the features step. */}
-      <div className="dv-section-head"><h2 id="deliver-title" className="dv-section-title reveal">Deliver</h2></div>
+      <ChapterHead id="deliver" title="Deliver" />
       <Block {...deliver} ff={ff} />
       {deliver.link && <p id="try" className="dv-try-link reveal"><a className="press" href={deliver.link.href} target="_blank" rel="noreferrer">{deliver.link.label}</a></p>}
     </div>
@@ -398,7 +404,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         )}
       </Section>
 
-      <Section id="discover" title="Discover">
+      <Section id="discover" title="Discover" noHead>
         {ff ? <Insights discover={discover} /> : <SourceInsights discover={discover} />}
       </Section>
 
@@ -684,9 +690,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
       {/* Findings first: Testing is a stage of its own (title, band, nav item),
           so it no longer reads as the tail of Deliver. */}
       <section id="testing" className="dv-section dv-testing" aria-labelledby="testing-title">
-        <div className="dv-section-head">
-          <h2 id="testing-title" className="dv-section-title reveal">Testing</h2>
-        </div>
         {/* No stage line under the title: the usability finding opens the stage (owner: the text
             read as too many separate pieces). `testing.lead` still feeds the diamond. */}
         <div>
@@ -695,11 +698,11 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.protocol ? <>
           {/* The finding is the block's heading; each chart's own sentence is a smaller caption
               (owner: without the heading the block had no hierarchy). */}
-          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} meta={testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")} />} /></section>
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} meta={testing.usability.protocol.filter((row: { value?: string }) => row.value).map((row: { value: string }) => row.value).join(" · ")} /></>} /></section>
           {testing.usability.result && <p className="dv-body dv-ut-meaning-text dv-gap-40 reveal">{testing.usability.result}</p>}
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>
-          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<Block {...testing.usability} ff={ff} />} /></section>
+          <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} ff={ff} /></>} /></section>
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
