@@ -142,7 +142,8 @@ hexa('neck', [a, b, c, d, a + n, b + n, c + n, d + n], NECKM)
 # The neck's base stops just behind the plate's back edge at its left end: fill that sliver.
 fw = -n * 1.6
 ft, fb = PY + 0.0165, PY + 0.0005
-qs = [Vector((q.x, ft, q.z)) for q in (a, b, b + fw, a + fw)] + [Vector((q.x, fb, q.z)) for q in (a, b, b + fw, a + fw)]
+al = a + (b - a) * 0.055 + fw  # kept under the neck, so it never shows past its left edge
+qs = [Vector((q.x, ft, q.z)) for q in (a, b, b + fw, al)] + [Vector((q.x, fb, q.z)) for q in (a, b, b + fw, al)]
 hexa('neck_seat', qs, FOOTM)
 # The neck's right side: the thin lit strip on the reference.
 u = (b - a).normalized() * 0.003
