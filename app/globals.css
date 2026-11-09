@@ -7639,32 +7639,6 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 }
 
 /* Interview: participants as a compact row, then one card per question with what we heard. */
-.dv-ivc { margin-top: 64px; }
-.dv-ivc-label { margin: 0 0 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
-.dv-ivc-people { margin-bottom: 72px; }
-.dv-ivc-people ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-.dv-ivc-people li { display: grid; gap: 2px; padding: 16px 18px; border-radius: 16px; background: color-mix(in srgb, var(--dv-ink) 5%, transparent); transition: background-color 250ms var(--ease), opacity 250ms var(--ease); }
-.dv-ivc-people li b { color: var(--case-accent); font-size: 16px; font-weight: 500; }
-.dv-ivc-people li span { color: var(--dv-ink); font-size: 18px; font-weight: 500; }
-.dv-ivc-people li small { color: var(--dv-muted); font-size: 16px; }
-.dv-ivc-people li[data-on] { background: color-mix(in srgb, var(--case-accent) 18%, transparent); }
-.dv-ivc-people li[data-dim] { opacity: 0.45; }
-.dv-ivc-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
-.dv-ivc-cards li { display: flex; flex-direction: column; padding: 28px; border-radius: 16px; background: color-mix(in srgb, var(--dv-ink) 5%, transparent); outline: none; transition: background-color 250ms var(--ease), translate 250ms var(--ease); }
-.dv-ivc-cards li:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--case-accent) 10%, transparent); translate: 0 -2px; }
-.dv-ivc-cards li:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
-.dv-ivc-num { margin: 0; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.dv-ivc-key { margin: 12px 0 0; color: var(--dv-ink); font-size: var(--t-heading, 28px); font-weight: 500; line-height: 1.25; word-break: keep-all; }
-.dv-ivc-q { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
-.dv-ivc-answer { margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--dv-line); color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; }
-.dv-ivc-quote { margin: 12px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.55; word-break: keep-all; }
-.dv-ivc-who { margin: auto 0 0; padding-top: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
-@media (max-width: 63.99rem) { .dv-ivc-cards { grid-template-columns: 1fr; } .dv-ivc-people ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (prefers-reduced-motion: reduce) { .dv-ivc-cards li:hover { translate: none; } }
-@media (min-width: 64rem) {
-  .dv-ivc-cards li { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; }
-  .dv-ivc-who { align-self: end; }
-}
 /* Cover clip (HeroClip): a real prototype recording over the opener's loop, fading in once
    it can play and no page transition runs. The cover plate reaches toward the screen
    edges (after metalab.com's case heroes); the text above stays on the 1200 column. */
@@ -7682,21 +7656,6 @@ header[data-photo]:not([data-compact]) { --ink: light-dark(#0e1111, #fff); --mut
 
 /* Interview evidence, short (supersedes the question cards): three large quotes under their
    keyword, who said it under each, then the participants as one small line. */
-.dv-ivc-quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; margin: 0; padding: 0; list-style: none; }
-.dv-ivc-quotes li { display: flex; flex-direction: column; gap: 16px; padding-top: 20px; border-top: 2px solid var(--dv-line); outline: none; transition: border-color 250ms var(--ease); }
-.dv-ivc-quotes li:is(:hover, :focus-visible) { border-top-color: var(--case-accent); }
-.dv-ivc-quotes li:focus-visible { box-shadow: 0 0 0 2px var(--accent); border-radius: 4px; }
-.dv-ivc-quotes .dv-ivc-key { margin: 0; color: var(--case-accent); font-size: 16px; font-weight: 500; }
-.dv-ivc-quotes blockquote { margin: 0; color: var(--dv-ink); font-size: clamp(20px, 1.8vw, 26px); font-weight: 400; line-height: 1.45; word-break: keep-all; text-wrap: pretty; }
-.dv-ivc-quotes .dv-ivc-who { margin: auto 0 0; padding-top: 8px; color: var(--dv-muted); font-size: 16px; }
-.dv-ivc-quotes .dv-ivc-who b { color: var(--dv-ink); font-weight: 500; }
-p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 56px 0 0; padding: 0; background: none; color: var(--dv-muted); font-size: 16px; }
-.dv-ivc-people-label { margin-right: 8px; color: var(--dv-muted); }
-.dv-ivc-chip { padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); color: var(--dv-ink); transition: background-color 250ms var(--ease), color 250ms var(--ease); }
-.dv-ivc-chip b { color: var(--case-accent); font-weight: 500; }
-.dv-ivc-chip[data-on] { background: color-mix(in srgb, var(--case-accent) 20%, transparent); }
-@media (max-width: 63.99rem) { .dv-ivc-quotes { grid-template-columns: 1fr; gap: 32px; } }
-.dv-ivc-quotes .dv-ivc-who { text-align: left; align-self: flex-start; }
 
 /* Community posts as the survey stage's third tab (owner). */
 .dv-qv { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; width: 100%; }
@@ -7849,9 +7808,6 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 
 /* Interview quotes, calmer (owner: still looked off): quote 20px, who right under it, no
    participant chip row (the line under the heading says who was interviewed). */
-.dv-ivc-quotes blockquote { font-size: 20px; line-height: 1.6; }
-.dv-ivc-quotes .dv-ivc-who { margin: 0; padding-top: 0; }
-.dv-ivc-quotes li { gap: 12px; }
 /* The photo starts and ends as a plain rectangle, like metalab.com's cover (no fade into the page). */
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot { -webkit-mask-image: none; mask-image: none; }
 .devsign-hero.dh-cover { background: none; }
@@ -8147,4 +8103,25 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv { --dv-edge: 0px; }
 @media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .dv > section > .dv-core.dv-core:last-child { border-radius: 0; }
+}
+
+/* Interview: read straight down. What we wanted to learn (each question with the quote that
+   answered it), then who took part. Same number column as the Takeaway rows. */
+.dv-ivc { display: grid; gap: 72px; margin-top: 64px; }
+.case-study .dv .dv-ivc-label { margin: 0 0 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-ivc-list { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--dv-line); }
+.dv-ivc-list li { display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: 16px; border-top: 1px solid var(--dv-line); }
+.dv-ivc-asks li { padding-block: 28px; }
+.dv-ivc-list b { color: var(--case-accent); font-size: 16px; font-weight: 500; line-height: 1.75; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-ivc-q { margin: 0; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; word-break: keep-all; text-wrap: pretty; }
+.case-study .dv .dv-ivc-list blockquote { grid-column: 2; margin: 8px 0 0; padding: 0; border: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.6; word-break: keep-all; }
+.dv-ivc-list cite { font-style: normal; white-space: nowrap; }
+.dv-ivc-people li { padding-block: 14px; }
+.dv-ivc-people span { color: var(--dv-ink); font-size: 16px; line-height: 1.75; }
+.dv-ivc-people small { margin-left: 12px; color: var(--dv-muted); font-size: 16px; }
+@media (max-width: 47.99rem) {
+  .dv-ivc { gap: 48px; margin-top: 40px; }
+  .dv-ivc-list li { grid-template-columns: 40px minmax(0, 1fr); column-gap: 8px; }
+  .dv-ivc-asks li { padding-block: 20px; }
+  .dv-ivc-people small { display: block; margin-left: 0; }
 }

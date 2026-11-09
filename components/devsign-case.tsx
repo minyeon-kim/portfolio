@@ -152,7 +152,7 @@ function Insights({ discover }: { discover: Study }) {
           </figure>
         </div>
         {interview.answers ? (
-          <InterviewCards keys={interview.questionKeys} questions={interview.questions} answers={interview.answers} participants={interview.participants} peopleLabel={interview.peopleLabel} questionsLabel={interview.answersLabel ?? interview.questionsLabel} />
+          <InterviewCards questions={interview.questions} answers={interview.answers} participants={interview.participants} peopleLabel={interview.peopleLabel} questionsLabel={interview.questionsLabel} />
         ) : (
         <div className="dv-iv-rows">
           <section className="dv-iv-row reveal">
