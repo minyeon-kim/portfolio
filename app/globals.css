@@ -7905,7 +7905,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-title { font-size: 20px; letter-spacing: -0.01em; }
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section :is(.dv-headline, .dv-finding) { letter-spacing: -0.02em; }
 /* The Devsign screen is the brightest thing on the cover (owner): the recording of a dark app is lifted a little. */
-.devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { filter: brightness(1.32) contrast(1.05) saturate(1.1); }
+.devsign-hero.dh-cover[data-project="devsign"] .dh-shot .dh-clip video { filter: brightness(1.4) contrast(1.22) saturate(1.12); }
 
 /* Gemini opener: the name on two lines at Devsign's size, and a dark room where the phone is the only light (privacy: only you see the screen). */
 .devsign-hero.dh-cover[data-project="gemini-privacy"] .devsign-hero-title { font-size: clamp(64px, 8.4vw, 168px); line-height: .95; }
@@ -7990,7 +7990,7 @@ p.dv-ivc-people { display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
 .home-device > .dh-shot { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
 .home-device .dh-shot-camera, .project-zoom .dh-shot-camera { animation: none; }
 .dh-shot-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.home-device[data-project="devsign"] .dh-shot-poster, .project-zoom[data-project="devsign"] .dh-shot-poster { filter: brightness(1.32) contrast(1.05) saturate(1.1); }
+.home-device[data-project="devsign"] .dh-shot-poster, .project-zoom[data-project="devsign"] .dh-shot-poster { filter: brightness(1.4) contrast(1.22) saturate(1.12); }
 .project-zoom:has(.dh-shot) { background: #0c0c0e; }
 .project-zoom[data-project="gemini-privacy"]:has(.dh-shot) { background: #1c1a24; }
 
