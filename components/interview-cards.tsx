@@ -1,12 +1,11 @@
 // Interview evidence: what we wanted to learn as three small diagrams, then who took part.
-const Q_MARKS = [
-  // Where AI-made work gets stuck between two people.
-  <svg key="0" viewBox="0 0 160 64" aria-hidden="true"><circle className="q" cx="16" cy="32" r="10" /><path className="q" d="M32 32h30" /><rect className="on" x="68" y="16" width="24" height="32" rx="4" /><path className="on" d="M73 27l14 10M87 27L73 37" /><path className="q d" d="M98 32h30" /><circle className="q" cx="144" cy="32" r="10" /></svg>,
-  // Design and build differ: who decides?
-  <svg key="1" viewBox="0 0 160 64" aria-hidden="true"><rect className="q" x="4" y="14" width="36" height="36" rx="4" /><rect className="q" x="120" y="14" width="36" height="36" rx="4" /><path className="q d" d="M46 32h22M92 32h22" /><circle className="on" cx="80" cy="32" r="12" /><path className="on" d="M76 28a4 4 0 118 0c0 3-4 3-4 6M80 38v.5" /></svg>,
-  // The final version exists; its reason doesn't.
-  <svg key="2" viewBox="0 0 160 64" aria-hidden="true"><rect className="q" x="20" y="10" width="44" height="44" rx="4" /><path className="q" d="M32 33l8 8 13-16" /><path className="q d" d="M70 32h20" /><rect className="on d" x="96" y="10" width="44" height="44" rx="4" /><path className="on d" d="M108 26h20M108 38h12" /></svg>,
+// One outline icon per question (Tabler, MIT): stuck, who decides, the missing reason.
+const Q_PATHS = [
+  "M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5M11 5.5v-2a1.5 1.5 0 1 1 3 0v8.5M14 5.5a1.5 1.5 0 0 1 3 0v6.5M17 7.5a1.5 1.5 0 0 1 3 0v8.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47",
+  "M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0M6 21v-2a4 4 0 0 1 4 -4h3.5M19 22v.01M19 19a2.003 2.003 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483",
+  "M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM12 17v.01M12 14a1.5 1.5 0 1 0 -1.14 -2.474",
 ];
+const Q_MARKS = Q_PATHS.map((d) => <svg key={d} viewBox="0 0 24 24" aria-hidden="true"><path d={d} /></svg>);
 
 export function InterviewCards({ questions, keys, participants, peopleLabel, questionsLabel }: {
   questions: string[]; keys: string[]; participants: string[][]; peopleLabel: string; questionsLabel: string;

@@ -8688,3 +8688,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-ivc2-people b { margin-bottom: 16px; color: var(--case-accent); font-size: 16px; font-weight: 500; }
 .dv-ivc2-people span { margin-top: 8px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; }
 @media (max-width: 63.99rem) { .dv-ivc2-asks { grid-template-columns: minmax(0, 1fr); } .dv-ivc2-people { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Interview question cards: one icon each instead of a diagram. */
+:root .dv-ivc2-asks svg { width: 32px; height: 32px; margin-bottom: 32px; stroke: var(--case-accent); stroke-width: 1.5; }
