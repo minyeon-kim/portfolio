@@ -8587,3 +8587,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .dv-dd-note[data-at="end"] { right: 0; width: 15%; text-align: right; }
 }
 @media (max-width: 74.99rem) { .dv-dd-point-line { display: none; } }
+
+/* Facts gather under the question instead of spreading to the screen edges. */
+@media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { display: flex; justify-content: center; gap: clamp(40px, 5vw, 80px); } :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { flex: 0 1 auto; min-width: 0; } }
