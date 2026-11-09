@@ -8659,3 +8659,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Opener facts: label and value with no gap between their lines (Metalab measured 0). */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dt, :root .devsign-hero.dh-cover.dh-cover .dh-lead .devsign-hero-details dd { margin: 0; line-height: 1.4; } }
 .about-bridge > .about-statement { width: min(1200px, calc(100% - 2 * var(--edge-inset, 16px))); margin-inline: auto; }
+
+/* Comparative analysis: two panels, one text size; only the surface says which side is Devsign. */
+.case-study .dv .dv-cmp2 { margin: 48px 0 0; }
+.dv-cmp2-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.dv-cmp2-panels section { padding: 32px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); }
+.dv-cmp2-panels section[data-self] { --dv-ink: #fff; --dv-muted: rgb(255 255 255 / 0.78); background: var(--dv-solid); }
+.case-study .dv .dv-cmp2-panels h4 { margin: 0 0 32px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.case-study .dv .dv-cmp2-panels section[data-self] h4 { color: #fff; }
+.dv-cmp2-panels h4 small { margin-left: 8px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+.dv-cmp2-panels dl { display: grid; gap: 24px; margin: 0; }
+.dv-cmp2-panels dt { color: var(--dv-muted); font-size: 16px; font-weight: 400; line-height: 1.4; }
+.dv-cmp2-panels dd { margin: 4px 0 0; color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.case-study .dv .dv-cmp2 .dv-cv-note { margin-top: 24px; color: var(--dv-muted); font-size: 16px; }
+@media (max-width: 47.99rem) { .dv-cmp2-panels { grid-template-columns: minmax(0, 1fr); } .dv-cmp2-panels section { padding: 24px; } }
+:root .case-study .dv .dv-cmp2-panels section[data-self] :is(dt, small) { color: rgb(255 255 255 / 0.82) !important; }
