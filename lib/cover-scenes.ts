@@ -11,7 +11,7 @@ export const COVER_SCENES: Record<string, CoverScene> = {
     src: "/images/devsign/cover-studio.webp",
     width: 1440, height: 838, mediaWidth: 1343, mediaHeight: 1000,
     matrix: "matrix3d(0.386063256, -0.00403789807, 0, -5.14754927e-05, -0.038678209, 0.460135074, 0, -8.08801034e-06, 0, 0, 1, 0, 439.34355, 83.8615, 0, 1)",
-    cropPhone: [330, 30, 800, 780], card: [24.5, 0, 1391, 838], cardPhone: [49.5, 0, 1341, 838],
+    crop: [124, 52, 1203, 700], cropPhone: [370, 40, 720, 702], card: [24.5, 0, 1391, 838], cardPhone: [49.5, 0, 1341, 838],
   },
   "gemini-privacy": {
     src: "/images/cases/gemini-privacy/cover-hand.webp",
