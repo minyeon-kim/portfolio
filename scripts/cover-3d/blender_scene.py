@@ -49,11 +49,11 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
     b.inputs['Coat Roughness'].default_value = 0.08
     return m
 
-PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
+PURPLE = mat('plinth', '#4d3a9c', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#050506', 0.3, metal=1)
 NECKM = mat('neck', '#020203', 0.45, spec=0.0)
-STRIP = mat('strip', '#70747a', 0.5, spec=0.3)
+STRIP = mat('strip', '#a4a8ae', 0.5, spec=0.3)
 FOOTM = mat('foot', '#60626a', 0.16, metal=1)
 GLASS = mat('bezel', '#040405', 0.12, coat=1)
 

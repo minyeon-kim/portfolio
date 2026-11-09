@@ -2,7 +2,7 @@
 const sharp = require('/Users/minyeon/Projects/portfolio/node_modules/sharp');
 const [, , input, out] = process.argv;
 const CORNERS = [[431.7, 69.4], [1071.8, 71.1], [1035.8, 596.4], [396.5, 553.2]];
-const GLOWS = [[120, -40, 1000, 720, '100,68,190', 1], [1460, 860, 900, 600, '124,86,226', 1]];
+const GLOWS = [[120, -40, 1000, 720, '70,56,118', 1], [1460, 860, 900, 600, '84,66,142', 1]];
 (async () => {
   const { width: W, height: H } = await sharp(input).metadata();
   const k = W / 1440;
