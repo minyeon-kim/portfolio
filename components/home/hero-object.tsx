@@ -70,7 +70,8 @@ vec3 formOf(float n, vec2 uv) {
     // spread across the whole stage: a regular grid rolling into slow waves,
     // rising into ridges at the sides, with faint, loose streams of data
     // falling behind it.
-    if (a < 0.82) {
+    // The landing keeps almost everything on the surface, so the wave reads as one form.
+    if (a < (symbol < 0.5 ? 0.95 : 0.82)) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
@@ -79,7 +80,7 @@ vec3 formOf(float n, vec2 uv) {
       y -= 0.5 * exp(-x * x / 2.4);
       // Tilted towards the viewer, so the rows open out down the screen.
       p = vec3(x, y + (z + 0.9) * 0.42 + ground, z);
-      loose *= 0.06;
+      loose *= symbol < 0.5 ? 0.03 : 0.06;
     } else {
       float col = floor(b * 46.0);
       p = vec3((col / 46.0 - 0.5) * 6.0 + (h1(n * 6.1) - 0.5) * 0.35, mix(-0.9, 1.5, fract(c + time * 0.03 * (0.5 + h1(col)))), -2.2 + h1(col * 3.1) * 0.8);
@@ -259,10 +260,9 @@ void main() {
   vec2 gq = (p.xy - vec2(0.35, 0.4 + ground)) / vec2(4.5, 1.9);
   float gr = length(gq), gt = atan(gq.y, gq.x);
   float wave = 0.5 + 0.5 * sin(gt * 2.0 + gr * 3.5 - time * 0.05);
-  vec3 arms = mix(mix(vec3(0.38, 0.6, 1.0), vec3(0.56, 0.42, 1.0), wave), vec3(0.32, 0.86, 0.96), smoothstep(0.55, 1.0, sin(gt * 3.0 - gr * 2.0) * 0.5 + 0.5) * 0.7);
-  arms = mix(arms, vec3(0.82, 0.62, 1.0), smoothstep(0.75, 1.0, wave) * smoothstep(0.4, 1.2, gr) * 0.6);
-  // A step towards ice: silver white and pale blue mixed into the arms.
-  arms = mix(arms, mix(vec3(0.62, 0.74, 1.0), vec3(0.9, 0.94, 1.0), wave), 0.12);
+  // Dark: one hue, deep periwinkle in the troughs rising to ice on the crests,
+  // so brightness draws the wave instead of a mix of colours.
+  vec3 arms = mix(vec3(0.26, 0.34, 0.92), vec3(0.84, 0.89, 1.0), smoothstep(-0.7, 0.9, p.y - ground));
   vec3 galaxyTint = mix(arms, vec3(0.96, 0.95, 1.0), exp(-gr * gr / 0.06) * 0.3);
   // Light theme: a brighter, sunnier palette on the pale page (sky blue,
   // violet, hot pink, coral, mint) with no grey core, so it reads as
@@ -350,7 +350,7 @@ void main() {
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky));
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
-  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix);
+  float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy * (1.0 - light));
   vFlake = flake;
   vFaint *= kept * mix(0.55, 1.0, fract(vSeed * 53.7)) * mix(0.9, 1.15, flake) * mix(1.0, 0.6, sky) * mix(1.0, 0.7, flake * galaxy * (1.0 - light));
   float bigger = 1.0 - max(portraitMix, halo);
@@ -418,12 +418,10 @@ void main() {
   float side = smoothstep(0.25, 0.7, abs(s.x));
   float sky = galaxy * smoothstep(mix(skyFrom, 0.3, side), mix(skyFrom, 0.3, side) + mix(0.6, 0.8, side), s.y);
   if (hs(i * 11.3) > mix(1.0, 0.25, sky)) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
-  float bright = step(0.97, hs(i * 9.7)) * (1.0 - sky);
-  vA *= (1.4 + bright * 2.5) * mix(1.0, 0.6, sky);
-  // Blue-white, warm and pale violet stars, a few of them bright.
-  float t = hs(i * 4.3);
-  vC = t < 0.45 ? vec3(0.7, 0.82, 1.0) : (t < 0.75 ? vec3(1.0, 0.86, 0.7) : vec3(0.85, 0.72, 1.0));
-  gl_PointSize = mix(1.6, 2.6, smoothstep(6.0, 12.0, w.z)) * (1.0 + bright * 1.6) * dpr;
+  // Faint and all one cool tone: warm or bright ones read as specks on the screen.
+  vA *= 0.7 * mix(1.0, 0.6, sky);
+  vC = vec3(0.7, 0.8, 1.0);
+  gl_PointSize = mix(1.6, 2.6, smoothstep(6.0, 12.0, w.z)) * dpr;
 }`;
 const starFragment = `#version 300 es
 precision highp float; in float vA; in vec3 vC; out vec4 o;
