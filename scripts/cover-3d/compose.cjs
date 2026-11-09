@@ -1,8 +1,8 @@
 // Lays the Blender render over the backdrop and cuts the screen hole: node compose.cjs in.png out.png [webp]
 const sharp = require('/Users/minyeon/Projects/portfolio/node_modules/sharp');
 const [, , input, out] = process.argv;
-const CORNERS = [[440.5, 99.7], [1052.8, 101.2], [1021.3, 583.4], [406.4, 546.9]];
-const GLOWS = [[120, -40, 1000, 720, '100,68,190', 1], [1460, 860, 860, 560, '112,76,214', 1]];
+const CORNERS = [[422.8, 119.0], [1071.9, 122.1], [1041.8, 584.6], [390.2, 545.8]];
+const GLOWS = [[120, -40, 1000, 720, '100,68,190', 1], [1460, 860, 900, 600, '124,86,226', 1]];
 (async () => {
   const { width: W, height: H } = await sharp(input).metadata();
   const k = W / 1440;

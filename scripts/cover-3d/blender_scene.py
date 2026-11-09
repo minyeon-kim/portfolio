@@ -11,10 +11,10 @@ H = round(W * 838 / 1440)
 
 # scene.html's numbers
 FOV, CAM, LOOK = 12.85, (0, 2.0, 11), (0, 1.0, 0)
-YAW, TILT, MON = -0.43, -0.17, (-0.01, 1.258, -0.02)
-PL, PC, PY, PX, PYAW, PTILT = (2.42, 3, 2.02), 0.14, 0.16, 0.07, -0.53, -0.036
+YAW, TILT, MON = -0.43, -0.17, (-0.01, 1.228, -0.02)
+PL, PC, PY, PX, PYAW, PTILT = (2.38, 3, 1.96), 0.13, 0.195, 0.07, -0.53, -0.036
 FOOT, FS, NB, NT, NX = (0.09, 0.05), (0.62, 0.44), 0.52, 0.45, 0.12
-SW, SH, BZ, TH = 2.0, 1.385, 0.024, 0.085
+SW, SH, BZ, TH = 2.12, 1.325, 0.024, 0.085
 
 C = Matrix.Rotation(math.radians(90), 4, 'X')  # three (y up) to Blender (z up)
 def Rx(t): return Matrix.Rotation(t, 4, 'X')
@@ -45,7 +45,7 @@ def mat(name, color, rough, metal=0.0, coat=0.0, spec=0.5):
     b.inputs['Coat Roughness'].default_value = 0.08
     return m
 
-PURPLE = mat('plinth', '#6a4bc4', 0.7, spec=0.04)
+PURPLE = mat('plinth', '#8f76e8', 0.7, spec=0.04)
 SILVER = mat('silver', '#c9cdd0', 0.26, metal=1)
 BLACKM = mat('stand', '#0b0b0d', 0.3, metal=1)
 FOOTM = mat('foot', '#101012', 0.2, metal=1)
@@ -140,16 +140,16 @@ def area(name, loc, target, size, size_y, power, color=(1, 1, 1)):
     o.rotation_euler = (C @ Vector(target) - o.location).to_track_quat('-Z', 'Y').to_euler()
     return o
 
-area('top', (4.0, 3.6, -0.9), (1.0, 0.2, 0), 2.6, 3.0, 200)
-area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 14)
-area('edge', (6.2, 1.6, -6.6), (0.6, 1.3, 0), 3.2, 6, 75)
+area('top', (0.4, 6.0, -2.0), (0.2, 0.2, -0.3), 9, 4.4, 720)
+area('right', (7.5, 0.4, 2.2), (0.6, -0.4, 0), 1.6, 5, 26)
+area('edge', (6.2, 0.5, -6.6), (0.6, 0.5, 0), 5, 12, 170)
 area('back', (-0.5, 3.4, -10), (0, 0.2, 0), 12, 3, 260)
 area('left', (-7, 3.5, -3), (0, 1.2, 0), 3, 5, 26)
-area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 1.5)
+area('front', (0.5, 2.2, 9), (0, 0.6, 0), 8, 2.4, 1.2)
 
 w = bpy.data.worlds.new('w'); scene.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs[0].default_value = (0.012, 0.009, 0.03, 1)
-w.node_tree.nodes['Background'].inputs[1].default_value = 1.0
+w.node_tree.nodes['Background'].inputs[1].default_value = 0.15
 
 # Render
 scene.render.engine = 'CYCLES'
