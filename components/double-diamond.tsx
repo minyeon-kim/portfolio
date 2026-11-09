@@ -10,7 +10,9 @@ const HALVES = ["M0 167L300 0V334Z", "M300 0L600 167L300 334Z", "M600 167L900 0V
 // column read top to bottom: its name above the diagram, its methods inside its half, its
 // outcome under it. Only the stage marked `current` and its `pivot` carry the case colour.
 // Each half links to its section. Shared by the Devsign body and CaseDiamond.
-export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot?: string }) {
+type DiamondPoint = { label: string; text: string };
+
+export function DoubleDiamond({ stages, pivot, waist, end }: { stages: DiamondStage[]; pivot?: string; waist?: DiamondPoint; end?: DiamondPoint }) {
   const [from, to] = pivot?.split(" → ") ?? [];
   return (
     <figure className="dv-dd reveal">
@@ -27,6 +29,8 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
           {HALVES.map((d, i) => <path key={d} className="dv-dd-half" d={d} data-current={stages[i]?.current || undefined} />)}
           <path className="dv-dd-line" pathLength={1} d="M1 167L300 1L599 167L300 333Z" />
           <path className="dv-dd-line" pathLength={1} d="M601 167L900 1L1199 167L900 333Z" />
+          {waist && <><path className="dv-dd-point-line" d="M600 82V167" /><circle className="dv-dd-point" cx="600" cy="167" r="7" /></>}
+          {end && <><path className="dv-dd-point-line" d="M1192 66V167" /><circle className="dv-dd-point" cx="1192" cy="167" r="7" /></>}
         </svg>
         <ol className="dv-dd-stages">
           {stages.map((stage) => (
@@ -42,6 +46,8 @@ export function DoubleDiamond({ stages, pivot }: { stages: DiamondStage[]; pivot
             </li>
           ))}
         </ol>
+        {waist && <p className="dv-dd-note" data-at="waist"><b>{waist.label}</b>{waist.text}</p>}
+        {end && <p className="dv-dd-note" data-at="end"><b>{end.label}</b>{end.text}</p>}
       </div>
     </figure>
   );

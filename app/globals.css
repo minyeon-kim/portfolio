@@ -8566,3 +8566,24 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Opener reads on one centre axis: name, question and the facts inside their columns. */
 @media (min-width: 64rem) { :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details, :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { text-align: center; } }
+
+/* Double Diamond: colour only where a conclusion comes out (owner: the hover fill said nothing).
+   A dot at the waist and at the far tip; a stage's link only underlines its name. */
+.dv-dd.dv-dd.dv-dd .dv-dd-half { fill: transparent !important; }
+.dv-dd.dv-dd.dv-dd .dv-dd-stages a:hover .dv-dd-inside, .dv-dd.dv-dd.dv-dd .dv-dd-stages a:hover .dv-dd-outcome { color: inherit; }
+.dv-dd.dv-dd.dv-dd .dv-dd-stages a:hover .dv-dd-outcome { color: var(--dv-muted); }
+.dv-dd:has(.dv-dd-stages li:nth-child(1) a:is(:hover, :focus-visible)) .dv-dd-heads li:nth-child(1),
+.dv-dd:has(.dv-dd-stages li:nth-child(2) a:is(:hover, :focus-visible)) .dv-dd-heads li:nth-child(2),
+.dv-dd:has(.dv-dd-stages li:nth-child(3) a:is(:hover, :focus-visible)) .dv-dd-heads li:nth-child(3),
+.dv-dd:has(.dv-dd-stages li:nth-child(4) a:is(:hover, :focus-visible)) .dv-dd-heads li:nth-child(4) { text-decoration: underline; text-underline-offset: 4px; }
+.dv-dd-point { fill: var(--dv-chart-fill); }
+.dv-dd-point-line { stroke: var(--dv-chart-fill); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dv-dd-note { margin: 16px 0 0; color: var(--dv-ink); font-size: 16px; line-height: 1.4; word-break: keep-all; text-wrap: balance; }
+.dv-dd-note b { display: block; color: var(--case-accent); font-weight: 500; }
+@media (min-width: 75rem) {
+  .dv-dd-body { position: relative; }
+  .dv-dd-note { position: absolute; top: 0; margin: 0; }
+  .dv-dd-note[data-at="waist"] { left: 50%; width: 22%; text-align: center; transform: translateX(-50%); }
+  .dv-dd-note[data-at="end"] { right: 0; width: 15%; text-align: right; }
+}
+@media (max-width: 74.99rem) { .dv-dd-point-line { display: none; } }

@@ -388,7 +388,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         <div className="dv-process">
           <h3 className="dv-block-title reveal">{overview.process.title}</h3>
-          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} />
+          <DoubleDiamond stages={overview.process.stages} pivot={overview.process.pivot} waist={overview.process.waist} end={overview.process.end} />
         </div>
         {/* With a problem → feature selection in Develop, the feature cards live there instead. */}
         {overview.features && !(ff && develop.selection) && !deliver.flows && (

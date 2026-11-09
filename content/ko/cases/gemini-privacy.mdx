@@ -75,11 +75,12 @@ export const study = {
       body: "먼저 넓게 리서치하고, 문제를 한 번 다시 정의했습니다. 입력할 때 경고하기에서, 이미 연결된 것을 통제하기로.",
       stages: [
         { name: "Discover", outcome: "끄는 스위치는 있지만, 끈 뒤에 무엇이 남는지는 아무도 모릅니다.", methods: ["Competitors", "Desk research", "Interviews"] },
-        { name: "Define", outcome: "인사이트 4개를 얻었고, 그중 하나가 문제를 다시 정하게 했습니다.", methods: ["Affinity map", "Personas", "HMW"], current: true },
+        { name: "Define", outcome: "인사이트 4개를 얻었고, 그중 하나가 문제를 다시 정하게 했습니다.", methods: ["Affinity map", "Personas", "HMW"] },
         { name: "Develop", outcome: "스케치 11개가 콘셉트 2개로 좁혀졌습니다.", methods: ["Sketching", "Feedback", "Design principles"] },
         { name: "Deliver", outcome: "테스트 중: 직접 확인하면 신뢰가 생길까?", methods: ["HTML prototype", "Usability test", "SUS · SEQ"] },
       ],
-      pivot: "입력할 때 경고 → 연결된 것을 통제",
+      waist: { label: "Problem reframed", text: "입력할 때 경고 → 연결된 것을 통제" },
+      end: { label: "Prototype", text: "두 가지 흐름" },
     },
     features: {
       method: "주요 기능",
