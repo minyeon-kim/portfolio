@@ -8392,3 +8392,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study .dv .dv-flist-open .dv-flist-items { margin-top: 48px; }
 }
 @media (min-width: 64rem) { :root .case-study .dv .dv-flist-open .dv-deliver-intro { padding-bottom: 0; border-bottom: 0; } }
+
+/* Handoff on the case: the screen large with no plate, tabs under it, one short note per element. */
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-hdoc-wide .dv-hdoc-shot { padding: 0 !important; background: none !important; box-shadow: none; border-radius: 0 !important; position: static; }
+:root .case-study .dv .dv-hdoc-wide .dv-hdoc-lens { border-radius: 16px; box-shadow: none; }
+.dv-hdoc-wide .dv-hdoc-tabs { justify-content: center; margin-top: 24px; border-bottom: 0; }
+.dv-hdoc-notes3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 40px 0 0; padding: 0; list-style: none; align-content: start; }
+.dv-hdoc-notes3 li { border-radius: 8px; transition: color 250ms var(--ease); }
+.dv-hdoc-notes3 li > b { display: block; margin-bottom: 8px; color: var(--case-accent); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.case-study .dv .dv-hdoc-notes3 h4 { margin: 0; color: var(--dv-ink); font-size: 18px; font-weight: 500; line-height: 1.4; }
+.case-study .dv .dv-hdoc-notes3 p { margin: 8px 0 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+.case-study .dv .dv-hdoc-notes3 li[data-lit] p { color: var(--dv-ink); }
+@media (min-width: 64rem) {
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-hdoc-wide .dv-hdoc-shot { --hw: min(1392px, calc(100vw - 48px)); width: var(--hw) !important; max-width: none !important; margin-left: calc(50% - var(--hw) / 2) !important; }
+}
+@media (max-width: 47.99rem) { .dv-hdoc-notes3 { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; } }

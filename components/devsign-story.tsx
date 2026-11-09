@@ -1035,7 +1035,16 @@ export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: numbe
     tabs.current[next]?.focus();
   };
   return (
-    <div className="dv-hdoc-excerpt dv-hdoc-one dv-gap-40 reveal">
+    <div className="dv-hdoc-excerpt dv-hdoc-one dv-hdoc-wide dv-gap-40 reveal">
+      {/* The screen large and alone, its tabs under it, one short note per element (owner, after
+          Figma Dev Mode). States and exceptions stay on the full spec page. */}
+      <div className="dv-hdoc-stack">
+        {spec.screens.map((item, i) => (
+          <div key={item.id} className="dv-hdoc-panel" data-on={i === current || undefined} aria-hidden={i === current ? undefined : true} inert={i !== current || undefined}>
+            <SpecShot screen={item} lit={i === current ? lit : -1} onPin={setLit} />
+          </div>
+        ))}
+      </div>
       <div className="dv-hdoc-tabs" role="tablist" aria-label={spec.labels.elements} onKeyDown={onKeys}>
         {spec.screens.map((item, i) => (
           <button key={item.id} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`ht-tab-${item.id}`} aria-selected={i === current} aria-controls="ht-panel" tabIndex={i === current ? 0 : -1} onClick={() => pick(i)}>
@@ -1043,17 +1052,17 @@ export function HandoffTabs({ spec, first = 0 }: { spec: SpecData; first?: numbe
           </button>
         ))}
       </div>
-      {/* Every screen is laid out in one grid cell and only the current one shows, so the block
-          keeps the height of its tallest screen and nothing below moves when a tab changes. */}
       <div className="dv-hdoc-stack">
         {spec.screens.map((item, i) => (
-          <div key={item.id} id={i === current ? "ht-panel" : undefined} role={i === current ? "tabpanel" : undefined} aria-labelledby={i === current ? `ht-tab-${item.id}` : undefined} aria-hidden={i === current ? undefined : true} inert={i !== current} data-on={i === current || undefined} className="dv-hdoc-panel">
-            <p className="dv-hdoc-purpose dv-hdoc-one-purpose">{item.purpose}</p>
-            <div className="dv-hdoc-pair">
-              <SpecShot screen={item} lit={i === current ? lit : -1} onPin={setLit} />
-              <SpecRows screen={item} cols={spec.cols} lit={i === current ? lit : -1} onRow={setLit} />
-            </div>
-          </div>
+          <ol key={item.id} id={i === current ? "ht-panel" : undefined} role={i === current ? "tabpanel" : undefined} aria-labelledby={i === current ? `ht-tab-${item.id}` : undefined} aria-hidden={i === current ? undefined : true} className="dv-hdoc-panel dv-hdoc-notes3" data-on={i === current || undefined}>
+            {item.rows.map(([name, does], n) => (
+              <li key={name} data-lit={(i === current && n === lit) || undefined} onPointerEnter={() => setLit(n)} onPointerLeave={() => setLit(-1)}>
+                <b>{n + 1}</b>
+                <h4>{name}</h4>
+                <p>{does}</p>
+              </li>
+            ))}
+          </ol>
         ))}
       </div>
     </div>
