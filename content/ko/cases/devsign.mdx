@@ -18,7 +18,7 @@ export const meta = {
     details: [
       { label: "프로젝트", value: "케이스 스터디, 10주" },
       { label: "팀", value: "UX 엔지니어 2명" },
-      { label: "역할", value: "리서치, 디자인, 프로토타이핑, 테스트" },
+      { label: "역할", value: "리서치, 디자인, 프로토타입 제작, 테스트" },
       { label: "도구", value: "Figma, FigJam, Claude Code, Codex" },
     ],
   },
@@ -53,9 +53,9 @@ export const study = {
     summary: {
       label: "At a glance",
       items: [
-        { tone: "red", label: "Problem", title: "AI 결과물 중 무엇을 쓸지는 채팅에서 정하고, 구현이 디자인과 달라져도 뒤늦게야 알게 됩니다." },
+        { tone: "red", label: "Problem", title: "어떤 AI 결과물을 쓸지 채팅으로 정하다 보니, 개발된 화면이 디자인과 달라도 한참 뒤에야 알게 됩니다." },
         { tone: "accent", label: "Solution", accent: "이유와 함께 남깁니다", title: "좋은 부분만 골라 합치고, 다른 곳은 결정권자가 정해 이유와 함께 남깁니다." },
-        { tone: "teal", label: "Impact", title: "테스트한 2명 모두 ‘디자인·코드 차이를 묻는 일이 줄 것’에 5점을 줬습니다." },
+        { tone: "teal", label: "Impact", title: "테스트 참가자 2명 모두 ‘디자인과 코드가 왜 다른지 묻는 일이 줄어들 것 같다’는 질문에 5점 만점을 줬습니다." },
       ],
     },
     headline: "AI로 만드는 일은 빨라졌지만, 그 결과물을",
@@ -70,7 +70,7 @@ export const study = {
         { name: "Develop", outcome: "기능 후보 5개를 4개로 줄였습니다.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
         { name: "Deliver", outcome: "테스트 후 화면을 두 번 고쳤습니다.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
-      waist: { label: "Problem statement", text: "AI 결과물 논의가 흩어져, 왜 그렇게 정했는지 남지 않습니다." },
+      waist: { label: "Problem statement", text: "AI 결과물에 대한 의견이 여러 곳에 흩어져서, 결정한 이유가 기록으로 남지 않습니다." },
       end: { label: "Prototype", text: "핵심 기능 4개" },
     },
     features: {
@@ -115,7 +115,7 @@ export const study = {
             { label: "그럴듯하지만 틀린 데가 섞인 결과", value: 66 },
             { label: "AI 코드를 고치는 데 시간이 더 걸림", value: 45.2 },
             { label: "스스로 문제를 푸는 자신감이 줄어듦", value: 20 },
-            { label: "코드가 왜 동작하는지 알기 어려움", value: 16.3 },
+            { label: "AI가 만든 코드가 어떻게 동작하는지 이해하기 어려움", value: 16.3 },
           ],
           source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "응답 31,476명" },
         },
@@ -137,7 +137,7 @@ export const study = {
       answer: "조사한 도구들에서, 여러 시안의 일부만 골라 합치고 이유까지 남기는 방식은 찾지 못했습니다.",
       auditLabel: "도구 10여 개, 유형별",
       headers: ["유형", "대표 도구", "해결하는 것", "찾지 못한 것"],
-      map: {"today": "지금 도구들", "selfName": "찾지 못한 것", "selfTag": "", "rows": [{"name": "합치기", "self": "여러 시안에서 부분만 골라 합치기", "now": "브랜치 통째로, 충돌만, 또는 프롬프트로"}, {"name": "결정 이유", "self": "그 변경에 이유를 붙여 함께 남기기", "now": "작업과 따로, 댓글이나 커밋에"}]},
+      map: {"today": "지금 도구들", "selfName": "찾지 못한 것", "selfTag": "", "rows": [{"name": "합치기", "self": "여러 시안에서 부분만 골라 합치기", "now": "브랜치 전체를 한 번에 합치거나, 충돌 난 부분만 고르거나, 프롬프트로 다시 만들기"}, {"name": "결정 이유", "self": "그 변경에 이유를 붙여 함께 남기기", "now": "작업과 따로, 댓글이나 커밋에"}]},
       rows: [
         { type: "개발 전달", tools: "Figma Dev Mode, Zeplin", solves: "스펙 전달, 버전 비교", gap: "디자인과 구현이 다를 때 누가 정하는지" },
         { type: "디자인·구현 비교", tools: "OverlayQA, Uiprobe", solves: "어긋난 곳 찾기", gap: "찾은 뒤의 결정" },
@@ -163,7 +163,7 @@ export const study = {
       lead: "디자인과 코드가 다를 때 어느 쪽에 맞출지 정하는 사람이 없었습니다.",
       text: "실무자 4명 · 1:1 원격 인터뷰 · 각 60분",
       questionsLabel: "알고 싶었던 것",
-      questionKeys: ["어디서 막히나", "누가 정하나", "이유는 어디 남나"],
+      questionKeys: ["막히는 지점", "결정하는 사람", "결정 이유의 기록"],
       questions: [
         "디자이너와 개발자 사이에서 AI가 만든 결과물은 어디서 막히는가?",
         "디자인과 실제 구현이 다를 때, 누가 어디서 이야기해 결정하는가?",
@@ -242,10 +242,10 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       label: "Affinity mapping",
-      lead: "피드백과 결정이 작업물과 떨어져 여러 곳에 흩어져 있었습니다.",
+      lead: "피드백과 결정 내용이 디자인 파일이나 코드가 아니라, 채팅과 회의처럼 여러 곳에 따로 남아 있었습니다.",
       funnel: [["201", "인터뷰에서 나온 말"], ["7", "테마"], ["4", "문제"]],
       themesLabel: "테마",
-      groups: [["실시간 협업", "#ffafa3", 8], ["버전·최종본", "#ffe299", 5], ["맥락 공유", "#b3efbd", 12], ["수동 검토", "#a6ece4", 7], ["역할 경계", "#a8daff", 7], ["도구 분산", "#d3bdff", 9], ["AI의 한계", "#ffb6d9", 6]],
+      groups: [["실시간 협업", "#ffafa3", 8], ["버전·최종본", "#ffe299", 5], ["맥락 공유", "#b3efbd", 12], ["일일이 눈으로 확인", "#a6ece4", 7], ["역할이 모호함", "#a8daff", 7], ["쓰는 도구가 너무 많음", "#d3bdff", 9], ["AI의 한계", "#ffb6d9", 6]],
       replay: "다시 보기",
       boardLabel: "실제 보드 보기 ↗",
       wall: {
@@ -254,7 +254,7 @@ export const study = {
         types: [["pain", "페인포인트", "#ffafa3"], ["need", "니즈", "#a8daff"], ["act", "행동", "#b3efbd"], ["think", "인식", "#ffe299"], ["feel", "감정", "#d3bdff"]],
         steps: ["말의 유형별로 분류", "테마 7개로 묶음", "문제 4개로 좁힘"],
         aside: "AI의 한계는 네 가지 문제에 넣지 않았습니다.",
-        themes: [["버전·최종본", 0, 14], ["수동 검토", 1, 28], ["역할 경계", 1, 28], ["도구 분산", 2, 37], ["실시간 협업", 2, 25], ["맥락 공유", 3, 48], ["AI의 한계", -1, 21]],
+        themes: [["버전·최종본", 0, 14], ["일일이 눈으로 확인", 1, 28], ["역할이 모호함", 1, 28], ["쓰는 도구가 너무 많음", 2, 37], ["실시간 협업", 2, 25], ["맥락 공유", 3, 48], ["AI의 한계", -1, 21]],
         notes: [
         [["B안을 따로 저장해놓고, 이런 거 자체가 없다고 하더라고요.", "P03", "pain"], ["두세 달 지났을 때 ‘이거 어디서 보고 썼지?’ 하는 적이 있었어요.", "P02", "pain"], ["그거를 자동으로 관리해줬으면 좋겠다는 생각도 있고요.", "P02", "need"], ["전후 차이를 클릭 한 번으로 바로 알 수 있는 것.", "P01", "need"]],
         [["AI가 80%⁠를 해주더라도 검토는 없어지지 않습니다.", "P04", "act"], ["제가 그냥 눈으로 보고 다시 고쳐요.", "P02", "act"]],
@@ -273,16 +273,16 @@ export const study = {
       lead: "테마 7개를 정리하니, 핵심 문제는 네 가지였습니다.",
       lowest: "Lowest point",
       items: [
-        { title: "작업 상태가 여러 도구에 흩어져 있습니다", body: "진행 상황이 Figma·Slack·GitHub에 나뉘어 있어, 지금 어디까지 됐는지 한곳에서 볼 수 없습니다.", themes: ["도구 분산", "실시간 협업"], quote: ["저는 그 노션이랑 깃허브로 체크했어요.", "P01"], role: "개발자", from: "도구 분산 (37) · 실시간 협업 (25)", lowest: true },
-        { title: "시안을 합칠 수 없습니다", body: "AI 시안이 여러 개 있어도, 각 시안의 좋은 부분만 골라 하나로 합칠 방법이 없습니다.", themes: ["버전·최종본"], quote: ["B안을 따로 저장해놓고, 이런 거 자체가 없다고 하더라고요.", "P03"], role: "디자이너", from: "버전·최종본 (14)" },
-        { title: "누가 결정할지 모릅니다", body: "실제 앱이 디자인과 다를 때마다, 누가 결정할지부터 채팅에서 다시 정해야 합니다.", themes: ["역할 경계", "수동 검토"], quote: ["저희 팀의 주도권이 개발자한테 많이 가 있어요.", "P03"], role: "디자이너 · PO", from: "역할 경계 (28) · 수동 검토 (28)", lowest: true },
-        { title: "이유가 사라집니다", body: "왜 바꿨는지, 누가 정했는지, 코드에 반영됐는지가 따로따로 남아 한눈에 보이지 않습니다.", themes: ["맥락 공유"], quote: ["너무 사소한 거여서 말 안 하면 제가 나중에 발견하기도 해요.", "P03"], role: "디자이너 · 개발자", from: "맥락 공유 (48)" },
+        { title: "작업 상태가 여러 도구에 흩어져 있음", body: "진행 상황이 Figma·Slack·GitHub에 나뉘어 있어, 지금 어디까지 됐는지 한곳에서 볼 수 없습니다.", themes: ["쓰는 도구가 너무 많음", "실시간 협업"], quote: ["저는 그 노션이랑 깃허브로 체크했어요.", "P01"], role: "개발자", from: "도구 분산 (37) · 실시간 협업 (25)", lowest: true },
+        { title: "시안을 합칠 방법이 없음", body: "AI 시안이 여러 개 있어도, 각 시안의 좋은 부분만 골라 하나로 합칠 방법이 없습니다.", themes: ["버전·최종본"], quote: ["B안을 따로 저장해놓고, 이런 거 자체가 없다고 하더라고요.", "P03"], role: "디자이너", from: "버전·최종본 (14)" },
+        { title: "누가 결정할지 정해져 있지 않음", body: "실제 앱이 디자인과 다를 때마다, 누가 결정할지부터 채팅에서 다시 정해야 합니다.", themes: ["역할이 모호함", "일일이 눈으로 확인"], quote: ["저희 팀의 주도권이 개발자한테 많이 가 있어요.", "P03"], role: "디자이너 · PO", from: "역할 경계 (28) · 수동 검토 (28)", lowest: true },
+        { title: "결정한 이유가 기록되지 않음", body: "왜 바꿨는지, 누가 정했는지, 코드에 반영됐는지가 따로따로 남아 한눈에 보이지 않습니다.", themes: ["맥락 공유"], quote: ["너무 사소한 거여서 말 안 하면 제가 나중에 발견하기도 해요.", "P03"], role: "디자이너 · 개발자", from: "맥락 공유 (48)" },
       ],
     },
     core: {
       method: "Problem definition",
       title: "Problem statement",
-      lead: "AI 결과물에 대한 논의가 채팅과 회의로 흩어져, 왜 그렇게 정했는지 남지 않습니다.",
+      lead: "AI 결과물에 대한 이야기를 채팅과 회의에서 나누다 보니, 왜 그렇게 결정했는지가 어디에도 기록되지 않습니다.",
     },
     hmw: {
       method: "HMW",
@@ -301,7 +301,7 @@ export const study = {
       candidatesLabel: "기능 후보와 각 후보가 해결하는 불편",
       candidates: [
         { id: "A", name: "결정 기록·히스토리", kind: "불편", pain: "결과만 남고 그렇게 정한 이유는 사라집니다.", to: "History", from: [4372, 1636, 311, 175], relief: [770, 1845, 238, 243] },
-        { id: "B", name: "배포 전 승인 단계", kind: "불편", pain: "디자이너가 의견을 내기 전에 배포됩니다.", to: "Conflict Points", from: [4118, 1169, 175, 178], relief: [1104, 1514, 311, 297] },
+        { id: "B", name: "배포 전 승인 단계", kind: "불편", pain: "디자이너가 검토하기 전에 개발된 화면이 먼저 배포됩니다.", to: "Conflict Points", from: [4118, 1169, 175, 178], relief: [1104, 1514, 311, 297] },
         { id: "C", name: "디자인 비교·세부 조정", kind: "불편", pain: "AI 작업물을 합치는 정해진 방법이 없습니다.", to: "Merge Studio", from: [4061, 1873, 175, 170], relief: [1443, 1537, 419, 241] },
         { id: "D", name: "하나로 모은 워크스페이스", kind: "불편", pain: "업무가 여러 도구에 흩어져 있습니다.", to: "Live Workspace", from: [4486, 1930, 186, 227], relief: [1287, 1967, 240, 240] },
         { id: "E", name: "실시간 작업 현황", kind: "바라는 것", pain: "다른 사람의 작업을 실시간으로 보고 싶습니다.", to: "Live Workspace에 합침", from: [3584, 641, 240, 240], relief: [2002, 736, 240, 264] },
@@ -325,10 +325,10 @@ export const study = {
       label: "4 core features",
       solves: "해결하는 문제",
       items: [
-        { problem: "작업 상태가 여러 도구에 흩어져 있습니다", feature: "Live Workspace", from: "후보 D + E에서" },
-        { problem: "시안을 합칠 수 없습니다", feature: "Merge Studio", from: "후보 C에서" },
-        { problem: "누가 결정할지 모릅니다", feature: "Conflict Points", from: "후보 B에서" },
-        { problem: "이유가 사라집니다", feature: "History", from: "후보 A에서" },
+        { problem: "작업 상태가 여러 도구에 흩어져 있음", feature: "Live Workspace", from: "후보 D + E에서" },
+        { problem: "시안을 합칠 방법이 없음", feature: "Merge Studio", from: "후보 C에서" },
+        { problem: "누가 결정할지 정해져 있지 않음", feature: "Conflict Points", from: "후보 B에서" },
+        { problem: "결정한 이유가 기록되지 않음", feature: "History", from: "후보 A에서" },
       ],
     },
     ia: {
@@ -345,7 +345,7 @@ export const study = {
           { name: "대시보드", columns: [{ items: [["홈", "리뷰 대기열", "모든 프로젝트"], ["활동", "최근 활동", "활동이 많은 프로젝트"], ["팀", "멤버", "팀 목록"], ["프로젝트 홈", "충돌 항목", "최근 활동", "참고 문서"]] }] },
           { name: "Workspace", main: true, columns: [
             { label: "보기 3개", items: [["미리보기", "기기별 미리보기"], ["화면", "화면 보드"], ["코드", "코드 편집기"]] },
-            { label: "작업 옆 패널", items: [["사이드 패널", "파일", "레이어", "에셋", "속성 확인", "터미널 · 콘솔"], ["AI 채팅"], ["Conflict Points", "충돌 목록", "변경 리뷰", "결정 단계"], ["Merge Studio", "Design Compare", "병합 캔버스", "공유"]] },
+            { label: "작업 옆 패널", items: [["사이드 패널", "파일", "레이어", "이미지 파일(에셋)", "속성 확인", "개발 로그(터미널)"], ["AI 채팅"], ["Conflict Points", "충돌 목록", "변경 리뷰", "결정 단계"], ["Merge Studio", "Design Compare", "병합 캔버스", "공유"]] },
           ] },
           { name: "History & Docs", columns: [{ items: [["History", "타임라인", "현재 버전과 비교", "체크포인트로 되돌리기"], ["문서", "디자인 가이드", "컴포넌트 명세", "개발", "작업 절차"]] }] },
           { name: "가져오기", columns: [{ items: [["가져올 소스", "GitHub", "Figma", "ZIP", "스프레드시트", "코드", "디자인"]] }] },
@@ -467,7 +467,7 @@ export const study = {
       resultLead: "처음엔 도움이 필요했지만, 두 번째엔 거의 혼자 해냈습니다.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "사용성 테스트 중 노트북으로 프로토타입을 사용하는 참가자 두 명" },
       chartLabels: { charts: "테스트 결과", pause: "차트 일시정지", play: "차트 재생" },
-      facts: [{ value: "55 · 75", label: "사용성 점수(SUS)", hint: "디자이너 · 개발자. 목표 51.7, 일반 평균 68" }, { value: "5 / 5", label: "디자인과 코드 차이를 묻는 일이 줄 것이라는 기대", hint: "2명 모두" }],
+      facts: [{ value: "55 · 75", label: "사용성 점수(SUS)", hint: "디자이너 · 개발자. 우리가 정한 목표 51.7점 · 일반적인 제품 평균 68점" }, { value: "5 / 5", label: "디자인과 코드 차이를 묻는 일이 줄 것이라는 기대", hint: "2명 모두" }],
       charts: [
         {
           type: "pair",
@@ -517,7 +517,7 @@ export const study = {
       before: { src: "/images/devsign/iter2-as-is.webp", alt: "As-is: 개발 도구 같은 4분할 레이아웃", text: "개발 도구처럼 화면을 4분할해, 모든 것을 한 번에 보여 줬습니다." },
       after: { src: "/images/devsign/iter2-to-be.webp", alt: "To-be: 탭 3개와 화면 보드, 접힌 AI 패널", lead: "탭 3개와 앱 화면 보드로 정리했습니다.", text: " AI 패널은 처음에 접어 두었습니다." },
       changes: [
-        { title: "패널 4개 대신 탭 3개", before: "파일 트리·탭·캔버스가 한 번에 열려 있었습니다.", after: "미리보기·화면·코드 탭으로 나눠, 코드는 탭 하나만 누르면 보입니다.", clip: { src: "/images/devsign/clips/iter-ko-tabs.mp4", poster: "/images/devsign/clips/iter-ko-tabs-poster.jpg", cut: 5.15 } },
+        { title: "패널 4개 대신 탭 3개", before: "파일 목록, 탭, 작업 화면이 한 화면에 동시에 열려 있어 복잡했습니다.", after: "미리보기·화면·코드 탭으로 나눠, 코드는 탭 하나만 누르면 보입니다.", clip: { src: "/images/devsign/clips/iter-ko-tabs.mp4", poster: "/images/devsign/clips/iter-ko-tabs-poster.jpg", cut: 5.15 } },
         { title: "흐름 순서대로 모든 화면", before: "캔버스에 화면이 한 번에 하나만 보였습니다.", after: "모든 화면을 한 보드에 놓고, 바뀐 곳을 표시합니다.", clip: { src: "/images/devsign/clips/iter-ko-board.mp4", poster: "/images/devsign/clips/iter-ko-board-poster.jpg", cut: 3.42 } },
         { title: "필요할 때만 AI", before: "AI 채팅 패널이 화면의 1/3을 차지했습니다.", after: "평소엔 접어 두고, 오른쪽 위 버튼으로 엽니다.", clip: { src: "/images/devsign/clips/iter-ko-ai.mp4", poster: "/images/devsign/clips/iter-ko-ai-poster.jpg", cut: 4.35 } },
       ],
@@ -527,7 +527,7 @@ export const study = {
     headline: "AI 시대의 협업 툴은 만드는 일보다 정하는 일을 도와야 합니다.",
     reviewTitle: "배운 점",
     review: [
-      { title: "사용자가 화면을 부르는 말에서 구조의 문제가 보였습니다" },
+      { title: "참가자가 화면을 ‘다른 팀이 쓰는 툴’이라고 부르는 걸 듣고, 구조에 문제가 있다는 걸 알았습니다." },
       { title: "기능을 더하기보다 덜어냈습니다" },
     ],
     next: {

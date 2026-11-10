@@ -50,9 +50,9 @@ export const study = {
     summary: {
       label: "At a glance",
       items: [
-        { tone: "red", label: "Problem", title: "Teams pick which AI output to use in chat, and find out late when the build differs from the design." },
+        { tone: "red", label: "Problem", title: "Teams choose which AI output to use in chat, so they often find out much later that the built screen doesn’t match the design." },
         { tone: "accent", label: "Solution", accent: "keep the reason", title: "Combine the best parts, and let the decision-maker settle each gap and keep the reason." },
-        { tone: "teal", label: "Impact", title: "Both testers gave 5/5 to “fewer questions about why design and code differ.”" },
+        { tone: "teal", label: "Impact", title: "Both test participants gave 5 out of 5 to “I expect to ask less often why the design and code differ.”" },
       ],
     },
     headline: "AI made making faster, but",
@@ -67,7 +67,7 @@ export const study = {
         { name: "Develop", outcome: "Cut five feature candidates to four.", methods: ["Brainstorming", "2x2 matrix", "Value canvas", "Sketching · IA"] },
         { name: "Deliver", outcome: "Tested it, then revised the screens twice.", methods: ["AI prototype", "Usability test", "Co-design"] },
       ],
-      waist: { label: "Problem statement", text: "Discussion scatters, and why things were decided is lost." },
+      waist: { label: "Problem statement", text: "Feedback on AI output ends up in different places, so the reasons for decisions aren’t recorded." },
       end: { label: "Prototype", text: "Four core features" },
     },
     features: {
@@ -112,7 +112,7 @@ export const study = {
             { label: "Looks right, but has hidden mistakes", value: 66 },
             { label: "Fixing AI code takes longer", value: 45.2 },
             { label: "Less confident solving problems myself", value: 20 },
-            { label: "Hard to tell why the code works", value: 16.3 },
+            { label: "Hard to understand how AI-made code works", value: 16.3 },
           ],
           source: { label: "2025 Stack Overflow Developer Survey", url: "https://survey.stackoverflow.co/2025/ai", detail: "31,476 responses" },
         },
@@ -134,7 +134,7 @@ export const study = {
       answer: "In the tools we reviewed, we found no way to combine parts of several drafts and keep the reason.",
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
-      map: {"today": "Tools today", "selfName": "What we didn’t find", "selfTag": "", "rows": [{"name": "Combining", "self": "Combining only parts of several drafts", "now": "Whole branches, conflicts only, or by prompt"}, {"name": "Why it was decided", "self": "Keeping the reason with the change", "now": "Apart from the work, in comments or commits"}]},
+      map: {"today": "Tools today", "selfName": "What we didn’t find", "selfTag": "", "rows": [{"name": "Combining", "self": "Combining only parts of several drafts", "now": "Merge a whole branch at once, pick only the conflicting parts, or regenerate by prompt"}, {"name": "Why it was decided", "self": "Keeping the reason with the change", "now": "Apart from the work, in comments or commits"}]},
       rows: [
         { type: "Handoff", tools: "Figma Dev Mode, Zeplin", solves: "Passing on specs, comparing versions", gap: "Who decides when the build differs from the design" },
         { type: "Design vs build", tools: "OverlayQA, Uiprobe", solves: "Finding where they differ", gap: "The decision after finding it" },
@@ -160,7 +160,7 @@ export const study = {
       lead: "When design and code differed, no one was set to decide which to follow.",
       text: "4 practitioners · 1:1 remote interviews · 60 min each",
       questionsLabel: "What we wanted to learn",
-      questionKeys: ["Where it gets stuck", "Who decides", "Where the reason goes"],
+      questionKeys: ["Where work gets stuck", "Who makes the decision", "Where the reasons are recorded"],
       questions: [
         "Where does AI-made work get stuck between designers and developers?",
         "When the design and the built product differ, who decides, and where do they talk it through?",
@@ -239,10 +239,10 @@ export const study = {
       method: "Research analysis",
       title: "Affinity mapping",
       label: "Affinity mapping",
-      lead: "Feedback and decisions were scattered, away from the work itself.",
+      lead: "Feedback and decisions lived in chats and meetings, not in the design files or the code.",
       funnel: [["201", "interview quotes"], ["7", "themes"], ["4", "problems"]],
       themesLabel: "Themes",
-      groups: [["Real-time collaboration", "#ffafa3", 8], ["Versions & finals", "#ffe299", 5], ["Shared context", "#b3efbd", 12], ["Manual review", "#a6ece4", 7], ["Blurred role lines", "#a8daff", 7], ["Tool sprawl", "#d3bdff", 9], ["AI limits", "#ffb6d9", 6]],
+      groups: [["Real-time collaboration", "#ffafa3", 8], ["Versions & finals", "#ffe299", 5], ["Shared context", "#b3efbd", 12], ["Checking by hand", "#a6ece4", 7], ["Unclear roles", "#a8daff", 7], ["Too many tools", "#d3bdff", 9], ["AI limits", "#ffb6d9", 6]],
       replay: "Replay",
       boardLabel: "See the real board ↗",
       wall: {
@@ -251,7 +251,7 @@ export const study = {
         types: [["pain", "Pain point", "#ffafa3"], ["need", "Need", "#a8daff"], ["act", "Behavior", "#b3efbd"], ["think", "Perception", "#ffe299"], ["feel", "Emotion", "#d3bdff"]],
         steps: ["Sorted by type of statement", "Grouped into 7 themes", "Narrowed to 4 problems"],
         aside: "AI limits stayed out of the four problems.",
-        themes: [["Versions & finals", 0, 14], ["Manual review", 1, 28], ["Blurred role lines", 1, 28], ["Tool sprawl", 2, 37], ["Real-time collaboration", 2, 25], ["Shared context", 3, 48], ["AI limits", -1, 21]],
+        themes: [["Versions & finals", 0, 14], ["Checking by hand", 1, 28], ["Unclear roles", 1, 28], ["Too many tools", 2, 37], ["Real-time collaboration", 2, 25], ["Shared context", 3, 48], ["AI limits", -1, 21]],
         notes: [
         [["They said there’s no such thing as saving a B option separately.", "P03", "pain"], ["After two or three months, I’d think: wait, where did I get this from?", "P02", "pain"], ["I do wish it were managed automatically.", "P02", "need"], ["Details like seeing the before-and-after of an edit in one click.", "P01", "need"]],
         [["Even if AI does 80%, review doesn’t go away.", "P04", "act"], ["I just look at it and fix it again myself.", "P02", "act"]],
@@ -270,16 +270,16 @@ export const study = {
       lead: "Sorting the seven themes left four core problems.",
       lowest: "Lowest point",
       items: [
-        { title: "Work status is scattered across tools", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Tool sprawl", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
+        { title: "Work status is scattered across tools", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Too many tools", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
         { title: "Drafts can’t be combined", body: "There are several AI drafts, but no way to take the best part of each and put them together.", themes: ["Versions"], quote: ["They said there’s no such thing as saving a B option separately.", "P03"], role: "Designer", from: "Versions, options & finals (14)" },
-        { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", themes: ["Role lines", "Manual review"], quote: ["On our team, developers hold most of the initiative.", "P03"], role: "Designer · PO", from: "Blurred role lines (28) · Manual review (28)", lowest: true },
-        { title: "Reasons get lost", body: "Why it changed, who decided, and whether the code was updated all live in different places.", themes: ["Shared context"], quote: ["If it seems too minor to mention, I sometimes find out about it later.", "P03"], role: "Designer · Developer", from: "Shared context (48)" },
+        { title: "No one knows who decides", body: "When the app doesn’t match the design, the team argues in chat every time about who should decide.", themes: ["Unclear roles", "Checking by hand"], quote: ["On our team, developers hold most of the initiative.", "P03"], role: "Designer · PO", from: "Blurred role lines (28) · Manual review (28)", lowest: true },
+        { title: "Decision reasons aren’t recorded", body: "Why it changed, who decided, and whether the code was updated all live in different places.", themes: ["Shared context"], quote: ["If it seems too minor to mention, I sometimes find out about it later.", "P03"], role: "Designer · Developer", from: "Shared context (48)" },
       ],
     },
     core: {
       method: "Problem definition",
       title: "Problem statement",
-      lead: "Discussion of AI-made work scatters across chats and meetings, so why things were decided is lost.",
+      lead: "Teams talk about AI output in chats and meetings, so the reason for each decision isn’t recorded anywhere.",
     },
     hmw: {
       method: "HMW",
@@ -298,7 +298,7 @@ export const study = {
       candidatesLabel: "Feature candidates and the pain points they address",
       candidates: [
         { id: "A", name: "Decision log & history", kind: "Pain", pain: "The reasons behind results get lost.", to: "History", from: [3964, 1687, 323, 186], relief: [852, 1904, 240, 240] },
-        { id: "B", name: "Approval step before release", kind: "Pain", pain: "Developers release before the designer can step in.", to: "Conflict Points", from: [3713, 1232, 177, 177], relief: [1178, 1586, 240, 240] },
+        { id: "B", name: "Approval step before release", kind: "Pain", pain: "Developed screens are released before the designer has reviewed them.", to: "Conflict Points", from: [3713, 1232, 177, 177], relief: [1178, 1586, 240, 240] },
         { id: "C", name: "Compare and fine-tune designs", kind: "Pain", pain: "No agreed way to combine AI work.", to: "Merge Studio", from: [3657, 1930, 186, 186], relief: [1527, 1601, 416, 240] },
         { id: "D", name: "One shared workspace", kind: "Pain", pain: "Work is split across many tools.", to: "Live Workspace", from: [4004, 1930, 186, 227], relief: [1287, 1967, 240, 240] },
         { id: "E", name: "See who’s working on what", kind: "Gain", pain: "See what others are working on, live.", to: "Merged into Live Workspace", from: [3102, 641, 240, 240], relief: [2002, 736, 240, 240] },
@@ -325,7 +325,7 @@ export const study = {
         { problem: "Work status is scattered across tools", feature: "Live Workspace", from: "From directions D + E" },
         { problem: "Drafts can’t be combined", feature: "Merge Studio", from: "From direction C" },
         { problem: "No one knows who decides", feature: "Conflict Points", from: "From direction B" },
-        { problem: "Reasons get lost", feature: "History", from: "From direction A" },
+        { problem: "Decision reasons aren’t recorded", feature: "History", from: "From direction A" },
       ],
     },
     ia: {
@@ -464,7 +464,7 @@ export const study = {
       resultLead: "Help dropped sharply on the second try, but both needed help the first time.",
       photo: { src: "/images/devsign/ut-session.webp", width: 850, height: 574, alt: "Two participants working through the prototype on a laptop during the usability test" },
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
-      facts: [{ value: "55 · 75", label: "Usability score (SUS)", hint: "Designer · developer. Goal 51.7, usual average 68" }, { value: "5 / 5", label: "Expect fewer questions about design vs. code", hint: "Both" }],
+      facts: [{ value: "55 · 75", label: "Usability score (SUS)", hint: "Designer · developer. Our goal 51.7 · typical product average 68" }, { value: "5 / 5", label: "Expect fewer questions about design vs. code", hint: "Both" }],
       charts: [
         {
           type: "pair",
@@ -514,7 +514,7 @@ export const study = {
       before: { src: "/images/devsign/iter2-as-is-en.webp", alt: "As-is: a four-panel developer layout", text: "A four-panel layout like a developer tool, showing everything at once." },
       after: { src: "/images/devsign/iter2-to-be-en.webp", alt: "To-be: three tabs with a screen board and the AI panel folded", lead: "Three tabs and a board of app screens.", text: " The AI panel starts folded." },
       changes: [
-        { title: "Three tabs instead of four panels", before: "File tree, tabs and canvas all open at once.", after: "Preview, Screens and Code tabs; code is one tap away.", clip: { src: "/images/devsign/clips/iter-en-tabs.mp4", poster: "/images/devsign/clips/iter-en-tabs-poster.jpg", cut: 5.15 } },
+        { title: "Three tabs instead of four panels", before: "The file list, tabs and canvas were all open on one screen, which felt crowded.", after: "Preview, Screens and Code tabs; code is one tap away.", clip: { src: "/images/devsign/clips/iter-en-tabs.mp4", poster: "/images/devsign/clips/iter-en-tabs-poster.jpg", cut: 5.15 } },
         { title: "Every screen in flow order", before: "One screen on the canvas at a time.", after: "Every screen on one board, changes marked.", clip: { src: "/images/devsign/clips/iter-en-board.mp4", poster: "/images/devsign/clips/iter-en-board-poster.jpg", cut: 3.42 } },
         { title: "AI when you ask for it", before: "The AI chat panel takes a third of the screen.", after: "Folded by default; one button at the top right opens it.", clip: { src: "/images/devsign/clips/iter-en-ai.mp4", poster: "/images/devsign/clips/iter-en-ai-poster.jpg", cut: 4.35 } },
       ],
@@ -525,7 +525,7 @@ export const study = {
     reviewTitle: "Key learnings",
     reviewItem: "Key learning",
     review: [
-      { title: "How people named a screen showed a structure problem" },
+      { title: "Hearing a participant call a screen “another team’s tool” showed us the structure was wrong." },
       { title: "Took things away instead of adding" },
     ],
     next: {

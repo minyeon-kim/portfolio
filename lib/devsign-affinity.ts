@@ -87,7 +87,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "수동 검토", en: "Manual review" },
+    name: { ko: "일일이 눈으로 확인", en: "Checking by hand" },
     insight: {
       ko: "사용자가 원하는 것은 AI에게 판단을 완전히 맡기는 것이 아니라 ‘판단해야 할 부분을 줄여주는 것’이다.",
       en: "Users don't want to hand judgment fully to AI. They want it to shrink what they have to judge.",
@@ -104,7 +104,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "역할 경계", en: "Blurred role lines" },
+    name: { ko: "역할이 모호함", en: "Unclear roles" },
     insight: {
       ko: "AI로 직군 간 실행 영역은 빠르게 겹치고 있지만, 역할과 책임 기준은 이를 따라가지 못하면서 협업 과정의 충돌과 재작업이 발생하고 있다.",
       en: "Roles overlap fast, but ownership hasn't caught up, causing conflicts and rework.",
@@ -121,7 +121,7 @@ export const AFF_THEMES: AffTheme[] = [
     ],
   },
   {
-    name: { ko: "도구 분산", en: "Tool sprawl" },
+    name: { ko: "쓰는 도구가 너무 많음", en: "Too many tools" },
     insight: {
       ko: "AI 도구는 이미 업무 전반에 빠르게 확산됐지만, 목적별로 분산 사용되면서 오히려 협업 맥락과 업무 흐름의 파편화를 심화시키고 있다.",
       en: "AI tools scattered by purpose actually break collaboration context and workflow further.",
@@ -164,7 +164,7 @@ export const AFF_UI: Record<Locale, {
   leftOut: string; from: string; pick: string; boardLink: string; statements: string; boardTitle: string; pickProblem: string;
 }> = {
   ko: {
-    steps: [["201", "인터뷰 발화"], ["7", "테마"], ["4", "문제"]],
+    steps: [["201", "인터뷰 의견"], ["7", "테마"], ["4", "문제"]],
     legend: "스티커 하나 = 인터뷰 발화 하나. 색은 보드와 같이 말의 유형이에요.",
     quotes: "실제 발화",
     subs: "소주제",
@@ -178,7 +178,7 @@ export const AFF_UI: Record<Locale, {
     pickProblem: "문제를 누르면 어떤 테마에서 왔는지 보여요.",
   },
   en: {
-    steps: [["201", "interview statements"], ["7", "themes"], ["4", "problems"]],
+    steps: [["201", "interview comments"], ["7", "themes"], ["4", "problems"]],
     legend: "One sticky = one statement from the interviews. Colour = type of statement, as on the board.",
     quotes: "What they said",
     subs: "Sub-groups",

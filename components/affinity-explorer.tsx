@@ -41,7 +41,7 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
           const out = i === AFF_LEFT_OUT;
           return (
             <li key={t.name.ko} className="reveal" tabIndex={0} data-on={on === i || undefined} data-out={out || undefined} onMouseEnter={() => setOn(i)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(i)} onBlur={() => setOn(null)}>
-              <p className="dv-axe-name"><b>{t.name[locale]}</b><span>{locale === "ko" ? `발화 ${count}개` : `${count} statements`}</span></p>
+              <p className="dv-axe-name"><b>{t.name[locale]}</b><span>{locale === "ko" ? `의견 ${count}개` : `${count} comments`}</span></p>
               <p className="sr-only">{SHORT[i][locale]}</p>
               {out && <p className="dv-axe-out">{ui.out}</p>}
               <span className="sr-only">{t.insight[locale]}</span>
@@ -52,7 +52,7 @@ export function AffinityExplorer({ locale, boardHref }: { locale: Locale; boardH
 
       <a className="dv-axe-board reveal" href={boardHref} target="_blank" rel="noreferrer" data-lit={on !== null || undefined}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={boardHref} width={7000} height={3022} loading="lazy" decoding="async" alt={locale === "ko" ? `어피니티 맵 원본 보드: 인터뷰 발화 ${total}개를 테마 7개로 묶음` : `The original affinity board: ${total} interview statements grouped into 7 themes`} />
+        <img src={boardHref} width={7000} height={3022} loading="lazy" decoding="async" alt={locale === "ko" ? `어피니티 맵 원본 보드: 인터뷰 의견 ${total}개를 테마 7개로 묶음` : `The original affinity board: ${total} interview statements grouped into 7 themes`} />
         {COLS.map(([l, w], i) => (
           <i key={i} className="dv-axe-col" data-on={on === i || undefined} style={{ left: `${l}%`, width: `${w}%` }} aria-hidden />
         ))}
