@@ -9,7 +9,7 @@ const HALVES = ["M0 167L300 0V334Z", "M300 0L600 167L300 334Z", "M600 167L900 0V
 // The Double Diamond, still: two outlined diamonds that draw in on reveal. Each stage is one
 // column read top to bottom: its name above the diagram, its methods inside its half, its
 // outcome under it. Only the stage marked `current` and its `pivot` carry the case colour.
-// Each half links to its section. Shared by the Devsign body and CaseDiamond.
+// Nothing in it is a link (owner: nothing to click, so no pointer). Shared by the Devsign body and CaseDiamond.
 type DiamondPoint = { label: string; text: string };
 
 export function DoubleDiamond({ stages, pivot, waist, end }: { stages: DiamondStage[]; pivot?: string; waist?: DiamondPoint; end?: DiamondPoint }) {
@@ -35,14 +35,14 @@ export function DoubleDiamond({ stages, pivot, waist, end }: { stages: DiamondSt
         <ol className="dv-dd-stages">
           {stages.map((stage) => (
             <li key={stage.name} data-current={stage.current || undefined}>
-              <a href={`#${stage.name.toLowerCase()}`}>
+              <div className="dv-dd-stage">
                 <span className="dv-dd-stage-name">{stage.name}</span>
                 <span className="dv-dd-name">
                   <span className="dv-dd-inside">{(stage.methods ?? []).map((m) => <span key={m}>{m}</span>)}</span>
                 </span>
                 {stage.outcome && <span className="dv-dd-outcome">{stage.outcome}</span>}
                 {stage.current && pivot && <span className="dv-dd-pivot">{from}{to && <><ArrowIcon size={14} />{to}</>}</span>}
-              </a>
+              </div>
             </li>
           ))}
         </ol>
