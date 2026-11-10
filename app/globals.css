@@ -8130,13 +8130,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .devsign-hero.dh-cover .dh-lead { display: block; }
 }
 
-/* Temporary: hidden row in the Menu for trying the landing particle options. */
-.menu-dust { position: fixed; left: var(--edge-inset); bottom: 16px; z-index: 2; display: flex; gap: 4px; opacity: .4; pointer-events: auto; transition: opacity 250ms ease; }
-.menu-dust:hover, .menu-dust:focus-within { opacity: 1; }
-.menu-dust button { min-width: 32px; height: 28px; padding: 0 8px; border: 0; border-radius: 999px; background: none; color: var(--ink); font-size: 13px; line-height: 1; }
-.menu-dust button:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
-.menu-dust button[aria-pressed="true"] { background: color-mix(in srgb, var(--ink) 14%, transparent); }
-.menu-dust button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Score table: each score sits right by its question, as dots you can compare at a glance. */
 @media (max-width: 63.99rem) {

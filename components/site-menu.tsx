@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { DevsignLoop } from "@/components/devsign-loop";
-import { DustLooks } from "@/components/home/dust-looks";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { revealNextProject } from "@/lib/project-transition";
@@ -126,7 +125,7 @@ export function SiteMenu({ contact, cases }: Props) {
       }
       if (event.key !== "Tab") return;
       // Tab stays in the sheet and its button.
-      const stops = [button.current, ...(sheet.current?.querySelectorAll<HTMLElement>(".menu-column a, .menu-side a, .menu-dust button") ?? [])].filter((el): el is HTMLElement => Boolean(el));
+      const stops = [button.current, ...(sheet.current?.querySelectorAll<HTMLElement>(".menu-column a, .menu-side a") ?? [])].filter((el): el is HTMLElement => Boolean(el));
       const at = stops.indexOf(document.activeElement as HTMLElement);
       const next = event.shiftKey ? (at <= 0 ? stops.length - 1 : at - 1) : (at + 1) % stops.length;
       event.preventDefault();
@@ -247,7 +246,6 @@ export function SiteMenu({ contact, cases }: Props) {
             </ol>
           </nav>
           {contact.resumeUrl && <ul className="menu-side"><li><a href={withBase(contact.resumeUrl)}>{t.resume}</a></li></ul>}
-          {path === "/" && <DustLooks />}
         </div>
       )}
     </div>
