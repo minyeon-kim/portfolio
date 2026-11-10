@@ -8719,8 +8719,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Opener text left-aligned across the full cover width (owner; supersedes the 1200 column and the
    centred text): name, question and facts start on the cover's left edge, facts spread to its right edge. */
 @media (min-width: 64rem) {
-  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { width: min(1640px, calc(100% - 2 * var(--edge-inset, 24px))); margin-inline: auto; align-items: flex-start; text-align: left; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { width: calc(100% - 2 * var(--edge-inset, 24px)); margin-inline: auto; align-items: flex-start; text-align: left; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { margin-left: 0; text-align: left; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details, :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { text-align: left; }
-  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { width: auto; max-width: 1640px; margin-inline: auto; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { width: auto; max-width: none; margin-inline: auto; }
 }
