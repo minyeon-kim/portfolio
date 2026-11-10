@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { AboutClip } from "@/components/about-clip";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
@@ -27,6 +28,21 @@ const copy = {
       desk: "Minyeon working on a laptop",
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
+    outside: "Outside work",
+    outsideAlt: {
+      bouldering: "Minyeon climbing a bouldering wall",
+      tokyo: "Minyeon in front of Tokyo Tower at night",
+      parasail: "Two people parasailing under a rainbow canopy",
+      "night-walk": "Minyeon in a yellow top on a street at night",
+      brewing: "Pour-over coffee brewing on a scale with a timer",
+      bangkok: "Minyeon by the river at sunset, a temple behind",
+      "night-bar": "Minyeon out at night",
+      "sea-walk": "Minyeon walking on a path by the sea",
+      platform: "Minyeon pushing a luggage trolley into a brick wall",
+      alley: "Minyeon walking down a quiet alley",
+      beach: "Minyeon standing on a beach",
+      statue: "Minyeon sitting next to a colourful statue",
+    } as Record<string, string>,
     open: "Open to product designer and design engineer roles.",
     work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy",
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
@@ -45,6 +61,21 @@ const copy = {
       hands: "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손",
       desk: "노트북으로 작업하는 김민연",
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
+    } as Record<string, string>,
+    outside: "Outside work",
+    outsideAlt: {
+      bouldering: "볼더링 벽을 오르는 김민연",
+      tokyo: "밤의 도쿄타워 앞에 선 김민연",
+      parasail: "무지개색 낙하산을 타고 패러세일링하는 두 사람",
+      "night-walk": "밤거리에 노란 상의를 입고 선 김민연",
+      brewing: "타이머가 있는 저울 위에서 내리는 핸드드립 커피",
+      bangkok: "노을 지는 강가의 김민연과 뒤편의 사원",
+      "night-bar": "밤 외출 중인 김민연",
+      "sea-walk": "바닷가 산책로를 걷는 김민연",
+      platform: "벽돌 벽으로 짐 카트를 미는 김민연",
+      alley: "조용한 골목을 걷는 김민연",
+      beach: "해변에 선 김민연",
+      statue: "알록달록한 조각상 옆에 앉은 김민연",
     } as Record<string, string>,
     open: "프로덕트 디자이너와 디자인 엔지니어 포지션을 찾고 있습니다.",
     work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "복사",
@@ -134,6 +165,26 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 </ol>
               </div>
             </article>
+            {/* Outside work: photos of different sizes, set loosely (in flow, so it scrolls over the sheet; no sticky). */}
+            <section className="about-panel about-outside" aria-labelledby="about-outside-title">
+              <div className="about-outside-inner">
+                <h2 id="about-outside-title">{c.outside}</h2>
+                <div className="about-outside-grid">
+                  {OUTSIDE.map((p) => (
+                    <figure key={p.name} className="reveal" style={{ gridColumn: p.col, gridRow: p.row }}>
+                      <div className="about-outside-media">
+                        {p.clip ? (
+                          <AboutClip src={withBase(`/images/about/outside/${p.name}.mp4`)} poster={withBase(`/images/about/outside/${p.name}-poster.webp`)} label={c.outsideAlt[p.name]} />
+                        ) : (
+                          <Image src={withBase(`/images/about/outside/${p.name}.webp`)} alt={c.outsideAlt[p.name]} fill sizes="(min-width: 64rem) 34vw, 50vw" style={{ objectPosition: p.pos }} />
+                        )}
+                      </div>
+                      {p.caption && <figcaption>{p.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            </section>
             <article className="about-panel about-panel-contact" aria-labelledby="about-contact-title">
               <Image src={withBase("/images/about/laptop.webp")} alt={c.photos.laptop} fill sizes="100vw" />
               <div className="about-panel-copy">
@@ -153,6 +204,23 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
     </div>
   );
 }
+
+// Outside work, set loosely on a 12-column grid (desktop): columns and rows in 24px units at a
+// 1200px column, so each cell keeps roughly its photo's 3:4 shape plus a caption line.
+const OUTSIDE: { name: string; col: string; row: string; caption?: string; clip?: boolean; pos?: string }[] = [
+  { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true },
+  { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo", pos: "50% 85%" },
+  { name: "parasail", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%" },
+  { name: "night-walk", col: "11 / span 2", row: "16 / span 12" },
+  { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over" },
+  { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok", pos: "40% 50%" },
+  { name: "night-bar", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%" },
+  { name: "sea-walk", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%" },
+  { name: "platform", col: "11 / span 2", row: "54 / span 12" },
+  { name: "alley", col: "1 / span 3", row: "60 / span 18" },
+  { name: "beach", col: "4 / span 3", row: "62 / span 18" },
+  { name: "statue", col: "11 / span 2", row: "70 / span 12" },
+];
 
 // A section title in the case pages' form: display size, light, without a counter.
 function StageHead({ title, id }: { title: string; id?: string }) {

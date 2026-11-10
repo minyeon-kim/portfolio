@@ -8735,3 +8735,25 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study .dv .dv-flist-open[data-pinned] .dv-flist-items { flex: none; margin-top: 24px; }
   :root .case-study .dv .dv-flist-open .dv-flist-frame video { top: 50% !important; left: 50% !important; translate: -50% -50% !important; width: auto !important; height: calc(100% - 80px) !important; max-width: min(1200px, calc(100vw - 112px)) !important; border-radius: 12px; object-fit: contain; box-shadow: 0 24px 64px rgb(0 0 0 / 0.35); }
 }
+
+/* About · Outside work: photos of different sizes set loosely on a 12-column grid (desktop),
+   in flow on the page ground so it scrolls over the Experience sheet; two columns on phones. */
+.about-panel.about-outside { position: relative; display: block; min-height: 0; background: var(--bg); color: var(--ink); text-align: left; overflow: visible; }
+.about-outside::before, .about-outside::after { display: none; }
+.about-outside-inner { width: min(1200px, calc(100vw - 2 * var(--edge-inset, 24px))); margin-inline: auto; padding-block: 128px 160px; }
+.about-outside h2 { margin: 0; font-family: var(--font-serif); font-size: clamp(40px, 5vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -0.02em; }
+.about-outside-grid { --u: calc(min(1200px, 100vw - 2 * var(--edge-inset, 24px)) / 50); display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: var(--u); column-gap: 16px; margin-top: 80px; }
+.about-outside-grid figure { position: relative; display: flex; flex-direction: column; min-height: 0; margin: 0; }
+.about-outside-media { position: relative; flex: 1; min-height: 0; overflow: hidden; border-radius: 8px; background: light-dark(#e8e8ec, #17181d); }
+.about-outside-media img, .about-outside-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.about-outside-media video { cursor: pointer; }
+.about-outside-grid figcaption { flex: none; padding-top: 8px; color: var(--muted); font-size: 16px; line-height: 24px; }
+.about-outside-grid figure:not(:has(figcaption)) .about-outside-media { margin-bottom: 32px; }
+@media (max-width: 63.99rem) {
+  .about-outside-inner { padding-block: 96px 112px; }
+  .about-outside-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; gap: 16px 12px; margin-top: 48px; }
+  .about-outside-grid figure { grid-column: auto !important; grid-row: auto !important; }
+  .about-outside-grid figure:first-child { grid-column: 1 / -1 !important; }
+  .about-outside-media { flex: none; aspect-ratio: 3 / 4; }
+  .about-outside-grid figure:not(:has(figcaption)) .about-outside-media { margin-bottom: 0; }
+}
