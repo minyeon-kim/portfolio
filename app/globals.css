@@ -8837,3 +8837,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .about-outside-grid[data-zoomed] .about-outside-item:not([data-open]) > * { opacity: 0.25; }
 .about-outside-item[data-open] .about-outside-media img { scale: 1; }
 @media (prefers-reduced-motion: reduce) { .about-outside-item { transition: none; } }
+
+/* Experience rows a step smaller (owner: too big): year 16px muted, title 20px medium, tighter rows. */
+.about-exp li { gap: 24px; padding-block: 20px; }
+.about-exp span { font-size: 16px; }
+.about-exp strong { font-size: 20px; line-height: 1.4; letter-spacing: -0.01em; }
