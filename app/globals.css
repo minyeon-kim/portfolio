@@ -8715,3 +8715,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .menu-card > .dh-shot { position: absolute; top: 0; left: 50%; height: 100%; width: auto; min-width: 100%; aspect-ratio: var(--shot-a); translate: -50% 0; }
   .menu-card > .dh-shot .dh-shot-camera { animation: none; }
 }
+
+/* Opener text left-aligned on the 1200 case column (owner; supersedes the centred name,
+   question and facts): name, question and facts share the body's left edge. */
+@media (min-width: 64rem) {
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { width: min(1200px, calc(100% - 2 * var(--edge-inset, 24px))); margin-inline: auto; align-items: flex-start; text-align: left; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { margin-left: 0; text-align: left; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details, :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { text-align: left; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { width: min(1200px, calc(100% - 2 * var(--edge-inset, 24px))); }
+}
