@@ -8723,3 +8723,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Double Diamond is read, not pressed (owner): no links, no hover states, the plain cursor. */
 .dv-dd .dv-dd-stages { pointer-events: none; }
+
+/* Deliver scene, held (owner: it should step with the scroll, and the screen was cropped by the field):
+   while pinned, title row, colour field and the four features fill one screen and native scroll moves
+   through the features (70svh each). The whole recording sits inside the field, contained, never cut. */
+@media (min-width: 64rem) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  :root .case-study .dv .dv-flist-open[data-pinned]::after { display: block; }
+  :root .case-study .dv .dv-flist-open[data-pinned] > .dv-flist { position: sticky; top: var(--stage-top, 76px); height: calc(100svh - 96px); }
+  :root .case-study .dv .dv-flist-open[data-pinned] .dv-flist-head { flex: none; margin-bottom: 24px !important; }
+  :root .case-study .dv .dv-flist-open[data-pinned] .dv-flist-frame { flex: 1 1 auto; min-height: 0; height: auto; }
+  :root .case-study .dv .dv-flist-open[data-pinned] .dv-flist-items { flex: none; margin-top: 24px; }
+  :root .case-study .dv .dv-flist-open .dv-flist-frame video { top: 50% !important; left: 50% !important; translate: -50% -50% !important; width: auto !important; height: calc(100% - 80px) !important; max-width: min(1200px, calc(100vw - 112px)) !important; border-radius: 12px; object-fit: contain; box-shadow: 0 24px 64px rgb(0 0 0 / 0.35); }
+}
