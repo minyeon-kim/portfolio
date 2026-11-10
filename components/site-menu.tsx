@@ -4,15 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { DevsignLoop } from "@/components/devsign-loop";
-import { GeminiDevice } from "@/components/gemini-device";
-import { GeminiPhone } from "@/components/gemini-phone";
+import { HeroShot } from "@/components/hero-shot";
+import { COVER_SCENES, type Crop } from "@/lib/cover-scenes";
 import { revealNextProject } from "@/lib/project-transition";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
-type MenuCase = { slug: string; name: string };
+type MenuCase = { slug: string; name: string; poster?: string };
 type Props = {
   contact: { email: string; linkedinUrl: string; resumeUrl?: string };
   cases: { en: MenuCase[]; ko: MenuCase[] };
@@ -24,6 +23,15 @@ const GROW = 650;
 // white screen (the page keeps running in it), with the links sliding in from the left
 // and the quieter ones from the right. Pointing at a case or About shows it in the card;
 // following a link grows the new page back out of the card. Below 64rem it's a plain sheet.
+// The card is a tall slice of the case's cover scene, centred where the cover is centred,
+// so opening the case grows the same picture to the screen and settles it into the cover.
+const menuCrop = (slug: string): Crop => {
+  const scene = COVER_SCENES[slug];
+  const [x, y, w, h] = scene.crop ?? [0, 0, scene.width, scene.height];
+  const width = h * 0.5;
+  return [x + (w - width) / 2, y, width, h];
+};
+
 export function SiteMenu({ contact, cases }: Props) {
   const pathname = usePathname();
   const router = useRouter();
@@ -165,7 +173,7 @@ export function SiteMenu({ contact, cases }: Props) {
     if (!link || !slug || link.hasAttribute("aria-current") || event.metaKey || event.ctrlKey || event.shiftKey) return;
     if (!window.matchMedia("(min-width: 64rem)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const card = sheet.current?.querySelector<HTMLElement>(`.menu-card[data-project="${slug}"]`);
-    const from = card?.querySelector<HTMLElement>(".home-device-window, .home-device-phone");
+    const from = card?.querySelector<HTMLElement>(".dh-shot");
     if (!card || !from) return;
     event.preventDefault();
     zooming.current = true;
@@ -216,11 +224,12 @@ export function SiteMenu({ contact, cases }: Props) {
           <div className="menu-window" aria-hidden="true">
             {list.map((c) => (
               <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-case={c.slug} aria-current={c.slug === current ? "page" : undefined} data-project={c.slug} data-on={shown === c.slug || undefined}>
-                {c.slug === "devsign"
-                  ? <span className="home-device-window"><DevsignLoop alt="" /></span>
-                  : c.slug === "gemini-privacy"
-                    ? <span className="home-device-phone"><GeminiDevice><GeminiPhone alt="" /></GeminiDevice></span>
-                    : null}
+                {COVER_SCENES[c.slug] && (
+                  <HeroShot {...COVER_SCENES[c.slug]} src={withBase(COVER_SCENES[c.slug].src)} alt="" crop={menuCrop(c.slug)} full={COVER_SCENES[c.slug].crop ?? [0, 0, COVER_SCENES[c.slug].width, COVER_SCENES[c.slug].height]} fullPhone={COVER_SCENES[c.slug].cropPhone}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {c.poster && <img className="dh-shot-poster" src={withBase(c.poster)} alt="" />}
+                  </HeroShot>
+                )}
               </Link>
             ))}
             <Link href={targetOf("about")} tabIndex={-1} className="menu-card" aria-current={path === "/about/" ? "page" : undefined} data-project="about" data-on={shown === "about" || undefined}>

@@ -8707,3 +8707,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 :root .case-study .dv ol.dv-flow.dv-kl > li { display: grid !important; grid-column: auto !important; grid-row: auto !important; grid-template-columns: 120px minmax(0, 1fr) 40px minmax(0, 1fr) !important; }
 @media (max-width: 47.99rem) { :root .case-study .dv ol.dv-flow.dv-kl > li { grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) !important; } }
 :root .case-study .dv .dv-flow-play:has(.dv-kl) { width: 100%; max-width: none; }
+
+/* Menu card = a tall slice of the case's cover scene (same picture the zoom grows into the
+   cover). Sized by height; on a card wider than the slice it widens and the bottom is cut. */
+@media (min-width: 64rem) {
+  .menu-card[data-project="devsign"], .menu-card[data-project="gemini-privacy"] { background: #0c0c0e; }
+  .menu-card > .dh-shot { position: absolute; top: 0; left: 50%; height: 100%; width: auto; min-width: 100%; aspect-ratio: var(--shot-a); translate: -50% 0; }
+  .menu-card > .dh-shot .dh-shot-camera { animation: none; }
+}
