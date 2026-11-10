@@ -86,7 +86,11 @@ async function click(page, name, opts = {}) {
 }
 // Moves the camera so `rect` fills the frame (null = whole screen). The mouse rides
 // along with the content it sits on, so the cursor doesn't slide over the picture.
+// WHOLE=1 records the whole screen with no camera at all (owner: the zoom cut parts of the app
+// off on the case page); the camera's beat is kept as a short pause so the pacing reads the same.
+const WHOLE = !!process.env.WHOLE;
 async function cam(page, rect, hold = 300) {
+  if (WHOLE) { await wait(260 + hold); return; }
   const next = await page.evaluate((r) => {
     if (!r) return { s: 1, tx: 0, ty: 0 };
     const pad = 24;
