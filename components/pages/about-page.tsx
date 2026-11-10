@@ -207,7 +207,7 @@ const OUTSIDE: OutsideItem[] = [
   { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok, Thailand", pos: "40% 50%", d: 30 },
   { name: "night-bar", caption: "Koh Samet, Thailand", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
   { name: "sea-walk", caption: "Shimoda, Japan", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
-  { name: "platform", caption: "Harry Potter Studio, Tokyo", col: "11 / span 2", row: "54 / span 12", d: 90 },
+  { name: "platform", caption: "Harry Potter Studio", col: "11 / span 2", row: "54 / span 12", d: 90 },
   { name: "alley", caption: "Hakone, Japan", col: "1 / span 3", row: "60 / span 18", d: 30 },
   { name: "beach", caption: "Gangwon, Korea", col: "4 / span 3", row: "62 / span 18", d: 60 },
   { name: "statue", caption: "Taiwan", col: "11 / span 2", row: "70 / span 12", d: 90 },
