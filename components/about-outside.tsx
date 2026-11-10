@@ -6,7 +6,7 @@ import { AboutClip } from "@/components/about-clip";
 
 export type OutsideItem = { name: string; col: string; row: string; caption: string; clip?: boolean; pos?: string; d?: number };
 
-// Outside work: photos set loosely; pointing at one shows its caption, pressing it opens it
+// Outside work: photos set loosely with a small caption under each; pressing one opens it
 // large over the page (a native <dialog>: arrows step through, Esc, the X or the backdrop
 // close it, focus goes back to the photo). The clip plays large too.
 export function OutsideGallery({ items, alts, base, labels }: { items: OutsideItem[]; alts: Record<string, string>; base: string; labels: { open: string; close: string; prev: string; next: string } }) {
@@ -49,8 +49,8 @@ export function OutsideGallery({ items, alts, base, labels }: { items: OutsideIt
                 <Image src={src(p.name, ".webp")} alt={alts[p.name]} fill sizes="(min-width: 64rem) 34vw, 50vw" style={{ objectPosition: p.pos }} />
               )}
               <button type="button" className="about-outside-open" aria-label={`${labels.open}: ${p.caption}`} onClick={(e) => open(i, e.currentTarget)} />
-              <figcaption>{p.caption}</figcaption>
             </div>
+            <figcaption>{p.caption}</figcaption>
           </figure>
         ))}
       </div>

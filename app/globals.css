@@ -8809,3 +8809,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .about-lightbox-btn[data-at="prev"], .about-lightbox-btn[data-at="next"] { top: auto; bottom: 24px; translate: none; }
 }
 @media (prefers-reduced-motion: reduce) { .about-lightbox[open], .about-lightbox-figure { animation: none; } }
+
+/* Outside work captions: small text under each photo again, always shown (owner preferred it to the hover pill). */
+.about-outside-grid .about-outside-item > figcaption { flex: none; padding-top: 8px; color: var(--muted); font-size: 16px; line-height: 24px; }
+@media (max-width: 63.99rem) { .about-outside-grid .about-outside-item > figcaption { padding-top: 6px; } }
