@@ -201,16 +201,16 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 const OUTSIDE: OutsideItem[] = [
   { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true, d: 30 },
   { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo", pos: "50% 85%", d: 60 },
-  { name: "parasail", caption: "Parasailing", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
-  { name: "night-walk", caption: "A night walk", col: "11 / span 2", row: "16 / span 12", d: 90 },
+  { name: "parasail", caption: "Kota Kinabalu", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
+  { name: "night-walk", caption: "Tainan", col: "11 / span 2", row: "16 / span 12", d: 90 },
   { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over", d: 60 },
   { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok", pos: "40% 50%", d: 30 },
-  { name: "night-bar", caption: "Out at night", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
-  { name: "sea-walk", caption: "A walk by the sea", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
-  { name: "platform", caption: "Platform 9¾", col: "11 / span 2", row: "54 / span 12", d: 90 },
-  { name: "alley", caption: "A quiet alley", col: "1 / span 3", row: "60 / span 18", d: 30 },
-  { name: "beach", caption: "On the beach", col: "4 / span 3", row: "62 / span 18", d: 60 },
-  { name: "statue", caption: "A new friend", col: "11 / span 2", row: "70 / span 12", d: 90 },
+  { name: "night-bar", caption: "Koh Samet", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
+  { name: "sea-walk", caption: "Shimoda", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
+  { name: "platform", caption: "Harry Potter Studio, Tokyo", col: "11 / span 2", row: "54 / span 12", d: 90 },
+  { name: "alley", caption: "Hakone", col: "1 / span 3", row: "60 / span 18", d: 30 },
+  { name: "beach", caption: "Gangwon", col: "4 / span 3", row: "62 / span 18", d: 60 },
+  { name: "statue", caption: "Taiwan", col: "11 / span 2", row: "70 / span 12", d: 90 },
 ];
 
 // A section title in the case pages' form: display size, light, without a counter.
