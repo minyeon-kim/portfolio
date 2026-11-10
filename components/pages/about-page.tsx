@@ -127,7 +127,6 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         <div className="about-split-portrait" aria-hidden="true">
           <Image src={withBase(heroPhoto)} alt="" width={2880} height={2267} sizes="100vw" />
         </div>
-        <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
           <h1 tabIndex={-1} className="about-hero-title">
             {headline.map((line, i) => <span key={line} className="about-hero-line">{i === 0 ? line.replace(/,$/, "") : line} </span>)}
