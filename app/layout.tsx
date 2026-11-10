@@ -62,6 +62,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <StyleRetry />
+        {/* Hangul in the sans stack: Pretendard, loaded in unicode-range slices, so only
+            the Korean glyphs a page actually shows are fetched; Latin stays Geist. */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
         <ThemeScript />
       </head>
       <body className="flex min-h-full flex-col text-sm">

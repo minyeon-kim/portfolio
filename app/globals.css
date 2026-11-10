@@ -65,7 +65,7 @@
   --color-fill: color-mix(in srgb, var(--ink) 7%, transparent);
   --color-fill-strong: color-mix(in srgb, var(--ink) 12%, transparent);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* 16 / 16 / 18 / 24 / 36 / 64 (16px is the smallest text anywhere, class rule).
