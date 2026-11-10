@@ -200,7 +200,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 const OUTSIDE: OutsideItem[] = [
   { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true, d: 30 },
   { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo, Japan", pos: "50% 85%", d: 60 },
-  { name: "parasail", caption: "Kota Kinabalu, Malaysia", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
+  { name: "parasail", caption: "Parasailing", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
   { name: "night-walk", caption: "Tainan, Taiwan", col: "11 / span 2", row: "16 / span 12", d: 90 },
   { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over", d: 60 },
   { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok, Thailand", pos: "40% 50%", d: 30 },

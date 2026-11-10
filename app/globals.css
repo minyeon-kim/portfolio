@@ -8824,3 +8824,16 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @keyframes about-zoom-cap { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
 @media (prefers-reduced-motion: reduce) { .about-zoom-caption { animation: none; } }
 .about-zoom-photo[data-closing] .about-zoom-caption { animation: none; opacity: 0; transition: opacity 120ms; }
+
+/* Outside work grows in place (owner; supersedes the dialog that grew to the middle): the pressed
+   photo scales up where it is via transform (the scroll motion uses translate and scale, so they
+   compose), shifted only to stay on screen; the others fade back. Settles on a second press,
+   elsewhere, Esc or a scroll. */
+.about-outside-item { transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 400ms cubic-bezier(0.2, 0.8, 0.2, 1); transform-origin: 50% 50%; }
+.about-outside-item[data-open] { z-index: 5; }
+.about-outside-item[data-open] .about-outside-open { cursor: zoom-out; }
+.about-outside-item > * { transition: opacity 400ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+/* On the children: the item's own opacity belongs to its entry animation. */
+.about-outside-grid[data-zoomed] .about-outside-item:not([data-open]) > * { opacity: 0.25; }
+.about-outside-item[data-open] .about-outside-media img { scale: 1; }
+@media (prefers-reduced-motion: reduce) { .about-outside-item { transition: none; } }
