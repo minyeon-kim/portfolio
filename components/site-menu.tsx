@@ -126,7 +126,7 @@ export function SiteMenu({ contact, cases }: Props) {
       }
       if (event.key !== "Tab") return;
       // Tab stays in the sheet and its button.
-      const stops = [button.current, ...(sheet.current?.querySelectorAll<HTMLElement>(".menu-column a, .menu-side a, .menu-dust button") ?? [])].filter((el): el is HTMLElement => Boolean(el));
+      const stops = [button.current, ...(sheet.current?.querySelectorAll<HTMLElement>(".menu-column a, .menu-side a, .menu-dust-pick button, .menu-dust button") ?? [])].filter((el): el is HTMLElement => Boolean(el));
       const at = stops.indexOf(document.activeElement as HTMLElement);
       const next = event.shiftKey ? (at <= 0 ? stops.length - 1 : at - 1) : (at + 1) % stops.length;
       event.preventDefault();
