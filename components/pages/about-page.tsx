@@ -92,7 +92,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
         </div>
         {/* The part of the photo inside the line: it lifts off the photo and glides to the middle. */}
         <div className="about-split-portrait" aria-hidden="true">
-          <Image src={withBase(heroPhoto)} alt="" width={2160} height={1700} sizes="100vw" />
+          <Image src={withBase(heroPhoto)} alt="" width={2880} height={2267} sizes="100vw" />
         </div>
         <div className="about-split-frame" aria-hidden="true" />
         <div className="about-hero-copy">
