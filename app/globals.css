@@ -8813,3 +8813,14 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* Outside work captions: small text under each photo again, always shown (owner preferred it to the hover pill). */
 .about-outside-grid .about-outside-item > figcaption { flex: none; padding-top: 8px; color: var(--muted); font-size: 16px; line-height: 24px; }
 @media (max-width: 63.99rem) { .about-outside-grid .about-outside-item > figcaption { padding-top: 6px; } }
+
+/* Outside work grows in place: the pressed photo lifts from its spot to the middle of the screen
+   over a dimming page (replaces the lightbox screen with arrows), and shrinks back on any press or Esc. */
+.about-zoom { position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(8 8 10 / 0.86); overflow: hidden; cursor: zoom-out; }
+.about-zoom::backdrop { background: transparent; }
+.about-zoom-photo { position: fixed; border-radius: 8px; }
+.about-zoom-photo :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.about-zoom-caption { position: absolute; left: 0; top: 100%; margin: 12px 0 0; color: rgb(255 255 255 / 0.8); font-size: 16px; line-height: 24px; white-space: nowrap; animation: about-zoom-cap 400ms 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes about-zoom-cap { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .about-zoom-caption { animation: none; } }
+.about-zoom-photo[data-closing] .about-zoom-caption { animation: none; opacity: 0; transition: opacity 120ms; }

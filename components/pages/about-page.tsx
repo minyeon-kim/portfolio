@@ -29,7 +29,7 @@ const copy = {
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
     outside: "Outside work",
-    lightbox: { open: "View larger", close: "Close", prev: "Previous photo", next: "Next photo" },
+    lightbox: { open: "View larger", close: "Close" },
     outsideAlt: {
       bouldering: "Minyeon climbing a bouldering wall",
       tokyo: "Minyeon in front of Tokyo Tower at night",
@@ -64,7 +64,7 @@ const copy = {
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     outside: "Outside work",
-    lightbox: { open: "크게 보기", close: "닫기", prev: "이전 사진", next: "다음 사진" },
+    lightbox: { open: "크게 보기", close: "닫기" },
     outsideAlt: {
       bouldering: "볼더링 벽을 오르는 김민연",
       tokyo: "밤의 도쿄타워 앞에 선 김민연",
