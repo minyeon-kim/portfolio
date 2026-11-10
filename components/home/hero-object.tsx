@@ -67,47 +67,13 @@ vec3 formOf(float n, vec2 uv) {
   float a = hq(n, 1u), b = hq(n, 2u), c = hq(n, 3u), g = hq(n, 4u);
   vec3 j = vec3(hq(n, 5u), hq(n, 6u), hq(n, 7u)) - 0.5;
   vec3 p; float loose = mix(0.4, 4.2, pow(g, 1.2));
-  // Temporary: the landing form options (Menu row). One clear form right of centre.
+  // Temporary: the landing form options, picked from the hidden row in the Menu.
   if (symbol < 0.5 && look > 0.5) {
-    float t = time * 0.06;
-    vec3 q;
-    if (look < 1.5) {
-      // D1: one thin ring (after byotone.com).
-      float th = b * 6.2831853, w = (c - 0.5);
-      q = vec3(cos(th), sin(th), 0.0) * (1.0 + w * 0.09) + vec3(0.0, 0.0, (hq(n, 17u) - 0.5) * 0.06);
-      q.yz = mat2(cos(1.05), -sin(1.05), sin(1.05), cos(1.05)) * q.yz;
-    } else if (look < 2.5) {
-      // D2: a thick torus, tilted.
-      float th = b * 6.2831853, ph = c * 6.2831853;
-      q = vec3((1.0 + 0.32 * cos(ph)) * cos(th), (1.0 + 0.32 * cos(ph)) * sin(th), 0.32 * sin(ph));
-      q.yz = mat2(cos(1.1), -sin(1.1), sin(1.1), cos(1.1)) * q.yz;
-    } else if (look < 3.5) {
-      // D3: a sphere, dust on its surface.
-      float z = c * 2.0 - 1.0, th = b * 6.2831853;
-      q = vec3(sqrt(1.0 - z * z) * cos(th), z, sqrt(1.0 - z * z) * sin(th));
-    } else if (look < 4.5) {
-      // D4: a small sphere inside a wide ring (a planet).
-      float th = b * 6.2831853;
-      if (a < 0.45) {
-        float z = c * 2.0 - 1.0;
-        q = vec3(sqrt(1.0 - z * z) * cos(th), z, sqrt(1.0 - z * z) * sin(th)) * 0.62;
-      } else {
-        q = vec3(cos(th), 0.0, sin(th)) * mix(1.05, 1.5, c);
-        q.xy = mat2(cos(0.35), -sin(0.35), sin(0.35), cos(0.35)) * q.xy;
-        q.yz = mat2(cos(0.32), -sin(0.32), sin(0.32), cos(0.32)) * q.yz;
-      }
-    } else {
-      // D5: two crossing rings (a gyroscope).
-      float th = b * 6.2831853, w = (c - 0.5) * 0.07;
-      q = vec3(cos(th), sin(th), 0.0) * (1.0 + w);
-      float k = a < 0.5 ? 0.9 : -0.9;
-      q.xz = mat2(cos(k), -sin(k), sin(k), cos(k)) * q.xz;
-      q.yz = mat2(cos(0.4), -sin(0.4), sin(0.4), cos(0.4)) * q.yz;
-    }
-    // Turning slowly about the vertical axis.
-    q.xz = mat2(cos(t), -sin(t), sin(t), cos(t)) * q.xz;
-    float haze = g > 0.9 ? 0.25 : 0.02;
-    return q * 1.4 + j * haze + vec3(1.75, -0.3, 0.0);
+    float th = (b - 0.5) * 1.75 + time * 0.012;
+    float d = -log(1.0 - c * 0.995) * 0.13;
+    float R = 4.6 - d;
+    p = vec3(0.45 + sin(th) * R, -4.72 + cos(th) * R, (hq(n, 17u) - 0.5) * 0.4);
+    return p * 1.6 + j * (g > 0.88 ? 0.5 : 0.035) + vec3(0.35, 0.05, 0.0);
   }
   if (symbol > 2.5 || symbol < 0.5) {
     // The landing (and About): a landscape of dots, seen low from the front,
@@ -117,7 +83,6 @@ vec3 formOf(float n, vec2 uv) {
     // The landing keeps almost everything on the surface, so the wave reads as one form.
     if (a < (symbol < 0.5 ? 0.92 : 0.82)) {
       vec2 gp = (floor(uv * SIZE) + 0.5) / SIZE;
-      // Temporary draft B2: the same wave, narrower, so it reads as one form.
       float x = (gp.x - 0.5) * 6.4, z = (gp.y - 0.5) * 4.0 - 0.9;
       float ridge = smoothstep(0.8, 3.0, abs(x)) * (0.55 + 0.45 * sin(x * 2.3 + z * 1.7));
       float y = 0.42 * sin(x * 1.4 + time * 0.35) * cos(z * 1.9 - time * 0.25) + 0.14 * sin(x * 4.1 + z * 3.3 + time * 0.5) + ridge * 1.2;
@@ -407,8 +372,7 @@ void main() {
   float lead = exp(-dot(fromLead, fromLead));
   float dense = max(smoothstep(-0.6, 0.8, patchy), lead);
   float kept = step(fract(vSeed * 97.31), keep * mix(1.0, mix(0.04, 0.12, side), sky) * mix(1.0, mix(0.32, 1.0, dense) * (1.0 + 2.0 * lead) * smoothstep(-0.8, -0.32, s.y), galaxy));
-  if (look > 0.5 && galaxy > 0.5) kept = step(fract(vSeed * 97.31), 0.55);
-  sky *= 1.0 - step(0.5, look);
+  if (look > 0.5 && galaxy > 0.5) kept = 1.0;
   // Mostly small grains, about one in eight a larger flake, so the field
   // has depth instead of an even texture. The sky keeps only the small ones.
   float flake = step(0.875, fract(vSeed * 71.9)) * (1.0 - sky) * (1.0 - portraitMix) * (1.0 - galaxy);
@@ -417,13 +381,9 @@ void main() {
   // Most grains quiet, a few much brighter and larger, more of them where the dust is dense.
   float standout = pow(fract(vSeed * 37.7), 5.0);
   vFaint *= mix(1.0, mix(0.5, 1.2, dense) * (0.7 + mix(2.0, 0.8, light) * standout) * mix(0.75, 1.0, smoothstep(-0.9, 0.1, s.x)) * (1.0 + mix(2.2, 0.7, light) * lead), galaxy);
-  // Temporary drafts: the form with depth (near grains larger and brighter).
-  float draft = step(0.5, look) * galaxy;
-  vFaint = mix(vFaint, vFaint * mix(0.3, 1.6, vDepth), draft);
   float bigger = 1.0 - max(portraitMix, halo);
   px = mix(mix(1.6, 2.4, vDepth) * mix(1.0, 1.45, bigger), mix(4.0, 6.0, vDepth) * mix(1.0, 1.2, bigger) * mix(1.0, 0.58, galaxy * (1.0 - light)), flake) * dpr;
   px *= mix(1.0, 0.72 + 0.55 * standout, galaxy * (1.0 - light));
-  px *= mix(1.0, mix(0.7, 1.9, vDepth), draft);
   // Light theme: about one grain in twelve glints now and then (a slow,
   // sharp swell in size and brightness, each on its own beat).
   // The portrait: grains are brighter where the photo is.

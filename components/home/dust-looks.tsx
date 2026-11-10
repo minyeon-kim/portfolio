@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 // Remove it, with the `look` uniform in hero-object.tsx, once a form is chosen.
 export const DUST_LOOK_EVENT = "dust-look";
 const KEY = "dust-look";
-const LOOKS = ["Now", "Ring", "Torus", "Sphere", "Planet", "Gyro"];
+const LOOKS = ["Now", "Horizon"];
 
 export function readDustLook() {
-  try { const v = Number(sessionStorage.getItem(KEY)); return v >= 0 && v <= 5 ? Math.floor(v) : 0; } catch { return 0; }
+  try { return Number(sessionStorage.getItem(KEY)) === 1 ? 1 : 0; } catch { return 0; }
 }
 
 export function DustLooks() {
@@ -21,14 +21,8 @@ export function DustLooks() {
     window.dispatchEvent(new CustomEvent(DUST_LOOK_EVENT, { detail: next }));
   };
   return (
-    <>
-      <div className="menu-dust-pick" role="group" aria-label="Compare Ring and Gyro">
-        <span>Particle draft</span>
-        {[1, 5].map((i) => <button key={i} type="button" aria-pressed={look === i} onClick={() => pick(i)}>{LOOKS[i]}</button>)}
-      </div>
-      <div className="menu-dust" role="group" aria-label="Landing particle options">
-        {LOOKS.map((name, i) => <button key={name} type="button" aria-pressed={look === i} onClick={() => pick(i)}>{name}</button>)}
-      </div>
-    </>
+    <div className="menu-dust" role="group" aria-label="Landing particle options">
+      {LOOKS.map((name, i) => <button key={name} type="button" aria-pressed={look === i} onClick={() => pick(i)}>{name}</button>)}
+    </div>
   );
 }
