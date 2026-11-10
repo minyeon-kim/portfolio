@@ -171,7 +171,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
                 <h2 id="about-outside-title">{c.outside}</h2>
                 <div className="about-outside-grid">
                   {OUTSIDE.map((p) => (
-                    <figure key={p.name} className="reveal" style={{ gridColumn: p.col, gridRow: p.row }}>
+                    <figure key={p.name} className="about-outside-item" style={{ gridColumn: p.col, gridRow: p.row, ["--d" as string]: `${p.d ?? 0}px` }}>
                       <div className="about-outside-media">
                         {p.clip ? (
                           <AboutClip src={withBase(`/images/about/outside/${p.name}.mp4`)} poster={withBase(`/images/about/outside/${p.name}-poster.webp`)} label={c.outsideAlt[p.name]} />
@@ -207,19 +207,21 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 
 // Outside work, set loosely on a 12-column grid (desktop): columns and rows in 24px units at a
 // 1200px column, so each cell keeps roughly its photo's 3:4 shape plus a caption line.
-const OUTSIDE: { name: string; col: string; row: string; caption?: string; clip?: boolean; pos?: string }[] = [
-  { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true },
-  { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo", pos: "50% 85%" },
-  { name: "parasail", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%" },
-  { name: "night-walk", col: "11 / span 2", row: "16 / span 12" },
-  { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over" },
-  { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok", pos: "40% 50%" },
-  { name: "night-bar", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%" },
-  { name: "sea-walk", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%" },
-  { name: "platform", col: "11 / span 2", row: "54 / span 12" },
-  { name: "alley", col: "1 / span 3", row: "60 / span 18" },
-  { name: "beach", col: "4 / span 3", row: "62 / span 18" },
-  { name: "statue", col: "11 / span 2", row: "70 / span 12" },
+// d: how far the item drifts against the scroll (px each way). Three layers by column
+// (left 30, middle 60, right 90), so photos in one column never drift into each other.
+const OUTSIDE: { name: string; col: string; row: string; caption?: string; clip?: boolean; pos?: string; d?: number }[] = [
+  { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true, d: 30 },
+  { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo", pos: "50% 85%", d: 60 },
+  { name: "parasail", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
+  { name: "night-walk", col: "11 / span 2", row: "16 / span 12", d: 90 },
+  { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over", d: 60 },
+  { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok", pos: "40% 50%", d: 30 },
+  { name: "night-bar", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
+  { name: "sea-walk", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
+  { name: "platform", col: "11 / span 2", row: "54 / span 12", d: 90 },
+  { name: "alley", col: "1 / span 3", row: "60 / span 18", d: 30 },
+  { name: "beach", col: "4 / span 3", row: "62 / span 18", d: 60 },
+  { name: "statue", col: "11 / span 2", row: "70 / span 12", d: 90 },
 ];
 
 // A section title in the case pages' form: display size, light, without a counter.

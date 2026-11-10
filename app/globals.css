@@ -8757,3 +8757,26 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .about-outside-media { flex: none; aspect-ratio: 3 / 4; }
   .about-outside-grid figure:not(:has(figcaption)) .about-outside-media { margin-bottom: 0; }
 }
+
+/* Outside work, matched to the Experience sheet above it: the same centred Geist heading, and motion.
+   Each photo rises and settles as it enters, then drifts against the scroll by its own depth (--d),
+   so near and far photos move apart. CSS scroll timelines only; static without them or with reduced motion. */
+.about-outside h2 { font-family: inherit; font-size: clamp(38px, min(4.4vw, 8svh), 84px); font-weight: 500; line-height: 1.04; letter-spacing: -0.035em; text-align: center; }
+.about-outside-inner { padding-top: clamp(96px, 14svh, 160px); padding-top: round(clamp(96px, 14svh, 160px), 8px); }
+.about-outside-grid { margin-top: clamp(64px, 9svh, 96px); margin-top: round(clamp(64px, 9svh, 96px), 8px); }
+.about-outside-media img { transition: scale 400ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .about-outside-item:hover .about-outside-media img { scale: 1.04; }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    .about-outside-item { animation: about-out-in linear both, about-out-drift linear both; animation-timeline: view(), view(); animation-range: entry 0% entry 70%, cover 0% cover 100%; }
+    .about-outside-media { animation: about-out-open linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  }
+  @media (max-width: 63.99rem) and (prefers-reduced-motion: no-preference) {
+    .about-outside-item { animation: about-out-in linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  }
+}
+@keyframes about-out-in { from { opacity: 0; scale: 0.94; } to { opacity: 1; scale: 1; } }
+@keyframes about-out-drift { from { translate: 0 var(--d); } to { translate: 0 calc(var(--d) * -1); } }
+@keyframes about-out-open { from { clip-path: inset(8% 6% round 8px); } to { clip-path: inset(0 round 8px); } }
