@@ -8716,11 +8716,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .menu-card > .dh-shot .dh-shot-camera { animation: none; }
 }
 
-/* Opener text left-aligned on the 1200 case column (owner; supersedes the centred name,
-   question and facts): name, question and facts share the body's left edge. */
+/* Opener text left-aligned across the full cover width (owner; supersedes the 1200 column and the
+   centred text): name, question and facts start on the cover's left edge, facts spread to its right edge. */
 @media (min-width: 64rem) {
-  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { width: min(1200px, calc(100% - 2 * var(--edge-inset, 24px))); margin-inline: auto; align-items: flex-start; text-align: left; }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-intro { width: min(1640px, calc(100% - 2 * var(--edge-inset, 24px))); margin-inline: auto; align-items: flex-start; text-align: left; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-question { margin-left: 0; text-align: left; }
   :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details, :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details > * { text-align: left; }
-  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { width: min(1200px, calc(100% - 2 * var(--edge-inset, 24px))); }
+  :root .devsign-hero.dh-cover.dh-cover .devsign-hero-details { width: auto; max-width: 1640px; margin-inline: auto; }
 }
