@@ -171,7 +171,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             <section className="about-panel about-outside" aria-labelledby="about-outside-title">
               <div className="about-outside-inner">
                 <h2 id="about-outside-title">{c.outside}</h2>
-                <OutsideGallery items={OUTSIDE} alts={c.outsideAlt} base={withBase("")} labels={c.lightbox} />
+                <OutsideGallery items={OUTSIDE} alts={c.outsideAlt} base={withBase("/").replace(/\/$/, "")} labels={c.lightbox} />
               </div>
             </section>
             <article className="about-panel about-panel-contact" aria-labelledby="about-contact-title">
