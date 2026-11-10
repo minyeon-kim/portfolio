@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { AboutClip } from "@/components/about-clip";
+import { OutsideGallery, type OutsideItem } from "@/components/about-outside";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { Todo } from "@/components/todo";
@@ -29,6 +29,7 @@ const copy = {
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
     } as Record<string, string>,
     outside: "Outside work",
+    lightbox: { open: "View larger", close: "Close", prev: "Previous photo", next: "Next photo" },
     outsideAlt: {
       bouldering: "Minyeon climbing a bouldering wall",
       tokyo: "Minyeon in front of Tokyo Tower at night",
@@ -63,6 +64,7 @@ const copy = {
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
     } as Record<string, string>,
     outside: "Outside work",
+    lightbox: { open: "크게 보기", close: "닫기", prev: "이전 사진", next: "다음 사진" },
     outsideAlt: {
       bouldering: "볼더링 벽을 오르는 김민연",
       tokyo: "밤의 도쿄타워 앞에 선 김민연",
@@ -169,20 +171,7 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
             <section className="about-panel about-outside" aria-labelledby="about-outside-title">
               <div className="about-outside-inner">
                 <h2 id="about-outside-title">{c.outside}</h2>
-                <div className="about-outside-grid">
-                  {OUTSIDE.map((p) => (
-                    <figure key={p.name} className="about-outside-item" style={{ gridColumn: p.col, gridRow: p.row, ["--d" as string]: `${p.d ?? 0}px` }}>
-                      <div className="about-outside-media">
-                        {p.clip ? (
-                          <AboutClip src={withBase(`/images/about/outside/${p.name}.mp4`)} poster={withBase(`/images/about/outside/${p.name}-poster.webp`)} label={c.outsideAlt[p.name]} />
-                        ) : (
-                          <Image src={withBase(`/images/about/outside/${p.name}.webp`)} alt={c.outsideAlt[p.name]} fill sizes="(min-width: 64rem) 34vw, 50vw" style={{ objectPosition: p.pos }} />
-                        )}
-                      </div>
-                      {p.caption && <figcaption>{p.caption}</figcaption>}
-                    </figure>
-                  ))}
-                </div>
+                <OutsideGallery items={OUTSIDE} alts={c.outsideAlt} base={withBase("")} labels={c.lightbox} />
               </div>
             </section>
             <article className="about-panel about-panel-contact" aria-labelledby="about-contact-title">
@@ -209,19 +198,19 @@ export async function AboutPage({ locale = "en" }: { locale?: Locale }) {
 // 1200px column, so each cell keeps roughly its photo's 3:4 shape plus a caption line.
 // d: how far the item drifts against the scroll (px each way). Three layers by column
 // (left 30, middle 60, right 90), so photos in one column never drift into each other.
-const OUTSIDE: { name: string; col: string; row: string; caption?: string; clip?: boolean; pos?: string; d?: number }[] = [
+const OUTSIDE: OutsideItem[] = [
   { name: "bouldering", col: "1 / span 5", row: "1 / span 29", caption: "Bouldering", clip: true, d: 30 },
   { name: "tokyo", col: "7 / span 3", row: "6 / span 18", caption: "Tokyo", pos: "50% 85%", d: 60 },
-  { name: "parasail", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
-  { name: "night-walk", col: "11 / span 2", row: "16 / span 12", d: 90 },
+  { name: "parasail", caption: "Parasailing", col: "11 / span 2", row: "1 / span 12", pos: "50% 35%", d: 90 },
+  { name: "night-walk", caption: "A night walk", col: "11 / span 2", row: "16 / span 12", d: 90 },
   { name: "brewing", col: "7 / span 3", row: "27 / span 14", caption: "Pour-over", d: 60 },
   { name: "bangkok", col: "2 / span 4", row: "34 / span 23", caption: "Bangkok", pos: "40% 50%", d: 30 },
-  { name: "night-bar", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
-  { name: "sea-walk", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
-  { name: "platform", col: "11 / span 2", row: "54 / span 12", d: 90 },
-  { name: "alley", col: "1 / span 3", row: "60 / span 18", d: 30 },
-  { name: "beach", col: "4 / span 3", row: "62 / span 18", d: 60 },
-  { name: "statue", col: "11 / span 2", row: "70 / span 12", d: 90 },
+  { name: "night-bar", caption: "Out at night", col: "10 / span 3", row: "31 / span 18", pos: "60% 60%", d: 90 },
+  { name: "sea-walk", caption: "A walk by the sea", col: "7 / span 4", row: "50 / span 23", pos: "50% 55%", d: 60 },
+  { name: "platform", caption: "Platform 9¾", col: "11 / span 2", row: "54 / span 12", d: 90 },
+  { name: "alley", caption: "A quiet alley", col: "1 / span 3", row: "60 / span 18", d: 30 },
+  { name: "beach", caption: "On the beach", col: "4 / span 3", row: "62 / span 18", d: 60 },
+  { name: "statue", caption: "A new friend", col: "11 / span 2", row: "70 / span 12", d: 90 },
 ];
 
 // A section title in the case pages' form: display size, light, without a counter.
