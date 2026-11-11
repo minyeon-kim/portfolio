@@ -8882,3 +8882,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 @media (max-width: 63.99rem) {
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 10.4vw, 56px); font-size: round(down, clamp(32px, 10.4vw, 56px), 4px); }
 }
+
+/* Landing headline in Figtree 500 (owner chose it from the font sheet), two lines:
+   Designing / Complex Products. The case name that takes its place on hover uses it too. */
+.home-tagline-wrap .home-tagline.home-tagline, .home-world-name { font-family: var(--font-landing), var(--font-sans); font-weight: 500; letter-spacing: -0.03em; }
+@media (min-width: 64rem) {
+  .home-tagline-wrap .home-tagline.home-tagline-default { font-size: round(down, clamp(56px, min(7.2vw, 12svh), 128px), 4px); line-height: 1; }
+}
+@media (max-width: 63.99rem) {
+  .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 11.2vw, 56px); font-size: round(down, clamp(32px, 11.2vw, 56px), 4px); line-height: 1.04; }
+}
