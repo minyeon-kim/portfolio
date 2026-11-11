@@ -3229,6 +3229,10 @@ header[data-home] .header-menu-trigger { transition-property: background-color, 
   /* The statement sits at the left edge under the menu column (owner). */
   .home-tagline-wrap { position: absolute; left: var(--project-text-inset); bottom: clamp(32px, 6svh, 64px); justify-items: start; }
   .home-tagline, .home-tagline-wrap:lang(ko) .home-tagline { width: 11.5em; padding-left: 1.6em; text-indent: -1.6em; font-size: clamp(40px, min(4.6vw, 8svh), 88px); line-height: 1.04; text-align: left; text-wrap: wrap; }
+  /* Class feedback 2026-11-10: "Complex Products" stays together, so the line breaks after the
+     comma (width sits between "Designing Complex Products," and "…, End"), and the size moves in
+     4px steps (84/88, not 86). */
+  .home-tagline-wrap .home-tagline.home-tagline { width: 14.5em; font-size: round(down, clamp(40px, min(4.6vw, 8svh), 88px), 4px); text-wrap: wrap; }
   .home-tagline-wrap:lang(ko) .home-tagline { width: 9.6em; font-size: clamp(36px, min(4vw, 7.2svh), 76px); line-height: 1.2; }
   /* Inherited, the indent would pull every inline-block glyph of the scramble left. */
   .home-tagline * { text-indent: 0; }
@@ -8859,3 +8863,9 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .dv-cmp2-named dt { color: var(--dv-ink); font-size: 20px; font-weight: 500; }
 .dv-cmp2-named dd { margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
 .case-study .dv .dv-cmp2-named section:not([data-self]) dt { color: var(--dv-muted); }
+
+/* Phones: the headline reads Designing / Complex Products, / End to End (width between the
+   two widths that would split "Complex Products"), sized in 4px steps. */
+@media (max-width: 63.99rem) {
+  .home-tagline-wrap .home-tagline.home-tagline, .home-tagline-wrap:lang(ko) .home-tagline.home-tagline { width: 8.7em; max-width: none; font-size: clamp(32px, 9.6vw, 44px); font-size: round(down, clamp(32px, 9.6vw, 44px), 4px); text-wrap: wrap; }
+}

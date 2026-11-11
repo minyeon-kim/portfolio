@@ -71,7 +71,7 @@ export const ui = {
     welcome: "What would you like to explore?",
     askPlaceholder: "Ask about a project",
     askWork: "Ask about my work",
-    heroLine: "Designing Complex Products, End To End",
+    heroLine: "Designing Complex Products, End to End",
     city: "Seoul",
     heroEmphasis: "Complex",
     heroParagraph: "For four years as a security consultant, I explained complex problems so developers and clients could act on them. Now I’m a product designer who builds with AI, from research to a working prototype.",
@@ -153,7 +153,7 @@ export const ui = {
     askPlaceholder: "프로젝트에 대해 물어보세요",
     askWork: "작업에 대해 물어보세요",
     // The display line stays English on both pages, like the site labels (owner): its serif is a Latin face.
-    heroLine: "Designing Complex Products, End To End",
+    heroLine: "Designing Complex Products, End to End",
     city: "서울",
     heroEmphasis: "Complex",
     heroParagraph: "4년 동안 보안 컨설턴트로 일하며\n복잡한 문제를 개발자와 고객사가\n이해하기 쉽게 설명해 왔습니다.\n지금은 AI와 함께 리서치부터\n작동하는 프로토타입까지\n직접 만드는 프로덕트 디자이너입니다.",
