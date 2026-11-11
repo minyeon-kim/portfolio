@@ -6,7 +6,8 @@
  */
 
 :root {
-  --font-headline: var(--font-serif), var(--font-serif-ko), Georgia, serif;
+  /* Bitter 500 for every big title (owner, after the 2026-11-10 class feedback); Hangul falls to Pretendard via --font-sans. */
+  --font-headline: var(--font-landing), var(--font-sans);
   --bg: #f5f6f4;
   --surface: #ffffff;
   --ink: #0e1111;
@@ -8270,7 +8271,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 
 /* Chapter titles differ from block headings by form, not distance: the headline serif over a line. */
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { padding-bottom: 24px; border-bottom: 1px solid var(--dv-line); }
-.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title { font-family: var(--font-serif); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; font-optical-sizing: auto; }
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title { font-family: var(--font-headline); font-size: clamp(48px, 5vw, 72px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; font-optical-sizing: auto; }
 @media (min-width: 64rem) { .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --sp-head: 48px; } }
 @media (max-width: 47.99rem) { .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv > section .dv-section-head { padding-bottom: 16px; } .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title { font-size: 40px; } }
 
@@ -8744,7 +8745,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .about-panel.about-outside { position: relative; display: block; min-height: 0; background: var(--bg); color: var(--ink); text-align: left; overflow: visible; }
 .about-outside::before, .about-outside::after { display: none; }
 .about-outside-inner { width: min(1200px, calc(100vw - 2 * var(--edge-inset, 24px))); margin-inline: auto; padding-block: 128px 160px; }
-.about-outside h2 { margin: 0; font-family: var(--font-serif); font-size: clamp(40px, 5vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -0.02em; }
+.about-outside h2 { margin: 0; font-family: var(--font-headline); font-size: clamp(40px, 5vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -0.02em; }
 .about-outside-grid { --u: calc(min(1200px, 100vw - 2 * var(--edge-inset, 24px)) / 50); display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: var(--u); column-gap: 16px; margin-top: 80px; }
 .about-outside-grid figure { position: relative; display: flex; flex-direction: column; min-height: 0; margin: 0; }
 .about-outside-media { position: relative; flex: 1; min-height: 0; overflow: hidden; border-radius: 8px; background: light-dark(#e8e8ec, #17181d); }
@@ -8883,12 +8884,25 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 10.4vw, 56px); font-size: round(down, clamp(32px, 10.4vw, 56px), 4px); }
 }
 
-/* Landing headline in Figtree 500 (owner chose it from the font sheet), two lines:
-   Designing / Complex Products. The case name that takes its place on hover uses it too. */
-.home-tagline-wrap .home-tagline.home-tagline, .home-world-name { font-family: var(--font-landing), var(--font-sans); font-weight: 500; letter-spacing: -0.03em; }
+/* Landing headline in the title face (Bitter 500), two lines: Designing / Complex Products.
+   The case name that takes its place on hover uses it too. */
+.home-tagline-wrap .home-tagline.home-tagline, .home-world-name { font-family: var(--font-headline); font-weight: 500; letter-spacing: -0.02em; }
 @media (min-width: 64rem) {
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: round(down, clamp(56px, min(7.2vw, 12svh), 128px), 4px); line-height: 1; }
 }
 @media (max-width: 63.99rem) {
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 11.2vw, 56px); font-size: round(down, clamp(32px, 11.2vw, 56px), 4px); line-height: 1.04; }
+}
+
+/* Big titles share one face (owner): Bitter 500, -0.02em. Bitter is loaded at 500 only, so the
+   old Light (300) weights are lifted here instead of being faked. */
+.home-world-name, .home-tagline, .menu-card-line, .about-contact-line,
+.devsign-hero.dh-cover.dh-cover .devsign-hero-title, .devsign-hero.dh-cover .devsign-hero-title,
+.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title,
+.about-outside h2, .about-panel-sheet .about-panel-copy h2, .about-panel-contact .about-panel-copy h2 { font-family: var(--font-headline); font-weight: 500; letter-spacing: -0.02em; }
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover.dh-cover .devsign-hero-title { font-size: round(down, clamp(56px, 6.2vw, 120px), 4px); }
+}
+@media (min-width: 64rem) {
+  .devsign-hero.dh-cover.dh-cover[data-project] .devsign-hero-title { font-size: round(down, clamp(56px, 6.2vw, 120px), 4px); }
 }

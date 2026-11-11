@@ -2,7 +2,7 @@ import { StyleRetry } from "@/components/style-retry";
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
-import { Bricolage_Grotesque, Figtree, Geist, Geist_Mono, Noto_Serif_KR, Roboto_Serif } from "next/font/google";
+import { Bitter, Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SmoothScroll } from "@/components/smooth-scroll";
@@ -28,31 +28,13 @@ const display = Bricolage_Grotesque({
   display: "swap",
 });
 
-// The landing statement: a thin display serif, after Metalab's PP Eiko.
-const serif = Roboto_Serif({
-  subsets: ["latin"],
-  weight: "variable",
-  axes: ["opsz"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-// The landing headline (owner, after the 2026-11-10 class feedback: the serif read too soft;
-// Figtree is the free face closest to the Avenir the teacher suggested).
-const landingSans = Figtree({
+// Every big title (owner, after the 2026-11-10 class feedback: the thin serif read too soft and
+// Figtree too much like a gothic sans; Bitter is the slab serif in between).
+const landingSans = Bitter({
   subsets: ["latin"],
   weight: ["500"],
   variable: "--font-landing",
   display: "swap",
-});
-
-// Its Hangul. Loaded in slices only where Korean text uses it, so never preloaded.
-const serifKo = Noto_Serif_KR({
-  variable: "--font-serif-ko",
-  subsets: ["latin"],
-  weight: ["200"],
-  display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -67,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       // The theme script may set data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${serif.variable} ${serifKo.variable} ${landingSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${landingSans.variable} h-full antialiased`}
     >
       <head>
         <StyleRetry />
