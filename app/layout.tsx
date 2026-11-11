@@ -2,7 +2,7 @@ import { StyleRetry } from "@/components/style-retry";
 import type { Metadata } from "next";
 import { HtmlLang } from "@/components/html-lang";
 import { ViewTransition } from "react";
-import { Bitter, Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono, Nunito_Sans } from "next/font/google";
 import { ReturnToIntro } from "@/components/return-to-intro";
 import { RevealObserver } from "@/components/reveal-observer";
 import { SmoothScroll } from "@/components/smooth-scroll";
@@ -28,11 +28,11 @@ const display = Bricolage_Grotesque({
   display: "swap",
 });
 
-// Every big title (owner, after the 2026-11-10 class feedback: the thin serif read too soft and
-// Figtree too much like a gothic sans; Bitter is the slab serif in between).
-const landingSans = Bitter({
+// Every big title (owner, after the 2026-11-10 class feedback): Nunito Sans, the free face
+// closest to the Avenir the teacher suggested.
+const landingSans = Nunito_Sans({
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["600"],
   variable: "--font-landing",
   display: "swap",
 });

@@ -6,7 +6,7 @@
  */
 
 :root {
-  /* Bitter 500 for every big title (owner, after the 2026-11-10 class feedback); Hangul falls to Pretendard via --font-sans. */
+  /* Nunito Sans 600 for every big title (owner, after the 2026-11-10 class feedback); Hangul falls to Pretendard via --font-sans. */
   --font-headline: var(--font-landing), var(--font-sans);
   --bg: #f5f6f4;
   --surface: #ffffff;
@@ -8884,9 +8884,9 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 10.4vw, 56px); font-size: round(down, clamp(32px, 10.4vw, 56px), 4px); }
 }
 
-/* Landing headline in the title face (Bitter 500), two lines: Designing / Complex Products.
+/* Landing headline in the title face (Nunito Sans 600), two lines: Designing / Complex Products.
    The case name that takes its place on hover uses it too. */
-.home-tagline-wrap .home-tagline.home-tagline, .home-world-name { font-family: var(--font-headline); font-weight: 500; letter-spacing: -0.02em; }
+.home-tagline-wrap .home-tagline.home-tagline, .home-world-name { font-family: var(--font-headline); font-weight: 600; letter-spacing: -0.02em; }
 @media (min-width: 64rem) {
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: round(down, clamp(56px, min(7.2vw, 12svh), 128px), 4px); line-height: 1; }
 }
@@ -8894,12 +8894,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 11.2vw, 56px); font-size: round(down, clamp(32px, 11.2vw, 56px), 4px); line-height: 1.04; }
 }
 
-/* Big titles share one face (owner): Bitter 500, -0.02em. Bitter is loaded at 500 only, so the
+/* Big titles share one face (owner): Nunito Sans 600, -0.02em. It is loaded at 600 only, so the
    old Light (300) weights are lifted here instead of being faked. */
 .home-world-name, .home-tagline, .menu-card-line, .about-contact-line,
 .devsign-hero.dh-cover.dh-cover .devsign-hero-title, .devsign-hero.dh-cover .devsign-hero-title,
 .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title,
-.about-outside h2, .about-panel-sheet .about-panel-copy h2, .about-panel-contact .about-panel-copy h2 { font-family: var(--font-headline); font-weight: 500; letter-spacing: -0.02em; }
+.about-outside h2, .about-panel-sheet .about-panel-copy h2, .about-panel-contact .about-panel-copy h2 { font-family: var(--font-headline); font-weight: 600; letter-spacing: -0.02em; }
 @media (min-width: 64rem) {
   .devsign-hero.dh-cover.dh-cover .devsign-hero-title { font-size: round(down, clamp(56px, 6.2vw, 120px), 4px); }
 }
