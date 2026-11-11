@@ -321,23 +321,18 @@ export const study = {
     lead: "Testing now: does checking it yourself build trust?",
     usability: {
       method: "Test plan",
-      title: "Moderated test (people think out loud)",
+      title: "Usability test",
+      meta: "2 of 5 sessions so far",
       lead: "Up to five people run two scenarios using a made-up person’s data.",
-      text: "Scenario A (in-place switches), then B (delete by asking).",
+      resultLead: "Both found the source without help, but the source panel showed too much.",
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
+      facts: [{ value: "46.5 s · 14.8 s", label: "Time to find the source, without help", hint: "P01 · P02" }, { value: "77.5 · 82.5", label: "Usability score (SUS)", hint: "P01 · P02, on different prototype versions. Typical product average 68" }],
       charts: [
-        {
-          type: "rings",
-          tab: "Usability score",
-          title: "After 2 of 5 sessions, the usability score (SUS, out of 100) is 77.5 and 82.5.",
-          note: "A trend only: they used different prototype versions.",
-          items: [{ label: "P01", value: 77.5 }, { label: "P02", value: 82.5 }],
-        },
         {
           type: "table",
           tab: "Ease and information",
-          title: "Both found the source without help (46.5 s, 14.8 s), but task 1 showed too much information.",
-          note: "Task 1 is the source panel, task 2 is asking in chat. For information, 4 is about right.",
+          title: "Both gave the source panel a 6 for amount of information, where 4 is about right.",
+          note: "Rated 1–7. Task 1 is the source panel, task 2 is asking in chat.",
           max: 7, people: ["P01", "P02"],
           rows: [
             { label: "Task 1 · Ease", values: [5, 3] },

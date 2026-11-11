@@ -765,7 +765,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         <div>
           {/* With a `protocol`: the result first (finding, who and how much, the
               scores, what they meant). */}
-          {testing.usability.protocol ? <>
+          {testing.usability.protocol || testing.usability.resultLead ? <>
           {/* The finding is the block's heading; each chart's own sentence is a smaller caption
               (owner: without the heading the block had no hierarchy). */}
           <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.facts ? testing.usability.charts.slice(0, 1) : testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} lead={testing.usability.resultLead ?? testing.usability.lead} text={undefined} ff={ff} /></>} below={testing.usability.facts && <dl className="dv-ut-rows">
@@ -775,6 +775,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>
           <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} ff={ff} /></>} /></section>
+          </>}
           {/* The success criteria the test measures, moved here from Define so the Problem
               statement can close Define as a full sheet (as on Devsign). */}
           {testing.goals && <div className="dv-goals dv-gap-64">
@@ -783,7 +784,6 @@ export function DevsignCase({ study, children }: { study: Study; children: React
               {testing.goals.items.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
             </ol>
           </div>}
-          </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">
           <Block {...testing.iteration1} text={ff ? undefined : testing.iteration1.text} ff={ff} />
