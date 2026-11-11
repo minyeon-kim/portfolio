@@ -217,6 +217,8 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         <div className="home-tagline-wrap" lang="en" data-swap={next ? "" : undefined}>
           <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
+          {/* A small line under the big one (class feedback: big and small type set against each other). */}
+          <p className="home-tagline-sub">{t.heroSub}</p>
         </div>
         {displayed?.role && <p className={`home-world-role${displayed.emphasis ? " has-emphasis" : ""}`} data-on={copyOn || undefined} aria-hidden={!copyOn}><Emphasis text={displayed.role} phrase={displayed.emphasis} /></p>}
         <p className="home-world-name" data-on={copyOn || undefined} aria-hidden={!copyOn}>{displayed?.name.split(/(?<=^Gemini) /).map((line) => <span key={line}>{line}{" "}</span>)}</p>
