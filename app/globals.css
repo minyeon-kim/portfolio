@@ -8360,7 +8360,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-flist-open .dv-flist-frame { position: relative; width: 100% !important; max-width: none !important; height: min(780px, 88svh); aspect-ratio: auto; border-radius: 0 !important; padding: 0; background: linear-gradient(150deg, #3b2a9a, #6a53d8); box-shadow: none; }
   .case-study .dv .dv-flist-open .dv-flist-tone { display: none; }
   .case-study .dv .dv-flist-open .dv-flist-frame video { inset: 80px auto auto 50% !important; width: min(1200px, calc(100vw - 112px)) !important; height: auto !important; max-width: none !important; max-height: none !important; translate: -50% 0 !important; margin: 0 !important; border-radius: 16px 16px 0 0; object-fit: cover; }
-  .case-study .dv .dv-flist-open .dv-flist-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 64px; }
+  .case-study .dv .dv-flist-open .dv-flist-items { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 32px; margin-top: 64px; }
   .case-study .dv .dv-flist-open .dv-flist-items li { position: relative; padding: 16px 0 0; border: 0; border-top: 1px solid var(--dv-line); }
   .case-study .dv .dv-flist-open .dv-flist-items button { display: block; padding: 0; text-align: left; }
   .case-study .dv .dv-flist-open .dv-flist-items button b { display: block; margin-bottom: 8px; }
@@ -8466,7 +8466,6 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study:is([data-project="devsign"], [data-project="gemini"]) { --dv-band-radius: 0px; --dv-card-radius: 8px; }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.dv-section, .more-work) { border-radius: 0 !important; }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv :is(.dv-figure img, .dv-iv-tiles img, .dv-dd-stages .dv-dd-stage, .dv-bar-track i, .dv-axe-grid li, .dv-axe-board, .dv-axe-col, .dv-axt-board, .dv-axt-list li, .dv-vpc-view, .dv-open-frame, .dv-open-frame img, .dv-fit, .dv-fit img, .dv-vpf li > p, .dv-flist-frame, .dv-flist-frame video, .dv-hdoc-lens, .dv-hdoc-lens img, .dv-iter-card, .dv-iter-plate, .dv-iter-view, .dv-held-plate, .dv-iter-clip, .dv-iter-clip video, .dv-detail-card, .dv-detail-card img, .dv-dscroll-inline img, .dv-tk-next) { border-radius: 8px !important; }
-:root .case-study[data-project="gemini"] .dv .dv-core.dv-core.dv-core { border-radius: 8px !important; }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) :is(.more-work-hit, .more-work-cover, .more-work-app) { border-radius: 8px !important; }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv { --dv-band-radius: 0px; --dv-card-radius: 8px; }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-card .dv-iter-plate { border-radius: 8px !important; }
@@ -8842,3 +8841,21 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .about-exp li { gap: 24px; padding-block: 20px; }
 .about-exp span { font-size: 16px; }
 .about-exp strong { font-size: 20px; line-height: 1.4; letter-spacing: -0.01em; }
+
+/* Gemini Develop: directions narrowed with the scroll, and what concept feedback kept vs dropped. */
+.dv-dirs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.dv-dirs li { position: relative; display: flex; align-items: center; gap: 16px; min-height: 72px; padding: 16px 24px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.4; transition: color 450ms var(--ease), background-color 450ms var(--ease), box-shadow 450ms var(--ease), opacity 450ms var(--ease), translate 450ms var(--ease); }
+.dv-dirs li > span { color: var(--dv-muted); font-size: 16px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.dv-dirs-tag { margin-left: auto; color: var(--case-accent); font-size: 16px; font-weight: 500; opacity: 0; transition: opacity 450ms var(--ease); }
+/* Final state: without JS, after the cut, or with reduced motion. */
+.dv-dirs-play:not([data-armed]) .dv-dirs li:not([data-kept]),
+.dv-dirs-play:has(.dv-dirs-cut[data-on]) .dv-dirs li:not([data-kept]) { background: transparent; box-shadow: inset 0 0 0 1px var(--dv-line); color: var(--dv-muted); }
+.dv-dirs-play:not([data-armed]) .dv-dirs li[data-kept],
+.dv-dirs-play:has(.dv-dirs-cut[data-on]) .dv-dirs li[data-kept] { background: color-mix(in srgb, var(--case-accent) 14%, transparent); }
+.dv-dirs-play:not([data-armed]) .dv-dirs-tag,
+.dv-dirs-play:has(.dv-dirs-cut[data-on]) .dv-dirs-tag { opacity: 1; }
+.dv-dirs-play[data-armed] .dv-dirs li[data-seq]:not([data-on]) { opacity: 0; translate: 0 16px; }
+@media (max-width: 47.99rem) { .dv-dirs { grid-template-columns: 1fr; } .dv-dirs li { min-height: 56px; font-size: 18px; } }
+.dv-cmp2-named dt { color: var(--dv-ink); font-size: 20px; font-weight: 500; }
+.dv-cmp2-named dd { margin-top: 4px; color: var(--dv-muted); font-size: 16px; font-weight: 400; }
+.case-study .dv .dv-cmp2-named section:not([data-self]) dt { color: var(--dv-muted); }

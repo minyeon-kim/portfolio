@@ -144,6 +144,11 @@ export const study = {
       label: "질문 2 · 지금의 컨트롤로 해결될까?",
       answer: "컨트롤은 두 곳에 나뉘어 있고, 어디에서도 끈 뒤에 무엇이 남는지 보여 주지 않습니다.",
       auditLabel: "AI 서비스 5곳 · 컨트롤이 놓친 것",
+      map: { today: "지금의 컨트롤", selfName: "찾지 못한 것", rows: [
+        { name: "끄기", now: "모든 서비스가 메모리나 기록을 끌 수 있게 합니다", self: "끈 뒤에 무엇이 남는지" },
+        { name: "스위치 위치", now: "Gemini 앱 설정은 3–4번 클릭, AI 학습 설정은 Google 계정 페이지에서 4–5번 클릭", self: "한곳에서 관리하는 방법" },
+        { name: "삭제와 차단", now: "화면에는 ‘삭제’ 하나만 있습니다", self: "법처럼 ‘지우기’와 ‘쓰지 못하게 막기’를 구분하는 화면" },
+      ] },
       groups: [
         { name: "끄는 스위치는 있지만 결과는 없습니다", detail: "모든 서비스가 메모리나 기록을 끌 수 있게 합니다 · 끈 뒤에 무엇이 남는지는 어디에도 없습니다" },
         { name: "Gemini는 통제가 두 곳으로 나뉩니다", detail: "Gemini 앱 설정은 3–4번 클릭 · AI 학습에 쓰지 말라는 설정은 Google 계정 페이지에 있어 4–5번 클릭" },
@@ -153,13 +158,13 @@ export const study = {
     synthesis: {
       label: "Synthesis",
       title: "통제는 네 지점에서 끊깁니다.",
-      withAi: "현재",
-      gap: "공백",
+      keptLabel: "현재",
+      lostLabel: "공백",
       rows: [
-        { stage: "나타날 때", withAi: "답변에 개인 정보가 나타납니다", gap: "출처가 보이지 않습니다" },
-        { stage: "끌 때", withAi: "Gemini 앱과 Google 계정에 나뉜 스위치", gap: "두 곳, 각각 3–5번 클릭" },
-        { stage: "삭제할 때", withAi: "‘삭제’와 ‘차단’이 똑같아 보입니다", gap: "원본은 Gmail이나 Photos에 남습니다" },
-        { stage: "확인할 때", withAi: "활동을 꺼도 대화는 72시간 보관, 검토된 대화는 3년", gap: "무엇이 사라졌는지 확인할 방법이 없습니다" },
+        { stage: "나타날 때", kept: "답변에 개인 정보가 나타납니다", lost: "출처가 보이지 않습니다" },
+        { stage: "끌 때", kept: "Gemini 앱과 Google 계정에 나뉜 스위치", lost: "두 곳, 각각 3–5번 클릭" },
+        { stage: "삭제할 때", kept: "‘삭제’와 ‘차단’이 똑같아 보입니다", lost: "원본은 Gmail이나 Photos에 남습니다" },
+        { stage: "확인할 때", kept: "활동을 꺼도 대화는 72시간 보관, 검토된 대화는 3년", lost: "무엇이 사라졌는지 확인할 방법이 없습니다" },
       ],
     },
     interview: {
@@ -169,6 +174,7 @@ export const study = {
       text: "개인 정보를 매일 요청하는 사람과, AI에 건네는 사람을 만났습니다.",
       questionsLabel: "리서치 질문",
       peopleLabel: "참여자",
+      questionKeys: ["무엇을 걱정하나", "언제 시작되나", "무엇이 있어야 믿나"],
       questions: [
         "AI가 내 개인 정보를 쓸 때 사람들은 무엇을 걱정할까?",
         "걱정은 언제 시작될까? 정보를 입력할 때일까, 답변에서 다시 볼 때일까?",
@@ -249,12 +255,6 @@ export const study = {
       lead: "Gemini는 내 정보를 답변에 가져오지만,",
       text: "나는 그게 어디서 왔는지 볼 수도, 그 자리에서 끌 수도, 사라졌는지 확인할 수도 없습니다.",
     },
-    hmw: {
-      method: "디자인 챌린지",
-      title: "How might we",
-      successLabel: "성공의 기준",
-      success: ["힌트 없이 출처와 스위치를 찾습니다", "차단과 삭제의 차이를 자기 말로 설명합니다"],
-    },
   },
   develop: {
     blocks: [
@@ -262,6 +262,8 @@ export const study = {
         method: "아이디에이션",
         title: "Improvement directions",
         lead: "개선 방향 6개(기능 24개)를, 문제를 다시 정한 뒤 3개로 좁혔습니다.",
+        keptTag: "남김",
+        directions: [{ name: "입력 보호" }, { name: "메모리 관리", kept: true }, { name: "처리 투명성", kept: true }, { name: "출처 표시", kept: true }, { name: "목적별 요청" }, { name: "작업 규칙" }],
       },
       {
         method: "아이디에이션",
@@ -273,7 +275,10 @@ export const study = {
         method: "아이디에이션",
         title: "Concept feedback",
         lead: "콘셉트 4개 중, 설정 화면으로 보내지 않는 두 가지가 남았습니다.",
-        text: "남긴 것: 바로 끄기, 채팅으로 삭제하기. 뺀 것: 파일별 보관 기간, 카테고리 대시보드.",
+        verdict: {
+          dropped: { title: "뺀 것", items: [["파일별 보관 기간", "관리할 것이 더 늘어납니다"], ["카테고리 대시보드", "사람들은 카테고리보다 민감한 항목을 봅니다"]] },
+          kept: { title: "남긴 것", items: [["바로 끄기", "“그냥 켰다 껐다 하면 돼서 쉬워요.”"], ["채팅으로 삭제하기", "“어디 갈 필요가 없어요.”"]] },
+        },
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "팀 피드백이 달린 인라인 데이터 관리 콘셉트" },
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "팀 피드백이 달린 채팅으로 삭제 콘셉트" },
@@ -309,6 +314,7 @@ export const study = {
     },
   },
   testing: {
+    goals: { label: "성공의 기준", items: ["힌트 없이 출처와 스위치를 찾습니다", "차단과 삭제의 차이를 자기 말로 설명합니다"] },
     method: "검증",
     title: "Usability test · in progress",
     lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",

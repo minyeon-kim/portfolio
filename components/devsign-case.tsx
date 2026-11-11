@@ -136,19 +136,7 @@ function Insights({ discover }: { discover: Study }) {
         <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} text={synthesis.text} ff />
         {synthesis.rows[0]?.kept ? (
-        <FlowPlay className="dv-flow-play dv-gap-40 reveal">
-          <p className="dv-kl-head" aria-hidden="true"><span /><span>{synthesis.keptLabel}</span><span /><span>{synthesis.lostLabel}</span></p>
-          <ol className="dv-flow dv-kl">
-          {synthesis.rows.map((row: { stage: string; kept: string; lost: string }, i: number) => (
-            <li key={row.stage} style={{ "--i": i } as CSSProperties}>
-              <span className="dv-kl-stage">{row.stage}</span>
-              <span className="dv-kl-kept"><span className="sr-only">{synthesis.keptLabel}: </span>{row.kept}</span>
-              <svg className="dv-kl-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              <span className="dv-kl-lost"><span className="sr-only">{synthesis.lostLabel}: </span>{row.lost}</span>
-            </li>
-          ))}
-          </ol>
-        </FlowPlay>
+        <KeptLost synthesis={synthesis} />
         ) : (
         <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; before?: string; lost?: string; gap: string }, i: number) => (
@@ -240,6 +228,25 @@ function EvidenceColumns({ label, link, groups }: { label: string; link?: ReactN
   );
 }
 
+// An analysis as stage rows: what stays (or happens now) → what's lost (or missing).
+function KeptLost({ synthesis }: { synthesis: Study }) {
+  return (
+    <FlowPlay className="dv-flow-play dv-gap-40 reveal">
+      <p className="dv-kl-head" aria-hidden="true"><span /><span>{synthesis.keptLabel}</span><span /><span>{synthesis.lostLabel}</span></p>
+      <ol className="dv-flow dv-kl">
+      {synthesis.rows.map((row: { stage: string; kept: string; lost: string }, i: number) => (
+        <li key={row.stage} style={{ "--i": i } as CSSProperties}>
+          <span className="dv-kl-stage">{row.stage}</span>
+          <span className="dv-kl-kept"><span className="sr-only">{synthesis.keptLabel}: </span>{row.kept}</span>
+          <svg className="dv-kl-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          <span className="dv-kl-lost"><span className="sr-only">{synthesis.lostLabel}: </span>{row.lost}</span>
+        </li>
+      ))}
+      </ol>
+    </FlowPlay>
+  );
+}
+
 function SourceInsights({ discover }: { discover: Study }) {
   const { q1, q2, synthesis, interview, desk } = discover;
   return (
@@ -253,33 +260,41 @@ function SourceInsights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block title={q2.title} lead={q2.answer} ff />
-        <div className="dv-gap-40"><EvidenceColumns label={q2.auditLabel} groups={q2.groups} /></div>
+        {q2.map ? <ToolMap map={q2.map} /> : <div className="dv-gap-40"><EvidenceColumns label={q2.auditLabel} groups={q2.groups} /></div>}
       </div>
 
       <div className="dv-subsection">
         <HeldFlow count={synthesis.rows.length}>
         <Block title={synthesis.label} lead={synthesis.title} ff />
-        <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
+        {synthesis.rows[0]?.kept ? <KeptLost synthesis={synthesis} /> : <FlowPlay className="dv-flow-play dv-gap-40 reveal"><ol className="dv-flow">
           {synthesis.rows.map((row: { stage: string; withAi: string; gap: string }, i: number) => (
             <li key={row.stage} style={{ "--i": i } as CSSProperties}><span className="dv-flow-stage">{row.stage}</span><p>{row.withAi} <b>{row.gap}</b></p></li>
           ))}
-        </ol></FlowPlay>
+        </ol></FlowPlay>}
         </HeldFlow>
       </div>
 
       <div className="dv-subsection">
         <Block {...interview} ff />
-        <div className="dv-asks dv-gap-40">
-          <p className="dv-caps reveal">{interview.questionsLabel}</p>
-          <ol>
-            {interview.questions.map((q: string, i: number) => <li key={q}><b>{i + 1}</b>{q}</li>)}
-          </ol>
+        {/* Questions and people as the same read-down rows Devsign uses. */}
+        <div className="dv-iv-rows">
+          <section className="dv-iv-row reveal">
+            <h4 className="dv-iv-rowlabel">{interview.questionsLabel}</h4>
+            <ol className="dv-ivq">
+              {interview.questions.map((q: string, i: number) => (
+                <li key={q}><b>{interview.questionKeys?.[i] ?? i + 1}</b><span>{q}</span></li>
+              ))}
+            </ol>
+          </section>
+          <section className="dv-iv-row reveal">
+            <h4 className="dv-iv-rowlabel">{interview.peopleLabel}</h4>
+            <ul className="dv-ivp">
+              {interview.participants.map(([id, role, why, kind]: string[]) => (
+                <li key={id}><b>{id}</b><strong>{role}</strong><span>{why} · {kind}</span></li>
+              ))}
+            </ul>
+          </section>
         </div>
-        <ul className="dv-people-strip reveal" aria-label={interview.peopleLabel}>
-          {interview.participants.map((row: string[]) => (
-            <li key={row[0]}><b>{row[0]} · {row[3]}</b><strong>{row[1]}</strong><span>{row[2]}</span></li>
-          ))}
-        </ul>
       </div>
     </div>
   );
@@ -359,6 +374,34 @@ function DevelopBlock({ block }: { block: Study }) {
         <div className={block.images.length > 2 ? "dv-screens dv-gap-40" : "dv-two dv-gap-40"} style={{ "--n": block.images.length } as CSSProperties}>
           {block.images.map((img: Img) => <Figure key={img.src} img={img} sizes="(max-width: 767px) 100vw, 40vw" className={block.images.length > 2 ? "dv-screen" : "dv-photo"} />)}
         </div>
+      )}
+      {/* Directions narrowed with the scroll: all of them come in one by one, then the
+          ones the reframed problem dropped fall back to muted and the kept ones stay lit. */}
+      {block.directions && (
+        <FlowPlay className="dv-dirs-play dv-gap-40" from={0.85} to={0.3}>
+          <ol className="dv-dirs">
+            {block.directions.map((d: { name: string; kept?: boolean }, i: number) => (
+              <li key={d.name} data-seq="" data-kept={d.kept ? "" : undefined} style={{ "--i": i } as CSSProperties}>
+                <span aria-hidden="true">{pad(i + 1)}</span>{d.name}
+                {d.kept && <b className="dv-dirs-tag">{block.keptTag}</b>}
+              </li>
+            ))}
+          </ol>
+          <span className="dv-dirs-cut" data-seq="" aria-hidden="true" style={{ "--i": block.directions.length + 0.6 } as CSSProperties} />
+        </FlowPlay>
+      )}
+      {/* What the feedback kept and dropped, as the two panels the tool review uses. */}
+      {block.verdict && (
+        <figure className="dv-cmp2 dv-cmp2-named dv-gap-40 reveal">
+          <div className="dv-cmp2-panels">
+            {[block.verdict.dropped, block.verdict.kept].map((side: { title: string; items: string[][] }, k: number) => (
+              <section key={side.title} data-self={k === 1 ? "" : undefined}>
+                <h4>{side.title}</h4>
+                <dl>{side.items.map(([name, note]) => <div key={name}><dt>{name}</dt><dd>{note}</dd></div>)}</dl>
+              </section>
+            ))}
+          </div>
+        </figure>
       )}
       {block.features && (
         <>
@@ -558,7 +601,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           <p className="dv-core-text reveal">{define.core.lead}{define.core.text && <> <span>{define.core.text}</span></>}</p>
         </div>
 
-        {!ff && <div className="dv-hmw">
+        {!ff && define.hmw && <div className="dv-hmw">
           {define.hmw.question && <p className="dv-label reveal">{define.hmw.title}</p>}
           {define.hmw.question && <p className="dv-hmw-question reveal">{define.hmw.question}</p>}
           <p className="dv-caps dv-accent dv-gap-24 reveal">{define.hmw.successLabel}</p>
@@ -668,6 +711,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {deliver.flows && (
           <div className="dv-main-features dv-main-features-joined">
             <FeatureList
+              open
               phone
               head={deliverIntro}
               reels={deliver.flows.map((f: { id: string; kicker: string; name: string; hook?: string; solves?: string; solvesLabel?: string; alt?: string; clip: { src: string; poster: string } }) => ({
@@ -731,6 +775,14 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.usability.sheet && <p className="dv-aff-foot dv-gap-40 reveal"><a className="link" href={withBase(testing.usability.sheet.src)} target="_blank" rel="noreferrer">{testing.usability.sheet.label}</a></p>}
           </> : <>
           <section className="dv-cycle-card"><SurveyCharts charts={testing.usability.charts} labels={testing.usability.chartLabels} head={<><ChapterHead id="testing" title="Testing" /><Block {...testing.usability} ff={ff} /></>} /></section>
+          {/* The success criteria the test measures, moved here from Define so the Problem
+              statement can close Define as a full sheet (as on Devsign). */}
+          {testing.goals && <div className="dv-goals dv-gap-64">
+            <p className="dv-caps dv-accent reveal">{testing.goals.label}</p>
+            <ol className="dv-checks">
+              {testing.goals.items.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
+            </ol>
+          </div>}
           </>}
         </div>
         {testing.iteration1 && <div className="dv-subsection-120">

@@ -145,6 +145,11 @@ export const study = {
       label: "Question 2 · Do today's controls solve it?",
       answer: "Controls sit in two places, and none shows what's left after.",
       auditLabel: "5 AI services · What the controls miss",
+      map: { today: "Today’s controls", selfName: "What we didn’t find", rows: [
+        { name: "Turning it off", now: "Every service lets you switch memory or history off", self: "What remains after you do" },
+        { name: "Where the switches are", now: "Gemini app settings, 3–4 clicks; the AI training setting on the Google account page, 4–5 clicks", self: "One place to control it" },
+        { name: "Delete or block", now: "One “delete” on screen", self: "Deleting told apart from stopping its use, as the law does" },
+      ] },
       groups: [
         { name: "Off switches, but no result", detail: "Every service lets you turn memory or history off · None shows what remains after you do" },
         { name: "Gemini splits control in two", detail: "Gemini app settings take 3–4 clicks · The setting that stops AI training on your data sits on the Google account page, 4–5 clicks away" },
@@ -154,13 +159,13 @@ export const study = {
     synthesis: {
       label: "Synthesis",
       title: "Control breaks at four points.",
-      withAi: "Today",
-      gap: "Gap",
+      keptLabel: "Today",
+      lostLabel: "Gap",
       rows: [
-        { stage: "Shows up", withAi: "Personal data appears in an answer", gap: "No source shown" },
-        { stage: "Turn off", withAi: "Switches in the Gemini app and the Google account", gap: "Two places, 3–5 clicks each" },
-        { stage: "Delete", withAi: "“Delete” and “block” look the same", gap: "Originals stay in Gmail or Photos" },
-        { stage: "Check", withAi: "Chats kept 72 hours with activity off; reviewed chats 3 years", gap: "No way to confirm what's gone" },
+        { stage: "Shows up", kept: "Personal data appears in an answer", lost: "No source shown" },
+        { stage: "Turn off", kept: "Switches in the Gemini app and the Google account", lost: "Two places, 3–5 clicks each" },
+        { stage: "Delete", kept: "“Delete” and “block” look the same", lost: "Originals stay in Gmail or Photos" },
+        { stage: "Check", kept: "Chats kept 72 hours with activity off; reviewed chats 3 years", lost: "No way to confirm what's gone" },
       ],
     },
     interview: {
@@ -170,6 +175,7 @@ export const study = {
       text: "We talked to someone who asks for personal data every day, and someone who gives it to AI.",
       questionsLabel: "Research questions",
       peopleLabel: "Participants",
+      questionKeys: ["What worries people", "When it starts", "What makes deletion trustworthy"],
       questions: [
         "What do people worry about when AI uses their personal data?",
         "When does the worry start: typing data in, or seeing it come back?",
@@ -250,12 +256,6 @@ export const study = {
       lead: "Gemini brings my data into answers,",
       text: "but I can't see where it came from, switch it off there, or check that it's gone.",
     },
-    hmw: {
-      method: "Design challenge",
-      title: "How might we",
-      successLabel: "Success looks like",
-      success: ["People find the source and the switch without hints", "People can explain blocking vs. deleting in their own words"],
-    },
   },
   develop: {
     blocks: [
@@ -263,6 +263,8 @@ export const study = {
         method: "Ideation",
         title: "Improvement directions",
         lead: "Six directions (24 features) narrowed to three after the problem changed.",
+        keptTag: "Kept",
+        directions: [{ name: "Input protection" }, { name: "Memory control", kept: true }, { name: "Processing transparency", kept: true }, { name: "Sources", kept: true }, { name: "Purpose-based requests" }, { name: "Work rules" }],
       },
       {
         method: "Ideation",
@@ -274,7 +276,10 @@ export const study = {
         method: "Ideation",
         title: "Concept feedback",
         lead: "Of four concepts, the two that never send you to settings stayed.",
-        text: "Kept: in-place switches and deleting from chat. Dropped: per-file retention and a category dashboard.",
+        verdict: {
+          dropped: { title: "Dropped", items: [["Per-file retention", "More for people to manage"], ["Category dashboard", "People care about sensitive items, not categories"]] },
+          kept: { title: "Kept", items: [["In-place switches", "“Easy, I can just toggle it on and off.”"], ["Deleting from chat", "“I don't have to go anywhere.”"]] },
+        },
         images: [
           { src: "/images/cases/gemini-privacy/concept-inline.webp", width: 1600, height: 1186, alt: "Inline data-control concept with team feedback notes" },
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "Delete-by-chat concept with team feedback notes" },
@@ -310,6 +315,7 @@ export const study = {
     },
   },
   testing: {
+    goals: { label: "Success looks like", items: ["People find the source and the switch without hints", "People can explain blocking vs. deleting in their own words"] },
     method: "Validation",
     title: "Usability test · in progress",
     lead: "Testing now: does checking it yourself build trust?",
