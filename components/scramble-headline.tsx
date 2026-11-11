@@ -146,8 +146,11 @@ export function ScrambleHeadline({ text, className, emphasis }: Props) {
   );
 
   return (
-    <h1 ref={ref} aria-label={text} data-scramble className={className}>
-      {text}
+    <h1 ref={ref} aria-label={text.replace(/\n/g, " ")} data-scramble className={className}>
+      {/* A "\n" in the text sets its own line, so the breaks don't depend on the face or width. */}
+      {text.includes("\n")
+        ? text.split("\n").map((line, i) => <span key={i} className="scramble-line">{line}</span>)
+        : text}
     </h1>
   );
 }

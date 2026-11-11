@@ -8870,13 +8870,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .home-tagline-wrap .home-tagline.home-tagline, .home-tagline-wrap:lang(ko) .home-tagline.home-tagline { width: 8.7em; max-width: none; font-size: clamp(32px, 9.6vw, 44px); font-size: round(down, clamp(32px, 9.6vw, 44px), 4px); text-wrap: wrap; }
 }
 
-/* Landing headline as size contrast (owner, after the 2026-11-10 class feedback): one big line,
-   "Designing Complex Products", and a small line under it in the text face. */
-.home-tagline-wrap > .home-tagline-sub { grid-area: 2 / 1; margin: 16px 0 0; color: var(--muted); font-family: var(--font-sans); font-size: 20px; font-weight: 400; line-height: 1.4; letter-spacing: -0.01em; }
-[data-swap] .home-tagline-sub { opacity: 0; translate: 0 -6px; }
+/* Landing headline in three stacked lines (owner): Designing / Complex Products / End to End.
+   Each line is its own block (ScrambleHeadline splits the text on "\n"), so the breaks hold in any
+   face. Sizes in 4px steps. */
+.scramble-line { display: block; white-space: nowrap; }
+.menu-card-line { white-space: pre-line; }
+.home-tagline-wrap .home-tagline.home-tagline-default { width: auto; max-width: none; padding-left: 0; text-indent: 0; white-space: normal; line-height: 1.02; }
 @media (min-width: 64rem) {
-  /* One line now, so it can be larger: 4px steps, 56px at 1024, 80px at 1440, 104px at 1920. */
-  .home-tagline-wrap .home-tagline.home-tagline { width: auto; padding-left: 0; text-indent: 0; white-space: nowrap; font-size: round(down, clamp(48px, min(5.6vw, 10svh), 104px), 4px); }
-  .home-tagline-wrap > .home-tagline-sub { margin-top: 24px; font-size: 24px; }
+  .home-tagline-wrap .home-tagline.home-tagline-default { font-size: round(down, clamp(56px, min(6.4vw, 10.6svh), 112px), 4px); }
 }
-@media (max-width: 63.99rem) { .home-tagline-wrap > .home-tagline-sub { margin-top: 12px; font-size: 18px; } }
+@media (max-width: 63.99rem) {
+  .home-tagline-wrap .home-tagline.home-tagline-default { font-size: clamp(32px, 10.4vw, 56px); font-size: round(down, clamp(32px, 10.4vw, 56px), 4px); }
+}
