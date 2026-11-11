@@ -77,8 +77,9 @@ async function record(browser, name) {
   await page.click('input[type=checkbox]');
   await page.click('#startBtn');
   await wait(600);
-  // A soft touch dot that follows the mouse and pulses on press.
-  await page.evaluate(() => {
+  // A soft touch dot that follows the mouse and pulses on press. NODOT=1 leaves it out (the cover
+  // photo's thumb doesn't move, so a dot elsewhere reads as a second hand).
+  if (!process.env.NODOT) await page.evaluate(() => {
     const d = document.createElement('div');
     d.style.cssText = 'position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(66,133,244,.28);box-shadow:0 0 0 2px rgba(66,133,244,.55);pointer-events:none;z-index:2147483647;transition:transform 120ms ease,background 120ms ease;';
     document.documentElement.appendChild(d);
@@ -124,7 +125,7 @@ async function record(browser, name) {
   fs.writeFileSync(listFile, list);
   const s = frames.length ? 2 : 2;
   const vf = `fps=30,crop=${crop.w * 2}:${crop.h * 2}:${crop.x * 2}:${crop.y * 2},scale=1200:-2:flags=lanczos+accurate_rnd+full_chroma_inp+full_chroma_int:in_range=pc:out_range=tv:in_color_matrix=bt601:out_color_matrix=bt709,format=yuv420p`;
-  const base = path.join(OUT, `${lang}-${name}`);
+  const base = path.join(OUT, `${lang}-${name}${process.env.NODOT ? '-nodot' : ''}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.6', '-i', `${base}.mp4`, '-frames:v', '1', '-q:v', '4', `${base}-poster.jpg`]);
   const duration = +(frames[frames.length - 1].t - start + 0.5).toFixed(2);

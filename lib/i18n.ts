@@ -74,7 +74,7 @@ export const ui = {
     heroLine: "Designing\nComplex Products",
     city: "Seoul",
     heroEmphasis: "Complex",
-    heroParagraph: "For four years as a security consultant, I explained complex problems so developers and clients could act on them. Now I’m a product designer who builds with AI, from research to a working prototype.",
+    heroParagraph: "For four years as a security consultant, I\u00a0explained complex problems so developers and clients could act on them. Now I’m a product designer who builds with AI, from research to a working\u00a0prototype.",
     scrollHint: "or scroll for the work ↓",
     caseStudies: "{n} case studies",
     askAnother: "Ask another",
