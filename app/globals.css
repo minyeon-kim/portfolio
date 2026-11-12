@@ -8922,3 +8922,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   box-shadow: inset 0 0 22px rgb(8 12 30 / 0.2);
 }
 :is(.devsign-hero.dh-cover[data-project="gemini-privacy"], .home-device[data-project="gemini-privacy"], .project-zoom[data-project="gemini-privacy"]) .dh-shot-media :is(video, img) { filter: brightness(0.94) saturate(1.04); }
+
+/* Footer page links never break inside a word: the row wraps between links instead
+   (on phones five links didn't fit one line and each shrank to its own width). */
+.site-footer-meta { flex-wrap: wrap; row-gap: 8px; }
+.site-footer-meta > li { flex-shrink: 0; }
+.site-footer-meta a, .site-footer-top-link { white-space: nowrap; }
+@media (max-width: 47.99rem) { .site-footer .site-footer-meta, .more-work + .site-footer .site-footer-meta { column-gap: 16px; row-gap: 0; } }
+@media (max-width: 47.99rem) { [data-about-page] .about-body .site-footer-meta { column-gap: 12px; } }
