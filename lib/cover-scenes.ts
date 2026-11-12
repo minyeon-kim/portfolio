@@ -13,8 +13,10 @@ export const COVER_SCENES: Record<string, CoverScene> = {
     // The film's frame at 3.4s (1920x1080): the workspace window floating on the grey canvas.
     src: "/images/devsign/hero-film/still-en.webp",
     width: 1920, height: 1080,
-    // Desktop cover 16:8.6 (the plate), phones the whole 16:9 frame; landing card 1.66:1, phone card 16:10.
-    crop: [0, 24, 1920, 1032], cropPhone: [0, 0, 1920, 1080], card: [63.5, 0, 1793, 1080], cardPhone: [96, 0, 1728, 1080],
+    // Desktop cover 16:8.6 (the plate), phones the whole 16:9 frame. The landing and phone cards
+    // close in on the window (1.66:1 and 16:10): it fills about 72% of the card, with the purple
+    // light of the upper left and lower right still showing round it.
+    crop: [0, 24, 1920, 1032], cropPhone: [0, 0, 1920, 1080], card: [243, 103, 1440, 867], cardPhone: [243, 86, 1440, 900],
   },
   "gemini-privacy": {
     src: "/images/cases/gemini-privacy/cover-hand.webp",
