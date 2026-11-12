@@ -8930,3 +8930,19 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .site-footer-meta a, .site-footer-top-link { white-space: nowrap; }
 @media (max-width: 47.99rem) { .site-footer .site-footer-meta, .more-work + .site-footer .site-footer-meta { column-gap: 16px; row-gap: 0; } }
 @media (max-width: 47.99rem) { [data-about-page] .about-body .site-footer-meta { column-gap: 12px; } }
+
+/* Devsign cover film (HeroFilm; supersedes the monitor-on-a-plinth scene with a recording
+   warped onto its screen): the film lies over a still of its own frame at 3.4s, in the same
+   box, and fades in from that frame once it can play. No camera push or edge fade on a film;
+   it has its own motion. Phones show the whole 16:9 frame. In the dark theme the film's black
+   meets the page's near-black, so a faint edge keeps it reading as a screen. */
+.dh-film { position: absolute; inset: 0; z-index: 2; opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
+.dh-film[data-ready] { opacity: 1; pointer-events: auto; }
+.dh-film video { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+.dh-shot[data-film] .dh-shot-camera { animation: none; }
+.devsign-hero.dh-cover[data-project="devsign"] .dh-shot[data-film] { -webkit-mask-image: none; mask-image: none; }
+.devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film]) { background: #000; }
+.devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film])::after { content: ""; position: absolute; inset: 0; width: auto; height: auto; z-index: 3; border-radius: inherit; pointer-events: none; background: none; filter: none; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12); }
+:root[data-theme="light"] .devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film])::after { box-shadow: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film])::after { box-shadow: none; } }
+@media (max-width: 47.99rem) { .devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film]) { aspect-ratio: 16 / 9; } }

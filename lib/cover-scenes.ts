@@ -3,15 +3,18 @@
 // opening a case is one continuous picture. Crops are [x, y, w, h] in image pixels.
 // Phone crops hold the whole device (Devsign the monitor on its plinth, about 1:1; Gemini the
 // hand and phone, about 4:5) instead of a tall slice that cut the product's edges off.
+// A scene with no matrix is a film still (Devsign): the cover plays the film over it, from the
+// still's own frame (meta.hero.film: src, start, the still per language).
 export type Crop = [number, number, number, number];
-export type CoverScene = { src: string; width: number; height: number; mediaWidth: number; mediaHeight: number; matrix: string; crop?: Crop; cropPhone: Crop; card: Crop; cardPhone: Crop; shadow?: { src: string; x: number; y: number; w: number; h: number } };
+export type CoverScene = { src: string; width: number; height: number; mediaWidth?: number; mediaHeight?: number; matrix?: string; crop?: Crop; cropPhone: Crop; card: Crop; cardPhone: Crop; shadow?: { src: string; x: number; y: number; w: number; h: number } };
 
 export const COVER_SCENES: Record<string, CoverScene> = {
   devsign: {
-    src: "/images/devsign/cover-studio.webp",
-    width: 1440, height: 838, mediaWidth: 1575, mediaHeight: 1000,
-    matrix: "matrix3d(0.352918811, -0.00243773021, 0, -4.99382821e-05, -0.0352032368, 0.465223771, 0, -3.03005982e-06, 0, 0, 1, 0, 431.1, 86.3, 0, 1)",
-    cropPhone: [330, 30, 800, 780], card: [24.5, 0, 1391, 838], cardPhone: [49.5, 0, 1341, 838],
+    // The film's frame at 3.4s (1920x1080): the workspace window floating on the grey canvas.
+    src: "/images/devsign/hero-film/still-en.webp",
+    width: 1920, height: 1080,
+    // Desktop cover 16:8.6 (the plate), phones the whole 16:9 frame; landing card 1.66:1, phone card 16:10.
+    crop: [0, 24, 1920, 1032], cropPhone: [0, 0, 1920, 1080], card: [63.5, 0, 1793, 1080], cardPhone: [96, 0, 1728, 1080],
   },
   "gemini-privacy": {
     src: "/images/cases/gemini-privacy/cover-hand.webp",
