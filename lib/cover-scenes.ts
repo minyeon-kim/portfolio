@@ -1,20 +1,17 @@
 // The picture on each case cover: a scene with its screen cut out and the matrix3d that
 // fits the product onto that screen. The landing card shows a crop of the same scene, so
 // opening a case is one continuous picture. Crops are [x, y, w, h] in image pixels.
-// A scene with no matrix is a film still: the screens are already in the picture, and the
-// cover plays the film over it (Devsign; the still per language comes from meta.hero.film).
 // Phone crops hold the whole device (Devsign the monitor on its plinth, about 1:1; Gemini the
 // hand and phone, about 4:5) instead of a tall slice that cut the product's edges off.
 export type Crop = [number, number, number, number];
-export type CoverScene = { src: string; width: number; height: number; mediaWidth?: number; mediaHeight?: number; matrix?: string; crop?: Crop; cropPhone: Crop; card: Crop; cardPhone: Crop; shadow?: { src: string; x: number; y: number; w: number; h: number } };
+export type CoverScene = { src: string; width: number; height: number; mediaWidth: number; mediaHeight: number; matrix: string; crop?: Crop; cropPhone: Crop; card: Crop; cardPhone: Crop; shadow?: { src: string; x: number; y: number; w: number; h: number } };
 
 export const COVER_SCENES: Record<string, CoverScene> = {
   devsign: {
-    // First frame of the hero film (1920x1080): two monitors in a dim office, the main one in the middle.
-    src: "/images/devsign/hero/poster-en.webp",
-    width: 1920, height: 1080,
-    // Phones: the main monitor with the keyboard and hands. Landing card 1.66:1, phone card 16:10.
-    cropPhone: [500, 40, 1040, 940], card: [63.5, 0, 1793, 1080], cardPhone: [96, 0, 1728, 1080],
+    src: "/images/devsign/cover-studio.webp",
+    width: 1440, height: 838, mediaWidth: 1575, mediaHeight: 1000,
+    matrix: "matrix3d(0.352918811, -0.00243773021, 0, -4.99382821e-05, -0.0352032368, 0.465223771, 0, -3.03005982e-06, 0, 0, 1, 0, 431.1, 86.3, 0, 1)",
+    cropPhone: [330, 30, 800, 780], card: [24.5, 0, 1391, 838], cardPhone: [49.5, 0, 1341, 838],
   },
   "gemini-privacy": {
     src: "/images/cases/gemini-privacy/cover-hand.webp",

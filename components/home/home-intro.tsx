@@ -173,7 +173,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
             {/* A pointer shortcut only: the backdrop is aria-hidden and the pills are the real controls. */}
             <div className="home-device" data-project={p.slug} data-active={previewed?.slug === p.slug || undefined} onClick={() => open(p.slug)}>
               {COVER_SCENES[p.slug] && (
-                <HeroShot {...COVER_SCENES[p.slug]} src={withBase(p.hero?.film?.poster ?? COVER_SCENES[p.slug].src)} alt="" crop={COVER_SCENES[p.slug].card} cropPhone={COVER_SCENES[p.slug].cardPhone} full={COVER_SCENES[p.slug].crop ?? [0, 0, COVER_SCENES[p.slug].width, COVER_SCENES[p.slug].height]} fullPhone={COVER_SCENES[p.slug].cropPhone}>
+                <HeroShot {...COVER_SCENES[p.slug]} src={withBase(COVER_SCENES[p.slug].src)} alt="" crop={COVER_SCENES[p.slug].card} cropPhone={COVER_SCENES[p.slug].cardPhone} full={COVER_SCENES[p.slug].crop ?? [0, 0, COVER_SCENES[p.slug].width, COVER_SCENES[p.slug].height]} fullPhone={COVER_SCENES[p.slug].cropPhone}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {p.hero?.clip && <img className="dh-shot-poster" src={withBase(p.hero.clip.poster)} alt="" />}
                 </HeroShot>
