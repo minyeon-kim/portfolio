@@ -8922,3 +8922,12 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   box-shadow: inset 0 0 22px rgb(8 12 30 / 0.2);
 }
 :is(.devsign-hero.dh-cover[data-project="gemini-privacy"], .home-device[data-project="gemini-privacy"], .project-zoom[data-project="gemini-privacy"]) .dh-shot-media :is(video, img) { filter: brightness(0.94) saturate(1.04); }
+
+/* Devsign cover film (HeroFilm; supersedes the monitor-on-a-plinth scene with a recording
+   warped onto its screen): the film lies over its own first frame, which is the cover's
+   still, in the same box, and fades in once it can play. No camera push on a film; it has
+   its own motion. The landing card, the Menu card and the zoom show only the still. */
+.dh-film { position: absolute; inset: 0; z-index: 2; opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
+.dh-film[data-ready] { opacity: 1; pointer-events: auto; }
+.dh-film video { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+.dh-shot[data-film] .dh-shot-camera { animation: none; }

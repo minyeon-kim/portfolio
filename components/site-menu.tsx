@@ -11,7 +11,7 @@ import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
-type MenuCase = { slug: string; name: string; poster?: string };
+type MenuCase = { slug: string; name: string; poster?: string; still?: string };   // still: the cover film's first frame, in this language
 type Props = {
   contact: { email: string; linkedinUrl: string; resumeUrl?: string };
   cases: { en: MenuCase[]; ko: MenuCase[] };
@@ -225,7 +225,7 @@ export function SiteMenu({ contact, cases }: Props) {
             {list.map((c) => (
               <Link key={c.slug} href={targetOf(c.slug)} tabIndex={-1} className="menu-card" data-case={c.slug} aria-current={c.slug === current ? "page" : undefined} data-project={c.slug} data-on={shown === c.slug || undefined}>
                 {COVER_SCENES[c.slug] && (
-                  <HeroShot {...COVER_SCENES[c.slug]} src={withBase(COVER_SCENES[c.slug].src)} alt="" crop={menuCrop(c.slug)} full={COVER_SCENES[c.slug].crop ?? [0, 0, COVER_SCENES[c.slug].width, COVER_SCENES[c.slug].height]} fullPhone={COVER_SCENES[c.slug].cropPhone}>
+                  <HeroShot {...COVER_SCENES[c.slug]} src={withBase(c.still ?? COVER_SCENES[c.slug].src)} alt="" crop={menuCrop(c.slug)} full={COVER_SCENES[c.slug].crop ?? [0, 0, COVER_SCENES[c.slug].width, COVER_SCENES[c.slug].height]} fullPhone={COVER_SCENES[c.slug].cropPhone}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {c.poster && <img className="dh-shot-poster" src={withBase(c.poster)} alt="" />}
                   </HeroShot>

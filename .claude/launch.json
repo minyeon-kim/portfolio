@@ -25,8 +25,25 @@
     {
       "name": "dev-case",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["next", "dev", "-p", "3001"],
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "-p",
+        "3001"
+      ],
       "port": 3001
+    },
+    {
+      "name": "static-hero",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4195",
+        "-d",
+        "out"
+      ],
+      "port": 4195
     }
   ]
 }

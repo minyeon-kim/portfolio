@@ -9,7 +9,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { LangToggle } from "./lang-toggle";
 import { SiteNav } from "./site-nav";
 
-const toMenu = (cases: CaseEntry[]) => cases.filter((c) => !c.meta.draft).map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title, poster: (c.meta.hero as { clip?: { poster: string } } | undefined)?.clip?.poster }));
+const toMenu = (cases: CaseEntry[]) => cases.filter((c) => !c.meta.draft).map((c) => ({ slug: c.slug, name: c.meta.short ?? c.meta.title, poster: (c.meta.hero as { clip?: { poster: string } } | undefined)?.clip?.poster, still: c.meta.hero?.film?.poster }));
 
 // The name in the middle; language and theme at the right; Menu at the left on every
 // page. Phones keep Menu at the right. Contact lives in the Menu and at the end of pages.

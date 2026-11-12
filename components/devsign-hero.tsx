@@ -1,12 +1,13 @@
 import { ArrowIcon } from "@/components/arrow-icon";
 import { DevsignLoop } from "@/components/devsign-loop";
 import { HeroClip } from "@/components/hero-clip";
+import { HeroFilm } from "@/components/hero-film";
 import { HeroShot } from "@/components/hero-shot";
 import { GeminiPhone } from "@/components/gemini-phone";
 import { COVER_SCENES } from "@/lib/cover-scenes";
 import { withBase } from "@/lib/site";
 
-export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; clip?: { src: string; poster: string; label: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
+export type DevsignHeroData = { title: string; subtitle?: string; card?: { src: string; width: number; height: number; alt: string }; clip?: { src: string; poster: string; label: string }; film?: { src: string; small?: string; poster: string; label: string; alt: string }; actions?: { label: string; href: string; primary?: boolean }[]; details: { label: string; value: string }[] };
 
 // The case opener, after metalab.com's case covers: the brand and the question on the
 // page itself (left-aligned on the 1200 case column), then one cover plate in the
@@ -53,6 +54,9 @@ export function DevsignHero({ hero, name, alt, project }: { hero: DevsignHeroDat
                 : <span className="devsign-hero-phone"><GeminiPhone alt={alt} preload /></span>}
             </div>
           </HeroShot>
+        ) : hero.film ? (
+          // The film's own first frame is the cover's still; the film plays over it.
+          <HeroShot {...scene} src={withBase(hero.film.poster)} alt={hero.film.alt} film={<HeroFilm src={withBase(hero.film.src)} small={hero.film.small && withBase(hero.film.small)} label={hero.film.label} />} />
         ) : (
           <HeroShot {...scene} src={withBase(scene.src)} alt="">
             <div className="devsign-hero-media">

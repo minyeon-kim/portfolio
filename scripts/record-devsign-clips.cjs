@@ -15,11 +15,13 @@ const L = {
 }[lang];
 
 // The cover clip fills the 1.58:1 monitor on the case opener: no camera.
-const VH = only === 'cover' ? 914 : 900;
+// COVER_VH overrides the cover height for other screen shapes (the hero video's monitor is 1.89:1 → 762).
+const VH = only === 'cover' ? (+process.env.COVER_VH || 914) : 900;
+const VW = +process.env.COVER_VW || 1440;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function boot(browser) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: VH }, colorScheme: 'dark' });
+  const ctx = await browser.newContext({ viewport: { width: only === 'cover' ? VW : 1440, height: VH }, colorScheme: 'dark' });
   const page = await ctx.newPage();
   await page.goto(`https://minyeon-kim.github.io/devsign/?lang=${lang}`, { waitUntil: 'networkidle' });
   await wait(1200);
@@ -105,7 +107,7 @@ async function cam(page, rect, hold = 300) {
   await page.evaluate((z) => { document.body.style.transform = `translate(${z.tx}px,${z.ty}px) scale(${z.s})`; }, next);
   Z = next;
   const p = scr(page0.x, page0.y);
-  const m = moveScreen(page, Math.max(4, Math.min(1436, p.x)), Math.max(4, Math.min(VH - 4, p.y)), 30);
+  const m = moveScreen(page, Math.max(4, Math.min(VW - 4, p.x)), Math.max(4, Math.min(VH - 4, p.y)), 30);
   await Promise.all([m, wait(T)]);
   await wait(hold);
 }
@@ -184,14 +186,14 @@ const CLIPS = {
   async cover(page, mark) {
     // A second person on the same screen: Jordan's cursor, a copy of the prototype's own
     // cursor in Jordan's colour, moving on a fixed path while the real mouse drives Taylor.
-    await page.evaluate(() => {
+    await page.evaluate((k) => {
       const j = document.createElement('div');
       j.dataset.cover = 'jordan';
       j.style.cssText = 'position:fixed;left:420px;top:640px;z-index:2147483646;pointer-events:none;';
       j.innerHTML = `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" fill="#0ea5e9" stroke="rgba(0,0,0,.25)" stroke-width="1" stroke-linejoin="round"/></svg><span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;border-radius:999px;padding:2px 8px;font-size:10px;line-height:1;font-weight:500;color:#fff;white-space:nowrap;background:#0ea5e9">Jordan</span>`;
       document.body.appendChild(j);
       // Time (s), x, y on the 1440x1125 screen.
-      const path = [[0, 420, 640], [1.6, 470, 760], [3.2, 520, 640], [5.0, 470, 610], [6.8, 1130, 400], [9.5, 1150, 420]];
+      const path = [[0, 420, 640], [1.6, 470, 760], [3.2, 520, 640], [5.0, 470, 610], [6.8, 1130, 400], [9.5, 1150, 420]].map(([t, x, y]) => [t, x * k, y * k]);
       const ease = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
       const t0 = performance.now();
       const tick = (now) => {
@@ -205,12 +207,17 @@ const CLIPS = {
         requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
-    });
+    }, VW / 1440);
     await wait(900);
-    await click(page, '+4', { after: 1100 });
+    // On a wide (2560) screen the board fits whole and the +4 change mark isn't shown; go straight to the pin.
+    if (await locate(page, '+4', 0)) await click(page, '+4', { after: 1100 });
+    else await wait(1100);
     mark();
     await click(page, L.pin, { after: 2200 });
     mark();
+    // On a shorter screen the decision buttons sit below the panel's fold: glide them up first.
+    await page.evaluate((t) => { const b = [...document.querySelectorAll('button')].find((x) => x.textContent.trim() === t); if (b && b.getBoundingClientRect().bottom > innerHeight - 8) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, L.fix);
+    await wait(800);
     await click(page, L.fix, { after: 2600 });
   },
   async conflict(page, mark) {
@@ -274,7 +281,7 @@ async function record(browser, name) {
   const list = frames.map((f, i) => `file '${f.file}'\nduration ${Math.max(0.001, ((frames[i + 1]?.t ?? f.t + 0.5) - f.t)).toFixed(4)}`).join('\n') + `\nfile '${frames[frames.length - 1].file}'\n`;
   const listFile = path.join(dir, 'list.txt');
   fs.writeFileSync(listFile, list);
-  const vf = `fps=30,scale=${only === 'cover' ? '1440:914' : '2400:1500'}:flags=lanczos+accurate_rnd+full_chroma_inp+full_chroma_int:in_range=pc:out_range=tv:in_color_matrix=bt601:out_color_matrix=bt709,format=yuv420p`;
+  const vf = `fps=30,scale=${only === 'cover' ? (process.env.COVER_VW ? `${VW * 2}:${VH * 2}` : `${VW}:${VH}`) : '2400:1500'}:flags=lanczos+accurate_rnd+full_chroma_inp+full_chroma_int:in_range=pc:out_range=tv:in_color_matrix=bt601:out_color_matrix=bt709,format=yuv420p`;
   const base = path.join(OUT, `${lang}-${name}`);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', listFile, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', '-movflags', '+faststart', '-an', `${base}.mp4`]);
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}.mp4`, '-vf', 'select=eq(n\\,0)', '-frames:v', '1', '-q:v', '2', `${base}-poster.jpg`]);
