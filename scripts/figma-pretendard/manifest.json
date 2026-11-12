@@ -1,0 +1,9 @@
+{
+  "name": "Portfolio · Hangul to Pretendard",
+  "id": "portfolio-hangul-pretendard",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] }
+}
