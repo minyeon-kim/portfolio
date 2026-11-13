@@ -9225,3 +9225,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-hbar-goal { left: calc((100% - var(--gap) - var(--val)) * var(--goal)); }
   .case-study .dv .dv-hbar-axis { padding-left: 0; padding-right: calc(var(--val) + var(--gap)); white-space: nowrap; font-size: 14px; }
 }
+
+/* Chapter titles step down so each block's finding leads (owner: Discover/Develop were the largest text,
+   though they are only process names). 40px desktop, just above the 36px finding; 28px on phones.
+   The rule and space above still mark a new chapter. Devsign and Gemini, the Deliver scene included. */
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title,
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-section-title { font-size: 40px; line-height: 1.15; }
+@media (max-width: 47.99rem) {
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title,
+  :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-section-title { font-size: 28px; }
+}
