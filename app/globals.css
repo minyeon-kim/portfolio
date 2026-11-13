@@ -9086,3 +9086,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-column: 1; grid-row: 2; max-width: var(--dv-measure-wide, 900px); }
   .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 1; grid-row: 3; margin-top: 48px; }
 }
+
+/* Donut with its numbers beside it (owner: the ring alone at the left left the right half empty).
+   Ring at the left, all three parts as large rows at the right, so the chart spans the column. */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-cycle-track .dv-trust-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: clamp(48px, 8vw, 128px); column-gap: round(clamp(48px, 8vw, 128px), 8px); }
+  .case-study .dv .dv-cycle-track .dv-trust-legend { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: stretch; gap: 0; width: 100%; max-width: 560px; justify-self: end; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend li { width: 100%; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend li, .case-study .dv .dv-cycle-track .dv-trust-legend li:has(button[data-on]) { position: static; width: auto; height: auto; overflow: visible; clip-path: none; padding: 0; border-top: 1px solid var(--dv-line); }
+  .case-study .dv .dv-cycle-track .dv-trust-legend li:last-child { border-bottom: 1px solid var(--dv-line); }
+  .case-study .dv .dv-cycle-track .dv-trust-legend button { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 16px; width: 100%; min-height: 0; padding: 20px 0; font-size: 16px; text-align: left; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend i { width: 12px; height: 12px; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend b { margin: 0; color: var(--dv-ink); font-size: var(--t-statement, 36px); font-weight: 300; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .case-study .dv .dv-cycle-track .dv-trust-legend [data-on] b { color: var(--case-accent); }
+  .case-study .dv .dv-cycle-track .dv-trust-legend [data-on] span { color: var(--dv-ink); }
+}
