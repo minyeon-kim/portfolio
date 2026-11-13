@@ -5,10 +5,16 @@ const Q_PATHS = [
   "M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0M6 21v-2a4 4 0 0 1 4 -4h3.5M19 22v.01M19 19a2.003 2.003 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483",
   "M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM12 17v.01M12 14a1.5 1.5 0 1 0 -1.14 -2.474",
 ];
-const Q_MARKS = Q_PATHS.map((d) => <svg key={d} viewBox="0 0 24 24" aria-hidden="true"><path d={d} /></svg>);
+// Gemini: the worry, when it starts, what makes deletion believable.
+export const GEMINI_Q_PATHS = [
+  "M12 9v4M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0zM12 16h.01",
+  "M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M12 7v5l3 3",
+  "M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06M15 19l2 2l4 -4",
+];
+const mark = (d: string) => <svg key={d} viewBox="0 0 24 24" aria-hidden="true"><path d={d} /></svg>;
 
-export function InterviewCards({ questions, keys, participants, peopleLabel, questionsLabel }: {
-  questions: string[]; keys: string[]; participants: string[][]; peopleLabel: string; questionsLabel: string;
+export function InterviewCards({ questions, keys, participants, peopleLabel, questionsLabel, icons = Q_PATHS }: {
+  questions: string[]; keys: string[]; participants: string[][]; peopleLabel: string; questionsLabel: string; icons?: string[];
 }) {
   return (
     <div className="dv-ivc">
@@ -17,7 +23,7 @@ export function InterviewCards({ questions, keys, participants, peopleLabel, que
         <ol className="dv-ivc2-asks">
           {questions.map((q, i) => (
             <li key={q}>
-              {Q_MARKS[i]}
+              {icons[i] && mark(icons[i])}
               <strong>{keys[i]}</strong>
               <p>{q}</p>
             </li>

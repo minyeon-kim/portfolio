@@ -2,7 +2,7 @@ import Image from "next/image";
 import { GlanceSteps } from "./glance-steps";
 import type { CSSProperties, ReactNode } from "react";
 import { SurveyCharts } from "@/components/devsign-survey-charts";
-import { InterviewCards } from "@/components/interview-cards";
+import { InterviewCards, GEMINI_Q_PATHS } from "@/components/interview-cards";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CaseGallery } from "@/components/case-gallery";
 import { DevsignCompare } from "@/components/devsign-compare";
@@ -276,25 +276,8 @@ function SourceInsights({ discover }: { discover: Study }) {
 
       <div className="dv-subsection">
         <Block {...interview} ff />
-        {/* Questions and people as the same read-down rows Devsign uses. */}
-        <div className="dv-iv-rows">
-          <section className="dv-iv-row reveal">
-            <h4 className="dv-iv-rowlabel">{interview.questionsLabel}</h4>
-            <ol className="dv-ivq">
-              {interview.questions.map((q: string, i: number) => (
-                <li key={q}><b>{interview.questionKeys?.[i] ?? i + 1}</b><span>{q}</span></li>
-              ))}
-            </ol>
-          </section>
-          <section className="dv-iv-row reveal">
-            <h4 className="dv-iv-rowlabel">{interview.peopleLabel}</h4>
-            <ul className="dv-ivp">
-              {interview.participants.map(([id, role, why, kind]: string[]) => (
-                <li key={id}><b>{id}</b><strong>{role}</strong><span>{why} · {kind}</span></li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        {/* Questions and people as icon cards, like Devsign's interview. */}
+        <InterviewCards questions={interview.questions} keys={interview.questionKeys} participants={interview.participants} peopleLabel={interview.peopleLabel} questionsLabel={interview.questionsLabel} icons={GEMINI_Q_PATHS} />
       </div>
     </div>
   );
