@@ -75,7 +75,7 @@ export const study = {
       title: "Process · Double Diamond",
       body: "먼저 넓게 리서치하고, 문제를 한 번 다시 정의했습니다. 입력할 때 경고하기에서, 이미 연결된 것을 통제하기로.",
       stages: [
-        { name: "Discover", outcome: "끄는 스위치는 있지만, 끈 뒤 무엇이 남는지는 알 수 없습니다.", methods: ["Competitors", "Desk research", "Interviews"] },
+        { name: "Discover", outcome: "AI 학습을 끌 수는 있지만, 끈 뒤 무엇이 남는지는 알 수 없습니다.", methods: ["Competitors", "Desk research", "Interviews"] },
         { name: "Define", outcome: "인사이트 4개를 찾고, 문제를 ‘경고하기’에서 ‘관리하기’로 다시 정했습니다.", methods: ["Affinity map", "Insights", "Personas"] },
         { name: "Develop", outcome: "스케치 11개를 콘셉트 4개로, 다시 2개로 좁혔습니다.", methods: ["Sketching", "Feedback", "Design principles"] },
         { name: "Deliver", outcome: "직접 확인할 수 있으면 더 믿게 되는지 테스트하고 있습니다.", methods: ["HTML prototype", "Usability test", "SUS · SEQ"] },
@@ -133,10 +133,10 @@ export const study = {
     q2: {
       title: "Comparative analysis",
       label: "질문 2 · 지금 있는 설정으로 해결될까?",
-      answer: "5곳 중 4곳은 끌 수 있지만, 끈 뒤 무엇이 남는지는 어디도 보여 주지 않습니다.",
+      answer: "5곳 중 4곳은 내 대화를 AI 학습에 쓰지 않게 끌 수 있지만, 끈 뒤에도 무엇이 남는지는 알려 주지 않습니다.",
       auditLabel: "ChatGPT, Gemini, Claude, Perplexity, Suno · 설정이 놓친 것",
       map: { today: "지금 서비스들", selfName: "찾지 못한 것", rows: [
-        { name: "끄기", now: "5곳 중 4곳은 끌 수 있습니다. Suno만 끌 수 없습니다.", self: "끈 뒤 무엇이 남는지 알려 주기" },
+        { name: "학습 끄기", now: "5곳 중 4곳은 대화를 AI 학습에 쓰지 않게 끌 수 있습니다. Suno는 끌 수 없습니다.", self: "끈 뒤 무엇이 남는지 알려 주기" },
         { name: "스위치 위치", now: "설정 깊숙이 있습니다. Gemini는 두 곳에 나뉘어, 각각 3–5번 눌러야 합니다.", self: "한곳에서 모두 관리하기" },
         { name: "꺼도 남는 것", now: "지운 대화도 서버에 30일에서 최대 3년까지 남습니다. 이 내용은 다른 페이지에 있습니다.", self: "스위치 바로 옆에서 알려 주기" },
         { name: "지우기와 답변에서 빼기", now: "‘삭제’ 버튼 하나뿐입니다. Gemini는 대화를 지워도 연결된 앱에 정보가 남습니다.", self: "완전히 지울지, 답변에만 안 쓰게 할지 고르기" },
@@ -149,14 +149,14 @@ export const study = {
     },
     synthesis: {
       label: "Analysis",
-      title: "내 정보를 통제하는 흐름은 네 곳에서 끊깁니다.",
+      title: "답변에 내 정보가 나온 뒤, 확인하고 끄고 지우는 단계마다 빠진 것이 있습니다.",
       keptLabel: "지금 있는 것",
       lostLabel: "빠진 것",
       rows: [
-        { stage: "나타날 때", kept: "답변에 내 정보가 쓰입니다", lost: "어디서 온 정보인지 보이지 않습니다" },
-        { stage: "끌 때", kept: "Gemini 앱과 Google 계정에 스위치가 있습니다", lost: "두 곳에 나뉘어 있고, 각각 3–5번 눌러야 합니다" },
-        { stage: "삭제할 때", kept: "‘삭제’ 버튼이 하나 있습니다", lost: "완전히 지우는 것과 답변에만 안 쓰는 것이 구분되지 않고, 원본은 Gmail이나 Photos에 그대로 남습니다" },
-        { stage: "확인할 때", kept: "기록을 꺼도 대화는 72시간, 사람이 검토한 대화는 최대 3년 보관됩니다", lost: "무엇이 지워졌는지 확인할 방법이 없습니다" },
+        { stage: "답변에 나올 때", kept: "답변에 내 정보가 쓰입니다", lost: "어디서 온 정보인지 보이지 않습니다" },
+        { stage: "끄려고 할 때", kept: "Gemini 앱과 Google 계정에 스위치가 있습니다", lost: "두 곳에 나뉘어 있고, 각각 3–5번 눌러야 합니다" },
+        { stage: "지우려고 할 때", kept: "‘삭제’ 버튼이 하나 있습니다", lost: "완전히 지우는 것과 답변에만 안 쓰는 것이 구분되지 않고, 원본은 Gmail이나 Photos에 그대로 남습니다" },
+        { stage: "지워졌는지 볼 때", kept: "기록을 꺼도 대화는 72시간, 사람이 검토한 대화는 최대 3년 보관됩니다", lost: "무엇이 지워졌는지 확인할 방법이 없습니다" },
       ],
     },
     interview: {
@@ -185,7 +185,7 @@ export const study = {
     personas: {
       method: "사용자 정의",
       title: "Persona & user journey map",
-      lead: "대표 사용자 한 명을 정하고, 내 정보가 답변에 나타나는 순간에 집중했습니다.",
+      lead: "대표 사용자 한 명을 만들고, 답변에 내 개인 정보가 갑자기 나오는 순간을 따라갔습니다.",
       people: [
         {
           role: "Gemini 사용자",
@@ -212,7 +212,7 @@ export const study = {
     affinity: {
       method: "리서치 분석",
       title: "Affinity mapping",
-      lead: "불안은 정보를 입력할 때보다, 그 뒤 저장되고 학습되고 지워지는 과정이 보이지 않을 때 더 커졌습니다.",
+      lead: "사람들이 가장 불안해한 건, 내 정보가 어디에 저장되고 언제 지워지는지 알 수 없다는 점이었습니다.",
       funnel: [["79", "인터뷰 속 말"], ["6", "테마"], ["4", "인사이트"]],
       board: { src: "/images/cases/gemini-privacy/affinity-board-ko.webp", width: 2854, height: 5000, alt: "인터뷰 속 말 79개를 테마 6개와 그 외 바람으로 묶은 FigJam 어피니티 맵 원본", open: "크게 보기 ↗" },
       themesLabel: "테마 6개와 그 외 바람",
@@ -253,7 +253,7 @@ export const study = {
       {
         method: "아이디에이션",
         title: "Improvement directions",
-        lead: "개선 방향 6개(기능 24개)를 냈고, 문제를 다시 정한 뒤 3개만 남겼습니다.",
+        lead: "개선 방향 6개를 냈고, ‘이미 연결된 정보를 관리하기’에 맞는 3개만 남겼습니다.",
         keptTag: "남김",
         directions: [{ name: "입력할 때 보호" }, { name: "기억 관리", kept: true }, { name: "처리 과정 공개", kept: true }, { name: "출처 표시", kept: true }, { name: "목적별로 요청" }, { name: "작업 규칙 정하기" }],
       },
@@ -304,7 +304,7 @@ export const study = {
     ],
     details: {
       label: "UI details",
-      lead: "흐름 속에서 사용자가 결정하는 네 화면입니다.",
+      lead: "사용자가 직접 고르고 확인하는 네 화면입니다.",
       items: [
         { title: "답변 바로 아래 출처 확인", body: "답변 아래 '출처 확인'을 누르면, 그 답변에 쓰인 정보가 바로 열립니다.", before: "어디서 왔는지 알기 어려움.", src: "/images/cases/gemini-privacy/detail-badge-ko.webp", width: 749, height: 264, alt: "Gemini 답변 아래 좋아요, 공유 버튼 옆에 있는 출처 확인 배지" },
         { title: "앱이 아니라 사람·주제별로", body: "쓰인 정보를 '정민', '식당 취향'처럼 주제별로 묶어, 한 번에 골라 처리합니다.", before: "설정 화면 두 곳, 각각 3–5번 클릭.", src: "/images/cases/gemini-privacy/detail-sheet-ko.webp", width: 825, height: 1375, alt: "이 답변에 사용된 정보 시트: 정민 5건, 식당 취향 2건, 앱 연동 설정" },
@@ -339,7 +339,7 @@ export const study = {
     },
   },
   takeaway: {
-    headline: "신뢰는 화면 속 약속이 아니라, 사용자가 직접 확인하면서 생깁니다.",
+    headline: "사람들은 ‘안전하다’는 문구보다, 직접 확인할 수 있을 때 믿습니다.",
     reviewTitle: "프로젝트 회고",
     review: [
       { title: "원칙을 화면 구조로 옮겼습니다", body: "‘완전히 지우기’와 ‘답변에만 안 쓰기’의 차이를 도움말이 아니라 화면에서 바로 보이게 했습니다." },

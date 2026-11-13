@@ -76,7 +76,7 @@ export const study = {
       title: "Process · Double Diamond",
       body: "We researched widely, then redefined the problem once: from warning people as they type to controlling what's already connected.",
       stages: [
-        { name: "Discover", outcome: "There’s an off switch, but no one knows what’s left after.", methods: ["Competitors", "Desk research", "Interviews"] },
+        { name: "Discover", outcome: "You can turn off AI training, but not see what’s left after.", methods: ["Competitors", "Desk research", "Interviews"] },
         { name: "Define", outcome: "Four insights; the problem shifted from warning to managing.", methods: ["Affinity map", "Insights", "Personas"] },
         { name: "Develop", outcome: "11 sketches became 4 concepts, then 2.", methods: ["Sketching", "Feedback", "Design principles"] },
         { name: "Deliver", outcome: "Testing whether checking it yourself builds trust.", methods: ["HTML prototype", "Usability test", "SUS · SEQ"] },
@@ -134,10 +134,10 @@ export const study = {
     q2: {
       title: "Comparative analysis",
       label: "Question 2 · Do today's controls solve it?",
-      answer: "Four of the five let you switch it off, but none shows what’s left after you do.",
+      answer: "4 of 5 let you stop AI training on your chats, but none says what’s still kept after you do.",
       auditLabel: "ChatGPT, Gemini, Claude, Perplexity, Suno · What the controls miss",
       map: { today: "Services today", selfName: "What we didn’t find", rows: [
-        { name: "Turning it off", now: "4 of 5 let you turn it off. Suno doesn’t.", self: "What stays after you turn it off" },
+        { name: "Stopping training", now: "4 of 5 let you stop AI training on your chats. Suno doesn’t.", self: "What stays after you turn it off" },
         { name: "Where the switches are", now: "Deep in settings. Gemini splits them across two places, 3–5 clicks each.", self: "One place to control it all" },
         { name: "What stays anyway", now: "Deleted chats stay on servers from 30 days up to 3 years, explained on a separate page.", self: "The exceptions, right next to the switch" },
         { name: "Delete or block", now: "One “delete” button. In Gemini, deleting a chat leaves the info in connected apps.", self: "Separate choices: delete it, or stop its use" },
@@ -150,14 +150,14 @@ export const study = {
     },
     synthesis: {
       label: "Analysis",
-      title: "Control over your data breaks at four points.",
+      title: "Once your data shows up in an answer, something is missing at every step: seeing, turning off, deleting, checking.",
       keptLabel: "What exists",
       lostLabel: "What’s missing",
       rows: [
-        { stage: "Shows up", kept: "Answers use your personal data", lost: "You can’t see where it came from" },
-        { stage: "Turn off", kept: "Switches in the Gemini app and the Google account", lost: "Split across two places, 3–5 clicks each" },
-        { stage: "Delete", kept: "One “delete” button", lost: "Deleting and blocking look the same, and originals stay in Gmail or Photos" },
-        { stage: "Check", kept: "With history off, chats are still kept 72 hours; chats a person reviewed, up to 3 years", lost: "No way to confirm what's gone" },
+        { stage: "In an answer", kept: "Answers use your personal data", lost: "You can’t see where it came from" },
+        { stage: "Turning it off", kept: "Switches in the Gemini app and the Google account", lost: "Split across two places, 3–5 clicks each" },
+        { stage: "Deleting", kept: "One “delete” button", lost: "Deleting and blocking look the same, and originals stay in Gmail or Photos" },
+        { stage: "Checking it’s gone", kept: "With history off, chats are still kept 72 hours; chats a person reviewed, up to 3 years", lost: "No way to confirm what's gone" },
       ],
     },
     interview: {
@@ -186,7 +186,7 @@ export const study = {
     personas: {
       method: "User definition",
       title: "Persona & user journey map",
-      lead: "One typical user and one key moment: the answer where personal data shows up.",
+      lead: "We made one typical user and followed the moment personal data suddenly shows up in an answer.",
       people: [
         {
           role: "Gemini user",
@@ -213,7 +213,7 @@ export const study = {
     affinity: {
       method: "Research analysis",
       title: "Affinity mapping",
-      lead: "Anxiety grew when people couldn't see how their data was saved, used or deleted.",
+      lead: "What worried people most was not knowing where their data is stored or when it’s deleted.",
       funnel: [["79", "interview quotes"], ["6", "themes"], ["4", "insights"]],
       board: { src: "/images/cases/gemini-privacy/affinity-board-en.webp", width: 1876, height: 5000, alt: "The FigJam affinity map: 79 interview quotes grouped into six themes and other needs (simplified English version, 32 key quotes)", open: "View full size ↗" },
       themesLabel: "Six themes and other needs",
@@ -254,7 +254,7 @@ export const study = {
       {
         method: "Ideation",
         title: "Improvement directions",
-        lead: "Six directions (24 features) narrowed to three after the problem changed.",
+        lead: "We had six directions and kept the three that fit managing what’s already connected.",
         keptTag: "Kept",
         directions: [{ name: "Protect what you type" }, { name: "Manage what it remembers", kept: true }, { name: "Show how it’s handled", kept: true }, { name: "Show the sources", kept: true }, { name: "Ask by purpose" }, { name: "Set work rules" }],
       },
@@ -305,7 +305,7 @@ export const study = {
     ],
     details: {
       label: "UI details",
-      lead: "The four screens where a decision happens in the flows.",
+      lead: "The four screens where people choose and check for themselves.",
       items: [
         { title: "Sources, right under the answer", body: "Tap \"View sources\" under an answer to open the info that answer used.", before: "Hard to tell where it came from.", src: "/images/cases/gemini-privacy/detail-badge-en.webp", width: 749, height: 316, alt: "The View sources badge next to the like and share buttons under a Gemini answer" },
         { title: "Grouped by person and topic, not app", body: "The info is grouped by topic, such as Jeongmin or dining preferences, so it can be handled in one go.", before: "Two settings screens, 3–5 clicks each.", src: "/images/cases/gemini-privacy/detail-sheet-en.webp", width: 825, height: 1375, alt: "Information used in this response sheet: Jeongmin 5 items, dining preferences 2 items, app connections" },
@@ -340,7 +340,7 @@ export const study = {
     },
   },
   takeaway: {
-    headline: "Trust isn't a promise on screen. It's something users check for themselves.",
+    headline: "People trust what they can check, more than a line saying it’s safe.",
     reviewTitle: "Project review",
     review: [
       { title: "Principles became requirements", body: "The difference between deleting and blocking is shown in the screen itself, not hidden in help text." },
