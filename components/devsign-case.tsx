@@ -449,6 +449,13 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <div className="reveal"><GlanceSteps items={overview.summary.items} label={overview.summary.label} /></div>
           </section>
         ) : <div className="dv-psi">{children}</div>}
+        {/* Background the case starts from, with its source as a small footnote (Gemini). */}
+        {overview.context && (
+          <p className="dv-context reveal">
+            {overview.context.text}{" "}
+            <a className="dv-context-source" href={overview.context.source.url} target="_blank" rel="noreferrer">{overview.context.source.label}</a>
+          </p>
+        )}
         {/* The photo follows the summary (owner: under the content, not between headline and summary). */}
         {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         <div className="dv-process">
@@ -561,37 +568,23 @@ export function DevsignCase({ study, children }: { study: Study; children: React
 
         <div className="dv-subsection">
         <Block {...define.personas} ff={ff} />
-        <div className="dv-personas dv-gap-64">
+        {/* The same compact person card as Devsign: who, a line about them, their words.
+            The pains live on the journey's hardest moment. */}
+        <div className="dv-cast dv-gap-40">
           {define.personas.people.map((person: Study, index: number) => (
-            <article key={person.name} className="dv-persona reveal" data-variant={index === 0 ? "designer" : "developer"}>
-              <div className="dv-persona-id">
-                {person.avatar ? <Image src={withBase(person.avatar)} alt="" width={88} height={88} className="dv-avatar" /> : <span className="dv-avatar dv-avatar-blank" aria-hidden="true" />}
-                <p className="dv-caps dv-persona-role">{person.role}</p>
-                <h3 className="dv-persona-name">{person.name}</h3>
-                <p className="dv-persona-bio">{person.bio}</p>
-                <p className="dv-persona-quote">{person.quote}</p>
-              </div>
-              <div className="dv-persona-details">
+            <article key={person.name} className="reveal" data-line={index === 0 ? "designer" : "developer"}>
+              <div className="dv-cast-head">
+                {person.avatar && <Image src={withBase(person.avatar)} alt="" width={96} height={96} className="dv-cast-photo" />}
                 <div>
-                  <p className="dv-caps dv-persona-role">{labels.context}</p>
-                  <p className="dv-persona-context">{person.context} <strong>{person.contextLead}</strong></p>
+                  <h4>{person.name}</h4>
+                  <p className="dv-cast-bio">{person.bio}</p>
                 </div>
-                <table className="dv-needs">
-                  <thead>
-                    <tr><th scope="col">{labels.painPoint}</th><th scope="col"><span className="sr-only">→</span></th><th scope="col">{labels.need}</th></tr>
-                  </thead>
-                  <tbody>
-                    {person.pairs.map(([pain, need]: string[]) => (
-                      <tr key={pain}><td>{pain}</td><td aria-hidden="true"><ArrowIcon /></td><td><strong>{need}</strong></td></tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
+              <p className="dv-cast-quote">{person.quote}</p>
             </article>
           ))}
         </div>
-        <Journey journey={define.personas.journey} />
-        <p className="dv-summary reveal">{define.personas.summary}</p>
+        <Journey journey={define.personas.journey} wide />
         </div>
 
         </>}
@@ -781,7 +774,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
           {testing.goals && <div className="dv-goals dv-gap-64">
             <p className="dv-caps dv-accent reveal">{testing.goals.label}</p>
             <ol className="dv-checks">
-              {testing.goals.items.map((s: string, i: number) => <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>)}
+              {testing.goals.items.map((s: string | { text: string; result: string; met?: boolean }, i: number) => typeof s === "string"
+                ? <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>
+                : <li key={s.text} className="reveal"><span>{i + 1}</span><span className="dv-goal-text">{s.text}<small className="dv-goal-result" data-met={s.met || undefined}>{s.result}</small></span></li>)}
             </ol>
           </div>}
         </div>

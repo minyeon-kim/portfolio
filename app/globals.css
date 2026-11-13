@@ -9018,3 +9018,14 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-hdoc-wide .dv-hdoc-lens {
   border-radius: 8px; box-shadow: 0 32px 80px -24px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08);
 }
+
+/* Gemini review pass: the background line under the Overview summary with its source as a small
+   footnote link; a result line under each success goal; UI details cards on the dark scene canvas
+   like the other screen plates. */
+.case-study .dv .dv-context { max-width: var(--dv-measure, 740px); margin-top: 48px; color: var(--dv-muted); font-size: 16px; line-height: 1.5; }
+:root .case-study .dv .dv-context .dv-context-source { color: var(--dv-muted); font-size: 14px; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; white-space: nowrap; }
+:root .case-study .dv .dv-context .dv-context-source:hover { color: var(--dv-ink); }
+.case-study .dv .dv-goal-text { display: grid; gap: 4px; }
+.case-study .dv .dv-goal-result { color: var(--dv-muted); font-size: 16px; }
+.case-study .dv .dv-goal-result[data-met] { color: var(--case-accent, var(--dv-accent)); }
+:root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-dscroll .dv-detail-card { background: var(--dv-scene) !important; }
