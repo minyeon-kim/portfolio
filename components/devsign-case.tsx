@@ -467,16 +467,9 @@ export function DevsignCase({ study, children }: { study: Study; children: React
         {overview.summary ? (
           <section className="dv-glance-block" aria-labelledby="tldr">
             <h3 id="tldr" className="sr-only">{overview.summary.label}</h3>
-            <div className="reveal"><GlanceSteps items={overview.summary.items} label={overview.summary.label} /></div>
+            <div className="reveal"><GlanceSteps items={overview.summary.items} label={overview.summary.label} context={overview.context} /></div>
           </section>
         ) : <div className="dv-psi">{children}</div>}
-        {/* Background the case starts from, with its source as a small footnote (Gemini). */}
-        {overview.context && (
-          <p className="dv-context reveal">
-            {overview.context.text}{" "}
-            <a className="dv-context-source" href={overview.context.source.url} target="_blank" rel="noreferrer">{overview.context.source.label}</a>
-          </p>
-        )}
         {/* The photo follows the summary (owner: under the content, not between headline and summary). */}
         {overview.photo && <Figure img={overview.photo} sizes="(max-width: 1023px) 100vw, 1200px" className="dv-me-photo" />}
         <div className="dv-process">

@@ -9181,3 +9181,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .dv-rulesv-steps .arrow-icon, .dv-rulesv-rows .arrow-icon { transform: rotate(90deg); }
 }
 @media (min-width: 64rem) { .dv-rulesv-steps { align-items: start; } .dv-rulesv-steps > .arrow-icon { margin-top: 44px; } }
+
+/* Overview summary: one even rhythm. The chapter rule is the first line, every row sits 24px
+   inside its lines, and the background row comes first in a quieter voice. */
+.case-study .dv .dv-glance-block { margin-top: 0 !important; }
+:root .case-study .dv .dv-gs:not([data-pinned]) .dv-gs-list > li:first-child { padding-top: 24px; }
+.case-study .dv .dv-gs-list > li.dv-gs-context { border-top: 0; }
+.case-study .dv .dv-gs-ctx { margin: 0; color: var(--dv-muted); font-size: 16px; line-height: 1.5; word-break: keep-all; max-width: 640px; }
+.case-study .dv .dv-gs-src { display: inline-block; margin-top: 8px; color: var(--dv-muted); font-size: 14px; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
+.case-study .dv .dv-gs-src:hover { color: var(--dv-ink); }
+.case-study .dv .dv-section-head:has(+ .dv-glance-block) { margin-bottom: 0 !important; }
