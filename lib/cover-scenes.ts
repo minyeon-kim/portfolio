@@ -12,7 +12,7 @@ export const COVER_SCENES: Record<string, CoverScene> = {
   devsign: {
     // The film's frame at 0.5s (its first shot, held), rendered at 3840x2160 and laid out at 1920x1080: the workspace
     // window floating on the purple-lit canvas.
-    src: "/images/devsign/hero-film/still-en-v5.webp",
+    src: "/images/devsign/hero-film/still-en-v7.webp",
     width: 1920, height: 1080,
     // Desktop cover 16:8.6 (the plate), phones the whole 16:9 frame. The landing and phone cards
     // close in on the window (1.66:1 and 16:10): it fills about 72% of the card, with the purple
