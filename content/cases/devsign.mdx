@@ -51,7 +51,7 @@ export const study = {
       label: "At a glance",
       items: [
         { tone: "red", label: "Problem", title: "Teams choose which AI output to use in chat, so they often find out much later that the built screen doesn’t match the design." },
-        { tone: "accent", label: "Solution", accent: "keep the reason", title: "Combine the best parts, and let the decision-maker settle each gap and keep the reason." },
+        { tone: "accent", label: "Solution", accent: "keep the reason", title: "Combine the best parts of AI drafts, and let the decision-maker settle where design and code differ, keeping the reason." },
         { tone: "teal", label: "Impact", title: "Both test participants gave 5 out of 5 to “I expect to ask less often why the design and code differ.”" },
       ],
     },
@@ -131,7 +131,7 @@ export const study = {
     },
     q2: {
       title: "Comparative analysis",
-      answer: "In the tools we reviewed, we found no way to combine parts of several drafts and keep the reason.",
+      answer: "We looked at design and dev tools, but found none that lets you pick the best parts of several AI drafts and keep the reason.",
       auditLabel: "10+ tools, by type",
       headers: ["Type", "Example tools", "What it solves", "What we didn’t find"],
       map: {"today": "Tools today", "selfName": "What we didn’t find", "selfTag": "", "rows": [{"name": "Combining", "self": "Combining only parts of several drafts", "now": "Merge a whole branch at once, pick only the conflicting parts, or regenerate by prompt"}, {"name": "Why it was decided", "self": "Keeping the reason with the change", "now": "Apart from the work, in comments or commits"}]},
@@ -146,7 +146,7 @@ export const study = {
       label: "Analysis",
       keptLabel: "What stays",
       lostLabel: "What’s lost",
-      title: "Each stage kept its result, but not the reason behind it.",
+      title: "From planning to release, the work is kept, but why it was decided isn’t kept anywhere.",
       rows: [
         { stage: "Plan", kept: "AI draft", lost: "Why it’s needed" },
         { stage: "Design", kept: "Picked option", lost: "Why it was picked" },
@@ -195,7 +195,7 @@ export const study = {
     personas: {
       method: "User definition",
       title: "Persona & user journey map",
-      lead: "Designers and developers get stuck at different stages.",
+      lead: "Designers had no chance to weigh in, and developers built by guessing the design intent.",
       people: [
         {
           role: "Designer",
@@ -267,7 +267,7 @@ export const study = {
     problems: {
       method: "Problem definition",
       title: "Key problems",
-      lead: "Sorting the seven themes left four core problems.",
+      lead: "Grouping the interviews into seven topics left four core problems.",
       lowest: "Lowest point",
       items: [
         { title: "Work status is scattered across tools", body: "Progress is split across Figma, Slack and GitHub, so no one can see in one place how far the work has got.", themes: ["Too many tools", "Collaboration"], quote: ["I checked it in Notion and GitHub.", "P01"], role: "Developer", from: "Tool sprawl (37) · Real-time collaboration (25)", lowest: true },
@@ -332,7 +332,7 @@ export const study = {
       method: "Structure",
       title: "Information architecture",
       lead: "We structured it so people can make decisions without leaving their work.",
-      text: "Work is viewed in three tabs: Preview, Screens and Code. Merging and decisions open beside them, and every decision is saved in History.",
+      text: "The work area has three tabs: Preview, Screens and Code. Merging and decisions open in a side panel, and every decision is saved in History.",
       more: "See the full structure",
       moreHref: "/work/devsign/handoff/#ia",
       fullTitle: "Information architecture, in full",
@@ -411,7 +411,7 @@ export const study = {
         kicker: "Feature 03 · Developer → decision-maker",
         title: "Conflict Points",
         clip: { src: "/images/devsign/clips/en-conflict.mp4", poster: "/images/devsign/clips/en-conflict-poster.jpg", marks: [1.28, 2.58, 3.54] },
-        body: "A pin marks where the build differs from the design, and the decision-maker picks which to keep.",
+        body: "A pin marks where the built screen differs from the design, and the decision-maker picks which to keep.",
         points: ["A pin on every changed spot", "The developer asks, with a reason", "Compare with the design, then decide"],
         src: "/images/devsign/screen-conflict-points.webp", width: 1280, height: 800,
         alt: "Conflict Points: a flagged difference between design and build, with the developer's reason and decision controls",
@@ -468,7 +468,7 @@ export const study = {
         {
           type: "pair",
           tab: "Help needed",
-          title: "The same tasks twice, so familiarity played a part.",
+          title: "Help needed dropped from 2.3 on the first try to 0.4 on the second. Our goal was 1.5 or less.",
           note: "2 people, 7 tasks twice, averaged. The same tasks twice, so familiarity played a part.",
           low: "0 on their own",
           high: "3 told directly",
@@ -520,17 +520,17 @@ export const study = {
     },
   },
   takeaway: {
-    headline: "A collaboration tool for the AI era should help teams decide, not just make.",
+    headline: "Making is easy now with AI, so a collaboration tool should help teams decide what to use.",
     reviewTitle: "Key learnings",
     reviewItem: "Key learning",
     review: [
       { title: "Hearing a participant call a screen “another team’s tool” showed us the structure was wrong." },
-      { title: "Took things away instead of adding" },
+      { title: "Working with a practicing designer, we had to remove features, not add them." },
     ],
     next: {
       label: "Next step",
       title: "Run a second usability test on the revised screens.",
-      chips: ["Checks the UI-only scope", "Uses real team data", "Measures success goal 2"],
+      chips: ["Checks the UI-only scope", "Uses real team data", "Checks every decision keeps its reason"],
     },
   },
 };
