@@ -9191,3 +9191,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-gs-src { display: inline-block; margin-top: 8px; color: var(--dv-muted); font-size: 14px; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
 .case-study .dv .dv-gs-src:hover { color: var(--dv-ink); }
 .case-study .dv .dv-section-head:has(+ .dv-glance-block) { margin-bottom: 0 !important; }
+
+/* Phones: no heading runs past three lines (About hero headline, the Problem statement sheet). */
+@media (max-width: 47.99rem) {
+  .about-hero-title { font-size: 32px !important; }
+  .case-study .dv > section > .dv-core.dv-core:last-child .dv-core-text { font-size: 30px !important; }
+}
+@media (max-width: 47.99rem) {
+  .about-hero-title .about-hero-line { display: inline; }
+  .about-hero-title { font-size: 30px !important; text-wrap: pretty; }
+}
