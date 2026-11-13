@@ -1,5 +1,5 @@
-// Devsign affinity map, read from the team's FigJam board (file FIGJAM_BOARD,
-// Empathise page): "Affinity Mapping" 322:6049 (Korean) and "Affinity Mapping · EN"
+// Devsign affinity map, read from the team's FigJam board
+// (Empathise page): "Affinity Mapping" 322:6049 (Korean) and "Affinity Mapping · EN"
 // 1842:14359. Every sticky is one statement from the four interviews. The board colours
 // stickies by type of statement, sorts them into sub-groups under seven themes and closes
 // each theme on an Insight. Nothing here is made up:

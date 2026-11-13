@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Working notes for Claude Code sessions stay on this machine (owner, 2026-11-13).
+claude.md
+CLAUDE.md

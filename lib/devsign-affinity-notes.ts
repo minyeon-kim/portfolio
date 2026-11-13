@@ -1,6 +1,6 @@
 // The text of every sticky on the Devsign affinity board, per theme, in the same order as
 // the type and participant codes in devsign-affinity.ts (sub-groups top to bottom, stickies
-// top to bottom, left to right). Read from FigJam FIGJAM_BOARD: Korean from
+// top to bottom, left to right). Read from the team FigJam board: Korean from
 // "Affinity Mapping" 322:6049 (type tags and the participant tag removed), English from
 // "Affinity Mapping · EN" 1842:14359. Long stickies are cut with "…" to fit a post-it.
 

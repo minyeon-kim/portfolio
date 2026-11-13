@@ -1,4 +1,4 @@
-// Builds one SVG per site state for the Figma file (FIGMA_FILE): text stays text
+// Builds one SVG per site state for the Figma file: text stays text
 // (one layer per line), boxes become rects, photos, recordings, canvases and drawn diagrams are
 // embedded as images. Upload each SVG with the Figma MCP `upload_assets` tool (the file name
 // becomes the frame name), then run the fix-up in scripts/figma-fixup.js through `use_figma`
