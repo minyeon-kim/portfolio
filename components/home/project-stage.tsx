@@ -7,6 +7,7 @@ import { ProjectTitle } from "@/components/project-title";
 import { HomeIntro } from "./home-intro";
 import { setUi, useUi } from "@/lib/ui-store";
 import { revealNextProject } from "@/lib/project-transition";
+import { filmOf } from "@/lib/film";
 import { Segmented } from "./segmented";
 import { GeminiDevice } from "@/components/gemini-device";
 import { GeminiPhone } from "@/components/gemini-phone";
@@ -101,7 +102,7 @@ export function ProjectStage({ projects, about }: Props) {
     revealNextProject(
       () => setUi({ activeCase: index }),
       () => Boolean(document.querySelector(`main [data-stage-index="${index}"]`)),
-      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug } : undefined,
+      from && project?.hero ? { from, to: "main .devsign-hero-media", project: project.slug, film: filmOf(project.hero.film) } : undefined,
     );
   };
   const p = active !== null ? projects[active] : null;

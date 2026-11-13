@@ -8938,6 +8938,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
    meets the page's near-black, so a faint edge keeps it reading as a screen. */
 .dh-film { position: absolute; inset: 0; z-index: 2; opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
 .dh-film[data-ready] { opacity: 1; pointer-events: auto; }
+/* Handed over from the zoom layer at the same frame: shown at once, no fade over the still. */
+.dh-film[data-instant] { transition: none; }
 .dh-film video { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 .dh-shot[data-film] .dh-shot-camera { animation: none; }
 .devsign-hero.dh-cover[data-project="devsign"] .dh-shot[data-film] { -webkit-mask-image: none; mask-image: none; }

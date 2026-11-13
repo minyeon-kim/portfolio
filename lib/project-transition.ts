@@ -1,4 +1,5 @@
 "use client";
+import { pickFilm, type FilmSources } from "@/lib/video";
 
 // A page's canvas: its background colour, plus the Devsign dot grid when the
 // page is a design-tool canvas.
@@ -33,7 +34,10 @@ export function freezeAmbient(source: HTMLElement) {
 // one continuous picture.
 // `box` is where the layer starts when that isn't the device's own box (the Menu's card
 // crops its device); `onCovered` runs once the layer fills the screen, before the page changes.
-export type ZoomOptions = { from: HTMLElement; to: string; project: string; box?: DOMRect; onCovered?: () => void };
+// `film` (the Devsign cover film): on a large screen the layer plays it full screen for a
+// moment once it has grown, then shrinks into the cover and hands the film's moment to the
+// page's own film (see HeroFilm), so it carries on in place.
+export type ZoomOptions = { from: HTMLElement; to: string; project: string; box?: DOMRect; onCovered?: () => void; film?: FilmSources & { start?: number } };
 
 // Carries the CSS animations of `source` (and its descendants) over to the
 // same elements in `copy`, at the same point of their cycle. A fresh copy
@@ -186,6 +190,12 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   };
   let sceneCopy: HTMLElement | null = null;
   let sceneFill = 1;
+  // The cover film in the layer (large screens): it plays once the layer fills the screen,
+  // holds the full screen for FILM_HOLD of playback (any wheel, key or press cuts it short),
+  // then settles. If it can't start within 1.5s the layer settles on its still as before.
+  const FILM_HOLD = 3000;
+  let filmVideo: HTMLVideoElement | null = null;
+  let filmPlayingAt = 0;
   if (zoom && !reduced) {
     const source = zoom.from;
     // The whole card, not just the window set into it: its plate is part of the picture.
@@ -221,6 +231,22 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
           const cover = Math.max(box.width / vw, box.height / vh);
           const start = ((box.width / cover) * w) / (vw * cardWidth);
           copy.animate([{ scale: `${start}` }, { scale: `${sceneFill}` }], { duration: grow, easing: ZOOM_EASE, fill: "both" });
+          const stage = copy.querySelector<HTMLElement>(".dh-shot-stage");
+          if (zoom.film && stage && window.matchMedia("(min-width: 64rem)").matches) {
+            const wrap = document.createElement("span");
+            wrap.className = "dh-film";
+            const video = document.createElement("video");
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = "auto";
+            const at = zoom.film.start ?? 0;
+            video.addEventListener("loadedmetadata", () => { video.currentTime = at; }, { once: true });
+            video.addEventListener("playing", () => { filmPlayingAt = performance.now(); wrap.dataset.ready = ""; }, { once: true });
+            video.src = pickFilm(zoom.film);
+            wrap.appendChild(video);
+            stage.appendChild(wrap);
+            filmVideo = video;
+          }
         }
       }
       stageOf(layer).appendChild(copy);
@@ -404,6 +430,32 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       releaseWhenIdle();
     }));
   };
+  const filmHeld = (video: HTMLVideoElement) => new Promise<void>((resolve) => {
+    const SKIP = ["wheel", "keydown", "pointerdown", "touchstart"] as const;
+    let timer = 0;
+    const finish = () => {
+      window.clearTimeout(timer);
+      SKIP.forEach((type) => window.removeEventListener(type, finish));
+      video.removeEventListener("playing", playing);
+      resolve();
+    };
+    const playing = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(finish, Math.max(0, filmPlayingAt + FILM_HOLD - performance.now()));
+    };
+    SKIP.forEach((type) => window.addEventListener(type, finish, { passive: true }));
+    if (filmPlayingAt) playing();
+    else {
+      video.addEventListener("playing", playing, { once: true });
+      timer = window.setTimeout(finish, 1500);
+    }
+  });
+  const handOver = (video: HTMLVideoElement) => new Promise<void>((resolve) => {
+    video.pause();
+    if (!filmPlayingAt) return resolve();
+    const timer = window.setTimeout(resolve, 900);
+    window.dispatchEvent(new CustomEvent("hero-film-handoff", { detail: { time: video.currentTime, done: () => { window.clearTimeout(timer); resolve(); } } }));
+  });
   const begin = () => {
     if (started || !ready()) return;
     started = true;
@@ -415,7 +467,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     }
     main.querySelector<HTMLElement>("[data-stage-index], [data-case-slug]")?.setAttribute("data-project-arrived", "true");
     // Capture the new title at scroll zero before animating viewport layers.
-    requestAnimationFrame(() => requestAnimationFrame(() => {
+    requestAnimationFrame(() => requestAnimationFrame(async () => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // Animate the actual destination, so there is no snapshot-to-document
       // handoff with different sticky/scroll geometry at the end.
@@ -433,6 +485,8 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       });
       // Under the shrinking picture the ground is the new page's, not the old one's.
       if (layer) floor.style.backgroundColor = canvasColor();
+      // The film plays full screen first; the new page waits, rendered, behind it.
+      if (filmVideo) await filmHeld(filmVideo);
       // Without the device layer: the old view lifts and blurs away in 140ms, so it
       // can't linger as a ghost, while its canvas stays as the ground the new page
       // rises onto (10vh, fading in from 160ms).
@@ -456,7 +510,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
         timing,
       );
       animations.push(slide);
-      let finished = slide.finished;
+      let finished: Promise<unknown> = slide.finished;
       if (layer && zoom) {
         const target = incoming.querySelector<HTMLElement>(sceneCopy ? "main .dh-shot" : zoom.to);
         const box = target?.getBoundingClientRect();
@@ -501,9 +555,11 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
               ));
             }
           }
-          const blend = layer.animate([{ opacity: 1 }, { opacity: 1, offset: 0.9 }, { opacity: 0 }], settleTiming);
+          // With the film the layer stays whole to the end, lying exactly on the cover; the
+          // page's film then takes over the same frame and the layer goes without a blend.
+          const blend = layer.animate(filmVideo ? [{ opacity: 1 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 1, offset: 0.9 }, { opacity: 0 }], settleTiming);
           animations.push(blend);
-          finished = blend.finished;
+          finished = filmVideo ? blend.finished.then(() => handOver(filmVideo!)) : blend.finished;
         } else {
           const blend = layer.animate([{ opacity: 1 }, { opacity: 0 }], settleTiming);
           animations.push(blend);
@@ -530,7 +586,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     }));
   };
   const observer = new MutationObserver(begin);
-  const timeout = setTimeout(cleanup, 5000);
+  const timeout = setTimeout(cleanup, filmVideo ? 5000 + FILM_HOLD + 2500 : 5000);
   observer.observe(main, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-stage-index", "data-case-slug"] });
   // With the device layer, the page is locked and the new one rendered only once the
   // device has filled the screen. Rendering a whole case is a long task; run during the
@@ -538,7 +594,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   if (layer) {
     // The old view is live behind the layer now: it mustn't react to the pointer.
     main.style.pointerEvents = "none";
-    window.setTimeout(() => { main.style.pointerEvents = ""; lockPage(); zoom?.onCovered?.(); change(); begin(); }, Math.max(0, grow - (performance.now() - zoomStart)));
+    window.setTimeout(() => { main.style.pointerEvents = ""; lockPage(); zoom?.onCovered?.(); filmVideo?.play().catch(() => {}); change(); begin(); }, Math.max(0, grow - (performance.now() - zoomStart)));
     return;
   }
   lockPage();

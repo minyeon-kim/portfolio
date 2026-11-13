@@ -14,3 +14,11 @@ export function toggleClip(event: { currentTarget: HTMLVideoElement }) {
   const v = event.currentTarget;
   if (v.paused) v.play().catch(() => {}); else v.pause();
 }
+
+// The cover film comes in three sizes. Phones get the 720p file; screens with more than about
+// 2400 device pixels across (a 1280+ wide window on a retina display) the 1440p file; the rest 1080p.
+export type FilmSources = { src: string; small?: string; large?: string };
+export function pickFilm({ src, small, large }: FilmSources) {
+  if (window.matchMedia("(max-width: 47.99rem)").matches) return small ?? src;
+  return large && window.innerWidth * window.devicePixelRatio >= 2400 ? large : src;
+}

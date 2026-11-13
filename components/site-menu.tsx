@@ -7,11 +7,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { HeroShot } from "@/components/hero-shot";
 import { COVER_SCENES, type Crop } from "@/lib/cover-scenes";
 import { revealNextProject } from "@/lib/project-transition";
+import { filmOf } from "@/lib/film";
 import { withBase } from "@/lib/site";
 import { setUi } from "@/lib/ui-store";
 import { localeOf, localize, stripLocale, ui } from "@/lib/i18n";
 
-type MenuCase = { slug: string; name: string; poster?: string; still?: string };   // still: the cover film's frame, in this language
+type MenuCase = { slug: string; name: string; poster?: string; still?: string; film?: { src: string; small?: string; large?: string; start?: number } };   // still: the cover film's frame, in this language
 type Props = {
   contact: { email: string; linkedinUrl: string; resumeUrl?: string };
   cases: { en: MenuCase[]; ko: MenuCase[] };
@@ -187,6 +188,7 @@ export function SiteMenu({ contact, cases }: Props) {
         to: "main .devsign-hero-media",
         project: slug,
         box: card.getBoundingClientRect(),
+        film: filmOf(list.find((c) => c.slug === slug)?.film),
         // The picture covers the screen: the menu can go at once, with nothing to animate.
         onCovered: () => {
           window.clearTimeout(timer.current);
