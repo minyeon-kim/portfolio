@@ -1,22 +1,30 @@
-// Comparative analysis as two panels side by side: how tools handle the two things the finding is
-// about, against Devsign, at one text size.
-// Sources: docs/tool-research.md.
+// Comparative analysis as one table read across (owner: two separate panels made you match rows
+// by eye): what each row checks, what tools do today, and what we didn't find, on one line.
+// Sources: docs/tool-research.md (Devsign); the Gemini FigJam "Benchmarking" section.
 type Row = { name: string; now: string; self: string };
 export type CoverageData = { today: string; selfName: string; rows: Row[] };
 
 export function ToolMap({ map }: { map: CoverageData }) {
   return (
-    <figure className="dv-cmp2 reveal">
-      <div className="dv-cmp2-panels">
-        <section>
-          <h4>{map.today}</h4>
-          <dl>{map.rows.map((row) => <div key={row.name}><dt>{row.name}</dt><dd>{row.now}</dd></div>)}</dl>
-        </section>
-        <section data-self="">
-          <h4>{map.selfName}</h4>
-          <dl>{map.rows.map((row) => <div key={row.name}><dt>{row.name}</dt><dd>{row.self}</dd></div>)}</dl>
-        </section>
-      </div>
+    <figure className="dv-cmpt reveal">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"><span className="sr-only">—</span></th>
+            <th scope="col">{map.today}</th>
+            <th scope="col" data-self="">{map.selfName}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {map.rows.map((row) => (
+            <tr key={row.name}>
+              <th scope="row">{row.name}</th>
+              <td><span className="dv-cmpt-tag" aria-hidden="true">{map.today}</span>{row.now}</td>
+              <td data-self=""><span className="dv-cmpt-tag" aria-hidden="true">{map.selfName}</span>{row.self}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </figure>
   );
 }

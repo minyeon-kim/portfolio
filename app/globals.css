@@ -9039,3 +9039,28 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-goal-result { color: var(--dv-muted); font-size: 16px; }
 .case-study .dv .dv-goal-result[data-met] { color: var(--case-accent, var(--dv-accent)); }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-dscroll .dv-detail-card { background: var(--dv-scene) !important; }
+
+/* Comparative analysis as one table read across (owner: the two panels were hard to compare):
+   row name | what exists today | what we didn't find, each row on one line with a hairline
+   between rows; the "didn't find" column is one soft accent band. Phones stack each row. */
+.case-study .dv .dv-cmpt { margin: 48px 0 0; }
+.dv-cmpt table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.dv-cmpt th, .dv-cmpt td { text-align: left; vertical-align: top; }
+.dv-cmpt thead th { padding: 16px 24px; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.4; }
+.dv-cmpt thead th:first-child { width: 160px; padding-left: 0; }
+.dv-cmpt thead th[data-self] { color: var(--case-accent); background: color-mix(in srgb, var(--case-accent) 8%, transparent); border-radius: 8px 8px 0 0; }
+.dv-cmpt tbody th { padding: 24px 24px 24px 0; color: var(--dv-muted); font-size: 16px; font-weight: 500; line-height: 1.5; border-top: 1px solid var(--dv-line); }
+.dv-cmpt tbody td { padding: 24px; color: var(--dv-ink); font-size: 18px; line-height: 1.5; word-break: keep-all; border-top: 1px solid var(--dv-line); }
+.dv-cmpt tbody td[data-self] { background: color-mix(in srgb, var(--case-accent) 8%, transparent); font-weight: 500; }
+.dv-cmpt tbody tr:last-child td[data-self] { border-radius: 0 0 8px 8px; }
+.dv-cmpt-tag { display: none; }
+@media (max-width: 47.99rem) {
+  .dv-cmpt thead { display: none; }
+  .dv-cmpt table, .dv-cmpt tbody, .dv-cmpt tr, .dv-cmpt th, .dv-cmpt td { display: block; width: auto; }
+  .dv-cmpt tbody tr { padding: 24px 0; border-top: 1px solid var(--dv-line); }
+  .dv-cmpt tbody th, .dv-cmpt tbody td { padding: 0; border: 0; }
+  .dv-cmpt tbody th { margin-bottom: 12px; }
+  .dv-cmpt tbody td + td { margin-top: 12px; padding: 16px; border-radius: 8px; }
+  .dv-cmpt-tag { display: block; margin-bottom: 4px; color: var(--dv-muted); font-size: 14px; font-weight: 500; }
+  .dv-cmpt td[data-self] .dv-cmpt-tag { color: var(--case-accent); }
+}
