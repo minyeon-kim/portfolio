@@ -9010,3 +9010,11 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study[data-project="devsign"] { --dv-core-bg: radial-gradient(90% 110% at 0% 0%, #6a4fe6 0%, #5b3fd6 35%, #3a2a9e 100%); }
 .case-study[data-project="gemini"] { --dv-core-bg: radial-gradient(90% 110% at 0% 0%, #3471d8 0%, #245cc0 35%, #163a86 100%); }
 :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-core.dv-core.dv-core.dv-core { background: var(--dv-core-bg); }
+
+/* Handoff screen on the same dark scene canvas as Deliver and the iterations (owner). */
+:root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-hdoc-wide .dv-hdoc-shot {
+  padding: clamp(24px, 3.2vw, 48px) !important; background: var(--dv-scene) !important; border-radius: 8px !important;
+}
+:root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-hdoc-wide .dv-hdoc-lens {
+  border-radius: 8px; box-shadow: 0 32px 80px -24px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08);
+}
