@@ -9201,3 +9201,17 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .about-hero-title .about-hero-line { display: inline; }
   .about-hero-title { font-size: 30px !important; text-wrap: pretty; }
 }
+
+/* Devsign usability: the help chart narrower at the left, the other two results as stat cards
+   beside it (owner: a long chart plus run-on rows was hard to read). */
+@media (min-width: 64rem) {
+  .case-study .dv .dv-cycle-panel:has(> .dv-ut-rows) { display: grid !important; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; row-gap: 32px; align-items: center; }
+  .case-study .dv .dv-cycle-panel:has(> .dv-ut-rows) > .dv-hbar { grid-column: 1; grid-row: 1; }
+  .case-study .dv .dv-cycle-panel:has(> .dv-ut-rows) > .dv-ut-rows { grid-column: 2; grid-row: 1; margin: 0; padding: 0; border: 0; gap: 12px; }
+  .case-study .dv .dv-cycle-panel:has(> .dv-ut-rows) > .dv-cycle-foot { grid-column: 1 / -1; }
+}
+.case-study .dv .dv-ut-rows > div { flex-direction: column-reverse; justify-content: flex-start; align-items: flex-start; gap: 8px; padding: 20px 24px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); }
+.case-study .dv .dv-ut-rows dd { font-size: var(--t-statement, 36px); font-weight: 300; line-height: 1.1; }
+.case-study .dv .dv-ut-rows dt { font-size: 16px; font-weight: 500; }
+.case-study .dv .dv-ut-rows dt span { display: block; margin: 4px 0 0; font-size: 14px; font-weight: 400; }
+@media (max-width: 63.99rem) { .case-study .dv .dv-ut-rows { gap: 12px; padding-top: 0; border-top: 0; } }
