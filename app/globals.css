@@ -9001,6 +9001,15 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--dv-chart-fill) 70%, transparent);
 }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card[data-side="b"] figcaption span { color: color-mix(in srgb, var(--dv-chart-fill) 45%, white) !important; }
+/* As-is reads as the old state (owner: it looked the same as To-be): the same dark stage lit in neutral
+   grey instead of the case colour, so the colour belongs to To-be alone. Same in both themes. */
+:root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card[data-side="a"] {
+  background:
+    radial-gradient(60% 75% at 8% 0%, rgb(255 255 255 / 0.09), transparent 70%),
+    radial-gradient(55% 70% at 95% 100%, rgb(255 255 255 / 0.05), transparent 70%),
+    #141416 !important;
+}
+:root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card[data-side="a"] figcaption span { color: #a3a3ad !important; opacity: 1 !important; }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter-duo .dv-iter-card .dv-iter-plate { background: none !important; }
 .case-study .dv .dv-iter-duo.dv-iter-duo:has(.dv-iter-card[data-on]) .dv-iter-card:not([data-on]) video { filter: grayscale(0.5) brightness(0.78); }
 :root .case-study.case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-iter .dv-iter-clip { background: var(--dv-scene) !important; }
