@@ -89,7 +89,7 @@ export const study = {
     desk: {
       method: "Secondary research",
       title: "Secondary research",
-      text: "We compared five AI services' privacy settings, read six papers on AI memory UX, and looked at two Pew surveys.",
+      text: "We compared the privacy settings of ChatGPT, Gemini, Claude, Perplexity and Suno, read six papers on AI memory UX, and looked at two Pew surveys.",
     },
     q1: {
       label: "Question 1 · Do people want control?",
@@ -134,12 +134,13 @@ export const study = {
     q2: {
       title: "Comparative analysis",
       label: "Question 2 · Do today's controls solve it?",
-      answer: "Controls sit in two places, and none shows what's left after.",
-      auditLabel: "5 AI services · What the controls miss",
+      answer: "Four of the five let you switch it off, but none shows what’s left after you do.",
+      auditLabel: "ChatGPT, Gemini, Claude, Perplexity, Suno · What the controls miss",
       map: { today: "Today’s controls", selfName: "What we didn’t find", rows: [
-        { name: "Turning it off", now: "Every service lets you switch memory or history off", self: "What remains after you do" },
-        { name: "Where the switches are", now: "Gemini app settings, 3–4 clicks; the AI training setting on the Google account page, 4–5 clicks", self: "One place to control it" },
-        { name: "Delete or block", now: "One “delete” on screen", self: "Deleting told apart from stopping its use, as the law does" },
+        { name: "Turning it off", now: "ChatGPT, Gemini, Claude and Perplexity can stop training on your chats, but it’s on by default. Suno has no switch.", self: "What remains after you switch it off" },
+        { name: "Where the switches are", now: "In settings submenus. In Gemini, it’s tied to your Google account activity, 3–5 clicks in two places.", self: "One place to control it" },
+        { name: "What stays anyway", now: "Flagged chats, up to 30 days on servers, reviewed chats up to 3 years, explained away from the switch", self: "The exceptions shown next to the switch" },
+        { name: "Delete or block", now: "One “delete” on screen. In Gemini, deleting a saved memory can leave it in the original chat.", self: "Deleting told apart from stopping its use, as the law does" },
       ] },
       groups: [
         { name: "Off switches, but no result", detail: "Every service lets you turn memory or history off · None shows what remains after you do" },
