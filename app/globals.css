@@ -9215,3 +9215,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 .case-study .dv .dv-ut-rows dt { font-size: 16px; font-weight: 500; }
 .case-study .dv .dv-ut-rows dt span { display: block; margin: 4px 0 0; font-size: 14px; font-weight: 400; }
 @media (max-width: 63.99rem) { .case-study .dv .dv-ut-rows { gap: 12px; padding-top: 0; border-top: 0; } }
+
+/* Phones: the bar names sit above their bars, so the bars and axis get the full width. */
+@media (max-width: 47.99rem) {
+  .case-study .dv .dv-hbar { --name: 0px; --gap: 12px; }
+  .case-study .dv .dv-hbar-plot { gap: 20px; }
+  .case-study .dv .dv-hbar-row { grid-template-columns: minmax(0, 1fr) var(--val); row-gap: 8px; }
+  .case-study .dv .dv-hbar-row .dv-hbar-name { grid-column: 1 / -1; }
+  .case-study .dv .dv-hbar-goal { left: calc((100% - var(--gap) - var(--val)) * var(--goal)); }
+  .case-study .dv .dv-hbar-axis { padding-left: 0; padding-right: calc(var(--val) + var(--gap)); white-space: nowrap; font-size: 14px; }
+}
