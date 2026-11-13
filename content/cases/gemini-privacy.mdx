@@ -277,21 +277,6 @@ export const study = {
           { src: "/images/cases/gemini-privacy/concept-chat.webp", width: 1600, height: 1197, alt: "Delete-by-chat concept with team feedback notes" },
         ],
       },
-      {
-        rule: true,
-        method: "Structure",
-        title: "Two rules behind the screens",
-        lead: "Say what you can do with each piece of info, and show a summary first.",
-        rulesVisual: {
-          one: { title: "Say what you can do with each source", rows: [
-            { source: "Memory", note: "What Gemini remembers", action: "Delete", result: "Removed from Gemini for good", strong: true },
-            { source: "Gmail · Calendar", note: "The originals live in each app", action: "Leave out of answers", result: "Not used in answers; the originals stay" },
-          ] },
-          two: { title: "A summary first, details on tap", before: "At first", after: "After a tap", summary: "20 items about Jeongmin", items: [
-            ["Memory", "3", "Delete", "1"], ["Gmail", "8", "Leave out of answers"], ["Calendar", "9", "Leave out of answers"],
-          ] },
-        },
-      },
     ],
   },
   deliver: {
@@ -309,7 +294,7 @@ export const study = {
       items: [
         { title: "Sources, right under the answer", body: "Tap \"View sources\" under an answer to open the info that answer used.", before: "Hard to tell where it came from.", src: "/images/cases/gemini-privacy/detail-badge-en.webp", width: 749, height: 316, alt: "The View sources badge next to the like and share buttons under a Gemini answer" },
         { title: "Grouped by person and topic, not app", body: "The info is grouped by topic, such as Jeongmin or dining preferences, so it can be handled in one go.", before: "Two settings screens, 3–5 clicks each.", src: "/images/cases/gemini-privacy/detail-sheet-en.webp", width: 825, height: 1375, alt: "Information used in this response sheet: Jeongmin 5 items, dining preferences 2 items, app connections" },
-        { title: "Deleting and blocking, told apart", body: "Memory says \"will be deleted\"; Gmail and Calendar say \"only left out of answers.\"", before: "Deleting and blocking looked the same.", src: "/images/cases/gemini-privacy/detail-found-en.webp", width: 733, height: 1347, alt: "Found items about Jeongmin card: Memory will be deleted, connected apps only left out of answers, process button" },
+        { title: "Deleting and blocking, told apart", body: "What Gemini remembers about you (Memory) says \"will be deleted.\" Information from connected apps like Gmail and Calendar stays in those apps, so it says \"only left out of answers.\"", before: "Deleting and blocking looked the same.", src: "/images/cases/gemini-privacy/detail-found-en.webp", width: 733, height: 1347, alt: "Found items about Jeongmin card: Memory will be deleted, connected apps only left out of answers, process button" },
         { title: "A result you can check", body: "After processing, it shows line by line what was deleted and what stays in the originals.", before: "No way to tell if it was really deleted.", src: "/images/cases/gemini-privacy/detail-result-en.webp", width: 733, height: 1096, alt: "Your request has been processed card: Memory deleted, Gmail and Calendar not used in answers, undo" },
       ],
     },
