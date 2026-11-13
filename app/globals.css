@@ -9101,3 +9101,28 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-cycle-track .dv-trust-legend [data-on] b { color: var(--case-accent); }
   .case-study .dv .dv-cycle-track .dv-trust-legend [data-on] span { color: var(--dv-ink); }
 }
+
+/* Survey answers as one bar (owner: a ring and a list beside it meant reading two things). From
+   48rem the parts sit in one line across the column, each with its number and name under it; a
+   part too thin for its words puts them above the bar. Phones keep the ring. */
+.dv-stack { display: none; }
+@media (min-width: 48rem) {
+  .case-study .dv .dv-cycle-panel[data-kind="donut"] .dv-trust-wrap { display: none; }
+  .case-study .dv .dv-stack { display: flex; gap: 4px; width: 100%; margin: 72px 0 0; padding: 0; list-style: none; }
+  .dv-stack li { position: relative; flex: var(--v) 1 0; min-width: 0; }
+  .dv-stack i { display: block; height: 56px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 22%, transparent); transform-origin: left; }
+  .dv-stack li[data-rest] i { background: color-mix(in srgb, var(--dv-ink) 10%, transparent); }
+  .dv-stack li[data-on] i { background: var(--dv-chart-fill); }
+  .dv-stack div { display: grid; gap: 4px; padding-top: 16px; }
+  .dv-stack strong { color: var(--dv-ink); font-size: var(--t-statement, 36px); font-weight: 300; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dv-stack li[data-on] strong { color: var(--case-accent); }
+  .dv-stack span { color: var(--dv-muted); font-size: 16px; line-height: 1.4; word-break: keep-all; }
+  .dv-stack li[data-on] span { color: var(--dv-ink); }
+  .dv-stack li[data-small] div { position: absolute; bottom: 100%; right: 0; width: max-content; max-width: 160px; padding: 0 0 12px; text-align: right; }
+  .dv-cycle-panel[data-phase="wait"] .dv-stack i { scale: 0 1; }
+  .dv-cycle-panel[data-phase="wait"] .dv-stack div { opacity: 0; }
+  .dv-cycle-panel[data-phase="play"] .dv-stack i { animation: dv-stack-grow 800ms var(--ease-reveal) calc(var(--i) * 120ms) backwards; }
+  .dv-cycle-panel[data-phase="play"] .dv-stack div { animation: dv-chart-fade 400ms var(--ease) calc(var(--i) * 120ms + 400ms) backwards; }
+}
+@keyframes dv-stack-grow { from { scale: 0 1; } }
+@media (prefers-reduced-motion: reduce) { .dv-cycle-panel .dv-stack :is(i, div) { animation: none !important; } }

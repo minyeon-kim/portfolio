@@ -48,6 +48,24 @@ function Count({ value, animate, delay = 0, suffix = "%" }: { value: number; ani
   return <>{shown.toFixed(decimals)}{suffix}</>;
 }
 
+// The same answers as one bar across the column (wide screens): every part sits in one line with
+// its number and name under it, so there is one thing to read instead of a ring and a list.
+function Stack({ data, animate }: { data: DonutChart; animate: boolean }) {
+  return (
+    <ol className="dv-stack">
+      {data.segments.map((s, i) => (
+        <li key={s.label} style={{ "--v": s.value, "--i": i } as React.CSSProperties} data-on={s.on || undefined} data-rest={s.rest || undefined} data-small={s.value < 8 || undefined}>
+          <i />
+          <div>
+            <strong><Count value={s.value} animate={animate} delay={i * 120} /></strong>
+            <span>{s.label}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 function Donut({ data, animate }: { data: DonutChart; animate: boolean }) {
   const mask = `dv-trust-sweep-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const [active, setActive] = useState<number | null>(null);
@@ -336,7 +354,7 @@ export function SurveyCharts({ charts, labels, head, below }: { charts: StageCha
             const on = i === current || !scrolled;
             return (
               <div key={on ? `${i}-${round}` : i} className="dv-cycle-panel" style={{ "--i": i } as React.CSSProperties} data-kind={chart.type} data-on={on || undefined} data-phase={on ? phase : "final"} aria-hidden={!on || undefined} inert={!on || undefined}>
-                {chart.type === "donut" && <Donut data={chart} animate={on && phase === "play"} />}
+                {chart.type === "donut" && <><Donut data={chart} animate={on && phase === "play"} /><Stack data={chart} animate={on && phase === "play"} /></>}
                 {chart.type === "bars" && <Bars data={chart} animate={on && phase === "play"} />}
                 {chart.type === "pair" && <Pair data={chart} animate={on && phase === "play"} />}
                 {chart.type === "rings" && <Rings data={chart} animate={on && phase === "play"} />}
