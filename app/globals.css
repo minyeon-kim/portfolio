@@ -9064,3 +9064,25 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .dv-cmpt-tag { display: block; margin-bottom: 4px; color: var(--dv-muted); font-size: 14px; font-weight: 500; }
   .dv-cmpt td[data-self] .dv-cmpt-tag { color: var(--case-accent); }
 }
+
+/* Chart stages read top to bottom (owner: the finding at the left and the chart at the right made
+   the eye go back and forth). Label and finding first, then the chart's sentence, then the chart. */
+@media (min-width: 64rem) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
+  .case-study .dv .dv-cycle-track { --ring: min(300px, calc(100svh - 620px)); }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto minmax(0, 1fr); row-gap: 0; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-column: 1; grid-row: 2; max-width: var(--dv-measure-wide, 900px); }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-texts { grid-column: 1; grid-row: 3; margin-top: 40px; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 1; grid-row: 4; margin-top: 24px; }
+  .case-study .dv .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-marks { grid-column: 1; grid-row: 4; }
+}
+@media (min-width: 64rem) and (max-height: 819.98px), (min-width: 64rem) and (prefers-reduced-motion: reduce) {
+  .case-study .dv .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-plate { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-text { grid-row: calc(var(--i) * 2 + 1); }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-text:not(:first-child) { margin-top: 56px !important; }
+  .dv-cycle-track:not(.dv-cycle-single) .dv-cycle-panel { grid-column: 1; grid-row: calc(var(--i) * 2 + 2); }
+}
+@media (min-width: 64rem) {
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-head > :not(.dv-section-head) { grid-column: 1; grid-row: 2; max-width: var(--dv-measure-wide, 900px); }
+  .case-study .dv .dv-cycle-single .dv-cycle-stage:has(.dv-cycle-head) .dv-cycle-charts { grid-column: 1; grid-row: 3; margin-top: 48px; }
+}
