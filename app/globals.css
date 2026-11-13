@@ -8961,3 +8961,25 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 /* No edge on the film's plate: the 1px inset line read as a stray line over the film. */
 .devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film])::after { content: none; }
 @media (max-width: 47.99rem) { .devsign-hero.dh-cover .dh-cover-plate:has(.dh-shot[data-film]) { aspect-ratio: 16 / 9; } }
+
+/* Deliver scene, calmer (owner): the field is the cover film's dark canvas lit from the upper left and
+   lower right instead of flat case colour (which read loud at this size), and the recording's box is
+   exactly the recording (16:10), so no empty, shadowed band shows round it like a second card.
+   The Problem statement keeps --dv-solid. */
+.case-study[data-project="devsign"] { --dv-scene-bg: #100d22; --dv-scene-l1: rgb(124 98 255 / 0.42); --dv-scene-l2: rgb(91 63 214 / 0.34); }
+.case-study[data-project="gemini"] { --dv-scene-bg: #0b1222; --dv-scene-l1: rgb(66 133 244 / 0.40); --dv-scene-l2: rgb(167 139 250 / 0.26); }
+:root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-flist-frame.dv-flist-frame {
+  background:
+    radial-gradient(60% 75% at 8% 0%, var(--dv-scene-l1), transparent 70%),
+    radial-gradient(55% 70% at 95% 100%, var(--dv-scene-l2), transparent 70%),
+    var(--dv-scene-bg);
+  container-type: size;
+}
+@media (min-width: 64rem) {
+  :root .case-study .dv .dv-flist-open .dv-flist:not([data-phone]) .dv-flist-frame video {
+    width: min(1200px, calc(100vw - 112px), calc((100cqh - 80px) * 1.6)) !important;
+    height: auto !important; aspect-ratio: 16 / 10; max-width: none !important; max-height: none !important;
+    object-fit: cover; background: #1c1c1c;
+    box-shadow: 0 32px 80px -24px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08);
+  }
+}
