@@ -9126,3 +9126,18 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 }
 @keyframes dv-stack-grow { from { scale: 0 1; } }
 @media (prefers-reduced-motion: reduce) { .dv-cycle-panel .dv-stack :is(i, div) { animation: none !important; } }
+
+/* Success goals as rows (owner: the label beside two numbered lines with their results under them
+   read as one clump). Label on top, then one row per goal: number, goal, and its result at the
+   right, between hairlines, well clear of the chart above. */
+.case-study .dv .dv-goals.dv-goals { display: block; margin-top: 120px; }
+.case-study .dv .dv-goals > p { margin: 0 0 24px; }
+.case-study .dv .dv-goals .dv-checks { gap: 0; margin: 0; border-top: 1px solid var(--dv-line); }
+.case-study .dv .dv-goals .dv-checks li { align-items: center; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--dv-line); }
+.case-study .dv .dv-goals .dv-goal-text { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 8px 48px; flex: 1; color: var(--dv-ink); font-size: var(--t-item, 20px); font-weight: 500; line-height: 1.4; }
+.case-study .dv .dv-goals .dv-goal-result { font-size: 16px; font-weight: 400; text-align: right; }
+@media (max-width: 47.99rem) {
+  .case-study .dv .dv-goals.dv-goals { margin-top: 72px; }
+  .case-study .dv .dv-goals .dv-goal-text { grid-template-columns: minmax(0, 1fr); }
+  .case-study .dv .dv-goals .dv-goal-result { text-align: left; }
+}
