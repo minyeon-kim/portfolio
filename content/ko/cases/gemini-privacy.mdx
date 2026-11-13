@@ -11,7 +11,7 @@ export const meta = {
     },
     after: {
       src: "/images/cases/gemini-privacy/after.svg",
-      alt: "같은 답변에 '출처 2개 사용' 배지가 열려 사진과 지난 대화가 보이고, 각각 차단과 삭제를 할 수 있는 화면.",
+      alt: "같은 답변에 '출처 2개 사용' 배지가 열려 사진과 지난 대화가 보이고, 각각 답변에서 빼거나 지울 수 있는 화면.",
     },
     width: 1200,
     height: 750,
@@ -139,12 +139,12 @@ export const study = {
         { name: "끄기", now: "5곳 중 4곳은 끌 수 있습니다. Suno만 끌 수 없습니다.", self: "끈 뒤 무엇이 남는지 알려 주기" },
         { name: "스위치 위치", now: "설정 깊숙이 있습니다. Gemini는 두 곳에 나뉘어, 각각 3–5번 눌러야 합니다.", self: "한곳에서 모두 관리하기" },
         { name: "꺼도 남는 것", now: "지운 대화도 서버에 30일에서 최대 3년까지 남습니다. 이 내용은 다른 페이지에 있습니다.", self: "스위치 바로 옆에서 알려 주기" },
-        { name: "삭제와 차단", now: "‘삭제’ 버튼 하나뿐입니다. Gemini는 대화를 지워도 연결된 앱에 정보가 남습니다.", self: "지우기와 막기를 따로 고르기" },
+        { name: "지우기와 답변에서 빼기", now: "‘삭제’ 버튼 하나뿐입니다. Gemini는 대화를 지워도 연결된 앱에 정보가 남습니다.", self: "완전히 지울지, 답변에만 안 쓰게 할지 고르기" },
       ] },
       groups: [
         { name: "끄는 스위치는 있지만 결과는 없습니다", detail: "모든 서비스가 메모리나 기록을 끌 수 있게 합니다 · 끈 뒤에 무엇이 남는지는 어디에도 없습니다" },
         { name: "Gemini는 통제가 두 곳으로 나뉩니다", detail: "Gemini 앱 설정은 3–4번 클릭 · AI 학습에 쓰지 말라는 설정은 Google 계정 페이지에 있어 4–5번 클릭" },
-        { name: "삭제와 차단이 똑같아 보입니다", detail: "법은 ‘지우기’와 ‘쓰지 못하게 막기’를 구분합니다 · 화면에는 ‘삭제’ 하나만 있습니다" },
+        { name: "지우기와 답변에서 빼기가 똑같아 보입니다", detail: "법은 ‘지우기’와 ‘쓰지 않게 하기’를 구분합니다 · 화면에는 ‘삭제’ 하나만 있습니다" },
       ],
     },
     synthesis: {
@@ -155,7 +155,7 @@ export const study = {
       rows: [
         { stage: "나타날 때", kept: "답변에 내 정보가 쓰입니다", lost: "어디서 온 정보인지 보이지 않습니다" },
         { stage: "끌 때", kept: "Gemini 앱과 Google 계정에 스위치가 있습니다", lost: "두 곳에 나뉘어 있고, 각각 3–5번 눌러야 합니다" },
-        { stage: "삭제할 때", kept: "‘삭제’ 버튼이 하나 있습니다", lost: "지우기와 막기가 구분되지 않고, 원본은 Gmail이나 Photos에 남습니다" },
+        { stage: "삭제할 때", kept: "‘삭제’ 버튼이 하나 있습니다", lost: "완전히 지우는 것과 답변에만 안 쓰는 것이 구분되지 않고, 원본은 Gmail이나 Photos에 그대로 남습니다" },
         { stage: "확인할 때", kept: "기록을 꺼도 대화는 72시간, 사람이 검토한 대화는 최대 3년 보관됩니다", lost: "무엇이 지워졌는지 확인할 방법이 없습니다" },
       ],
     },
@@ -281,7 +281,7 @@ export const study = {
         method: "구조",
         title: "Two rules behind the screens",
         lead: "정보마다 할 수 있는 일을 알려 주고, 처음엔 요약만 보여 줍니다.",
-        text: "예를 들어 Gemini가 기억한 내용(Memory)은 지울 수 있지만, Gmail과 Calendar의 원본은 Gemini가 지울 수 없어 답변에 쓰지 않게 막을 수만 있습니다. 자세한 내용은 누를 때만 펼쳐집니다.",
+        text: "예를 들어 Gemini가 기억한 내용(Memory)은 지울 수 있지만, Gmail과 Calendar의 원본은 Gemini가 지울 수 없어 답변에 쓰지 않게만 할 수 있습니다. 자세한 내용은 누를 때만 펼쳐집니다.",
       },
     ],
   },
@@ -300,13 +300,13 @@ export const study = {
       items: [
         { title: "답변 바로 아래 출처 확인", body: "답변 아래 '출처 확인'을 누르면, 그 답변에 쓰인 정보가 바로 열립니다.", before: "어디서 왔는지 알기 어려움.", src: "/images/cases/gemini-privacy/detail-badge-ko.webp", width: 749, height: 264, alt: "Gemini 답변 아래 좋아요, 공유 버튼 옆에 있는 출처 확인 배지" },
         { title: "앱이 아니라 사람·주제별로", body: "쓰인 정보를 '정민', '식당 취향'처럼 주제별로 묶어, 한 번에 골라 처리합니다.", before: "설정 화면 두 곳, 각각 3–5번 클릭.", src: "/images/cases/gemini-privacy/detail-sheet-ko.webp", width: 825, height: 1375, alt: "이 답변에 사용된 정보 시트: 정민 5건, 식당 취향 2건, 앱 연동 설정" },
-        { title: "삭제와 차단을 나눠서", body: "Memory는 '삭제돼요', Gmail과 Calendar는 '답변에만 안 써요'로 나눠 보여 줍니다.", before: "삭제와 차단이 똑같아 보임.", src: "/images/cases/gemini-privacy/detail-found-ko.webp", width: 733, height: 1245, alt: "정민 관련 정보 20건을 찾았어요 카드: Memory 삭제돼요, 연결된 앱 답변에만 안 써요, 20건 처리 버튼" },
+        { title: "지우기와 답변에서 빼기를 나눠서", body: "Memory는 '삭제돼요', Gmail과 Calendar는 '답변에만 안 써요'로 나눠 보여 줍니다.", before: "지우는 것과 답변에서 빼는 것이 똑같아 보임.", src: "/images/cases/gemini-privacy/detail-found-ko.webp", width: 733, height: 1245, alt: "정민 관련 정보 20건을 찾았어요 카드: Memory 삭제돼요, 연결된 앱 답변에만 안 써요, 20건 처리 버튼" },
         { title: "확인할 수 있는 결과", body: "처리 뒤 무엇이 지워지고, 무엇이 원본에 그대로 남는지 한 줄씩 보여 줍니다.", before: "정말 지워졌는지 알 수 없음.", src: "/images/cases/gemini-privacy/detail-result-ko.webp", width: 733, height: 980, alt: "요청을 처리했어요 카드: Memory 3건 삭제됨, Gmail 8건과 Calendar 9건은 답변에 안 씀, 되돌리기" },
       ],
     },
   },
   testing: {
-    goals: { label: "성공 기준", items: [{ text: "힌트 없이 출처를 찾습니다", result: "달성 · 46.5초, 14.8초", met: true }, { text: "차단과 삭제의 차이를 자기 말로 설명합니다", result: "결과 정리 중" }] },
+    goals: { label: "성공 기준", items: [{ text: "힌트 없이 출처를 찾습니다", result: "달성 · 46.5초, 14.8초", met: true }, { text: "지우기와 답변에서 빼기의 차이를 자기 말로 설명합니다", result: "결과 정리 중" }] },
     method: "검증",
     title: "Usability test · in progress",
     lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",
@@ -334,7 +334,7 @@ export const study = {
     headline: "신뢰는 화면 속 약속이 아니라, 사용자가 직접 확인하면서 생깁니다.",
     reviewTitle: "프로젝트 회고",
     review: [
-      { title: "원칙을 화면 구조로 옮겼습니다", body: "‘지우기’와 ‘쓰지 않게 막기’의 차이를 도움말이 아니라 화면에서 바로 보이게 했습니다." },
+      { title: "원칙을 화면 구조로 옮겼습니다", body: "‘완전히 지우기’와 ‘답변에만 안 쓰기’의 차이를 도움말이 아니라 화면에서 바로 보이게 했습니다." },
       { title: "편향을 줄이려고 다시 묶었습니다", body: "처음 붙인 테마 이름을 지우고 인터뷰 속 말 79개를 다시 묶어, 첫 분류에 결과가 끌려가지 않게 했습니다." },
     ],
     next: {
