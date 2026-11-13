@@ -190,10 +190,12 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
   };
   let sceneCopy: HTMLElement | null = null;
   let sceneFill = 1;
-  // The cover film in the layer (large screens): it plays once the layer fills the screen,
-  // holds the full screen for FILM_HOLD of playback (any wheel, key or press cuts it short),
-  // then settles. If it can't start within 1.5s the layer settles on its still as before.
-  const FILM_HOLD = 3000;
+  // The cover film in the layer (large screens): it plays once the layer fills the screen
+  // and holds the full screen through the whole film, round its loop (it fades out and back
+  // in through black) to its start frame, then settles while it keeps playing (any wheel,
+  // key or press cuts the hold short). If it can't start within 1.5s, or stalls for 2.5s,
+  // the layer settles as before. FILM_MAX only bounds the safety cleanup.
+  const FILM_MAX = 60000;
   let filmVideo: HTMLVideoElement | null = null;
   let filmPlayingAt = 0;
   if (zoom && !reduced) {
@@ -239,6 +241,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
             video.muted = true;
             video.playsInline = true;
             video.preload = "auto";
+            video.loop = true;
             const at = zoom.film.start ?? 0;
             video.addEventListener("loadedmetadata", () => { video.currentTime = at; }, { once: true });
             video.addEventListener("playing", () => { filmPlayingAt = performance.now(); wrap.dataset.ready = ""; }, { once: true });
@@ -430,25 +433,43 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       releaseWhenIdle();
     }));
   };
-  const filmHeld = (video: HTMLVideoElement) => new Promise<void>((resolve) => {
+  const filmHeld = (video: HTMLVideoElement, start: number) => new Promise<void>((resolve) => {
     const SKIP = ["wheel", "keydown", "pointerdown", "touchstart"] as const;
     let timer = 0;
+    let frame = 0;
+    let last = 0;
+    let wrapped = false;
     const finish = () => {
       window.clearTimeout(timer);
+      cancelAnimationFrame(frame);
       SKIP.forEach((type) => window.removeEventListener(type, finish));
       video.removeEventListener("playing", playing);
+      video.removeEventListener("waiting", waiting);
       resolve();
+    };
+    // Done once the film has come round its loop and back to its start frame (the cover's still).
+    const watch = () => {
+      const t = video.currentTime;
+      if (t + 1 < last) wrapped = true;
+      last = t;
+      if (wrapped && t >= start) return finish();
+      frame = requestAnimationFrame(watch);
     };
     const playing = () => {
       window.clearTimeout(timer);
-      timer = window.setTimeout(finish, Math.max(0, filmPlayingAt + FILM_HOLD - performance.now()));
+      cancelAnimationFrame(frame);
+      last = Math.max(last, video.currentTime);
+      frame = requestAnimationFrame(watch);
+    };
+    const waiting = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(finish, 2500);
     };
     SKIP.forEach((type) => window.addEventListener(type, finish, { passive: true }));
+    video.addEventListener("playing", playing);
+    video.addEventListener("waiting", waiting);
     if (filmPlayingAt) playing();
-    else {
-      video.addEventListener("playing", playing, { once: true });
-      timer = window.setTimeout(finish, 1500);
-    }
+    else timer = window.setTimeout(finish, 1500);
   });
   const handOver = (video: HTMLVideoElement) => new Promise<void>((resolve) => {
     video.pause();
@@ -486,7 +507,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       // Under the shrinking picture the ground is the new page's, not the old one's.
       if (layer) floor.style.backgroundColor = canvasColor();
       // The film plays full screen first; the new page waits, rendered, behind it.
-      if (filmVideo) await filmHeld(filmVideo);
+      if (filmVideo) await filmHeld(filmVideo, zoom?.film?.start ?? 0);
       // Without the device layer: the old view lifts and blurs away in 140ms, so it
       // can't linger as a ghost, while its canvas stays as the ground the new page
       // rises onto (10vh, fading in from 160ms).
@@ -586,7 +607,7 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     }));
   };
   const observer = new MutationObserver(begin);
-  const timeout = setTimeout(cleanup, filmVideo ? 5000 + FILM_HOLD + 2500 : 5000);
+  const timeout = setTimeout(cleanup, filmVideo ? 5000 + FILM_MAX + 2500 : 5000);
   observer.observe(main, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-stage-index", "data-case-slug"] });
   // With the device layer, the page is locked and the new one rendered only once the
   // device has filled the screen. Rendering a whole case is a long task; run during the
