@@ -306,7 +306,7 @@ export const study = {
     },
   },
   testing: {
-    goals: { label: "성공 기준", items: [{ text: "힌트 없이 출처를 찾습니다", result: "두 사람 모두 도움 없이 찾았습니다.", met: true }, { text: "차단과 삭제의 차이를 자기 말로 설명합니다", result: "아직 결과를 정리하지 않았습니다." }] },
+    goals: { label: "성공 기준", items: [{ text: "힌트 없이 출처를 찾습니다", result: "달성 · 46.5초, 14.8초", met: true }, { text: "차단과 삭제의 차이를 자기 말로 설명합니다", result: "결과 정리 중" }] },
     method: "검증",
     title: "Usability test · in progress",
     lead: "테스트 중: 직접 확인하면 신뢰가 생길까?",
@@ -316,13 +316,12 @@ export const study = {
       lead: "최대 5명이 가상 인물의 데이터로 두 가지 상황을 직접 해 봅니다.",
       resultLead: "두 사람 모두 도움 없이 출처를 찾았지만, 출처 패널에 담긴 정보가 너무 많다고 느꼈습니다.",
       chartLabels: { charts: "테스트 결과", pause: "차트 일시정지", play: "차트 재생" },
-      facts: [{ value: "46.5초 · 14.8초", label: "도움 없이 출처를 찾기까지 걸린 시간", hint: "P01 · P02" }],
       charts: [
         {
           type: "pair",
           tab: "정보량",
           title: "두 사람 모두 출처 패널의 정보량에 6점을 줬습니다. 4점이 ‘적당함’이고, 채팅으로 요청하기는 4점이었습니다.",
-          note: "1–7점, 두 사람의 점수가 과제마다 같았습니다. 쉬움 점수는 엇갈렸습니다(과제 1: 5점·3점, 과제 2: 6점·4점). 사용성 점수(SUS)는 77.5점과 82.5점이지만, 서로 다른 프로토타입 버전이라 비교하지 않았습니다.",
+          note: "참여자 2명, 1–7점. 사용성 점수(SUS)는 77.5점·82.5점입니다.",
           low: "너무 적음",
           high: "너무 많음",
           scale: 7, goal: 4, goalLabel: "적당함 · 4",

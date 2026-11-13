@@ -307,7 +307,7 @@ export const study = {
     },
   },
   testing: {
-    goals: { label: "Success looks like", items: [{ text: "People find the source without hints", result: "Both found it without help.", met: true }, { text: "People can explain blocking vs. deleting in their own words", result: "Not reported yet." }] },
+    goals: { label: "Success looks like", items: [{ text: "People find the source without hints", result: "Met · 46.5 s, 14.8 s", met: true }, { text: "People can explain blocking vs. deleting in their own words", result: "Results pending" }] },
     method: "Validation",
     title: "Usability test · in progress",
     lead: "Testing now: does checking it yourself build trust?",
@@ -317,13 +317,12 @@ export const study = {
       lead: "Up to five people run two scenarios using a made-up person’s data.",
       resultLead: "Both found the source without help, but the source panel showed too much.",
       chartLabels: { charts: "Test results", pause: "Pause charts", play: "Play charts" },
-      facts: [{ value: "46.5 s · 14.8 s", label: "Time to find the source, without help", hint: "P01 · P02" }],
       charts: [
         {
           type: "pair",
           tab: "Amount of information",
           title: "Both rated the source panel 6 for amount of information, where 4 is about right. Asking in chat landed on 4.",
-          note: "Rated 1–7, both people gave the same score on each task. Ease scores were mixed (task 1: 5 and 3, task 2: 6 and 4). SUS was 77.5 and 82.5, on different prototype versions, so they aren’t compared.",
+          note: "2 participants, rated 1–7. Usability scores (SUS) were 77.5 and 82.5.",
           low: "Too little",
           high: "Too much",
           scale: 7, goal: 4, goalLabel: "About right · 4",
