@@ -439,12 +439,22 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
     let frame = 0;
     let last = 0;
     let wrapped = false;
+    // A visible way out while the film holds the screen; its fill shows how much is left.
+    // Outside the layer, so the layer's transforms never move it.
+    let skip: HTMLButtonElement | null = null;
     const finish = () => {
       window.clearTimeout(timer);
       cancelAnimationFrame(frame);
       SKIP.forEach((type) => window.removeEventListener(type, finish));
       video.removeEventListener("playing", playing);
       video.removeEventListener("waiting", waiting);
+      if (skip) {
+        const gone = skip;
+        skip = null;
+        gone.dataset.gone = "";
+        gone.disabled = true;
+        window.setTimeout(() => gone.remove(), 250);
+      }
       resolve();
     };
     // Done once the film has come round its loop and back to its start frame (the cover's still).
@@ -453,12 +463,22 @@ export function revealNextProject(change: () => void, ready: () => boolean, zoom
       if (t + 1 < last) wrapped = true;
       last = t;
       if (wrapped && t >= start) return finish();
+      const total = video.duration;
+      if (skip && total > 0) skip.style.setProperty("--film-p", String(Math.min(1, ((wrapped ? total : 0) + t - start) / total)));
       frame = requestAnimationFrame(watch);
     };
     const playing = () => {
       window.clearTimeout(timer);
       cancelAnimationFrame(frame);
       last = Math.max(last, video.currentTime);
+      if (!skip) {
+        skip = document.createElement("button");
+        skip.type = "button";
+        skip.className = "film-skip";
+        skip.innerHTML = '<span>Skip</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        skip.addEventListener("click", finish);
+        document.body.appendChild(skip);
+      }
       frame = requestAnimationFrame(watch);
     };
     const waiting = () => {
