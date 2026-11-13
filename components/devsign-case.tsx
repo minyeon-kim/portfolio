@@ -776,7 +776,7 @@ export function DevsignCase({ study, children }: { study: Study; children: React
             <ol className="dv-checks">
               {testing.goals.items.map((s: string | { text: string; result: string; met?: boolean }, i: number) => typeof s === "string"
                 ? <li key={s} className="reveal"><span>{i + 1}</span>{s}</li>
-                : <li key={s.text} className="reveal"><span>{i + 1}</span><span className="dv-goal-text">{s.text}<small className="dv-goal-result" data-met={s.met || undefined}>{s.result}</small></span></li>)}
+                : <li key={s.text} className="reveal"><span>{i + 1}</span><div className="dv-goal-text">{s.text}<small className="dv-goal-result" data-met={s.met || undefined}>{s.result}</small></div></li>)}
             </ol>
           </div>}
         </div>
