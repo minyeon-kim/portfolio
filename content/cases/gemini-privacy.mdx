@@ -236,10 +236,10 @@ export const study = {
       lowest: "Core insight",
       columns: ["Insight", "What it means"],
       items: [
-        { title: "No way to check it's gone", body: "There's no way to see whether data was saved, used for training or deleted, and no easy path to the settings, so the worry stays.", role: "Core insight", from: "The worry is what happens after", lowest: true },
-        { title: "Warnings alone don't lead to action", body: "At the moment a risk shows, people need a concrete control they can use right away.", role: "Insight", from: "Give me controls, not warnings" },
-        { title: "A short note at the moment of typing", body: "Long, repeated notices get skipped like spam. The note has to be short and clear when people type and send. This backed the first direction, warning while typing, and was set aside when the problem was reframed.", role: "Insight", from: "The right moment, not more warnings" },
-        { title: "Checking it yourself builds trust", body: "\"Your data is safe\" doesn't convince anyone, so people defend themselves by renaming things or splitting tools.", role: "Insight", from: "Show me proof, not promises" },
+        { title: "Can’t check it’s gone", body: "No way to tell if data was saved, trained on or deleted.", role: "Core insight", from: "The worry is what happens after", lowest: true },
+        { title: "A switch, not a warning", body: "People act when they can turn it off right there.", role: "Insight", from: "Give me controls, not warnings" },
+        { title: "Short notes while typing", body: "Long notices get skipped. Not covered in this prototype.", role: "Insight", from: "The right moment, not more warnings" },
+        { title: "Trust comes from checking", body: "“Your data is safe” isn’t enough. People check and protect themselves.", role: "Insight", from: "Show me proof, not promises" },
       ],
     },
     core: {
@@ -292,8 +292,8 @@ export const study = {
     lead: "We built two flows: turn info off right from the answer, or ask in chat to clear it.",
     link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=en", label: "Try the prototype ↗" },
     flows: [
-      { id: "a", kicker: "01 · Flow A", name: "Turn it off from the answer", hook: "Tap the sources badge to see what this answer used, grouped by topic, and handle it right there.", solvesLabel: "Solves", solves: "Warnings alone don't lead to action", alt: "Screen recording: tapping the sources badge under a Gemini answer and handling the five items about Jeongmin", clip: { src: "/images/cases/gemini-privacy/clips/en-a.mp4", poster: "/images/cases/gemini-privacy/clips/en-a-poster.webp" } },
-      { id: "b", kicker: "02 · Flow B", name: "Ask in chat to clear it", hook: "Ask in plain words; Gemini lists what it found, then shows what was deleted and what is only left out of answers.", solvesLabel: "Solves", solves: "No way to check it's gone · Checking it yourself builds trust", alt: "Screen recording: asking in chat to stop using information about Jeongmin and reading the result card", clip: { src: "/images/cases/gemini-privacy/clips/en-b.mp4", poster: "/images/cases/gemini-privacy/clips/en-b-poster.webp" } },
+      { id: "a", kicker: "01 · Flow A", name: "Turn it off from the answer", hook: "Tap the sources badge to see what this answer used, grouped by topic, and handle it right there.", solvesLabel: "Solves", solves: "A switch, not a warning", alt: "Screen recording: tapping the sources badge under a Gemini answer and handling the five items about Jeongmin", clip: { src: "/images/cases/gemini-privacy/clips/en-a.mp4", poster: "/images/cases/gemini-privacy/clips/en-a-poster.webp" } },
+      { id: "b", kicker: "02 · Flow B", name: "Ask in chat to clear it", hook: "Ask in plain words; Gemini lists what it found, then shows what was deleted and what is only left out of answers.", solvesLabel: "Solves", solves: "Can’t check it’s gone · Trust comes from checking", alt: "Screen recording: asking in chat to stop using information about Jeongmin and reading the result card", clip: { src: "/images/cases/gemini-privacy/clips/en-b.mp4", poster: "/images/cases/gemini-privacy/clips/en-b-poster.webp" } },
     ],
     details: {
       label: "UI details",

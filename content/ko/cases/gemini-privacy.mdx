@@ -235,10 +235,10 @@ export const study = {
       lowest: "핵심 인사이트",
       columns: ["인사이트", "의미"],
       items: [
-        { title: "지워졌는지 확인할 방법이 없습니다", body: "내 정보가 저장됐는지, 학습에 쓰였는지, 지워졌는지 확인할 방법이 없고 설정을 찾기도 어려워 불안이 남습니다.", role: "핵심 인사이트", from: "불안의 원인", lowest: true },
-        { title: "경고만으로는 행동하지 않습니다", body: "위험이 보이는 바로 그때, 누르면 끝나는 컨트롤이 필요합니다.", role: "인사이트", from: "원하는 해결책" },
-        { title: "안내는 입력하는 순간에 짧게", body: "길고 반복되는 안내는 스팸처럼 넘깁니다. 입력하고 보내는 순간에 짧고 분명해야 합니다. 처음 방향(입력할 때 경고하기)을 뒷받침한 인사이트라, 문제를 다시 정한 뒤 이번 프로토타입에서는 다루지 않았습니다.", role: "인사이트", from: "안내가 전달되는 방식" },
-        { title: "직접 확인해 봐야 믿습니다", body: "'안전하다'는 문구로는 믿지 않습니다. 그래서 이름을 바꿔 입력하거나 서비스를 나눠 쓰며 스스로 지킵니다.", role: "인사이트", from: "신뢰가 만들어지는 방식" },
+        { title: "지워졌는지 확인할 수 없음", body: "저장됐는지, 학습에 쓰였는지, 지워졌는지 알 수 없어 불안합니다.", role: "핵심 인사이트", from: "불안의 원인", lowest: true },
+        { title: "경고보다 바로 끄는 버튼", body: "위험이 보일 때 그 자리에서 끌 수 있어야 움직입니다.", role: "인사이트", from: "원하는 해결책" },
+        { title: "안내는 입력할 때 짧게", body: "긴 안내는 넘깁니다. 이번 프로토타입에서는 다루지 않았습니다.", role: "인사이트", from: "안내가 전달되는 방식" },
+        { title: "직접 확인해야 믿음", body: "‘안전하다’는 말보다, 직접 확인하며 스스로 지킵니다.", role: "인사이트", from: "신뢰가 만들어지는 방식" },
       ],
     },
     core: {
@@ -291,8 +291,8 @@ export const study = {
     lead: "답변에서 바로 끄는 흐름과, 채팅으로 정리하는 흐름을 프로토타입으로 만들었습니다.",
     link: { href: "https://minyeon-kim.github.io/gemini_privacy/?mode=participant&lang=ko", label: "프로토타입 써 보기 ↗" },
     flows: [
-      { id: "a", kicker: "01 · 흐름 A", name: "답변에서 바로 끄기", hook: "출처 배지를 누르면 그 답변에 쓰인 정보가 주제별로 열리고, 그 자리에서 바로 처리합니다.", solvesLabel: "해결하는 문제", solves: "경고만으로는 행동하지 않습니다", alt: "Gemini 답변 아래 출처 확인을 눌러 정민 관련 정보 5건을 골라 처리하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-a.mp4", poster: "/images/cases/gemini-privacy/clips/ko-a-poster.webp" } },
-      { id: "b", kicker: "02 · 흐름 B", name: "채팅으로 요청해 정리하기", hook: "평소 말로 요청하면 찾은 정보를 보여 주고, 처리한 뒤에는 무엇이 지워졌고 무엇이 답변에서만 빠졌는지 알려 줍니다.", solvesLabel: "해결하는 문제", solves: "지워졌는지 확인할 방법이 없습니다 · 직접 확인해 봐야 믿습니다", alt: "채팅으로 정민 관련 정보를 쓰지 말라고 요청하고, 처리 결과 카드를 확인하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-b.mp4", poster: "/images/cases/gemini-privacy/clips/ko-b-poster.webp" } },
+      { id: "a", kicker: "01 · 흐름 A", name: "답변에서 바로 끄기", hook: "출처 배지를 누르면 그 답변에 쓰인 정보가 주제별로 열리고, 그 자리에서 바로 처리합니다.", solvesLabel: "해결하는 문제", solves: "경고보다 바로 끄는 버튼", alt: "Gemini 답변 아래 출처 확인을 눌러 정민 관련 정보 5건을 골라 처리하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-a.mp4", poster: "/images/cases/gemini-privacy/clips/ko-a-poster.webp" } },
+      { id: "b", kicker: "02 · 흐름 B", name: "채팅으로 요청해 정리하기", hook: "평소 말로 요청하면 찾은 정보를 보여 주고, 처리한 뒤에는 무엇이 지워졌고 무엇이 답변에서만 빠졌는지 알려 줍니다.", solvesLabel: "해결하는 문제", solves: "지워졌는지 확인할 수 없음 · 직접 확인해야 믿음", alt: "채팅으로 정민 관련 정보를 쓰지 말라고 요청하고, 처리 결과 카드를 확인하는 화면 녹화", clip: { src: "/images/cases/gemini-privacy/clips/ko-b.mp4", poster: "/images/cases/gemini-privacy/clips/ko-b-poster.webp" } },
     ],
     details: {
       label: "UI details",
