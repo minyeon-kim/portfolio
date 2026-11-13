@@ -9151,3 +9151,33 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .case-study .dv .dv-goals .dv-goal-result { justify-self: start; text-align: left; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 8%, transparent); color: var(--dv-muted); }
   .case-study .dv .dv-goals .dv-goal-result[data-met] { background: color-mix(in srgb, var(--case-accent) 18%, transparent); color: var(--case-accent); }
 }
+
+/* Gemini "two rules" drawn as small UI (owner asked for a visual aid). */
+.dv-rulesv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.dv-rulesv > section { padding: 32px; border-radius: 8px; background: color-mix(in srgb, var(--dv-ink) 6%, transparent); }
+.case-study .dv .dv-rulesv h4 { display: flex; align-items: center; gap: 12px; margin: 0 0 32px; color: var(--dv-ink); font-size: 20px; font-weight: 500; line-height: 1.4; word-break: keep-all; }
+.dv-rulesv h4 span { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 999px; background: var(--dv-deep); color: #fff; font-size: 14px; }
+.dv-rulesv-rows { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dv-rulesv-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.2fr); align-items: center; gap: 16px; padding: 16px; border-radius: 8px; background: var(--bg); }
+.dv-rulesv-rows li > div, .dv-rulesv-steps > div { display: grid; gap: 4px; min-width: 0; }
+.dv-rulesv strong { color: var(--dv-ink); font-size: 16px; font-weight: 500; }
+.dv-rulesv small { color: var(--dv-muted); font-size: 14px; line-height: 1.4; word-break: keep-all; }
+.dv-rulesv b { justify-self: start; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dv-ink) 10%, transparent); color: var(--dv-ink); font-size: 14px; font-weight: 500; white-space: nowrap; }
+.dv-rulesv b[data-strong] { background: color-mix(in srgb, var(--case-accent) 20%, transparent); color: var(--case-accent); }
+.dv-rulesv .arrow-icon { color: var(--dv-muted); }
+.dv-rulesv-steps { display: grid; grid-template-columns: minmax(0, 0.8fr) auto minmax(0, 1.2fr); align-items: center; gap: 16px; }
+.case-study .dv .dv-rulesv-tag { margin: 0 0 8px; color: var(--dv-muted); font-size: 14px; }
+.dv-rulesv-card { padding: 16px; border-radius: 8px; background: var(--bg); }
+.dv-rulesv-sum { display: flex; justify-content: space-between; gap: 8px; color: var(--dv-ink); font-size: 16px; font-weight: 500; }
+.dv-rulesv-sum i { font-style: normal; color: var(--dv-muted); transition: transform 250ms; }
+.dv-rulesv-sum i[data-open] { transform: rotate(180deg); }
+.dv-rulesv-card ul { display: grid; gap: 8px; margin: 16px 0 0; padding: 16px 0 0; border-top: 1px solid var(--dv-line); list-style: none; }
+.dv-rulesv-card li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; color: var(--dv-ink); font-size: 14px; }
+.dv-rulesv-card li span:nth-child(2) { color: var(--dv-muted); }
+@media (max-width: 63.99rem) {
+  .dv-rulesv { grid-template-columns: minmax(0, 1fr); }
+  .dv-rulesv > section { padding: 24px; }
+  .dv-rulesv-steps, .dv-rulesv-rows li { grid-template-columns: minmax(0, 1fr); }
+  .dv-rulesv-steps .arrow-icon, .dv-rulesv-rows .arrow-icon { transform: rotate(90deg); }
+}
+@media (min-width: 64rem) { .dv-rulesv-steps { align-items: start; } .dv-rulesv-steps > .arrow-icon { margin-top: 44px; } }

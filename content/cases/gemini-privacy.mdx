@@ -282,7 +282,15 @@ export const study = {
         method: "Structure",
         title: "Two rules behind the screens",
         lead: "Say what you can do with each piece of info, and show a summary first.",
-        text: "For example, what Gemini remembers (Memory) can be deleted, but Gemini can’t delete your Gmail or Calendar, so those can only be kept out of answers. Details open only when you tap.",
+        rulesVisual: {
+          one: { title: "Say what you can do with each source", rows: [
+            { source: "Memory", note: "What Gemini remembers", action: "Delete", result: "Removed from Gemini for good", strong: true },
+            { source: "Gmail · Calendar", note: "The originals live in each app", action: "Leave out of answers", result: "Not used in answers; the originals stay" },
+          ] },
+          two: { title: "A summary first, details on tap", before: "At first", after: "After a tap", summary: "20 items about Jeongmin", items: [
+            ["Memory", "3", "Delete", "1"], ["Gmail", "8", "Leave out of answers"], ["Calendar", "9", "Leave out of answers"],
+          ] },
+        },
       },
     ],
   },

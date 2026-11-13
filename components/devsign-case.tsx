@@ -373,6 +373,44 @@ function DevelopBlock({ block }: { block: Study }) {
           <span className="dv-dirs-cut" data-seq="" aria-hidden="true" style={{ "--i": block.directions.length + 0.6 } as CSSProperties} />
         </FlowPlay>
       )}
+      {/* The two screen rules drawn as small UI: what each source allows, then summary first. */}
+      {block.rulesVisual && (
+        <div className="dv-rulesv dv-gap-40">
+          <section className="reveal">
+            <h4><span aria-hidden="true">1</span>{block.rulesVisual.one.title}</h4>
+            <ul className="dv-rulesv-rows">
+              {block.rulesVisual.one.rows.map((r: { source: string; note: string; action: string; result: string; strong?: boolean }) => (
+                <li key={r.source}>
+                  <div><strong>{r.source}</strong><small>{r.note}</small></div>
+                  <ArrowIcon />
+                  <div><b data-strong={r.strong ? "" : undefined}>{r.action}</b><small>{r.result}</small></div>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section className="reveal">
+            <h4><span aria-hidden="true">2</span>{block.rulesVisual.two.title}</h4>
+            <div className="dv-rulesv-steps">
+              <div>
+                <p className="dv-rulesv-tag">{block.rulesVisual.two.before}</p>
+                <div className="dv-rulesv-card"><div className="dv-rulesv-sum">{block.rulesVisual.two.summary}<i aria-hidden="true">⌄</i></div></div>
+              </div>
+              <ArrowIcon />
+              <div>
+                <p className="dv-rulesv-tag">{block.rulesVisual.two.after}</p>
+                <div className="dv-rulesv-card">
+                  <div className="dv-rulesv-sum">{block.rulesVisual.two.summary}<i aria-hidden="true" data-open="">⌄</i></div>
+                  <ul>
+                    {block.rulesVisual.two.items.map(([src, n, act, strong]: string[]) => (
+                      <li key={src}><span>{src}</span><span>{n}</span><b data-strong={strong ? "" : undefined}>{act}</b></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
       {/* What the feedback kept and dropped, as the two panels the tool review uses. */}
       {block.verdict && (
         <figure className="dv-cmp2 dv-cmp2-named dv-gap-40 reveal">
