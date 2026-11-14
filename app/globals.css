@@ -9235,3 +9235,13 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-section-title,
   :root .case-study:is([data-project="devsign"], [data-project="gemini"]) .dv .dv-flist-open .dv-section-title { font-size: 28px; }
 }
+
+/* Landing About link (class feedback 2026-11-10): one small lowercase word,
+   underlined, above the Projects label; small and large together read better
+   than a column of title-size links. Tablets and up; phones keep it in the Menu. */
+@media (min-width: 48rem) {
+  .home-stage .home-links { display: block; margin: 0 0 24px; padding: 0; list-style: none; }
+  .home-stage .home-links a.home-about { color: var(--ink); font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: lowercase; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, currentColor 55%, transparent); transition: text-decoration-color 250ms ease, text-underline-offset 250ms var(--ease); }
+  .home-stage .home-links a.home-about:is(:hover, :focus-visible, [data-active]) { text-decoration-color: currentColor; text-underline-offset: 3px; }
+  .home-stage .home-links a.home-about:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+}

@@ -187,7 +187,20 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         </div>
       </div>
       <div className="intro-surface home-grid">
-        <nav className="home-picks" aria-label={t.caseStudiesLabel}>
+        <nav className="home-picks" aria-label={t.siteNav}>
+          {/* Class feedback 2026-11-10: About alone, small, lowercase, underlined
+              (Get in touch and LinkedIn live in the Menu). Hidden on phones. */}
+          <ul className="home-links">
+            <li><Link
+              href={localize("/about/", locale)}
+              className="home-about"
+              data-slug="about"
+              data-active={hover === "about" || undefined}
+              onMouseEnter={() => enterPick("about")}
+              onFocus={() => setHover("about")}
+              onBlur={() => setHover(null)}
+            >{t.about}</Link></li>
+          </ul>
           <p className="home-picks-label">{t.caseStudiesLabel}</p>
           <ol>
             {choices.map((c, i) => (
