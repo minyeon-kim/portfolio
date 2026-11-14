@@ -9264,3 +9264,7 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   .about-hero-actions a[data-primary] { background: #191c1f; color: #fff; }
   .about-hero-actions a[data-primary]:hover { background: #2b2f33; }
 }
+
+/* The contact photo (laptop.webp) is already a dim office scene, so the dark theme's
+   35% photo dim would bury her face; it gets a lighter 12%. */
+.about-panel.about-panel-contact::before { background: light-dark(transparent, rgb(0 0 0 / 0.12)); }
