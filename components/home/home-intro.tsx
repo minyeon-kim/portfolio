@@ -187,20 +187,7 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         </div>
       </div>
       <div className="intro-surface home-grid">
-        <nav className="home-picks" aria-label={t.siteNav}>
-          {/* Class feedback 2026-11-10: About alone, small, lowercase, underlined
-              (Get in touch and LinkedIn live in the Menu). Hidden on phones. */}
-          <ul className="home-links">
-            <li><Link
-              href={localize("/about/", locale)}
-              className="home-about"
-              data-slug="about"
-              data-active={hover === "about" || undefined}
-              onMouseEnter={() => enterPick("about")}
-              onFocus={() => setHover("about")}
-              onBlur={() => setHover(null)}
-            >{t.about}</Link></li>
-          </ul>
+        <nav className="home-picks" aria-label={t.caseStudiesLabel}>
           <p className="home-picks-label">{t.caseStudiesLabel}</p>
           <ol>
             {choices.map((c, i) => (
@@ -228,7 +215,13 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
           <p className="home-note-project" aria-hidden={!next}>{recent?.text}</p>
         </div>
         <div className="home-tagline-wrap" lang="en" data-swap={next ? "" : undefined}>
-          <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
+          <div className="home-tagline-row">
+            <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
+            {/* Class feedback 2026-11-10: a small lowercase, underlined "about"
+                right after the headline's last line, where the teacher wrote it.
+                A plain link (no hover world, which would cover it). Tablets and up. */}
+            <Link href={localize("/about/", locale)} className="home-about">{t.about}</Link>
+          </div>
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
         {displayed?.role && <p className={`home-world-role${displayed.emphasis ? " has-emphasis" : ""}`} data-on={copyOn || undefined} aria-hidden={!copyOn}><Emphasis text={displayed.role} phrase={displayed.emphasis} /></p>}
