@@ -9252,8 +9252,8 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
 }
 @media (prefers-reduced-motion: reduce) { .home-tagline-row > * { transition: none; } }
 
-/* About hero photo (2026-11-14): Minyeon cut from IMG_3527 and set on an AI-made office
-   background, which is bright at the top. In the light theme the headline turns ink
+/* About hero photo (2026-11-14): IMG_3310 (Minyeon with a teammate at a laptop, its top
+   a bright window grid). In the light theme the headline turns ink
    (white on the bright windows did not read); the dark theme keeps white over the 35% dim.
    No scrim: the lifted portrait copy sits over the photo and would show as a brighter box. */
 @media (min-width: 64rem) {

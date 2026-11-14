@@ -38,7 +38,7 @@ const landingSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: `${site.name} — Product Designer`, template: `%s — ${site.name}` },
+  title: { default: `${site.name} — Product Designer`, template: `%s — ${site.name}, Product Designer` },
   description: site.positioning,
   ...shareMeta("/", `${site.name} — Product Designer`, site.positioning),
 };

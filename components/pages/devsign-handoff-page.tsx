@@ -21,7 +21,7 @@ async function deliverOf(locale: Locale) {
 export async function handoffMetadata(locale: Locale): Promise<Metadata> {
   const { spec } = await deliverOf(locale);
   const title = `Devsign: ${spec.label}`;
-  return { title, description: spec.pageLead, ...shareMeta(localize("/work/devsign/handoff/", locale), `${title} — ${site.name}`, spec.pageLead, "devsign") };
+  return { title, description: spec.pageLead, ...shareMeta(localize("/work/devsign/handoff/", locale), `${title} — ${site.name}, Product Designer`, spec.pageLead, "devsign") };
 }
 
 export async function HandoffPage({ locale }: { locale: Locale }) {

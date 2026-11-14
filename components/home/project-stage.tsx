@@ -95,7 +95,7 @@ export function ProjectStage({ projects, about }: Props) {
   }, [active, locale, projects]);
   // Next.js doesn't retitle the tab for these entries (other pages set their own).
   useEffect(() => {
-    document.title = active === null ? `${site.name} — Product Designer` : `${projects[active].title} — ${site.name}`;
+    document.title = active === null ? `${site.name} — Product Designer` : `${projects[active].title} — ${site.name}, Product Designer`;
   }, [active, projects]);
   const select = (index: number, from?: HTMLElement | null) => {
     const project = projects[index];

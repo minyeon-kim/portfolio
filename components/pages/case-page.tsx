@@ -16,7 +16,7 @@ export async function caseMetadata(slug: string, locale: Locale): Promise<Metada
   if (!getCaseSlugs(locale).includes(slug)) return {};
   const { meta, tldr } = await getCase(slug, locale);
   const description = meta.hook ?? tldr.problem;
-  return { title: meta.title, description, ...shareMeta(localize(`/work/${slug}/`, locale), `${meta.title} — ${site.name}`, description, slug) };
+  return { title: meta.title, description, ...shareMeta(localize(`/work/${slug}/`, locale), `${meta.title} — ${site.name}, Product Designer`, description, slug) };
 }
 
 export async function CasePage({ slug, locale = "en" }: { slug: string; locale?: Locale }) {

@@ -14,7 +14,7 @@ import { shareMeta, site, withBase } from "@/lib/site";
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
 const copy = {
   en: {
-    label: "About", portrait: "Minyeon working on a laptop in an office",
+    label: "About", portrait: "Minyeon going through a design on a laptop with a teammate",
     experience: "Experience",
     skills: "Skills",
     atWork: "At work",
@@ -23,7 +23,7 @@ const copy = {
       side: "Minyeon at a sticky-note wall, in black and white",
       talk: "Minyeon looking over a screen with a teammate",
       "panel-talk": "Minyeon smiling as she talks at the table",
-      laptop: "Minyeon going through a design on a laptop with a teammate",
+      laptop: "Minyeon working on a laptop in an office",
       hands: "Hands around a table covered in printed screens, sketches and sticky notes",
       desk: "Minyeon working on a laptop",
       screen: "Minyeon typing on her laptop at a meeting table, this portfolio site on a large screen behind",
@@ -49,7 +49,7 @@ const copy = {
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
-    label: "소개", portrait: "사무실에서 노트북으로 일하는 김민연",
+    label: "소개", portrait: "노트북으로 팀원과 디자인을 함께 보는 김민연",
     experience: "Experience",
     skills: "역량",
     atWork: "At work",
@@ -58,7 +58,7 @@ const copy = {
       side: "포스트잇 벽 앞에 선 김민연, 흑백",
       talk: "팀원과 함께 화면을 살펴보는 김민연",
       "panel-talk": "테이블에서 웃으며 이야기하는 김민연",
-      laptop: "노트북으로 팀원과 디자인을 함께 보는 김민연",
+      laptop: "사무실에서 노트북으로 일하는 김민연",
       hands: "출력한 화면과 스케치, 포스트잇이 놓인 테이블에 모인 손",
       desk: "노트북으로 작업하는 김민연",
       screen: "회의 테이블에서 노트북을 치는 김민연과, 큰 화면에 띄운 이 포트폴리오",
@@ -87,7 +87,7 @@ const copy = {
 
 export function aboutMetadata(locale: Locale): Metadata {
   const description = (locale === "ko" ? ko : en).bio[0] ?? site.positioning;
-  return { title: copy[locale].label, description, ...shareMeta(localize("/about/", locale), `${copy[locale].label} — ${site.name}`, description) };
+  return { title: copy[locale].label, description, ...shareMeta(localize("/about/", locale), `${copy[locale].label} — ${site.name}, Product Designer`, description) };
 }
 
 // One idea, security to design: the intro and portrait on the first screen, what
