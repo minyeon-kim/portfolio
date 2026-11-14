@@ -44,7 +44,7 @@ const copy = {
       beach: "Minyeon standing on a beach",
       statue: "Minyeon sitting next to a colourful statue",
     } as Record<string, string>,
-    open: "I work as a product designer / design engineer.",
+    open: "I work as a product designer and design engineer.",
     work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "Copy",
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
@@ -79,7 +79,7 @@ const copy = {
       beach: "해변에 선 김민연",
       statue: "알록달록한 조각상 옆에 앉은 김민연",
     } as Record<string, string>,
-    open: "프로덕트 디자이너 / 디자인 엔지니어로 일하고 있습니다.",
+    open: "프로덕트 디자이너이자 디자인 엔지니어로 일하고 있습니다.",
     work: "Selected work", contact: "Contact", resume: "Resume (PDF)", email: "Email", copyEmail: "복사",
     steps: "Then and now", research: "리서치", build: "디자인과 제작", copyHint: "눌러서 복사", copied: "복사됨", read: "케이스 보기",
   },
@@ -87,7 +87,7 @@ const copy = {
 
 export function aboutMetadata(locale: Locale): Metadata {
   const description = (locale === "ko" ? ko : en).bio[0] ?? site.positioning;
-  return { title: copy[locale].label, description, ...shareMeta(localize("/about/", locale), `${copy[locale].label} — ${site.name}, Product Designer`, description) };
+  return { title: copy[locale].label, description, ...shareMeta(localize("/about/", locale), `${copy[locale].label} — ${site.name}, Product Designer`, description, "about") };
 }
 
 // One idea, security to design: the intro and portrait on the first screen, what
