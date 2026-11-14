@@ -14,7 +14,7 @@ import { shareMeta, site, withBase } from "@/lib/site";
 // Page labels around the copy in content/about.mdx (content/ko/about.mdx).
 const copy = {
   en: {
-    label: "About", portrait: "Minyeon placing sticky notes on a wall during a workshop",
+    label: "About", portrait: "Minyeon working on a laptop in an office",
     experience: "Experience",
     skills: "Skills",
     atWork: "At work",
@@ -49,7 +49,7 @@ const copy = {
     steps: "Then and now", research: "Research", build: "Design and build", copyHint: "Press to copy", copied: "Copied", read: "Read the case",
   },
   ko: {
-    label: "소개", portrait: "워크숍에서 벽에 포스트잇을 붙이는 김민연",
+    label: "소개", portrait: "사무실에서 노트북으로 일하는 김민연",
     experience: "Experience",
     skills: "역량",
     atWork: "At work",

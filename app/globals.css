@@ -9251,3 +9251,16 @@ html[data-about-entering] .home-stage :is(.intro-surface, [class*="home-world-"]
   [data-swap] .home-tagline-row > a.home-about { opacity: 0; pointer-events: none; }
 }
 @media (prefers-reduced-motion: reduce) { .home-tagline-row > * { transition: none; } }
+
+/* About hero photo (2026-11-14): Minyeon cut from IMG_3527 and set on an AI-made office
+   background, which is bright at the top. In the light theme the headline turns ink
+   (white on the bright windows did not read); the dark theme keeps white over the 35% dim.
+   No scrim: the lifted portrait copy sits over the photo and would show as a brighter box. */
+@media (min-width: 64rem) {
+  .about-hero, .about-hero-title, .about-hero-subtitle { color: light-dark(#0e1111, #fff); }
+  .about-hero-copy { text-shadow: 0 1px 24px light-dark(transparent, rgb(0 0 0 / 0.32)); }
+  .about-hero-actions a { background: light-dark(rgb(14 17 17 / 0.08), rgb(255 255 255 / 0.18)); color: light-dark(#0e1111, #fff); }
+  .about-hero-actions a:hover { background: light-dark(rgb(14 17 17 / 0.14), rgb(255 255 255 / 0.28)); }
+  .about-hero-actions a[data-primary] { background: #191c1f; color: #fff; }
+  .about-hero-actions a[data-primary]:hover { background: #2b2f33; }
+}
