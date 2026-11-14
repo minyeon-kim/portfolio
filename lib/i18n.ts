@@ -21,6 +21,8 @@ export const ui = {
   en: {
     work: "Work",
     about: "About",
+    // The landing link after the headline, as the teacher typed it in class (2026-11-10).
+    aboutInline: "about Minyeon",
     playground: "Playground",
     email: "Email",
     getInTouch: "Get in touch",
@@ -102,6 +104,8 @@ export const ui = {
   ko: {
     work: "Work",
     about: "About",
+    // The landing link after the headline, as the teacher typed it in class (2026-11-10).
+    aboutInline: "about Minyeon",
     playground: "Playground",
     email: "Email",
     getInTouch: "Get in touch",

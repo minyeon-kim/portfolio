@@ -217,10 +217,10 @@ export function HomeIntro({ projects, about: aboutCopy, onSelect }: Props) {
         <div className="home-tagline-wrap" lang="en" data-swap={next ? "" : undefined}>
           <div className="home-tagline-row">
             <ScrambleHeadline className="home-tagline home-tagline-default" text={t.heroLine} emphasis={t.heroEmphasis} />
-            {/* Class feedback 2026-11-10: a small lowercase, underlined "about"
-                right after the headline's last line, where the teacher wrote it.
+            {/* Class feedback 2026-11-10: a small underlined "about Minyeon" right
+                after the headline's last line, as the teacher typed it in Figma.
                 A plain link (no hover world, which would cover it). Tablets and up. */}
-            <Link href={localize("/about/", locale)} className="home-about">{t.about}</Link>
+            <Link href={localize("/about/", locale)} className="home-about">{t.aboutInline}</Link>
           </div>
           <p className="home-tagline home-tagline-project" aria-hidden={!next}>{recent?.name}</p>
         </div>
